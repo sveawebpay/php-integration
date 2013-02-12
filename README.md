@@ -21,7 +21,6 @@
 
 
 ## Introduction                                                             
-<<[To top](https://github.com/sveawebpay/php-integration/tree/develop#php-integration-package-api-for-sveawebpay)
 This integration package is built for developers to simplify the integration of Svea WebPay services. 
 Using this package will make your implementation sustainable and unaffected for changes
 in our payment system. Just make sure to update the package regularly.
@@ -41,8 +40,9 @@ $requestObject =
 $foo->...
     ->..;
 ```
-## Configuration                                                             
-<<[To top](https://github.com/sveawebpay/php-integration/tree/develop#php-integration-package-api-for-sveawebpay)
+[<< To top](https://github.com/sveawebpay/php-integration/tree/develop#php-integration-package-api-for-sveawebpay)
+
+## Configuration 
 There are three ways to configure Svea authorization. Choose one of the following:
 
 * 1. Drop a file named SveaConfig.php in folder Config looking the same as existing file
@@ -50,9 +50,9 @@ There are three ways to configure Svea authorization. Choose one of the followin
 * 2. Modify function __construct() in file SveaConfig.php in folder Config with your authorization values.
 * 3. Everytime when creating an order, after choosing payment type, use function setPasswordBasedAuthorization() for Invoice/Payment plan 
     or setMerchantIdBasedAuthorization() for other hosted payments like card and direct bank payments.
+[<< To top](https://github.com/sveawebpay/php-integration/tree/develop#php-integration-package-api-for-sveawebpay)
 
 ## 1. createOrder                                                            
-<<[To top](https://github.com/sveawebpay/php-integration/tree/develop#php-integration-package-api-for-sveawebpay)
 Creates an order and performs payment for all payment forms. Invoice and Payment plan will perform 
 a synchronous payment and return a response. 
 Other hosted payments, like card, direct bank and other payments from the *PayPage*,
@@ -135,16 +135,17 @@ $response = WebPay::createOrder()
     ...
         ->doRequest();
 ```
+[<< To top](https://github.com/sveawebpay/php-integration/tree/develop#php-integration-package-api-for-sveawebpay)
+
 ### 1.1 Test mode                                                            
-<<[To top](https://github.com/sveawebpay/php-integration/tree/develop#php-integration-package-api-for-sveawebpay)
 Set test mode while developing to make the calls to our test server.
 Remove when you change to production mode.	
 ```php
     ->setTestmode()
 ```
+[<< To top](https://github.com/sveawebpay/php-integration/tree/develop#php-integration-package-api-for-sveawebpay)
 	
 ### 1.2 Specify order                                                        
-<<[To top](https://github.com/sveawebpay/php-integration/tree/develop#php-integration-package-api-for-sveawebpay)
 Continue by adding rows for products and other. You can add OrderRow, InvoiceFee, ShippingFee, RelativeDiscount, FixedDiscount.	
 	
 #### 1.2.1 OrderRow
@@ -213,8 +214,9 @@ When discount or coupon is a percentage on total product amount.
         ->setDescription("RelativeDiscount")//Optional
     ->endRelativeDiscount()
 ```
-### 1.3 Customer Identity                                                    
-<<[To top](https://github.com/sveawebpay/php-integration/tree/develop#php-integration-package-api-for-sveawebpay)
+[<< To top](https://github.com/sveawebpay/php-integration/tree/develop#php-integration-package-api-for-sveawebpay)
+
+### 1.3 Customer Identity   
 Customer Identity is required for invoice and payment plan orders. Required values varies 
 depending on country and customer type. For SE, NO, DK and FI ssn (Social Security Number)
 or companyIdNumber is required. Email and Ip Address are desirable.
@@ -237,8 +239,9 @@ or companyIdNumber is required. Email and Ip Address are desirable.
     ->setCustomerCompanyVatNumber("NL2345234")    //Required for NL and DE
     ->setCustomerCompanyName("TestCompagniet")  //Required for Eu countries like NL and DE
 ```
-### 1.4 Other values                                                         
-<<[To top](https://github.com/sveawebpay/php-integration/tree/develop#php-integration-package-api-for-sveawebpay)
+[<< To top](https://github.com/sveawebpay/php-integration/tree/develop#php-integration-package-api-for-sveawebpay)
+
+### 1.4 Other values  
 ```php
     ->setCountryCode("SE")                      //Required for web services    
     ->setCurrency("SEK")                        //Required for card payment, direct payment and *PayPage* payment.
@@ -247,8 +250,9 @@ or companyIdNumber is required. Email and Ip Address are desirable.
     ->setOrderDate("2012-12-12")                //Optional
     ->setCustomerReference("33")                //Optional
 ```
-### 1.5 Choose payment                                                       
-<<[To top](https://github.com/sveawebpay/php-integration/tree/develop#php-integration-package-api-for-sveawebpay)
+[<< To top](https://github.com/sveawebpay/php-integration/tree/develop#php-integration-package-api-for-sveawebpay)
+
+### 1.5 Choose payment 
 End process by choosing the payment method you desire.
 
 Invoice and payment plan will perform a synchronous payment and return a response as object. 
@@ -493,8 +497,9 @@ Param: Campaign code recieved from getPaymentPlanParams().
            ->setPasswordBasedAuthorization("sverigetest", "sverigetest", 79021) //Optional
            ->doPayment();**
 ```
-## 2. getPaymentPlanParams                                                   
-<<[To top](https://github.com/sveawebpay/php-integration/tree/develop#php-integration-package-api-for-sveawebpay)
+[<< To top](https://github.com/sveawebpay/php-integration/tree/develop#php-integration-package-api-for-sveawebpay)
+
+## 2. getPaymentPlanParams   
 Use this function to retrieve campaign codes for possible payment plan options. Use prior to create payment plan payment.
 Returns PaymentPlanParamsResponse object.
 If Config/SveaConfig.php is not modified you can set your store authorization here.
@@ -505,29 +510,31 @@ Ex.
             ->setPasswordBasedAuthorization("sverigetest", "sverigetest", 79021) //Optional
             ->doRequest();
 ```
-## 3. getAddresses                                                           
-<<[To top](https://github.com/sveawebpay/php-integration/tree/develop#php-integration-package-api-for-sveawebpay)
+[<< To top](https://github.com/sveawebpay/php-integration/tree/develop#php-integration-package-api-for-sveawebpay)
+
+## 3. getAddresses 
 Returns getAddressesResponse object with an *AddressSelector* for the associated addresses for a specific SecurityNumber. 
 Can be used when creating an order. Only applicable for SE, NO and DK.
 If Config/Config.php is not modified you can set your store authorization here.
+[<< To top](https://github.com/sveawebpay/php-integration/tree/develop#php-integration-package-api-for-sveawebpay)
 
-### 3.1 Order type                                                           
-<<[To top](https://github.com/sveawebpay/php-integration/tree/develop#php-integration-package-api-for-sveawebpay)
+### 3.1 Order type 
 ```php
     ->setOrderTypeInvoice()         //Required if this is an invoice order
 or
     ->setOrderTypePaymentPlan()     //Required if this is a payment plan order
 ```
-### 3.2 Customer type                                                        
-<<[To top](https://github.com/sveawebpay/php-integration/tree/develop#php-integration-package-api-for-sveawebpay)
+[<< To top](https://github.com/sveawebpay/php-integration/tree/develop#php-integration-package-api-for-sveawebpay)
+
+### 3.2 Customer type 
 ```php
     ->setIndividual(194605092222)   //Required if this is an Individual customer
 or
     ->setCompany("CompanyId")       //Required if this is a Company customer
 ```
-### 3.3                                                                      
-<<[To top](https://github.com/sveawebpay/php-integration/tree/develop#php-integration-package-api-for-sveawebpay)
-Ex.	
+[<< To top](https://github.com/sveawebpay/php-integration/tree/develop#php-integration-package-api-for-sveawebpay)
+
+### 3.3                                                                      	
 ```php
     $response = WebPay::getAddresses()
         ->setTestmode()
@@ -537,17 +544,17 @@ Ex.
         ->setIndividual(194605092222)                                        //See 3.2   
         ->doRequest();
 ```
+[<< To top](https://github.com/sveawebpay/php-integration/tree/develop#php-integration-package-api-for-sveawebpay)
 
 ## 4. deliverOrder                                                           
-<<[To top](https://github.com/sveawebpay/php-integration/tree/develop#php-integration-package-api-for-sveawebpay)
 Updates the status on a previous created order as *delivered*. Add rows that you want delivered. The rows will automatically be
 matched with the rows that was sent when creating the order.
 Only applicable for invoice and payment plan payments.
 Returns DeliverOrderResult object.
 If Config/SveaConfig.php is not modified you can set your store authorization here.
+[<< To top](https://github.com/sveawebpay/php-integration/tree/develop#php-integration-package-api-for-sveawebpay)
 
 ### 4.1 Testmode                                                             
-<<[To top](https://github.com/sveawebpay/php-integration/tree/develop#php-integration-package-api-for-sveawebpay)
 Set test mode while developing to make the calls to our test server.
 Remove when you change to production mode.
 
@@ -555,9 +562,11 @@ Ex.
 ```php
     ->setTestmode()
 ```
+[<< To top](https://github.com/sveawebpay/php-integration/tree/develop#php-integration-package-api-for-sveawebpay)
+
 ### 4.2 Specify order                                                        
-<<[To top](https://github.com/sveawebpay/php-integration/tree/develop#php-integration-package-api-for-sveawebpay)
 Continue by adding rows for products and other. You can also add InvoiceFee and ShippingFee.
+[<< To top](https://github.com/sveawebpay/php-integration/tree/develop#php-integration-package-api-for-sveawebpay)
 
 #### 4.2.1 OrderRow
 All products and other items. It is required to have a minimum of one row.
@@ -597,8 +606,9 @@ All products and other items. It is required to have a minimum of one row.
         ->setDiscountPercent(0)             //Optional
     ->endInvoiceFee()
 ```
-### 4.3 Other values                                                         
-<<[To top](https://github.com/sveawebpay/php-integration/tree/develop#php-integration-package-api-for-sveawebpay)
+[<< To top](https://github.com/sveawebpay/php-integration/tree/develop#php-integration-package-api-for-sveawebpay)
+
+### 4.3 Other values  
 Required is the Order id received when creating the order. Required for InvoiceOrders are InvoiceDistributionType. 
 If invoice order is credit invoice use setCreditInvoice($invoiceId) and setNumberOfCreditDays($creditDaysAsInt)
 ```php
@@ -628,14 +638,14 @@ If invoice order is credit invoice use setCreditInvoice($invoiceId) and setNumbe
             ->setPasswordBasedAuthorization("sverigetest", "sverigetest", 79021) //Optional
             ->doRequest();**
 ```
+[<< To top](https://github.com/sveawebpay/php-integration/tree/develop#php-integration-package-api-for-sveawebpay)
 
 ## 5. closeOrder                                                             
-<<[To top](https://github.com/sveawebpay/php-integration/tree/develop#php-integration-package-api-for-sveawebpay)
 Use when you want to cancel an undelivered order. Valid only for invoice and payment plan orders. 
 Required is the order id received when creating the order. If Config/SveaConfig.php is not modified you can set your store authorization here.
+[<< To top](https://github.com/sveawebpay/php-integration/tree/develop#php-integration-package-api-for-sveawebpay)
 
 ### 5.1 Close by payment type                                                
-<<[To top](https://github.com/sveawebpay/php-integration/tree/develop#php-integration-package-api-for-sveawebpay)
 ```php
     ->closeInvoiceOrder()
 or
@@ -650,8 +660,9 @@ or
             ->setPasswordBasedAuthorization("sverigetest", "sverigetest", 79021) //Optional
             ->doRequest();
 ```
+[<< To top](https://github.com/sveawebpay/php-integration/tree/develop#php-integration-package-api-for-sveawebpay)
+
 ## 6. Response handler                                                       
-<<[To top](https://github.com/sveawebpay/php-integration/tree/develop#php-integration-package-api-for-sveawebpay)
 All synchronous responses are handled through *SveaResponse* and structured into objects.
 Responses recieved after sending the values *mac*, *merchantid* and *xmlMessageBase64* to
 hosted solutions can also be processed through the *SveaResponse class*.
@@ -661,8 +672,9 @@ The response from server will be sent to the *returnUrl* with POST or GET as XML
 ```php
   $respObject = new SveaResponse($_REQUEST['response']); 
 ```
-## APPENDIX                                                                   
-<<[To top](https://github.com/sveawebpay/php-integration/tree/develop#php-integration-package-api-for-sveawebpay)
+[<< To top](https://github.com/sveawebpay/php-integration/tree/develop#php-integration-package-api-for-sveawebpay)
+
+## APPENDIX 
 
 ### PayMentMethods
 Used in usePaymentMethod($paymentMethod) and in usePayPage(), 
@@ -692,3 +704,4 @@ Used in usePaymentMethod($paymentMethod) and in usePayPage(),
 | PaymentMethod::SVEASPLITEU_FI     | PaymentPlan by PayPage in FI.                 |
 | PaymentMethod::SVEASPLITEU_DE     | PaymentPlan by PayPage in SE.                 |
 | PaymentMethod::SVEASPLITEU_NL     | PaymentPlan by PayPage in NL.                 |
+[<< To top](https://github.com/sveawebpay/php-integration/tree/develop#php-integration-package-api-for-sveawebpay)
