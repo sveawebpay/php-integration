@@ -1,14 +1,22 @@
 # PHP Integration Package API for SveaWebPay
 
 ## Index
-Introduction
-Configuration
-1. CreateOrder
-2. GetPaymentPlanParams
-3. GetAddresses
-4. DeliverOrder
-5. CloseOrder
-6. Response
+* [Introduction](https://github.com/sveawebpay/php-integration#introduction)
+* [Configuration](https://github.com/sveawebpay/php-integration#configuration)
+* 1. [CreateOrder](https://github.com/sveawebpay/php-integration#1-createorder)
+    * [Test mode](https://github.com/sveawebpay/php-integration#11-test-mode)
+    * [Specify order](https://github.com/sveawebpay/php-integration#12-specify-order)
+    * [Customer identity](https://github.com/sveawebpay/php-integration#13-customer-identity)
+    * [Other values](https://github.com/sveawebpay/php-integration#14-other-values)
+    * [Choose payment](https://github.com/sveawebpay/php-integration#15-choose-payment)
+* 2. [GetPaymentPlanParams](https://github.com/sveawebpay/php-integration#2-getpaymentplanparams)
+* 3. [GetAddresses](https://github.com/sveawebpay/php-integration#2-getpaymentplanparams)
+* 4. [DeliverOrder](https://github.com/sveawebpay/php-integration#2-getpaymentplanparams)
+    * [Test mode](https://github.com/sveawebpay/php-integration#41-testmode)
+    * [Specify order](https://github.com/sveawebpay/php-integration#42-specify-order)
+    * [Other values](https://github.com/sveawebpay/php-integration#43-other-values)
+* 5. [CloseOrder](https://github.com/sveawebpay/php-integration#5-closeorder)
+* 6. Response
 
 
 ## Introduction
@@ -19,10 +27,10 @@ in our payment system. Just make sure to update the package regularly.
 The API is built as a *Fluent API* so you can use *method chaining* when implementing it in your code.
 Make sure to open your implementation as a project in your IDE to make the code completion work properly. 
 Package is developed and tested in NetBeans IDE 7.2. 
+
 Include the file *Includes.php* from the php integration package in your file.
 Call class WebPay and the suitable static function for your action.
    
-Ex:
 ```php
 require_once 'Includes.php';
 
@@ -33,7 +41,8 @@ $foo->...
 ```
 ## Configuration
 There are three ways to configure Svea authorization. Choose one of the following:
-1. Drop a file named SveaConfig.php in folder Config looking the same as existing file
+
+1.Drop a file named SveaConfig.php in folder Config looking the same as existing file
    but with your own authorization values. This method is preffered as it simplyfies updates in the package.
 2. Modify function __construct() in file SveaConfig.php in folder Config with your authorization values.
 3. Everytime when creating an order, after choosing payment type, use function setPasswordBasedAuthorization() for Invoice/Payment plan 
@@ -45,11 +54,10 @@ a synchronous payment and return a response.
 Other hosted payments, like card, direct bank and other payments from the *PayPage*,
 on the other hand are asynchronous. They will return an html form with formatted message to send from your store.
 For every new payment type implementation, you follow the steps from the beginning and chose your payment type preffered in the end:
-Build order -> choose payment type -> do payment/get payment form
+Build order -> choose payment type -> doRequest/getPaymentForm
 
 Create order Ex.
 ```php
-
 $response = WebPay::createOrder()
 //if testmode
     ->setTestmode()
@@ -86,9 +94,9 @@ $response = WebPay::createOrder()
     ->setCustomerZipCode(9999)
     ->setCustomerLocality("Stan")
 //If customer is a company values
-    ->setCustomerCompanyIdNumber("2345234")
+    ->setCustomerCompanyIdNumber(2345234)
     ->setCustomerCompanyName("TestCompagniet")
-    ->setCustomerCompanyVatNumber(NL123123)
+    ->setCustomerCompanyVatNumber("NL12312")
 //Other values
     ->setCountryCode("SE")
     ->setOrderDate("2012-12-12")
@@ -125,8 +133,7 @@ $response = WebPay::createOrder()
 ```
 ### 1.1 Test mode
 Set test mode while developing to make the calls to our test server.
-Remove when you change to production mode.
-Ex.	
+Remove when you change to production mode.	
 ```php
     ->setTestmode()
 ```
@@ -137,7 +144,6 @@ Continue by adding rows for products and other. You can add OrderRow, InvoiceFee
 #### 1.2.1 OrderRow
 All products and other items. It´s required to have a minimum of one order row.
 **The price can be set in a combination by using a minimum of two out of three functions: setAmountExVat(), setAmountIncVat(), setVatPercent().**
-Ex.
 ```php
     ->beginOrderRow()        
         ->setQuantity(2)                    //Required
@@ -154,7 +160,6 @@ Ex.
 
 #### 1.2.2 ShippingFee
 **The price can be set in a combination by using a minimum of two out of three functions: setAmountExVat(), setAmountIncVat(), setVatPercent().**
-Ex.
 ```php
     ->beginShippingFee()
         ->setShippingId('33')               //Optional
@@ -169,7 +174,6 @@ Ex.
 ```
 #### 1.2.3 InvoiceFee
 **The price can be set in a combination by using a minimum of two out of three functions: setAmountExVat(), setAmountIncVat(), setVatPercent().**
-Ex. 
 ```php
     ->beginInvoiceFee()
         ->setName('Svea fee')               //Optional
@@ -183,7 +187,6 @@ Ex.
 ```
 #### 1.2.4 Fixed Discount
 When discount or coupon is a fixed amount on total product amount.
-Ex. 
 ```php
     ->beginFixedDiscount()                  
         ->setAmountIncVat(100.00)           //Required
@@ -195,7 +198,6 @@ Ex.
 ```
 #### 1.2.5 Relative Discount
 When discount or coupon is a percentage on total product amount.
-Ex. 
 ```php
     ->beginRelativeDiscount()
         ->setDiscountPercent(50)            //Required
@@ -209,7 +211,6 @@ Ex.
 Customer Identity is required for invoice and payment plan orders. Required values varies 
 depending on country and customer type. For SE, NO, DK and FI ssn (Social Security Number)
 or companyIdNumber is required. Email and Ip Address are desirable.
-Ex. 
 ```php
     //Options for individual customers
     ->setCustomerSsn(194605092222)          //Required for individual customers in SE, NO, DK, FI
@@ -225,12 +226,11 @@ Ex.
     ->setCustomerPhoneNumber(999999)        //Optional
 
     //Additional options for company customers
-    ->setCustomerCompanyIdNumber("2345234")     //Required for company customers in SE, NO, DK, FI
-    ->setCustomerCompanyVatNumber(NL2345234)    //Required for NL and DE
+    ->setCustomerCompanyIdNumber(2345234)     //Required for company customers in SE, NO, DK, FI
+    ->setCustomerCompanyVatNumber("NL2345234")    //Required for NL and DE
     ->setCustomerCompanyName("TestCompagniet")  //Required for Eu countries like NL and DE
 ```
-### 1.5 Other values
-Ex. 
+### 1.4 Other values
 ```php
     ->setCountryCode("SE")                      //Required for web services    
     ->setCurrency("SEK")                        //Required for card payment, direct payment and *PayPage* payment.
@@ -239,7 +239,7 @@ Ex.
     ->setOrderDate("2012-12-12")                //Optional
     ->setCustomerReference("33")                //Optional
 ```
-### 1.6 Choose payment
+### 1.5 Choose payment
 End process by choosing the payment method you desire.
 
 Invoice and payment plan will perform a synchronous payment and return a response as object. 
@@ -260,18 +260,17 @@ Ex.
         <input type='hidden' name='merchantid' value='{$this->merchantid}' />
         <input type='hidden' name='message' value='{$this->xmlMessageBase64}' />
         <input type='hidden' name='mac' value='{$this->mac}' />
-        <noscript><p>Javascript is inactivated.</p></noscript>'
+        <noscript><p>Javascript is inactivated.</p></noscript>
         <input type="submit" name="submit" value="Submit" />
     </form>
 ```
 
 
-#### 1.6.1 PayPage with Card payment options
+#### 1.5.1 PayPage with Card payment options
 *PayPage* with availible card payments only.
 
-##### 1.6.1.1 Request
+##### 1.5.1.1 Request
 If Config/SveaConfig.php is not modified you can set your store authorization here.
-Ex. 
 ```php
 $form = WebPay::createOrder()
     ->beginOrderRow()
@@ -288,18 +287,19 @@ $form = WebPay::createOrder()
     ->setClientOrderNumber("33")
     ->setOrderDate("2012-12-12")
     ->setCurrency("SEK")
- ** ->usePayPageCardOnly()
-        ->setMerchantIdBasedAuthorization("merchantId", "f78hv9")   //Optional
-        ->setReturnUrl("http://myurl.se")                   //Required
-        ->getPaymentForm();**
+        ->usePayPageCardOnly()
+            ->setMerchantIdBasedAuthorization(1200, "f78hv9")   //Optional
+            ->setReturnUrl("http://myurl.se")                   //Required
+            ->setCancelUrl("http://myurl.se")                   //Optional
+            ->getPaymentForm();
 
 ```
-##### 1.6.1.2 Return
-The values of *message*, *merchantId* and *mac* are to be sent as xml to SveaWebPay.
+##### 1.5.1.2 Return
+The values of *xmlMessageBase64*, *merchantid* and *mac* are to be sent as xml to SveaWebPay.
 Function getPaymentForm() returns Object type PaymentForm with accessible members:
 
 | Member                            | Description                               |
-| --------------------------------- |:-----------------------------------------:|
+|---------------------------------- |-------------------------------------------|
 | xmlMessageBase64                  | Payment information in XML-format, Base64 encoded.| 
 | xmlMessage                        | Payment information in XML-format.        |
 | merchantid                        | Authorization                             |
@@ -307,16 +307,15 @@ Function getPaymentForm() returns Object type PaymentForm with accessible member
 | mac                               | Message authentication code.              |    
 | completeHtmlFormWithSubmitButton  | A complete Html form with method= "post" with submit button to include in your code. |
 | htmlFormFieldsAsArray             | Array of Html form fields to include.     |
-| rawFields                         | Array of values to send in Html form. ($merchantid, $message, $mac) |
+| rawFields                         | Array of values to send in Html form. ($merchantid, $xmlMessageBase64, $mac) |
             
 
 
-#### 1.6.2 PayPage with Direct bank payment options
+#### 1.5.2 PayPage with Direct bank payment options
 *PayPage* with available direct bank payments only.
                 
-##### 1.6.2.1 Request
+##### 1.5.2.1 Request
 If Config/SveaConfig.php is not modified you can set your store authorization here.
-Ex. 
 ```php
 $form = WebPay::createOrder()
     ->setTestmode()
@@ -334,16 +333,17 @@ $form = WebPay::createOrder()
     ->setCustomerReference("33")
     ->setOrderDate("2012-12-12")
     ->setCurrency("SEK")
-  **  ->usePayPageDirectBankOnly()
-        ->setMerchantIdBasedAuthorization(1200, "f78hv9")   //Optional
-        ->setReturnUrl("http://myurl.se")                   //Required
-        ->getPaymentForm();**
+        ->usePayPageDirectBankOnly()
+            ->setMerchantIdBasedAuthorization(1200, "f78hv9")   //Optional
+            ->setReturnUrl("http://myurl.se")                   //Required
+            ->setCancelUrl("http://myurl.se")                   //Optional
+            ->getPaymentForm();
 ```
-##### 1.6.2.2 Return
+##### 1.5.2.2 Return
 Returns Object type PaymentForm:
            
 | Member                            | Description                               |
-| --------------------------------- |:-----------------------------------------:|
+|---------------------------------- |-------------------------------------------|
 | xmlMessageBase64                  | Payment information in XML-format, Base64 encoded.| 
 | xmlMessage                        | Payment information in XML-format.        |
 | merchantid                        | Authorization                             |
@@ -351,14 +351,13 @@ Returns Object type PaymentForm:
 | mac                               | Message authentication code.              |
 | completeHtmlFormWithSubmitButton  | A complete Html form with method= "post" with submit button to include in your code. |
 | htmlFormFieldsAsArray             | Array of Html form fields to include.     |
-| rawFields                         | Array of values to send in Html form. ($merchantid, $message, $mac) |
+| rawFields                         | Array of values to send in Html form. ($merchantid, $xmlMessageBase64, $mac) |
             
-#### 1.6.3 PayPagePayment
+#### 1.5.3 PayPagePayment
 *PayPage* with all available payments. You can also custom the *PayPage* by using one of the methods for PayPagePayments:
 setPaymentMethod, includePaymentMethods, excludeCardPaymentMethods or excludeDirectPaymentMethods.
                 
-##### 1.6.3.1 Request
-Ex. 
+##### 1.5.3.1 Request
 ```php
 $form = WebPay::createOrder()
         ->setTestmode()
@@ -376,34 +375,33 @@ $form = WebPay::createOrder()
         ->setCustomerReference("33")
         ->setOrderDate("2012-12-12")
         ->setCurrency("SEK")
-**        ->usePayPage()
-            ->setMerchantIdBasedAuthorization(1200, "f78hv9")   //Optional
-            ->setReturnUrl("http://myurl.se")                   //Required
-            ->getPaymentForm();**
+            ->usePayPage()
+                ->setMerchantIdBasedAuthorization(1200, "f78hv9")   //Optional
+                ->setReturnUrl("http://myurl.se")                   //Required
+                ->setCancelUrl("http://myurl.se")                   //Optional
+                ->getPaymentForm();
 ```               
 
-###### 1.6.3.1.1 Exclude specific payment methods
+###### 1.5.3.1.1 Exclude specific payment methods
 Optional if you want to include specific paymentmethods for paypage
-Ex. 
 ```php   
     ->usePayPage()
-        ->setReturnUrl("http://myurl.se") //Required
-        ->excludePaymentMethods(PaymentMethod::DBSEBSE,PaymentMethod::SVEAINVOICE_SE)
+        ->setReturnUrl("http://myurl.se")                   //Required
+        ->setCancelUrl("http://myurl.se")                   //Optional
+        ->excludePaymentMethods(PaymentMethod::DBSEBSE,PaymentMethod::SVEAINVOICE_SE)   //Optional
         ->getPaymentForm();
 ```
-###### 1.6.3.1.2 Include specific payment methods
+###### 1.5.3.1.2 Include specific payment methods
 Optional if you want to include specific payment methods for *PayPage*
-Ex. 
 ```php   
     ->usePayPage()
-        ->setReturnUrl("http://myurl.se")       //Required
+        ->setReturnUrl("http://myurl.se")                   //Required
         ->includePaymentMethods(PaymentMethod::DBSEBSE,PaymentMethod::SVEAINVOICE_SE)   //Optional
         ->getPaymentForm();
 ```
 
-###### 1.6.3.1.3 Exclude Card payments
+###### 1.5.3.1.3 Exclude Card payments
 Optional if you want to exclude all cardpayment methods from *PayPage*.
-Ex. 
 ```php
    ->usePayPage()
         ->setReturnUrl("http://myurl.se")       //Required
@@ -411,20 +409,19 @@ Ex.
         ->getPaymentForm();
 ```
 
-###### 1.6.3.1.4 Exclude Direct payments
+###### 1.5.3.1.4 Exclude Direct payments
 Optional if you want to exclude all direct bank payments methods from *PayPage*.
-Ex. 
 ```php  
 ->usePayPage()
     ->setReturnUrl("http://myurl.se")           //Required
     ->excludeDirectPaymentMethods()             //Optional
     ->getPaymentForm();
 ```
-##### 1.6.3.6 Return
+##### 1.5.3.6 Return
 Returns Object type PaymentForm:
                 
 | Member                            | Description                               |
-| --------------------------------- |:-----------------------------------------:|
+|---------------------------------- |-------------------------------------------|
 | xmlMessageBase64                  | Payment information in XML-format, Base64 encoded.| 
 | xmlMessage                        | Payment information in XML-format.        |
 | merchantid                        | Authorization                             |
@@ -432,25 +429,14 @@ Returns Object type PaymentForm:
 | mac                               | Message authentication code.              |
 | completeHtmlFormWithSubmitButton  | A complete Html form with method= "post" with submit button to include in your code. |
 | htmlFormFieldsAsArray             | Array of Html form fields to include.     |
-| rawFields                         | Array of values to send in Html form. ($merchantid, $message, $mac) |
-     
-#### 1.6.4 Response handler
-After sending the values *mac*, *merchantid* and *xmlMessageBase64* to the server,
-an answer will be sent to the *returnUrl* with POST or GET as XML. If you process
-the answer with the class SveaResponse, you will have a structured object 
-similar to the synchronous aswer instead.
-Ex.
-```php
-  $resp = new SveaResponse($_REQUEST['response']); 
-```
+| rawFields                         | Array of values to send in Html form. ($merchantid, $xmlMessageBase64, $mac) |
 
 #### Synchronous solutions - Invoice and PaymentPlan
        
-#### 1.6.4 InvoicePayment
+#### 1.5.4 InvoicePayment
 Perform invoice payment. This payment form will perform an synchronous payment and return a response.
 Returns CreateOrderResponse object.
 If Config/SveaConfig.php is not modified you can set your store authorization here.
-Ex. 
 ```php
     $response = WebPay::createOrder()
         ->setTestmode()
@@ -468,16 +454,15 @@ Ex.
          ->setCustomerReference("33")
          ->setOrderDate("2012-12-12")
          ->setCurrency("SEK")
-**         ->useInvoicePayment()
+             ->useInvoicePayment()
              ->setPasswordBasedAuthorization("sverigetest", "sverigetest", 79021) //Optional
-             ->doPayment();**
+             ->doPayment();
 ```
-#### 1.6.5 PaymentPlanPayment
+#### 1.5.5 PaymentPlanPayment
 Perform PaymentPlanPayment. This payment form will perform an synchronous payment and return a response.
 Returns CreateOrderResponse object. Preceded by WebPay::getPaymentPlanParams().
 If Config/SveaConfig.php is not modified you can set your store authorization here.
 Param: Campaign code recieved from getPaymentPlanParams().
-Ex. 
 ```php
     $response = WebPay::createOrder()
        ->setTestmode()
@@ -512,7 +497,7 @@ Ex.
 ```
 ## 3. getAddresses
 Returns getAddressesResponse object with an *AddressSelector* for the associated addresses for a specific SecurityNumber. 
-Can be used when creating an order.  Only applicable for SE, NO and DK.
+Can be used when creating an order. Only applicable for SE, NO and DK.
 If Config/Config.php is not modified you can set your store authorization here.
 
 ### 3.1 Order type 
@@ -554,12 +539,11 @@ Ex.
 ```php
     ->setTestmode()
 ```
-### 4.2 Rows
+### 4.2 Specify order
 Continue by adding rows for products and other. You can also add InvoiceFee and ShippingFee.
 
 #### 4.2.1 OrderRow
 All products and other items. It is required to have a minimum of one row.
-Ex.
 ```php
     ->beginOrderRow()       
        ->setQuantity(2)                     //Required
@@ -574,7 +558,6 @@ Ex.
 ```
 
 #### 4.2.2 ShippingFee
-Ex. 
 ```php
     ->beginShippingFee()
         ->setAmountExVat(50)                //Required
@@ -587,7 +570,6 @@ Ex.
     ->endShippingFee()
 ```
 #### 4.2.3 InvoiceFee
-Ex. 
 ```php
     ->beginInvoiceFee()
         ->setAmountExVat(50)                //Required
@@ -601,7 +583,6 @@ Ex.
 ### 4.3 Other values
 Required is the Order id received when creating the order. Required for InvoiceOrders are InvoiceDistributionType. 
 If invoice order is credit invoice use setCreditInvoice($invoiceId) and setNumberOfCreditDays($creditDaysAsInt)
-Ex. 
 ```php
     ->setOrderId($orderId)                  //Required. Received when creating order.
     ->setNumberOfCreditDays(1)              //Use for Invoice orders.
@@ -609,8 +590,7 @@ Ex.
     ->setCreditInvoice                      //Use for invoice orders, if this should be a credit invoice.
     ->setNumberOfCreditDays(1)              //Use for invoice orders.
 ```
-	
-Ex. 
+
 ```php
     $response = WebPay::deliverOrder()
         ->setTestmode()
@@ -642,7 +622,7 @@ Ex.
 or
     ->closePaymentPlanOrder()
 ```
-Ex. 
+
 ```php
     $request =  WebPay::closeOrder()
         ->setTestmode()
@@ -651,33 +631,43 @@ Ex.
             ->setPasswordBasedAuthorization("sverigetest", "sverigetest", 79021) //Optional
             ->doRequest();
 ```
+## 6. Response handler
+All synchronous responses are handled through *SveaResponse* and structured into objects.
+Responses recieved after sending the values *mac*, *merchantid* and *xmlMessageBase64* to
+hosted solutions can also be processed through the *SveaResponse class*.
 
+The response from server will be sent to the *returnUrl* with POST or GET as XML, and
+*SveaResponse* will return a structured object similar to the synchronous aswer instead.
+```php
+  $respObject = new SveaResponse($_REQUEST['response']); 
+```
 # APPENDIX
 
 ## PayMentMethods
 Used in usePaymentMethod($paymentMethod) and in usePayPage(), 
 ->includePaymentMethods(...,...,...), ->excludeCardPaymentMethods(...,...,...), ->excludeDirectPaymentMethods(), ->excludeCardPaymentMethods().
 
-PaymentMethod::DBNORDEASE = Direct bank payment, Nordea, Sweden.
-PaymentMethod::DBSEBSE = Direct bank payment, private, SEB, Sweden.
-PaymentMethod::DBSEBFTGSE = Direct bank payment, company, SEB, Sweden.
-PaymentMethod::DBSHBSE = Direct bank payment, Handelsbanken, Sweden.
-PaymentMethod::DBSWEDBANKSE = Direct bank payment, Swedbanke, Sweden.
-PaymentMethod::KORTCERT = Card payments, Certitrade.
-PaymentMethod::PAYPAL = Paypal
-PaymentMethod::SKRILL = Card payment with Dankort, Skrill.
-
-PaymentMethod::SVEAINVOICESE = Invoice by PayPage in SE only.
-PaymentMethod::SVEASPLITSE = PaymentPlan by PayPage in SE only.
-PaymentMethod::SVEAINVOICEEU_SE = Invoice by PayPage in SE.
-PaymentMethod::SVEAINVOICEEU_NO = Invoice by PayPage in NO.
-PaymentMethod::SVEAINVOICEEU_DK = Invoice by PayPage in DK.
-PaymentMethod::SVEAINVOICEEU_FI = Invoice by PayPage in FI.
-PaymentMethod::SVEAINVOICEEU_NL = Invoice by PayPage in NL.
-PaymentMethod::SVEAINVOICEEU_DE = Invoice by PayPage in DL.
-PaymentMethod::SVEASPLITEU_SE = PaymentPlan by PayPage in SE.
-PaymentMethod::SVEASPLITEU_NO = PaymentPlan by PayPage in NO.
-PaymentMethod::SVEASPLITEU_DK = PaymentPlan by PayPage in DK.
-PaymentMethod::SVEASPLITEU_FI = PaymentPlan by PayPage in FI.
-PaymentMethod::SVEASPLITEU_DE = PaymentPlan by PayPage in SE.
-PaymentMethod::SVEASPLITEU_NL = PaymentPlan by PayPage in NL.
+| Payment method                    | Description                                   |
+|-----------------------------------|-----------------------------------------------|
+| PaymentMethod::DBNORDEAS          | Direct bank payment, Nordea, Sweden.          | 
+| PaymentMethod::DBSEBSE            | Direct bank payment, private, SEB, Sweden.    |
+| PaymentMethod::DBSEBFTGSE         | Direct bank payment, company, SEB, Sweden.    |
+| PaymentMethod::DBSHBSE            | Direct bank payment, Handelsbanken, Sweden.   |
+| PaymentMethod::DBSWEDBANKSE       | Direct bank payment, Swedbanke, Sweden.       |
+| PaymentMethod::KORTCERT           | Card payments, Certitrade.                    |
+| PaymentMethod::PAYPAL             | Paypal                                        |
+| PaymentMethod::SKRILL             | Card payment with Dankort, Skrill.            |
+| PaymentMethod::SVEAINVOICESE      | Invoice by PayPage in SE only.                |
+| PaymentMethod::SVEASPLITSE        | PaymentPlan by PayPage in SE only.            |
+| PaymentMethod::SVEAINVOICEEU_SE   | Invoice by PayPage in SE.                     |
+| PaymentMethod::SVEAINVOICEEU_NO   | Invoice by PayPage in NO.                     |
+| PaymentMethod::SVEAINVOICEEU_DK   | Invoice by PayPage in DK.                     |
+| PaymentMethod::SVEAINVOICEEU_FI   | Invoice by PayPage in FI.                     |
+| PaymentMethod::SVEAINVOICEEU_NL   | Invoice by PayPage in NL.                     |
+| PaymentMethod::SVEAINVOICEEU_DE   | Invoice by PayPage in DL.                     |
+| PaymentMethod::SVEASPLITEU_SE     | PaymentPlan by PayPage in SE.                 |
+| PaymentMethod::SVEASPLITEU_NO     | PaymentPlan by PayPage in NO.                 |
+| PaymentMethod::SVEASPLITEU_DK     | PaymentPlan by PayPage in DK.                 |
+| PaymentMethod::SVEASPLITEU_FI     | PaymentPlan by PayPage in FI.                 |
+| PaymentMethod::SVEASPLITEU_DE     | PaymentPlan by PayPage in SE.                 |
+| PaymentMethod::SVEASPLITEU_NL     | PaymentPlan by PayPage in NL.                 |
