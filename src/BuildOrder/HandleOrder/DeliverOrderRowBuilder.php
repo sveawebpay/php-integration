@@ -21,9 +21,9 @@ class DeliverOrderRowBuilder {
     public $vatDiscount = 0;
     
     /**
-     * @param deliverOrder $order
+     * @param deliverOrderBuilder $order
      */
-    public function __construct(deliverOrder $order) {
+    public function __construct(deliverOrderBuilder $order) {
         $this->order = $order;
     }
     
@@ -118,7 +118,7 @@ class DeliverOrderRowBuilder {
     
     /**
      * Code completion comment
-     * @return deliverOrder orderBuilder
+     * @return deliverOrderBuilder orderBuilder
      */
     public function endOrderRow() {
         return $this->order;

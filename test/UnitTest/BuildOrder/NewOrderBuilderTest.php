@@ -14,7 +14,7 @@ require_once $root . '\TestRowFactory.php';
  */
 class NewOrderBuilderTest extends PHPUnit_Framework_TestCase {
     
-    function testNewInvoiceOrder(){       
+    function t_estNewInvoiceOrder(){       
         $request = WebPay::createOrder()
             ->setTestmode();
         //foreach...
@@ -44,7 +44,7 @@ class NewOrderBuilderTest extends PHPUnit_Framework_TestCase {
 
         }
         
-        function testNewInvoiceOrderWithArray(){
+        function te_stNewInvoiceOrderWithArray(){
      
         $orderRows[] = Item::orderrow()
                     ->setArticleNumber(1)

@@ -5,6 +5,7 @@
  */
 abstract class PaymentMethod {
 
+    //PaymentMethodType::DIRECT
     const BANKAXESS = 'BANKAXESS';
     const DBAKTIAFI = 'DBAKTIAFI';
     const DBALANDSBANKENFI = 'DBALANDSBANKENFI';
@@ -21,13 +22,17 @@ abstract class PaymentMethod {
     const DBSPANKKIFI = 'DBSPANKKIFI';
     const DBSWEDBANKSE = 'DBSWEDBANKSE';
     const DBTAPIOLAFI = 'DBTAPIOLAFI';
+    //PaymentMethodType::CARD
     const KORTCERT = 'KORTCERT';
-   // const KORTSKRILL = 'KORTSKRILL';
+    const SKRILL = 'SKRILL';
+   // const KORTSKRILL = 'KORTSKRILL'; //Same as SKRILL
     const KORTWN = 'KORTWN';
-    const MICRODEB = 'MICRODEB';
+    //PaymentMethodType::PREPAID
+    const MICRODEB = 'MICRODEB'; //prepay
+    //PaymentMethodType::PSP
     const PAYGROUND = 'PAYGROUND';
     const PAYPAL = 'PAYPAL';
-    const SKRILL = 'SKRILL';
+    //PaymentMethodType::INVOICE
     const SVEAINVOICESE = 'SVEAINVOICESE';
     const SVEASPLITSE = 'SVEASPLITSE';
     const SVEAINVOICEEU_SE = 'SVEAINVOICEEU_SE';

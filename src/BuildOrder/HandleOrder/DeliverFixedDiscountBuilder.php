@@ -12,9 +12,9 @@ require_once '/../RowBuilder.php';
 class DeliverFixedDiscountBuilder implements RowBuilder {
     
     /**
-     * @param deliverOrder $order
+     * @param deliverOrderBuilder $order
      */
-    public function __construct(deliverOrder $order) {
+    public function __construct(deliverOrderBuilder $order) {
         $this->order = $order;
     }
 
@@ -70,7 +70,7 @@ class DeliverFixedDiscountBuilder implements RowBuilder {
 
     /**
      * Code completion comment
-     * @return deliverOrder deliverOrder
+     * @return deliverOrderBuilder deliverOrder
      */
     public function endFixedDiscount() {
         return $this->order;
