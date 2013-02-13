@@ -51,6 +51,10 @@ class WebPay {
     public static function getAddresses() {
         return new GetAddresses();
     }
+    
+     public static function orderRow(){
+         return new OrderRow();
+    }
 }
 
 ?>

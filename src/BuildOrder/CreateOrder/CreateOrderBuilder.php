@@ -255,6 +255,12 @@ class createOrder {
         return $rowBuilder;
     }
     
+    public function addOrderRow($orderRow){
+       array_push($this->orderRows, $orderRow);
+       return $this;
+    }
+      
+
     /**
      * Begin building Shipping fee row
      * Use for all Payment types when Creating Order.

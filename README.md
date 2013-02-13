@@ -1,21 +1,21 @@
 # PHP Integration Package API for SveaWebPay
 
 ## Index
-* [Introduction](https://github.com/sveawebpay/php-integration#introduction)
-* [Configuration](https://github.com/sveawebpay/php-integration#configuration)
-* [1. CreateOrder](https://github.com/sveawebpay/php-integration#1-createorder)
-    * [Test mode](https://github.com/sveawebpay/php-integration#11-test-mode)
-    * [Specify order](https://github.com/sveawebpay/php-integration#12-specify-order)
-    * [Customer identity](https://github.com/sveawebpay/php-integration#13-customer-identity)
-    * [Other values](https://github.com/sveawebpay/php-integration#14-other-values)
-    * [Choose payment](https://github.com/sveawebpay/php-integration#15-choose-payment)
-* [2. GetPaymentPlanParams](https://github.com/sveawebpay/php-integration#2-getpaymentplanparams)
-* [3. GetAddresses](https://github.com/sveawebpay/php-integration#2-getpaymentplanparams)
-* [4. DeliverOrder](https://github.com/sveawebpay/php-integration#2-getpaymentplanparams)
-    * [Test mode](https://github.com/sveawebpay/php-integration#41-testmode)
-    * [Specify order](https://github.com/sveawebpay/php-integration#42-specify-order)
-    * [Other values](https://github.com/sveawebpay/php-integration#43-other-values)
-* [5. CloseOrder](https://github.com/sveawebpay/php-integration#5-closeorder)
+* [Introduction](https://github.com/sveawebpay/php-integration/tree/develop#introduction)
+* [Configuration](https://github.com/sveawebpay/php-integration/tree/develop#configuration)
+* [1. CreateOrder](https://github.com/sveawebpay/php-integration/tree/develop#1-createorder)
+    * [Test mode](https://github.com/sveawebpay/php-integration/tree/develop#11-test-mode)
+    * [Specify order](https://github.com/sveawebpay/php-integration/tree/develop#12-specify-order)
+    * [Customer identity](https://github.com/sveawebpay/php-integration/tree/develop#13-customer-identity)
+    * [Other values](https://github.com/sveawebpay/php-integration/tree/develop#14-other-values)
+    * [Choose payment](https://github.com/sveawebpay/php-integration/tree/develop#15-choose-payment)
+* [2. GetPaymentPlanParams](https://github.com/sveawebpay/php-integration/tree/develop#2-getpaymentplanparams)
+* [3. GetAddresses](https://github.com/sveawebpay/php-integration/tree/develop#2-getpaymentplanparams)
+* [4. DeliverOrder](https://github.com/sveawebpay/php-integration/tree/develop#2-getpaymentplanparams)
+    * [Test mode](https://github.com/sveawebpay/php-integration/tree/develop#41-testmode)
+    * [Specify order](https://github.com/sveawebpay/php-integration/tree/develop#42-specify-order)
+    * [Other values](https://github.com/sveawebpay/php-integration/tree/develop#43-other-values)
+* [5. CloseOrder](https://github.com/sveawebpay/php-integration/tree/develop#5-closeorder)
 * [6. Response handler](https://github.com/sveawebpay/php-integration/tree/develop#6-response-handler)
 * [APPENDIX](https://github.com/sveawebpay/php-integration/tree/develop#appendix)
 
@@ -50,6 +50,7 @@ There are three ways to configure Svea authorization. Choose one of the followin
 * 2. Modify function __construct() in file SveaConfig.php in folder Config with your authorization values.
 * 3. Everytime when creating an order, after choosing payment type, use function setPasswordBasedAuthorization() for Invoice/Payment plan 
     or setMerchantIdBasedAuthorization() for other hosted payments like card and direct bank payments.
+
 [<< To top](https://github.com/sveawebpay/php-integration/tree/develop#php-integration-package-api-for-sveawebpay)
 
 ## 1. createOrder                                                            
@@ -478,8 +479,8 @@ If Config/SveaConfig.php is not modified you can set your store authorization he
 Param: Campaign code recieved from getPaymentPlanParams().
 ```php
     $response = WebPay::createOrder()
-       ->setTestmode()
-       ->beginOrderRow()
+        ->setTestmode()
+        ->beginOrderRow()
            ->setArticleNumber(1)
            ->setQuantity(2)
            ->setAmountExVat(100.00)
@@ -488,14 +489,14 @@ Param: Campaign code recieved from getPaymentPlanParams().
            ->setUnit("st")
            ->setVatPercent(25)
            ->setDiscountPercent(0)
-       ->endOrderRow()
-       ->setCountryCode("SE")
-       ->setCustomerReference("33")
-       ->setOrderDate("2012-12-12")
-       ->setCurrency("SEK")
- **      ->usePaymentPlanPayment("camp1")  //Parameter: campaign code recieved from getPaymentPlanParams
+        ->endOrderRow()
+        ->setCountryCode("SE")
+        ->setCustomerReference("33")
+        ->setOrderDate("2012-12-12")
+        ->setCurrency("SEK")
+        ->usePaymentPlanPayment("camp1")  //Parameter: campaign code recieved from getPaymentPlanParams
            ->setPasswordBasedAuthorization("sverigetest", "sverigetest", 79021) //Optional
-           ->doPayment();**
+           ->doPayment();
 ```
 [<< To top](https://github.com/sveawebpay/php-integration/tree/develop#php-integration-package-api-for-sveawebpay)
 
@@ -516,6 +517,7 @@ Ex.
 Returns getAddressesResponse object with an *AddressSelector* for the associated addresses for a specific SecurityNumber. 
 Can be used when creating an order. Only applicable for SE, NO and DK.
 If Config/Config.php is not modified you can set your store authorization here.
+
 [<< To top](https://github.com/sveawebpay/php-integration/tree/develop#php-integration-package-api-for-sveawebpay)
 
 ### 3.1 Order type 
@@ -552,6 +554,7 @@ matched with the rows that was sent when creating the order.
 Only applicable for invoice and payment plan payments.
 Returns DeliverOrderResult object.
 If Config/SveaConfig.php is not modified you can set your store authorization here.
+
 [<< To top](https://github.com/sveawebpay/php-integration/tree/develop#php-integration-package-api-for-sveawebpay)
 
 ### 4.1 Testmode                                                             
@@ -566,6 +569,7 @@ Ex.
 
 ### 4.2 Specify order                                                        
 Continue by adding rows for products and other. You can also add InvoiceFee and ShippingFee.
+
 [<< To top](https://github.com/sveawebpay/php-integration/tree/develop#php-integration-package-api-for-sveawebpay)
 
 #### 4.2.1 OrderRow
@@ -643,6 +647,7 @@ If invoice order is credit invoice use setCreditInvoice($invoiceId) and setNumbe
 ## 5. closeOrder                                                             
 Use when you want to cancel an undelivered order. Valid only for invoice and payment plan orders. 
 Required is the order id received when creating the order. If Config/SveaConfig.php is not modified you can set your store authorization here.
+
 [<< To top](https://github.com/sveawebpay/php-integration/tree/develop#php-integration-package-api-for-sveawebpay)
 
 ### 5.1 Close by payment type                                                
@@ -686,7 +691,7 @@ Used in usePaymentMethod($paymentMethod) and in usePayPage(),
 | PaymentMethod::DBSEBSE            | Direct bank payment, private, SEB, Sweden.    |
 | PaymentMethod::DBSEBFTGSE         | Direct bank payment, company, SEB, Sweden.    |
 | PaymentMethod::DBSHBSE            | Direct bank payment, Handelsbanken, Sweden.   |
-| PaymentMethod::DBSWEDBANKSE       | Direct bank payment, Swedbanke, Sweden.       |
+| PaymentMethod::DBSWEDBANKSE       | Direct bank payment, Swedbank, Sweden.       |
 | PaymentMethod::KORTCERT           | Card payments, Certitrade.                    |
 | PaymentMethod::PAYPAL             | Paypal                                        |
 | PaymentMethod::SKRILL             | Card payment with Dankort, Skrill.            |
@@ -697,11 +702,11 @@ Used in usePaymentMethod($paymentMethod) and in usePayPage(),
 | PaymentMethod::SVEAINVOICEEU_DK   | Invoice by PayPage in DK.                     |
 | PaymentMethod::SVEAINVOICEEU_FI   | Invoice by PayPage in FI.                     |
 | PaymentMethod::SVEAINVOICEEU_NL   | Invoice by PayPage in NL.                     |
-| PaymentMethod::SVEAINVOICEEU_DE   | Invoice by PayPage in DL.                     |
+| PaymentMethod::SVEAINVOICEEU_DE   | Invoice by PayPage in DE.                     |
 | PaymentMethod::SVEASPLITEU_SE     | PaymentPlan by PayPage in SE.                 |
 | PaymentMethod::SVEASPLITEU_NO     | PaymentPlan by PayPage in NO.                 |
 | PaymentMethod::SVEASPLITEU_DK     | PaymentPlan by PayPage in DK.                 |
 | PaymentMethod::SVEASPLITEU_FI     | PaymentPlan by PayPage in FI.                 |
-| PaymentMethod::SVEASPLITEU_DE     | PaymentPlan by PayPage in SE.                 |
+| PaymentMethod::SVEASPLITEU_DE     | PaymentPlan by PayPage in DE.                 |
 | PaymentMethod::SVEASPLITEU_NL     | PaymentPlan by PayPage in NL.                 |
 [<< To top](https://github.com/sveawebpay/php-integration/tree/develop#php-integration-package-api-for-sveawebpay)
