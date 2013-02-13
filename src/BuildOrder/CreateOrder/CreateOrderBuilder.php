@@ -256,7 +256,13 @@ class createOrder {
     }
     
     public function addOrderRow($orderRow){
-       array_push($this->orderRows, $orderRow);
+        if(is_array($orderRow)){
+            foreach ($orderRow as $row) {
+                array_push($this->orderRows, $row);
+            }
+        }  else {
+             array_push($this->orderRows, $orderRow);
+        }      
        return $this;
     }
       

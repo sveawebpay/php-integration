@@ -4,7 +4,7 @@
 require_once '/../RowBuilder.php';
 
 /**
- * Description of CreateOrderRowBuilder
+ * OrderRowBuilder.
  *
  * @author Anneli Halld'n, Daniel Brolund for Svea Webpay
  */
