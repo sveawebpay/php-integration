@@ -20,27 +20,14 @@ class CardPayment extends HostedPayment {
     }
 
     protected function configureExcludedPaymentMethods($request) {       
-        //directbanks
-        $methods[] = PaymentMethod::DBAKTIAFI;
-        $methods[] = PaymentMethod::DBALANDSBANKENFI;
-        $methods[] = PaymentMethod::DBDANSKEBANKSE;
+        //directbanks      
         $methods[] = PaymentMethod::DBNORDEASE;
-        $methods[] = PaymentMethod::DBNORDEAFI;
-        $methods[] = PaymentMethod::DBNORDEAEE;
-        $methods[] = PaymentMethod::DBPOHJOLAFI;
-        $methods[] = PaymentMethod::DBSAMPOFI;
         $methods[] = PaymentMethod::DBSEBSE;
         $methods[] = PaymentMethod::DBSEBFTGSE;
-        $methods[] = PaymentMethod::DBSHBFI;
         $methods[] = PaymentMethod::DBSHBSE;
-        $methods[] = PaymentMethod::DBSPANKKIFI;
         $methods[] = PaymentMethod::DBSWEDBANKSE;
-        $methods[] = PaymentMethod::DBTAPIOLAFI;
-        //other
-        $methods[] = PaymentMethod::BANKAXESS;
-        $methods[] = PaymentMethod::MICRODEB;
-        $methods[] = PaymentMethod::PAYGROUND;
-        $methods[] = PaymentMethod::PAYPAL;
+        //other        
+       $methods[] = PaymentMethod::PAYPAL;
         //countrycheck
         switch ($this->order->countryCode) {
             case "SE":

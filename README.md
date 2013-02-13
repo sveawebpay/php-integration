@@ -445,6 +445,52 @@ Returns Object type PaymentForm:
 | htmlFormFieldsAsArray             | Array of Html form fields to include.     |
 | rawFields                         | Array of values to send in Html form. ($merchantid, $xmlMessageBase64, $mac) |
 
+
+#### 1.5.4 PaymentMethod specified
+Go direct to specified payment method without the step *PayPage*.
+
+##### 1.5.1.1 Request
+If Config/SveaConfig.php is not modified you can set your store authorization here.
+```php
+$form = WebPay::createOrder()
+    ->beginOrderRow()
+        ->setArticleNumber(1)
+        ->setQuantity(2)
+        ->setAmountExVat(100.00)
+        ->setDescription("Specification")
+        ->setName('Prod')
+        ->setUnit("st")
+        ->setVatPercent(25)
+        ->setDiscountPercent(0)
+    ->endOrderRow()                
+    ->setCountryCode("SE")
+    ->setClientOrderNumber("33")
+    ->setOrderDate("2012-12-12")
+    ->setCurrency("SEK")
+        ->usePaymentMethod(PaymentMethod::KORTCERT)             //Se APPENDIX for paymentmethods
+            ->setMerchantIdBasedAuthorization(1200, "f78hv9")   //Optional
+            ->setReturnUrl("http://myurl.se")                   //Required
+            ->setCancelUrl("http://myurl.se")                   //Optional
+            ->getPaymentForm();
+
+```
+##### 1.5.1.2 Return
+The values of *xmlMessageBase64*, *merchantid* and *mac* are to be sent as xml to SveaWebPay.
+Function getPaymentForm() returns Object type PaymentForm with accessible members:
+
+| Member                            | Description                               |
+|---------------------------------- |-------------------------------------------|
+| xmlMessageBase64                  | Payment information in XML-format, Base64 encoded.| 
+| xmlMessage                        | Payment information in XML-format.        |
+| merchantid                        | Authorization                             |
+| secretWord                        | Authorization                             |
+| mac                               | Message authentication code.              |    
+| completeHtmlFormWithSubmitButton  | A complete Html form with method= "post" with submit button to include in your code. |
+| htmlFormFieldsAsArray             | Array of Html form fields to include.     |
+| rawFields                         | Array of values to send in Html form. ($merchantid, $xmlMessageBase64, $mac) |
+            
+
+
 #### Synchronous solutions - Invoice and PaymentPlan
        
 #### 1.5.4 InvoicePayment
@@ -687,11 +733,11 @@ Used in usePaymentMethod($paymentMethod) and in usePayPage(),
 
 | Payment method                    | Description                                   |
 |-----------------------------------|-----------------------------------------------|
-| PaymentMethod::DBNORDEAS          | Direct bank payment, Nordea, Sweden.          | 
+| PaymentMethod::DBNORDEASE         | Direct bank payment, Nordea, Sweden.          | 
 | PaymentMethod::DBSEBSE            | Direct bank payment, private, SEB, Sweden.    |
 | PaymentMethod::DBSEBFTGSE         | Direct bank payment, company, SEB, Sweden.    |
 | PaymentMethod::DBSHBSE            | Direct bank payment, Handelsbanken, Sweden.   |
-| PaymentMethod::DBSWEDBANKSE       | Direct bank payment, Swedbank, Sweden.       |
+| PaymentMethod::DBSWEDBANKSE       | Direct bank payment, Swedbank, Sweden.        |
 | PaymentMethod::KORTCERT           | Card payments, Certitrade.                    |
 | PaymentMethod::PAYPAL             | Paypal                                        |
 | PaymentMethod::SKRILL             | Card payment with Dankort, Skrill.            |
@@ -709,4 +755,5 @@ Used in usePaymentMethod($paymentMethod) and in usePayPage(),
 | PaymentMethod::SVEASPLITEU_FI     | PaymentPlan by PayPage in FI.                 |
 | PaymentMethod::SVEASPLITEU_DE     | PaymentPlan by PayPage in DE.                 |
 | PaymentMethod::SVEASPLITEU_NL     | PaymentPlan by PayPage in NL.                 |
+
 [<< To top](https://github.com/sveawebpay/php-integration/tree/develop#php-integration-package-api-for-sveawebpay)
