@@ -91,7 +91,7 @@ class WebServicePayment {
      * Transforms object to array and sends it to SveaWebPay Europe Web service API by php SoapClient
      * @return CreateOrderEuResponse
      */
-    public function doPayment() {
+    public function doRequest() {
         $object = $this->preparePayment();
         $url = $this->order->testmode ? SveaConfig::SWP_TEST_WS_URL : SveaConfig::SWP_PROD_WS_URL;
         $request = new SveaDoRequest($url);

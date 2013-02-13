@@ -41,7 +41,7 @@ class WebServicePayments_RequestTest extends PHPUnit_Framework_TestCase {
                 ->setOrderDate("2012-12-12")
                 ->setCurrency("SEK")
                 ->useInvoicePayment()
-                    ->doPayment();
+                    ->doRequest();
         
         $this->assertEquals(1, $request->accepted);
     }
@@ -64,7 +64,7 @@ class WebServicePayments_RequestTest extends PHPUnit_Framework_TestCase {
                 ->setOrderDate("2012-12-12")
                 ->setCurrency("SEK")
                 ->useInvoicePayment()
-                    ->doPayment();
+                    ->doRequest();
         
         $this->assertEquals(true, $request->accepted);
     }
@@ -109,7 +109,7 @@ class WebServicePayments_RequestTest extends PHPUnit_Framework_TestCase {
                 ->setOrderDate("2012-12-12")
                 ->setCurrency("SEK")
                     ->usePaymentPlanPayment($campaigncode)// returnerar InvoiceOrder object
-                    ->doPayment();
+                    ->doRequest();
 
         $this->assertEquals(1, $request->accepted);
     }
@@ -149,7 +149,7 @@ class WebServicePayments_RequestTest extends PHPUnit_Framework_TestCase {
                     ->setOrderDate("2012-12-12")
                     ->setCurrency("SEK")
                     ->useInvoicePayment()// returnerar InvoiceOrder object
-                        ->doPayment();
+                        ->doRequest();
 
         return $request->sveaOrderId;
     }
