@@ -19,19 +19,39 @@ class CardPayment extends HostedPayment {
         parent::__construct($order);
     }
 
-    protected function configureExcludedPaymentMethods($request) {
+    protected function configureExcludedPaymentMethods($request) {       
+        //directbanks
+        $methods[] = PaymentMethod::DBAKTIAFI;
+        $methods[] = PaymentMethod::DBALANDSBANKENFI;
+        $methods[] = PaymentMethod::DBDANSKEBANKSE;
+        $methods[] = PaymentMethod::DBNORDEASE;
+        $methods[] = PaymentMethod::DBNORDEAFI;
+        $methods[] = PaymentMethod::DBNORDEAEE;
+        $methods[] = PaymentMethod::DBPOHJOLAFI;
+        $methods[] = PaymentMethod::DBSAMPOFI;
+        $methods[] = PaymentMethod::DBSEBSE;
+        $methods[] = PaymentMethod::DBSEBFTGSE;
+        $methods[] = PaymentMethod::DBSHBFI;
+        $methods[] = PaymentMethod::DBSHBSE;
+        $methods[] = PaymentMethod::DBSPANKKIFI;
+        $methods[] = PaymentMethod::DBSWEDBANKSE;
+        $methods[] = PaymentMethod::DBTAPIOLAFI;
+        //other
+        $methods[] = PaymentMethod::BANKAXESS;
+        $methods[] = PaymentMethod::MICRODEB;
+        $methods[] = PaymentMethod::PAYGROUND;
         $methods[] = PaymentMethod::PAYPAL;
-
+        //countrycheck
         switch ($this->order->countryCode) {
             case "SE":
-                $methods[] = PaymentMethod::DBNORDEASE;
-                $methods[] = PaymentMethod::DBSEBSE;
-                $methods[] = PaymentMethod::DBSEBFTGSE;
-                $methods[] = PaymentMethod::DBSHBSE;
-                $methods[] = PaymentMethod::DBSWEDBANKSE;
+            $methods[] = PaymentMethod::SKRILL;
+
+                break;
+
             default:
                 break;
         }
+         
         $exclude = new ExcludePayments();
         $methods = array_merge((array)$methods, (array)$exclude->excludeInvoicesAndPaymentPlan($this->order->countryCode));
         
