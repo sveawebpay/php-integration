@@ -10,9 +10,9 @@ require_once SVEA_REQUEST_DIR . '/Includes.php';
 class ShippingFeeBuilder {
  
     /**
-     * @param createOrder $order
+     * @param createOrderBuilder $order
      */
-    public function __construct(createOrder $order) {
+    public function __construct(createOrderBuilder $order) {
         $this->order = $order;
     }
     
@@ -82,7 +82,7 @@ class ShippingFeeBuilder {
 
     /**
      * Code completion comment
-     * @return createOrder orderBuilder
+     * @return createOrderBuilder orderBuilder
      */
     public function endShippingFee() {
         return $this->order;

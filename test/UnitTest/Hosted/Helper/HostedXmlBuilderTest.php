@@ -12,7 +12,7 @@ require_once '/../Payment/FakeHostedPayment.php';
 class HostedXmlBuilderTest extends PHPUnit_Framework_TestCase {
     
     public function testFormatOrderRows() {
-        $order = new createOrder();
+        $order = new createOrderBuilder();
         $payment = new FakeHostedPayment($order);
         $payment->order = $order;
         $payment->setCancelUrl("http://www.cancel.com");

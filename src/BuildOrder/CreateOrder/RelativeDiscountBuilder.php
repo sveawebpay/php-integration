@@ -12,9 +12,9 @@ require_once '/../RowBuilder.php';
 class RelativeDiscountBuilder implements RowBuilder {
     
     /**
-     * @param createOrder $order
+     * @param createOrderBuilder $order
      */
-    public function __construct(createOrder $order) {
+    public function __construct(createOrderBuilder $order) {
         $this->order = $order;
     }
     
@@ -71,7 +71,7 @@ class RelativeDiscountBuilder implements RowBuilder {
 
     /**
      * Code completion comment
-     * @return createOrder createOrder
+     * @return createOrderBuilder createOrder
      */
     public function endRelativeDiscount() {
         return $this->order;

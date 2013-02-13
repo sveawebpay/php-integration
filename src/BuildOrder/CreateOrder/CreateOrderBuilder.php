@@ -8,7 +8,7 @@ require_once SVEA_REQUEST_DIR . '/Includes.php';
  * @author Anneli Halld'n, Daniel Brolund for Svea Webpay
  * @package BuildOrder/CreateOrder
 */
-class createOrder {
+class createOrderBuilder {
 
      /**
      * @var Array Rows containing Product rows

@@ -11,9 +11,9 @@ require_once SVEA_REQUEST_DIR . '/Includes.php';
 class FixedDiscountBuilder implements RowBuilder {
     
     /**
-     * @param createOrder $order
+     * @param createOrderBuilder $order
      */
-    public function __construct(createOrder $order) {
+    public function __construct(createOrderBuilder $order) {
         $this->order = $order;
     }
 
@@ -69,7 +69,7 @@ class FixedDiscountBuilder implements RowBuilder {
 
     /**
      * Code completion comment
-     * @return createOrder createOrder
+     * @return createOrderBuilder createOrder
      */
     public function endFixedDiscount() {
         return $this->order;

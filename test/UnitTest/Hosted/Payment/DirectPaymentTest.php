@@ -33,13 +33,13 @@ class DirectPaymentTest extends PHPUnit_Framework_TestCase {
             ->setOrderDate("2012-12-12")
             ->setCurrency("SEK")
             ->usePayPageDirectBankOnly()
-            ->setReturnUrl("http://myurl.se")
-            ->getPaymentForm();
+                ->setReturnUrl("http://myurl.se")
+                ->getPaymentForm();
         
         $xmlMessage = new SimpleXMLElement($form->xmlMessage);
-        $this->assertEquals('PAYPAL', $xmlMessage->excludepaymentmethods->exclude[0]);
-        $this->assertEquals('KORTCERT', $xmlMessage->excludepaymentmethods->exclude[1]);
-        $this->assertEquals('SKRILL', $xmlMessage->excludepaymentmethods->exclude[2]);
+        $this->assertEquals('KORTCERT', $xmlMessage->excludepaymentmethods->exclude[0]);      
+        $this->assertEquals('SKRILL', $xmlMessage->excludepaymentmethods->exclude[1]);
+        $this->assertEquals('PAYPAL', $xmlMessage->excludepaymentmethods->exclude[2]);  
        // $this->assertEquals('SKRILL', $xmlMessage->excludepaymentmethods->exclude[3]);
     }
    
