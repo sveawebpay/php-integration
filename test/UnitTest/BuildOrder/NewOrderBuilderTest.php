@@ -14,13 +14,13 @@ require_once $root . '\TestRowFactory.php';
  */
 class NewOrderBuilderTest extends PHPUnit_Framework_TestCase {
     
-    function t_estNewInvoiceOrder(){       
+    function testNewInvoiceOrder(){       
         $request = WebPay::createOrder()
             ->setTestmode();
         //foreach...
         $request = $request
             ->addOrderRow(
-                    Item::orderRow()
+                Item::orderRow()
                     ->setArticleNumber(1)
                     ->setQuantity(2)
                     ->setAmountExVat(100.00)
@@ -31,16 +31,22 @@ class NewOrderBuilderTest extends PHPUnit_Framework_TestCase {
                     ->setDiscountPercent(0)
                     );
         //end foreach
-            $request = $request->setCustomerSsn(194605092222)
+            $sveaRequest = $request->setCustomerSsn(194605092222)
                 ->setCountryCode("SE")
                 ->setCustomerReference("33")
                 ->setOrderDate("2012-12-12")
                 ->setCurrency("SEK")
                 ->useInvoicePayment()// returnerar InvoiceOrder object 
                     ->prepareRequest();
-        
-            print_r($request);
-            $this->assertEquals(194605092222, $request->request->CreateOrderInformation->CustomerIdentity->NationalIdNumber); //Check all in identity
+            
+            $this->assertEquals(194605092222, $sveaRequest->request->CreateOrderInformation->CustomerIdentity->NationalIdNumber); //Check all in identity
+            $this->assertEquals(1, $sveaRequest->request->CreateOrderInformation->OrderRows['OrderRow'][0]->ArticleNumber);
+            $this->assertEquals(2, $sveaRequest->request->CreateOrderInformation->OrderRows['OrderRow'][0]->NumberOfUnits);
+            $this->assertEquals(100.00, $sveaRequest->request->CreateOrderInformation->OrderRows['OrderRow'][0]->PricePerUnit);
+            $this->assertEquals("Prod: Specification", $sveaRequest->request->CreateOrderInformation->OrderRows['OrderRow'][0]->Description);
+            $this->assertEquals("st", $sveaRequest->request->CreateOrderInformation->OrderRows['OrderRow'][0]->Unit);
+            $this->assertEquals(25, $sveaRequest->request->CreateOrderInformation->OrderRows['OrderRow'][0]->VatPercent);
+            $this->assertEquals(0, $sveaRequest->request->CreateOrderInformation->OrderRows['OrderRow'][0]->DiscountPercent);
 
         }
         
