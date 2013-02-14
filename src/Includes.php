@@ -18,7 +18,7 @@ foreach (glob(SVEA_REQUEST_DIR . "/BuildOrder/HandleOrder/*.php") as $config)
     include_once($config);
 foreach (glob(SVEA_REQUEST_DIR . "/BuildOrder/Validator/*.php") as $config)
     include_once($config);
-foreach (glob(SVEA_REQUEST_DIR . "/BuildOrder/helper/*.php") as $config)
+foreach (glob(SVEA_REQUEST_DIR . "/BuildOrder/RowBuilders/*.php") as $config)
     include_once($config);
 
 foreach (glob(SVEA_REQUEST_DIR . "/HostedRequests/Payment/*.php") as $config)

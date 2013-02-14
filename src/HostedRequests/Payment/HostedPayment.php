@@ -18,6 +18,7 @@ class HostedPayment {
     public $xmlMessageBase64;
     public $returnUrl;
     public $cancelUrl;
+    public $langCode;
 
     /**
      * @param type $order
@@ -26,18 +27,7 @@ class HostedPayment {
         $this->order = $order;
     }
     
-    /**
-     * Alternative drop or change file in Config/SveaConfig.php
-     * Note! This fuction may change in future updates.
-     * @param type $merchantId
-     * @param type $secret
-     * @return \HostedPayment
-     */
-    public function setMerchantIdBasedAuthorization($merchantId,$secret){
-        $this->order->conf->merchantId = $merchantId;
-        $this->order->conf->secret = $secret;
-        return $this;
-    }
+
     /**
      * 
      * @return type $errors
@@ -97,6 +87,7 @@ class HostedPayment {
         $request['totalVat'] = $formatter->formatTotalVat( $request['rows']);
         $request['returnUrl'] = $this->returnUrl;
         $request['cancelUrl'] = $this->cancelUrl;
+        $request['langCode'] = $this->langCode;
         $currency = trim($this->order->currency);
         $currency = strtoupper($currency);
         $request['currency'] = $currency;
@@ -104,45 +95,6 @@ class HostedPayment {
     }
     
     
-    /**
-    protected function excludeInvoicesAndPaymentPlan($countryCode) {
-        $methods = array();
-        
-        switch ($countryCode) {
-            case "SE":
-                $methods[] = PaymentMethod::SVEAINVOICESE;
-                $methods[] = PaymentMethod::SVEASPLITSE;
-                $methods[] = PaymentMethod::SVEAINVOICEEU_SE;
-                $methods[] = PaymentMethod::SVEASPLITEU_SE;
-                break;
-            case "DE":
-                $methods[] = PaymentMethod::SVEAINVOICEEU_DE;
-                $methods[] = PaymentMethod::SVEASPLITEU_DE;
-                break;
-            case "DK":
-                $methods[] = PaymentMethod::SVEAINVOICEEU_DK;
-                $methods[] = PaymentMethod::SVEASPLITEU_DK;
-                break;
-            case "FI":
-                $methods[] = PaymentMethod::SVEAINVOICEEU_FI;
-                $methods[] = PaymentMethod::SVEASPLITEU_FI;
-                break;
-            case "NL":
-                $methods[] = PaymentMethod::SVEAINVOICEEU_NL;
-                $methods[] = PaymentMethod::SVEASPLITEU_NL;
-                break;
-            case "NO":
-                $methods[] = PaymentMethod::SVEAINVOICEEU_NO;
-                $methods[] = PaymentMethod::SVEASPLITEU_NO;
-                break;
-            default:
-                break;
-        }
-        
-        return $methods;
-    }
-     * 
-     */
 }
 
 ?>

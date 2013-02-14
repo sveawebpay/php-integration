@@ -47,6 +47,19 @@ class CardPayment extends HostedPayment {
     }
     
     /**
+     * Alternative drop or change file in Config/SveaConfig.php
+     * Note! This fuction may change in future updates.
+     * @param type $merchantId
+     * @param type $secret
+     * @return \HostedPayment
+     */
+    public function setMerchantIdBasedAuthorization($merchantId,$secret){
+        $this->order->conf->merchantId = $merchantId;
+        $this->order->conf->secret = $secret;
+        return $this;
+    }
+    
+    /**
      * Set return Url for redirect when payment is completed
      * @param type $returnUrlAsString
      * @return \HostedPayment
@@ -63,6 +76,32 @@ class CardPayment extends HostedPayment {
      */
     public function setCancelUrl($cancelUrlAsString) {
         $this->cancelUrl = $cancelUrlAsString;
+        return $this;
+    }
+    
+    public function setPayPageLanguage($languageCodeAsISO639){
+        switch ($languageCodeAsISO639) {
+            case "sv":
+                $this->langCode = $languageCodeAsISO639;
+
+                break;
+            case "fi":
+                $this->langCode = $languageCodeAsISO639;
+
+                break;
+            case "es":
+                $this->langCode = $languageCodeAsISO639;
+
+                break;
+            case "en":
+                $this->langCode = $languageCodeAsISO639;
+
+                break;
+
+            default:
+                 $this->langCode = "en";
+                break;
+        }
         return $this;
     }
 }

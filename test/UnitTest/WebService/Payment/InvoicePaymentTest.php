@@ -32,7 +32,7 @@ class InvoicePaymentTest extends PHPUnit_Framework_TestCase {
                 ->setOrderDate("2012-12-12")
                 ->setCurrency("SEK")
                 ->useInvoicePayment()// returnerar InvoiceOrder object 
-                    ->preparePayment();
+                    ->prepareRequest();
 
         $this->assertEquals(194605092222, $request->request->CreateOrderInformation->CustomerIdentity->NationalIdNumber); //Check all in identity
         $this->assertEquals("SE", $request->request->CreateOrderInformation->CustomerIdentity->CountryCode); //Check all in identity
@@ -59,7 +59,7 @@ class InvoicePaymentTest extends PHPUnit_Framework_TestCase {
                     ->setCurrency("SEK")
                     ->useInvoicePayment()// returnerar InvoiceOrder object 
                         ->setPasswordBasedAuthorization("sverigetest", "sverigetest", 79021)
-                        ->preparePayment();
+                        ->prepareRequest();
            
         $this->assertEquals(79021, $request->request->Auth->ClientNumber); //Check all in identity
         $this->assertEquals("sverigetest", $request->request->Auth->Username); //Check all in identity
@@ -94,7 +94,7 @@ class InvoicePaymentTest extends PHPUnit_Framework_TestCase {
                 ->setOrderDate("2012-12-12")
                 ->setCurrency("SEK")
                 ->useInvoicePayment()// returnerar InvoiceOrder object
-                    ->preparePayment();
+                    ->prepareRequest();
 
         $this->assertEquals("test@svea.com", $request->request->CreateOrderInformation->CustomerIdentity->Email); //Check all in identity
         $this->assertEquals(999999, $request->request->CreateOrderInformation->CustomerIdentity->PhoneNumber); //Check all in identity
@@ -141,7 +141,7 @@ class InvoicePaymentTest extends PHPUnit_Framework_TestCase {
             ->setOrderDate("2012-12-12")
             ->setCurrency("SEK")
             ->useInvoicePayment()// returnerar InvoiceOrder object
-                ->preparePayment();
+                ->prepareRequest();
 
         $this->assertEquals("test@svea.com", $request->request->CreateOrderInformation->CustomerIdentity->Email); //Check all in identity
         $this->assertEquals(999999, $request->request->CreateOrderInformation->CustomerIdentity->PhoneNumber); //Check all in identity
@@ -176,7 +176,7 @@ class InvoicePaymentTest extends PHPUnit_Framework_TestCase {
             ->setOrderDate("2012-12-12")
             ->setCurrency("SEK")
             ->useInvoicePayment()// returnerar InvoiceOrder object
-                ->preparePayment();
+                ->prepareRequest();
           
         $this->assertEquals("vat234", $request->request->CreateOrderInformation->CustomerIdentity->NationalIdNumber); //Check all in identity
         $this->assertEquals("SE", $request->request->CreateOrderInformation->CustomerIdentity->CountryCode); //Check all in identity
@@ -205,7 +205,7 @@ class InvoicePaymentTest extends PHPUnit_Framework_TestCase {
                 ->setOrderDate("2012-12-12")
                 ->setCurrency("SEK")
                 ->useInvoicePayment()// returnerar InvoiceOrder object
-                    ->preparePayment();
+                    ->prepareRequest();
             
         //First orderrow is a product
         $this->assertEquals(1, $request->request->CreateOrderInformation->OrderRows['OrderRow'][0]->ArticleNumber);
@@ -269,7 +269,7 @@ class InvoicePaymentTest extends PHPUnit_Framework_TestCase {
                 ->setOrderDate("2012-12-12")
                 ->setCurrency("SEK")
                 ->useInvoicePayment()// returnerar InvoiceOrder object
-                    ->preparePayment();
+                    ->prepareRequest();
             
         //First orderrow is a product
         $this->assertEquals(1, $request->request->CreateOrderInformation->OrderRows['OrderRow'][0]->ArticleNumber);
@@ -333,7 +333,7 @@ class InvoicePaymentTest extends PHPUnit_Framework_TestCase {
                 ->setOrderDate("2012-12-12")
                 ->setCurrency("SEK")
                 ->useInvoicePayment()// returnerar InvoiceOrder object
-                    ->preparePayment();
+                    ->prepareRequest();
             
         //First orderrow is a product
         $this->assertEquals(1, $request->request->CreateOrderInformation->OrderRows['OrderRow'][0]->ArticleNumber);
@@ -391,7 +391,7 @@ class InvoicePaymentTest extends PHPUnit_Framework_TestCase {
                 ->setOrderDate("2012-12-12")
                 ->setCurrency("SEK")
                     ->useInvoicePayment()
-                        ->preparePayment();
+                        ->prepareRequest();
                
         //couponrow
         $this->assertEquals('1', $request->request->CreateOrderInformation->OrderRows['OrderRow'][2]->ArticleNumber);
@@ -431,7 +431,7 @@ class InvoicePaymentTest extends PHPUnit_Framework_TestCase {
                     ->setOrderDate("2012-12-12")
                     ->setCurrency("SEK")
                     ->useInvoicePayment()
-                        ->preparePayment();
+                        ->prepareRequest();
 
         //couponrow
         $this->assertEquals('1', $request->request->CreateOrderInformation->OrderRows['OrderRow'][2]->ArticleNumber);
@@ -466,7 +466,7 @@ class InvoicePaymentTest extends PHPUnit_Framework_TestCase {
                     ->setCurrency("SEK")
                     ->setAddressSelector("ad33")
                     ->useInvoicePayment()// returnerar InvoiceOrder object
-                        ->preparePayment();   
+                        ->prepareRequest();   
         /**
          * Test that all data is in the right place for SoapRequest
          */
@@ -501,7 +501,7 @@ class InvoicePaymentTest extends PHPUnit_Framework_TestCase {
                 ->setCurrency("SEK")
                 ->setAddressSelector("ad33")
                 ->useInvoicePayment()// returnerar InvoiceOrder object 
-                ->preparePayment();
+                ->prepareRequest();
 
         $this->assertEquals('sverigetest', $request->request->Auth->Username);
         $this->assertEquals('sverigetest', $request->request->Auth->Password);

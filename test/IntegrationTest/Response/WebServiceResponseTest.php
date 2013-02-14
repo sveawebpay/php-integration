@@ -46,7 +46,7 @@ class WebServiceResponseTest extends PHPUnit_Framework_TestCase {
                 ->setCurrency("SEK")
                 ->useInvoicePayment()// returnerar InvoiceOrder object
                 ->setPasswordBasedAuthorization("sverigetest", "sverigetest", 79021)
-                ->doPayment();
+                ->doRequest();
         
         return $request->sveaOrderId;
     }
@@ -120,7 +120,7 @@ class WebServiceResponseTest extends PHPUnit_Framework_TestCase {
                 ->setCurrency("EUR")
                 ->useInvoicePayment()
                 ->setPasswordBasedAuthorization("hollandtest", "hollandtest", 85997)
-                ->doPayment();
+                ->doRequest();
            
         $this->assertEquals(1, $request->accepted);
         $this->assertEquals(0, $request->resultcode);

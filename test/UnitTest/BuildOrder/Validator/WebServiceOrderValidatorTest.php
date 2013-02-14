@@ -24,7 +24,7 @@ class WebServiceOrderValidatorTest extends PHPUnit_Framework_TestCase {
                 ->endOrderRow()
                 ->setCountryCode("SE")
                     ->useInvoicePayment();
-        $order->preparePayment();
+        $order->prepareRequest();
 
        
     }
@@ -47,7 +47,7 @@ class WebServiceOrderValidatorTest extends PHPUnit_Framework_TestCase {
                 ->setCustomerSsn(194605092222)
                 ->setCustomerCompanyIdNumber(4608142222)
                     ->useInvoicePayment();
-       $order->preparePayment();
+       $order->prepareRequest();
        
     }
 
@@ -68,7 +68,7 @@ class WebServiceOrderValidatorTest extends PHPUnit_Framework_TestCase {
                 ->setCustomerSsn(111111)
                     ->useInvoicePayment();
         
-     $order->preparePayment();
+     $order->prepareRequest();
     }
     
      
@@ -88,7 +88,7 @@ class WebServiceOrderValidatorTest extends PHPUnit_Framework_TestCase {
                 ->setCustomerSsn(111111)
                     ->useInvoicePayment();
         
-        $order->preparePayment();
+        $order->prepareRequest();
     }
     /**
      * @expectedException ValidationException
@@ -101,7 +101,7 @@ class WebServiceOrderValidatorTest extends PHPUnit_Framework_TestCase {
                 ->setCustomerName("Tess", "Testson")
                     ->useInvoicePayment();
         
-       $order->preparePayment();
+       $order->prepareRequest();
     }
 
     /**
@@ -116,7 +116,7 @@ class WebServiceOrderValidatorTest extends PHPUnit_Framework_TestCase {
                 ->setCustomerCompanyName("Mycompany")
                     ->useInvoicePayment();
         
-        $order->preparePayment();
+        $order->prepareRequest();
     }
 
     /**
@@ -134,7 +134,7 @@ class WebServiceOrderValidatorTest extends PHPUnit_Framework_TestCase {
                 ->setCountryCode("DE")
                     ->usePaymentPlanPayment(213060);
 
-       $order->preparePayment();
+       $order->prepareRequest();
     }
 
     /**
@@ -151,7 +151,7 @@ class WebServiceOrderValidatorTest extends PHPUnit_Framework_TestCase {
                 ->setCustomerZipCode(9999)
                 ->setCustomerLocality("Stan")
                     ->useInvoicePayment();
-        $order->preparePayment();
+        $order->prepareRequest();
 
     }
 
@@ -177,7 +177,7 @@ class WebServiceOrderValidatorTest extends PHPUnit_Framework_TestCase {
                     ->useInvoicePayment();
         //$errorArray = $order->validateOrder(); 
         //print_r($errorArray);
-        $order->preparePayment(); //throws esception
+        $order->prepareRequest(); //throws esception
         
       
     }
@@ -198,7 +198,7 @@ class WebServiceOrderValidatorTest extends PHPUnit_Framework_TestCase {
                 ->setCustomerLocality("Stan")
                     ->useInvoicePayment();
 
-      $order->preparePayment();
+      $order->prepareRequest();
     }
 
     /**
@@ -212,7 +212,7 @@ class WebServiceOrderValidatorTest extends PHPUnit_Framework_TestCase {
                 ->setCustomerReference("1")
                 ->setCustomerSsn(46111111)
                     ->useInvoicePayment();
-       $order->preparePayment();
+       $order->prepareRequest();
       
     }
    
@@ -233,7 +233,7 @@ class WebServiceOrderValidatorTest extends PHPUnit_Framework_TestCase {
                 ->setCustomerReference("ref1")
                 ->setCustomerSsn(46111111)
                     ->useInvoicePayment();
-        $order->preparePayment(); 
+        $order->prepareRequest(); 
     }
 }
 
