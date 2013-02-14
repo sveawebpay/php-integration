@@ -1,5 +1,4 @@
 <?php
-include_once SVEA_REQUEST_DIR . "/Includes.php";
 /**
  * Description of OrderRow
  *
@@ -24,7 +23,7 @@ class OrderRow {
     /**
      * Optional
      * @param type $articleNumberAsString
-     * @return \OrderRowBuilder
+     * @return \OrderRow
      */
     public function setArticleNumber($articleNumberAsString) {
         $this->articleNumber = $articleNumberAsString;
@@ -34,7 +33,7 @@ class OrderRow {
     /**
      * Required
      * @param type $quantityAsInt
-     * @return \OrderRowBuilder
+     * @return \OrderRow
      */
     public function setQuantity($quantityAsInt) {
         $this->quantity = $quantityAsInt;
@@ -44,7 +43,7 @@ class OrderRow {
     /**
      * Optional
      * @param type $unitAsString
-     * @return \OrderRowBuilder
+     * @return \OrderRow
      */
     public function setUnit($unitAsString) {
         $this->unit = $unitAsString;
@@ -54,7 +53,7 @@ class OrderRow {
     /**
      * Optional
      * @param type $AmountAsFloat
-     * @return \OrderRowBuilder
+     * @return \OrderRow
      */
     public function setAmountExVat($AmountAsFloat) {
         $this->amountExVat = $AmountAsFloat;
@@ -63,7 +62,7 @@ class OrderRow {
     /**
      * Optional
      * @param type $AmountAsFloat
-     * @return \OrderRowBuilder
+     * @return \OrderRow
      */
     public function setAmountIncVat($AmountAsFloat) {
         $this->amountIncVat = $AmountAsFloat;
@@ -73,7 +72,7 @@ class OrderRow {
     /**
      * Optional
      * @param type $nameAsString
-     * @return \OrderRowBuilder
+     * @return \OrderRow
      */
     public function setName($nameAsString) {
         $this->name = $nameAsString;
@@ -83,7 +82,7 @@ class OrderRow {
     /**
      * Optional
      * @param type $descriptionAsString
-     * @return \OrderRowBuilder
+     * @return \OrderRow
      */
     public function setDescription($descriptionAsString) {
         $this->description = $descriptionAsString;
@@ -93,7 +92,7 @@ class OrderRow {
     /**
      * Optional
      * @param type $percentAsInt
-     * @return \OrderRowBuilder
+     * @return \OrderRow
      */
     public function setVatPercent($percentAsInt) {
         $this->vatPercent = $percentAsInt;
@@ -103,7 +102,7 @@ class OrderRow {
     /**
      * Optional
      * @param type $discountPercentAsInteger
-     * @return \OrderRowBuilder
+     * @return \OrderRow
      */
     public function setDiscountPercent($discountPercentAsInteger) {
         $this->discountPercent = $discountPercentAsInteger;

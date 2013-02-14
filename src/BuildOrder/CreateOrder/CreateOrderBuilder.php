@@ -254,19 +254,21 @@ class createOrderBuilder {
         array_push($this->orderRows, $rowBuilder);
         return $rowBuilder;
     }
-    
-    public function addOrderRow($orderRow){
-        if(is_array($orderRow)){
-            foreach ($orderRow as $row) {
+    /**
+     * New!
+     * @param type $orderRow
+     * @return \createOrderBuilder
+     */
+    public function addOrderRow($itemOrderRowObject){
+        if(is_array($itemOrderRowObject)){
+            foreach ($itemOrderRowObject as $row) {
                 array_push($this->orderRows, $row);
             }
         }  else {
-             array_push($this->orderRows, $orderRow);
+             array_push($this->orderRows, $itemOrderRowObject);
         }      
        return $this;
     }
-      
-
     /**
      * Begin building Shipping fee row
      * Use for all Payment types when Creating Order.
@@ -278,7 +280,22 @@ class createOrderBuilder {
         array_push($this->shippingFeeRows, $shippingFeeBuilder);
         return $shippingFeeBuilder;
     }
-
+    /**
+     * New!
+     * @param type $itemShippingFeeObject
+     * @return \createOrderBuilder
+     */
+    public function addShippingFee($itemShippingFeeObject){    
+         if(is_array($itemShippingFeeObject)){
+            foreach ($itemShippingFeeObject as $row) {
+                array_push($this->shippingFeeRows, $row);
+            }
+        }  else {
+        array_push($this->shippingFeeRows, $itemShippingFeeObject);
+        }
+      
+       return $this;
+    }
     /**
      * Begin building Invoice fee row
      * Use for all Payment types when Creating Order.
@@ -290,7 +307,23 @@ class createOrderBuilder {
         array_push($this->invoiceFeeRows, $invoiceFeeBuilder);
         return $invoiceFeeBuilder;
     }
-    
+    /**
+     * New!
+     * @param type $itemInvoiceFeeObject
+     * @return \createOrderBuilder
+     */
+    public function addInvoiceFee($itemInvoiceFeeObject){
+        if(is_array($itemInvoiceFeeObject)){
+            foreach ($itemInvoiceFeeObject as $row) {
+                array_push($this->invoiceFeeRows, $row);
+            }
+        }  else {
+              array_push($this->invoiceFeeRows, $itemInvoiceFeeObject);
+        }
+      
+       return $this;
+    }
+
     /**
      * Begin building Discount row for fixed discount
      * @return \FixedDiscountBuilder
@@ -299,6 +332,21 @@ class createOrderBuilder {
         $fixedDiscountRowBuilder = new FixedDiscountBuilder($this);
         array_push($this->fixedDiscountRows, $fixedDiscountRowBuilder);
         return $fixedDiscountRowBuilder;
+    }
+    /**
+     * New!
+     * @param type $itemFixedDiscounObjectt
+     * @return \createOrderBuilder
+     */
+    public function addFixedDiscount($itemFixedDiscounObject){
+         if(is_array($itemFixedDiscounObject)){
+            foreach ($itemFixedDiscounObject as $row) {
+                array_push($this->fixedDiscountRows, $row);
+            }
+        }  else {
+              array_push($this->fixedDiscountRows, $itemFixedDiscounObject);
+        }      
+       return $this;
     }
 
     /**
@@ -309,6 +357,17 @@ class createOrderBuilder {
         $relativeDiscountBuilder = new RelativeDiscountBuilder($this);
         array_push($this->relativeDiscountRows, $relativeDiscountBuilder);
         return $relativeDiscountBuilder;
+    }
+    
+     public function addRelativeDiscount($itemRelativeDiscounObject){
+         if(is_array($itemRelativeDiscounObject)){
+            foreach ($itemRelativeDiscounObject as $row) {
+                array_push($this->relativeDiscountRows, $row);
+            }
+        }  else {
+              array_push($this->relativeDiscountRows, $itemRelativeDiscounObject);
+        }      
+       return $this;
     }
 
     /**

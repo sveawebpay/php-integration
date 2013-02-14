@@ -74,6 +74,21 @@ class deliverOrderBuilder {
         array_push($this->orderRows, $rowBuilder);
         return $rowBuilder;
     }
+    /**
+     * New!
+     * @param type $orderRow
+     * @return \deliverOrderBuilder
+     */
+     public function addOrderRow($orderRow){
+        if(is_array($orderRow)){
+            foreach ($orderRow as $row) {
+                array_push($this->orderRows, $row);
+            }
+        }  else {
+             array_push($this->orderRows, $orderRow);
+        }      
+       return $this;
+    }
     
     /**
      * Begin building Shipping fee row
@@ -86,7 +101,22 @@ class deliverOrderBuilder {
         array_push($this->shippingFeeRows, $shippingFeeBuilder);
         return $shippingFeeBuilder;
     }
-
+    /**
+     * 
+     * @param type $itemShippingFeeObject
+     * @return \deliverOrderBuilder
+     */
+    public function addShippingFee($itemShippingFeeObject){    
+         if(is_array($itemShippingFeeObject)){
+            foreach ($itemShippingFeeObject as $row) {
+                array_push($this->shippingFeeRows, $row);
+            }
+        }  else {
+        array_push($this->shippingFeeRows, $itemShippingFeeObject);
+        }
+      
+       return $this;
+    }
     /**
      * Begin building Invoice fee row
      * Use for all Payment types when Creating Order.
