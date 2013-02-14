@@ -58,7 +58,7 @@ class WebServicePayment {
      * Rebuild $order with svea_soap package to be in right format for SveaWebPay Europe Web service API
      * @return prepared SveaRequest
      */
-    public function preparePayment() {
+    public function prepareRequest() {
         $errors = $this->validateOrder();       
         if(count($errors) > 0){
             $exceptionString = "";
@@ -92,7 +92,7 @@ class WebServicePayment {
      * @return CreateOrderEuResponse
      */
     public function doRequest() {
-        $object = $this->preparePayment();
+        $object = $this->prepareRequest();
         $url = $this->order->testmode ? SveaConfig::SWP_TEST_WS_URL : SveaConfig::SWP_PROD_WS_URL;
         $request = new SveaDoRequest($url);
         $svea_req = $request->CreateOrderEu($object);

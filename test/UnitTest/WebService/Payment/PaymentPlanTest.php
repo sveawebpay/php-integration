@@ -36,7 +36,7 @@ class PaymentPlanTest extends PHPUnit_Framework_TestCase {
                 ->setCurrency("SEK")
                 ->setAddressSelector("ad33")
                 ->usePaymentPlanPayment("camp1")// returnerar InvoiceOrder object
-                    ->preparePayment();
+                    ->prepareRequest();
         
         $this->assertEquals('camp1', $request->request->CreateOrderInformation->CreatePaymentPlanDetails['CampaignCode']);
         $this->assertEquals(0, $request->request->CreateOrderInformation->CreatePaymentPlanDetails['SendAutomaticGiroPaymentForm']);

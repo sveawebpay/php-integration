@@ -37,7 +37,7 @@ class NewOrderBuilderTest extends PHPUnit_Framework_TestCase {
                 ->setOrderDate("2012-12-12")
                 ->setCurrency("SEK")
                 ->useInvoicePayment()// returnerar InvoiceOrder object 
-                    ->preparePayment();
+                    ->prepareRequest();
         
             print_r($request);
             $this->assertEquals(194605092222, $request->request->CreateOrderInformation->CustomerIdentity->NationalIdNumber); //Check all in identity
@@ -75,7 +75,7 @@ class NewOrderBuilderTest extends PHPUnit_Framework_TestCase {
             ->setOrderDate("2012-12-12")
             ->setCurrency("SEK")
             ->useInvoicePayment()// returnerar InvoiceOrder object 
-                ->preparePayment();
+                ->prepareRequest();
         
             $this->assertEquals(194605092222, $request->request->CreateOrderInformation->CustomerIdentity->NationalIdNumber); //Check all in identity
 
