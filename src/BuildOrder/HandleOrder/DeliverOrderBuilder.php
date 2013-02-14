@@ -117,6 +117,7 @@ class deliverOrderBuilder {
       
        return $this;
     }
+    
     /**
      * Begin building Invoice fee row
      * Use for all Payment types when Creating Order.
@@ -128,7 +129,22 @@ class deliverOrderBuilder {
         array_push($this->invoiceFeeRows, $invoiceFeeBuilder);
         return $invoiceFeeBuilder;
     }
-    
+    /**
+     * 
+     * @param type $itemInvoiceFeeObject
+     * @return \deliverOrderBuilder
+     */
+    public function addInvoiceFee($itemInvoiceFeeObject){
+        if(is_array($itemInvoiceFeeObject)){
+            foreach ($itemInvoiceFeeObject as $row) {
+                array_push($this->invoiceFeeRows, $row);
+            }
+        }  else {
+              array_push($this->invoiceFeeRows, $itemInvoiceFeeObject);
+        }
+      
+       return $this;
+    }
     /**
      * Begin building Discount row for fixed discount
      * @return \FixedDiscountBuilder
@@ -137,6 +153,21 @@ class deliverOrderBuilder {
         $fixedDiscountRowBuilder = new DeliverFixedDiscountBuilder($this);
         array_push($this->fixedDiscountRows, $fixedDiscountRowBuilder);
         return $fixedDiscountRowBuilder;
+    }
+    /**
+     * 
+     * @param type $itemFixedDiscounObject
+     * @return \deliverOrderBuilder
+     */
+    public function addFixedDiscount($itemFixedDiscounObject){
+         if(is_array($itemFixedDiscounObject)){
+            foreach ($itemFixedDiscounObject as $row) {
+                array_push($this->fixedDiscountRows, $row);
+            }
+        }  else {
+              array_push($this->fixedDiscountRows, $itemFixedDiscounObject);
+        }      
+       return $this;
     }
 
     /**
@@ -148,7 +179,21 @@ class deliverOrderBuilder {
         array_push($this->relativeDiscountRows, $relativeDiscountBuilder);
         return $relativeDiscountBuilder;
     }
-    
+    /**
+     * 
+     * @param type $itemRelativeDiscounObject
+     * @return \deliverOrderBuilder
+     */
+     public function addRelativeDiscount($itemRelativeDiscounObject){
+         if(is_array($itemRelativeDiscounObject)){
+            foreach ($itemRelativeDiscounObject as $row) {
+                array_push($this->relativeDiscountRows, $row);
+            }
+        }  else {
+              array_push($this->relativeDiscountRows, $itemRelativeDiscounObject);
+        }      
+       return $this;
+    }
     /**
      * When function is called it turns into testmode
      * @return \deliverOrder

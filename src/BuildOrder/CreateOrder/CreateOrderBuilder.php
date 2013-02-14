@@ -358,8 +358,12 @@ class createOrderBuilder {
         array_push($this->relativeDiscountRows, $relativeDiscountBuilder);
         return $relativeDiscountBuilder;
     }
-    
-     public function addRelativeDiscount($itemRelativeDiscounObject){
+    /**
+     * 
+     * @param type $itemRelativeDiscounObject
+     * @return \createOrderBuilder
+     */
+    public function addRelativeDiscount($itemRelativeDiscounObject){
          if(is_array($itemRelativeDiscounObject)){
             foreach ($itemRelativeDiscounObject as $row) {
                 array_push($this->relativeDiscountRows, $row);
