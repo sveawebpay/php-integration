@@ -16,6 +16,8 @@ class CardPaymentTest extends PHPUnit_Framework_TestCase {
     function testSetAuthorization() {
         $form = WebPay::createOrder()
                 ->setTestmode()
+                ->setCustomerSsn(194605092222)
+                ->setCustomerIpAddress("123.123.123")
                 ->beginOrderRow()
                     ->setArticleNumber(1)
                     ->setQuantity(2)
@@ -33,9 +35,9 @@ class CardPaymentTest extends PHPUnit_Framework_TestCase {
                 ->setCurrency("SEK")
                 ->usePayPageCardOnly() // PayPageObject
                     ->setMerchantIdBasedAuthorization(4444, "secret")
+                    ->setPayPageLanguage("sv")
                     ->setReturnUrl("http://myurl.se")
                     ->getPaymentForm();
-           
         $this->assertEquals(4444, $form->merchantid);
         $this->assertEquals('secret', $form->secretWord);
     }
@@ -115,8 +117,8 @@ class CardPaymentTest extends PHPUnit_Framework_TestCase {
                 ->setCurrency("SEK")
                 ->usePayPageCardOnly() // PayPageObject
                 ->setReturnUrl("http://myurl.se")
-                ->getPaymentForm();
-
+                    ->setPayPageLanguage("sv")
+                    ->getPaymentForm();
         $xmlMessage = new SimpleXMLElement($form->xmlMessage);
         
         $this->assertEquals('40000', $xmlMessage->amount);
