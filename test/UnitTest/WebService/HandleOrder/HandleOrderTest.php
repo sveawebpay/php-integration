@@ -22,7 +22,7 @@ class HandleOrderTest extends PHPUnit_Framework_TestCase {
     function testDeliverInvoiceDistributionType(){
          $orderBuilder = WebPay::deliverOrder();
         $request = $orderBuilder
-                ->beginOrderRow()
+            ->addOrderRow(Item::orderRow()
                     ->setArticleNumber(1)
                     ->setQuantity(2)
                     ->setAmountExVat(100.00)
@@ -31,7 +31,7 @@ class HandleOrderTest extends PHPUnit_Framework_TestCase {
                     ->setUnit("st")
                     ->setVatPercent(25)
                     ->setDiscountPercent(0)
-                ->endOrderRow()
+                    )
                 ->setTestmode()
                 ->setOrderId("id")
                 ->setNumberOfCreditDays(1)
@@ -46,7 +46,7 @@ class HandleOrderTest extends PHPUnit_Framework_TestCase {
     function testDeliverInvoiceOrder() {
         $orderBuilder = WebPay::deliverOrder();
         $request = $orderBuilder
-                ->beginOrderRow()
+              ->addOrderRow(Item::orderRow()
                     ->setArticleNumber(1)
                     ->setQuantity(2)
                     ->setAmountExVat(100.00)
@@ -55,19 +55,17 @@ class HandleOrderTest extends PHPUnit_Framework_TestCase {
                     ->setUnit("st")
                     ->setVatPercent(25)
                     ->setDiscountPercent(0)
-                ->endOrderRow()
-                ->beginShippingFee()
+                    )
+                ->addDiscount(Item::fixedDiscount()->setAmountIncVat(10))
+                ->addFee(Item::shippingFee()
                     ->setShippingId('33')
                     ->setName('shipping')
                     ->setDescription("Specification")
                     ->setAmountExVat(50)
                     ->setUnit("st")
                     ->setVatPercent(25)
-                    ->setDiscountPercent(0) 
-                ->endShippingFee()
-                ->beginFixedDiscount()
-                    ->setAmountIncVat(10)
-                ->endFixedDiscount()
+                    ->setDiscountPercent(0)   
+                    )                
                 ->setTestmode()
                 ->setOrderId("id")
                 ->setNumberOfCreditDays(1)

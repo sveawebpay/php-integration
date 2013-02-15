@@ -10,7 +10,7 @@ class TestRowFactory {
     function buildShippingFee(){
         return function($orderbuilder){
             return $orderbuilder
-              ->addShippingFee(
+              ->addFee(
                 Item::shippingFee()
                      ->setShippingId('33')
                     ->setName('shipping')
@@ -32,7 +32,7 @@ class TestRowFactory {
     function buildInvoiceFee() {
         return function($orderbuilder) {
             return $orderbuilder
-                ->addInvoiceFee(
+                ->addFee(
                 Item::invoiceFee()
                     ->setName('Svea fee')
                     ->setDescription("Fee for invoice")

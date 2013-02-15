@@ -111,69 +111,53 @@ class createOrderBuilder {
    
     /**
      * New!
-     * @param type $itemShippingFeeObject
+     * @param type $itemFeeObject
      * @return \createOrderBuilder
      */
-    public function addShippingFee($itemShippingFeeObject){    
-         if(is_array($itemShippingFeeObject)){
-            foreach ($itemShippingFeeObject as $row) {
-                array_push($this->shippingFeeRows, $row);
+    public function addFee($itemFeeObject){    
+         if(is_array($itemFeeObject)){
+            foreach ($itemFeeObject as $row) {
+                if (get_class($row) == "ShippingFee") {
+                     array_push($this->shippingFeeRows, $row);
+                }else{
+                     array_push($this->invoiceFeeRows, $row);
+                }               
             }
-        }  else {
-        array_push($this->shippingFeeRows, $itemShippingFeeObject);
-        }
+        } else {
+             if (get_class($itemFeeObject) == "ShippingFee") {
+                     array_push($this->shippingFeeRows, $itemFeeObject);
+            }else{
+                 array_push($this->invoiceFeeRows, $itemFeeObject);
+            }
+        }     
       
        return $this;
     }
-  
     /**
      * New!
-     * @param type $itemInvoiceFeeObject
+     * @param type $itemDiscounObject
      * @return \createOrderBuilder
      */
-    public function addInvoiceFee($itemInvoiceFeeObject){
-        if(is_array($itemInvoiceFeeObject)){
-            foreach ($itemInvoiceFeeObject as $row) {
-                array_push($this->invoiceFeeRows, $row);
+    public function addDiscount($itemDiscounObject){
+         if(is_array($itemDiscounObject)){
+            foreach ($itemDiscounObject as $row) {
+                if (get_class($row) == "FixedDiscount") {
+                     array_push($this->fixedDiscountRows, $row);
+                }else{
+                     array_push($this->relativeDiscountRows, $row);
+                }
+               
             }
         }  else {
-              array_push($this->invoiceFeeRows, $itemInvoiceFeeObject);
-        }
-      
-       return $this;
-    }
-   
-    /**
-     * New!
-     * @param type $itemFixedDiscounObjectt
-     * @return \createOrderBuilder
-     */
-    public function addFixedDiscount($itemFixedDiscounObject){
-         if(is_array($itemFixedDiscounObject)){
-            foreach ($itemFixedDiscounObject as $row) {
-                array_push($this->fixedDiscountRows, $row);
+             if (get_class($itemDiscounObject) == "FixedDiscount") {
+                     array_push($this->fixedDiscountRows, $itemDiscounObject);
+            }else{
+                 array_push($this->relativeDiscountRows, $itemDiscounObject);
             }
-        }  else {
-              array_push($this->fixedDiscountRows, $itemFixedDiscounObject);
         }      
        return $this;
     }
   
-    /**
-     * 
-     * @param type $itemRelativeDiscounObject
-     * @return \createOrderBuilder
-     */
-    public function addRelativeDiscount($itemRelativeDiscounObject){
-         if(is_array($itemRelativeDiscounObject)){
-            foreach ($itemRelativeDiscounObject as $row) {
-                array_push($this->relativeDiscountRows, $row);
-            }
-        }  else {
-              array_push($this->relativeDiscountRows, $itemRelativeDiscounObject);
-        }      
-       return $this;
-    }
 
     /**
      * @param type $countryCodeAsString ex. "SE"

@@ -80,7 +80,7 @@ class OrderBuilderTest extends PHPUnit_Framework_TestCase {
 
     function testBuildOrderWithFixedDiscount() {
         $sveaRequest = WebPay::createOrder()
-                ->addFixedDiscount(Item::fixedDiscount()
+                ->addDiscount(Item::fixedDiscount()
                     ->setDiscountId("1")
                     ->setAmountIncVat(100.00)
                     ->setUnit("st")
@@ -98,7 +98,7 @@ class OrderBuilderTest extends PHPUnit_Framework_TestCase {
     function testBuildOrderWithRelativeDiscount() {
         $sveaRequest =
                 WebPay::createOrder()
-                ->addRelativeDiscount(Item::relativeDiscount()
+                ->addDiscount(Item::relativeDiscount()
                     ->setDiscountId("1")
                     ->setDiscountPercent(50)
                     ->setUnit("st")

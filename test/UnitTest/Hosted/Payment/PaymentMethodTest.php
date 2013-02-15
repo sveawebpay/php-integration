@@ -28,7 +28,7 @@ class PaymentMethodTest extends PHPUnit_Framework_TestCase{
                     ->setDiscountPercent(0)
                     )
             ->run($rowFactory->buildShippingFee())
-            ->addRelativeDiscount(Item::relativeDiscount()
+            ->addDiscount(Item::relativeDiscount()
                     ->setDiscountId("1")
                     ->setDiscountPercent(50)
                     ->setUnit("st")

@@ -31,7 +31,7 @@ class OrderHandlerValidatorTest extends PHPUnit_Framework_TestCase {
     function testFailOnMissingInvoiceDetailsOnInvoiceDeliver() {
         $builder = WebPay::deliverOrder();
         $object = $builder
-                ->beginOrderRow()
+            ->addOrderRow(Item::orderRow()
                     ->setArticleNumber(1)
                     ->setQuantity(2)
                     ->setAmountExVat(100.00)
@@ -40,8 +40,8 @@ class OrderHandlerValidatorTest extends PHPUnit_Framework_TestCase {
                     ->setUnit("st")
                     ->setVatPercent(25)
                     ->setDiscountPercent(0)
-                ->endOrderRow()
-                ->beginShippingFee()
+                    )
+                ->addFee(Item::shippingFee()
                     ->setShippingId('33')
                     ->setName('shipping')
                     ->setDescription("Specification")
@@ -49,7 +49,7 @@ class OrderHandlerValidatorTest extends PHPUnit_Framework_TestCase {
                     ->setUnit("st")
                     ->setVatPercent(25)
                     ->setDiscountPercent(0)
-                ->endShippingFee()
+                    )
                 ->setOrderId('id')
                 ->deliverInvoiceOrder();
        $object->prepareRequest();

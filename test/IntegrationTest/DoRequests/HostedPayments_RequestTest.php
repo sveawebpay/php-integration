@@ -30,7 +30,7 @@ class HostedPayments_RequestTest extends PHPUnit_Framework_TestCase {
                         )
                 
                 ->run($rowFactory->buildShippingFee())              
-                ->addRelativeDiscount(Item::relativeDiscount()
+                ->addDiscount(Item::relativeDiscount()
                         ->setDiscountId("1")
                         ->setDiscountPercent(50)
                         ->setUnit("st")

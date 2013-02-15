@@ -33,7 +33,7 @@ class HostedRowFormatterTest extends PHPUnit_Framework_TestCase {
     public function testFormatShippingFeeRows() {
         $order = new createOrderBuilder();
         $order
-        ->addShippingFee(Item::shippingFee()
+        ->addFee(Item::shippingFee()
                 ->setShippingId("0")
                 ->setName("Tess")
                 ->setDescription("Tester")
@@ -62,7 +62,7 @@ class HostedRowFormatterTest extends PHPUnit_Framework_TestCase {
                 ->setVatPercent(25)
                 ->setQuantity(1)
                 )
-                ->addFixedDiscount(Item::fixedDiscount()
+                ->addDiscount(Item::fixedDiscount()
                     ->setDiscountId("0")
                     ->setName("Tess")
                     ->setDescription("Tester")
@@ -88,7 +88,7 @@ class HostedRowFormatterTest extends PHPUnit_Framework_TestCase {
                 ->setVatPercent(25)
                 ->setQuantity(1)
                 )
-        ->addRelativeDiscount(Item::relativeDiscount()
+        ->addDiscount(Item::relativeDiscount()
                 ->setDiscountId("0")
                 ->setName("Tess")
                 ->setDescription("Tester")
