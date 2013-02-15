@@ -70,6 +70,8 @@ class createOrderBuilder {
      *
      * @var CustomerIdentity values
      */
+    public $customerIdentity;
+    
     public $ssn;
     public $orgNumber;
     public $companyVatNumber;
@@ -100,6 +102,12 @@ class createOrderBuilder {
         $this->testmode = TRUE;
         return $this;
     }
+    
+     public function addCustomerDetails($itemCustomerObject){
+        $this->customerIdentity = $itemCustomerObject;
+        return $this;
+    }
+
     /**
      * Required for private customers in SE, NO, DK, FI
      * @param type $yyyymmddxxxx
@@ -393,7 +401,7 @@ class createOrderBuilder {
         $this->currency = $currency;
         return $this;
     }
-
+   
     /**
      * @param type $customerReferenceAsString ex. "test".rand(0 9999)
      * @return \createOrder
