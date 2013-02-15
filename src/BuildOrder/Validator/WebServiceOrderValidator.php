@@ -25,7 +25,10 @@ class WebServiceOrderValidator extends OrderValidator {
             $this->isCompany = TRUE;
            
         }    
-             
+        //new!
+        if(isset($order->customerIdentity->orgNumber) || isset($order->customerIdentity->companyVatNumber) || isset($order->customerIdentity->companyName)){
+            $this->isCompany = TRUE;
+        }
         $identityValidator = new IdentityValidator($this->isCompany);
         //$this->errors = $identityValidator->validateThatCustomerIdentityExists($order,  $this->errors); //use countries validators instead
         

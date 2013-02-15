@@ -27,6 +27,14 @@ class Item {
     public static function relativeDiscount(){
         return new RelativeDiscount();
     }
+    
+    public static function individualCustomer(){
+        return new IndividualCustomer();
+    }
+    
+    public static function companyCustomer(){
+        return new CompanyCustomer();
+    }
 }
 
 ?>
