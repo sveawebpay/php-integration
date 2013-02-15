@@ -72,21 +72,7 @@ class createOrderBuilder {
      */
     public $customerIdentity;
     
-    public $ssn;
-    public $orgNumber;
-    public $companyVatNumber;
-    public $initials;
-    public $email;
-    public $phonenumber;
-    public $ipAddress;
-    public $firstname;
-    public $lastname;
-    public $street;
-    public $housenumber;
-    public $zipCode;
-    public $coAddress;
-    public $locality;
-    public $companyName;
+   
     /**
      * @param type $orderrows
      */
@@ -107,161 +93,6 @@ class createOrderBuilder {
         $this->customerIdentity = $itemCustomerObject;
         return $this;
     }
-
-    /**
-     * Required for private customers in SE, NO, DK, FI
-     * @param type $yyyymmddxxxx
-     * @return \createOrder
-     */
-    public function setCustomerSsn($yyyymmddxxxx){
-        $this->ssn = $yyyymmddxxxx;
-        return $this;
-    }
-    /**
-     * Example: 4608142222
-     * Required for company customers in SE, NO, DK, FI
-     * For SE: Organisationsnummer
-     * For NO: Vatnumber
-     * For DK: CVR
-     * For FI: Yritystunnus
-     * @param type $companyNumberAsInt
-     * @return \createOrder
-     */
-    public function setCustomerCompanyIdNumber($companyIdNumberAsInt){
-        $this->orgNumber = $companyIdNumberAsInt;
-        return $this;
-    }
-    /**
-     * Example: NL123456789A12
-     * @param type $vatNumber
-     * Required for NL and DE
-     * @return \createOrder
-     */
-    public function setCustomerCompanyVatNumber($vatNumber){
-        $this->companyVatNumber = $vatNumber;
-        return $this;
-    }
-    /**
-     * Required for private customers in NL 
-     * @param type $initialsAsString
-     * @return \createOrder
-     */
-    public function setCustomerInitials($initialsAsString) {
-        $this->initials = $initialsAsString;
-        return $this;
-    }
-    
-    /**
-     * Required for private customers in NL and DE
-     * @param type $yyyy
-     * @param type $mm
-     * @param type $dd
-     * @return \createOrder
-     */
-    public function setCustomerBirthDate($yyyy, $mm, $dd) {
-        if($mm < 10){$mm = "0".$mm; }
-        if($dd < 10){$dd = "0".$dd; }
-        
-        $this->birthDate = $yyyy . $mm . $dd;
-        return $this;
-    }
-    
-   /**
-     * Optional but desirable
-     * @param type $emailAsString
-     * @return \createOrder
-     */
-    public function setCustomerEmail($emailAsString) {
-        $this->email = $emailAsString;
-        return $this;
-    }
-     /**
-     * Optional
-     * @param type $phoneNumberAsInt
-     * @return \createOrder
-     */
-    public function setCustomerPhoneNumber($phoneNumberAsInt) {
-        $this->phonenumber = $phoneNumberAsInt;
-        return $this;
-    }
-    /**
-     * Optinal but desirable
-     * @param type $ipAddressAsString
-     * @return \createOrder
-     */
-    public function setCustomerIpAddress($ipAddressAsString) {
-        $this->ipAddress = $ipAddressAsString;
-        return $this;
-    }
-    /**
-     * Required for private Customers in NL and DE
-     * @param type $firstnameAsString
-     * @param type $lastnameAsString
-     * @return \createOrder
-     */
-    public function setCustomerName($firstnameAsString, $lastnameAsString) {
-        $this->firstname = $firstnameAsString;
-        $this->lastname = $lastnameAsString;
-        return $this;
-    }
-    /**
-     * Required in NL and DE
-     * @param type $streetAsString
-     * @param type $houseNumberAsInt
-     * @return \createOrder
-     */
-    public function setCustomerStreetAddress($streetAsString, $houseNumberAsInt) {
-        $this->street = $streetAsString;
-        $this->housenumber = $houseNumberAsInt;
-        return $this;
-    }
-    /**
-     * Optional in NL and DE
-     * @param type $coAddressAsString
-     * @return \createOrder
-     */
-    public function setCustomerCoAddress($coAddressAsString) {
-        $this->coAddress = $coAddressAsString;
-        return $this;
-    }
-    /**
-     * Requuired in NL and DE
-     * @param type $zipCodeAsString
-     * @return \createOrder
-     */
-    public function setCustomerZipCode($zipCodeAsString) {
-        $this->zipCode = $zipCodeAsString;
-        return $this;
-    }
-    /**
-     * Required in NL and DE
-     * @param type $cityAsString
-     * @return \createOrder
-     */
-    public function setCustomerLocality($cityAsString) {
-        $this->locality = $cityAsString;
-        return $this;
-    }
-    /**
-     * Required for Eu countries like NL and DE
-     * @param type $nameAsString
-     * @return \createOrder
-     */
-    public function setCustomerCompanyName($nameAsString) {
-        $this->companyName = $nameAsString;
-        return $this;
-    } 
-    /**
-     * Begin building row for product or other values.
-     * Use for all Payment types when Creating Order.
-     * If this is a DeliverOrder: Only use for InvoicePayments.
-     * @return \OrderRowBuilder
-     */
-    public function beginOrderRow() {
-        $rowBuilder = new OrderRowBuilder($this);
-        array_push($this->orderRows, $rowBuilder);
-        return $rowBuilder;
-    }
     /**
      * New!
      * @param type $orderRow
@@ -277,17 +108,7 @@ class createOrderBuilder {
         }      
        return $this;
     }
-    /**
-     * Begin building Shipping fee row
-     * Use for all Payment types when Creating Order.
-     * If this is a DeliverOrder: Only use for InvoicePayments.
-     * @return shippingFeeRows
-     */
-    public function beginShippingFee() {
-        $shippingFeeBuilder = new ShippingFeeBuilder($this);
-        array_push($this->shippingFeeRows, $shippingFeeBuilder);
-        return $shippingFeeBuilder;
-    }
+   
     /**
      * New!
      * @param type $itemShippingFeeObject
@@ -304,17 +125,7 @@ class createOrderBuilder {
       
        return $this;
     }
-    /**
-     * Begin building Invoice fee row
-     * Use for all Payment types when Creating Order.
-     * If this is a DeliverOrder: Only use for InvoicePayments.
-     * @return \InvoiceFeeBuilder
-     */
-    public function beginInvoiceFee() {
-        $invoiceFeeBuilder = new InvoiceFeeBuilder($this);
-        array_push($this->invoiceFeeRows, $invoiceFeeBuilder);
-        return $invoiceFeeBuilder;
-    }
+  
     /**
      * New!
      * @param type $itemInvoiceFeeObject
@@ -331,16 +142,7 @@ class createOrderBuilder {
       
        return $this;
     }
-
-    /**
-     * Begin building Discount row for fixed discount
-     * @return \FixedDiscountBuilder
-     */
-    public function beginFixedDiscount() {
-        $fixedDiscountRowBuilder = new FixedDiscountBuilder($this);
-        array_push($this->fixedDiscountRows, $fixedDiscountRowBuilder);
-        return $fixedDiscountRowBuilder;
-    }
+   
     /**
      * New!
      * @param type $itemFixedDiscounObjectt
@@ -356,16 +158,7 @@ class createOrderBuilder {
         }      
        return $this;
     }
-
-    /**
-     * Begin building Discount row for relative discount
-     * @return \RelativeDiscountBuilder
-     */
-    public function beginRelativeDiscount() {
-        $relativeDiscountBuilder = new RelativeDiscountBuilder($this);
-        array_push($this->relativeDiscountRows, $relativeDiscountBuilder);
-        return $relativeDiscountBuilder;
-    }
+  
     /**
      * 
      * @param type $itemRelativeDiscounObject

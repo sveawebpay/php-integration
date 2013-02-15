@@ -8,7 +8,7 @@ class WebServiceRowFormatterTest extends PHPUnit_Framework_TestCase {
     
     public function testFormatOrderRows() {
         $order = new createOrderBuilder();
-        $order->beginOrderRow()
+        $order->addOrderRow(Item::orderRow()
                 ->setArticleNumber("0")
                 ->setName("Tess")
                 ->setDescription("Tester")
@@ -16,7 +16,7 @@ class WebServiceRowFormatterTest extends PHPUnit_Framework_TestCase {
                 ->setVatPercent(25)
                 ->setQuantity(1)
                 ->setUnit("st")
-        ->endOrderRow();
+                );
         
         $formatter = new WebServiceRowFormatter($order);
         $newRows = $formatter->formatRows();
@@ -33,14 +33,14 @@ class WebServiceRowFormatterTest extends PHPUnit_Framework_TestCase {
     
     public function testFormatShippingFeeRows() {
         $order = new createOrderBuilder();
-        $order->beginShippingFee()
-                ->setShippingId("0")
-                ->setName("Tess")
-                ->setDescription("Tester")
-                ->setAmountExVat(4)
-                ->setVatPercent(25)
-                ->setUnit("st")
-        ->endShippingFee();
+        $order->addShippingFee(Item::shippingFee()
+                    ->setShippingId("0")
+                    ->setName("Tess")
+                    ->setDescription("Tester")
+                    ->setAmountExVat(4)
+                    ->setVatPercent(25)
+                    ->setUnit("st")
+                );
         
         $formatter = new WebServiceRowFormatter($order);
         $newRows = $formatter->formatRows();
@@ -57,13 +57,13 @@ class WebServiceRowFormatterTest extends PHPUnit_Framework_TestCase {
     
     public function testFormatInvoiceFeeRows() {
         $order = new createOrderBuilder();
-        $order->beginInvoiceFee()
+        $order->addInvoiceFee(Item::invoiceFee()
                 ->setName("Tess")
                 ->setDescription("Tester")
                 ->setAmountExVat(4)
                 ->setVatPercent(25)
                 ->setUnit("st")
-        ->endInvoiceFee();
+                );
         
         $formatter = new WebServiceRowFormatter($order);
         $newRows = $formatter->formatRows();
@@ -80,18 +80,18 @@ class WebServiceRowFormatterTest extends PHPUnit_Framework_TestCase {
     
     public function testFormatFixedDiscountRows() {
         $order = new createOrderBuilder();
-        $order->beginOrderRow()
+        $order->addOrderRow(Item::orderRow()
                 ->setAmountExVat(4)
                 ->setVatPercent(25)
                 ->setQuantity(1)
-            ->endOrderRow()
-        ->beginFixedDiscount()
-                ->setDiscountId("0")
-                ->setName("Tess")
-                ->setDescription("Tester")
-                ->setAmountIncVat(1)
-                ->setUnit("st")
-        ->endFixedDiscount();
+                )
+                ->addFixedDiscount(Item::fixedDiscount()
+                    ->setDiscountId("0")
+                    ->setName("Tess")
+                    ->setDescription("Tester")
+                    ->setAmountIncVat(1)
+                    ->setUnit("st")
+                );
         
         $formatter = new WebServiceRowFormatter($order);
         $newRows = $formatter->formatRows();
@@ -107,18 +107,18 @@ class WebServiceRowFormatterTest extends PHPUnit_Framework_TestCase {
     
     public function testFormatRelativeDiscountRows() {
         $order = new createOrderBuilder();
-        $order->beginOrderRow()
+        $order->addOrderRow(Item::orderRow()
                 ->setAmountExVat(4)
                 ->setVatPercent(25)
                 ->setQuantity(1)
-        ->endOrderRow()
-        ->beginRelativeDiscount()
+                )
+            ->addRelativeDiscount(Item::relativeDiscount()
                 ->setDiscountId("0")
                 ->setName("Tess")
                 ->setDescription("Tester")
                 ->setDiscountPercent(10)
-                ->setUnit("st")
-        ->endRelativeDiscount();
+                ->setUnit("st")  
+                );
         
         $formatter = new WebServiceRowFormatter($order);
         $newRows = $formatter->formatRows();

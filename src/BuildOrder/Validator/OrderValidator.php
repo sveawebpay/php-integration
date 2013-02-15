@@ -19,7 +19,7 @@ abstract class OrderValidator {
      */
     protected function validateRequiredFieldsForOrder($order,$errors) {
         if (isset($order->orderRows) == false || count($order->orderRows) == 0) {
-            $errors['missing values'] = "OrderRows are required. Use function beginOrderRow() to get orderrow setters. End with endOrderRow().";
+            $errors['missing values'] = "OrderRows are required. Use function addOrderRow(Item::orderRow) to get orderrow setters. ";
         }       
         return $errors;
     }
@@ -33,16 +33,16 @@ abstract class OrderValidator {
         if (isset($order->orderRows)) {
             foreach ($order->orderRows as $row) {
                 if (isset($row->quantity) == false) {
-                    $errors['missing value'] = "Quantity is required. Use function setQuantity().";
+                    $errors['missing value'] = "Quantity is required in object Item. Use function Item::setQuantity().";
                 }
                 if(isset($row->amountExVat) == false && isset($row->vatPercent) == false && isset($row->amountIncVat) == false){
-                    $errors['missing values'] = "At least two of the values must be set:  AmountExVat, AmountIncVat or VatPercent for Orderrow. Use functions setAmountExVat(), setAmountIncVat() or setVatPercent() after using function beginOrderRow().";
+                    $errors['missing values'] = "At least two of the values must be set in object Item::  AmountExVat, AmountIncVat or VatPercent for Orderrow. Use functions setAmountExVat(), setAmountIncVat() or setVatPercent().";
                 }elseif(isset($row->amountExVat) && (isset($row->vatPercent) == false && isset($row->amountIncVat) == false)){
-                    $errors['missing values'] = "At least one of the values must be set in combination with AmountExVat: AmountIncVat or VatPercent for Orderrow. Use functions setAmountIncVat() or setVatPercent() after using function beginOrderRow().";
+                    $errors['missing values'] = "At least one of the values must be set in combination with AmountExVat, in object Item:: AmountIncVat or VatPercent for Orderrow. Use functions setAmountIncVat() or setVatPercent().";
                 } elseif (isset($row->amountIncVat) && (isset($row->amountExVat) == false) && isset($row->vatPercent) == false) {
-                    $errors['missing values'] = "At least one of the values must be set in combination with AmountIncVat: AmountExVat or VatPercent for Orderrow. Use functions setAmountExVat() or setVatPercent() after using function beginOrderRow().";
+                    $errors['missing values'] = "At least one of the values must be set in combination with AmountIncVat, in object Item:: AmountExVat or VatPercent for Orderrow. Use functions setAmountExVat() or setVatPercent().";
                 }elseif (isset($row->vatPercent) && (isset($row->amountExVat) == false && isset($row->amountIncVat) == false)) {
-                    $errors['missing values'] = "At least one of the values must be set in combination with VatPercent: AmountIncVat or AmountExVat for Orderrow. Use functions setAmountExVat() or setAmountIncVat() after using function beginOrderRow().";
+                    $errors['missing values'] = "At least one of the values must be set in combination with VatPercent, in object Item:: AmountIncVat or AmountExVat for Orderrow. Use functions setAmountExVat() or setAmountIncVat().";
                 }
                 
             }

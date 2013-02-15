@@ -7,7 +7,8 @@ class HostedRowFormatterTest extends PHPUnit_Framework_TestCase {
     
     public function testFormatOrderRows() {
         $order = new createOrderBuilder();
-        $order->beginOrderRow()
+        $order->
+        addOrderRow(Item::orderRow()
                 ->setArticleNumber("0")
                 ->setName("Tess")
                 ->setDescription("Tester")
@@ -15,7 +16,7 @@ class HostedRowFormatterTest extends PHPUnit_Framework_TestCase {
                 ->setVatPercent(25)
                 ->setQuantity(1)
                 ->setUnit("st")
-        ->endOrderRow();
+            );
         
         $formatter = new HostedRowFormatter();
         $newRows = $formatter->formatRows($order);
@@ -31,15 +32,15 @@ class HostedRowFormatterTest extends PHPUnit_Framework_TestCase {
     
     public function testFormatShippingFeeRows() {
         $order = new createOrderBuilder();
-        $order->beginShippingFee()
+        $order
+        ->addShippingFee(Item::shippingFee()
                 ->setShippingId("0")
                 ->setName("Tess")
                 ->setDescription("Tester")
                 ->setAmountExVat(4)
                 ->setVatPercent(25)
                 ->setUnit("st")
-        ->endShippingFee();
-        
+            );
         $formatter = new HostedRowFormatter();
         $newRows = $formatter->formatRows($order);
         $newRow = $newRows[0];
@@ -55,17 +56,18 @@ class HostedRowFormatterTest extends PHPUnit_Framework_TestCase {
     
     public function testFormatFixedDiscountRows() {
         $order = new createOrderBuilder();
-        $order->beginOrderRow()
-                ->setAmountExVat(4)
+        $order->
+        addOrderRow(Item::orderRow()
+                  ->setAmountExVat(4)
                 ->setVatPercent(25)
                 ->setQuantity(1)
-        ->endOrderRow()
-        ->beginFixedDiscount()
-                ->setDiscountId("0")
-                ->setName("Tess")
-                ->setDescription("Tester")
-                ->setAmountIncVat(1)
-        ->endFixedDiscount();
+                )
+                ->addFixedDiscount(Item::fixedDiscount()
+                    ->setDiscountId("0")
+                    ->setName("Tess")
+                    ->setDescription("Tester")
+                    ->setAmountIncVat(1)
+                    );
         
         $formatter = new HostedRowFormatter();
         $newRows = $formatter->formatRows($order);
@@ -80,17 +82,18 @@ class HostedRowFormatterTest extends PHPUnit_Framework_TestCase {
     
     public function testFormatRelativeDiscountRows() {
         $order = new createOrderBuilder();
-        $order->beginOrderRow()
+        $order->
+        addOrderRow(Item::orderRow()
                 ->setAmountExVat(4)
                 ->setVatPercent(25)
                 ->setQuantity(1)
-        ->endOrderRow()
-        ->beginRelativeDiscount()
+                )
+        ->addRelativeDiscount(Item::relativeDiscount()
                 ->setDiscountId("0")
                 ->setName("Tess")
                 ->setDescription("Tester")
                 ->setDiscountPercent(10)
-        ->endRelativeDiscount();
+                );
         
         $formatter = new HostedRowFormatter();
         $newRows = $formatter->formatRows($order);

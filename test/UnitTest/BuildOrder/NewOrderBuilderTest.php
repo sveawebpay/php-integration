@@ -31,7 +31,8 @@ class NewOrderBuilderTest extends PHPUnit_Framework_TestCase {
                     ->setDiscountPercent(0)
                     );
         //end foreach
-            $request = $request->setCustomerSsn(194605092222)
+            $request = $request
+                ->addCustomerDetails(Item::individualCustomer()->setSsn(194605092222))
                 ->setCountryCode("SE")
                 ->setCustomerReference("33")
                 ->setOrderDate("2012-12-12")
@@ -76,7 +77,7 @@ class NewOrderBuilderTest extends PHPUnit_Framework_TestCase {
         $request = WebPay::createOrder()
             ->setTestmode()
             ->addOrderRow($orderRows)
-            ->setCustomerSsn(194605092222)
+            ->addCustomerDetails(Item::individualCustomer()->setSsn(194605092222))
             ->setCountryCode("SE")
             ->setCustomerReference("33")
             ->setOrderDate("2012-12-12")
@@ -116,7 +117,7 @@ class NewOrderBuilderTest extends PHPUnit_Framework_TestCase {
                         );
         //end foreach
             $request = $request  
-            ->setCustomerSsn(194605092222)
+            ->addCustomerDetails(Item::individualCustomer()->setSsn(194605092222))
             ->setCountryCode("SE")
             ->setCustomerReference("33")
             ->setOrderDate("2012-12-12")
@@ -159,7 +160,7 @@ class NewOrderBuilderTest extends PHPUnit_Framework_TestCase {
                         );
         //end foreach
             $request = $request  
-            ->setCustomerSsn(194605092222)
+            ->addCustomerDetails(Item::individualCustomer()->setSsn(194605092222))
             ->setCountryCode("SE")
             ->setCustomerReference("33")
             ->setOrderDate("2012-12-12")
@@ -199,8 +200,8 @@ class NewOrderBuilderTest extends PHPUnit_Framework_TestCase {
                     ->setName("Fixed")
                         );
         //end foreach
-            $request = $request  
-            ->setCustomerSsn(194605092222)
+            $request = $request 
+            ->addCustomerDetails(Item::individualCustomer()->setSsn(194605092222))
             ->setCountryCode("SE")
             ->setCustomerReference("33")
             ->setOrderDate("2012-12-12")
@@ -241,7 +242,7 @@ class NewOrderBuilderTest extends PHPUnit_Framework_TestCase {
                         );                    
         //end foreach
             $request = $request  
-            ->setCustomerSsn(194605092222)
+            ->addCustomerDetails(Item::individualCustomer()->setSsn(194605092222))
             ->setCountryCode("SE")
             ->setCustomerReference("33")
             ->setOrderDate("2012-12-12")

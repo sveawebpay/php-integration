@@ -17,7 +17,7 @@ class PaymentPlanTest extends PHPUnit_Framework_TestCase {
     function testPaymentPlanRequestObjectSpecifics() {
         $rowFactory = new TestRowFactory();
         $request = WebPay::createOrder()
-                ->beginOrderRow()
+                ->addOrderRow(Item::orderRow()
                     ->setArticleNumber(1)
                     ->setQuantity(2)
                     ->setAmountExVat(100.00)
@@ -25,10 +25,10 @@ class PaymentPlanTest extends PHPUnit_Framework_TestCase {
                     ->setName('Prod')
                     ->setUnit("st")
                     ->setVatPercent(25)
-                    ->setDiscountPercent(0) 
-                ->endOrderRow()
+                    ->setDiscountPercent(0)    
+                    )
                 ->run($rowFactory->buildShippingFee())
-                 ->setCustomerSsn(194605092222)
+                ->addCustomerDetails(Item::individualCustomer()->setSsn(194605092222))
                 ->setCountryCode("SE")
                 ->setCustomerReference("33")
                 ->setClientOrderNumber("nr26")

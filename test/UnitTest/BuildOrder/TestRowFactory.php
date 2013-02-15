@@ -10,15 +10,17 @@ class TestRowFactory {
     function buildShippingFee(){
         return function($orderbuilder){
             return $orderbuilder
-                ->beginShippingFee()
-                    ->setShippingId('33')
+              ->addShippingFee(
+                Item::shippingFee()
+                     ->setShippingId('33')
                     ->setName('shipping')
                     ->setDescription("Specification")
                     ->setAmountExVat(50)
                     ->setUnit("st")
                     ->setVatPercent(25)
                     ->setDiscountPercent(0)
-                ->endShippingFee();
+                );
+                
         };
     }
     
@@ -30,14 +32,16 @@ class TestRowFactory {
     function buildInvoiceFee() {
         return function($orderbuilder) {
             return $orderbuilder
-                ->beginInvoiceFee()
+                ->addInvoiceFee(
+                Item::invoiceFee()
                     ->setName('Svea fee')
                     ->setDescription("Fee for invoice")
                     ->setAmountExVat(50)
                     ->setUnit("st")
                     ->setVatPercent(25)
                     ->setDiscountPercent(0)
-                ->endInvoiceFee();
+                        );
+               
         };
     }
 
