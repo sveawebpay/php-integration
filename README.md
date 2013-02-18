@@ -761,7 +761,8 @@ Responses recieved after sending the values *mac*, *merchantid* and *xmlMessageB
 hosted solutions can also be processed through the *SveaResponse* class.
 
 The response from server will be sent to the *returnUrl* with POST or GET as XML, and
-*SveaResponse* will return a structured object similar to the synchronous aswer instead.
+*SveaResponse* will return a structured object similar to the synchronous aswer instead. 
+Params are, besides the 
 ```php
   $respObject = new SveaResponse($_REQUEST['response']); 
 ```
