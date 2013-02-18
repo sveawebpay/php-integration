@@ -66,41 +66,19 @@ $response = WebPay::createOrder()
 //If testmode
     ->setTestmode()
 //For all products and other items
-    ->beginOrderRow()
-    ...
-    ->endOrderRow()
+   ->addOrderRow(Item::orderRow()...)
 //If shipping fee
-    ->beginShippingFee()
-    ...
-    ->endShippingFee()
+   ->addFee(Item::shippingFee()...)
 //If invoice with invoice fee
-    ->beginInvoiceFee()
-    ...
-    ->endInvoiceFee()
+    ->addFee(Item::invoiceFee()
 //If discount or coupon with fixed amount
-    ->beginFixedDiscount()
-    ...
-    ->endFixedDiscount()
+    ->addDiscount(Item::fixedDiscount()
 //If discount or coupon with percent discount
-    ->beginRelativeDiscount()
-    ...	
-    ->endRelativeDiscount()
-//Customer values. Different validation depending on country code.
-    ->setCustomerSsn(194605092222)
-    ->setCustomerInitials("SB")
-    ->setCustomerBirthDate(1923, 12, 12)
-    ->setCustomerName("Tess", "Testson")
-    ->setCustomerEmail("test@svea.com")
-    ->setCustomerPhoneNumber(999999)
-    ->setCustomerIpAddress("123.123.123")
-    ->setCustomerStreetAddress("Gatan", 23)
-    ->setCustomerCoAddress("c/o Eriksson")
-    ->setCustomerZipCode(9999)
-    ->setCustomerLocality("Stan")
-//If customer is a company values
-    ->setCustomerCompanyIdNumber(2345234)
-    ->setCustomerCompanyName("TestCompagniet")
-    ->setCustomerCompanyVatNumber("NL12312")
+   ->addDiscount(Item::relativeDiscount()
+//Individual customer values. 
+      ->addCustomerDetails(Item::individualCustomer()...)
+//Company customer values
+     ->addCustomerDetails(Item::companyCustomer()...)
 //Other values
     ->setCountryCode("SE")
     ->setOrderDate("2012-12-12")
@@ -146,13 +124,23 @@ Remove when you change to production mode.
 [<< To top](https://github.com/sveawebpay/php-integration/tree/develop#php-integration-package-api-for-sveawebpay)
 	
 ### 1.2 Specify order                                                        
-Continue by adding rows for products and other. You can add OrderRow, InvoiceFee, ShippingFee, RelativeDiscount and FixedDiscount.	
+Continue by adding values for products and other. You can add OrderRow, Fee and Discount. Chose the right Item object as parameter.
+You can use the **add-** functions with an Item object or an array of Item objects as parameters. 
+
+```php
+->addOrderRow(Item::orderRow()->...)
+
+//or
+$orderRows[] = Item::orderRow()->...; 
+->addOrderRow($orderRows)
+```
 	
 #### 1.2.1 OrderRow
-All products and other items. It´s required to have a minimum of one order row.
+All products and other items. It´s required to have a minimum of one orderrow.
 **The price can be set in a combination by using a minimum of two out of three functions: setAmountExVat(), setAmountIncVat() and setVatPercent().**
 ```php
-    ->beginOrderRow()        
+->addOrderRow(
+      Item::orderRow()     
         ->setQuantity(2)                        //Required
         ->setAmountExVat(100.00)                //Optional, see info above
         ->setAmountIncVat(125.00)               //Optional, see info above
@@ -162,13 +150,14 @@ All products and other items. It´s required to have a minimum of one order row.
         ->setName('Prod')                       //Optional
         ->setUnit("st")                         //Optional              
         ->setDiscountPercent(0)                 //Optional
-    ->endOrderRow()
+    )
 ```
 
 #### 1.2.2 ShippingFee
 **The price can be set in a combination by using a minimum of two out of three functions: setAmountExVat(), setAmountIncVat()and setVatPercent().**
 ```php
-    ->beginShippingFee()
+->addFee(
+    Item::shippingFee()
         ->setShippingId('33')                   //Optional
         ->setName('shipping')                   //Optional
         ->setDescription("Specification")       //Optional
@@ -177,12 +166,13 @@ All products and other items. It´s required to have a minimum of one order row.
         ->setVatPercent(25)                     //Optional, see info above
         ->setUnit("st")                         //Optional             
         ->setDiscountPercent(0)                 //Optional
-    ->endShippingFee()
+   )
 ```
 #### 1.2.3 InvoiceFee
 **The price can be set in a combination by using a minimum of two out of three functions: setAmountExVat(), setAmountIncVat() and setVatPercent().**
 ```php
-    ->beginInvoiceFee()
+->addFee(
+    Item::invoiceFee()
         ->setName('Svea fee')                   //Optional
         ->setDescription("Fee for invoice")     //Optional
         ->setAmountExVat(50)                    //Optional, see info above
@@ -190,29 +180,31 @@ All products and other items. It´s required to have a minimum of one order row.
         ->setVatPercent(25)                     //Optional, see info above
         ->setUnit("st")                         //Optional
         ->setDiscountPercent(0)                 //Optional
-    ->endInvoiceFee()
+    )
 ```
 #### 1.2.4 Fixed Discount
 When discount or coupon is a fixed amount on total product amount.
 ```php
-    ->beginFixedDiscount()                  
+->addDiscount(
+    Item::fixedDiscount()                
         ->setAmountIncVat(100.00)               //Required
         ->setDiscountId("1")                    //Optional        
         ->setUnit("st")                         //Optional
         ->setDescription("FixedDiscount")       //Optional
         ->setName("Fixed")                      //Optional
-    ->endFixedDiscount(0)
+    )
 ```
 #### 1.2.5 Relative Discount
 When discount or coupon is a percentage on total product amount.
 ```php
-    ->beginRelativeDiscount()
+->addDiscount(
+    Item::relativeDiscount()
         ->setDiscountPercent(50)                //Required
         ->setDiscountId("1")                    //Optional      
         ->setUnit("st")                         //Optional
         ->setName('Relative')                   //Optional
         ->setDescription("RelativeDiscount")    //Optional
-    ->endRelativeDiscount()
+    )
 ```
 [<< To top](https://github.com/sveawebpay/php-integration/tree/develop#php-integration-package-api-for-sveawebpay)
 
@@ -220,24 +212,33 @@ When discount or coupon is a percentage on total product amount.
 Customer identity is required for invoice and payment plan orders. Required values varies 
 depending on country and customer type. For SE, NO, DK and FI ssn (Social Security Number)
 or company id number is required. Email and ip address are desirable.
-```php
-    //Options for individual customers
-    ->setCustomerSsn(194605092222)              //Required for individual customers in SE, NO, DK, FI
-    ->setCustomerInitials("SB")                 //Required for individual customers in NL 
-    ->setCustomerBirthDate(1923, 12, 12)        //Required for individual customers in NL and DE
-    ->setCustomerName("Tess", "Testson")        //Required for individual customers in NL and DE    
-    ->setCustomerStreetAddress("Gatan", 23)     //Required in NL and DE    
-    ->setCustomerZipCode(9999)                  //Required in NL and DE
-    ->setCustomerLocality("Stan")               //Required in NL and DE    
-    ->setCustomerEmail("test@svea.com")         //Optional but desirable    
-    ->setCustomerIpAddress("123.123.123")       //Optional but desirable
-    ->setCustomerCoAddress("c/o Eriksson")      //Optional
-    ->setCustomerPhoneNumber(999999)            //Optional
 
-    //Additional options for company customers
-    ->setCustomerCompanyIdNumber(2345234)       //Required for company customers in SE, NO, DK, FI
-    ->setCustomerCompanyVatNumber("NL2345234")  //Required for NL and DE
-    ->setCustomerCompanyName("TestCompagniet")  //Required for Eu countries like NL and DE
+####1.3.1 Options for individual customers
+```php
+->addCustomerDetails(
+    Item::individualCustomer()
+    ->setSsn(194605092222)              //Required for individual customers in SE, NO, DK, FI
+    ->setInitials("SB")                 //Required for individual customers in NL 
+    ->setBirthDate(1923, 12, 12)        //Required for individual customers in NL and DE
+    ->setName("Tess", "Testson")        //Required for individual customers in NL and DE    
+    ->setStreetAddress("Gatan", 23)     //Required in NL and DE    
+    ->setZipCode(9999)                  //Required in NL and DE
+    ->setLocality("Stan")               //Required in NL and DE    
+    ->setEmail("test@svea.com")         //Optional but desirable    
+    ->setIpAddress("123.123.123")       //Optional but desirable
+    ->setCoAddress("c/o Eriksson")      //Optional
+    ->setPhoneNumber(999999)            //Optional
+    )
+```
+
+####1.3.2 Options for company customers
+```php
+->addCustomerDetails(
+    Item::companyCustomer()
+    ->setCompanyIdNumber(2345234)       //Required for company customers in SE, NO, DK, FI
+    ->setVatNumber("NL2345234")  //Required for NL and DE
+    ->setCompanyName("TestCompagniet")  //Required for Eu countries like NL and DE
+    )
 ```
 [<< To top](https://github.com/sveawebpay/php-integration/tree/develop#php-integration-package-api-for-sveawebpay)
 
@@ -246,7 +247,7 @@ or company id number is required. Email and ip address are desirable.
     ->setCountryCode("SE")                      //Required for web services    
     ->setCurrency("SEK")                        //Required for card payment, direct payment and PayPage payment.
     ->setClientOrderNumber("nr26")              //Required for card payment, direct payment, PaymentMethod payment and PayPage payments.
-    ->setAddressSelector("7fd7768")             //Recieved from getAddresses
+    ->setAddressSelector("7fd7768")             //Optional. Recieved from getAddresses
     ->setOrderDate("2012-12-12")                //Optional
     ->setCustomerReference("33")                //Optional
 ```
@@ -286,7 +287,8 @@ and the html form element as array.
 If Config/SveaConfig.php is not modified you can set your store authorization here.
 ```php
 $form = WebPay::createOrder()
-    ->beginOrderRow()
+->addOrderRow(
+    Item::orderRow()
         ->setArticleNumber(1)
         ->setQuantity(2)
         ->setAmountExVat(100.00)
@@ -295,7 +297,7 @@ $form = WebPay::createOrder()
         ->setUnit("st")
         ->setVatPercent(25)
         ->setDiscountPercent(0)
-    ->endOrderRow()                
+    )
     ->setCountryCode("SE")
     ->setClientOrderNumber("33")
     ->setOrderDate("2012-12-12")
@@ -331,8 +333,9 @@ Function getPaymentForm() returns object type *PaymentForm* with accessible memb
 If Config/SveaConfig.php is not modified you can set your store authorization here.
 ```php
 $form = WebPay::createOrder()
-    ->setTestmode()
-    ->beginOrderRow()
+->setTestmode()
+->addOrderRow(
+    Item::orderRow()
         ->setArticleNumber(1)
         ->setQuantity(2)
         ->setAmountExVat(100.00)
@@ -341,7 +344,7 @@ $form = WebPay::createOrder()
         ->setUnit("st")
         ->setVatPercent(25)
         ->setDiscountPercent(0)
-    ->endOrderRow()                   
+    )                   
     ->setCountryCode("SE")
     ->setCustomerReference("33")
     ->setOrderDate("2012-12-12")
@@ -374,16 +377,17 @@ setPaymentMethod, includePaymentMethods, excludeCardPaymentMethods or excludeDir
 ```php
 $form = WebPay::createOrder()
         ->setTestmode()
-        ->beginOrderRow()
-            ->setArticleNumber(1)
-            ->setQuantity(2)
-            ->setAmountExVat(100.00)
-            ->setDescription("Specification")
-            ->setName('Prod')
-            ->setUnit("st")
-            ->setVatPercent(25)
-            ->setDiscountPercent(0)
-        ->endOrderRow()
+->addOrderRow(
+    Item::orderRow()
+        ->setArticleNumber(1)
+        ->setQuantity(2)
+        ->setAmountExVat(100.00)
+        ->setDescription("Specification")
+        ->setName('Prod')
+        ->setUnit("st")
+        ->setVatPercent(25)
+        ->setDiscountPercent(0)
+    )   
         ->setCountryCode("SE")
         ->setCustomerReference("33")
         ->setOrderDate("2012-12-12")
@@ -452,7 +456,8 @@ Go direct to specified payment method without the step *PayPage*.
 If Config/SveaConfig.php is not modified you can set your store authorization here.
 ```php
 $form = WebPay::createOrder()
-    ->beginOrderRow()
+  ->addOrderRow(
+    Item::orderRow()
         ->setArticleNumber(1)
         ->setQuantity(2)
         ->setAmountExVat(100.00)
@@ -461,7 +466,7 @@ $form = WebPay::createOrder()
         ->setUnit("st")
         ->setVatPercent(25)
         ->setDiscountPercent(0)
-    ->endOrderRow()                
+    )                  
     ->setCountryCode("SE")
     ->setClientOrderNumber("33")
     ->setOrderDate("2012-12-12")
@@ -499,23 +504,24 @@ If Config/SveaConfig.php is not modified you can set your store authorization he
 ```php
     $response = WebPay::createOrder()
         ->setTestmode()
-        ->beginOrderRow()
-            ->setArticleNumber(1)
-            ->setQuantity(2)
-            ->setAmountExVat(100.00)
-            ->setDescription("Specification")
-            ->setName('Prod')
-            ->setUnit("st")
-            ->setVatPercent(25)
-            ->setDiscountPercent(0)
-        ->endOrderRow()
+      ->addOrderRow(
+    Item::orderRow()
+        ->setArticleNumber(1)
+        ->setQuantity(2)
+        ->setAmountExVat(100.00)
+        ->setDescription("Specification")
+        ->setName('Prod')
+        ->setUnit("st")
+        ->setVatPercent(25)
+        ->setDiscountPercent(0)
+    )   
          ->setCountryCode("SE")
          ->setCustomerReference("33")
          ->setOrderDate("2012-12-12")
          ->setCurrency("SEK")
              ->useInvoicePayment()
              ->setPasswordBasedAuthorization("sverigetest", "sverigetest", 79021) //Optional
-             ->doPayment();
+             ->doRequest();
 ```
 #### 1.5.5 PaymentPlanPayment
 Perform *PaymentPlanPayment*. This payment form will perform a synchronous payment and return a response.
@@ -523,25 +529,26 @@ Returns a *CreateOrderResponse* object. Preceded by WebPay::getPaymentPlanParams
 If Config/SveaConfig.php is not modified you can set your store authorization here.
 Param: Campaign code recieved from getPaymentPlanParams().
 ```php
-    $response = WebPay::createOrder()
-        ->setTestmode()
-        ->beginOrderRow()
-           ->setArticleNumber(1)
-           ->setQuantity(2)
-           ->setAmountExVat(100.00)
-           ->setDescription("Specification")
-           ->setName('Prod')
-           ->setUnit("st")
-           ->setVatPercent(25)
-           ->setDiscountPercent(0)
-        ->endOrderRow()
+$response = WebPay::createOrder()
+->setTestmode()
+->addOrderRow(
+    Item::orderRow()
+        ->setArticleNumber(1)
+        ->setQuantity(2)
+        ->setAmountExVat(100.00)
+        ->setDescription("Specification")
+        ->setName('Prod')
+        ->setUnit("st")
+        ->setVatPercent(25)
+        ->setDiscountPercent(0)
+    )   
         ->setCountryCode("SE")
         ->setCustomerReference("33")
         ->setOrderDate("2012-12-12")
         ->setCurrency("SEK")
         ->usePaymentPlanPayment("camp1")                //Parameter: campaign code recieved from getPaymentPlanParams
            ->setPasswordBasedAuthorization("sverigetest", "sverigetest", 79021) //Optional
-           ->doPayment();
+           ->doRequest();
 ```
 [<< To top](https://github.com/sveawebpay/php-integration/tree/develop#php-integration-package-api-for-sveawebpay)
 
@@ -620,7 +627,8 @@ Continue by adding rows for products and other. You can also add invoice fee and
 #### 4.2.1 OrderRow
 All products and other items. It is required to have a minimum of one row.
 ```php
-    ->beginOrderRow()       
+  ->addOrderRow(
+    Item::orderRow()   
        ->setQuantity(2)                     //Required
        ->setAmountExVat(100.00)             //Required
        ->setVatPercent(25)                  //Required
@@ -629,12 +637,13 @@ All products and other items. It is required to have a minimum of one row.
        ->setName('Prod')                    //Optional
        ->setUnit("st")                      //Optional
        ->setDiscountPercent(0)              //Optional
-   ->endOrderRow()
+   )
 ```
 
 #### 4.2.2 ShippingFee
 ```php
-    ->beginShippingFee()
+->addFee(
+    Item::shippingFee()
         ->setAmountExVat(50)                //Required
         ->setVatPercent(25)                 //Required
         ->setShippingId('33')               //Optional
@@ -642,18 +651,19 @@ All products and other items. It is required to have a minimum of one row.
         ->setDescription("Specification")   //Optional        
         ->setUnit("st")                     //Optional        
         ->setDiscountPercent(0)
-    ->endShippingFee()
+    )
 ```
 #### 4.2.3 InvoiceFee
 ```php
-    ->beginInvoiceFee()
+->addFee(
+    Item::invoiceFee()
         ->setAmountExVat(50)                //Required
         ->setVatPercent(25)                 //Required
         ->setName('Svea fee')               //Optional
         ->setDescription("Fee for invoice") //Optional       
         ->setUnit("st")                     //Optional
         ->setDiscountPercent(0)             //Optional
-    ->endInvoiceFee()
+  )
 ```
 [<< To top](https://github.com/sveawebpay/php-integration/tree/develop#php-integration-package-api-for-sveawebpay)
 
@@ -670,17 +680,18 @@ If invoice order is credit invoice use setCreditInvoice($invoiceId) and setNumbe
 
 ```php
     $response = WebPay::deliverOrder()
-        ->setTestmode()
-        ->beginOrderRow()
-            ->setArticleNumber(1)
-            ->setQuantity(2)
-            ->setAmountExVat(100.00)
-            ->setDescription("Specification")
-            ->setName('Prod')
-            ->setUnit("st")
-            ->setVatPercent(25)
-            ->setDiscountPercent(0)
-        ->endOrderRow()
+->setTestmode()
+->addOrderRow(
+    Item::orderRow()
+        ->setArticleNumber(1)
+        ->setQuantity(2)
+        ->setAmountExVat(100.00)
+        ->setDescription("Specification")
+        ->setName('Prod')
+        ->setUnit("st")
+        ->setVatPercent(25)
+        ->setDiscountPercent(0)
+    )  
         ->setOrderId("id")
         ->setInvoiceDistributionType('Post')
         ->deliverInvoiceOrder()
