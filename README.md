@@ -37,7 +37,7 @@ require_once 'Includes.php';
 
 $foo = WebPay::createOrder();
 $requestObject = 
-$foo->...
+$foo()->...
     ->..;
 ```
 [<< To top](https://github.com/sveawebpay/php-integration/tree/develop#php-integration-package-api-for-sveawebpay)
@@ -76,9 +76,9 @@ $response = WebPay::createOrder()
 //If discount or coupon with percent discount
    ->addDiscount(Item::relativeDiscount()
 //Individual customer values. 
-      ->addCustomerDetails(Item::individualCustomer()...)
+    ->addCustomerDetails(Item::individualCustomer()...)
 //Company customer values
-     ->addCustomerDetails(Item::companyCustomer()...)
+    ->addCustomerDetails(Item::companyCustomer()...)
 //Other values
     ->setCountryCode("SE")
     ->setOrderDate("2012-12-12")
@@ -125,13 +125,13 @@ Remove when you change to production mode.
 	
 ### 1.2 Specify order                                                        
 Continue by adding values for products and other. You can add OrderRow, Fee and Discount. Chose the right Item object as parameter.
-You can use the **add-** functions with an Item object or an array of Item objects as parameters. 
+You can use the *add-* functions with an Item object or an array of Item objects as parameters. 
 
 ```php
 ->addOrderRow(Item::orderRow()->...)
 
 //or
-$orderRows[] = Item::orderRow()->...; 
+$orderRows[] = Item::orderRow()->...;
 ->addOrderRow($orderRows)
 ```
 	
@@ -244,11 +244,11 @@ or company id number is required. Email and ip address are desirable.
 
 ### 1.4 Other values  
 ```php
-    ->setCountryCode("SE")                      //Required for web services    
+    ->setCountryCode("SE")                      //Required for synchronous payments    
     ->setCurrency("SEK")                        //Required for card payment, direct payment and PayPage payment.
     ->setClientOrderNumber("nr26")              //Required for card payment, direct payment, PaymentMethod payment and PayPage payments.
     ->setAddressSelector("7fd7768")             //Optional. Recieved from getAddresses
-    ->setOrderDate("2012-12-12")                //Optional
+    ->setOrderDate("2012-12-12")                //Required for synchronous payments
     ->setCustomerReference("33")                //Optional
 ```
 [<< To top](https://github.com/sveawebpay/php-integration/tree/develop#php-integration-package-api-for-sveawebpay)
@@ -324,7 +324,12 @@ Function getPaymentForm() returns object type *PaymentForm* with accessible memb
 | htmlFormFieldsAsArray             | Array of Html form fields to include.     |
 | rawFields                         | Array of values to send in Html form. ($merchantid, $xmlMessageBase64, $mac) |
             
+```php
+$form = ...
+        ->getPaymentForm();
 
+echo $form->completeHtmlFormWithSubmitButton; //Will render a hidden form with submit button in browser
+```
 
 #### 1.5.2 PayPage with direct bank payment options
 *PayPage* with available direct bank payments only.
@@ -368,6 +373,13 @@ Returns object type PaymentForm:
 | completeHtmlFormWithSubmitButton  | A complete Html form with method= "post" with submit button to include in your code. |
 | htmlFormFieldsAsArray             | Array of Html form fields to include.     |
 | rawFields                         | Array of values to send in Html form. ($merchantid, $xmlMessageBase64, $mac) |
+
+```php
+$form = ...
+        ->getPaymentForm();
+
+echo $form->completeHtmlFormWithSubmitButton; //Will render a hidden form with submit button in browser
+```
             
 #### 1.5.3 PayPagePayment
 *PayPage* with all available payments. You can also custom the *PayPage* by using one of the methods for *PayPagePayments*:
@@ -448,6 +460,12 @@ Returns object type *PaymentForm*:
 | htmlFormFieldsAsArray             | Array of Html form fields to include.     |
 | rawFields                         | Array of values to send in Html form. ($merchantid, $xmlMessageBase64, $mac) |
 
+```php
+$form = ...
+        ->getPaymentForm();
+
+echo $form->completeHtmlFormWithSubmitButton; //Will render a hidden form with submit button in browser
+```
 
 #### 1.5.4 PaymentMethod specified
 Go direct to specified payment method without the step *PayPage*.
@@ -493,7 +511,12 @@ Function getPaymentForm() returns Object type PaymentForm with accessible member
 | htmlFormFieldsAsArray             | Array of Html form fields to include.     |
 | rawFields                         | Array of values to send in Html form. ($merchantid, $xmlMessageBase64, $mac) |
             
+```php
+$form = ...
+        ->getPaymentForm();
 
+echo $form->completeHtmlFormWithSubmitButton; //Will render a hidden form with submit button in browser
+```
 
 #### Synchronous solutions - Invoice and PaymentPlan
        
@@ -620,7 +643,16 @@ Ex.
 [<< To top](https://github.com/sveawebpay/php-integration/tree/develop#php-integration-package-api-for-sveawebpay)
 
 ### 4.2 Specify order                                                        
-Continue by adding rows for products and other. You can also add invoice fee and shipping fee.
+Continue by adding values for products and other. You can add OrderRow, Fee and Discount. Chose the right Item object as parameter.
+You can use the **add-** functions with an Item object or an array of Item objects as parameters. 
+
+```php
+->addOrderRow(Item::orderRow()->...)
+
+//or
+$orderRows[] = Item::orderRow()->...; 
+->addOrderRow($orderRows)
+```
 
 [<< To top](https://github.com/sveawebpay/php-integration/tree/develop#php-integration-package-api-for-sveawebpay)
 
