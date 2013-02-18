@@ -324,7 +324,12 @@ Function getPaymentForm() returns object type *PaymentForm* with accessible memb
 | htmlFormFieldsAsArray             | Array of Html form fields to include.     |
 | rawFields                         | Array of values to send in Html form. ($merchantid, $xmlMessageBase64, $mac) |
             
+```php
+$form = ...
+        ->getPaymentForm();
 
+echo $form->completeHtmlFormWithSubmitButton; //Will render a hidden form with submit button in browser
+```
 
 #### 1.5.2 PayPage with direct bank payment options
 *PayPage* with available direct bank payments only.
@@ -368,6 +373,13 @@ Returns object type PaymentForm:
 | completeHtmlFormWithSubmitButton  | A complete Html form with method= "post" with submit button to include in your code. |
 | htmlFormFieldsAsArray             | Array of Html form fields to include.     |
 | rawFields                         | Array of values to send in Html form. ($merchantid, $xmlMessageBase64, $mac) |
+
+```php
+$form = ...
+        ->getPaymentForm();
+
+echo $form->completeHtmlFormWithSubmitButton; //Will render a hidden form with submit button in browser
+```
             
 #### 1.5.3 PayPagePayment
 *PayPage* with all available payments. You can also custom the *PayPage* by using one of the methods for *PayPagePayments*:
@@ -448,6 +460,12 @@ Returns object type *PaymentForm*:
 | htmlFormFieldsAsArray             | Array of Html form fields to include.     |
 | rawFields                         | Array of values to send in Html form. ($merchantid, $xmlMessageBase64, $mac) |
 
+```php
+$form = ...
+        ->getPaymentForm();
+
+echo $form->completeHtmlFormWithSubmitButton; //Will render a hidden form with submit button in browser
+```
 
 #### 1.5.4 PaymentMethod specified
 Go direct to specified payment method without the step *PayPage*.
@@ -493,7 +511,12 @@ Function getPaymentForm() returns Object type PaymentForm with accessible member
 | htmlFormFieldsAsArray             | Array of Html form fields to include.     |
 | rawFields                         | Array of values to send in Html form. ($merchantid, $xmlMessageBase64, $mac) |
             
+```php
+$form = ...
+        ->getPaymentForm();
 
+echo $form->completeHtmlFormWithSubmitButton; //Will render a hidden form with submit button in browser
+```
 
 #### Synchronous solutions - Invoice and PaymentPlan
        
