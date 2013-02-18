@@ -55,8 +55,10 @@ class WebServiceOrderValidator extends OrderValidator {
         $this->errors = $identityValidator->validateDoubleIdentity($order,$this->errors);
         $this->errors = $this->validateRequiredFieldsForOrder($order,$this->errors);
         $this->errors = $this->validateOrderRows($order, $this->errors);
-              
-        
+        if(isset($order->orderDate) == false){
+            
+            $this->errors["missing value"] = "OrderDate is Required. Use function setOrderDate().";
+        }
         return $this->errors;
     }
 

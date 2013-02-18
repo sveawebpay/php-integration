@@ -49,7 +49,7 @@ class createOrderBuilder {
      */
     public $countryCode;
     /**
-     * @var type Date
+     * @var type Date time
      */
     public $orderDate;
     /**
