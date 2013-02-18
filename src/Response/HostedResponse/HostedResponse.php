@@ -18,9 +18,9 @@ class HostedResponse {
     private $decodedXml;
 
 
-    function __construct($encodedXml,$mac,$secret) {
+    function __construct($encodedXml,$secret) {
         $this->decodedXml = base64_decode($encodedXml);
-        if($this->validateMac($mac, $secret)){           
+        if($this->validateMac($secret)){           
             $this->formatXml($this->decodedXml);
         }  else {
             return "Response failed authorization. MAC not valid.";
