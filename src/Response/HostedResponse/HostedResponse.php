@@ -18,17 +18,21 @@ class HostedResponse {
 
 
     function __construct($response,$secret) {
-        if(property_exists($response,"response") && property_exists($response, "mac")){
-            $decodedXml = base64_decode($response['response']);
-            if($this->validateMac($response['response'],$response['mac'],$secret)){           
-                $this->formatXml($decodedXml);
-            }  else {
-                return "Response failed authorization. MAC not valid.";
-            }
-        }  else {
-            return "Response is not recognized.";
+        if(is_array($response)){
+            if(array_key_exists("response",$response) && array_key_exists("mac",$response)){
+                $decodedXml = base64_decode($response['response']);
+                if($this->validateMac($response['response'],$response['mac'],$secret)){           
+                    $this->formatXml($decodedXml);
+                }  else {
+                    $this->accepted = 0;
+                    $this->resultcode = "Response failed authorization. MAC not valid.";
+                }
+            }             
+        }else{
+            $this->accepted = 0;
+            $this->resultcode = "Response is not recognized.";
         }
-
+        
        
     }
     

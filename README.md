@@ -757,14 +757,17 @@ or
 
 ## 6. Response handler                                                       
 All synchronous responses are handled through *SveaResponse* and structured into objects.
-Responses recieved after sending the values *mac*, *merchantid* and *xmlMessageBase64* to
+Asynchronous responses recieved after sending the values *mac*, *merchantid* and *xmlMessageBase64* to
 hosted solutions can also be processed through the *SveaResponse* class.
 
-The response from server will be sent to the *returnUrl* with POST or GET as XML, and
-*SveaResponse* will return a structured object similar to the synchronous aswer instead. 
-Params are, besides the 
+The response from server will be sent to the *returnUrl* with POST or GET. The response contains the parameters: 
+*response*,*mac*,*merchantid*.
+Class *SveaResponse* will return a structured object similar to the synchronous answer instead. 
+Params: 
+* The POST or GET message 
+* Your *secret word*. //Optional if set in SveaConfig.php
 ```php
-  $respObject = new SveaResponse($_REQUEST['response']); 
+  $respObject = new SveaResponse($_REQUEST,$secretWord); 
 ```
 [<< To top](https://github.com/sveawebpay/php-integration/tree/develop#php-integration-package-api-for-sveawebpay)
 
