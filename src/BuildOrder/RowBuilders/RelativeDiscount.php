@@ -1,27 +1,14 @@
 <?php
-
-require_once SVEA_REQUEST_DIR . '/Includes.php';
-require_once '/../RowBuilder.php';
-
 /**
-  If order contains a discount with relative value as percentage.
- * @author Anneli Halld'n, Daniel Brolund for Svea Webpay
- * @package BuildOrder/CreateOrder
+ * Description of RelativeDiscount
+ *
+ * @author anne-hal
  */
-
-class RelativeDiscountBuilder implements RowBuilder {
-    
-    /**
-     * @param createOrder $order
-     */
-    public function __construct(createOrder $order) {
-        $this->order = $order;
-    }
-    
+class RelativeDiscount {
     /**
      * Optional
      * @param type $idAsString
-     * @return \RelativeDiscountBuilder
+     * @return \RelativeDiscount
      */
     public function setDiscountId($idAsString) {
         $this->discountId = $idAsString;
@@ -32,7 +19,7 @@ class RelativeDiscountBuilder implements RowBuilder {
      * Required
      * The percentage of the discount
      * @param type $discountPercentOnTotalAmountInInt
-     * @return \RelativeDiscountBuilder
+     * @return \RelativeDiscount
      */
     public function setDiscountPercent($discountPercentOnTotalAmountInInt) {
         $this->discountPercent = $discountPercentOnTotalAmountInInt;
@@ -42,7 +29,7 @@ class RelativeDiscountBuilder implements RowBuilder {
     /**
      * Optional
      * @param type $unitDescriptionAsString
-     * @return \RelativeDiscountBuilder
+     * @return \RelativeDiscount
      */
     public function setUnit($unitDescriptionAsString) {
         $this->unit = $unitDescriptionAsString;
@@ -52,7 +39,7 @@ class RelativeDiscountBuilder implements RowBuilder {
     /**
      * Optional
      * @param type $nameAsString
-     * @return \RelativeDiscountBuilder
+     * @return \RelativeDiscount
      */
     public function setName($nameAsString) {
         $this->name = $nameAsString;
@@ -62,20 +49,13 @@ class RelativeDiscountBuilder implements RowBuilder {
     /**
      * Optional
      * @param type $descriptionAsString
-     * @return \RelativeDiscountBuilder
+     * @return \RelativeDiscount
      */
     public function setDescription($descriptionAsString) {
         $this->description = $descriptionAsString;
         return $this;
     }
 
-    /**
-     * Code completion comment
-     * @return createOrder createOrder
-     */
-    public function endRelativeDiscount() {
-        return $this->order;
-    }
 }
 
 ?>

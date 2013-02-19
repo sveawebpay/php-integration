@@ -1,26 +1,14 @@
 <?php
-
-require_once SVEA_REQUEST_DIR . '/Includes.php';
-
 /**
- *  If order contains a discount with fixed value.
- * @author Anneli Halld'n, Daniel Brolund for Svea Webpay
- * @package BuildOrder/CreateOrder
+ * Description of FixedDiscount
+ *
+ * @author anne-hal
  */
-
-class FixedDiscountBuilder implements RowBuilder {
-    
-    /**
-     * @param createOrder $order
-     */
-    public function __construct(createOrder $order) {
-        $this->order = $order;
-    }
-
+class FixedDiscount {
     /**
      * Optional
      * @param type $IdAsString
-     * @return \FixedDiscountBuilder
+     * @return \FixedDiscount
      */
     public function setDiscountId($IdAsString) {
         $this->discountId = $IdAsString;
@@ -30,7 +18,7 @@ class FixedDiscountBuilder implements RowBuilder {
     /**
      * Optional
      * @param type $unitDescriptionAsString
-     * @return \FixedDiscountBuilder
+     * @return \FixedDiscount
      */
     public function setUnit($unitDescriptionAsString) {
         $this->unit = $unitDescriptionAsString;
@@ -40,7 +28,7 @@ class FixedDiscountBuilder implements RowBuilder {
     /**
      * Optional
      * @param type $nameAsString
-     * @return \FixedDiscountBuilder
+     * @return \FixedDiscount
      */
     public function setName($nameAsString) {
         $this->name = $nameAsString;
@@ -50,7 +38,7 @@ class FixedDiscountBuilder implements RowBuilder {
     /**
      * Optional
      * @param type $descriptionAsString
-     * @return \FixedDiscountBuilder
+     * @return \FixedDiscount
      */
     public function setDescription($descriptionAsString) {
         $this->description = $descriptionAsString;
@@ -60,20 +48,13 @@ class FixedDiscountBuilder implements RowBuilder {
     /**
      * Required
      * @param type $discountAmountOnTotalPriceAsFloat
-     * @return \FixedDiscountBuilder
+     * @return \FixedDiscount
      */
     public function setAmountIncVat($discountAmountOnTotalPriceAsFloat) {
         $this->amount = $discountAmountOnTotalPriceAsFloat;
         return $this;
     }
 
-    /**
-     * Code completion comment
-     * @return createOrder createOrder
-     */
-    public function endFixedDiscount() {
-        return $this->order;
-    }
 }
 
 ?>

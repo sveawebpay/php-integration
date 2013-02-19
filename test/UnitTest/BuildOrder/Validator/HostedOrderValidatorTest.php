@@ -17,11 +17,11 @@ class HostedOrderValidatorTest extends PHPUnit_Framework_TestCase {
     function testFailOnNullCustomerRefNo() {
         $builder = WebPay::createOrder();
         $order = $builder
-                 ->beginOrderRow()
-                    ->setAmountExVat(100)
+                ->addOrderRow(Item::orderRow()
+                         ->setAmountExVat(100)
                     ->setVatPercent(20)
                     ->setQuantity(1)
-                ->endOrderRow()
+                        )
                 ->setCountryCode("SE")
                 ->setCurrency("SEK")
         ->usePayPageCardOnly();
@@ -36,11 +36,11 @@ class HostedOrderValidatorTest extends PHPUnit_Framework_TestCase {
     function testFailOnEmptyCustomerRefNo() {
         $builder = WebPay::createOrder();
         $order = $builder
-                 ->beginOrderRow()
+                ->addOrderRow(Item::orderRow()
                     ->setAmountExVat(100)
                     ->setVatPercent(20)
                     ->setQuantity(1)
-                ->endOrderRow()
+                    )
                 ->setCountryCode("SE")
                 ->setCurrency("SEK")
                 ->setClientOrderNumber("")
@@ -61,11 +61,11 @@ class HostedOrderValidatorTest extends PHPUnit_Framework_TestCase {
     function testFailOnMissingCustomerForNL(){
           $builder = WebPay::createOrder();
         $order = $builder
-                 ->beginOrderRow()
+                ->addOrderRow(Item::orderRow()
                     ->setAmountExVat(100)
                     ->setVatPercent(20)
                     ->setQuantity(1)
-                ->endOrderRow()
+                    )
                 ->setCountryCode("NL")
                 ->setCurrency("SEK")
                 ->setClientOrderNumber("55")
@@ -85,11 +85,11 @@ class HostedOrderValidatorTest extends PHPUnit_Framework_TestCase {
     function testFailOnMissingCompanyCustomerForNL(){
           $builder = WebPay::createOrder();
         $order = $builder
-                 ->beginOrderRow()
+                ->addOrderRow(Item::orderRow()
                     ->setAmountExVat(100)
                     ->setVatPercent(20)
                     ->setQuantity(1)
-                ->endOrderRow()
+                        )
                 ->setCountryCode("NL")
                 ->setCurrency("SEK")
                 ->setClientOrderNumber("55")
@@ -104,11 +104,11 @@ class HostedOrderValidatorTest extends PHPUnit_Framework_TestCase {
     function testFailOnMissingCurrency(){
          $builder = WebPay::createOrder();
         $order = $builder
-                 ->beginOrderRow()
-                    ->setAmountExVat(100)
+                ->addOrderRow(Item::orderRow()
+                          ->setAmountExVat(100)
                     ->setVatPercent(20)
                     ->setQuantity(1)
-                ->endOrderRow()
+                        )
                 ->setCountryCode("SE")
                 ->setClientOrderNumber("34")
                     ->usePayPageCardOnly();

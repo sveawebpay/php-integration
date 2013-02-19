@@ -1,14 +1,12 @@
 <?php
-require_once SVEA_REQUEST_DIR . '/Includes.php';
-
 /**
- * For products or other rows
- * @author Anneli Halld'n, Daniel Brolund for Svea Webpay
- * @package BuildOrder/Row
+ * Description of OrderRow
+ *
+ * @author anne-hal
  */
-class DeliverOrderRowBuilder {
-  
-    /**
+class OrderRow {
+    
+   /**
      * Contains empty string if not set
      * @var type 
      */
@@ -20,17 +18,12 @@ class DeliverOrderRowBuilder {
      */
     public $vatDiscount = 0;
     
-    /**
-     * @param deliverOrder $order
-     */
-    public function __construct(deliverOrder $order) {
-        $this->order = $order;
-    }
+    
     
     /**
      * Optional
      * @param type $articleNumberAsString
-     * @return \DeliverOrderRowBuilder
+     * @return \OrderRow
      */
     public function setArticleNumber($articleNumberAsString) {
         $this->articleNumber = $articleNumberAsString;
@@ -40,7 +33,7 @@ class DeliverOrderRowBuilder {
     /**
      * Required
      * @param type $quantityAsInt
-     * @return \DeliverOrderRowBuilder
+     * @return \OrderRow
      */
     public function setQuantity($quantityAsInt) {
         $this->quantity = $quantityAsInt;
@@ -50,7 +43,7 @@ class DeliverOrderRowBuilder {
     /**
      * Optional
      * @param type $unitAsString
-     * @return \DeliverOrderRowBuilder
+     * @return \OrderRow
      */
     public function setUnit($unitAsString) {
         $this->unit = $unitAsString;
@@ -58,18 +51,18 @@ class DeliverOrderRowBuilder {
     }
     
     /**
-     * Required
+     * Optional
      * @param type $AmountAsFloat
-     * @return \DeliverOrderRowBuilder
+     * @return \OrderRow
      */
     public function setAmountExVat($AmountAsFloat) {
         $this->amountExVat = $AmountAsFloat;
         return $this;
     }
     /**
-     * Required
+     * Optional
      * @param type $AmountAsFloat
-     * @return \DeliverOrderRowBuilder
+     * @return \OrderRow
      */
     public function setAmountIncVat($AmountAsFloat) {
         $this->amountIncVat = $AmountAsFloat;
@@ -79,7 +72,7 @@ class DeliverOrderRowBuilder {
     /**
      * Optional
      * @param type $nameAsString
-     * @return \DeliverOrderRowBuilder
+     * @return \OrderRow
      */
     public function setName($nameAsString) {
         $this->name = $nameAsString;
@@ -89,7 +82,7 @@ class DeliverOrderRowBuilder {
     /**
      * Optional
      * @param type $descriptionAsString
-     * @return \DeliverOrderRowBuilder
+     * @return \OrderRow
      */
     public function setDescription($descriptionAsString) {
         $this->description = $descriptionAsString;
@@ -97,9 +90,9 @@ class DeliverOrderRowBuilder {
     }
     
     /**
-     * Required
+     * Optional
      * @param type $percentAsInt
-     * @return \DeliverOrderRowBuilder
+     * @return \OrderRow
      */
     public function setVatPercent($percentAsInt) {
         $this->vatPercent = $percentAsInt;
@@ -109,19 +102,11 @@ class DeliverOrderRowBuilder {
     /**
      * Optional
      * @param type $discountPercentAsInteger
-     * @return \DeliverOrderRowBuilder
+     * @return \OrderRow
      */
     public function setDiscountPercent($discountPercentAsInteger) {
         $this->discountPercent = $discountPercentAsInteger;
         return $this;
-    }
-    
-    /**
-     * Code completion comment
-     * @return deliverOrder orderBuilder
-     */
-    public function endOrderRow() {
-        return $this->order;
     }
 }
 

@@ -25,7 +25,7 @@ class WebServicePayments_RequestTest extends PHPUnit_Framework_TestCase {
     function testInvoiceRequestReturnsAcceptedResult() {
         $request = WebPay::createOrder()
                 ->setTestmode()
-                ->beginOrderRow()
+                ->addOrderRow(Item::orderRow()
                     ->setArticleNumber(1)
                     ->setQuantity(2)
                     ->setAmountExVat(100.00)
@@ -34,14 +34,14 @@ class WebServicePayments_RequestTest extends PHPUnit_Framework_TestCase {
                     ->setUnit("st")
                     ->setVatPercent(25)
                     ->setDiscountPercent(0)
-                ->endOrderRow()
-                ->setCustomerSsn(194605092222)
+                        )              
+                   ->addCustomerDetails(Item::individualCustomer()->setSsn(194605092222))               
                 ->setCountryCode("SE")
                 ->setCustomerReference("33")
                 ->setOrderDate("2012-12-12")
                 ->setCurrency("SEK")
                 ->useInvoicePayment()
-                    ->doPayment();
+                    ->doRequest();
         
         $this->assertEquals(1, $request->accepted);
     }
@@ -49,7 +49,7 @@ class WebServicePayments_RequestTest extends PHPUnit_Framework_TestCase {
     function testInvoiceCompanySe() {
         $request = WebPay::createOrder()
                 ->setTestmode()
-                ->beginOrderRow()
+                ->addOrderRow(Item::orderRow()
                     ->setArticleNumber(1)
                     ->setQuantity(2)
                     ->setAmountExVat(100.00)
@@ -58,13 +58,13 @@ class WebServicePayments_RequestTest extends PHPUnit_Framework_TestCase {
                     ->setUnit("st")
                     ->setVatPercent(25)
                     ->setDiscountPercent(0)
-                ->endOrderRow()
-                ->setCustomerCompanyIdNumber(4608142222)               
+                        )
+                ->addCustomerDetails(Item::companyCustomer()->setCompanyIdNumber(4608142222))
                 ->setCountryCode("SE")
                 ->setOrderDate("2012-12-12")
                 ->setCurrency("SEK")
                 ->useInvoicePayment()
-                    ->doPayment();
+                    ->doRequest();
         
         $this->assertEquals(true, $request->accepted);
     }
@@ -82,7 +82,7 @@ class WebServicePayments_RequestTest extends PHPUnit_Framework_TestCase {
         $campaigncode = $this->getGetPaymentPlanParamsForTesting();           
         $request = WebPay::createOrder()
                 ->setTestmode()
-                ->beginOrderRow()
+                ->addOrderRow(Item::orderRow()
                     ->setArticleNumber(1)
                     ->setQuantity(2)
                     ->setAmountExVat(1000.00)
@@ -91,25 +91,28 @@ class WebServicePayments_RequestTest extends PHPUnit_Framework_TestCase {
                     ->setUnit("st")
                     ->setVatPercent(25)
                     ->setDiscountPercent(0)
-                ->endOrderRow()               
-                ->setCustomerSsn(194605092222)
-                ->setCustomerInitials("SB")
-                ->setCustomerBirthDate(1923, 12, 12)
-                ->setCustomerName("Tess", "Testson")
-                ->setCustomerEmail("test@svea.com")
-                ->setCustomerPhoneNumber(999999)
-                ->setCustomerIpAddress("123.123.123")
-                ->setCustomerStreetAddress("Gatan", 23)
-                ->setCustomerCoAddress("c/o Eriksson")
-                ->setCustomerZipCode(9999)
-                ->setCustomerLocality("Stan")              
+                        )
+                ->addCustomerDetails(Item::individualCustomer()
+                        ->setSsn(194605092222)
+                        ->setInitials("SB")
+                        ->setBirthDate(1923, 12, 12)
+                        ->setName("Tess", "Testson")
+                        ->setEmail("test@svea.com")
+                        ->setPhoneNumber(999999)
+                        ->setIpAddress("123.123.123")
+                        ->setStreetAddress("Gatan", 23)
+                        ->setCoAddress("c/o Eriksson")
+                        ->setZipCode(9999)
+                        ->setLocality("Stan") 
+                        )            
+                            
                 ->setCountryCode("SE")
                 ->setCustomerReference("33")
                 ->setClientOrderNumber("nr26")
                 ->setOrderDate("2012-12-12")
                 ->setCurrency("SEK")
                     ->usePaymentPlanPayment($campaigncode)// returnerar InvoiceOrder object
-                    ->doPayment();
+                    ->doRequest();
 
         $this->assertEquals(1, $request->accepted);
     }
@@ -133,7 +136,7 @@ class WebServicePayments_RequestTest extends PHPUnit_Framework_TestCase {
     function getInvoiceOrderId() {
         $request = WebPay::createOrder()
                 ->setTestmode()
-                ->beginOrderRow()
+                ->addOrderRow(Item::orderRow()
                     ->setArticleNumber(1)
                     ->setQuantity(2)
                     ->setAmountExVat(100.00)
@@ -142,14 +145,14 @@ class WebServicePayments_RequestTest extends PHPUnit_Framework_TestCase {
                     ->setUnit("st")
                     ->setVatPercent(25)
                     ->setDiscountPercent(0)
-                ->endOrderRow()                
-                    ->setCustomerSsn(194605092222)
+                        )
+                    ->addCustomerDetails(Item::individualCustomer()->setSsn(194605092222))
                     ->setCountryCode("SE")
                     ->setCustomerReference("33")
                     ->setOrderDate("2012-12-12")
                     ->setCurrency("SEK")
                     ->useInvoicePayment()// returnerar InvoiceOrder object
-                        ->doPayment();
+                        ->doRequest();
 
         return $request->sveaOrderId;
     }
@@ -159,7 +162,7 @@ class WebServicePayments_RequestTest extends PHPUnit_Framework_TestCase {
         $orderBuilder = WebPay::deliverOrder();
         $request = $orderBuilder
                 ->setTestmode()
-               ->beginOrderRow()
+                ->addOrderRow(Item::orderRow()
                     ->setArticleNumber(1)
                     ->setQuantity(2)
                     ->setAmountExVat(100.00)
@@ -168,7 +171,7 @@ class WebServicePayments_RequestTest extends PHPUnit_Framework_TestCase {
                     ->setUnit("st")
                     ->setVatPercent(25)
                     ->setDiscountPercent(0)
-                ->endOrderRow()
+                        )
                     ->setOrderId($orderId)
                     ->setNumberOfCreditDays(1)
                     ->setInvoiceDistributionType('Post')//Post or Email

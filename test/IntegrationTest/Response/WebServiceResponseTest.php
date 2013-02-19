@@ -29,7 +29,7 @@ class WebServiceResponseTest extends PHPUnit_Framework_TestCase {
     function getInvoiceOrderId() {
         $request = WebPay::createOrder()
                 ->setTestmode()
-                ->beginOrderRow()
+                ->addOrderRow(Item::orderRow()
                     ->setArticleNumber(1)
                     ->setQuantity(2)
                     ->setAmountExVat(100.00)
@@ -38,15 +38,15 @@ class WebServiceResponseTest extends PHPUnit_Framework_TestCase {
                     ->setUnit("st")
                     ->setVatPercent(25)
                     ->setDiscountPercent(0)
-                ->endOrderRow()
-                ->setCustomerSsn(194605092222)
+                        )
+                ->addCustomerDetails(Item::individualCustomer()->setSsn(194605092222))
                 ->setCountryCode("SE")
                 ->setCustomerReference("33")
                 ->setOrderDate("2012-12-12")
                 ->setCurrency("SEK")
                 ->useInvoicePayment()// returnerar InvoiceOrder object
                 ->setPasswordBasedAuthorization("sverigetest", "sverigetest", 79021)
-                ->doPayment();
+                ->doRequest();
         
         return $request->sveaOrderId;
     }
@@ -97,7 +97,7 @@ class WebServiceResponseTest extends PHPUnit_Framework_TestCase {
     function testResultForInvoicePaymentNL() {
         $request = WebPay::createOrder()
                 ->setTestmode()
-                ->beginOrderRow()
+                ->addOrderRow(Item::orderRow()
                     ->setArticleNumber(1)
                     ->setQuantity(2)
                     ->setAmountExVat(100.00)
@@ -106,21 +106,24 @@ class WebServiceResponseTest extends PHPUnit_Framework_TestCase {
                     ->setUnit("st")
                     ->setVatPercent(25)
                     ->setDiscountPercent(0)
-                ->endOrderRow()
-                ->setCustomerBirthDate(1955, 03, 07)
-                ->setCustomerName("Sneider", "Boasman")
-                ->setCustomerStreetAddress("Gate", 42)
-                ->setCustomerLocality("BARENDRECHT")
-                ->setCustomerZipCode("1102 HG")
-                ->setCustomerInitials("SB")
-                ->setCustomerCoAddress(138)
+                        )
+                ->addCustomerDetails(Item::individualCustomer()
+                    ->setBirthDate(1955, 03, 07)
+                    ->setName("Sneider", "Boasman")
+                    ->setStreetAddress("Gate", 42)
+                    ->setLocality("BARENDRECHT")
+                    ->setZipCode("1102 HG")
+                    ->setInitials("SB")
+                    ->setCoAddress(138)
+                        )
+             
                 ->setCountryCode("NL")
                 ->setCustomerReference("33")
                 ->setOrderDate("2012-12-12")
                 ->setCurrency("EUR")
                 ->useInvoicePayment()
                 ->setPasswordBasedAuthorization("hollandtest", "hollandtest", 85997)
-                ->doPayment();
+                ->doRequest();
            
         $this->assertEquals(1, $request->accepted);
         $this->assertEquals(0, $request->resultcode);
@@ -147,7 +150,7 @@ class WebServiceResponseTest extends PHPUnit_Framework_TestCase {
         $orderBuilder = WebPay::deliverOrder();
         $request = $orderBuilder
                 ->setTestmode()
-                ->beginOrderRow()
+                ->addOrderRow(Item::orderRow()
                     ->setArticleNumber(1)
                     ->setQuantity(2)
                     ->setAmountExVat(100.00)
@@ -156,12 +159,12 @@ class WebServiceResponseTest extends PHPUnit_Framework_TestCase {
                     ->setUnit("st")
                     ->setVatPercent(25)
                     ->setDiscountPercent(0)
-                ->endOrderRow()
+                    )
                     ->setOrderId($orderId)
                     ->setNumberOfCreditDays(1)
                     ->setInvoiceDistributionType('Post')//Post or Email
                     ->deliverInvoiceOrder()
-                    ->doRequest();
+                        ->doRequest();
         
         $this->assertEquals(1, $request->accepted);
         $this->assertEquals(0, $request->resultcode);

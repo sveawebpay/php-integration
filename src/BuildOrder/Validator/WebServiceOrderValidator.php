@@ -25,7 +25,10 @@ class WebServiceOrderValidator extends OrderValidator {
             $this->isCompany = TRUE;
            
         }    
-             
+        //new!
+        if(isset($order->customerIdentity->orgNumber) || isset($order->customerIdentity->companyVatNumber) || isset($order->customerIdentity->companyName)){
+            $this->isCompany = TRUE;
+        }
         $identityValidator = new IdentityValidator($this->isCompany);
         //$this->errors = $identityValidator->validateThatCustomerIdentityExists($order,  $this->errors); //use countries validators instead
         
@@ -52,8 +55,10 @@ class WebServiceOrderValidator extends OrderValidator {
         $this->errors = $identityValidator->validateDoubleIdentity($order,$this->errors);
         $this->errors = $this->validateRequiredFieldsForOrder($order,$this->errors);
         $this->errors = $this->validateOrderRows($order, $this->errors);
-              
-        
+        if(isset($order->orderDate) == false){
+            
+            $this->errors["missing value"] = "OrderDate is Required. Use function setOrderDate().";
+        }
         return $this->errors;
     }
 

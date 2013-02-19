@@ -14,13 +14,26 @@ class HostedResponse {
     public $paymentMethod;
     public $merchantId;
     public $amount;
-    public $currency;
-    
+    public $currency;  
 
 
-    function __construct($encodedXml) {
-           $decodedXml = base64_decode($encodedXml);
-        $this->formatXml($decodedXml);
+    function __construct($response,$secret) {
+        if(is_array($response)){
+            if(array_key_exists("response",$response) && array_key_exists("mac",$response)){
+                $decodedXml = base64_decode($response['response']);
+                if($this->validateMac($response['response'],$response['mac'],$secret)){           
+                    $this->formatXml($decodedXml);
+                }  else {
+                    $this->accepted = 0;
+                    $this->resultcode = "Response failed authorization. MAC not valid.";
+                }
+            }             
+        }else{
+            $this->accepted = 0;
+            $this->resultcode = "Response is not recognized.";
+        }
+        
+       
     }
     
     protected function formatXml($xml){
@@ -53,7 +66,16 @@ class HostedResponse {
        
     }
     
-    
+    public function validateMac($messageEncoded,$mac,$secret){
+        if($secret == null){
+            $secret = SveaConfig::getConfig()->secret;
+        }
+        $macKey = hash("sha512", $messageEncoded.$secret);
+        if($mac == $macKey){
+            return TRUE;
+        }
+        return FALSE;
+    }
 }
 
 ?>

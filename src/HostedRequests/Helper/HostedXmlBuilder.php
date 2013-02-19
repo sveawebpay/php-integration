@@ -25,8 +25,15 @@ class HostedXmlBuilder {
         $this->XMLWriter->writeElement("cancelurl", $request['cancelUrl']);
         $this->XMLWriter->writeElement("amount", $request['amount']);
         $this->XMLWriter->writeElement("currency", $request['currency']);
+        $this->XMLWriter->writeElement("lang", $request['langCode']);
         if ($request['totalVat'] != null) {
             $this->XMLWriter->writeElement("vat", $request['totalVat']);
+        }
+        if(isset($order->ipAddress)){
+             $this->XMLWriter->writeElement("ipaddress", $order->ipAddress);
+        }
+        if(isset($order->ssn)){
+             $this->XMLWriter->writeElement("ssn", $order->ssn);
         }
 
         $this->serializeOrderRows($request['rows']);

@@ -15,14 +15,14 @@ require_once $root . '\TestRowFactory.php';
 class OrderBuilderTest extends PHPUnit_Framework_TestCase {
 
     //Set up orderobject
-    protected function setUp() {
+    protected function setUp() {   
         $this->orderBuilder = WebPay::createOrder();
         $this->orderBuilder->validator = new VoidValidator();
     }
     
     function testBuildOrderWithOrderRow() {
-        $sveaRequest = $this->orderBuilder
-                ->beginOrderRow()
+        $sveaRequest = WebPay::createOrder()
+                ->addOrderRow(Item::orderRow()
                     ->setArticleNumber(1)
                     ->setQuantity(2)
                     ->setAmountExVat(100.00)
@@ -31,7 +31,7 @@ class OrderBuilderTest extends PHPUnit_Framework_TestCase {
                     ->setUnit("st")
                     ->setVatPercent(25)
                     ->setDiscountPercent(0)
-                ->endOrderRow();
+                        );
         
         $this->assertEquals(1, $sveaRequest->orderRows[0]->articleNumber);
         $this->assertEquals(2, $sveaRequest->orderRows[0]->quantity);
@@ -59,7 +59,7 @@ class OrderBuilderTest extends PHPUnit_Framework_TestCase {
     function testBuildOrderWithInvoicefee() {
         $rowFactory = new TestRowFactory();
         $sveaRequest = WebPay::createOrder()
-                ->beginOrderRow()
+                ->addOrderRow(Item::orderRow()
                     ->setArticleNumber(1)
                     ->setQuantity(2)
                     ->setAmountExVat(100.00)
@@ -67,7 +67,7 @@ class OrderBuilderTest extends PHPUnit_Framework_TestCase {
                     ->setName('Prod')
                     ->setUnit("st")
                     ->setVatPercent(25)
-                ->endOrderRow()
+                        )
                 ->run($rowFactory->buildInvoiceFee());
 
         $this->assertEquals("Svea fee", $sveaRequest->invoiceFeeRows[0]->name);
@@ -80,13 +80,13 @@ class OrderBuilderTest extends PHPUnit_Framework_TestCase {
 
     function testBuildOrderWithFixedDiscount() {
         $sveaRequest = WebPay::createOrder()
-                ->beginFixedDiscount()
+                ->addDiscount(Item::fixedDiscount()
                     ->setDiscountId("1")
                     ->setAmountIncVat(100.00)
                     ->setUnit("st")
                     ->setDescription("FixedDiscount")
                     ->setName("Fixed")
-                ->endFixedDiscount(0);
+                    );
         
         $this->assertEquals("1", $sveaRequest->fixedDiscountRows[0]->discountId);
         $this->assertEquals(100.00, $sveaRequest->fixedDiscountRows[0]->amount);
@@ -98,13 +98,13 @@ class OrderBuilderTest extends PHPUnit_Framework_TestCase {
     function testBuildOrderWithRelativeDiscount() {
         $sveaRequest =
                 WebPay::createOrder()
-                ->beginRelativeDiscount()
+                ->addDiscount(Item::relativeDiscount()
                     ->setDiscountId("1")
                     ->setDiscountPercent(50)
                     ->setUnit("st")
                     ->setName('Relative')
                     ->setDescription("RelativeDiscount")
-                ->endRelativeDiscount();
+                    );
         
         $this->assertEquals("1", $sveaRequest->relativeDiscountRows[0]->discountId);
         $this->assertEquals(50, $sveaRequest->relativeDiscountRows[0]->discountPercent);
@@ -116,42 +116,47 @@ class OrderBuilderTest extends PHPUnit_Framework_TestCase {
     function testBuildOrderWithCustomer() {
         $sveaRequest =
                 WebPay::createOrder()
-                ->setCustomerSsn(194605092222)
-                ->setCustomerInitials("SB")
-                ->setCustomerBirthDate(1923, 12, 12)
-                ->setCustomerName("Tess", "Testson")
-                ->setCustomerEmail("test@svea.com")
-                ->setCustomerPhoneNumber(999999)
-                ->setCustomerIpAddress("123.123.123")
-                ->setCustomerStreetAddress("Gatan", 23)
-                ->setCustomerCoAddress("c/o Eriksson")
-                ->setCustomerZipCode(9999)
-                ->setCustomerLocality("Stan");	
+                ->addCustomerDetails(Item::individualCustomer()
+                ->setSsn(194605092222)
+                ->setInitials("SB")
+                ->setBirthDate(1923, 12, 12)
+                ->setName("Tess", "Testson")
+                ->setEmail("test@svea.com")
+                ->setPhoneNumber(999999)
+                ->setIpAddress("123.123.123")
+                ->setStreetAddress("Gatan", 23)
+                ->setCoAddress("c/o Eriksson")
+                ->setZipCode(9999)
+                ->setLocality("Stan")
+                        );
+              
                 
                 
         
-        $this->assertEquals(194605092222, $sveaRequest->ssn);
-        $this->assertEquals("SB", $sveaRequest->initials);
-        $this->assertEquals(19231212, $sveaRequest->birthDate);
-        $this->assertEquals("Tess", $sveaRequest->firstname);
-        $this->assertEquals("Testson", $sveaRequest->lastname);
-        $this->assertEquals("test@svea.com", $sveaRequest->email);
-        $this->assertEquals(999999, $sveaRequest->phonenumber);
-        $this->assertEquals("123.123.123", $sveaRequest->ipAddress);
-        $this->assertEquals("Gatan", $sveaRequest->street);
-        $this->assertEquals(23, $sveaRequest->housenumber);
-        $this->assertEquals("c/o Eriksson", $sveaRequest->coAddress);
-        $this->assertEquals(9999, $sveaRequest->zipCode);
-        $this->assertEquals("Stan", $sveaRequest->locality);
+        $this->assertEquals(194605092222, $sveaRequest->customerIdentity->ssn);
+        $this->assertEquals("SB", $sveaRequest->customerIdentity->initials);
+        $this->assertEquals(19231212, $sveaRequest->customerIdentity->birthDate);
+        $this->assertEquals("Tess", $sveaRequest->customerIdentity->firstname);
+        $this->assertEquals("Testson", $sveaRequest->customerIdentity->lastname);
+        $this->assertEquals("test@svea.com", $sveaRequest->customerIdentity->email);
+        $this->assertEquals(999999, $sveaRequest->customerIdentity->phonenumber);
+        $this->assertEquals("123.123.123", $sveaRequest->customerIdentity->ipAddress);
+        $this->assertEquals("Gatan", $sveaRequest->customerIdentity->street);
+        $this->assertEquals(23, $sveaRequest->customerIdentity->housenumber);
+        $this->assertEquals("c/o Eriksson", $sveaRequest->customerIdentity->coAddress);
+        $this->assertEquals(9999, $sveaRequest->customerIdentity->zipCode);
+        $this->assertEquals("Stan", $sveaRequest->customerIdentity->locality);
     }
     
     function testBuildOrderWithCompanyDetails() {
         $sveaRequest = WebPay::createOrder()
-                    ->setCustomerCompanyIdNumber("2345234")
-                    ->setCustomerCompanyName("TestCompagniet");
+                    ->addCustomerDetails(Item::companyCustomer()
+                        ->setCompanyIdNumber("2345234")
+                        ->setCompanyName("TestCompagniet")
+                    );
         
-        $this->assertEquals("2345234", $sveaRequest->orgNumber);
-        $this->assertEquals("TestCompagniet", $sveaRequest->companyName);
+        $this->assertEquals("2345234", $sveaRequest->customerIdentity->orgNumber);
+        $this->assertEquals("TestCompagniet", $sveaRequest->customerIdentity->companyName);
     }
 
     function testBuildOrderWithOrderDate() {

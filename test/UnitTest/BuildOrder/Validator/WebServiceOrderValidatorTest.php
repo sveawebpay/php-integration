@@ -24,7 +24,7 @@ class WebServiceOrderValidatorTest extends PHPUnit_Framework_TestCase {
                 ->endOrderRow()
                 ->setCountryCode("SE")
                     ->useInvoicePayment();
-        $order->preparePayment();
+        $order->prepareRequest();
 
        
     }
@@ -33,21 +33,22 @@ class WebServiceOrderValidatorTest extends PHPUnit_Framework_TestCase {
     
      /**
      * @expectedException ValidationException
-     * @expectedExceptionMessage -duplicated value : Customer is either an individual or a company. You can not use function setCustomerSsn() in combination with setCustomerCompanyIdNumber() or setCustomerCompanyVatNumber().
+     * @expectedExceptionMessage -duplicated value : Customer is either an individual or a company. You can not use function setSsn() in combination with setCompanyIdNumber() or setVatNumber().
      */
-    function testFailOnDoubleIdentity() {
+    function t_estFailOnDoubleIdentity() {
         $builder = WebPay::createOrder();
         $order = $builder 
-                ->beginOrderRow()
+                ->addOrderRow(Item::orderRow()
                     ->setAmountExVat(100)
                     ->setVatPercent(20)
                     ->setQuantity(1)
-                ->endOrderRow()
-                ->setCountryCode("SE")                
-                ->setCustomerSsn(194605092222)
-                ->setCustomerCompanyIdNumber(4608142222)
+                    )
+                ->setCountryCode("SE")   
+                  ->setOrderDate("Mon, 15 Aug 05 15:52:01 +0000")
+                ->addCustomerDetails(Item::individualCustomer()->setSsn(194605092222))
+                ->addCustomerDetails(Item::companyCustomer()->setCompanyIdNumber(4608142222))
                     ->useInvoicePayment();
-       $order->preparePayment();
+       $order->prepareRequest();
        
     }
 
@@ -59,16 +60,17 @@ class WebServiceOrderValidatorTest extends PHPUnit_Framework_TestCase {
     function testFailOnBadCountryCode() {
         $builder = WebPay::createOrder();
         $order = $builder
-                ->beginOrderRow()
+                ->addOrderRow(Item::orderRow()
                     ->setAmountExVat(100)
                     ->setVatPercent(20)
                     ->setQuantity(1)
-                ->endOrderRow()
+                    )
                  ->setCountryCode("ZZ")
-                ->setCustomerSsn(111111)
+                  ->setOrderDate("Mon, 15 Aug 05 15:52:01 +0000")
+                ->addCustomerDetails(Item::individualCustomer()->setSsn(111111))
                     ->useInvoicePayment();
         
-     $order->preparePayment();
+     $order->prepareRequest();
     }
     
      
@@ -80,139 +82,151 @@ class WebServiceOrderValidatorTest extends PHPUnit_Framework_TestCase {
     function testFailOnMissingCountryCode() {
         $builder = WebPay::createOrder();
         $order = $builder
-                ->beginOrderRow()
+                ->addOrderRow(Item::orderRow()
                     ->setAmountExVat(100)
                     ->setVatPercent(20)
                     ->setQuantity(1)
-                ->endOrderRow()
-                ->setCustomerSsn(111111)
+                    )
+                ->addCustomerDetails(Item::individualCustomer()->setSsn(111111))
+                  ->setOrderDate("Mon, 15 Aug 05 15:52:01 +0000")
                     ->useInvoicePayment();
         
-        $order->preparePayment();
+        $order->prepareRequest();
     }
     /**
      * @expectedException ValidationException
-     * @expectedExceptionMessage -missing value : CustomerSsn is required for individual customers when countrycode is SE, NO, DK or FI. Use function setCustomerSsn().
+     * @expectedExceptionMessage -missing value : Ssn is required for individual customers when countrycode is SE, NO, DK or FI. Use function setSsn().
      */
     function testFailOnMissingSsnForSeOrder() {
         $builder = WebPay::createOrder();
         $order = $builder
                 ->setCountryCode("SE")
-                ->setCustomerName("Tess", "Testson")
+                  ->setOrderDate("Mon, 15 Aug 05 15:52:01 +0000")
+                ->addCustomerDetails(Item::individualCustomer()->setName("Tess", "Testson"))
                     ->useInvoicePayment();
         
-       $order->preparePayment();
+       $order->prepareRequest();
     }
 
     /**
      * @expectedException ValidationException
-     * @expectedExceptionMessage -missing value : OrgNumber is required for company customers when countrycode is SE, NO, DK or FI. Use function setCustomerCompanyIdNumber().
+     * @expectedExceptionMessage -missing value : OrgNumber is required for company customers when countrycode is SE, NO, DK or FI. Use function setCompanyIdNumber().
      */
     function testFailOnMissingOrgNumberForCompanyOrderSe() {
         $builder = WebPay::createOrder();
         $order = $builder
                 ->setCountryCode("SE")
-                ->setCustomerReference("1")
-                ->setCustomerCompanyName("Mycompany")
+                  ->setOrderDate("Mon, 15 Aug 05 15:52:01 +0000")
+                  ->addCustomerDetails(Item::companyCustomer()->setCompanyName("Mycompany"))
                     ->useInvoicePayment();
         
-        $order->preparePayment();
+        $order->prepareRequest();
     }
 
     /**
      * @expectedException ValidationException
      * @expectedExceptionMessage 
-     * -missing value : CustomerBirthDate is required for individual customers when countrycode is DE. Use function setCustomerBirthDate().
-     * -missing value : CustomerName is required for individual customers when countrycode is DE. Use function setCustomerName().
-     * -missing value : CustomerStreetAddress is required for all customers when countrycode is DE. Use function setCustomerStreetAddress().
-     * -missing value : CustomerLocality is required for all customers when countrycode is DE. Use function setCustomerLocality().
-     * -missing value : CustomerZipCode is required for all customers when countrycode is DE. Use function setCustomerZipCode().
+     * -missing value : BirthDate is required for individual customers when countrycode is DE. Use function setBirthDate().
+     * -missing value : Name is required for individual customers when countrycode is DE. Use function setName().
+     * -missing value : StreetAddress is required for all customers when countrycode is DE. Use function setStreetAddress().
+     * -missing value : Locality is required for all customers when countrycode is DE. Use function setLocality().
+     * -missing value : ZipCode is required for all customers when countrycode is DE. Use function setZipCode().
      */
     function testFailOnMissingIdentityValuesForDEPaymentPlanOrder() {
         $builder = WebPay::createOrder();
         $order = $builder
                 ->setCountryCode("DE")
+                  ->setOrderDate("Mon, 15 Aug 05 15:52:01 +0000")
                     ->usePaymentPlanPayment(213060);
 
-       $order->preparePayment();
+       $order->prepareRequest();
     }
 
     /**
      * @expectedException ValidationException
-     * @expectedExceptionMessage -missing value : CustomerBirthDate is required for individual customers when countrycode is DE. Use function setCustomerBirthDate().
+     * @expectedExceptionMessage -missing value : BirthDate is required for individual customers when countrycode is DE. Use function setBirthDate().
      */
     function testFailOnMissingBirthDateForDeOrder() {
         $builder = WebPay::createOrder();
         $order = $builder
                 ->setCountryCode("DE")
-                //->setCustomerBirthDate(1923, 12, 12)
-                ->setCustomerName("Tess", "Testson")
-                ->setCustomerStreetAddress("Gatan", 23)
-                ->setCustomerZipCode(9999)
-                ->setCustomerLocality("Stan")
+                  ->setOrderDate("Mon, 15 Aug 05 15:52:01 +0000")
+                ->addCustomerDetails(Item::individualCustomer()
+                //->setBirthDate(1923, 12, 12)
+                ->setName("Tess", "Testson")
+                ->setStreetAddress("Gatan", 23)
+                ->setZipCode(9999)
+                ->setLocality("Stan")
+                )
+               
                     ->useInvoicePayment();
-        $order->preparePayment();
+        $order->prepareRequest();
 
     }
 
     /**
      * @expectedException ValidationException
      * @expectedExceptionMessage 
-     * -missing value : CustomerInitials is required for individual customers when countrycode is NL. Use function setCustomerInitials().
-     * -missing value : CustomerBirthDate is required for individual customers when countrycode is NL. Use function setCustomerBirthDate().
-     * -missing value : CustomerName is required for individual customers when countrycode is NL. Use function setCustomerName().
-     * -missing value : CustomerStreetAddress is required for all customers when countrycode is NL. Use function setCustomerStreetAddress().
-     * -missing value : CustomerLocality is required for all customers when countrycode is NL. Use function setCustomerLocality().
-     * -missing value : CustomerZipCode is required for all customers when countrycode is NL. Use function setCustomerZipCode().
+     * -missing value : Initials is required for individual customers when countrycode is NL. Use function setInitials().
+     * -missing value : BirthDate is required for individual customers when countrycode is NL. Use function setBirthDate().
+     * -missing value : Name is required for individual customers when countrycode is NL. Use function setName().
+     * -missing value : StreetAddress is required for all customers when countrycode is NL. Use function setStreetAddress().
+     * -missing value : Locality is required for all customers when countrycode is NL. Use function setLocality().
+     * -missing value : ZipCode is required for all customers when countrycode is NL. Use function setZipCode().
      */
     function testFailOnMissingValuesForNlOrder() {
         $builder = WebPay::createOrder();
         $order = $builder
-                ->beginOrderRow()
+                ->addOrderRow(Item::orderRow()
                     ->setAmountExVat(100)
                     ->setVatPercent(20)
                     ->setQuantity(1)
-                ->endOrderRow()
+                        )
                 ->setCountryCode("NL")
+                  ->setOrderDate("Mon, 15 Aug 05 15:52:01 +0000")
                     ->useInvoicePayment();
         //$errorArray = $order->validateOrder(); 
         //print_r($errorArray);
-        $order->preparePayment(); //throws esception
+        $order->prepareRequest(); //throws esception
         
       
     }
 
     /**
      * @expectedException ValidationException
-     * @expectedExceptionMessage -missing value : CustomerInitials is required for individual customers when countrycode is NL. Use function setCustomerInitials().
+     * @expectedExceptionMessage -missing value : Initials is required for individual customers when countrycode is NL. Use function setInitials().
      */
     function testFailOnMissingInitialsForNlOrder() {
         $builder = WebPay::createOrder();
         $order = $builder
                 ->setCountryCode("NL")
-                //->setCustomerInitials("SB")
-                ->setCustomerBirthDate(1923, 12, 12)
-                ->setCustomerName("Tess", "Testson")
-                ->setCustomerStreetAddress("Gatan", 23)
-                ->setCustomerZipCode(9999)
-                ->setCustomerLocality("Stan")
+                  ->setOrderDate("Mon, 15 Aug 05 15:52:01 +0000")
+                ->addCustomerDetails(Item::individualCustomer()
+                //->setInitials("SB")
+                ->setBirthDate(1923, 12, 12)
+                ->setName("Tess", "Testson")
+                ->setStreetAddress("Gatan", 23)
+                ->setZipCode(9999)
+                ->setLocality("Stan")
+                )
+               
                     ->useInvoicePayment();
 
-      $order->preparePayment();
+      $order->prepareRequest();
     }
 
     /**
      * @expectedException ValidationException
-     * @expectedExceptionMessage -missing values : OrderRows are required. Use function beginOrderRow() to get orderrow setters. End with endOrderRow().
+     * @expectedExceptionMessage -missing values : OrderRows are required. Use function addOrderRow(Item::orderRow) to get orderrow setters.
      */
     function testFailOnMissingOrderRows() {
         $builder = WebPay::createOrder();
         $order = $builder
                 ->setCountryCode("SE")
-                ->setCustomerReference("1")
-                ->setCustomerSsn(46111111)
+                 ->setOrderDate("Mon, 15 Aug 05 15:52:01 +0000")
+                ->addCustomerDetails(Item::individualCustomer()->setSsn(46111111))
                     ->useInvoicePayment();
-       $order->preparePayment();
+       $order->prepareRequest();
       
     }
    
@@ -220,20 +234,37 @@ class WebServiceOrderValidatorTest extends PHPUnit_Framework_TestCase {
     /**
      * @expectedException ValidationException
      * @expectedExceptionMessage 
-     * -missing values : At least two of the values must be set:  AmountExVat, AmountIncVat or VatPercent for Orderrow. Use functions setAmountExVat(), setAmountIncVat() or setVatPercent() after using function beginOrderRow().
-     * -missing value : Quantity is required. Use function setQuantity().
+     * -missing values : At least two of the values must be set in object Item::  AmountExVat, AmountIncVat or VatPercent for Orderrow. Use functions setAmountExVat(), setAmountIncVat() or setVatPercent().
+     * -missing value : Quantity is required in object Item. Use function Item::setQuantity().
      */
     function testFailOnMissingOrderRowValues() {
         $builder = WebPay::createOrder();
         $order = $builder
-                ->beginOrderRow()
-                    //->setAmountExVat(100)
-                ->endOrderRow()
+                ->addOrderRow(Item::orderRow())
                 ->setCountryCode("SE")
-                ->setCustomerReference("ref1")
-                ->setCustomerSsn(46111111)
+                 ->setOrderDate("Mon, 15 Aug 05 15:52:01 +0000")
+                 ->addCustomerDetails(Item::individualCustomer()->setSsn(46111111))
                     ->useInvoicePayment();
-        $order->preparePayment(); 
+        $order->prepareRequest(); 
+    }
+    /**
+     * @expectedException ValidationException
+     * @expectedExceptionMessage 
+     * -missing values : OrderDate is Required. Use function setOrderDate().
+    */
+    function testFailOnMissingOrderDate() {
+        $builder = WebPay::createOrder();
+        $order = $builder
+                 ->addOrderRow(Item::orderRow()
+                    ->setAmountExVat(100)
+                    ->setVatPercent(20)
+                    ->setQuantity(1)
+                        )
+                ->setCountryCode("SE")
+               // ->setOrderDate("Mon, 15 Aug 05 15:52:01 +0000")
+                 ->addCustomerDetails(Item::individualCustomer()->setSsn(46111111))
+                    ->useInvoicePayment();
+        $order->prepareRequest(); 
     }
 }
 

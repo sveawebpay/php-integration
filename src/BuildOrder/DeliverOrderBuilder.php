@@ -7,7 +7,7 @@ require_once SVEA_REQUEST_DIR . '/Includes.php';
  *
  * @author Anneli Halld'n, Daniel Brolund for Svea Webpay
  */
-class deliverOrder {
+class deliverOrderBuilder {
    
      /**
      * @var Array Rows containing Product rows
@@ -63,62 +63,74 @@ class deliverOrder {
         $this->conf = SveaConfig::getConfig();
     }
 
+    
     /**
-     * Begin building row for product or other values.
-     * Use for all Payment types when Creating Order.
-     * If this is a DeliverOrder: Only use for InvoicePayments.
-     * @return \OrderRowBuilder
+     * New!
+     * @param type $orderRow
+     * @return \deliverOrderBuilder
      */
-    public function beginOrderRow() {
-        $rowBuilder = new DeliverOrderRowBuilder($this);
-        array_push($this->orderRows, $rowBuilder);
-        return $rowBuilder;
+     public function addOrderRow($orderRow){
+        if(is_array($orderRow)){
+            foreach ($orderRow as $row) {
+                array_push($this->orderRows, $row);
+            }
+        }  else {
+             array_push($this->orderRows, $orderRow);
+        }      
+       return $this;
     }
     
     /**
-     * Begin building Shipping fee row
-     * Use for all Payment types when Creating Order.
-     * If this is a DeliverOrder: Only use for InvoicePayments.
-     * @return shippingFeeRows
+     * New!
+     * @param type $itemFeeObject
+     * @return \deliverOrderBuilder
      */
-    public function beginShippingFee() {
-        $shippingFeeBuilder = new DeliverShippingFeeBuilder($this);
-        array_push($this->shippingFeeRows, $shippingFeeBuilder);
-        return $shippingFeeBuilder;
+    public function addFee($itemFeeObject){    
+         if(is_array($itemFeeObject)){
+            foreach ($itemFeeObject as $row) {
+                if (get_class($row) == "ShippingFee") {
+                     array_push($this->shippingFeeRows, $row);
+                }else{
+                     array_push($this->invoiceFeeRows, $row);
+                }               
+            }
+        } else {
+             if (get_class($itemFeeObject) == "ShippingFee") {
+                     array_push($this->shippingFeeRows, $itemFeeObject);
+            }else{
+                 array_push($this->invoiceFeeRows, $itemFeeObject);
+            }
+        }     
+      
+       return $this;
     }
-
-    /**
-     * Begin building Invoice fee row
-     * Use for all Payment types when Creating Order.
-     * If this is a DeliverOrder: Only use for InvoicePayments.
-     * @return \InvoiceFeeBuilder
-     */
-    public function beginInvoiceFee() {
-        $invoiceFeeBuilder = new DeliverInvoiceFeeBuilder($this);
-        array_push($this->invoiceFeeRows, $invoiceFeeBuilder);
-        return $invoiceFeeBuilder;
-    }
+   
     
-    /**
-     * Begin building Discount row for fixed discount
-     * @return \FixedDiscountBuilder
+     /**
+     * New!
+     * @param type $itemDiscounObject
+     * @return \deliverOrderBuilder
      */
-    public function beginFixedDiscount() {
-        $fixedDiscountRowBuilder = new DeliverFixedDiscountBuilder($this);
-        array_push($this->fixedDiscountRows, $fixedDiscountRowBuilder);
-        return $fixedDiscountRowBuilder;
+    public function addDiscount($itemDiscounObject){
+         if(is_array($itemDiscounObject)){
+            foreach ($itemDiscounObject as $row) {
+                if (get_class($row) == "FixedDiscount") {
+                     array_push($this->fixedDiscountRows, $row);
+                }else{
+                     array_push($this->relativeDiscountRows, $row);
+                }
+               
+            }
+        }  else {
+             if (get_class($itemDiscounObject) == "FixedDiscount") {
+                     array_push($this->fixedDiscountRows, $itemDiscounObject);
+            }else{
+                 array_push($this->relativeDiscountRows, $itemDiscounObject);
+            }
+        }      
+       return $this;
     }
-
-    /**
-     * Begin building Discount row for relative discount
-     * @return \RelativeDiscountBuilder
-     */
-    public function beginRelativeDiscount() {
-        $relativeDiscountBuilder = new DeliverRelativeDiscountBuilder($this);
-        array_push($this->relativeDiscountRows, $relativeDiscountBuilder);
-        return $relativeDiscountBuilder;
-    }
-    
+   
     /**
      * When function is called it turns into testmode
      * @return \deliverOrder

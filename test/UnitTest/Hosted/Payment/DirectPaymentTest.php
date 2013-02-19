@@ -16,7 +16,7 @@ class DirectPaymentTest extends PHPUnit_Framework_TestCase {
     function testConfigureExcludedPaymentMethods() {
         $rowFactory = new TestRowFactory();
         $form = WebPay::createOrder()
-            ->beginOrderRow()
+                ->addOrderRow(Item::orderRow()
                     ->setArticleNumber(1)
                     ->setQuantity(2)
                     ->setAmountExVat(100.00)
@@ -25,28 +25,30 @@ class DirectPaymentTest extends PHPUnit_Framework_TestCase {
                     ->setUnit("st")
                     ->setVatPercent(25)
                     ->setDiscountPercent(0)
-            ->endOrderRow()
+                    )
             ->run($rowFactory->buildShippingFee())
-            ->setCustomerSsn(194605092222)
+            ->addCustomerDetails(Item::individualCustomer()
+                    ->setSsn(194605092222)
+                    )
             ->setCountryCode("ZZ")
             ->setClientOrderNumber("33")
             ->setOrderDate("2012-12-12")
             ->setCurrency("SEK")
             ->usePayPageDirectBankOnly()
-            ->setReturnUrl("http://myurl.se")
-            ->getPaymentForm();
+                ->setReturnUrl("http://myurl.se")
+                ->getPaymentForm();
         
         $xmlMessage = new SimpleXMLElement($form->xmlMessage);
-        $this->assertEquals('PAYPAL', $xmlMessage->excludepaymentmethods->exclude[0]);
-        $this->assertEquals('KORTCERT', $xmlMessage->excludepaymentmethods->exclude[1]);
-        $this->assertEquals('SKRILL', $xmlMessage->excludepaymentmethods->exclude[2]);
+        $this->assertEquals('KORTCERT', $xmlMessage->excludepaymentmethods->exclude[0]);      
+        $this->assertEquals('SKRILL', $xmlMessage->excludepaymentmethods->exclude[1]);
+        $this->assertEquals('PAYPAL', $xmlMessage->excludepaymentmethods->exclude[2]);  
        // $this->assertEquals('SKRILL', $xmlMessage->excludepaymentmethods->exclude[3]);
     }
    
     function testBuildDirectBankPayment() {
         $rowFactory = new TestRowFactory();
         $form = WebPay::createOrder()
-            ->beginOrderRow()
+                ->addOrderRow(Item::orderRow()
                     ->setArticleNumber(1)
                     ->setQuantity(2)
                     ->setAmountExVat(100.00)
@@ -55,8 +57,8 @@ class DirectPaymentTest extends PHPUnit_Framework_TestCase {
                     ->setUnit("st")
                     ->setVatPercent(25)
                     ->setDiscountPercent(0)
-            ->endOrderRow()           
-              ->beginShippingFee()
+                )
+                ->addFee(Item::shippingFee()
                     ->setShippingId('33')
                     ->setName('shipping')
                     ->setDescription("Specification")
@@ -64,15 +66,15 @@ class DirectPaymentTest extends PHPUnit_Framework_TestCase {
                     ->setUnit("st")
                     ->setVatPercent(25)
                     ->setDiscountPercent(0)
-                ->endShippingFee()
-            ->beginRelativeDiscount()
+                    )
+                ->addDiscount(Item::relativeDiscount()
                     ->setDiscountId("1")
                     ->setDiscountPercent(50)
                     ->setUnit("st")
                     ->setName('Relative')
                     ->setDescription("RelativeDiscount")
-            ->endRelativeDiscount()                
-            ->setCustomerSsn(194605092222)                   
+                    )
+                ->addCustomerDetails(Item::individualCustomer()->setSsn(194605092222))
             ->setCountryCode("SE")
             ->setClientOrderNumber("33")
             ->setOrderDate("2012-12-12")

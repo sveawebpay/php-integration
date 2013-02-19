@@ -2,10 +2,10 @@
 
 require_once 'WebServicePayment.php';
 
-/******************************************************************************
+/**
  * Extends WebServicePayment. Creates Invoice order.
  * @author Anneli Halld'n, Daniel Brolund for Svea Webpay
- ******************************************************************************/
+*/
 class InvoicePayment extends WebServicePayment {
 
     public $orderType = 'Invoice';

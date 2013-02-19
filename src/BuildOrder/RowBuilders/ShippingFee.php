@@ -1,25 +1,15 @@
 <?php
 
-require_once SVEA_REQUEST_DIR . '/Includes.php';
-
 /**
- * If shippingfee is used
- * @author Anneli Halld'n, Daniel Brolund for Svea Webpay
- * @package BuildOrder/Row
+ * Description of ShippingFee
+ *
+ * @author anne-hal
  */
-class ShippingFeeBuilder {
- 
-    /**
-     * @param createOrder $order
-     */
-    public function __construct(createOrder $order) {
-        $this->order = $order;
-    }
-    
-    /**
+class ShippingFee {
+  /**
      * Optional
      * @param type $idAsString
-     * @return \ShippingFeeBuilder
+     * @return \ShippingFee
      */
     public function setShippingId($idAsString) {
         $this->shippingId = $idAsString;
@@ -29,7 +19,7 @@ class ShippingFeeBuilder {
     /**
      * Optional
      * @param type $nameAsString
-     * @return \ShippingFeeBuilder
+     * @return \ShippingFee
      */
     public function setName($nameAsString) {
         $this->name = $nameAsString;
@@ -39,7 +29,7 @@ class ShippingFeeBuilder {
     /**
      * Optional
      * @param type $descriptionAsString
-     * @return \ShippingFeeBuilder
+     * @return \ShippingFee
      */
     public function setDescription($descriptionAsString) {
         $this->description = $descriptionAsString;
@@ -49,7 +39,7 @@ class ShippingFeeBuilder {
     /**
      * Optional
      * @param type $amountAsFloat
-     * @return \ShippingFeeBuilder
+     * @return \ShippingFee
      */
     public function setAmountExVat($amountAsFloat) {
         $this->amountExVat = $amountAsFloat;
@@ -58,34 +48,38 @@ class ShippingFeeBuilder {
     /**
      * Optional
      * @param type $amountAsFloat
-     * @return \ShippingFeeBuilder
+     * @return \ShippingFee
      */
     public function setAmountIncVat($amountAsFloat) {
         $this->amountIncVat = $amountAsFloat;
         return $this;
     }
-  
+  /**
+   * 
+   * @param type $unitDescriptionAsString
+   * @return \ShippingFee
+   */
     public function setUnit($unitDescriptionAsString) {
         $this->unit = $unitDescriptionAsString;
         return $this;
     }
-
+/**
+ * 
+ * @param type $percentAsInt
+ * @return \ShippingFee
+ */
     public function setVatPercent($percentAsInt) {
         $this->vatPercent = $percentAsInt;
         return $this;
     }
-
+/**
+ * 
+ * @param type $discountPercentAsInt
+ * @return \ShippingFee
+ */
     public function setDiscountPercent($discountPercentAsInt) {
         $this->discountPercent = $discountPercentAsInt;
         return $this;
-    }
-
-    /**
-     * Code completion comment
-     * @return createOrder orderBuilder
-     */
-    public function endShippingFee() {
-        return $this->order;
     }
 }
 

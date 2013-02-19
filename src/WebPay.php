@@ -15,7 +15,7 @@ class WebPay {
      * @return \createOrder
      */
     public static function createOrder() {
-        return new createOrder();
+        return new createOrderBuilder();
     }
     
     /**
@@ -31,7 +31,7 @@ class WebPay {
      * @return \deliverOrder
      */
     public static function deliverOrder() {
-       return new deliverOrder();
+       return new deliverOrderBuilder();
        // return new OrderBuilder();
     }
 
@@ -51,6 +51,8 @@ class WebPay {
     public static function getAddresses() {
         return new GetAddresses();
     }
+    
+    
 }
 
 ?>

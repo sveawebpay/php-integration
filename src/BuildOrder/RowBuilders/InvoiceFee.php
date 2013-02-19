@@ -1,25 +1,15 @@
 <?php
 
-require_once SVEA_REQUEST_DIR . '/Includes.php';
-
 /**
- * Description of CreateInvoiceFeeBuilder
+ * Description of InvoiceFee
  *
- * @author Anneli Halld'n, Daniel Brolund for Svea Webpay
+ * @author anne-hal
  */
-class InvoiceFeeBuilder {
-  
-    /**
-     * @param createOrder $order
-     */
-    public function __construct(createOrder $order) {
-        $this->order = $order;
-    }
-    
+class InvoiceFee {
     /**
      * Optional
      * @param type $nameAsString
-     * @return \InvoiceFeeBuilder
+     * @return \InvoiceFee
      */
     public function setName($nameAsString) {
         $this->name = $nameAsString;
@@ -29,7 +19,7 @@ class InvoiceFeeBuilder {
     /**
      * Optional
      * @param type $descriptionAsString
-     * @return \InvoiceFeeBuilder
+     * @return \InvoiceFee
      */
     public function setDescription($descriptionAsString) {
         $this->description = $descriptionAsString;
@@ -40,7 +30,7 @@ class InvoiceFeeBuilder {
      * Optional
      * Required to use at least two of the functions setAmountExVat(), setAmountIncVat(), setVatPercent()
      * @param type $amountAsFloat
-     * @return \InvoiceFeeBuilder
+     * @return \InvoiceFee
      */
     public function setAmountExVat($amountAsFloat) {
         $this->amountExVat = $amountAsFloat;
@@ -50,7 +40,7 @@ class InvoiceFeeBuilder {
      * Optional
      * Required to use at least two of the functions setAmountExVat(), setAmountIncVat(), setVatPercent()
      * @param type $amountAsFloat
-     * @return \InvoiceFeeBuilder
+     * @return \InvoiceFee
      */
     public function setAmountIncVat($amountAsFloat) {
         $this->amountIncVat = $amountAsFloat;
@@ -60,7 +50,7 @@ class InvoiceFeeBuilder {
     /**
      * Optional
      * @param type $unitDescriptionAsString
-     * @return \InvoiceFeeBuilder
+     * @return \InvoiceFee
      */
     public function setUnit($unitDescriptionAsString) {
         $this->unit = $unitDescriptionAsString;
@@ -71,7 +61,7 @@ class InvoiceFeeBuilder {
      * Optional
      * Required to use at least two of the functions setAmountExVat(), setAmountIncVat(), setVatPercent()
      * @param type $vatPercentAsInt
-     * @return \InvoiceFeeBuilder
+     * @return \InvoiceFee
      */
     public function setVatPercent($vatPercentAsInt) {
         $this->vatPercent = $vatPercentAsInt;
@@ -81,20 +71,13 @@ class InvoiceFeeBuilder {
     /**
      * Optional
      * @param type $discountPercentAsInt
-     * @return \InvoiceFeeBuilder
+     * @return \InvoiceFee
      */
     public function setDiscountPercent($discountPercentAsInt) {
         $this->discountPercent = $discountPercentAsInt;
         return $this;
     }
 
-    /**
-     * Code completion comment. 
-     * @return createOrder orderBuilder
-     */
-    public function endInvoiceFee() {
-        return $this->order;
-    }
 }
 
 ?>
