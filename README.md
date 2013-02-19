@@ -219,7 +219,7 @@ or company id number is required. Email and ip address are desirable.
     Item::individualCustomer()
     ->setSsn(194605092222)              //Required for individual customers in SE, NO, DK, FI
     ->setInitials("SB")                 //Required for individual customers in NL 
-    ->setBirthDate(1923, 12, 12)        //Required for individual customers in NL and DE
+    ->setBirthDate(1923, 12, 20)        //Required for individual customers in NL and DE
     ->setName("Tess", "Testson")        //Required for individual customers in NL and DE    
     ->setStreetAddress("Gatan", 23)     //Required in NL and DE    
     ->setZipCode(9999)                  //Required in NL and DE
@@ -235,9 +235,16 @@ or company id number is required. Email and ip address are desirable.
 ```php
 ->addCustomerDetails(
     Item::companyCustomer()
-    ->setCompanyIdNumber(2345234)       //Required for company customers in SE, NO, DK, FI
-    ->setVatNumber("NL2345234")  //Required for NL and DE
-    ->setCompanyName("TestCompagniet")  //Required for Eu countries like NL and DE
+    ->setCompanyIdNumber(2345234)       //Required in SE, NO, DK, FI
+    ->setVatNumber("NL2345234")         //Required in NL and DE
+    ->setCompanyName("TestCompagniet")  //Required in NL and DE  
+    ->setStreetAddress("Gatan", 23)     //Required in NL and DE    
+    ->setZipCode(9999)                  //Required in NL and DE
+    ->setLocality("Stan")               //Required in NL and DE    
+    ->setEmail("test@svea.com")         //Optional but desirable    
+    ->setIpAddress("123.123.123")       //Optional but desirable
+    ->setCoAddress("c/o Eriksson")      //Optional
+    ->setPhoneNumber(999999)            //Optional
     )
 ```
 [<< To top](https://github.com/sveawebpay/php-integration/tree/develop#php-integration-package-api-for-sveawebpay)
@@ -274,7 +281,6 @@ and the html form element as array.
         <input type='hidden' name='merchantid' value='{$this->merchantid}' />
         <input type='hidden' name='message' value='{$this->xmlMessageBase64}' />
         <input type='hidden' name='mac' value='{$this->mac}' />
-        <noscript><p>Javascript is inactivated.</p></noscript>
         <input type="submit" name="submit" value="Submit" />
     </form>
 ```
@@ -766,9 +772,11 @@ Class *SveaResponse* will return a structured object similar to the synchronous 
 Params: 
 * The POST or GET message 
 * Your *secret word*. //Optional if set in SveaConfig.php
+
 ```php
   $respObject = new SveaResponse($_REQUEST,$secretWord); 
 ```
+
 [<< To top](https://github.com/sveawebpay/php-integration/tree/develop#php-integration-package-api-for-sveawebpay)
 
 ## APPENDIX 
