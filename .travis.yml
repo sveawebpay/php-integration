@@ -8,3 +8,8 @@ php:
 matrix:
   allow_failures:
     - php: 5.5
+
+branches:
+  only:
+    - master
+    - develop
