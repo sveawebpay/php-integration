@@ -37,7 +37,7 @@ require_once 'Includes.php';
 
 $foo = WebPay::createOrder();
 $requestObject = 
-$foo()->...
+$foo->...
     ->..;
 ```
 [<< To top](https://github.com/sveawebpay/php-integration/tree/develop#php-integration-package-api-for-sveawebpay)
