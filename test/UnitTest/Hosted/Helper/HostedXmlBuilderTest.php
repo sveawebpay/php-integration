@@ -2,9 +2,7 @@
 
 $root = realpath(dirname(__FILE__));
 require_once $root . '/../../../../src/Includes.php';
-
-$root = realpath(dirname(__FILE__));
-require_once '/../Payment/FakeHostedPayment.php';
+require_once $root . '/../../../../test/UnitTest/Hosted/Payment/FakeHostedPayment.php';
 
 /**
  * Description of HostedXmlBuilderTest
@@ -23,5 +21,6 @@ class HostedXmlBuilderTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(1, substr_count($xml, "http://www.cancel.com"));
     }
 }
+
 
 ?>

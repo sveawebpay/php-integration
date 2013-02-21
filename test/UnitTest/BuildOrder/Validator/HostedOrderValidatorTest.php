@@ -1,7 +1,7 @@
 <?php
 
 $root = realpath(dirname(__FILE__));
-require_once $root . '\..\..\..\..\src\Includes.php';
+require_once $root . '/../../../../src/Includes.php';
 
 /**
  * Description of HostedOrderValidatorTest
