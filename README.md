@@ -1,5 +1,10 @@
 # PHP Integration Package API for SveaWebPay
 
+| Branch                            | Build status                               |
+|---------------------------------- |------------------------------------------- |
+| master (latest release)           | [![Build Status](https://travis-ci.org/sveawebpay/php-integration.png?branch=master)](https://travis-ci.org/sveawebpay/php-integration) |
+| develop                           | [![Build Status](https://travis-ci.org/sveawebpay/php-integration.png?branch=develop)](https://travis-ci.org/sveawebpay/php-integration) |
+
 ## Index
 * [Introduction](https://github.com/sveawebpay/php-integration/tree/develop#introduction)
 * [Configuration](https://github.com/sveawebpay/php-integration/tree/develop#configuration)

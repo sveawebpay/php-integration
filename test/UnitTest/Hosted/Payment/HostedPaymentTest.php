@@ -1,6 +1,6 @@
 <?php
 
-require_once '/FakeHostedPayment.php';
+require_once 'FakeHostedPayment.php';
 
 class HostedPaymentTest extends PHPUnit_Framework_TestCase {
     
