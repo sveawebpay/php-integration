@@ -34,16 +34,15 @@ class HostedPayments_RequestTest extends PHPUnit_Framework_TestCase {
                         ->setUnit("st")
                         ->setName('Relative')
                         ->setDescription("RelativeDiscount")
-                        )
-                ->addCustomerDetails(Item::individualCustomer()->setSsn(2345234))             
+                        )        
                 ->setCountryCode("SE")
                 ->setClientOrderNumber("33")
                 ->setOrderDate("2012-12-12")
                 ->setCurrency("SEK")
-                ->usePayPageCardOnly() // PayPageObject
+                ->usePayPage() // PayPageObject
                     ->setReturnUrl("http://myurl.se")
                     ->getPaymentForm();
-           
+          
         
             $url = "https://test.sveaekonomi.se/webpay/payment";
             /** CURL  **/          
@@ -68,18 +67,24 @@ class HostedPayments_RequestTest extends PHPUnit_Framework_TestCase {
             if(!curl_errno($ch))
             {
              $info = curl_getinfo($ch);
-
+             $payPage = "";
              $response = $info['http_code'];
+             if(isset($info['redirect_url'])){
+                 $payPage = $info['redirect_url'];
+             }
+             
+            
             }
             curl_close($ch);
             if($response){
                 $status = $response;
+                $redirect = substr($payPage, 41, 7);
             }  else {
                 $status = 'No answer';
-            }
-       
+            }          
             
-             $this->assertEquals(200, $status);
+             $this->assertEquals(302, $status);
+             $this->assertEquals("payPage", $redirect);
     }
 }
 

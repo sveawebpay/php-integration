@@ -80,7 +80,12 @@ class PayPagePayment extends HostedPayment {
         $this->excludedPaymentMethods[] = PaymentMethod::SVEASPLITEU_NL;
         $this->excludedPaymentMethods[] = PaymentMethod::SVEAINVOICEEU_NO;
         $this->excludedPaymentMethods[] = PaymentMethod::SVEASPLITEU_NO;
-        $this->excludedPaymentMethods[] = PaymentMethod::PAYPAL;
+        $this->excludedPaymentMethods[] = PaymentMethod::PAYPAL;        
+        $this->excludedPaymentMethods[] = PaymentMethod::DBSWEDBANKSE;
+        $this->excludedPaymentMethods[] = PaymentMethod::DBSHBSE;
+        $this->excludedPaymentMethods[] = PaymentMethod::DBSEBFTGSE;
+        $this->excludedPaymentMethods[] = PaymentMethod::DBSEBSE;
+        $this->excludedPaymentMethods[] = PaymentMethod::DBNORDEASE;
         
         //remove the include functions from the excludedPaymentMethods
         foreach ($include as $key => $value) {
