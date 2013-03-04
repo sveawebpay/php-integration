@@ -41,7 +41,7 @@ class SveaDoRequest {
     }
 
     /**
-     * Use to get Addresses based on ssn or orgnr. Only in SE, NO, DK.
+     * Use to get Addresses based on NationalIdNumber or orgnr. Only in SE, NO, DK.
      * @param type $request Object containing SveaAuth, IsCompany, CountryCode, SecurityNumber
      * @return GetCustomerAddressesResponse Object. 
      */

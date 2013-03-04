@@ -115,7 +115,7 @@ class TestRowFactory {
       return function ($orderbuilder){
       return $orderbuilder
       ->beginIndividualCustomerIdentity()
-      ->setSsn(194605092222)
+      ->setNationalIdNumber(194605092222)
       ->setInitials("SB")
       ->setBirthDate(1923, 12, 12)
       ->setName("Tess", "Testson")

@@ -94,14 +94,14 @@ class GetAddresses {
 
     /**
      * Required if customer is Individual
-     * @param type $ssnAsInt
+     * @param type $NationalIdNumberAsInt
      * Sweden: Personnummer,
      * Norway: Persnonalnumber,
      * Denmark: CPR
      * @return \GetAddresses
      */
-    public function setIndividual($ssnAsInt) {
-        $this->ssn = $ssnAsInt;
+    public function setIndividual($NationalIdNumberAsInt) {
+        $this->ssn = $NationalIdNumberAsInt;
         return $this;
     }
     

@@ -39,7 +39,7 @@ class WebServiceResponseTest extends PHPUnit_Framework_TestCase {
                     ->setVatPercent(25)
                     ->setDiscountPercent(0)
                         )
-                ->addCustomerDetails(Item::individualCustomer()->setSsn(194605092222))
+                ->addCustomerDetails(Item::individualCustomer()->setNationalIdNumber(194605092222))
                 ->setCountryCode("SE")
                 ->setCustomerReference("33")
                 ->setOrderDate("2012-12-12")

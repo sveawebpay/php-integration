@@ -33,7 +33,7 @@ class WebServiceOrderValidatorTest extends PHPUnit_Framework_TestCase {
     
      /**
      * @expectedException ValidationException
-     * @expectedExceptionMessage -duplicated value : Customer is either an individual or a company. You can not use function setSsn() in combination with setCompanyIdNumber() or setVatNumber().
+     * @expectedExceptionMessage -duplicated value : Customer is either an individual or a company. You can not use function setNationalIdNumber() in combination with setNationalIdNumber() or setVatNumber().
      */
     function t_estFailOnDoubleIdentity() {
         $builder = WebPay::createOrder();
@@ -45,8 +45,8 @@ class WebServiceOrderValidatorTest extends PHPUnit_Framework_TestCase {
                     )
                 ->setCountryCode("SE")   
                   ->setOrderDate("Mon, 15 Aug 05 15:52:01 +0000")
-                ->addCustomerDetails(Item::individualCustomer()->setSsn(194605092222))
-                ->addCustomerDetails(Item::companyCustomer()->setCompanyIdNumber(4608142222))
+                ->addCustomerDetails(Item::individualCustomer()->setNationalIdNumber(194605092222))
+                ->addCustomerDetails(Item::companyCustomer()->setNationalIdNumber(4608142222))
                     ->useInvoicePayment();
        $order->prepareRequest();
        
@@ -67,7 +67,7 @@ class WebServiceOrderValidatorTest extends PHPUnit_Framework_TestCase {
                     )
                  ->setCountryCode("ZZ")
                   ->setOrderDate("Mon, 15 Aug 05 15:52:01 +0000")
-                ->addCustomerDetails(Item::individualCustomer()->setSsn(111111))
+                ->addCustomerDetails(Item::individualCustomer()->setNationalIdNumber(111111))
                     ->useInvoicePayment();
         
      $order->prepareRequest();
@@ -87,7 +87,7 @@ class WebServiceOrderValidatorTest extends PHPUnit_Framework_TestCase {
                     ->setVatPercent(20)
                     ->setQuantity(1)
                     )
-                ->addCustomerDetails(Item::individualCustomer()->setSsn(111111))
+                ->addCustomerDetails(Item::individualCustomer()->setNationalIdNumber(111111))
                   ->setOrderDate("Mon, 15 Aug 05 15:52:01 +0000")
                     ->useInvoicePayment();
         
@@ -95,9 +95,9 @@ class WebServiceOrderValidatorTest extends PHPUnit_Framework_TestCase {
     }
     /**
      * @expectedException ValidationException
-     * @expectedExceptionMessage -missing value : Ssn is required for individual customers when countrycode is SE, NO, DK or FI. Use function setSsn().
+     * @expectedExceptionMessage -missing value : NationalIdNumber is required for individual customers when countrycode is SE, NO, DK or FI. Use function setNationalIdNumber().
      */
-    function testFailOnMissingSsnForSeOrder() {
+    function testFailOnMissingNationalIdNumberForSeOrder() {
         $builder = WebPay::createOrder();
         $order = $builder
                 ->setCountryCode("SE")
@@ -110,7 +110,7 @@ class WebServiceOrderValidatorTest extends PHPUnit_Framework_TestCase {
 
     /**
      * @expectedException ValidationException
-     * @expectedExceptionMessage -missing value : OrgNumber is required for company customers when countrycode is SE, NO, DK or FI. Use function setCompanyIdNumber().
+     * @expectedExceptionMessage -missing value : OrgNumber is required for company customers when countrycode is SE, NO, DK or FI. Use function setNationalIdNumber().
      */
     function testFailOnMissingOrgNumberForCompanyOrderSe() {
         $builder = WebPay::createOrder();
@@ -224,7 +224,7 @@ class WebServiceOrderValidatorTest extends PHPUnit_Framework_TestCase {
         $order = $builder
                 ->setCountryCode("SE")
                  ->setOrderDate("Mon, 15 Aug 05 15:52:01 +0000")
-                ->addCustomerDetails(Item::individualCustomer()->setSsn(46111111))
+                ->addCustomerDetails(Item::individualCustomer()->setNationalIdNumber(46111111))
                     ->useInvoicePayment();
        $order->prepareRequest();
       
@@ -243,7 +243,7 @@ class WebServiceOrderValidatorTest extends PHPUnit_Framework_TestCase {
                 ->addOrderRow(Item::orderRow())
                 ->setCountryCode("SE")
                  ->setOrderDate("Mon, 15 Aug 05 15:52:01 +0000")
-                 ->addCustomerDetails(Item::individualCustomer()->setSsn(46111111))
+                 ->addCustomerDetails(Item::individualCustomer()->setNationalIdNumber(46111111))
                     ->useInvoicePayment();
         $order->prepareRequest(); 
     }
@@ -262,7 +262,7 @@ class WebServiceOrderValidatorTest extends PHPUnit_Framework_TestCase {
                         )
                 ->setCountryCode("SE")
                // ->setOrderDate("Mon, 15 Aug 05 15:52:01 +0000")
-                 ->addCustomerDetails(Item::individualCustomer()->setSsn(46111111))
+                 ->addCustomerDetails(Item::individualCustomer()->setNationalIdNumber(46111111))
                     ->useInvoicePayment();
         $order->prepareRequest(); 
     }

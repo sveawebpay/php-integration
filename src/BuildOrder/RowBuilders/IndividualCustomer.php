@@ -7,11 +7,13 @@
 class IndividualCustomer {
     /**
      * Required for private customers in SE, NO, DK, FI
-     * @param type $yyyymmddxxxx
+     * @param for SE, DK:  $yyyymmddxxxx
+     * @param for FI:  $ddmmyyxxxx
+     * @param for NO:  $ddmmyyxxxxx
      * @return \IndividualCustomer
      */
-    public function setSsn($yyyymmddxxxx){
-        $this->ssn = $yyyymmddxxxx;
+    public function setNationalIdNumber($nationalIdNumber){
+        $this->ssn = $nationalIdNumber;
         return $this;
     }
     

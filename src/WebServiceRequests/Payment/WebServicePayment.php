@@ -165,7 +165,7 @@ class WebServicePayment {
         $individualCustomerIdentity = new SveaCustomerIdentity($idValues);
         //For nordic countries NationalIdNumber is required
         if ($this->order->countryCode != 'NL' && $this->order->countryCode != 'DE') {
-            //set with companyVatNumber for Company and ssn for individual
+            //set with companyVatNumber for Company and NationalIdNumber for individual
             $individualCustomerIdentity->NationalIdNumber = $isCompany ? $companyId : $this->order->ssn;
         }
         
@@ -230,7 +230,7 @@ class WebServicePayment {
         $individualCustomerIdentity = new SveaCustomerIdentity($idValues);
         //For nordic countries NationalIdNumber is required
         if ($this->order->countryCode != 'NL' && $this->order->countryCode != 'DE') {
-            //set with companyVatNumber for Company and ssn for individual
+            //set with companyVatNumber for Company and NationalIdNumber for individual
             $individualCustomerIdentity->NationalIdNumber = $isCompany ? $companyId : $this->order->customerIdentity->ssn;
         }
         

@@ -33,7 +33,7 @@ class PaymentMethodTest extends PHPUnit_Framework_TestCase{
                     ->setName('Relative')
                     ->setDescription("RelativeDiscount") 
                     )
-            ->addCustomerDetails(Item::individualCustomer()->setSsn(194605092222))
+            ->addCustomerDetails(Item::individualCustomer()->setNationalIdNumber(194605092222))
                 ->setCountryCode("SE")
                 ->setClientOrderNumber("33")
                 ->setOrderDate("2012-12-12")

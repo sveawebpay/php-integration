@@ -10,14 +10,14 @@ class CompanyCustomer {
      * Example: 4608142222
      * Required for company customers in SE, NO, DK, FI
      * For SE: Organisationsnummer
-     * For NO: Vatnumber
+     * For NO: Organisasjonsnummer
      * For DK: CVR
      * For FI: Yritystunnus
-     * @param type $companyNumberAsInt
+     * @param type $companyIdNumberAsString
      * @return \CompanyCustomer
      */
-    public function setCompanyIdNumber($companyIdNumberAsInt){
-        $this->orgNumber = $companyIdNumberAsInt;
+    public function setNationalIdNumber($companyIdNumberAsString){
+        $this->orgNumber = $companyIdNumberAsString;
         return $this;
     }
     /**

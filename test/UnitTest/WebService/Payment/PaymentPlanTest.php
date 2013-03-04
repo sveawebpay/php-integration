@@ -26,7 +26,7 @@ class PaymentPlanTest extends PHPUnit_Framework_TestCase {
                     ->setDiscountPercent(0)    
                     )
                 ->run($rowFactory->buildShippingFee())
-                ->addCustomerDetails(Item::individualCustomer()->setSsn(194605092222))
+                ->addCustomerDetails(Item::individualCustomer()->setNationalIdNumber(194605092222))
                 ->setCountryCode("SE")
                 ->setCustomerReference("33")
                 ->setClientOrderNumber("nr26")
