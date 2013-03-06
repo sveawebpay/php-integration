@@ -13,7 +13,7 @@ class PayPagePayment extends HostedPayment {
 
     public $paymentMethod;
     public $excludedPaymentMethods;
-
+    public $langCode = "en";
     /**
      * 
      * @param type $order
