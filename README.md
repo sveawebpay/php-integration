@@ -315,9 +315,10 @@ $form = WebPay::createOrder()
     ->setCurrency("SEK")
         ->usePayPageCardOnly()
             ->setMerchantIdBasedAuthorization(1200, "f78hv9")   //Optional
+            ->setPayPageLanguage("sv")                          //Optional, default english
             ->setReturnUrl("http://myurl.se")                   //Required
             ->setCancelUrl("http://myurl.se")                   //Optional
-            ->getPaymentForm();
+                ->getPaymentForm();
 
 ```
 ##### 1.5.1.2 Return
@@ -367,6 +368,7 @@ $form = WebPay::createOrder()
     ->setCurrency("SEK")
         ->usePayPageDirectBankOnly()
             ->setMerchantIdBasedAuthorization(1200, "f78hv9")   //Optional
+            ->setPayPageLanguage("sv")                          //Optional, default english
             ->setReturnUrl("http://myurl.se")                   //Required
             ->setCancelUrl("http://myurl.se")                   //Optional
             ->getPaymentForm();
@@ -417,6 +419,7 @@ $form = WebPay::createOrder()
         ->setCurrency("SEK")
             ->usePayPage()
                 ->setMerchantIdBasedAuthorization(1200, "f78hv9")   //Optional
+                ->setPayPageLanguage("sv")                          //Optional, default english
                 ->setReturnUrl("http://myurl.se")                   //Required
                 ->setCancelUrl("http://myurl.se")                   //Optional
                 ->getPaymentForm();

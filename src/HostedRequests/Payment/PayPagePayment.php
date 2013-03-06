@@ -162,7 +162,23 @@ class PayPagePayment extends HostedPayment {
                 $this->langCode = $languageCodeAsISO639;
 
                 break;
+            case "en":
+                $this->langCode = $languageCodeAsISO639;
+
+                break;
+            case "da":
+                $this->langCode = $languageCodeAsISO639;
+
+                break;
             case "fi":
+                $this->langCode = $languageCodeAsISO639;
+
+                break;
+            case "no":
+                $this->langCode = $languageCodeAsISO639;
+
+                break;
+            case "de":
                 $this->langCode = $languageCodeAsISO639;
 
                 break;
@@ -170,11 +186,14 @@ class PayPagePayment extends HostedPayment {
                 $this->langCode = $languageCodeAsISO639;
 
                 break;
-            case "en":
+            case "fr":
                 $this->langCode = $languageCodeAsISO639;
 
                 break;
+            case "it":
+                $this->langCode = $languageCodeAsISO639;
 
+                break;     
             default:
                  $this->langCode = "en";
                 break;

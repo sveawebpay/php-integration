@@ -5,3 +5,6 @@
     * setCompanyIdNumber() to setNationalIdNumber()
     * setSsn() to setNationalIdNumber()
     
+* Added
+    * ->setPayPageLanguage() when choosing one of the PayPagePayments
+    
