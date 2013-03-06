@@ -43,7 +43,7 @@ class WebServicePayments_RequestTest extends PHPUnit_Framework_TestCase {
                 ->useInvoicePayment()
                     ->doRequest();
         
-        $this->assertEquals(0, $request->accepted);
+        $this->assertEquals(1, $request->accepted);
     }
 
     function testInvoiceCompanySe() {
