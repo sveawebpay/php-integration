@@ -28,16 +28,9 @@ class SveaDoRequest {
      * @return CreateOrderEuResponse Object
      */
     public function CreateOrderEu($order) {
-        $builder = new SveaSoapArrayBuilder();
+        $builder = new SveaSoapArrayBuilder();    
+        return $this->client->CreateOrderEu($builder->object_to_array($order));    
         
-        try {
-            $return = $this->client->CreateOrderEu($builder->object_to_array($order));
-        } catch (SoapFault $fault) {
-            print_r($this->client->__getLastRequest() . "<hr />" . $fault->getMessage());
-            die();
-        }
-        
-        return $return;
     }
 
     /**
@@ -47,13 +40,7 @@ class SveaDoRequest {
      */
     public function GetAddresses($request) {
         $builder = new SveaSoapArrayBuilder();
-        try {
-            $return = $this->client->GetAddresses($builder->object_to_array($request));
-        } catch (SoapFault $fault) {
-            print_r($this->client->__getLastRequest() . "<hr />" . $fault->getMessage());
-            die();
-        }
-        return $return;
+        return $this->client->GetAddresses($builder->object_to_array($request));      
     }
 
     /**
@@ -63,13 +50,7 @@ class SveaDoRequest {
      */
     public function GetPaymentPlanParamsEu($auth) {
         $builder = new SveaSoapArrayBuilder();
-        try {
-            $return = $this->client->GetPaymentPlanParamsEu($builder->object_to_array($auth));
-        } catch (SoapFault $fault) {
-            print_r($this->client->__getLastRequest() . "<hr />" . $fault->getMessage());
-            die();
-        }
-        return $return;
+        return $this->client->GetPaymentPlanParamsEu($builder->object_to_array($auth));       
     }
 
     /**
@@ -79,24 +60,12 @@ class SveaDoRequest {
      */
     public function DeliverOrderEu($deliverdata) {
         $builder = new SveaSoapArrayBuilder();
-        try {
-            $return = $this->client->DeliverOrderEu($builder->object_to_array($deliverdata));
-        } catch (SoapFault $fault) {
-            print_r($this->client->__getLastRequest() . "<hr />" . $fault->getMessage());
-            die();
-        }
-        return $return;
+        return $this->client->DeliverOrderEu($builder->object_to_array($deliverdata));        
     }
 
     public function CloseOrderEu($closedata) {
         $builder = new SveaSoapArrayBuilder();
-        try {
-            $return = $this->client->CloseOrderEu($builder->object_to_array($closedata));
-        } catch (SoapFault $fault) {
-            print_r($this->client->__getLastRequest() . "<hr />" . $fault->getMessage());
-            die();
-        }
-        return $return;
+        return $this->client->CloseOrderEu($builder->object_to_array($closedata));       
     }
 
 }

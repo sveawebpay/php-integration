@@ -119,6 +119,10 @@ class CardPayment extends HostedPayment {
                 $this->langCode = $languageCodeAsISO639;
 
                 break;     
+            case "nl":
+                $this->langCode = $languageCodeAsISO639;
+
+                break;     
             default:
                  $this->langCode = "en";
                 break;
