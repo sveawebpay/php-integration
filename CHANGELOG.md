@@ -1,6 +1,7 @@
 # Changelog
 
-## 0.0.6
-* Namechange: 
+## Not released
+* 2013-03-04 : Namechange: 
     * setCompanyIdNumber() to setNationalIdNumber()
     * setSsn() to setNationalIdNumber()
+    

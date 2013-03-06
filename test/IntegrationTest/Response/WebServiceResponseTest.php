@@ -93,6 +93,17 @@ class WebServiceResponseTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(1000, $request->campaignCodes[0]->fromAmount);
         $this->assertEquals(50000, $request->campaignCodes[0]->toAmount);
     }
+    
+    function testErrorMessageResponse(){
+        $addressRequest = WebPay::getPaymentPlanParams();
+        $request = $addressRequest
+                ->setTestmode()
+                ->setPasswordBasedAuthorization('sverigetest', 'sverjetest', 59999)
+                    ->doRequest();
+         $this->assertEquals(0, $request->accepted);
+         $this->assertEquals('User lacks sufficient privileges', $request->errormessage);
+         $this->assertEquals(0, $request->resultcode);
+    }
 
     function testResultForInvoicePaymentNL() {
         $request = WebPay::createOrder()
