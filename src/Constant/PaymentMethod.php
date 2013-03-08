@@ -25,7 +25,7 @@ abstract class PaymentMethod {
     //PaymentMethodType::CARD
     const KORTCERT = 'KORTCERT';
     const SKRILL = 'SKRILL';
-   // const KORTSKRILL = 'KORTSKRILL'; //Same as SKRILL
+    const KORTSKRILL = 'KORTSKRILL';
     const KORTWN = 'KORTWN';
     //PaymentMethodType::PREPAID
     const MICRODEB = 'MICRODEB'; //prepay
