@@ -13,7 +13,7 @@ class PayPagePayment extends HostedPayment {
 
     public $paymentMethod;
     public $excludedPaymentMethods;
-
+    public $langCode = "en";
     /**
      * 
      * @param type $order
@@ -80,7 +80,12 @@ class PayPagePayment extends HostedPayment {
         $this->excludedPaymentMethods[] = PaymentMethod::SVEASPLITEU_NL;
         $this->excludedPaymentMethods[] = PaymentMethod::SVEAINVOICEEU_NO;
         $this->excludedPaymentMethods[] = PaymentMethod::SVEASPLITEU_NO;
-        $this->excludedPaymentMethods[] = PaymentMethod::PAYPAL;
+        $this->excludedPaymentMethods[] = PaymentMethod::PAYPAL;        
+        $this->excludedPaymentMethods[] = PaymentMethod::DBSWEDBANKSE;
+        $this->excludedPaymentMethods[] = PaymentMethod::DBSHBSE;
+        $this->excludedPaymentMethods[] = PaymentMethod::DBSEBFTGSE;
+        $this->excludedPaymentMethods[] = PaymentMethod::DBSEBSE;
+        $this->excludedPaymentMethods[] = PaymentMethod::DBNORDEASE;
         
         //remove the include functions from the excludedPaymentMethods
         foreach ($include as $key => $value) {
@@ -157,7 +162,23 @@ class PayPagePayment extends HostedPayment {
                 $this->langCode = $languageCodeAsISO639;
 
                 break;
+            case "en":
+                $this->langCode = $languageCodeAsISO639;
+
+                break;
+            case "da":
+                $this->langCode = $languageCodeAsISO639;
+
+                break;
             case "fi":
+                $this->langCode = $languageCodeAsISO639;
+
+                break;
+            case "no":
+                $this->langCode = $languageCodeAsISO639;
+
+                break;
+            case "de":
                 $this->langCode = $languageCodeAsISO639;
 
                 break;
@@ -165,11 +186,18 @@ class PayPagePayment extends HostedPayment {
                 $this->langCode = $languageCodeAsISO639;
 
                 break;
-            case "en":
+            case "fr":
                 $this->langCode = $languageCodeAsISO639;
 
                 break;
+            case "it":
+                $this->langCode = $languageCodeAsISO639;
 
+                break;     
+            case "nl":
+                $this->langCode = $languageCodeAsISO639;
+
+                break;     
             default:
                  $this->langCode = "en";
                 break;

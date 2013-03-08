@@ -117,7 +117,7 @@ class OrderBuilderTest extends PHPUnit_Framework_TestCase {
         $sveaRequest =
                 WebPay::createOrder()
                 ->addCustomerDetails(Item::individualCustomer()
-                ->setSsn(194605092222)
+                ->setNationalIdNumber(194605092222)
                 ->setInitials("SB")
                 ->setBirthDate(1923, 12, 12)
                 ->setName("Tess", "Testson")
@@ -151,7 +151,7 @@ class OrderBuilderTest extends PHPUnit_Framework_TestCase {
     function testBuildOrderWithCompanyDetails() {
         $sveaRequest = WebPay::createOrder()
                     ->addCustomerDetails(Item::companyCustomer()
-                        ->setCompanyIdNumber("2345234")
+                        ->setNationalIdNumber("2345234")
                         ->setCompanyName("TestCompagniet")
                     );
         

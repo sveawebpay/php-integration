@@ -215,14 +215,14 @@ When discount or coupon is a percentage on total product amount.
 
 ### 1.3 Customer Identity   
 Customer identity is required for invoice and payment plan orders. Required values varies 
-depending on country and customer type. For SE, NO, DK and FI ssn (Social Security Number)
+depending on country and customer type. For SE, NO, DK and FI NationalIdNumber (Social Security Number)
 or company id number is required. Email and ip address are desirable.
 
 ####1.3.1 Options for individual customers
 ```php
 ->addCustomerDetails(
     Item::individualCustomer()
-    ->setSsn(194605092222)              //Required for individual customers in SE, NO, DK, FI
+    ->setNationalIdNumber(194605092222)              //Required for individual customers in SE, NO, DK, FI
     ->setInitials("SB")                 //Required for individual customers in NL 
     ->setBirthDate(1923, 12, 20)        //Required for individual customers in NL and DE
     ->setName("Tess", "Testson")        //Required for individual customers in NL and DE    
@@ -240,7 +240,7 @@ or company id number is required. Email and ip address are desirable.
 ```php
 ->addCustomerDetails(
     Item::companyCustomer()
-    ->setCompanyIdNumber(2345234)       //Required in SE, NO, DK, FI
+    ->setNationalIdNumber(2345234)       //Required in SE, NO, DK, FI
     ->setVatNumber("NL2345234")         //Required in NL and DE
     ->setCompanyName("TestCompagniet")  //Required in NL and DE  
     ->setStreetAddress("Gatan", 23)     //Required in NL and DE    
@@ -315,9 +315,10 @@ $form = WebPay::createOrder()
     ->setCurrency("SEK")
         ->usePayPageCardOnly()
             ->setMerchantIdBasedAuthorization(1200, "f78hv9")   //Optional
+            ->setPayPageLanguage("sv")                          //Optional, default english
             ->setReturnUrl("http://myurl.se")                   //Required
             ->setCancelUrl("http://myurl.se")                   //Optional
-            ->getPaymentForm();
+                ->getPaymentForm();
 
 ```
 ##### 1.5.1.2 Return
@@ -367,6 +368,7 @@ $form = WebPay::createOrder()
     ->setCurrency("SEK")
         ->usePayPageDirectBankOnly()
             ->setMerchantIdBasedAuthorization(1200, "f78hv9")   //Optional
+            ->setPayPageLanguage("sv")                          //Optional, default english
             ->setReturnUrl("http://myurl.se")                   //Required
             ->setCancelUrl("http://myurl.se")                   //Optional
             ->getPaymentForm();
@@ -417,6 +419,7 @@ $form = WebPay::createOrder()
         ->setCurrency("SEK")
             ->usePayPage()
                 ->setMerchantIdBasedAuthorization(1200, "f78hv9")   //Optional
+                ->setPayPageLanguage("sv")                          //Optional, default english
                 ->setReturnUrl("http://myurl.se")                   //Required
                 ->setCancelUrl("http://myurl.se")                   //Optional
                 ->getPaymentForm();
@@ -799,7 +802,7 @@ Used in usePaymentMethod($paymentMethod) and in usePayPage(),
 | PaymentMethod::DBSWEDBANKSE       | Direct bank payment, Swedbank, Sweden.        |
 | PaymentMethod::KORTCERT           | Card payments, Certitrade.                    |
 | PaymentMethod::PAYPAL             | Paypal                                        |
-| PaymentMethod::SKRILL             | Card payment with Dankort, Skrill.            |
+| PaymentMethod::KORTSKRILL         | Card payment with Dankort, Skrill.            |
 | PaymentMethod::SVEAINVOICESE      | Invoice by PayPage in SE only.                |
 | PaymentMethod::SVEASPLITSE        | PaymentPlan by PayPage in SE only.            |
 | PaymentMethod::SVEAINVOICEEU_SE   | Invoice by PayPage in SE.                     |

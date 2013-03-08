@@ -14,7 +14,7 @@ class CardPaymentTest extends PHPUnit_Framework_TestCase {
     function testSetAuthorization() {
         $form = WebPay::createOrder()
                 ->setTestmode()
-                ->addCustomerDetails(Item::individualCustomer()->setSsn(194605092222)->setIpAddress("123.123.123"))
+                ->addCustomerDetails(Item::individualCustomer()->setNationalIdNumber(194605092222)->setIpAddress("123.123.123"))
                 ->addOrderRow(Item::orderRow()
                     ->setArticleNumber(1)
                     ->setQuantity(2)
@@ -61,7 +61,7 @@ class CardPaymentTest extends PHPUnit_Framework_TestCase {
                     ->setDescription("RelativeDiscount")
                     )
                 ->addCustomerDetails(Item::companyCustomer()
-                        ->setCompanyIdNumber("2345234")
+                        ->setNationalIdNumber("2345234")
                         )
                 ->setCountryCode("SE")
                 ->setClientOrderNumber("33")

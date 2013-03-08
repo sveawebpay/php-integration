@@ -61,7 +61,7 @@ class WebServiceRowFormatter {
         }
     }
 
-    private function formatOrderRows() {
+    private function formatOrderRows() {        
         foreach ($this->order->orderRows as $row) {
             $orderRow = new SveaOrderRow();
             if (isset($row->articleNumber)) {

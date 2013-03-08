@@ -35,6 +35,8 @@ class PaymentForm {
          $this->rawFields['merchantid'] = $this->merchantid;
          $this->rawFields['message'] = $this->xmlMessageBase64;
          $this->rawFields['mac'] = $this->mac;
+         $this->rawFields['htmlFormMethod'] = 'post';
+         $this->rawFields['htmlFormAction'] = $this->testmode ? SveaConfig::SWP_TEST_URL : SveaConfig::SWP_PROD_URL;
     }
 
     public function setSubmitMessage($countryCode = FALSE){

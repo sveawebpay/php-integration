@@ -43,17 +43,17 @@ class IdentityValidator {
 
    
     /**
-     *  ssn or companyVanNumber required for SE, NO, DK, FI
+     *  NationalIdNumber or companyVanNumber required for SE, NO, DK, FI
      * @param type $order
      * @param type $errors
      * @return string
      */
     public function validateNordicIdentity($order, $errors) {
         if ($this->isCompany == FALSE && isset($order->customerIdentity->ssn) == false){
-            $errors['missing value'] = "Ssn is required for individual customers when countrycode is SE, NO, DK or FI. Use function setSsn().";
+            $errors['missing value'] = "NationalIdNumber is required for individual customers when countrycode is SE, NO, DK or FI. Use function setNationalIdNumber().";
 
         }  elseif ( $this->isCompany && isset($order->customerIdentity->orgNumber) == false){ 
-            $errors['missing value'] =  "OrgNumber is required for company customers when countrycode is SE, NO, DK or FI. Use function setCompanyIdNumber().";
+            $errors['missing value'] =  "OrgNumber is required for company customers when countrycode is SE, NO, DK or FI. Use function setNationalIdNumber().";
 
         }
         return $errors;
@@ -125,8 +125,6 @@ class IdentityValidator {
         return $errors;
     }
 
-    //KOLLA VAR DENNA ANROPAS IFRÅN!!
-    
     /**
      * @param type $order
      * @param type $errors
@@ -134,7 +132,7 @@ class IdentityValidator {
      */
     public function validateDoubleIdentity($order,$errors) {
         if((isset($order->customerIdentity->orgNumber) || isset($order->customerIdentity->companyVatNumber)) && isset($order->customerIdentity->ssn)){
-            $errors['duplicated value'] = "Customer is either an individual or a company. You can not use function setSsn() in combination with setCompanyIdNumber() or setCompanyVatNumber().";
+            $errors['duplicated value'] = "Customer is either an individual or a company. You can not use function setNationalIdNumber() in combination with setNationalIdNumber() or setCompanyVatNumber().";
         }
         return $errors;        
     }

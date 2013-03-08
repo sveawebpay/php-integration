@@ -20,7 +20,8 @@ class PaymentPlanParamsResponse extends WebServiceResponse{
     protected function formatObject($message){
         $this->accepted = $message->GetPaymentPlanParamsEuResult->Accepted;
         $this->resultcode = $message->GetPaymentPlanParamsEuResult->ResultCode;
-        foreach ($message->GetPaymentPlanParamsEuResult->CampaignCodes->CampaignCodeInfo as $code) {
+        if($this->accepted == 1){
+            foreach ($message->GetPaymentPlanParamsEuResult->CampaignCodes->CampaignCodeInfo as $code) {
             $campaign = new CampaignCode();
             $campaign->campaignCode = $code->CampaignCode;
             $campaign->description = $code->Description;
@@ -36,8 +37,8 @@ class PaymentPlanParamsResponse extends WebServiceResponse{
             $campaign->toAmount = $code->ToAmount;
             
             array_push($this->campaignCodes, $campaign);
+            } 
         }
-        
     }
 }
 
