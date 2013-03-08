@@ -802,7 +802,7 @@ Used in usePaymentMethod($paymentMethod) and in usePayPage(),
 | PaymentMethod::DBSWEDBANKSE       | Direct bank payment, Swedbank, Sweden.        |
 | PaymentMethod::KORTCERT           | Card payments, Certitrade.                    |
 | PaymentMethod::PAYPAL             | Paypal                                        |
-| PaymentMethod::SKRILL             | Card payment with Dankort, Skrill.            |
+| PaymentMethod::KORTSKRILL         | Card payment with Dankort, Skrill.            |
 | PaymentMethod::SVEAINVOICESE      | Invoice by PayPage in SE only.                |
 | PaymentMethod::SVEASPLITSE        | PaymentPlan by PayPage in SE only.            |
 | PaymentMethod::SVEAINVOICEEU_SE   | Invoice by PayPage in SE.                     |
