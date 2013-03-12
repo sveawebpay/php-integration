@@ -93,30 +93,31 @@ $response = WebPay::createOrder()
     ->setAddressSelector("7fd7768")
 
 //Continue by choosing one of the following paths
-    //Continue as a card payment
-    ->usePayPageCardOnly() 
-        ...
-        ->getPaymentForm();
-    //Continue as a direct bank payment		
-    ->usePayPageDirectBankOnly()
-        ...
-        ->getPaymentForm();
-    //Continue as a PayPage payment
-    ->usePayPage()
-        ...
-        ->getPaymentForm();
-    //Continue as a PayPage payment
-    ->usePaymentMethod (PaymentMethod::DBSEBSE) //see APPENDIX for Constants
-        ...
-        ->getPaymentForm();
-    //Continue as an invoice payment
+    //Continue as an invoice payment with instant response
     ->useInvoicePayment()
     ...
         ->doRequest();
-    //Continue as a payment plan payment
+    //Continue as a payment plan payment with instant response
     ->usePaymentPlanPayment("campaigncode", 0)
     ...
         ->doRequest();
+    //Continue as a card payment with asynchronous response
+    ->usePayPageCardOnly() 
+        ...
+        ->getPaymentForm();
+    //Continue as a direct bank payment	with asynchronous response	
+    ->usePayPageDirectBankOnly()
+        ...
+        ->getPaymentForm();
+    //Continue as a PayPage payment, where you can custom the alternatives on your paypage, with asynchronous response
+    ->usePayPage()
+        ...
+        ->getPaymentForm();
+    //Go direct to specified paymentmethod, whithout stopping on the PayPage, with asynchronous response
+    ->usePaymentMethod (PaymentMethod::SEB_SE) //see APPENDIX for Constants
+        ...
+        ->getPaymentForm();
+
 ```
 [<< To top](https://github.com/sveawebpay/php-integration/tree/develop#php-integration-package-api-for-sveawebpay)
 
@@ -276,10 +277,89 @@ The response is then returned to the return url you have specified in function s
 use class *Response* with the xml response as parameter, you will receive a
 formatted object as well. 
 
+#### Which payment method should I choose?
+I am using invoice and/or payment plan payments.
+>The best way is to use `->useInvoicePayment()` [read more](https://github.com/sveawebpay/php-integration/tree/develop#154-invoicepayment) and
+>`->usePaymentPlanPayment()` [read more](https://github.com/sveawebpay/php-integration/tree/develop#154-paymentplanpayment).
+>These payments are synchronous and will give you an instant response.
+I am using card and/or direct bank payments
+>You can go by *PayPage* by using `->usePayPageCardOnly()[read more](https://github.com/sveawebpay/php-integration/tree/develop#151-paypage-with-card-payment-options)
+>and `->usePayPageDirectBankOnly()` [read more](https://github.com/sveawebpay/php-integration/tree/develop#152-paypage-with-direct-bank-payment-options). 
+>If you only for example only have one specific bank payment, you can go direct to that specific bank payment by using
+>´->usePaymentMethod(PaymentMethod)´ [read more] (https://github.com/sveawebpay/php-integration/tree/develop#154-paymentmethod-specified)
+I am using all payments.
+>The most effective way is to use ´->useInvoicePayment()´ [read more](https://github.com/sveawebpay/php-integration/tree/develop#154-invoicepayment) 
+>and ´->usePaymentPlanPayment()` [read more](https://github.com/sveawebpay/php-integration/tree/develop#154-paymentplanpayment) for the synchronous payments,
+>and use the *PayPage* for the asynchronous requests by using ´->usePayPageCardOnly()´ [read more](https://github.com/sveawebpay/php-integration/tree/develop#151-paypage-with-card-payment-options) 
+>and ´->usePayPageDirectBankOnly()` [read more](https://github.com/sveawebpay/php-integration/tree/develop#152-paypage-with-direct-bank-payment-options).
+I am using more than one payment and want them gathered on on place.
+>You can go by PayPage and choose to show all your payments here, or modify to exclude or include one or more payments. Use ´->usePayPage()´
+>[read more](https://github.com/sveawebpay/php-integration/tree/develop#153-paypagepayment) where you can custom your own *PayPage*.
+Note that Invoice and Payment plan payments will return an asynchronous response from here.
+
+#### Synchronous payments - Invoice and PaymentPlan
+The request gives an instant response.
+       
+#### 1.5.4 InvoicePayment
+Perform an invoice payment. This payment form will perform a synchronous payment and return a response.
+Returns *CreateOrderResponse* object.
+If Config/SveaConfig.php is not modified you can set your store authorization here.
+```php
+    $response = WebPay::createOrder()
+        ->setTestmode()
+      ->addOrderRow(
+    Item::orderRow()
+        ->setArticleNumber(1)
+        ->setQuantity(2)
+        ->setAmountExVat(100.00)
+        ->setDescription("Specification")
+        ->setName('Prod')
+        ->setUnit("st")
+        ->setVatPercent(25)
+        ->setDiscountPercent(0)
+    )   
+         ->setCountryCode("SE")
+         ->setCustomerReference("33")
+         ->setOrderDate("2012-12-12")
+         ->setCurrency("SEK")
+             ->useInvoicePayment()
+             ->setPasswordBasedAuthorization("sverigetest", "sverigetest", 79021) //Optional on certain conditions, see chapter: Configuration
+             ->doRequest();
+```
+#### 1.5.5 PaymentPlanPayment
+Perform *PaymentPlanPayment*. This payment form will perform a synchronous payment and return a response.
+Returns a *CreateOrderResponse* object. Preceded by WebPay::getPaymentPlanParams().
+If Config/SveaConfig.php is not modified you can set your store authorization here.
+Param: Campaign code recieved from getPaymentPlanParams().
+```php
+$response = WebPay::createOrder()
+->setTestmode()
+->addOrderRow(
+    Item::orderRow()
+        ->setArticleNumber(1)
+        ->setQuantity(2)
+        ->setAmountExVat(100.00)
+        ->setDescription("Specification")
+        ->setName('Prod')
+        ->setUnit("st")
+        ->setVatPercent(25)
+        ->setDiscountPercent(0)
+    )   
+        ->setCountryCode("SE")
+        ->setCustomerReference("33")
+        ->setOrderDate("2012-12-12")
+        ->setCurrency("SEK")
+        ->usePaymentPlanPayment("camp1")                //Parameter: campaign code recieved from getPaymentPlanParams
+           ->setPasswordBasedAuthorization("sverigetest", "sverigetest", 79021) //Optional on certain conditions, see chapter: Configuration
+           ->doRequest();
+```
+[<< To top](https://github.com/sveawebpay/php-integration/tree/develop#php-integration-package-api-for-sveawebpay)
+
 #### Asynchronous payments - Hosted solutions
 Build order and recieve a *PaymentForm* object. Send the *PaymentForm* parameters: *merchantid*, *xmlMessageBase64* and *mac* by POST to
 SveaConfig::SWP_TEST_URL or SveaConfig::SWP_PROD_URL. The *PaymentForm* object also contains a complete html form as string 
-and the html form element as array.
+and the html form element as array. The response is returned as XML, but you can use our [response handler](https://github.com/sveawebpay/php-integration/tree/develop#6-response-handler)
+to format the response.
 
 ```html
     <form name='paymentForm' id='paymentForm' method='post' action='SveaConfig::SWP_TEST_URL'>
@@ -314,7 +394,7 @@ $form = WebPay::createOrder()
     ->setOrderDate("2012-12-12")
     ->setCurrency("SEK")
         ->usePayPageCardOnly()
-            ->setMerchantIdBasedAuthorization(1200, "f78hv9")   //Optional
+            ->setMerchantIdBasedAuthorization(1200, "f78hv9")   //Optional on certain conditions, see chapter: Configuration
             ->setPayPageLanguage("sv")                          //Optional, default english
             ->setReturnUrl("http://myurl.se")                   //Required
             ->setCancelUrl("http://myurl.se")                   //Optional
@@ -367,7 +447,7 @@ $form = WebPay::createOrder()
     ->setOrderDate("2012-12-12")
     ->setCurrency("SEK")
         ->usePayPageDirectBankOnly()
-            ->setMerchantIdBasedAuthorization(1200, "f78hv9")   //Optional
+            ->setMerchantIdBasedAuthorization(1200, "f78hv9")   //Optional on certain conditions, see chapter: Configuration
             ->setPayPageLanguage("sv")                          //Optional, default english
             ->setReturnUrl("http://myurl.se")                   //Required
             ->setCancelUrl("http://myurl.se")                   //Optional
@@ -418,7 +498,7 @@ $form = WebPay::createOrder()
         ->setOrderDate("2012-12-12")
         ->setCurrency("SEK")
             ->usePayPage()
-                ->setMerchantIdBasedAuthorization(1200, "f78hv9")   //Optional
+                ->setMerchantIdBasedAuthorization(1200, "f78hv9")   //Optional on certain conditions, see chapter: Configuration
                 ->setPayPageLanguage("sv")                          //Optional, default english
                 ->setReturnUrl("http://myurl.se")                   //Required
                 ->setCancelUrl("http://myurl.se")                   //Optional
@@ -431,7 +511,7 @@ Optional if you want to include specific payment methods for *PayPage*.
     ->usePayPage()
         ->setReturnUrl("http://myurl.se")                                               //Required
         ->setCancelUrl("http://myurl.se")                                               //Optional
-        ->excludePaymentMethods(PaymentMethod::DBSEBSE,PaymentMethod::SVEAINVOICE_SE)   //Optional
+        ->excludePaymentMethods(PaymentMethod::SEB_SE,PaymentMethod::INVOICE)   //Optional
         ->getPaymentForm();
 ```
 ###### 1.5.3.1.2 Include specific payment methods
@@ -439,7 +519,7 @@ Optional if you want to include specific payment methods for *PayPage*.
 ```php   
     ->usePayPage()
         ->setReturnUrl("http://myurl.se")                                               //Required
-        ->includePaymentMethods(PaymentMethod::DBSEBSE,PaymentMethod::SVEAINVOICE_SE)   //Optional
+        ->includePaymentMethods(PaymentMethod::SEB_SE,PaymentMethod::INVOICE)   //Optional
         ->getPaymentForm();
 ```
 
@@ -498,13 +578,13 @@ $form = WebPay::createOrder()
         ->setUnit("st")
         ->setVatPercent(25)
         ->setDiscountPercent(0)
-    )                  
+    )
     ->setCountryCode("SE")
     ->setClientOrderNumber("33")
     ->setOrderDate("2012-12-12")
     ->setCurrency("SEK")
         ->usePaymentMethod(PaymentMethod::KORTCERT)             //Se APPENDIX for paymentmethods
-            ->setMerchantIdBasedAuthorization(1200, "f78hv9")   //Optional
+            ->setMerchantIdBasedAuthorization(1200, "f78hv9")   //Optional on certain conditions, see chapter: Configuration
             ->setReturnUrl("http://myurl.se")                   //Required
             ->setCancelUrl("http://myurl.se")                   //Optional
             ->getPaymentForm();
@@ -532,62 +612,8 @@ $form = ...
 echo $form->completeHtmlFormWithSubmitButton; //Will render a hidden form with submit button in browser
 ```
 
-#### Synchronous solutions - Invoice and PaymentPlan
-       
-#### 1.5.4 InvoicePayment
-Perform an invoice payment. This payment form will perform a synchronous payment and return a response.
-Returns *CreateOrderResponse* object.
-If Config/SveaConfig.php is not modified you can set your store authorization here.
-```php
-    $response = WebPay::createOrder()
-        ->setTestmode()
-      ->addOrderRow(
-    Item::orderRow()
-        ->setArticleNumber(1)
-        ->setQuantity(2)
-        ->setAmountExVat(100.00)
-        ->setDescription("Specification")
-        ->setName('Prod')
-        ->setUnit("st")
-        ->setVatPercent(25)
-        ->setDiscountPercent(0)
-    )   
-         ->setCountryCode("SE")
-         ->setCustomerReference("33")
-         ->setOrderDate("2012-12-12")
-         ->setCurrency("SEK")
-             ->useInvoicePayment()
-             ->setPasswordBasedAuthorization("sverigetest", "sverigetest", 79021) //Optional
-             ->doRequest();
-```
-#### 1.5.5 PaymentPlanPayment
-Perform *PaymentPlanPayment*. This payment form will perform a synchronous payment and return a response.
-Returns a *CreateOrderResponse* object. Preceded by WebPay::getPaymentPlanParams().
-If Config/SveaConfig.php is not modified you can set your store authorization here.
-Param: Campaign code recieved from getPaymentPlanParams().
-```php
-$response = WebPay::createOrder()
-->setTestmode()
-->addOrderRow(
-    Item::orderRow()
-        ->setArticleNumber(1)
-        ->setQuantity(2)
-        ->setAmountExVat(100.00)
-        ->setDescription("Specification")
-        ->setName('Prod')
-        ->setUnit("st")
-        ->setVatPercent(25)
-        ->setDiscountPercent(0)
-    )   
-        ->setCountryCode("SE")
-        ->setCustomerReference("33")
-        ->setOrderDate("2012-12-12")
-        ->setCurrency("SEK")
-        ->usePaymentPlanPayment("camp1")                //Parameter: campaign code recieved from getPaymentPlanParams
-           ->setPasswordBasedAuthorization("sverigetest", "sverigetest", 79021) //Optional
-           ->doRequest();
-```
-[<< To top](https://github.com/sveawebpay/php-integration/tree/develop#php-integration-package-api-for-sveawebpay)
+#### Other Synchronous requests
+Request returns an instans response.
 
 ## 2. getPaymentPlanParams   
 Use this function to retrieve campaign codes for possible payment plan options. Use prior to create payment plan payment.
@@ -597,7 +623,7 @@ If Config/SveaConfig.php is not modified you can set your store authorization he
 ```php
     $response = WebPay::getPaymentPlanParams()
         ->setTestmode()
-            ->setPasswordBasedAuthorization("sverigetest", "sverigetest", 79021) //Optional
+            ->setPasswordBasedAuthorization("sverigetest", "sverigetest", 79021) //Optional on certain conditions, see chapter: Configuration
             ->doRequest();
 ```
 [<< To top](https://github.com/sveawebpay/php-integration/tree/develop#php-integration-package-api-for-sveawebpay)
@@ -629,7 +655,7 @@ or
 ```php
     $response = WebPay::getAddresses()
         ->setTestmode()
-        ->setPasswordBasedAuthorization("sverigetest", "sverigetest", 79021) //Optional
+        ->setPasswordBasedAuthorization("sverigetest", "sverigetest", 79021) //Optional on certain conditions, see chapter: Configuration
         ->setOrderTypeInvoice()                                              //See 3.1   
         ->setCountryCode("SE")                                               //Required
         ->setIndividual(194605092222)                                        //See 3.2   
@@ -741,7 +767,7 @@ If invoice order is credit invoice use setCreditInvoice($invoiceId) and setNumbe
         ->setOrderId("id")
         ->setInvoiceDistributionType('Post')
         ->deliverInvoiceOrder()
-            ->setPasswordBasedAuthorization("sverigetest", "sverigetest", 79021) //Optional
+            ->setPasswordBasedAuthorization("sverigetest", "sverigetest", 79021) //Optional on certain conditions, see chapter: Configuration
             ->doRequest();
 ```
 [<< To top](https://github.com/sveawebpay/php-integration/tree/develop#php-integration-package-api-for-sveawebpay)
@@ -764,7 +790,7 @@ or
         ->setTestmode()
         ->setOrderId($orderId)                                                  //Required, received when creating an order.
         ->closeInvoiceOrder()
-            ->setPasswordBasedAuthorization("sverigetest", "sverigetest", 79021)//Optional
+            ->setPasswordBasedAuthorization("sverigetest", "sverigetest", 79021)//Optional on certain conditions, see chapter: Configuration
             ->doRequest();
 ```
 [<< To top](https://github.com/sveawebpay/php-integration/tree/develop#php-integration-package-api-for-sveawebpay)
@@ -795,27 +821,16 @@ Used in usePaymentMethod($paymentMethod) and in usePayPage(),
 
 | Payment method                    | Description                                   |
 |-----------------------------------|-----------------------------------------------|
-| PaymentMethod::DBNORDEASE         | Direct bank payment, Nordea, Sweden.          | 
-| PaymentMethod::DBSEBSE            | Direct bank payment, private, SEB, Sweden.    |
-| PaymentMethod::DBSEBFTGSE         | Direct bank payment, company, SEB, Sweden.    |
-| PaymentMethod::DBSHBSE            | Direct bank payment, Handelsbanken, Sweden.   |
-| PaymentMethod::DBSWEDBANKSE       | Direct bank payment, Swedbank, Sweden.        |
+| PaymentMethod::BANKAXESS          | Direct bank payments, Norway                  | 
+| PaymentMethod::NORDEA_SE          | Direct bank payment, Nordea, Sweden.          | 
+| PaymentMethod::SEB_SE             | Direct bank payment, private, SEB, Sweden.    |
+| PaymentMethod::SEBFTG_SE          | Direct bank payment, company, SEB, Sweden.    |
+| PaymentMethod::SHB_SE             | Direct bank payment, Handelsbanken, Sweden.   |
+| PaymentMethod::SWEDBANK_SE        | Direct bank payment, Swedbank, Sweden.        |
 | PaymentMethod::KORTCERT           | Card payments, Certitrade.                    |
 | PaymentMethod::PAYPAL             | Paypal                                        |
 | PaymentMethod::KORTSKRILL         | Card payment with Dankort, Skrill.            |
-| PaymentMethod::SVEAINVOICESE      | Invoice by PayPage in SE only.                |
-| PaymentMethod::SVEASPLITSE        | PaymentPlan by PayPage in SE only.            |
-| PaymentMethod::SVEAINVOICEEU_SE   | Invoice by PayPage in SE.                     |
-| PaymentMethod::SVEAINVOICEEU_NO   | Invoice by PayPage in NO.                     |
-| PaymentMethod::SVEAINVOICEEU_DK   | Invoice by PayPage in DK.                     |
-| PaymentMethod::SVEAINVOICEEU_FI   | Invoice by PayPage in FI.                     |
-| PaymentMethod::SVEAINVOICEEU_NL   | Invoice by PayPage in NL.                     |
-| PaymentMethod::SVEAINVOICEEU_DE   | Invoice by PayPage in DE.                     |
-| PaymentMethod::SVEASPLITEU_SE     | PaymentPlan by PayPage in SE.                 |
-| PaymentMethod::SVEASPLITEU_NO     | PaymentPlan by PayPage in NO.                 |
-| PaymentMethod::SVEASPLITEU_DK     | PaymentPlan by PayPage in DK.                 |
-| PaymentMethod::SVEASPLITEU_FI     | PaymentPlan by PayPage in FI.                 |
-| PaymentMethod::SVEASPLITEU_DE     | PaymentPlan by PayPage in DE.                 |
-| PaymentMethod::SVEASPLITEU_NL     | PaymentPlan by PayPage in NL.                 |
+| PaymentMethod::INVOICE            | Invoice by PayPage.                           |
+| PaymentMethod::PAYMENTPLAN        | PaymentPlan by PayPage.                       |   
 
 [<< To top](https://github.com/sveawebpay/php-integration/tree/develop#php-integration-package-api-for-sveawebpay)

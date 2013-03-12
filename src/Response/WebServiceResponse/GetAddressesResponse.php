@@ -18,19 +18,21 @@ class GetAddressesResponse extends WebServiceResponse{
         parent::__construct($message);
     }
     
-    protected function formatObject($message){       
+    protected function formatObject($message){  
         //Required
         $this->accepted = $message->GetAddressesResult->Accepted;
         $this->resultcode = $message->GetAddressesResult->RejectionCode; //Whet update comes
       
-        if(property_exists($message->GetAddressesResult, "Addresses")){
+        if(property_exists($message->GetAddressesResult, "Addresses") && $this->accepted == 1){
             $this->formatCustomerIdentity($message->GetAddressesResult->Addresses);           
         }
+        
     }
 
     public function formatCustomerIdentity($customers) {
         $this->customerIdentity = array();
-        foreach ($customers as $customer) {  
+        is_array($customers->CustomerAddress) ? $loopValue = $customers->CustomerAddress : $loopValue = $customers;
+        foreach ($loopValue as $customer) {          
         $temp = new GetAddressIdentity();
         $temp->customerType = $customer->BusinessType;          
         $temp->nationalIdNumber = $customer->SecurityNumber;         
@@ -43,9 +45,9 @@ class GetAddressesResponse extends WebServiceResponse{
         $temp->addressSelector = isset($customer->AddressSelector) ? $customer->AddressSelector : "";        
         
         array_push($this->customerIdentity, $temp);
-        }
         
-                 
+        }
+                       
     }
 }
 

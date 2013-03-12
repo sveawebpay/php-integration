@@ -34,6 +34,7 @@ class CardPaymentTest extends PHPUnit_Framework_TestCase {
                     ->setPayPageLanguage("sv")
                     ->setReturnUrl("http://myurl.se")
                     ->getPaymentForm();
+        
         $this->assertEquals(4444, $form->merchantid);
         $this->assertEquals('secret', $form->secretWord);
     }
