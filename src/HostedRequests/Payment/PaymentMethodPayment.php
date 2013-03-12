@@ -24,9 +24,14 @@ class PaymentMethodPayment extends HostedPayment{
     
      protected function configureExcludedPaymentMethods($request) {
         if (isset($this->paymentMethod)) {
-            $request['paymentMethod'] = $this->paymentMethod;
+            if($this->paymentMethod == PaymentMethod::INVOICE){
+                $request['paymentMethod'] = SystemPaymentMethod::INVOICE_.$this->order->countryCode;
+            }  elseif ($this->paymentMethod == PaymentMethod::PAYMENTPLAN) {
+                $request['paymentMethod'] = SystemPaymentMethod::PAYMENTPLAN_.$this->order->countryCode;
+            }  else {
+                $request['paymentMethod'] = $this->paymentMethod;
+            }
         }
-
         return $request;
     }
     

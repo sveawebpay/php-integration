@@ -41,7 +41,7 @@ class PayPagePaymentTest extends PHPUnit_Framework_TestCase {
                 ->setCurrency("SEK")
                 ->usePayPage()
                     ->setReturnUrl("http://myurl.se")
-                    ->excludePaymentMethods(PaymentMethod::SVEAINVOICESE, PaymentMethod::KORTCERT)
+                    ->excludePaymentMethods(PaymentMethod::INVOICE, PaymentMethod::KORTCERT)
                     ->getPaymentForm();
 
         $xmlMessage = new SimpleXMLElement($form->xmlMessage);
@@ -52,9 +52,8 @@ class PayPagePaymentTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals('12500', $xmlMessage->orderrows->row[0]->amount);
         $this->assertEquals('6250', $xmlMessage->orderrows->row[1]->amount);
         $this->assertEquals('-12500', $xmlMessage->orderrows->row[2]->amount);
-
         //  $this->assertEquals(PaymentMethod::KORTCERT,$xmlMessage->paymentMethod);
-        $this->assertEquals(PaymentMethod::SVEAINVOICESE, $xmlMessage->excludepaymentmethods->exclude[0]);
+        $this->assertEquals(SystemPaymentMethod::INVOICE_SE, $xmlMessage->excludepaymentmethods->exclude[0]);
     }
    
 
@@ -127,7 +126,7 @@ class PayPagePaymentTest extends PHPUnit_Framework_TestCase {
                     ->getPaymentForm();
 
         $xmlMessage = new SimpleXMLElement($form->xmlMessage);
-        $this->assertEquals(PaymentMethod::DBNORDEASE, $xmlMessage->excludepaymentmethods->exclude[0]);
+        $this->assertEquals(PaymentMethod::NORDEA_SE, $xmlMessage->excludepaymentmethods->exclude[0]);
     }
 
     function testpayPagePaymentIncludePaymentMethods() {
@@ -165,7 +164,7 @@ class PayPagePaymentTest extends PHPUnit_Framework_TestCase {
         $xmlMessage = new SimpleXMLElement($form->xmlMessage);
 
         //check to see if the first value is one of the excluded ones
-        $this->assertEquals(PaymentMethod::SVEAINVOICESE, $xmlMessage->excludepaymentmethods->exclude[0]);
+        $this->assertEquals(SystemPaymentMethod::INVOICESE, $xmlMessage->excludepaymentmethods->exclude[0]);
     }
 
    
