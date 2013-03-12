@@ -290,11 +290,12 @@ I am using card and/or direct bank payments
 I am using all payments.
 >The most effective way is to use ´->useInvoicePayment()´ [read more](https://github.com/sveawebpay/php-integration/tree/develop#154-invoicepayment) 
 >and ´->usePaymentPlanPayment()` [read more](https://github.com/sveawebpay/php-integration/tree/develop#154-paymentplanpayment) for the synchronous payments,
->and use the *PayPage* for the asynchronous payments by using ´->usePayPageCardOnly()´ [read more](https://github.com/sveawebpay/php-integration/tree/develop#151-paypage-with-card-payment-options) 
+>and use the *PayPage* for the asynchronous requests by using ´->usePayPageCardOnly()´ [read more](https://github.com/sveawebpay/php-integration/tree/develop#151-paypage-with-card-payment-options) 
 >and ´->usePayPageDirectBankOnly()` [read more](https://github.com/sveawebpay/php-integration/tree/develop#152-paypage-with-direct-bank-payment-options).
 I am using more than one payment and want them gathered on on place.
 >You can go by PayPage and choose to show all your payments here, or modify to exclude or include one or more payments. Use ´->usePayPage()´
 >[read more](https://github.com/sveawebpay/php-integration/tree/develop#153-paypagepayment) where you can custom your own *PayPage*.
+Note that Invoice and Payment plan payments will return an asynchronous response from here.
 
 #### Synchronous payments - Invoice and PaymentPlan
 The request gives an instant response.
