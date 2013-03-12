@@ -37,7 +37,9 @@ class GetAddressesResponse extends WebServiceResponse{
         $temp->customerType = $customer->BusinessType;          
         $temp->nationalIdNumber = $customer->SecurityNumber;         
         $temp->phoneNumber = isset($customer->PhoneNumber) ? $customer->PhoneNumber : "";      
-        $temp->fullName = isset($customer->LegalName) ? $customer->LegalName : "";
+        $temp->firstName = isset($customer->FirstName) ? $customer->FirstName : "";      
+        $temp->lastName = isset($customer->LastName) ? $customer->LastName : "";      
+        $temp->legalName = isset($customer->LegalName) ? $customer->LegalName : "";
         $temp->street = isset($customer->AddressLine2) ? $customer->AddressLine2 : "";
         $temp->coAddress = isset($customer->AddressLine1) ? $customer->AddressLine1 : "";
         $temp->zipCode = isset($customer->Postcode) ? $customer->Postcode : "";       
