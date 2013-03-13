@@ -280,28 +280,28 @@ formatted object as well.
 #### Which payment method should I choose?
 I am using invoice and/or payment plan payments.
 
->The best way is to use `->useInvoicePayment()` [read more](https://github.com/sveawebpay/php-integration/tree/develop#154-invoicepayment) and
->`->usePaymentPlanPayment()` [read more](https://github.com/sveawebpay/php-integration/tree/develop#154-paymentplanpayment).
+>The best way is to use [`->useInvoicePayment()`] (https://github.com/sveawebpay/php-integration/tree/develop#154-invoicepayment) and
+>[`->usePaymentPlanPayment()`] (https://github.com/sveawebpay/php-integration/tree/develop#154-paymentplanpayment).
 >These payments are synchronous and will give you an instant response.
 
 I am using card and/or direct bank payments.
 
->You can go by *PayPage* by using `->usePayPageCardOnly() [read more](https://github.com/sveawebpay/php-integration/tree/develop#151-paypage-with-card-payment-options)
->and `->usePayPageDirectBankOnly()` [read more](https://github.com/sveawebpay/php-integration/tree/develop#152-paypage-with-direct-bank-payment-options). 
->If you only for example only have one specific bank payment, you can go direct to that specific bank payment by using
->´->usePaymentMethod(PaymentMethod)´ [read more] (https://github.com/sveawebpay/php-integration/tree/develop#154-paymentmethod-specified)
+>You can go by *PayPage* by using [`->usePayPageCardOnly()`] (https://github.com/sveawebpay/php-integration/tree/develop#151-paypage-with-card-payment-options)
+>and [`->usePayPageDirectBankOnly()`] (https://github.com/sveawebpay/php-integration/tree/develop#152-paypage-with-direct-bank-payment-options). 
+>
+>If you for example only have one specific bank payment, you can go direct to that specific bank payment by using
+>[`->usePaymentMethod(PaymentMethod)`] (https://github.com/sveawebpay/php-integration/tree/develop#154-paymentmethod-specified)
 
 I am using all payments.
 
->The most effective way is to use ´->useInvoicePayment()´ [read more](https://github.com/sveawebpay/php-integration/tree/develop#154-invoicepayment) 
->and ´->usePaymentPlanPayment()` [read more](https://github.com/sveawebpay/php-integration/tree/develop#154-paymentplanpayment) for the synchronous payments,
->and use the *PayPage* for the asynchronous requests by using ´->usePayPageCardOnly()´ [read more](https://github.com/sveawebpay/php-integration/tree/develop#151-paypage-with-card-payment-options) 
->and ´->usePayPageDirectBankOnly()` [read more](https://github.com/sveawebpay/php-integration/tree/develop#152-paypage-with-direct-bank-payment-options).
+>The most effective way is to use [`->useInvoicePayment()`](https://github.com/sveawebpay/php-integration/tree/develop#154-invoicepayment) 
+>and [`->usePaymentPlanPayment()`](https://github.com/sveawebpay/php-integration/tree/develop#154-paymentplanpayment) 
+>for the synchronous payments, and use the *PayPage* for the asynchronous requests by using [`->usePayPageCardOnly()`] (https://github.com/sveawebpay/php-integration/tree/develop#151-paypage-with-card-payment-options) 
+>and [`->usePayPageDirectBankOnly()`] (https://github.com/sveawebpay/php-integration/tree/develop#152-paypage-with-direct-bank-payment-options).
 
 I am using more than one payment and want them gathered on on place.
 
->You can go by PayPage and choose to show all your payments here, or modify to exclude or include one or more payments. Use ´->usePayPage()´
->[read more](https://github.com/sveawebpay/php-integration/tree/develop#153-paypagepayment) where you can custom your own *PayPage*.
+>You can go by PayPage and choose to show all your payments here, or modify to exclude or include one or more payments. Use [´->usePayPage()`] (https://github.com/sveawebpay/php-integration/tree/develop#153-paypagepayment) where you can custom your own *PayPage*.
 
 Note that Invoice and Payment plan payments will return an asynchronous response from here.
 
