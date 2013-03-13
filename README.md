@@ -277,7 +277,7 @@ The response is then returned to the return url you have specified in function s
 use class *Response* with the xml response as parameter, you will receive a
 formatted object as well. 
 
-#### Which payment method should I choose?
+###### Which payment method should I choose?
 I am using invoice and/or payment plan payments.
 
 >The best way is to use [`->useInvoicePayment()`] (https://github.com/sveawebpay/php-integration/tree/develop#154-invoicepayment) and
@@ -301,7 +301,7 @@ I am using all payments.
 
 I am using more than one payment and want them gathered on on place.
 
->You can go by PayPage and choose to show all your payments here, or modify to exclude or include one or more payments. Use [´->usePayPage()`] (https://github.com/sveawebpay/php-integration/tree/develop#153-paypagepayment) where you can custom your own *PayPage*.
+>You can go by PayPage and choose to show all your payments here, or modify to exclude or include one or more payments. Use [`->usePayPage()`] (https://github.com/sveawebpay/php-integration/tree/develop#153-paypagepayment) where you can custom your own *PayPage*.
 
 Note that Invoice and Payment plan payments will return an asynchronous response from here.
 
