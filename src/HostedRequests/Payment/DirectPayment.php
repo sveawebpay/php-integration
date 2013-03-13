@@ -23,7 +23,7 @@ class DirectPayment extends HostedPayment {
     protected function configureExcludedPaymentMethods($request) {       
          //card
         $methods[] = SystemPaymentMethod::KORTCERT;
-        $methods[] = SystemPaymentMethod::SKRILL;
+        $methods[] = SystemPaymentMethod::KORTSKRILL;
        //other      
         $methods[] = SystemPaymentMethod::PAYPAL;
        

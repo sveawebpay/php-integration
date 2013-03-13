@@ -26,7 +26,6 @@ abstract class PaymentMethod {
     const TAPIOLA_FI = 'DBTAPIOLAFI';
     //PaymentMethodType::CARD
     const KORTCERT = 'KORTCERT';
-    const SKRILL = 'SKRILL';
     const KORTSKRILL = 'KORTSKRILL';
     const KORTWN = 'KORTWN';
     //PREPAID

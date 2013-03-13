@@ -33,7 +33,7 @@ class CardPayment extends HostedPayment {
         //countrycheck
         switch ($this->order->countryCode) {
             case "SE":
-            $methods[] = SystemPaymentMethod::SKRILL;
+            $methods[] = SystemPaymentMethod::KORTSKRILL;
 
                 break;
 

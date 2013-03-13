@@ -76,7 +76,7 @@ class PayPagePayment extends HostedPayment {
         $include = func_get_args();
         //exclude all functions       
         $this->excludedPaymentMethods[] = SystemPaymentMethod::KORTCERT;
-        $this->excludedPaymentMethods[] = SystemPaymentMethod::SKRILL;
+        $this->excludedPaymentMethods[] = SystemPaymentMethod::KORTSKRILL;
         $this->excludedPaymentMethods[] = SystemPaymentMethod::INVOICESE;
         $this->excludedPaymentMethods[] = SystemPaymentMethod::PAYMENTPLANSE;
         $this->excludedPaymentMethods[] = "SVEAINVOICEEU_".$this->order->countryCode;
@@ -112,7 +112,7 @@ class PayPagePayment extends HostedPayment {
      */     
     public function excludeCardPaymentMethods() {
         $this->excludedPaymentMethods[] = SystemPaymentMethod::KORTCERT;
-        $this->excludedPaymentMethods[] = SystemPaymentMethod::SKRILL;
+        $this->excludedPaymentMethods[] = SystemPaymentMethod::KORTSKRILL;
         $this->excludedPaymentMethods[] = SystemPaymentMethod::KORTWN;
         return $this;
     }
