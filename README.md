@@ -279,22 +279,30 @@ formatted object as well.
 
 #### Which payment method should I choose?
 I am using invoice and/or payment plan payments.
+
 >The best way is to use `->useInvoicePayment()` [read more](https://github.com/sveawebpay/php-integration/tree/develop#154-invoicepayment) and
 >`->usePaymentPlanPayment()` [read more](https://github.com/sveawebpay/php-integration/tree/develop#154-paymentplanpayment).
 >These payments are synchronous and will give you an instant response.
-I am using card and/or direct bank payments
->You can go by *PayPage* by using `->usePayPageCardOnly()[read more](https://github.com/sveawebpay/php-integration/tree/develop#151-paypage-with-card-payment-options)
+
+I am using card and/or direct bank payments.
+
+>You can go by *PayPage* by using `->usePayPageCardOnly() [read more](https://github.com/sveawebpay/php-integration/tree/develop#151-paypage-with-card-payment-options)
 >and `->usePayPageDirectBankOnly()` [read more](https://github.com/sveawebpay/php-integration/tree/develop#152-paypage-with-direct-bank-payment-options). 
 >If you only for example only have one specific bank payment, you can go direct to that specific bank payment by using
 >´->usePaymentMethod(PaymentMethod)´ [read more] (https://github.com/sveawebpay/php-integration/tree/develop#154-paymentmethod-specified)
+
 I am using all payments.
+
 >The most effective way is to use ´->useInvoicePayment()´ [read more](https://github.com/sveawebpay/php-integration/tree/develop#154-invoicepayment) 
 >and ´->usePaymentPlanPayment()` [read more](https://github.com/sveawebpay/php-integration/tree/develop#154-paymentplanpayment) for the synchronous payments,
 >and use the *PayPage* for the asynchronous requests by using ´->usePayPageCardOnly()´ [read more](https://github.com/sveawebpay/php-integration/tree/develop#151-paypage-with-card-payment-options) 
 >and ´->usePayPageDirectBankOnly()` [read more](https://github.com/sveawebpay/php-integration/tree/develop#152-paypage-with-direct-bank-payment-options).
+
 I am using more than one payment and want them gathered on on place.
+
 >You can go by PayPage and choose to show all your payments here, or modify to exclude or include one or more payments. Use ´->usePayPage()´
 >[read more](https://github.com/sveawebpay/php-integration/tree/develop#153-paypagepayment) where you can custom your own *PayPage*.
+
 Note that Invoice and Payment plan payments will return an asynchronous response from here.
 
 #### Synchronous payments - Invoice and PaymentPlan
@@ -797,11 +805,11 @@ or
 
 ## 6. Response handler                                                       
 All synchronous responses are handled through *SveaResponse* and structured into objects.
-Asynchronous responses recieved after sending the values *mac*, *merchantid* and *xmlMessageBase64* to
+Asynchronous responses recieved after sending the values *merchantid* and *xmlMessageBase64* to
 hosted solutions can also be processed through the *SveaResponse* class.
 
 The response from server will be sent to the *returnUrl* with POST or GET. The response contains the parameters: 
-*response*,*mac*,*merchantid*.
+*response* and *merchantid*.
 Class *SveaResponse* will return a structured object similar to the synchronous answer instead. 
 Params: 
 * The POST or GET message 
