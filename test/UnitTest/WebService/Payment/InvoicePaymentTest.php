@@ -63,6 +63,8 @@ class InvoicePaymentTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals("sverigetest", $request->request->Auth->Username); //Check all in identity
         $this->assertEquals("sverigetest", $request->request->Auth->Password); //Check all in identity
     }
+    
+    
 
     function testInvoiceRequestObjectForCustomerIdentityIndividualFromNL(){
          $request = WebPay::createOrder()

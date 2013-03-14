@@ -35,7 +35,7 @@ class WebServicePayments_RequestTest extends PHPUnit_Framework_TestCase {
                     ->setVatPercent(25)
                     ->setDiscountPercent(0)
                         )              
-                   ->addCustomerDetails(Item::individualCustomer()->setNationalIdNumber(194605092222))               
+                   ->addCustomerDetails(Item::individualCustomer()->setNationalIdNumber(4605092222))               
                 ->setCountryCode("SE")
                 ->setCustomerReference("33")
                 ->setOrderDate("2012-12-12")
@@ -117,13 +117,23 @@ class WebServicePayments_RequestTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(1, $request->accepted);
     }
 
-    function testGetAddressesResult() {
+    function testGetAddressesResultForPrivate() {
         $addressRequest = WebPay::getAddresses();
-       $request = $addressRequest
+        $request = $addressRequest
             ->setTestmode()
             ->setOrderTypeInvoice()
             ->setCountryCode("SE")
             ->setIndividual(194605092222)
+            ->doRequest();
+        $this->assertEquals(1, $request->accepted);
+     }
+    function testGetAddressesResultForCompany() {
+        $addressRequest = WebPay::getAddresses();
+        $request = $addressRequest
+            ->setTestmode()
+            ->setOrderTypeInvoice()
+            ->setCountryCode("SE")
+            ->setCompany(4608142222)
             ->doRequest();
        
         $this->assertEquals(1, $request->accepted);

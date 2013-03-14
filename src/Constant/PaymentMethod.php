@@ -1,52 +1,38 @@
 <?php
 
 /**
- * Constants for Hosted payments
+ * PaymentMethodType
  */
 abstract class PaymentMethod {
-
-    //PaymentMethodType::DIRECT
+  
+    const INVOICE = 'INVOICE';
+    const PAYMENTPLAN = 'PAYMENTPLAN';
+    //DIRECT
     const BANKAXESS = 'BANKAXESS';
-    const DBAKTIAFI = 'DBAKTIAFI';
-    const DBALANDSBANKENFI = 'DBALANDSBANKENFI';
-    const DBDANSKEBANKSE = 'DBDANSKEBANKSE';
-    const DBNORDEAEE = 'DBNORDEAEE';
-    const DBNORDEAFI = 'DBNORDEAFI';
-    const DBNORDEASE = 'DBNORDEASE';
-    const DBPOHJOLAFI = 'DBPOHJOLAFI';
-    const DBSAMPOFI = 'DBSAMPOFI';
-    const DBSEBSE = 'DBSEBSE';
-    const DBSEBFTGSE = 'DBSEBFTGSE';
-    const DBSHBFI = 'DBSHBFI';
-    const DBSHBSE = 'DBSHBSE';
-    const DBSPANKKIFI = 'DBSPANKKIFI';
-    const DBSWEDBANKSE = 'DBSWEDBANKSE';
-    const DBTAPIOLAFI = 'DBTAPIOLAFI';
+    const AKTIA_FI = 'DBAKTIAFI';
+    const ALANDSBANKEN_FI = 'DBALANDSBANKENFI';
+    const DANSKEBANK_SE = 'DBDANSKEBANKSE';
+    const NORDEA_EE = 'DBNORDEAEE';
+    const NORDEA_FI = 'DBNORDEAFI';
+    const NORDEA_SE = 'DBNORDEASE';
+    const POHJOLA_FI = 'DBPOHJOLAFI';
+    const SAMPOFI = 'DBSAMPOFI';
+    const SEB_SE = 'DBSEBSE';
+    const SEBFTG_SE = 'DBSEBFTGSE';
+    const SHB_SE = 'DBSHBSE'; 
+    const SHB_FI = 'DBSHBFI'; 
+    const SPANKKI_FI = 'DBSPANKKIFI';
+    const SWEDBANK_SE = 'DBSWEDBANKSE';
+    const TAPIOLA_FI = 'DBTAPIOLAFI';
     //PaymentMethodType::CARD
     const KORTCERT = 'KORTCERT';
-    const SKRILL = 'SKRILL';
     const KORTSKRILL = 'KORTSKRILL';
     const KORTWN = 'KORTWN';
-    //PaymentMethodType::PREPAID
-    const MICRODEB = 'MICRODEB'; //prepay
-    //PaymentMethodType::PSP
+    //PREPAID
+    const MICRODEB = 'MICRODEB';
+    //PSP
     const PAYGROUND = 'PAYGROUND';
     const PAYPAL = 'PAYPAL';
-    //PaymentMethodType::INVOICE
-    const SVEAINVOICESE = 'SVEAINVOICESE';
-    const SVEASPLITSE = 'SVEASPLITSE';
-    const SVEAINVOICEEU_SE = 'SVEAINVOICEEU_SE';
-    const SVEAINVOICEEU_NO = 'SVEAINVOICEEU_NO';
-    const SVEAINVOICEEU_DK = 'SVEAINVOICEEU_DK';
-    const SVEAINVOICEEU_FI = 'SVEAINVOICEEU_FI';
-    const SVEAINVOICEEU_NL = 'SVEAINVOICEEU_NL';
-    const SVEAINVOICEEU_DE = 'SVEAINVOICEEU_DE';
-    const SVEASPLITEU_SE = 'SVEASPLITEU_SE';
-    const SVEASPLITEU_NO = 'SVEASPLITEU_NO';
-    const SVEASPLITEU_DK = 'SVEASPLITEU_DK';
-    const SVEASPLITEU_FI = 'SVEASPLITEU_FI';
-    const SVEASPLITEU_DE = 'SVEASPLITEU_DE';
-    const SVEASPLITEU_NL = 'SVEASPLITEU_NL';
 
 }
 

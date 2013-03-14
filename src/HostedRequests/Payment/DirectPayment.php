@@ -22,18 +22,18 @@ class DirectPayment extends HostedPayment {
 
     protected function configureExcludedPaymentMethods($request) {       
          //card
-        $methods[] = PaymentMethod::KORTCERT;
-        $methods[] = PaymentMethod::SKRILL;
+        $methods[] = SystemPaymentMethod::KORTCERT;
+        $methods[] = SystemPaymentMethod::KORTSKRILL;
        //other      
-        $methods[] = PaymentMethod::PAYPAL;
+        $methods[] = SystemPaymentMethod::PAYPAL;
        
         //countrycheck
        if($this->order->countryCode != "SE") {
-            $methods[] = PaymentMethod::DBNORDEASE;
-            $methods[] = PaymentMethod::DBSEBSE;
-            $methods[] = PaymentMethod::DBSEBFTGSE;
-            $methods[] = PaymentMethod::DBSHBSE;         
-            $methods[] = PaymentMethod::DBSWEDBANKSE;
+            $methods[] = SystemPaymentMethod::DBNORDEASE;
+            $methods[] = SystemPaymentMethod::DBSEBSE;
+            $methods[] = SystemPaymentMethod::DBSEBFTGSE;
+            $methods[] = SystemPaymentMethod::DBSHBSE;         
+            $methods[] = SystemPaymentMethod::DBSWEDBANKSE;
         }
         $exclude = new ExcludePayments();
         $methods = array_merge((array)$methods, (array)$exclude->excludeInvoicesAndPaymentPlan($this->order->countryCode));

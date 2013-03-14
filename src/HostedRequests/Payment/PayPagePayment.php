@@ -53,8 +53,19 @@ class PayPagePayment extends HostedPayment {
      * @return \PayPagePayment
      */     
     public function excludePaymentMethods() {
-        $this->excludedPaymentMethods = func_get_args();
-        return $this;
+        $excludes = func_get_args();       
+        foreach ($excludes as $method) {
+             if($method == PaymentMethod::INVOICE){
+               $this->excludedPaymentMethods[] ="SVEAINVOICEEU_".$this->order->countryCode;
+               $this->excludedPaymentMethods[] ="SVEAINVOICE".$this->order->countryCode;
+            }  elseif ($this->paymentMethod == PaymentMethod::PAYMENTPLAN) {
+                $this->excludedPaymentMethods[] = "SVEASPLITEU_".$this->order->countryCode;
+            }  else {
+                 $this->excludedPaymentMethods[] = $method;
+            }             
+          
+        }       
+        return $this;  
     }
      /** 
      * 
@@ -63,62 +74,61 @@ class PayPagePayment extends HostedPayment {
     public function includePaymentMethods() {
         //get parameters sent no matter how many
         $include = func_get_args();
-        //exclude all functions
-        $this->excludedPaymentMethods[] = PaymentMethod::KORTCERT;
-        $this->excludedPaymentMethods[] = PaymentMethod::SKRILL;
-        $this->excludedPaymentMethods[] = PaymentMethod::SVEAINVOICESE;
-        $this->excludedPaymentMethods[] = PaymentMethod::SVEASPLITSE;
-        $this->excludedPaymentMethods[] = PaymentMethod::SVEAINVOICEEU_SE;
-        $this->excludedPaymentMethods[] = PaymentMethod::SVEASPLITEU_SE;
-        $this->excludedPaymentMethods[] = PaymentMethod::SVEAINVOICEEU_DE;
-        $this->excludedPaymentMethods[] = PaymentMethod::SVEASPLITEU_DE;
-        $this->excludedPaymentMethods[] = PaymentMethod::SVEAINVOICEEU_DK;
-        $this->excludedPaymentMethods[] = PaymentMethod::SVEASPLITEU_DK;
-        $this->excludedPaymentMethods[] = PaymentMethod::SVEAINVOICEEU_FI;
-        $this->excludedPaymentMethods[] = PaymentMethod::SVEASPLITEU_FI;
-        $this->excludedPaymentMethods[] = PaymentMethod::SVEAINVOICEEU_NL;
-        $this->excludedPaymentMethods[] = PaymentMethod::SVEASPLITEU_NL;
-        $this->excludedPaymentMethods[] = PaymentMethod::SVEAINVOICEEU_NO;
-        $this->excludedPaymentMethods[] = PaymentMethod::SVEASPLITEU_NO;
-        $this->excludedPaymentMethods[] = PaymentMethod::PAYPAL;        
-        $this->excludedPaymentMethods[] = PaymentMethod::DBSWEDBANKSE;
-        $this->excludedPaymentMethods[] = PaymentMethod::DBSHBSE;
-        $this->excludedPaymentMethods[] = PaymentMethod::DBSEBFTGSE;
-        $this->excludedPaymentMethods[] = PaymentMethod::DBSEBSE;
-        $this->excludedPaymentMethods[] = PaymentMethod::DBNORDEASE;
+        //exclude all functions       
+        $this->excludedPaymentMethods[] = SystemPaymentMethod::KORTCERT;
+        $this->excludedPaymentMethods[] = SystemPaymentMethod::KORTSKRILL;
+        $this->excludedPaymentMethods[] = SystemPaymentMethod::INVOICESE;
+        $this->excludedPaymentMethods[] = SystemPaymentMethod::PAYMENTPLANSE;
+        $this->excludedPaymentMethods[] = "SVEAINVOICEEU_".$this->order->countryCode;
+        $this->excludedPaymentMethods[] = "SVEASPLITEU_".$this->order->countryCode;
+        $this->excludedPaymentMethods[] = SystemPaymentMethod::PAYPAL;        
+        $this->excludedPaymentMethods[] = SystemPaymentMethod::DBSWEDBANKSE;
+        $this->excludedPaymentMethods[] = SystemPaymentMethod::DBSHBSE;
+        $this->excludedPaymentMethods[] = SystemPaymentMethod::DBSEBFTGSE;
+        $this->excludedPaymentMethods[] = SystemPaymentMethod::DBSEBSE;
+        $this->excludedPaymentMethods[] = SystemPaymentMethod::DBNORDEASE;
         
         //remove the include functions from the excludedPaymentMethods
         foreach ($include as $key => $value) {
             $trimmed = trim($value);
             $cleanValue = strtoupper($trimmed);
-            if ($this->excludedPaymentMethods[$key] == $cleanValue)
-                unset($this->excludedPaymentMethods[$key]);
+            if ($this->excludedPaymentMethods[$key] == $cleanValue){
+                 unset($this->excludedPaymentMethods[$key]);
+            }  elseif ($cleanValue == PaymentMethod::INVOICE) {
+                $this->excludedPaymentMethods[] = SystemPaymentMethod::INVOICESE;
+                $this->excludedPaymentMethods[] = "SVEAINVOICEEU_".$this->order->countryCode;
+            }  elseif ($cleanValue == PaymentMethod::PAYMENTPLAN) {
+                $this->excludedPaymentMethods[] = SystemPaymentMethod::PAYMENTPLANSE;
+                $this->excludedPaymentMethods[] = "SVEASPLITEU_".$this->order->countryCode;
+            }
+               
         }
         return $this;
     }
 
-    /** Deprecated
+    /** 
      * Exclude all cardpayments
      * @return \PayPagePayment
      */     
     public function excludeCardPaymentMethods() {
-        $this->excludedPaymentMethods[] = PaymentMethod::KORTCERT;
-        $this->excludedPaymentMethods[] = PaymentMethod::SKRILL;
+        $this->excludedPaymentMethods[] = SystemPaymentMethod::KORTCERT;
+        $this->excludedPaymentMethods[] = SystemPaymentMethod::KORTSKRILL;
+        $this->excludedPaymentMethods[] = SystemPaymentMethod::KORTWN;
         return $this;
     }
     
 
-    /** Deprecated
+    /** 
      * Exclude all direct bank payments
      * @return \PayPagePayment
      * 
      */     
     public function excludeDirectPaymentMethods() {
-        $this->excludedPaymentMethods[] = PaymentMethod::DBNORDEASE;
-        $this->excludedPaymentMethods[] = PaymentMethod::DBSEBSE;
-        $this->excludedPaymentMethods[] = PaymentMethod::DBSEBFTGSE;
-        $this->excludedPaymentMethods[] = PaymentMethod::DBSHBSE;
-        $this->excludedPaymentMethods[] = PaymentMethod::DBSWEDBANKSE;
+        $this->excludedPaymentMethods[] = SystemPaymentMethod::DBNORDEASE;
+        $this->excludedPaymentMethods[] = SystemPaymentMethod::DBSEBSE;
+        $this->excludedPaymentMethods[] = SystemPaymentMethod::DBSEBFTGSE;
+        $this->excludedPaymentMethods[] = SystemPaymentMethod::DBSHBSE;
+        $this->excludedPaymentMethods[] = SystemPaymentMethod::DBSWEDBANKSE;
         return $this;
     }
     

@@ -15,25 +15,25 @@ class ExcludePayments {
     public function excludeInvoicesAndPaymentPlan($countryCode) {
         $methods = array();
         
-                $methods[] = PaymentMethod::SVEAINVOICESE;
-                $methods[] = PaymentMethod::SVEASPLITSE;
-                $methods[] = PaymentMethod::SVEAINVOICEEU_SE;
-                $methods[] = PaymentMethod::SVEASPLITEU_SE;
+                $methods[] = SystemPaymentMethod::INVOICESE;
+                $methods[] = SystemPaymentMethod::PAYMENTPLANSE;
+                $methods[] = SystemPaymentMethod::INVOICE_SE;
+                $methods[] = SystemPaymentMethod::PAYMENTPLAN_SE;
           
-                $methods[] = PaymentMethod::SVEAINVOICEEU_DE;
-                $methods[] = PaymentMethod::SVEASPLITEU_DE;
+                $methods[] = SystemPaymentMethod::INVOICE_DE;
+                $methods[] = SystemPaymentMethod::PAYMENTPLAN_DE;
            
-                $methods[] = PaymentMethod::SVEAINVOICEEU_DK;
-                $methods[] = PaymentMethod::SVEASPLITEU_DK;
+                $methods[] = SystemPaymentMethod::INVOICE_DK;
+                $methods[] = SystemPaymentMethod::PAYMENTPLAN_DK;
              
-                $methods[] = PaymentMethod::SVEAINVOICEEU_FI;
-                $methods[] = PaymentMethod::SVEASPLITEU_FI;
+                $methods[] = SystemPaymentMethod::INVOICE_FI;
+                $methods[] = SystemPaymentMethod::PAYMENTPLAN_FI;
             
-                $methods[] = PaymentMethod::SVEAINVOICEEU_NL;
-                $methods[] = PaymentMethod::SVEASPLITEU_NL;
+                $methods[] = SystemPaymentMethod::INVOICE_NL;
+                $methods[] = SystemPaymentMethod::PAYMENTPLAN_NL;
           
-                $methods[] = PaymentMethod::SVEAINVOICEEU_NO;
-                $methods[] = PaymentMethod::SVEASPLITEU_NO;
+                $methods[] = SystemPaymentMethod::INVOICE_NO;
+                $methods[] = SystemPaymentMethod::PAYMENTPLAN_NO;
             
         
         return $methods;
