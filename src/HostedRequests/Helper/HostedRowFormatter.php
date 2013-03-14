@@ -77,7 +77,7 @@ class HostedRowFormatter {
         
         foreach ($order->shippingFeeRows as $row) {
             $tempRow = new HostedOrderRowBuilder();
-            $plusVatCounter = ($row->vatPercent * 0.01) + 1;
+            $plusVatCounter = isset($row->vatPercent) ? ($row->vatPercent * 0.01) + 1 : "";
 
             if(isset($row->name)) {
                 $tempRow->setName($row->name);
@@ -85,15 +85,15 @@ class HostedRowFormatter {
             if(isset($row->description)) {
                 $tempRow->setDescription($row->description);
             } 
-                if(isset($row->amountExVat) && isset($row->vatPercent)){
+            if(isset($row->amountExVat) && isset($row->vatPercent)){
                 $tempRow->setAmount(round(($row->amountExVat * 100) * $plusVatCounter));
                 $tempRow->setVat(round($tempRow->amount - ($row->amountExVat * 100)));
             }elseif (isset($row->amountIncVat) && isset($row->vatPercent)) {
                  $tempRow->setAmount(round($row->amountIncVat * 100));
                  $tempRow->setVat(round($tempRow->amount - ($tempRow->amount / $plusVatCounter)));
             }  else {
-                 $tempRow->setAmount(round($row->amountIncVat * 100));
-                 $tempRow->setVat($row->amountIncVat - $row->amountExVat);
+                 $tempRow->setAmount(round($row->amountIncVat * 100));               
+                 $tempRow->setVat(($row->amountIncVat - $row->amountExVat) * 100);
             }
 
             if(isset($row->unit)) {

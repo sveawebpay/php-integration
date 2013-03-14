@@ -148,6 +148,41 @@ class OrderBuilderTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals("Stan", $sveaRequest->customerIdentity->locality);
     }
     
+    function testBuildOrderWithAllCustomerTypes(){
+        $company = TRUE;
+        $sveaRequest = WebPay::createOrder();
+       
+        if($company == TRUE){
+               $item = Item::companyCustomer();
+               $item = $item->setNationalIdNumber(194605092222)
+                    ->setEmail("test@svea.com")
+                    ->setCompanyName("TestCompagniet")        //SET
+                    ->setZipCode(9999)            
+                    ->setLocality("Stan")
+                    ->setIpAddress("123.123.123")
+                    ->setPhoneNumber(999999);
+          
+        if("DE" == "DE"){
+            $item = 
+             $item
+                ->setVatNumber("NL2345234")
+                ->setStreetAddress("Gatan", 23);
+            }        
+        }
+        $sveaRequest = $sveaRequest->addCustomerDetails($item);      
+        
+        $this->assertEquals(194605092222, $sveaRequest->customerIdentity->orgNumber);
+        $this->assertEquals("NL2345234", $sveaRequest->customerIdentity->companyVatNumber);
+        $this->assertEquals("test@svea.com", $sveaRequest->customerIdentity->email);
+        $this->assertEquals(999999, $sveaRequest->customerIdentity->phonenumber);
+        $this->assertEquals("123.123.123", $sveaRequest->customerIdentity->ipAddress);
+        $this->assertEquals("Gatan", $sveaRequest->customerIdentity->street);
+        $this->assertEquals(23, $sveaRequest->customerIdentity->housenumber);
+        $this->assertEquals(9999, $sveaRequest->customerIdentity->zipCode);
+        $this->assertEquals("Stan", $sveaRequest->customerIdentity->locality);
+    }
+
+
     function testBuildOrderWithCompanyDetails() {
         $sveaRequest = WebPay::createOrder()
                     ->addCustomerDetails(Item::companyCustomer()
