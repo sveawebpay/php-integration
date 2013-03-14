@@ -38,20 +38,6 @@ class HostedPayment {
         return $errors;
     }
 
-        /**
-     * Transforms Order to xml format an populates a html form to integrate in your code.
-     * @return \PaymentForm ->
-     * public $xml;    
-     * public $payment;
-     * public $merchantid;
-     * public $secretWord;
-     * public $mac;
-     * public $form;
-     * public $formHtmlFields = array();
-     * public $testmode;
-     * public $rawFields = array();
-     * 
-     */
     public function getPaymentForm() {
         //validate input
        $errors = $this->validateOrder();       
