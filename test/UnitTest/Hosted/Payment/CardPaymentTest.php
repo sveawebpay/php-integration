@@ -229,6 +229,31 @@ class CardPaymentTest extends PHPUnit_Framework_TestCase {
         
         $this->assertEquals('SEK', $xmlMessage->currency);
     }
+    
+    function testBuildCardPaymentWithShippingFee(){
+          $form = WebPay::createOrder()
+                ->addOrderRow(Item::orderRow()
+                    ->setArticleNumber(1)
+                    ->setQuantity(1)
+                    ->setAmountExVat(240.00)
+                    ->setAmountIncVat(300)
+                    ->setDescription("CD")     
+                    )
+                ->addFee(Item::shippingFee()
+                        ->setAmountExVat(80)
+                        ->setAmountIncVat(100)                        
+                        )
+            ->setClientOrderNumber("33")
+            ->setCurrency("sek")
+            ->usePayPageCardOnly() // PayPageObject
+            ->setReturnUrl("http://myurl.se")
+                ->getPaymentForm();
+        
+        $xmlMessage = new SimpleXMLElement($form->xmlMessage);
+        
+        $this->assertEquals("8000", $xmlMessage->vat);
+        $this->assertEquals("40000", $xmlMessage->amount);
+    }
 }
 
 ?>
