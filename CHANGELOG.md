@@ -7,4 +7,6 @@
     
 * Added
     * ->setPayPageLanguage() when choosing one of the PayPagePayments
-    
+
+* Changed
+    * Paymentmethods in APPENDIX are fewer and more generalized
