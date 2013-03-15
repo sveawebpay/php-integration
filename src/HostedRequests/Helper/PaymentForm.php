@@ -76,8 +76,8 @@ class PaymentForm {
     public function setHtmlFields() {
         $this->mac =hash("sha512", $this->xmlMessageBase64 . $this->secretWord);
         $this->htmlFormFieldsAsArray['form_start_tag'] = "<form name='paymentForm' id='paymentForm' method='post' action='"
-                . ($this->testmode ? SveaConfig::SWP_TEST_URL : SveaConfig::SWP_PROD_URL .
-                        "'>");
+                . ($this->testmode ? SveaConfig::SWP_TEST_URL : SveaConfig::SWP_PROD_URL) .
+                        "'>";
         $this->htmlFormFieldsAsArray['input_merchantId'] = "<input type='hidden' name='merchantid' value='{$this->merchantid}' />";
         $this->htmlFormFieldsAsArray['input_message'] = "<input type='hidden' name='message' value='{$this->xmlMessageBase64}' />";
         $this->htmlFormFieldsAsArray['input_mac'] = "<input type='hidden' name='mac' value='{$this->mac}' />";
