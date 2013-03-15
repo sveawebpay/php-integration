@@ -126,7 +126,7 @@ class PayPagePaymentTest extends PHPUnit_Framework_TestCase {
                     ->getPaymentForm();
 
         $xmlMessage = new SimpleXMLElement($form->xmlMessage);
-        $this->assertEquals(PaymentMethod::NORDEA_SE, $xmlMessage->excludepaymentmethods->exclude[0]);
+        $this->assertEquals(PaymentMethod::BANKAXESS, $xmlMessage->excludepaymentmethods->exclude[0]);
     }
 
     function testpayPagePaymentIncludePaymentMethods() {
@@ -162,9 +162,8 @@ class PayPagePaymentTest extends PHPUnit_Framework_TestCase {
                     ->getPaymentForm();
         
         $xmlMessage = new SimpleXMLElement($form->xmlMessage);
-
         //check to see if the first value is one of the excluded ones
-        $this->assertEquals(SystemPaymentMethod::INVOICESE, $xmlMessage->excludepaymentmethods->exclude[0]);
+        $this->assertEquals(SystemPaymentMethod::BANKAXESS, $xmlMessage->excludepaymentmethods->exclude[0]);
     }
 
    

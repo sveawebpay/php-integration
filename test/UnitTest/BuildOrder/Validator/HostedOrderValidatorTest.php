@@ -114,7 +114,26 @@ class HostedOrderValidatorTest extends PHPUnit_Framework_TestCase {
                     ->usePayPageCardOnly();
        $order->getPaymentForm();
     }
+     /**
+     * @expectedException ValidationException
+     * @expectedExceptionMessage -missing value : CountryCode is required. Use function setCountryCode().
+     */
+    function testFailOnMissingCountryCode(){
+         $builder = WebPay::createOrder();
+        $order = $builder
+                ->addOrderRow(Item::orderRow()
+                          ->setAmountExVat(100)
+                    ->setVatPercent(20)
+                    ->setQuantity(1)
+                        )
+               //->setCountryCode("SE")
+                ->setCurrency("SEK")
+                ->setClientOrderNumber("34")
+                    ->usePayPageCardOnly();
+       $order->getPaymentForm();
+    }
      
+    
      
 }
 

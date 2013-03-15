@@ -51,6 +51,38 @@ class WebServiceOrderValidatorTest extends PHPUnit_Framework_TestCase {
        $order->prepareRequest();
        
     }
+    
+    /**
+     * Use to get paymentPlanParams to be able to test PaymentPlanRequest
+     * @return type
+     */
+    function getGetPaymentPlanParamsForTesting() {
+        $addressRequest = WebPay::getPaymentPlanParams();
+        $response = $addressRequest
+                ->setTestmode()
+                ->doRequest();
+         return $response->campaignCodes[0]->campaignCode;
+    }
+    /**
+     * @expectedException ValidationException
+     * @expectedExceptionMessage -Wrong customer type : PaymentPlanPayment not allowed for Company customer.
+     */
+    function testFailOnCompanyPaymentPlanPayment() {
+        $code = $this->getGetPaymentPlanParamsForTesting();
+        $builder = WebPay::createOrder();
+        $order = $builder 
+                ->addOrderRow(Item::orderRow()
+                    ->setAmountExVat(100)
+                    ->setVatPercent(20)
+                    ->setQuantity(1)
+                    )
+                ->setCountryCode("SE")   
+                ->setOrderDate("Mon, 15 Aug 05 15:52:01 +0000")
+                ->addCustomerDetails(Item::companyCustomer()->setNationalIdNumber(4608142222))
+                    ->usePaymentPlanPayment($code);
+       $order->prepareRequest();
+      
+    }
 
     /**
      * @expectedException ValidationException
