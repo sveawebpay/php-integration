@@ -75,6 +75,7 @@ class PayPagePayment extends HostedPayment {
         //get parameters sent no matter how many
         $include = func_get_args();
         //exclude all functions       
+        $this->excludedPaymentMethods[] = SystemPaymentMethod::BANKAXESS;
         $this->excludedPaymentMethods[] = SystemPaymentMethod::KORTCERT;
         $this->excludedPaymentMethods[] = SystemPaymentMethod::KORTSKRILL;
         $this->excludedPaymentMethods[] = SystemPaymentMethod::INVOICESE;
@@ -124,6 +125,7 @@ class PayPagePayment extends HostedPayment {
      * 
      */     
     public function excludeDirectPaymentMethods() {
+        $this->excludedPaymentMethods[] = SystemPaymentMethod::BANKAXESS;
         $this->excludedPaymentMethods[] = SystemPaymentMethod::DBNORDEASE;
         $this->excludedPaymentMethods[] = SystemPaymentMethod::DBSEBSE;
         $this->excludedPaymentMethods[] = SystemPaymentMethod::DBSEBFTGSE;

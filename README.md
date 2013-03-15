@@ -138,7 +138,8 @@ You can use the *add-* functions with an Item object or an array of Item objects
 
 //or
 $orderRows[] = Item::orderRow()->...;
-->addOrderRow($orderRows)
+->addOrderRow($orderRows);
+
 ```
 	
 #### 1.2.1 OrderRow
@@ -219,11 +220,23 @@ Customer identity is required for invoice and payment plan orders. Required valu
 depending on country and customer type. For SE, NO, DK and FI NationalIdNumber (Social Security Number)
 or company id number is required. Email and ip address are desirable.
 
+To make it easy to set the right data depending on the customer type this example
+```php
+
+//create company or individual object
+$foo = Item::individualCustomer();
+if(*condition*){
+ $foo = $foo ->setEmail("test@svea.com") ;
+}
+->addOrderRow($foo);
+
+```
+
 ####1.3.1 Options for individual customers
 ```php
 ->addCustomerDetails(
     Item::individualCustomer()
-    ->setNationalIdNumber(194605092222)              //Required for individual customers in SE, NO, DK, FI
+    ->setNationalIdNumber(194605092222) //Required for individual customers in SE, NO, DK, FI
     ->setInitials("SB")                 //Required for individual customers in NL 
     ->setBirthDate(1923, 12, 20)        //Required for individual customers in NL and DE
     ->setName("Tess", "Testson")        //Required for individual customers in NL and DE    
@@ -257,7 +270,7 @@ or company id number is required. Email and ip address are desirable.
 
 ### 1.4 Other values  
 ```php
-    ->setCountryCode("SE")                      //Required for synchronous payments    
+    ->setCountryCode("SE")                      //Required
     ->setCurrency("SEK")                        //Required for card payment, direct payment and PayPage payment.
     ->setClientOrderNumber("nr26")              //Required for card payment, direct payment, PaymentMethod payment and PayPage payments.
     ->setAddressSelector("7fd7768")             //Optional. Recieved from getAddresses
@@ -335,6 +348,7 @@ If Config/SveaConfig.php is not modified you can set your store authorization he
              ->doRequest();
 ```
 #### 1.5.5 PaymentPlanPayment
+Only individual customers can use this payment type.
 Perform *PaymentPlanPayment*. This payment form will perform a synchronous payment and return a response.
 Returns a *CreateOrderResponse* object. Preceded by WebPay::getPaymentPlanParams().
 If Config/SveaConfig.php is not modified you can set your store authorization here.

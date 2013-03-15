@@ -24,6 +24,7 @@ class HostedOrderValidator extends OrderValidator {
         }
         $this->errors = $this->validateClientOrderNumber($order,$this->errors);
         $this->errors = $this->validateCurrency($order,$this->errors);
+        $this->errors = $this->validateCountryCode($order, $this->errors);
         $this->errors = $this->validateRequiredFieldsForOrder($order,$this->errors);
         $this->errors = $this->validateOrderRows($order,$this->errors);
         if (isset($order->countryCode) && $order->countryCode == "NL") {
@@ -34,6 +35,7 @@ class HostedOrderValidator extends OrderValidator {
 
     /**
      * @param type $order
+     * @param type $errors
      */
     private function validateClientOrderNumber($order,$errors) {
         if (isset($order->clientOrderNumber) == false || "" == $order->clientOrderNumber) {          
@@ -41,10 +43,23 @@ class HostedOrderValidator extends OrderValidator {
         }
         return $errors;
     }
-    
+     /**
+     * @param type $order
+     * @param type $errors
+     */
     private function validateCurrency($order,$errors){
          if(isset($order->currency) == false){
             $errors['missing value'] = "Currency is required. Use function setCurrency().";
+        }
+        return $errors;
+    }
+     /**
+     * @param type $order
+     * @param type $errors
+     */
+    private function validateCountryCode($order,$errors){
+         if(isset($order->countryCode) == false){
+            $errors['missing value'] = "CountryCode is required. Use function setCountryCode().";
         }
         return $errors;
     }
