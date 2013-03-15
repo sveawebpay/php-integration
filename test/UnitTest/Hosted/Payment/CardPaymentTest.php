@@ -221,6 +221,7 @@ class CardPaymentTest extends PHPUnit_Framework_TestCase {
                     )
             ->setClientOrderNumber("33")
             ->setCurrency(" sek")
+            ->setCountryCode("SE")
             ->usePayPageCardOnly() // PayPageObject
             ->setReturnUrl("http://myurl.se")
                 ->getPaymentForm();
@@ -245,6 +246,7 @@ class CardPaymentTest extends PHPUnit_Framework_TestCase {
                         )
             ->setClientOrderNumber("33")
             ->setCurrency("sek")
+            ->setCountryCode("SE")
             ->usePayPageCardOnly() // PayPageObject
             ->setReturnUrl("http://myurl.se")
                 ->getPaymentForm();

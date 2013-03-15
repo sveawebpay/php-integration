@@ -49,6 +49,7 @@ class WebServicePayment {
     }
 
     public function validateOrder(){
+        $this->order->orderType = $this->orderType;
          $validator = new WebServiceOrderValidator();
          $errors = $validator->validate($this->order);
          return $errors;

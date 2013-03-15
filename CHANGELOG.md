@@ -10,3 +10,5 @@
 
 * Changed
     * Paymentmethods in APPENDIX are fewer and more generalized
+    * Validation prevents companies to use Payment plan payment
+    * Country code is required for all payments

@@ -24,15 +24,17 @@ class WebServiceOrderValidator extends OrderValidator {
        if(isset($order->orgNumber) || isset($order->companyVatNumber) || isset($order->companyName)){
             $this->isCompany = TRUE;
            
-        }    
+        }          
         //new!
         if(isset($order->customerIdentity->orgNumber) || isset($order->customerIdentity->companyVatNumber) || isset($order->customerIdentity->companyName)){
             $this->isCompany = TRUE;
         }
         $identityValidator = new IdentityValidator($this->isCompany);
         //$this->errors = $identityValidator->validateThatCustomerIdentityExists($order,  $this->errors); //use countries validators instead
-        
-        
+
+        if($order->orderType == "PaymentPlan" && $this->isCompany == TRUE){
+            $this->errors["Wrong customer type"] = "PaymentPlanPayment not allowed for Company customer.";
+        }        
         if (isset($order->countryCode)) {
             if ($order->countryCode == "SE"
                     || $order->countryCode == "NO"

@@ -15,6 +15,7 @@ class HostedXmlBuilder {
      * This method expect UTF-8 input
      */
     public function getOrderXML($request, $order) {
+     
         $this->XMLWriter = new XMLWriter();
         $this->XMLWriter->openMemory();
         $this->XMLWriter->setIndent(true);
@@ -32,8 +33,12 @@ class HostedXmlBuilder {
         if(isset($order->ipAddress)){
              $this->XMLWriter->writeElement("ipaddress", $order->ipAddress);
         }
-        if(isset($order->ssn)){
-             $this->XMLWriter->writeElement("ssn", $order->ssn);
+        if(isset($order->customerIdentity->ssn)){
+             $this->XMLWriter->writeElement("ssn", $order->customerIdentity->ssn);
+        }
+        if(isset($order->customerIdentity->orgNumber)){
+             $this->XMLWriter->writeElement("ssn", $order->customerIdentity->orgNumber);
+             $this->XMLWriter->writeElement("iscompany", "TRUE");
         }
 
         $this->serializeOrderRows($request['rows']);
