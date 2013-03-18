@@ -143,25 +143,23 @@ class PayPagePaymentTest extends PHPUnit_Framework_TestCase {
                     ->setVatPercent(25)
                     ->setDiscountPercent(0)
                     )
-            ->run($rowFactory->buildShippingFee())
-            ->addDiscount(Item::relativeDiscount()
-                    ->setDiscountId("1")
-                    ->setDiscountPercent(50)
-                    ->setUnit("st")
-                    ->setName('Relative')
-                    ->setDescription("RelativeDiscount")
-                    )
-                 ->addCustomerDetails(Item::individualCustomer()->setNationalIdNumber(194605092222))
                 ->setCountryCode("SE")
                 ->setClientOrderNumber("33")
                 ->setOrderDate("2012-12-12")
                 ->setCurrency("SEK")
                 ->usePayPage()
                     ->setReturnUrl("http://myurl.se")
-                    ->includePaymentMethods(PaymentMethod::KORTCERT, PaymentMethod::KORTSKRILL)
+                    ->includePaymentMethods(                            
+                            PaymentMethod::BANKAXESS, 
+                            PaymentMethod::NORDEA_SE, 
+                            PaymentMethod::SEB_SE, 
+                            PaymentMethod::SEBFTG_SE, 
+                            PaymentMethod::SHB_SE, 
+                            PaymentMethod::SWEDBANK_SE)
                     ->getPaymentForm();
-        
+        print_r($form->xmlMessage);
         $xmlMessage = new SimpleXMLElement($form->xmlMessage);
+       // print_r($xmlMessage);
         //check to see if the first value is one of the excluded ones
         $this->assertEquals(SystemPaymentMethod::BANKAXESS, $xmlMessage->excludepaymentmethods->exclude[0]);
     }
