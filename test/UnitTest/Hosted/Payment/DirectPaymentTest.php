@@ -28,6 +28,7 @@ class DirectPaymentTest extends PHPUnit_Framework_TestCase {
             ->addCustomerDetails(Item::individualCustomer()
                     ->setNationalIdNumber(194605092222)
                     )
+            ->setTestmode()
             ->setCountryCode("ZZ")
             ->setClientOrderNumber("33")
             ->setOrderDate("2012-12-12")
@@ -37,6 +38,7 @@ class DirectPaymentTest extends PHPUnit_Framework_TestCase {
                 ->getPaymentForm();
         
         $xmlMessage = new SimpleXMLElement($form->xmlMessage);
+       
         $this->assertEquals('KORTCERT', $xmlMessage->excludepaymentmethods->exclude[0]);      
         $this->assertEquals('KORTSKRILL', $xmlMessage->excludepaymentmethods->exclude[1]);
         $this->assertEquals('PAYPAL', $xmlMessage->excludepaymentmethods->exclude[2]);  
