@@ -158,7 +158,7 @@ class PayPagePaymentTest extends PHPUnit_Framework_TestCase {
                 ->setCurrency("SEK")
                 ->usePayPage()
                     ->setReturnUrl("http://myurl.se")
-                    ->includePaymentMethods(PaymentMethod::KORTCERT, PaymentMethod::KORTSKRILL)
+                    ->includePaymentMethods(PaymentMethod::KORTCERT, PaymentMethod::SKRILL)
                     ->getPaymentForm();
         
         $xmlMessage = new SimpleXMLElement($form->xmlMessage);

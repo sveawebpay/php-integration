@@ -38,13 +38,13 @@ class DirectPaymentTest extends PHPUnit_Framework_TestCase {
                 ->getPaymentForm();
         
         $xmlMessage = new SimpleXMLElement($form->xmlMessage);
-       
+        
         $this->assertEquals('KORTCERT', $xmlMessage->excludepaymentmethods->exclude[0]);      
-        $this->assertEquals('KORTSKRILL', $xmlMessage->excludepaymentmethods->exclude[1]);
+        $this->assertEquals('SKRILL', $xmlMessage->excludepaymentmethods->exclude[1]);
         $this->assertEquals('PAYPAL', $xmlMessage->excludepaymentmethods->exclude[2]);  
        // $this->assertEquals('SKRILL', $xmlMessage->excludepaymentmethods->exclude[3]);
     }
-   
+    
     function testBuildDirectBankPayment() {
         $rowFactory = new TestRowFactory();
         $form = WebPay::createOrder()

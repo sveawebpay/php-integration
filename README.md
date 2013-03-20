@@ -851,7 +851,7 @@ Used in usePaymentMethod($paymentMethod) and in usePayPage(),
 | PaymentMethod::SWEDBANK_SE        | Direct bank payment, Swedbank, Sweden.        |
 | PaymentMethod::KORTCERT           | Card payments, Certitrade.                    |
 | PaymentMethod::PAYPAL             | Paypal                                        |
-| PaymentMethod::KORTSKRILL         | Card payment with Dankort, Skrill.            |
+| PaymentMethod::SKRILL             | Card payment with Dankort, Skrill.            |
 | PaymentMethod::INVOICE            | Invoice by PayPage.                           |
 | PaymentMethod::PAYMENTPLAN        | PaymentPlan by PayPage.                       |   
 
