@@ -15,8 +15,9 @@ class PaymentPlanParamsTest extends PHPUnit_Framework_TestCase {
     function testBuildRequest() {
         $addressRequest = WebPay::getPaymentPlanParams();
         $request = $addressRequest
-                ->setTestmode()
-                ->setPasswordBasedAuthorization("sverigetest", "sverigetest", 59999)
+                //->setTestmode()()
+                //->setPasswordBasedAuthorization("sverigetest", "sverigetest", 59999)
+                ->setCountryCode("SE")
                 ->prepareRequest();
         //doRequest();
         $this->assertEquals(59999, $request->request->Auth->ClientNumber); //Check all in identity

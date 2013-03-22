@@ -16,6 +16,7 @@ require_once SVEA_REQUEST_DIR . '/Config/SveaConfig.php';
 class PaymentForm {
     
     public $testmode;
+    public $endPointUrl;
     public $xmlMessage;
     public $xmlMessageBase64;
     public $merchantid;
@@ -36,7 +37,7 @@ class PaymentForm {
          $this->rawFields['message'] = $this->xmlMessageBase64;
          $this->rawFields['mac'] = $this->mac;
          $this->rawFields['htmlFormMethod'] = 'post';
-         $this->rawFields['htmlFormAction'] = $this->testmode ? SveaConfig::SWP_TEST_URL : SveaConfig::SWP_PROD_URL;
+         $this->rawFields['htmlFormAction'] = $this->endPointUrl;//$this->testmode ? SveaConfig::SWP_TEST_URL : SveaConfig::SWP_PROD_URL;
     }
 
     public function setSubmitMessage($countryCode = FALSE){
@@ -59,7 +60,7 @@ class PaymentForm {
         $this->mac = hash("sha512", $this->xmlMessageBase64. $this->secretWord);
 
         $formString = "<form name='paymentForm' id='paymentForm' method='post' action='";
-        $formString .= ($this->testmode ? SveaConfig::SWP_TEST_URL : SveaConfig::SWP_PROD_URL);
+        $formString .= $this->endPointUrl;//($this->testmode ? SveaConfig::SWP_TEST_URL : SveaConfig::SWP_PROD_URL);
         $formString .= "'>";
         $formString .= "<input type='hidden' name='merchantid' value='{$this->merchantid}' />";
         $formString .= "<input type='hidden' name='message' value='{$this->xmlMessageBase64}' />";
@@ -76,7 +77,7 @@ class PaymentForm {
     public function setHtmlFields() {
         $this->mac =hash("sha512", $this->xmlMessageBase64 . $this->secretWord);
         $this->htmlFormFieldsAsArray['form_start_tag'] = "<form name='paymentForm' id='paymentForm' method='post' action='"
-                . ($this->testmode ? SveaConfig::SWP_TEST_URL : SveaConfig::SWP_PROD_URL) .
+                . $this->endPointUrl. //($this->testmode ? SveaConfig::SWP_TEST_URL : SveaConfig::SWP_PROD_URL) .
                         "'>";
         $this->htmlFormFieldsAsArray['input_merchantId'] = "<input type='hidden' name='merchantid' value='{$this->merchantid}' />";
         $this->htmlFormFieldsAsArray['input_message'] = "<input type='hidden' name='message' value='{$this->xmlMessageBase64}' />";

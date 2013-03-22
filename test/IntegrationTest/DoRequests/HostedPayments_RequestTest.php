@@ -14,7 +14,7 @@ class HostedPayments_RequestTest extends PHPUnit_Framework_TestCase {
     function testDoCardPaymentRequest() {
         $rowFactory = new TestRowFactory();
         $form = WebPay::createOrder()
-                ->setTestmode()
+                //->setTestmode()
                 ->addOrderRow(
                 Item::orderRow()
                     ->setArticleNumber(1)
