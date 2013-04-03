@@ -59,7 +59,8 @@ class WebServiceOrderValidatorTest extends PHPUnit_Framework_TestCase {
     function getGetPaymentPlanParamsForTesting() {
         $addressRequest = WebPay::getPaymentPlanParams();
         $response = $addressRequest
-                ->setTestmode()
+                //->setTestmode()()
+                ->setCountryCode("SE")
                 ->doRequest();
          return $response->campaignCodes[0]->campaignCode;
     }
@@ -69,14 +70,14 @@ class WebServiceOrderValidatorTest extends PHPUnit_Framework_TestCase {
      */
     function testFailOnCompanyPaymentPlanPayment() {
         $code = $this->getGetPaymentPlanParamsForTesting();
-        $builder = WebPay::createOrder();
+        $builder = WebPay::CreateOrder();
         $order = $builder 
                 ->addOrderRow(Item::orderRow()
                     ->setAmountExVat(100)
                     ->setVatPercent(20)
                     ->setQuantity(1)
                     )
-                ->setCountryCode("SE")   
+                ->setCountryCode("SE")
                 ->setOrderDate("Mon, 15 Aug 05 15:52:01 +0000")
                 ->addCustomerDetails(Item::companyCustomer()->setNationalIdNumber(4608142222))
                     ->usePaymentPlanPayment($code);

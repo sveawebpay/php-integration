@@ -12,8 +12,8 @@ require_once $root . '/../../../../src/Includes.php';
 class NewHandleOrderTest extends PHPUnit_Framework_TestCase {
   
     function testNewDeliverInvoiceOrderRow(){ 
-        $request = WebPay::deliverOrder()
-            ->setTestmode();
+        $request = WebPay::deliverOrder();
+            //->setTestmode()();
         //foreach...
         $request = $request
             ->addOrderRow(
@@ -30,6 +30,7 @@ class NewHandleOrderTest extends PHPUnit_Framework_TestCase {
         //end foreach
             $request = $request ->setOrderId("id")
                 ->setNumberOfCreditDays(1)
+                ->setCountryCode("SE")
                 ->setInvoiceDistributionType(DistributionType::POST)//Post or Email
                 ->setCreditInvoice("id")
                 ->deliverInvoiceOrder()
@@ -46,8 +47,8 @@ class NewHandleOrderTest extends PHPUnit_Framework_TestCase {
         }
         
         function testDeliverOrderWithInvoiceFeeAndFixedDiscount(){
-             $request = WebPay::deliverOrder()
-            ->setTestmode();
+             $request = WebPay::deliverOrder();
+            //->setTestmode()();
         //foreach...
         $request = $request
             ->addOrderRow(
@@ -81,6 +82,7 @@ class NewHandleOrderTest extends PHPUnit_Framework_TestCase {
                 ->setNumberOfCreditDays(1)
                 ->setInvoiceDistributionType(DistributionType::POST)//Post or Email
                 ->setCreditInvoice("id")
+                ->setCountryCode("SE")
                 ->deliverInvoiceOrder()
                     ->prepareRequest();
             
@@ -111,8 +113,8 @@ class NewHandleOrderTest extends PHPUnit_Framework_TestCase {
         }
         
         function testDeliverOrderWithShippingFeeAndRelativeDiscount(){
-             $request = WebPay::deliverOrder()
-            ->setTestmode();
+             $request = WebPay::deliverOrder();
+            //->setTestmode()();
         //foreach...
         $request = $request
                 ->addOrderRow(Item::orderRow()
@@ -146,6 +148,7 @@ class NewHandleOrderTest extends PHPUnit_Framework_TestCase {
                 ->setNumberOfCreditDays(1)
                 ->setInvoiceDistributionType(DistributionType::POST)//Post or Email
                 ->setCreditInvoice("id")
+                ->setCountryCode("SE")
                 ->deliverInvoiceOrder()
                     ->prepareRequest();
             

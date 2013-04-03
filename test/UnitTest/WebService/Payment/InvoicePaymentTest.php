@@ -13,7 +13,7 @@ class InvoicePaymentTest extends PHPUnit_Framework_TestCase {
    
      function testInvoiceRequestObjectForCustomerIdentityIndividualFromSE(){
            $request = WebPay::createOrder()
-            ->setTestmode()
+            //->setTestmode()()
             ->addOrderRow(Item::orderRow()
                 ->setArticleNumber(1)
                 ->setQuantity(2)
@@ -39,7 +39,7 @@ class InvoicePaymentTest extends PHPUnit_Framework_TestCase {
     
     function testSetAuth(){
            $request = WebPay::createOrder()
-            ->setTestmode()
+            //->setTestmode()()
             ->addOrderRow(Item::orderRow()
                 ->setArticleNumber(1)
                 ->setQuantity(2)
@@ -56,7 +56,7 @@ class InvoicePaymentTest extends PHPUnit_Framework_TestCase {
                     ->setOrderDate("2012-12-12")
                     ->setCurrency("SEK")
                     ->useInvoicePayment()// returnerar InvoiceOrder object 
-                        ->setPasswordBasedAuthorization("sverigetest", "sverigetest", 79021)
+                        //->setPasswordBasedAuthorization("sverigetest", "sverigetest", 79021)
                         ->prepareRequest();
            
         $this->assertEquals(79021, $request->request->Auth->ClientNumber); //Check all in identity
@@ -68,7 +68,7 @@ class InvoicePaymentTest extends PHPUnit_Framework_TestCase {
 
     function testInvoiceRequestObjectForCustomerIdentityIndividualFromNL(){
          $request = WebPay::createOrder()
-            ->setTestmode()
+            //->setTestmode()()
             ->addOrderRow(Item::orderRow()
                 ->setArticleNumber(1)
                 ->setQuantity(2)
@@ -119,7 +119,7 @@ class InvoicePaymentTest extends PHPUnit_Framework_TestCase {
     
     function testInvoiceRequestObjectForCustomerIdentityCompanyFromNL(){
          $request = WebPay::createOrder()
-            ->setTestmode()
+            //->setTestmode()()
             ->addOrderRow(Item::orderRow()
                 ->setArticleNumber(1)
                 ->setQuantity(2)
@@ -167,7 +167,7 @@ class InvoicePaymentTest extends PHPUnit_Framework_TestCase {
     
     function testInvoiceRequestObjectForCustomerIdentityCompanyFromSE(){
           $request = WebPay::createOrder()
-            ->setTestmode()
+            //->setTestmode()()
               ->addOrderRow(Item::orderRow()
                 ->setArticleNumber(1)
                 ->setQuantity(2)
@@ -194,7 +194,7 @@ class InvoicePaymentTest extends PHPUnit_Framework_TestCase {
     function testInvoiceRequestObjectForSEorderOnOneProductRow() {
         $rowFactory = new TestRowFactory();
         $request = WebPay::createOrder()
-            ->setTestmode()
+            //->setTestmode()()
              ->addOrderRow(Item::orderRow()
                 ->setArticleNumber(1)
                 ->setQuantity(2)
@@ -243,7 +243,7 @@ class InvoicePaymentTest extends PHPUnit_Framework_TestCase {
     function testInvoiceRequestUsingAmountIncVatWithVatPercent() {
         $rowFactory = new TestRowFactory();
         $request = WebPay::createOrder()
-            ->setTestmode()
+            //->setTestmode()()
             ->addOrderRow(Item::orderRow()
                     ->setArticleNumber(1)
                     ->setQuantity(2)
@@ -307,7 +307,7 @@ class InvoicePaymentTest extends PHPUnit_Framework_TestCase {
     function testInvoiceRequestUsingAmountIncVatWithAmountExVat() {
         $rowFactory = new TestRowFactory();
         $request = WebPay::createOrder()
-            ->setTestmode()
+            //->setTestmode()()
             ->addOrderRow(Item::orderRow()
                     ->setArticleNumber(1)
                     ->setQuantity(2)
@@ -371,7 +371,7 @@ class InvoicePaymentTest extends PHPUnit_Framework_TestCase {
 
     function testInvoiceRequestObjectWithRelativeDiscountOnDifferentProductVat() {
         $request = WebPay::createOrder()
-                ->setTestmode()
+                //->setTestmode()()
                 ->addOrderRow(Item::orderRow()
                     ->setArticleNumber(1)
                     ->setQuantity(1)
@@ -413,7 +413,7 @@ class InvoicePaymentTest extends PHPUnit_Framework_TestCase {
 
     function testInvoiceRequestObjectWithFixedDiscountOnDifferentProductVat() {
         $request = WebPay::createOrder()
-                ->setTestmode()
+                //->setTestmode()()
                 ->addOrderRow(Item::orderRow()
                     ->setArticleNumber(1)
                     ->setQuantity(1)
@@ -454,7 +454,7 @@ class InvoicePaymentTest extends PHPUnit_Framework_TestCase {
      function testInvoiceRequestObjectWithCreateOrderInformation(){
         $rowFactory = new TestRowFactory();
            $request = WebPay::createOrder()
-            ->setTestmode()
+            //->setTestmode()()
             ->addOrderRow(Item::orderRow()
                    ->setArticleNumber(1)
                     ->setQuantity(2)
@@ -489,7 +489,7 @@ class InvoicePaymentTest extends PHPUnit_Framework_TestCase {
     function testInvoiceRequestObjectWithAuth(){
         $rowFactory = new TestRowFactory();
             $request = WebPay::createOrder()
-            ->setTestmode()
+            //->setTestmode()()
             ->addOrderRow(Item::orderRow()
                      ->setArticleNumber(1)
                     ->setQuantity(2)

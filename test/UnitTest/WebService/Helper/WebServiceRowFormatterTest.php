@@ -7,7 +7,7 @@ require_once $root . '/../../../../src/Includes.php';
 class WebServiceRowFormatterTest extends PHPUnit_Framework_TestCase {
     
     public function testFormatOrderRows() {
-        $order = new createOrderBuilder();
+        $order = WebPay::createOrder();
         $order->addOrderRow(Item::orderRow()
                 ->setArticleNumber("0")
                 ->setName("Tess")
@@ -32,7 +32,7 @@ class WebServiceRowFormatterTest extends PHPUnit_Framework_TestCase {
     }
     
     public function testFormatShippingFeeRows() {
-        $order = new createOrderBuilder();
+        $order = WebPay::createOrder();
         $order->addFee(Item::shippingFee()
                     ->setShippingId("0")
                     ->setName("Tess")
@@ -56,7 +56,7 @@ class WebServiceRowFormatterTest extends PHPUnit_Framework_TestCase {
     }
     
     public function testFormatInvoiceFeeRows() {
-        $order = new createOrderBuilder();
+        $order = WebPay::createOrder();
         $order->addFee(Item::invoiceFee()
                 ->setName("Tess")
                 ->setDescription("Tester")
@@ -79,7 +79,7 @@ class WebServiceRowFormatterTest extends PHPUnit_Framework_TestCase {
     }
     
     public function testFormatFixedDiscountRows() {
-        $order = new createOrderBuilder();
+        $order = WebPay::createOrder();
         $order->addOrderRow(Item::orderRow()
                 ->setAmountExVat(4)
                 ->setVatPercent(25)
@@ -106,7 +106,7 @@ class WebServiceRowFormatterTest extends PHPUnit_Framework_TestCase {
     }
     
     public function testFormatRelativeDiscountRows() {
-        $order = new createOrderBuilder();
+        $order = WebPay::createOrder();
         $order->addOrderRow(Item::orderRow()
                 ->setAmountExVat(4)
                 ->setVatPercent(25)

@@ -17,7 +17,7 @@ class WebServiceResponseTest extends PHPUnit_Framework_TestCase {
     function getGetPaymentPlanParamsForTesting() {
         $addressRequest = WebPay::getPaymentPlanParams();
         $response = $addressRequest
-                ->setTestmode()
+                //->setTestmode()()
                 ->doRequest();
         return $response->campaignCodes[0]->campaignCode;
     }
@@ -28,7 +28,7 @@ class WebServiceResponseTest extends PHPUnit_Framework_TestCase {
      */
     function getInvoiceOrderId() {
         $request = WebPay::createOrder()
-                ->setTestmode()
+                //->setTestmode()()
                 ->addOrderRow(Item::orderRow()
                     ->setArticleNumber(1)
                     ->setQuantity(2)
@@ -45,7 +45,7 @@ class WebServiceResponseTest extends PHPUnit_Framework_TestCase {
                 ->setOrderDate("2012-12-12")
                 ->setCurrency("SEK")
                 ->useInvoicePayment()// returnerar InvoiceOrder object
-                ->setPasswordBasedAuthorization("sverigetest", "sverigetest", 79021)
+                //->setPasswordBasedAuthorization("sverigetest", "sverigetest", 79021)
                 ->doRequest();
         
         return $request->sveaOrderId;
@@ -54,7 +54,7 @@ class WebServiceResponseTest extends PHPUnit_Framework_TestCase {
     function testResultGetAddresses() {
         $addressRequest = WebPay::getAddresses();
         $request = $addressRequest
-                ->setTestmode()
+                //->setTestmode()()
                 ->setOrderTypeInvoice()
                 ->setCountryCode("SE")
                 ->setIndividual(194605092222)
@@ -78,7 +78,8 @@ class WebServiceResponseTest extends PHPUnit_Framework_TestCase {
     function testResultGetPaymentPlanParams() {
         $addressRequest = WebPay::getPaymentPlanParams();
         $request = $addressRequest
-                ->setTestmode()
+                //->setTestmode()()
+                ->setCountryCode("SE")
                 ->doRequest();
         
         $this->assertEquals(1, $request->accepted);
@@ -96,20 +97,21 @@ class WebServiceResponseTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(50000, $request->campaignCodes[0]->toAmount);
     }
     
+     /**
+     * @expectedException Exception
+     * @expectedExceptionMessage Invalid or missing Country code
+     */
     function testErrorMessageResponse(){
         $addressRequest = WebPay::getPaymentPlanParams();
-        $request = $addressRequest
-                ->setTestmode()
-                ->setPasswordBasedAuthorization('sverigetest', 'sverjetest', 59999)
+        $request = $addressRequest              
+                    //->setCountryCode("SE")
                     ->doRequest();
-         $this->assertEquals(0, $request->accepted);
-         $this->assertEquals('User lacks sufficient privileges', $request->errormessage);
-         $this->assertEquals(0, $request->resultcode);
+        
     }
 
     function testResultForInvoicePaymentNL() {
         $request = WebPay::createOrder()
-                ->setTestmode()
+                //->setTestmode()()
                 ->addOrderRow(Item::orderRow()
                     ->setArticleNumber(1)
                     ->setQuantity(2)
@@ -135,7 +137,7 @@ class WebServiceResponseTest extends PHPUnit_Framework_TestCase {
                 ->setOrderDate("2012-12-12")
                 ->setCurrency("EUR")
                 ->useInvoicePayment()
-                ->setPasswordBasedAuthorization("hollandtest", "hollandtest", 85997)
+                //->setPasswordBasedAuthorization("hollandtest", "hollandtest", 85997)
                 ->doRequest();
            
         $this->assertEquals(1, $request->accepted);
@@ -162,7 +164,7 @@ class WebServiceResponseTest extends PHPUnit_Framework_TestCase {
         $orderId = $this->getInvoiceOrderId();        
         $orderBuilder = WebPay::deliverOrder();
         $request = $orderBuilder
-                ->setTestmode()
+                //->setTestmode()()
                 ->addOrderRow(Item::orderRow()
                     ->setArticleNumber(1)
                     ->setQuantity(2)
@@ -174,6 +176,7 @@ class WebServiceResponseTest extends PHPUnit_Framework_TestCase {
                     ->setDiscountPercent(0)
                     )
                     ->setOrderId($orderId)
+                    ->setCountryCode("SE")
                     ->setNumberOfCreditDays(1)
                     ->setInvoiceDistributionType('Post')//Post or Email
                     ->deliverInvoiceOrder()
@@ -196,8 +199,9 @@ class WebServiceResponseTest extends PHPUnit_Framework_TestCase {
         $orderId = $this->getInvoiceOrderId();
         $orderBuilder = WebPay::closeOrder();
         $request = $orderBuilder
-                ->setTestmode()
+                //->setTestmode()()
                 ->setOrderId($orderId)
+                ->setCountryCode("SE")
                 ->closeInvoiceOrder()
                     ->doRequest();
         $this->assertEquals(1, $request->accepted);

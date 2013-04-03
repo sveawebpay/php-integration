@@ -169,12 +169,18 @@ class PayPagePayment extends HostedPayment {
      * @param type $merchantId
      * @param type $secret
      * @return \HostedPayment
-     */
+     
     public function setMerchantIdBasedAuthorization($merchantId,$secret){
         $this->order->conf->merchantId = $merchantId;
         $this->order->conf->secret = $secret;
         return $this;
     }
+     * 
+     */
+     /** 
+     * @param type $languageCodeAsISO639
+     * @return \HostedPayment|\PayPagePayment
+     */
     
     public function setPayPageLanguage($languageCodeAsISO639){
         switch ($languageCodeAsISO639) {

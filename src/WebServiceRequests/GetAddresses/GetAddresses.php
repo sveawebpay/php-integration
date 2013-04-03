@@ -23,14 +23,16 @@ class GetAddresses {
     public $orderType;
     public $conf;
 
-    function __construct() {
-        $this->conf = SveaConfig::getConfig();
+    function __construct($config) {
+        $this->conf = $config;
     }
-
+/**
     public function setTestmode() {
         $this->testmode = true;
         return $this;
     }
+ * 
+ */
     
    /**
      * Alternative drop or change file in Config/SveaConfig.php
@@ -38,7 +40,7 @@ class GetAddresses {
      * @param type $merchantId
      * @param type $secret
      * @return \HostedPayment
-     */
+    
    public function setPasswordBasedAuthorization($username, $password, $clientNumber) {
         $this->conf = SveaConfig::getConfig();
         $this->conf->username = $username;
@@ -50,6 +52,8 @@ class GetAddresses {
         }
         return $this;
     }
+    * 
+    */
     
     /**
      * Required for Invoice type
@@ -110,11 +114,10 @@ class GetAddresses {
      * @return type
      */
     public function prepareRequest() {
-        $authArray = $this->conf->getPasswordBasedAuthorization('Invoice');
         $auth = new SveaAuth();
-        $auth->Username = $authArray['username'];
-        $auth->Password = $authArray['password'];
-        $auth->ClientNumber = $authArray['clientnumber'];
+        $auth->Username = $this->conf->getUsername($this->orderType,  $this->countryCode); //$authArray['username'];
+        $auth->Password = $this->conf->getPassword($this->orderType,  $this->countryCode);//$authArray['password'];
+        $auth->ClientNumber = $this->conf->getClientNumber($this->orderType,  $this->countryCode);//$authArray['clientnumber'];
 
         $address = new SveaAddress();
         $address->Auth = $auth;
@@ -135,7 +138,7 @@ class GetAddresses {
      */
     public function doRequest() {
         $object = $this->prepareRequest();
-        $url = $this->testmode ? SveaConfig::SWP_TEST_WS_URL : SveaConfig::SWP_PROD_WS_URL;
+        $url = $this->conf->getEndPoint($this->orderType); //$this->testmode ? SveaConfig::SWP_TEST_WS_URL : SveaConfig::SWP_PROD_WS_URL;
         $request = new SveaDoRequest($url);
         $svea_req = $request->GetAddresses($object);
        

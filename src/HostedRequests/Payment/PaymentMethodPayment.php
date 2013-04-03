@@ -61,12 +61,15 @@ class PaymentMethodPayment extends HostedPayment{
      * @param type $merchantId
      * @param type $secret
      * @return \HostedPayment
-     */
+     
+    
     public function setMerchantIdBasedAuthorization($merchantId,$secret){
         $this->order->conf->merchantId = $merchantId;
         $this->order->conf->secret = $secret;
         return $this;
     }
+     * 
+     */
 }
 
 ?>

@@ -6,7 +6,7 @@ require_once $root . '/../../../../src/Includes.php';
 class HostedRowFormatterTest extends PHPUnit_Framework_TestCase {
     
     public function testFormatOrderRows() {
-        $order = new createOrderBuilder();
+        $order = new createOrderBuilder(new SveaConfigurationProvider(SveaConfig::getDefaultConfig()));
         $order->
         addOrderRow(Item::orderRow()
                 ->setArticleNumber("0")
@@ -31,7 +31,7 @@ class HostedRowFormatterTest extends PHPUnit_Framework_TestCase {
     }
     
     public function testFormatShippingFeeRows() {
-        $order = new createOrderBuilder();
+        $order = new createOrderBuilder(new SveaConfigurationProvider(SveaConfig::getDefaultConfig()));
         $order
         ->addFee(Item::shippingFee()
                 ->setShippingId("0")
@@ -55,7 +55,7 @@ class HostedRowFormatterTest extends PHPUnit_Framework_TestCase {
     }
     
     public function testFormatFixedDiscountRows() {
-        $order = new createOrderBuilder();
+        $order = new createOrderBuilder(new SveaConfigurationProvider(SveaConfig::getDefaultConfig()));
         $order->
         addOrderRow(Item::orderRow()
                   ->setAmountExVat(4)
@@ -81,7 +81,7 @@ class HostedRowFormatterTest extends PHPUnit_Framework_TestCase {
     }
     
     public function testFormatRelativeDiscountRows() {
-        $order = new createOrderBuilder();
+        $order = new createOrderBuilder(new SveaConfigurationProvider(SveaConfig::getDefaultConfig()));
         $order->
         addOrderRow(Item::orderRow()
                 ->setAmountExVat(4)
@@ -107,7 +107,7 @@ class HostedRowFormatterTest extends PHPUnit_Framework_TestCase {
     }
     
     public function testFormatTotalAmount() {
-        $row = new HostedOrderRowBuilder();
+        $row = new HostedOrderRowBuilder(new SveaConfigurationProvider(SveaConfig::getDefaultConfig()));
         $row->setAmount(100);
         $row->setQuantity(2);
         $rows = array();
@@ -118,7 +118,7 @@ class HostedRowFormatterTest extends PHPUnit_Framework_TestCase {
     }
     
     public function testFormatTotalAmountNegative() {
-        $row = new HostedOrderRowBuilder();
+        $row = new HostedOrderRowBuilder(new SveaConfigurationProvider(SveaConfig::getDefaultConfig()));
         $row->setAmount(-100)
             ->setQuantity(2);
         $rows = array();
@@ -129,7 +129,7 @@ class HostedRowFormatterTest extends PHPUnit_Framework_TestCase {
     }
     
     public function testFormatTotalVat() {
-        $row = new HostedOrderRowBuilder();
+        $row = new HostedOrderRowBuilder(new SveaConfigurationProvider(SveaConfig::getDefaultConfig()));
         $row->setVat(100);
         $row->setQuantity(2);
         $rows = array();
@@ -140,7 +140,7 @@ class HostedRowFormatterTest extends PHPUnit_Framework_TestCase {
     }
     
     public function testFormatTotalVatNegative() {
-        $row = new HostedOrderRowBuilder();
+        $row = new HostedOrderRowBuilder(new SveaConfigurationProvider(SveaConfig::getDefaultConfig()));
         $row->setVat(-100);
         $row->setQuantity(2);
         $rows = array();

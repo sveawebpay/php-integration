@@ -4,6 +4,32 @@ $root = realpath(dirname(__FILE__));
 require_once $root . '/../../../../test/UnitTest/BuildOrder/OrderBuilderTest.php';
 require_once $root . '/../../../../test/UnitTest/BuildOrder/TestRowFactory.php';
 
+class testConf implements ConfigurationProvider{
+    public function getEndPoint($type) {
+        return "url";
+    }
+
+    public function getMerchantId($type, $country) {
+        return "merchant";
+    }
+
+    public function getPassword($type, $country) {
+        return "pass";
+    }
+
+    public function getSecret($type, $country) {
+        return "secret";
+    }
+
+    public function getUsername($type, $country) {
+        return "username";
+    }
+
+    public function getclientNumber($type, $country) {
+        return "clientnumber";
+    }
+}
+
 /**
  * Description of CardPaymentTest
  *
@@ -12,8 +38,8 @@ require_once $root . '/../../../../test/UnitTest/BuildOrder/TestRowFactory.php';
 class CardPaymentTest extends PHPUnit_Framework_TestCase {
 
     function testSetAuthorization() {
-        $form = WebPay::createOrder()
-                ->setTestmode()
+        $form = WebPay::createOrder(new testConf())
+               // ////->setTestmode()()()
                 ->addCustomerDetails(Item::individualCustomer()->setNationalIdNumber(194605092222)->setIpAddress("123.123.123"))
                 ->addOrderRow(Item::orderRow()
                     ->setArticleNumber(1)
@@ -30,19 +56,19 @@ class CardPaymentTest extends PHPUnit_Framework_TestCase {
                 ->setOrderDate("2012-12-12")
                 ->setCurrency("SEK")
                 ->usePayPageCardOnly() // PayPageObject
-                    ->setMerchantIdBasedAuthorization(4444, "secret")
+                    //->setMerchantIdBasedAuthorization(4444, "secret")
                     ->setPayPageLanguage("sv")
                     ->setReturnUrl("http://myurl.se")
                     ->getPaymentForm();
         
-        $this->assertEquals(4444, $form->merchantid);
+        $this->assertEquals("merchant", $form->merchantid);
         $this->assertEquals('secret', $form->secretWord);
     }
 
     function testBuildCardPayment() {
         $rowFactory = new TestRowFactory();
         $form = WebPay::createOrder()
-                ->setTestmode()
+                ////->setTestmode()()()
                 ->addOrderRow(Item::orderRow()
                     ->setArticleNumber(1)
                     ->setQuantity(2)
