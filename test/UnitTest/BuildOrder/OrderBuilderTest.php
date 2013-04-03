@@ -21,7 +21,7 @@ class OrderBuilderTest extends PHPUnit_Framework_TestCase {
     }
     
     function testBuildOrderWithOrderRow() {
-        $sveaRequest = WebPay::createOrder()
+        $sveaRequest = WebPay::createOrder(SveaConfig::getProdConfig())
                 ->addOrderRow(Item::orderRow()
                     ->setArticleNumber(1)
                     ->setQuantity(2)
