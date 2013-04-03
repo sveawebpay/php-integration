@@ -54,7 +54,7 @@ class SveaConfigTest extends PHPUnit_Framework_TestCase {
     
     
         function testOrderWithNoConfigFromFunction(){
-           $request = WebPay::createOrder(new SveaConfigurationProvider(SveaConfig::getTestConfig()))
+           $request = WebPay::createOrder(SveaConfig::getTestConfig())
             ->addOrderRow(Item::orderRow()
                 ->setArticleNumber(1)
                 ->setQuantity(2)
@@ -69,7 +69,6 @@ class SveaConfigTest extends PHPUnit_Framework_TestCase {
                     ->setOrderDate("2012-12-12")
                     ->setCurrency("SEK")
                     ->useInvoicePayment()// returnerar InvoiceOrder object 
-//                        ->setPasswordBasedAuthorization("norge", "norge", 1111)
                         ->prepareRequest();
               
             $this->assertEquals("webpay_test_no", $request->request->Auth->Username);

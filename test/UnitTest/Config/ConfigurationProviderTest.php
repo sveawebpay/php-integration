@@ -10,7 +10,7 @@ require_once $root . '/../../../src/Includes.php';
 class ConfigurationProviderTest extends PHPUnit_Framework_TestCase {
 
     function testDefaultTestConfig(){
-        $config = new SveaConfigurationProvider(SveaConfig::getDefaultConfig());
+        $config = SveaConfig::getDefaultConfig();
         $this->assertEquals("sverigetest", $config->getUsername("INVOICE","SE"));
         $this->assertEquals("sverigetest", $config->getPassword("PAYMENTPLAN","SE"));
         $this->assertEquals("36000", $config->getClientNumber("PAYMENTPLAN","NO"));
