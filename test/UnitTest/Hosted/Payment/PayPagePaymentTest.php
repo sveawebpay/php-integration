@@ -165,6 +165,30 @@ class PayPagePaymentTest extends PHPUnit_Framework_TestCase {
         //check to see if the first value is one of the excluded ones
         $this->assertEquals(SystemPaymentMethod::BANKAXESS, $xmlMessage->excludepaymentmethods->exclude[0]);
     }
+    
+     function testBuildPayPagePaymentVatIsCero(){
+        $rowFactory = new TestRowFactory();
+       $form = WebPay::createOrder()
+           
+            ->addOrderRow(Item::orderRow()                
+                    ->setQuantity(2)
+                    ->setAmountExVat(100.00)
+                    ->setName('Prod')                
+                    ->setVatPercent(0)
+                    )
+                ->setCountryCode("SE")
+                ->setClientOrderNumber("33")
+                ->setCurrency("SEK")
+                ->usePayPage()
+                    ->setReturnUrl("myurl")
+                    ->getPaymentForm();
+       
+
+        $xmlMessage = new SimpleXMLElement($form->xmlMessage);
+        //test values are as expected avter transforming xml to php object
+        $this->assertEquals('SEK', $xmlMessage->currency);
+     
+    }
 
    
 }
