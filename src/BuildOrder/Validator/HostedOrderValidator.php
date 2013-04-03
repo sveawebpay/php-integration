@@ -91,7 +91,7 @@ class HostedOrderValidator extends OrderValidator {
         }
        
         return $errors;
-    }
+    }   
   
 }
 

@@ -15,7 +15,7 @@ require_once SVEA_REQUEST_DIR . '/Config/SveaConfig.php';
  */
 class PaymentForm {
     
-    public $testmode;
+   
     public $endPointUrl;
     public $xmlMessage;
     public $xmlMessageBase64;
@@ -37,7 +37,7 @@ class PaymentForm {
          $this->rawFields['message'] = $this->xmlMessageBase64;
          $this->rawFields['mac'] = $this->mac;
          $this->rawFields['htmlFormMethod'] = 'post';
-         $this->rawFields['htmlFormAction'] = $this->endPointUrl;//$this->testmode ? SveaConfig::SWP_TEST_URL : SveaConfig::SWP_PROD_URL;
+         $this->rawFields['htmlFormAction'] = $this->endPointUrl;
     }
 
     public function setSubmitMessage($countryCode = FALSE){

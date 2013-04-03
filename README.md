@@ -98,7 +98,7 @@ There are two ways to configure Svea authorization. Choose one of the following:
             if($type == "HOSTED"){
                 return   SveaConfig::SWP_TEST_URL;;
             }elseif($type == "INVOICE" || $type == "PAYMENTPLAN"){
-                 SveaConfig::SWP_TEST_WS_URL;
+                return SveaConfig::SWP_TEST_WS_URL;
             }  else {
                throw new Exception('Invalid type. Accepted values: INVOICE, PAYMENTPLAN or HOSTED');
             }  

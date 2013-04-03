@@ -24,8 +24,9 @@ class HostedOrderValidatorTest extends PHPUnit_Framework_TestCase {
                         )
                 ->setCountryCode("SE")
                 ->setCurrency("SEK")
-        ->usePayPageCardOnly();
-       $order->getPaymentForm();
+                ->usePayPageCardOnly()
+                     ->setReturnUrl("myurl.se");
+               $order->getPaymentForm();
         
     }
      
@@ -44,7 +45,8 @@ class HostedOrderValidatorTest extends PHPUnit_Framework_TestCase {
                 ->setCountryCode("SE")
                 ->setCurrency("SEK")
                 ->setClientOrderNumber("")
-                    ->usePayPageCardOnly();
+                    ->usePayPageCardOnly()
+                     ->setReturnUrl("myurl.se");
        $order->getPaymentForm();
     }
   
@@ -69,7 +71,8 @@ class HostedOrderValidatorTest extends PHPUnit_Framework_TestCase {
                 ->setCountryCode("NL")
                 ->setCurrency("SEK")
                 ->setClientOrderNumber("55")
-                    ->usePayPage();
+                    ->usePayPage()
+                     ->setReturnUrl("myurl.se");
        $order->getPaymentForm();
      }
     /**
@@ -93,7 +96,8 @@ class HostedOrderValidatorTest extends PHPUnit_Framework_TestCase {
                 ->setCountryCode("NL")
                 ->setCurrency("SEK")
                 ->setClientOrderNumber("55")
-                    ->usePayPage();
+                    ->usePayPage()
+                     ->setReturnUrl("myurl.se");
        $order->getPaymentForm();
      }
     
@@ -111,7 +115,8 @@ class HostedOrderValidatorTest extends PHPUnit_Framework_TestCase {
                         )
                 ->setCountryCode("SE")
                 ->setClientOrderNumber("34")
-                    ->usePayPageCardOnly();
+                    ->usePayPageCardOnly()
+                     ->setReturnUrl("myurl.se");
        $order->getPaymentForm();
     }
      /**
@@ -129,7 +134,29 @@ class HostedOrderValidatorTest extends PHPUnit_Framework_TestCase {
                //->setCountryCode("SE")
                 ->setCurrency("SEK")
                 ->setClientOrderNumber("34")
-                    ->usePayPageCardOnly();
+                    ->usePayPageCardOnly()
+                     ->setReturnUrl("myurl.se");
+       $order->getPaymentForm();
+    }
+     /**
+     * @expectedException ValidationException
+     * @expectedExceptionMessage -missing value : ReturnUrl is required. Use function setReturnUrl().
+     */
+    function testFailOnMissingReturnUrl(){
+         $builder = WebPay::createOrder();
+        $order = $builder
+                ->addOrderRow(Item::orderRow()
+                    ->setAmountExVat(100)
+                    ->setVatPercent(20)
+                    ->setQuantity(1)
+                        )
+               ->setCountryCode("SE")
+                ->setCurrency("SEK")
+                ->setClientOrderNumber("34")
+                    ->usePayPage()
+                   // ->setReturnUrl("myurl.se")
+                    
+                    ;
        $order->getPaymentForm();
     }
      
