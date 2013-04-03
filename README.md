@@ -61,6 +61,7 @@ There are two ways to configure Svea authorization. Choose one of the following:
 ```php
    $foo = WebPay::createOrder();
 ```
+
     * Giving either the getProdConfig() or the getTestConfig() as parameter when calling a function in WebPay.
     This way makes it possible to put a condition in implemantation code to check testmode.
 
@@ -71,7 +72,7 @@ There are two ways to configure Svea authorization. Choose one of the following:
         $config = SveaConfig::getProdConfig();
     }
    $foo = WebPay::createOrder($config);
-``
+```
 
 2. If your have the authorization values saved in a database, probably using an administration interface in your shop.
     **Create a class** (eg. one for testing values, one for production) that implements the ConfigurationProvider Interface. Let the implemented functions return the authorization values asked for.
