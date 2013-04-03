@@ -7,67 +7,12 @@
  * @package Config
  */
 class SveaConfig {
-/**
+
     const SWP_TEST_URL = "https://test.sveaekonomi.se/webpay/payment";
     const SWP_PROD_URL = "https://webpay.sveaekonomi.se/webpay/payment";
     const SWP_TEST_WS_URL = "https://webservices.sveaekonomi.se/webpay_test/SveaWebPay.asmx?WSDL";
     const SWP_PROD_WS_URL = "https://webservices.sveaekonomi.se/webpay/SveaWebPay.asmx?WSDL";
- * 
- */
-
-    /**
-     * Sets default testing values.
-     * Change manually to your merchant identification values.
-     */
-    public function __construct() {
-        /**
-        $this->username = 'sverigetest';
-        $this->password = 'sverigetest';
-        $this->invoiceClientnumber = 79021;
-        $this->paymentPlanClientnumber = 59999;       
-        $this->merchantId = 1130;
-        $this->secret = "8a9cece566e808da63c6f07ff415ff9e127909d000d259aba24daa2fed6d9e3f8b0b62e8ad1fa91c7d7cd6fc3352deaae66cdb533123edf127ad7d1f4c77e7a3";
-      
-         * 
-         */
-    }
-
-    /**
-     * 
-     * @param type $type
-     * @return type Array
-     
-    public function getPasswordBasedAuthorization($type) {
-        $auth['username'] = $this->username;
-        $auth['password'] = $this->password;
-        if ($type == 'PaymentPlan') {
-            $auth['clientnumber'] = $this->paymentPlanClientnumber;
-        } else {
-            $auth['clientnumber'] = $this->invoiceClientnumber;
-        }
-        return $auth;
-    }
-     * 
-     * @return \type
-     
-
-    public function getmerchantIdBasedAuthorization() {
-        return array($this->merchantId, $this->secret);
-    }
-     * 
-     */
     
-    /**
-     * Get an instance of the Config
-     * @return SveaConfig
-     
-    public static function getConfig() {
-        return new SveaConfig();
-    }
-     * 
-     * @return \SveaConfig
-     */
-
     public static function getDefaultConfig() {
         return self::getTestConfig();
     }
@@ -117,9 +62,9 @@ class SveaConfig {
                                     )
                                 );
         $url =              array(
-                                "HOSTED"            =>      "https://webpay.sveaekonomi.se/webpay/payment",
-                                "INVOICE"           =>      "https://webservices.sveaekonomi.se/webpay/SveaWebPay.asmx?WSDL",
-                                "PAYMENTPLAN"       =>      "https://webservices.sveaekonomi.se/webpay/SveaWebPay.asmx?WSDL"
+                                "HOSTED"            => self::SWP_PROD_URL,
+                                "INVOICE"           => self::SWP_PROD_WS_URL,
+                                "PAYMENTPLAN"       => self::SWP_PROD_WS_URL
                             );
         
         return new SveaConfigurationProvider(array("url" => $url, "credentials" => $prodConfig));
@@ -170,9 +115,9 @@ class SveaConfig {
                                     )
                                 );
          $url =              array(
-                                "HOSTED"            =>      "https://test.sveaekonomi.se/webpay/payment",
-                                "INVOICE"           =>      "https://webservices.sveaekonomi.se/webpay_test/SveaWebPay.asmx?WSDL",
-                                "PAYMENTPLAN"       =>      "https://webservices.sveaekonomi.se/webpay_test/SveaWebPay.asmx?WSDL"
+                                "HOSTED"            => self::SWP_TEST_URL,
+                                "INVOICE"           => self::SWP_TEST_WS_URL,
+                                "PAYMENTPLAN"       => self::SWP_TEST_WS_URL
                             );
 
         return new SveaConfigurationProvider(array("url" => $url, "credentials" => $testConfig));
