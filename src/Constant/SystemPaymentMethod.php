@@ -1,5 +1,3 @@
-
-
 <?php
 
 /**
@@ -52,5 +50,3 @@ abstract class SystemPaymentMethod {
     const PAYMENTPLAN_NL = 'SVEASPLITEU_NL';
 
 }
-
-?>
