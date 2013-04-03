@@ -14,7 +14,7 @@ class HandleOrderTest extends PHPUnit_Framework_TestCase {
     function testBuildRequest() {
         $handler = WebPay::deliverOrder();
         $request = $handler
-                ->setTestmode()
+                //->setTestmode()()
                 ->setOrderId("id");
         $this->assertEquals("id", $request->orderId);
     }
@@ -32,9 +32,10 @@ class HandleOrderTest extends PHPUnit_Framework_TestCase {
                     ->setVatPercent(25)
                     ->setDiscountPercent(0)
                     )
-                ->setTestmode()
+                //->setTestmode()()
                 ->setOrderId("id")
                 ->setNumberOfCreditDays(1)
+                ->setCountryCode("SE")
                 ->setInvoiceDistributionType(DistributionType::POST)//Post or Email
                 ->setCreditInvoice("id")
                 ->deliverInvoiceOrder()
@@ -66,9 +67,10 @@ class HandleOrderTest extends PHPUnit_Framework_TestCase {
                     ->setVatPercent(25)
                     ->setDiscountPercent(0)   
                     )                
-                ->setTestmode()
+                //->setTestmode()()
                 ->setOrderId("id")
                 ->setNumberOfCreditDays(1)
+                ->setCountryCode("SE")
                 ->setInvoiceDistributionType(DistributionType::POST)
                 ->setCreditInvoice("id")
                 ->deliverInvoiceOrder()
@@ -108,7 +110,8 @@ class HandleOrderTest extends PHPUnit_Framework_TestCase {
         $orderBuilder = WebPay::deliverOrder();
 
         $request = $orderBuilder
-                ->setTestmode()
+                //->setTestmode()()
+                ->setCountryCode("SE")
                 ->setOrderId("id")
                 ->deliverPaymentPlanOrder()
                 ->prepareRequest();
@@ -121,8 +124,9 @@ class HandleOrderTest extends PHPUnit_Framework_TestCase {
         $orderBuilder = WebPay::closeOrder();
 
         $request = $orderBuilder
-                ->setTestmode()
+                //->setTestmode()()
                 ->setOrderId("id")
+                ->setCountryCode("SE")
                 ->closeInvoiceOrder()
                 ->prepareRequest();
         //->doRequest(); 
@@ -133,7 +137,8 @@ class HandleOrderTest extends PHPUnit_Framework_TestCase {
         $orderBuilder = WebPay::closeOrder();
 
         $request = $orderBuilder
-                ->setTestmode()
+                //->setTestmode()()
+                ->setCountryCode("SE")
                 ->setOrderId("id")
                 ->closePaymentPlanOrder()
                 ->prepareRequest();

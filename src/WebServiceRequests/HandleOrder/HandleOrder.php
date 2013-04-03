@@ -24,7 +24,7 @@ class HandleOrder {
      * Note! This fuction may change in future updates.
      * @param type $merchantId
      * @param type $secret
-     */
+     
     public function setPasswordBasedAuthorization($username, $password, $clientNumber) {
         $this->handler->conf->username = $username;
         $this->handler->conf->password = $password;
@@ -35,13 +35,16 @@ class HandleOrder {
         }
         return $this;
     }
+     * 
+     * @return \SveaAuth
+     */
 
     protected function getStoreAuthorization() {
-        $authArray = $this->handler->conf->getPasswordBasedAuthorization($this->handler->orderType);
+       // $authArray = $this->handler->conf->getPasswordBasedAuthorization($this->handler->orderType);
         $auth = new SveaAuth();
-        $auth->Username = $authArray['username'];
-        $auth->Password = $authArray['password'];
-        $auth->ClientNumber = $authArray['clientnumber'];
+         $auth->Username = $this->handler->conf->getUsername($this->handler->orderType,  $this->handler->countryCode);//$authArray['username'];
+        $auth->Password = $this->handler->conf->getPassword($this->handler->orderType,  $this->handler->countryCode);//$authArray['password'];
+        $auth->ClientNumber = $this->handler->conf->getClientNumber($this->handler->orderType,  $this->handler->countryCode); //$authArray['clientnumber'];
         return $auth;
     }
     
@@ -97,7 +100,7 @@ class HandleOrder {
      */
     public function doRequest() {
         $object = $this->prepareRequest();
-        $url = $this->handler->testmode ? SveaConfig::SWP_TEST_WS_URL : SveaConfig::SWP_PROD_WS_URL;
+        $url = $this->handler->conf->getEndPoint($this->handler->orderType); //$this->handler->testmode ? SveaConfig::SWP_TEST_WS_URL : SveaConfig::SWP_PROD_WS_URL;
         $request = new SveaDoRequest($url);
         $svea_req = $request->DeliverOrderEu($object);
        

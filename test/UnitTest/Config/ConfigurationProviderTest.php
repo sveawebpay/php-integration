@@ -1,0 +1,22 @@
+<?php
+
+$root = realpath(dirname(__FILE__));
+require_once $root . '/../../../src/Includes.php';
+
+
+/**
+ * Description of SveaConfigTest
+ */
+class ConfigurationProviderTest extends PHPUnit_Framework_TestCase {
+
+    function testDefaultTestConfig(){
+        $config = new SveaConfigurationProvider(SveaConfig::getDefaultConfig());
+        $this->assertEquals("sverigetest", $config->getUsername("INVOICE","SE"));
+        $this->assertEquals("sverigetest", $config->getPassword("PAYMENTPLAN","SE"));
+        $this->assertEquals("36000", $config->getClientNumber("PAYMENTPLAN","NO"));
+        $this->assertEquals("1130", $config->getMerchantId("HOSTED", "NL"));
+        $this->assertEquals("https://webservices.sveaekonomi.se/webpay_test/SveaWebPay.asmx?WSDL", $config->getEndPoint("INVOICE"));
+    }
+}
+
+?>

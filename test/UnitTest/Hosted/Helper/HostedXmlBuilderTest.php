@@ -10,7 +10,7 @@ require_once $root . '/../../../../test/UnitTest/Hosted/Payment/FakeHostedPaymen
 class HostedXmlBuilderTest extends PHPUnit_Framework_TestCase {
     
     public function testFormatOrderRows() {
-        $order = new createOrderBuilder();
+        $order = new CreateOrderBuilder(new SveaConfigurationProvider(SveaConfig::getDefaultConfig()));
         $payment = new FakeHostedPayment($order);
         $payment->order = $order;
         $payment->setCancelUrl("http://www.cancel.com");

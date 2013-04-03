@@ -41,21 +41,103 @@ Call class *WebPay* and the suitable static function for your action.
 require_once 'Includes.php';
 
 $foo = WebPay::createOrder();
-$requestObject = 
-$foo->...
-    ->..;
+$foo = $foo->...
+        ->..;
 ```
 [<< To top](https://github.com/sveawebpay/php-integration/tree/develop#php-integration-package-api-for-sveawebpay)
 
-## Configuration 
-There are three ways to configure Svea authorization. Choose one of the following:
+## Configuration
+The Configuration needed to be set differs of how many different paymentmethods and Countries you have i the same installation.
+The SveaConfig file can handle multiple paymentmethods and countries. The authorization values are recieved from Svea Ekonomi when creating an account. 
+If no configuration is done, default settings and testdata found in SveaConfig::getDefaultConfig() will be used.
 
-* 1. Drop a file named SveaConfig.php in folder Config looking the same as existing file
-   but with your own authorization values. This method is preffered as it simplyfies updates in the package.
-* 2. Modify function __construct() in file SveaConfig.php in folder Config with your authorization values.
-* 3. Everytime when creating an order, after choosing payment type, use function setPasswordBasedAuthorization() for Invoice/Payment plan 
-    or setMerchantIdBasedAuthorization() for other hosted payments like card and direct bank payments.
+There are two ways to configure Svea authorization. Choose one of the following:
 
+1. Replace the file named SveaConfig.php in folder Config looking the same as existing file
+   but with your own authorization values. 
+
+2. If your have the authorization values saved in a database, probably using an administration interface in your shop.
+    Create a class (eg. one for testing values, one for production) that implements the ConfigurationProvider Interface. Let the implemented functions return the authorization values asked for.
+    The integration package will then call these functions to get the value from your database.
+
+```php  
+    require_once Includes.php
+
+   class MyConfigTest implements ConfigurationProvider{
+    
+        /**
+        * Constants for the endpoint url found in the class SveaConfig.php
+        * @param $type eg. HOSTED, INVOICE or PAYMENTPLAN
+        */
+        public function getEndPoint($type){
+            if($type == "HOSTED"){
+                return   SveaConfig::SWP_TEST_URL;;
+            }elseif($type == "INVOICE" || $type == "PAYMENTPLAN"){
+                 SveaConfig::SWP_TEST_WS_URL;
+            }  else {
+               throw new Exception('Invalid type. Accepted values: INVOICE, PAYMENTPLAN or HOSTED');
+            }  
+        }
+        /**
+        * get the return value from your database or likewise
+        * @param $type eg. HOSTED, INVOICE or PAYMENTPLAN
+        * $param $country CountryCode eg. SE, NO, DK, FI, NL, DE 
+        */
+        public function getMerchantId($type, $country){
+            //if you have different countries or types the parameters are a help to put up conditions
+            return $myMerchantId;
+        }
+         /**
+        * get the return value from your database or likewise
+        * @param $type eg. HOSTED, INVOICE or PAYMENTPLAN
+        * $param $country CountryCode eg. SE, NO, DK, FI, NL, DE 
+        */
+        public function getPassword($type, $country){
+            return $myPassword;
+        }
+        /**
+        * get the return value from your database or likewise
+        * @param $type eg. HOSTED, INVOICE or PAYMENTPLAN
+        * $param $country CountryCode eg. SE, NO, DK, FI, NL, DE 
+        */
+        public function getSecret($type, $country){
+            return $mySecret;
+        }
+        /**
+        * get the return value from your database or likewise
+        * @param $type eg. HOSTED, INVOICE or PAYMENTPLAN
+        * $param $country CountryCode eg. SE, NO, DK, FI, NL, DE 
+        */
+        public function getUsername($type, $country){
+            return $myUsername;
+        }
+        /**
+        * get the return value from your database or likewise
+        * @param $type eg. HOSTED, INVOICE or PAYMENTPLAN
+        * $param $country CountryCode eg. SE, NO, DK, FI, NL, DE 
+        */
+        public function getclientNumber($type, $country){
+            return $myClientNumber;
+        }
+    }
+```
+
+  Later when starting an WebPay action in your integration file, put an instance of your class as parameter to the constructor.
+  If left blank, the default settings in the class SveaConfig will be used.
+
+```php
+    //Find your testmode settings
+    if($this->testmode == 1){
+        //if test, use your class that returns test authorization
+        $conf = new MyConfigTest();
+    }else{
+        //if production mode, use your class that returns production authorization
+        $conf = new MyConfigProd();
+    }
+        //Create your CreateOrder object and continue building your order. Se next steps.
+        $foo = WebPay::CreateOrder($conf);
+```
+    
 [<< To top](https://github.com/sveawebpay/php-integration/tree/develop#php-integration-package-api-for-sveawebpay)
 
 ## 1. createOrder                                                            
@@ -68,8 +150,6 @@ Build order -> choose payment type -> doRequest/getPaymentForm
 
 ```php
 $response = WebPay::createOrder()
-//If testmode
-    ->setTestmode()
 //For all products and other items
    ->addOrderRow(Item::orderRow()...)
 //If shipping fee
@@ -851,7 +931,7 @@ Used in usePaymentMethod($paymentMethod) and in usePayPage(),
 | PaymentMethod::SWEDBANK_SE        | Direct bank payment, Swedbank, Sweden.        |
 | PaymentMethod::KORTCERT           | Card payments, Certitrade.                    |
 | PaymentMethod::PAYPAL             | Paypal                                        |
-| PaymentMethod::KORTSKRILL         | Card payment with Dankort, Skrill.            |
+| PaymentMethod::SKRILL             | Card payment with Dankort, Skrill.            |
 | PaymentMethod::INVOICE            | Invoice by PayPage.                           |
 | PaymentMethod::PAYMENTPLAN        | PaymentPlan by PayPage.                       |   
 

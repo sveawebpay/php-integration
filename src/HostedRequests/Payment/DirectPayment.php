@@ -23,10 +23,10 @@ class DirectPayment extends HostedPayment {
     protected function configureExcludedPaymentMethods($request) {       
          //card
         $methods[] = SystemPaymentMethod::KORTCERT;
-        $methods[] = SystemPaymentMethod::KORTSKRILL;
+        $methods[] = SystemPaymentMethod::SKRILL;
        //other      
         $methods[] = SystemPaymentMethod::PAYPAL;
-       
+       /**
         //countrycheck
        if($this->order->countryCode != "SE") {
             $methods[] = SystemPaymentMethod::DBNORDEASE;
@@ -35,6 +35,8 @@ class DirectPayment extends HostedPayment {
             $methods[] = SystemPaymentMethod::DBSHBSE;         
             $methods[] = SystemPaymentMethod::DBSWEDBANKSE;
         }
+        * 
+        */
         $exclude = new ExcludePayments();
         $methods = array_merge((array)$methods, (array)$exclude->excludeInvoicesAndPaymentPlan($this->order->countryCode));
 
@@ -68,12 +70,18 @@ class DirectPayment extends HostedPayment {
      * @param type $merchantId
      * @param type $secret
      * @return \HostedPayment
-     */
+    
     public function setMerchantIdBasedAuthorization($merchantId,$secret){
         $this->order->conf->merchantId = $merchantId;
         $this->order->conf->secret = $secret;
         return $this;
     }
+     * 
+     */
+     /** 
+     * @param type $languageCodeAsISO639
+     * @return \HostedPayment|\DirectPayment
+     */
     
          public function setPayPageLanguage($languageCodeAsISO639){
         switch ($languageCodeAsISO639) {

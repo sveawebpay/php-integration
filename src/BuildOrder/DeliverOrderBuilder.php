@@ -42,7 +42,9 @@ class deliverOrderBuilder {
      * @var type String "Invoice" or "PaymentPlan"
      */
     public $orderType;
-  
+    public $countryCode;
+
+
     public $numberOfCreditDays;
     /**
      * @var type String "Post" or "Email"
@@ -58,9 +60,9 @@ class deliverOrderBuilder {
      */
     public $conf;
 
-    public function __construct() {
+    public function __construct($config) {
         $this->handleValidator = new HandleOrderValidator();
-        $this->conf = SveaConfig::getConfig();
+        $this->conf = $config;
     }
 
     
@@ -134,13 +136,20 @@ class deliverOrderBuilder {
     /**
      * When function is called it turns into testmode
      * @return \deliverOrder
-     */
+     
     public function setTestmode() {
         $this->testmode = TRUE;
         return $this;
     }
+     * 
+     */
   
-    /**
+    public function setCountryCode($countryCodeAsString){
+        $this->countryCode = $countryCodeAsString;
+        return $this;
+    }
+
+        /**
      * Required
      * @param type $orderIdAsString
      * @return \deliverOrder

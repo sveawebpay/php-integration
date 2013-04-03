@@ -14,7 +14,7 @@ class PaymentMethodTest extends PHPUnit_Framework_TestCase{
      function testPayPagePaymentWithSetPaymentMethod() {
         $rowFactory = new TestRowFactory();
         $form = WebPay::createOrder()
-            ->setTestmode()
+            ////->setTestmode()()()
             ->addOrderRow(Item::orderRow()
                     ->setArticleNumber(1)
                     ->setQuantity(2)
@@ -40,7 +40,7 @@ class PaymentMethodTest extends PHPUnit_Framework_TestCase{
                 ->setCurrency("SEK")
                     ->usePaymentMethod(PaymentMethod::KORTCERT)
                     ->setReturnUrl("http://myurl.se")
-                    ->setMerchantIdBasedAuthorization(1130, "8a9cece566e808da63c6f07ff415ff9e127909d000d259aba24daa2fed6d9e3f8b0b62e8ad1fa91c7d7cd6fc3352deaae66cdb533123edf127ad7d1f4c77e7a3")
+                    //->setMerchantIdBasedAuthorization(1130, "8a9cece566e808da63c6f07ff415ff9e127909d000d259aba24daa2fed6d9e3f8b0b62e8ad1fa91c7d7cd6fc3352deaae66cdb533123edf127ad7d1f4c77e7a3")
                         ->getPaymentForm();
 
         $xmlMessage = new SimpleXMLElement($form->xmlMessage);
@@ -49,7 +49,7 @@ class PaymentMethodTest extends PHPUnit_Framework_TestCase{
      function testPayPagePaymentWithSetPaymentMethodInvoice() {
         $rowFactory = new TestRowFactory();
         $form = WebPay::createOrder()
-            ->setTestmode()
+            //->setTestmode()()
             ->addOrderRow(Item::orderRow()
                     ->setArticleNumber(1)
                     ->setQuantity(2)
@@ -75,7 +75,7 @@ class PaymentMethodTest extends PHPUnit_Framework_TestCase{
                 ->setCurrency("SEK")
                     ->usePaymentMethod(PaymentMethod::INVOICE)
                     ->setReturnUrl("http://myurl.se")
-                    ->setMerchantIdBasedAuthorization(1130, "8a9cece566e808da63c6f07ff415ff9e127909d000d259aba24daa2fed6d9e3f8b0b62e8ad1fa91c7d7cd6fc3352deaae66cdb533123edf127ad7d1f4c77e7a3")
+                    //->setMerchantIdBasedAuthorization(1130, "8a9cece566e808da63c6f07ff415ff9e127909d000d259aba24daa2fed6d9e3f8b0b62e8ad1fa91c7d7cd6fc3352deaae66cdb533123edf127ad7d1f4c77e7a3")
                         ->getPaymentForm();
               
         $xmlMessage = new SimpleXMLElement($form->xmlMessage);         
