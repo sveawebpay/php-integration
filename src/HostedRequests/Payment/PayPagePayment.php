@@ -144,6 +144,7 @@ class PayPagePayment extends HostedPayment {
     
     
     /**
+     * Required
      * Set return Url for redirect when payment is completed
      * @param type $returnUrlAsString
      * @return \HostedPayment
