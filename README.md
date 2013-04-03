@@ -53,76 +53,78 @@ If no configuration is done, default settings and testdata found in SveaConfig::
 
 There are two ways to configure Svea authorization. Choose one of the following:
 
-* 1. Replace the file named SveaConfig.php in folder Config looking the same as existing file
+1. Replace the file named SveaConfig.php in folder Config looking the same as existing file
    but with your own authorization values. 
 
-* 2. If your have the authorization values saved in a database, probably using an administration interface in your shop.
+2. If your have the authorization values saved in a database, probably using an administration interface in your shop.
     Create a class (eg. one for testing values, one for production) that implements the ConfigurationProvider Interface. Let the implemented functions return the authorization values asked for.
     The integration package will then call these functions to get the value from your database.
+
 ```php  
     require_once Includes.php
 
    class MyConfigTest implements ConfigurationProvider{
     
-    /**
-    * Constants for the endpoint url found in the class SveaConfig.php
-    * @param $type eg. HOSTED, INVOICE or PAYMENTPLAN
-    */
-    public function getEndPoint($type){
-        if($type == "HOSTED"){
-            return   SveaConfig::SWP_TEST_URL;;
-        }elseif($type == "INVOICE" || $type == "PAYMENTPLAN"){
-             SveaConfig::SWP_TEST_WS_URL;
-        }  else {
-           throw new Exception('Invalid type. Accepted values: INVOICE, PAYMENTPLAN or HOSTED');
-        }  
+        /**
+        * Constants for the endpoint url found in the class SveaConfig.php
+        * @param $type eg. HOSTED, INVOICE or PAYMENTPLAN
+        */
+        public function getEndPoint($type){
+            if($type == "HOSTED"){
+                return   SveaConfig::SWP_TEST_URL;;
+            }elseif($type == "INVOICE" || $type == "PAYMENTPLAN"){
+                 SveaConfig::SWP_TEST_WS_URL;
+            }  else {
+               throw new Exception('Invalid type. Accepted values: INVOICE, PAYMENTPLAN or HOSTED');
+            }  
+        }
+        /**
+        * get the return value from your database or likewise
+        * @param $type eg. HOSTED, INVOICE or PAYMENTPLAN
+        * $param $country CountryCode eg. SE, NO, DK, FI, NL, DE 
+        */
+        public function getMerchantId($type, $country){
+            //if you have different countries or types the parameters are a help to put up conditions
+            return $myMerchantId;
+        }
+         /**
+        * get the return value from your database or likewise
+        * @param $type eg. HOSTED, INVOICE or PAYMENTPLAN
+        * $param $country CountryCode eg. SE, NO, DK, FI, NL, DE 
+        */
+        public function getPassword($type, $country){
+            return $myPassword;
+        }
+        /**
+        * get the return value from your database or likewise
+        * @param $type eg. HOSTED, INVOICE or PAYMENTPLAN
+        * $param $country CountryCode eg. SE, NO, DK, FI, NL, DE 
+        */
+        public function getSecret($type, $country){
+            return $mySecret;
+        }
+        /**
+        * get the return value from your database or likewise
+        * @param $type eg. HOSTED, INVOICE or PAYMENTPLAN
+        * $param $country CountryCode eg. SE, NO, DK, FI, NL, DE 
+        */
+        public function getUsername($type, $country){
+            return $myUsername;
+        }
+        /**
+        * get the return value from your database or likewise
+        * @param $type eg. HOSTED, INVOICE or PAYMENTPLAN
+        * $param $country CountryCode eg. SE, NO, DK, FI, NL, DE 
+        */
+        public function getclientNumber($type, $country){
+            return $myClientNumber;
+        }
     }
-    /**
-    * get the return value from your database or likewise
-    * @param $type eg. HOSTED, INVOICE or PAYMENTPLAN
-    * $param $country CountryCode eg. SE, NO, DK, FI, NL, DE 
-    */
-    public function getMerchantId($type, $country){
-        //if you have different countries or types the parameters are a help to put up conditions
-        return $myMerchantId;
-    }
-     /**
-    * get the return value from your database or likewise
-    * @param $type eg. HOSTED, INVOICE or PAYMENTPLAN
-    * $param $country CountryCode eg. SE, NO, DK, FI, NL, DE 
-    */
-    public function getPassword($type, $country){
-        return $myPassword;
-    }
-    /**
-    * get the return value from your database or likewise
-    * @param $type eg. HOSTED, INVOICE or PAYMENTPLAN
-    * $param $country CountryCode eg. SE, NO, DK, FI, NL, DE 
-    */
-    public function getSecret($type, $country){
-        return $mySecret;
-    }
-    /**
-    * get the return value from your database or likewise
-    * @param $type eg. HOSTED, INVOICE or PAYMENTPLAN
-    * $param $country CountryCode eg. SE, NO, DK, FI, NL, DE 
-    */
-    public function getUsername($type, $country){
-        return $myUsername;
-    }
-    /**
-    * get the return value from your database or likewise
-    * @param $type eg. HOSTED, INVOICE or PAYMENTPLAN
-    * $param $country CountryCode eg. SE, NO, DK, FI, NL, DE 
-    */
-    public function getclientNumber($type, $country){
-        return $myClientNumber;
-    }
-}
 ```
 
   Later when starting an WebPay action in your integration file, put an instance of your class as parameter to the constructor.
   If left blank, the default settings in the class SveaConfig will be used.
+
 ```php
     //Find your testmode settings
     if($this->testmode == 1){
