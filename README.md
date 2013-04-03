@@ -56,17 +56,23 @@ There are two ways to configure Svea authorization. Choose one of the following:
 1 - **Replace the file named SveaConfig.php** in folder Config looking the same as existing file
    but with your own authorization values. Determining to use the test or the prod values there are two ways:
 
-    A - Manually changing the getDefaultConfig() to return the getProdConfig() or the getTestConfig(). 
-        In this case no parameter is neccesary when calling a function in WebPay. 
+```php
+    /**
+    * 1.
+    * Manually changing the getDefaultConfig() to return the getProdConfig() or the getTestConfig(). 
+    * In this case no parameter is neccesary when calling a function in WebPay. 
+    */
 
-`
    $foo = WebPay::createOrder();
-`
-
-    B - Giving either the getProdConfig() or the getTestConfig() as parameter when calling a function in WebPay.
-    This way makes it possible to put a condition in implemantation code to check testmode.
+``` 
 
 ```php
+    /**
+    * 2.
+    * Giving either the getProdConfig() or the getTestConfig() as parameter when calling a function in WebPay.
+    * This way makes it possible to put a condition in implemantation code to check testmode.
+    */
+
     if($testmode == TRUE){
         $config = SveaConfig::getTestConfig();
     }else{
