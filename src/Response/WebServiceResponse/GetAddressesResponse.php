@@ -7,7 +7,7 @@ require_once 'WebServiceResponse.php';
  * @author anne-hal
  */
 class GetAddressesResponse extends WebServiceResponse{
-   
+
 
 
     function __construct($message) {
@@ -17,40 +17,38 @@ class GetAddressesResponse extends WebServiceResponse{
         }
         parent::__construct($message);
     }
-    
-    protected function formatObject($message){  
+
+    protected function formatObject($message){
         //Required
         $this->accepted = $message->GetAddressesResult->Accepted;
         $this->resultcode = $message->GetAddressesResult->RejectionCode; //Whet update comes
-      
+
         if(property_exists($message->GetAddressesResult, "Addresses") && $this->accepted == 1){
-            $this->formatCustomerIdentity($message->GetAddressesResult->Addresses);           
+            $this->formatCustomerIdentity($message->GetAddressesResult->Addresses);
         }
-        
+
     }
 
     public function formatCustomerIdentity($customers) {
         $this->customerIdentity = array();
         is_array($customers->CustomerAddress) ? $loopValue = $customers->CustomerAddress : $loopValue = $customers;
-        foreach ($loopValue as $customer) {          
+        foreach ($loopValue as $customer) {
         $temp = new GetAddressIdentity();
-        $temp->customerType = $customer->BusinessType;          
-        $temp->nationalIdNumber = $customer->SecurityNumber;         
-        $temp->phoneNumber = isset($customer->PhoneNumber) ? $customer->PhoneNumber : "";      
-        $temp->firstName = isset($customer->FirstName) ? $customer->FirstName : "";      
-        $temp->lastName = isset($customer->LastName) ? $customer->LastName : "";      
+        $temp->customerType = $customer->BusinessType;
+        $temp->nationalIdNumber = $customer->SecurityNumber;
+        $temp->phoneNumber = isset($customer->PhoneNumber) ? $customer->PhoneNumber : "";
+        $temp->firstName = isset($customer->FirstName) ? $customer->FirstName : "";
+        $temp->lastName = isset($customer->LastName) ? $customer->LastName : "";
         $temp->legalName = isset($customer->LegalName) ? $customer->LegalName : "";
         $temp->street = isset($customer->AddressLine2) ? $customer->AddressLine2 : "";
         $temp->coAddress = isset($customer->AddressLine1) ? $customer->AddressLine1 : "";
-        $temp->zipCode = isset($customer->Postcode) ? $customer->Postcode : "";       
-        $temp->locality = isset($customer->Postarea) ? $customer->Postarea : "";  
-        $temp->addressSelector = isset($customer->AddressSelector) ? $customer->AddressSelector : "";        
-        
+        $temp->zipCode = isset($customer->Postcode) ? $customer->Postcode : "";
+        $temp->locality = isset($customer->Postarea) ? $customer->Postarea : "";
+        $temp->addressSelector = isset($customer->AddressSelector) ? $customer->AddressSelector : "";
+
         array_push($this->customerIdentity, $temp);
-        
+
         }
-                       
+
     }
 }
-
-?>

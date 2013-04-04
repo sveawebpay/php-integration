@@ -15,7 +15,7 @@ class InvoiceFee {
         $this->name = $nameAsString;
         return $this;
     }
-    
+
     /**
      * Optional
      * @param type $descriptionAsString
@@ -25,7 +25,7 @@ class InvoiceFee {
         $this->description = $descriptionAsString;
         return $this;
     }
-    
+
     /**
      * Optional
      * Required to use at least two of the functions setAmountExVat(), setAmountIncVat(), setVatPercent()
@@ -46,7 +46,7 @@ class InvoiceFee {
         $this->amountIncVat = $amountAsFloat;
         return $this;
     }
-    
+
     /**
      * Optional
      * @param type $unitDescriptionAsString
@@ -56,7 +56,7 @@ class InvoiceFee {
         $this->unit = $unitDescriptionAsString;
         return $this;
     }
-    
+
     /**
      * Optional
      * Required to use at least two of the functions setAmountExVat(), setAmountIncVat(), setVatPercent()
@@ -67,7 +67,7 @@ class InvoiceFee {
         $this->vatPercent = $vatPercentAsInt;
         return $this;
     }
-    
+
     /**
      * Optional
      * @param type $discountPercentAsInt
@@ -79,5 +79,3 @@ class InvoiceFee {
     }
 
 }
-
-?>

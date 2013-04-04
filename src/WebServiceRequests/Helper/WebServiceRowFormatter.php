@@ -23,22 +23,22 @@ class WebServiceRowFormatter {
 
     public function formatRows() {
         $this->newRows = array();
-        
+
         $this->calculateTotals();
-        
+
         $this->formatOrderRows();
         $this->formatShippingFeeRows();
         $this->formatInvoiceFeeRows();
         $this->formatFixedDiscountRows();
         $this->formatRelativeDiscountRows();
-        
+
         return $this->newRows;
     }
 
     private function calculateTotals() {
         $this->totalAmountExVat = 0;
         $this->totalVatAsAmount = 0;
-       
+
         foreach ($this->order->orderRows as $product) {
             $vatPercentAsCeroDecimal = isset($product->vatPercent) ? $product->vatPercent * 0.01 : "";
             if(isset($product->vatPercent) && isset($product->amountExVat)){
@@ -51,17 +51,17 @@ class WebServiceRowFormatter {
                 $this->totalAmountInclVat += $product->amountIncVat;
                 $this->totalAmountExVat += $product->amountExVat;
                 $this->totalVatAsAmount += $product->amountIncVat - $product->amountExVat;
-            }              
-           
+            }
+
         }
         $this->totalAmountInclVat = $this->totalAmountExVat + $this->totalVatAsAmount;
-        $this->totalAmountExVat = $this->totalAmountInclVat - $this->totalVatAsAmount;            
+        $this->totalAmountExVat = $this->totalAmountInclVat - $this->totalVatAsAmount;
         if ($this->totalAmountExVat > 0) {
             $this->totalVatAsPercent = $this->totalVatAsAmount / $this->totalAmountInclVat; //e.g. 0,20 if percentage 20
         }
     }
 
-    private function formatOrderRows() {        
+    private function formatOrderRows() {
         foreach ($this->order->orderRows as $row) {
             $orderRow = new SveaOrderRow();
             if (isset($row->articleNumber)) {
@@ -87,7 +87,7 @@ class WebServiceRowFormatter {
                 $orderRow->PricePerUnit = number_format($row->amountExVat, 2, '.', ' ');
                 $orderRow->VatPercent = (($row->amountIncVat / $row->amountExVat)-1) * 100;
             }
-           
+
             $this->newRows[] = $orderRow;
         }
     }
@@ -96,7 +96,7 @@ class WebServiceRowFormatter {
         if (!isset($this->order->shippingFeeRows)) {
             return;
         }
-        
+
         foreach ($this->order->shippingFeeRows as $row) {
             $orderRow = new SveaOrderRow();
             if (isset($row->shippingId)) {
@@ -130,7 +130,7 @@ class WebServiceRowFormatter {
         if (!isset($this->order->invoiceFeeRows)) {
             return;
         }
-        
+
         foreach ($this->order->invoiceFeeRows as $row) {
             $orderRow = new SveaOrderRow();
             $orderRow->ArticleNumber = "";
@@ -192,7 +192,7 @@ class WebServiceRowFormatter {
         if (!isset($this->order->relativeDiscountRows)) {
             return;
         }
-        
+
         foreach ($this->order->relativeDiscountRows as $row) {
             $orderRow = new SveaOrderRow();
             if (isset($row->discountId)) {
@@ -209,11 +209,9 @@ class WebServiceRowFormatter {
             $pricePerUnitExMoms = round($this->totalAmountExVat * ($row->discountPercent * 0.01), 2);
             $orderRow->DiscountPercent = 0; //no discount on discount
             $orderRow->NumberOfUnits = 1; //only one discount per row
-            $orderRow->PricePerUnit = - number_format($pricePerUnitExMoms,2,'.',' '); //Discountpercent on toatal price ex vat.               
+            $orderRow->PricePerUnit = - number_format($pricePerUnitExMoms,2,'.',' '); //Discountpercent on toatal price ex vat.
             $orderRow->VatPercent = round((($this->totalVatAsAmount * ($row->discountPercent * 0.01))/$pricePerUnitExMoms)*100,2);//round((($this->totalVatAsAmount * ($row->discountPercent * 0.01))/$orderRow->PricePerUnit) * 100,2); //Discountpercent on total vatamount
             $this->newRows[] = $orderRow;
         }
     }
 }
-
-?>

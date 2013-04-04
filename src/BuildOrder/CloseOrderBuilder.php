@@ -8,7 +8,7 @@ require_once SVEA_REQUEST_DIR . '/Includes.php';
  * @author Anneli Halld'n, Daniel Brolund for Svea Webpay
  */
 class closeOrderBuilder {
-    
+
      /**
      * Order Id recieved when creating order
      * @var Order id
@@ -28,18 +28,18 @@ class closeOrderBuilder {
         $this->handleValidator = new HandleOrderValidator();
          $this->conf = $config;
     }
-    
+
     /**
      * When function is called it turns into testmode
      * @return \closeOrder
-    
+
     public function setTestmode() {
         $this->testmode = TRUE;
         return $this;
     }
-     * 
+     *
      */
-    
+
     /**
      * Required
      * @param type $orderIdAsString
@@ -49,7 +49,7 @@ class closeOrderBuilder {
         $this->orderId = $orderIdAsString;
         return $this;
     }
-    
+
     public function setCountryCode($countryCodeAsString){
         $this->countryCode = $countryCodeAsString;
         return $this;
@@ -65,5 +65,3 @@ class closeOrderBuilder {
         return new CloseOrder($this);
     }
 }
-
-?>

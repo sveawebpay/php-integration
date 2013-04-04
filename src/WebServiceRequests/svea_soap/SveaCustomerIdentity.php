@@ -1,7 +1,7 @@
 <?php
 
 /**
- * 
+ *
  */
 class SveaCustomerIdentity {
 
@@ -38,5 +38,3 @@ class SveaCustomerIdentity {
     }
 
 }
-
-?>

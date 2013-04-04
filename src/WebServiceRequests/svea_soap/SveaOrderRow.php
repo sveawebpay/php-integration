@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Orderrow 
+ * Orderrow
  */
 class SveaOrderRow {
 
@@ -14,5 +14,3 @@ class SveaOrderRow {
     public $DiscountPercent;
 
 }
-
-?>

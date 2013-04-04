@@ -14,7 +14,7 @@ class SveaSoapArrayBuilder {
       public function __construct($object){
       return $this->object_to_array($object);
       }
-     * 
+     *
      */
 
     function object_to_array($data) {
@@ -23,12 +23,10 @@ class SveaSoapArrayBuilder {
             foreach ($data as $key => $value) {
                 $result[$key] = $this->object_to_array($value);
             }
-            
+
             return $result;
         }
 
         return $data;
     }
 }
-
-?>

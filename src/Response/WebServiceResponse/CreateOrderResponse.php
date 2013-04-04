@@ -6,7 +6,7 @@ require_once 'WebServiceResponse.php';
  * @author Anneli Halld'n, Daniel Brolund for Svea Webpay
  */
 class CreateOrderResponse extends WebServiceResponse {
-    
+
     public $sveaOrderId;
     public $sveaWillBuyOrder;
     public $amount;
@@ -19,8 +19,8 @@ class CreateOrderResponse extends WebServiceResponse {
         }
         parent::__construct($message);
     }
-    
-    protected function formatObject($message){       
+
+    protected function formatObject($message){
         //Required
         $this->accepted = $message->CreateOrderEuResult->Accepted;
         $this->resultcode = $message->CreateOrderEuResult->ResultCode;
@@ -34,11 +34,11 @@ class CreateOrderResponse extends WebServiceResponse {
         }
         if(isset($message->CreateOrderEuResult->CreateOrderResult->ClientOrderNumber)){
             $this->clientOrderNumber = $message->CreateOrderEuResult->CreateOrderResult->ClientOrderNumber;
-        }           
+        }
         if(isset($message->CreateOrderEuResult->CreateOrderResult->CustomerIdentity)){
             $this->formatCustomerIdentity($message->CreateOrderEuResult->CreateOrderResult->CustomerIdentity);
-        }        
-      
+        }
+
     }
 
     public function formatCustomerIdentity($customer) {
@@ -48,10 +48,10 @@ class CreateOrderResponse extends WebServiceResponse {
         //optional
         if(property_exists($customer, "NationalIdNumber") && $customer->NationalIdNumber != ""){
             $this->customerIdentity->nationalIdNumber = $customer->NationalIdNumber;
-        }       
-        $this->customerIdentity->email = isset($customer->Email) ? $customer->Email : "";       
-        $this->customerIdentity->ipAddress = isset($customer->IpAddress) ? $customer->IpAddress : "";       
-        $this->customerIdentity->phoneNumber = isset($customer->PhoneNumber) ? $customer->PhoneNumber : "";      
+        }
+        $this->customerIdentity->email = isset($customer->Email) ? $customer->Email : "";
+        $this->customerIdentity->ipAddress = isset($customer->IpAddress) ? $customer->IpAddress : "";
+        $this->customerIdentity->phoneNumber = isset($customer->PhoneNumber) ? $customer->PhoneNumber : "";
         $this->customerIdentity->fullName = isset($customer->FullName) ? $customer->FullName : "";
         $this->customerIdentity->street = isset($customer->Street) ? $customer->Street : "";
         $this->customerIdentity->coAddress = isset($customer->CoAddress) ? $customer->CoAddress : "";
@@ -62,5 +62,3 @@ class CreateOrderResponse extends WebServiceResponse {
         $this->customerIdentity->customerType = isset($customer->CustomerType) ? $customer->CustomerType : "";
     }
 }
-
-?>

@@ -20,7 +20,7 @@ abstract class OrderValidator {
     protected function validateRequiredFieldsForOrder($order,$errors) {
         if (isset($order->orderRows) == false || count($order->orderRows) == 0) {
             $errors['missing values'] = "OrderRows are required. Use function addOrderRow(Item::orderRow) to get orderrow setters. ";
-        }       
+        }
         return $errors;
     }
 
@@ -44,11 +44,9 @@ abstract class OrderValidator {
                 }elseif (isset($row->vatPercent) && (isset($row->amountExVat) == false && isset($row->amountIncVat) == false)) {
                     $errors['missing values'] = "At least one of the values must be set in combination with VatPercent, in object Item:: AmountIncVat or AmountExVat for Orderrow. Use functions setAmountExVat() or setAmountIncVat().";
                 }
-                
+
             }
         }
         return $errors;
     }
 }
-
-?>

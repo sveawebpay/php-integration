@@ -20,5 +20,3 @@ class InvoicePayment extends WebServicePayment {
         return $orderInformation;
     }
 }
-
-?>

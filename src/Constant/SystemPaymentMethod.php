@@ -1,5 +1,3 @@
-
-
 <?php
 
 /**
@@ -26,7 +24,7 @@ abstract class SystemPaymentMethod {
     const DBTAPIOLAFI = 'DBTAPIOLAFI';
     //PaymentMethodType::CARD
     const KORTCERT = 'KORTCERT';
-   
+
     const SKRILL = 'SKRILL';
     const KORTWN = 'KORTWN';
     //PREPAID
@@ -52,5 +50,3 @@ abstract class SystemPaymentMethod {
     const PAYMENTPLAN_NL = 'SVEASPLITEU_NL';
 
 }
-
-?>

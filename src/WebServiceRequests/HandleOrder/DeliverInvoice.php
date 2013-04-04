@@ -16,5 +16,3 @@ class DeliverInvoice extends HandleOrder {
         parent::__construct($order);
     }
 }
-
-?>

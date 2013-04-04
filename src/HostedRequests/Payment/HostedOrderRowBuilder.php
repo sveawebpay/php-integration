@@ -1,7 +1,7 @@
 <?php
 
 class HostedOrderRowBuilder {
-    
+
     /**
      * @param type $skuAsString
      * @return \HostedOrderRowBuilder
@@ -10,7 +10,7 @@ class HostedOrderRowBuilder {
         $this->sku = $skuAsString;
         return $this;
     }
-    
+
     /**
      * @param type $nameAsString
      * @return \HostedOrderRowBuilder
@@ -19,7 +19,7 @@ class HostedOrderRowBuilder {
         $this->name = $nameAsString;
         return $this;
     }
-    
+
     /**
      * @param type $descriptionAsString
      * @return \OrderRowBuilder
@@ -28,7 +28,7 @@ class HostedOrderRowBuilder {
         $this->description = $descriptionAsString;
         return $this;
     }
-    
+
     /**
      * @param type $AmountAsInt
      * @return \HostedOrderRowBuilder
@@ -37,7 +37,7 @@ class HostedOrderRowBuilder {
         $this->amount = $AmountAsInt;
         return $this;
     }
-    
+
     /**
      * @param type $vatAsInt
      * @return \OrderRowBuilder
@@ -46,7 +46,7 @@ class HostedOrderRowBuilder {
         $this->vat = $vatAsInt;
         return $this;
     }
-    
+
     /**
      * @param type $quantityAsInt
      * @return \HostedOrderRowBuilder
@@ -55,7 +55,7 @@ class HostedOrderRowBuilder {
         $this->quantity = $quantityAsInt;
         return $this;
     }
-    
+
     /**
      * @param type $unitAsString
      * @return \HostedOrderRowBuilder
@@ -65,5 +65,3 @@ class HostedOrderRowBuilder {
         return $this;
     }
 }
-
-?>

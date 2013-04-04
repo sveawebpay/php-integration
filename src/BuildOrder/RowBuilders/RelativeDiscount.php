@@ -25,7 +25,7 @@ class RelativeDiscount {
         $this->discountPercent = $discountPercentOnTotalAmountInInt;
         return $this;
     }
-    
+
     /**
      * Optional
      * @param type $unitDescriptionAsString
@@ -45,7 +45,7 @@ class RelativeDiscount {
         $this->name = $nameAsString;
         return $this;
     }
-    
+
     /**
      * Optional
      * @param type $descriptionAsString
@@ -57,5 +57,3 @@ class RelativeDiscount {
     }
 
 }
-
-?>

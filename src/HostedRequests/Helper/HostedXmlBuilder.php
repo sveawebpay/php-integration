@@ -15,7 +15,7 @@ class HostedXmlBuilder {
      * This method expect UTF-8 input
      */
     public function getOrderXML($request, $order) {
-     
+
         $this->XMLWriter = new XMLWriter();
         $this->XMLWriter->openMemory();
         $this->XMLWriter->setIndent(true);
@@ -87,7 +87,7 @@ class HostedXmlBuilder {
 
     private function serializeOrderRow($orderRow) {
         $this->XMLWriter->startElement("row");
-        
+
         if (!empty($orderRow->description) && $orderRow->description != null) {
             $this->XMLWriter->writeElement("description", $orderRow->description);
         } else {
@@ -99,25 +99,25 @@ class HostedXmlBuilder {
         } else {
             $this->XMLWriter->writeElement("name", "");
         }
-        
+
         if (!empty($orderRow->sku) && $orderRow->sku != null) {
             $this->XMLWriter->writeElement("sku", $orderRow->sku);
         } else {
             $this->XMLWriter->writeElement("sku", "");
         }
-        
+
         if (!empty($orderRow->amount) && $orderRow->amount != null) {
             $this->XMLWriter->writeElement("amount", $orderRow->amount);
         }
-        
+
         if (!empty($orderRow->vat) && $orderRow->vat != null) {
             $this->XMLWriter->writeElement("vat", $orderRow->vat);
         }
-        
+
         if (!empty($orderRow->unit) && $orderRow->unit != null) {
             $this->XMLWriter->writeElement("unit", $orderRow->unit);
         }
-        
+
         if (!empty($orderRow->quantity) && $orderRow->quantity != null) {
             $this->XMLWriter->writeElement("quantity", $orderRow->quantity);
         }
@@ -125,5 +125,3 @@ class HostedXmlBuilder {
         $this->XMLWriter->endElement();
     }
 }
-
-?>

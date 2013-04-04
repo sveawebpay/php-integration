@@ -1,23 +1,23 @@
 <?php
 
 /**
- * 
+ *
  */
 class HostedRowFormatter {
-    
+
     private $totalAmount;
     private $totalVat;
     private $newRows;
-    
+
     /**
-     * 
+     *
      */
     public function __construct() {
         $this->totalAmount = 0;
         $this->totalVat = 0;
         $this->newRows = array();
     }
-    
+
     /**
      * Format rows and calculate vat
      * @param type $rows
@@ -28,21 +28,21 @@ class HostedRowFormatter {
         $this->formatShippingFeeRows($order);
         $this->formatFixedDiscountRows($order);
         $this->formatRelativeDiscountRows($order);
-        
+
         return $this->newRows;
     }
-    
+
     private function formatOrderRows($order) {
         foreach ($order->orderRows as $row ) {
             $tempRow = new HostedOrderRowBuilder();
             $plusVatCounter = isset($row->vatPercent) ? ($row->vatPercent * 0.01) + 1 : "";
-            
+
             if(isset($row->name)) {
                 $tempRow->setName($row->name);
-            }            
+            }
             if(isset($row->description)) {
                 $tempRow->setDescription($row->description);
-            } 
+            }
             if(isset($row->amountExVat) && isset($row->vatPercent)){
                 $tempRow->setAmount(round(($row->amountExVat * 100) * $plusVatCounter));
                 $tempRow->setVat(round($tempRow->amount - ($row->amountExVat * 100)));
@@ -53,28 +53,28 @@ class HostedRowFormatter {
                  $tempRow->setAmount(round($row->amountIncVat * 100));
                  $tempRow->setVat(($row->amountIncVat - $row->amountExVat) * 100);
             }
-                    
+
             if(isset($row->unit)) {
                 $tempRow->setUnit($row->unit);
-            }            
+            }
             if(isset($row->articleNumber)) {
                 $tempRow->setSku($row->articleNumber);
             }
             if(isset($row->quantity)){
                 $tempRow->setQuantity($row->quantity);
             }
-            
+
             $this->newRows[] = $tempRow;
             $this->totalAmount += $tempRow->amount * $row->quantity;
             $this->totalVat +=  $tempRow->vat * $row->quantity;
         }
     }
-    
+
     private function formatShippingFeeRows($order) {
         if(!isset($order->shippingFeeRows)) {
             return;
         }
-        
+
         foreach ($order->shippingFeeRows as $row) {
             $tempRow = new HostedOrderRowBuilder();
             $plusVatCounter = isset($row->vatPercent) ? ($row->vatPercent * 0.01) + 1 : "";
@@ -84,7 +84,7 @@ class HostedRowFormatter {
             }
             if(isset($row->description)) {
                 $tempRow->setDescription($row->description);
-            } 
+            }
             if(isset($row->amountExVat) && isset($row->vatPercent)){
                 $tempRow->setAmount(round(($row->amountExVat * 100) * $plusVatCounter));
                 $tempRow->setVat(round($tempRow->amount - ($row->amountExVat * 100)));
@@ -92,7 +92,7 @@ class HostedRowFormatter {
                  $tempRow->setAmount(round($row->amountIncVat * 100));
                  $tempRow->setVat(round($tempRow->amount - ($tempRow->amount / $plusVatCounter)));
             }  else {
-                 $tempRow->setAmount(round($row->amountIncVat * 100));               
+                 $tempRow->setAmount(round($row->amountIncVat * 100));
                  $tempRow->setVat(($row->amountIncVat - $row->amountExVat) * 100);
             }
 
@@ -111,11 +111,11 @@ class HostedRowFormatter {
         }
     }
     //check!
-    public function formatFixedDiscountRows($order) {       
+    public function formatFixedDiscountRows($order) {
         if(!isset($order->fixedDiscountRows)) {
             return;
-        }   
-      
+        }
+
         foreach ($order->fixedDiscountRows as $row) {
             $discountInPercent = ($row->amount * 100)/ $this->totalAmount;
             $tempRow = new HostedOrderRowBuilder();
@@ -126,15 +126,15 @@ class HostedRowFormatter {
 
             if(isset($row->description)) {
                 $tempRow->setDescription($row->description);
-            } 
-          
+            }
+
             $tempRow->setAmount(- round($row->amount * 100));
 
-                  
+
             if($this->totalVat > 0) {
                 $vat = $this->totalVat * $discountInPercent;
-                $tempRow->setVat(-round($vat));             
-                        
+                $tempRow->setVat(-round($vat));
+
             }
 
             if(isset($row->unit)) {
@@ -143,27 +143,27 @@ class HostedRowFormatter {
 
             if(isset($row->discountId)) {
                 $tempRow->setSku($row->discountId);
-            }            
+            }
             $tempRow->setQuantity(1);
               $this->totalAmount -= $row->amount;
-              $this->totalVat -= substr($tempRow->vat, 1);     
+              $this->totalVat -= substr($tempRow->vat, 1);
             $this->newRows[] = $tempRow;
-           
+
         }
     }
-    
+
     public function formatRelativeDiscountRows($order) {
         if(!isset($order->relativeDiscountRows)) {
             return;
         }
-        
-        foreach ($order->relativeDiscountRows as $row) {      
+
+        foreach ($order->relativeDiscountRows as $row) {
             $discountCounter = $row->discountPercent * 0.01; //e.g. 0.20
             $tempRow = new HostedOrderRowBuilder();
 
             if(isset($row->name)) {
                 $tempRow->setName($row->name);
-            } 
+            }
 
             if(isset($row->description)) {
                 $tempRow->setDescription($row->description);
@@ -176,10 +176,10 @@ class HostedRowFormatter {
             if(isset($row->unit)) {
                 $tempRow->setUnit($row->unit);
             }
-           
+
             $tempRow->setAmount(- round(($discountCounter * $this->totalAmount)));
 
-            
+
 
             if($this->totalVat > 0) {
                 $tempRow->setVat(- round(($this->totalVat * $discountCounter)));
@@ -194,7 +194,7 @@ class HostedRowFormatter {
 
     public function formatTotalAmount($rows) {
         $result = 0;
-        
+
         foreach ($rows as $row) {
             if(substr($row->amount, 0,1) == "-") {
                 $result -= (substr($row->amount, 1))*$row->quantity;
@@ -202,16 +202,16 @@ class HostedRowFormatter {
                 $result += $row->amount * $row->quantity;
             }
         }
-        
+
         return $result;
     }
 
     public function formatTotalVat($rows) {
         $result = 0;
-        
+
         foreach ($rows as $row) {
             if(substr($row->vat, 0,1) == "-") {
-                $result -= substr($row->vat, 1) * $row->quantity;            
+                $result -= substr($row->vat, 1) * $row->quantity;
             } else {
                 $result += $row->vat * $row->quantity;
             }
@@ -219,5 +219,3 @@ class HostedRowFormatter {
         return $result;
     }
 }
-
-?>

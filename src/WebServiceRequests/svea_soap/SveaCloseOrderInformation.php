@@ -10,5 +10,3 @@ class SveaCloseOrderInformation {
     public $SveaOrderId;
 
 }
-
-?>

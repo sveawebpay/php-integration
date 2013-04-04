@@ -11,14 +11,14 @@ require_once SVEA_REQUEST_DIR . '/Includes.php';
  * @author anne-hal
  */
 class SveaConfigurationProvider implements ConfigurationProvider {
-    
+
     public $conf;
 
     public function __construct($enviromentConfig) {
         $this->conf = (array)$enviromentConfig;
     }
 /**
- * 
+ *
  * @param type $type eg. INVOICE, PAYMENTPLAN, HOSTED
  * @param type $country
  * @return Username
@@ -32,12 +32,12 @@ class SveaConfigurationProvider implements ConfigurationProvider {
         }elseif(array_key_exists($uType,$this->conf['credentials'][$uCountry]['auth']) == FALSE){
             throw new Exception('Invalid type. Accepted values: INVOICE, PAYMENTPLAN or HOSTED');
         }
-        
+
         return $this->conf['credentials'][$uCountry]['auth'][$uType]['username'];
     }
 
     /**
-     * 
+     *
      * @param type $type eg. INVOICE, PAYMENTPLAN, HOSTED
      * @param type $country
      * @return Password
@@ -54,7 +54,7 @@ class SveaConfigurationProvider implements ConfigurationProvider {
         return $this->conf['credentials'][$uCountry]['auth'][$uType]['password'];
     }
     /**
-     * 
+     *
      * @param type $type eg. INVOICE, PAYMENTPLAN, HOSTED
      * @param type $country
      * @return ClientNumber
@@ -71,7 +71,7 @@ class SveaConfigurationProvider implements ConfigurationProvider {
         return $this->conf['credentials'][$uCountry]['auth'][$uType]['clientNumber'];
     }
     /**
-     * 
+     *
      * @param type $type eg. INVOICE, PAYMENTPLAN, HOSTED
      * @param type $country
      * @return MerchantId
@@ -88,7 +88,7 @@ class SveaConfigurationProvider implements ConfigurationProvider {
         return $this->conf['credentials'][$uCountry]['auth'][$uType]['merchantId'];
     }
     /**
-     * 
+     *
      * @param type $type eg. INVOICE, PAYMENTPLAN, HOSTED
      * @param type $country
      * @return Secret word
@@ -105,7 +105,7 @@ class SveaConfigurationProvider implements ConfigurationProvider {
         return $this->conf['credentials'][$uCountry]['auth'][$uType]['secret'];
     }
     /**
-     * 
+     *
      * @param type $type eg. INVOICE, PAYMENTPLAN, HOSTED
      * @return type
      * @throws Exception
@@ -118,8 +118,6 @@ class SveaConfigurationProvider implements ConfigurationProvider {
         return $this->conf['url'][$uType];
     }
 
-   
-    
-}
 
-?>
+
+}

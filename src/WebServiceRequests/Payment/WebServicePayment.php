@@ -21,13 +21,13 @@ class WebServicePayment {
     public function __construct($order) {
         $this->order = $order;
     }
-    
+
     /** deprecated
      * Alternative drop or change file in Config/SveaConfig.php
      * Note! This fuction may change in future updates.
      * @param type $merchantId
      * @param type $secret
-    
+
     public function setPasswordBasedAuthorization($username, $password, $clientNumber) {
         $this->order->conf->username = $username;
         $this->order->conf->password = $password;
@@ -38,7 +38,7 @@ class WebServicePayment {
         }
         return $this;
     }
-     * 
+     *
      * @return \SveaAuth
      */
 
@@ -63,13 +63,13 @@ class WebServicePayment {
      * @return prepared SveaRequest
      */
     public function prepareRequest() {
-        $errors = $this->validateOrder();       
+        $errors = $this->validateOrder();
         if(count($errors) > 0){
             $exceptionString = "";
             foreach ($errors as $key => $value) {
-                $exceptionString .="-". $key. " : ".$value."\n";                
+                $exceptionString .="-". $key. " : ".$value."\n";
             }
-           
+
             throw new ValidationException($exceptionString);
         }
         $sveaOrder = new SveaOrder;
@@ -82,7 +82,7 @@ class WebServicePayment {
         }  else {
             $orderinformation->CustomerIdentity = $this->formatCustomerIdentity();
         }
-       
+
         $orderinformation->ClientOrderNumber = $this->order->clientOrderNumber;
         $orderinformation->OrderDate = $this->order->orderDate;
         $orderinformation->CustomerReference = $this->order->customerReference;
@@ -106,7 +106,7 @@ class WebServicePayment {
         $url = $this->order->conf->getEndPoint($this->orderType); //$this->order->testmode ? SveaConfig::SWP_TEST_WS_URL : SveaConfig::SWP_PROD_WS_URL;
         $request = new SveaDoRequest($url);
         $svea_req = $request->CreateOrderEu($object);
-     
+
         $response = new SveaResponse($svea_req);
         return $response->response;
     }
@@ -133,7 +133,7 @@ class WebServicePayment {
     /**
      * Format Customer Identity with svea_soap package
      * @return \SveaCustomerIdentity
-     */ 
+     */
     private function formatCustomerIdentity() {
         $isCompany = false;
         $companyId ="";
@@ -141,16 +141,16 @@ class WebServicePayment {
             $isCompany = true;
             $companyId = isset($this->order->orgNumber) ? $this->order->orgNumber : $this->order->companyVatNumber;
         }
-     
+
         //For european countries Individual/Company - identity required
         $idValues = array();
-        
+
         if ($this->order->countryCode != 'SE'
                 && $this->order->countryCode != 'NO'
                 && $this->order->countryCode != 'FI'
                 && $this->order->countryCode != 'DK') {
             $euIdentity = new SveaIdentity($isCompany);
-            
+
             if ($isCompany) {
                 $euIdentity->CompanyVatNumber = $companyId;
             } else {
@@ -161,7 +161,7 @@ class WebServicePayment {
                 }
                 $euIdentity->BirthDate = $this->order->birthDate;
             }
-            
+
             $type = ($isCompany ? "CompanyIdentity" : "IndividualIdentity");
             $idValues[$type] = $euIdentity;
         }
@@ -172,13 +172,13 @@ class WebServicePayment {
             //set with companyVatNumber for Company and NationalIdNumber for individual
             $individualCustomerIdentity->NationalIdNumber = $isCompany ? $companyId : $this->order->ssn;
         }
-        
+
         if ($isCompany) {
-            $individualCustomerIdentity->FullName = isset($this->order->companyName) ? $this->order->companyName : "";         
+            $individualCustomerIdentity->FullName = isset($this->order->companyName) ? $this->order->companyName : "";
         }  else {
-            $individualCustomerIdentity->FullName = isset($this->order->firstname) && isset($this->order->lastname) ? $this->order->firstname. ' ' .$this->order->lastname : ""; 
+            $individualCustomerIdentity->FullName = isset($this->order->firstname) && isset($this->order->lastname) ? $this->order->firstname. ' ' .$this->order->lastname : "";
         }
-        
+
         $individualCustomerIdentity->PhoneNumber = isset($this->order->phonenumber) ? $this->order->phonenumber : "";
         $individualCustomerIdentity->Street = isset($this->order->street) ? $this->order->street : "";
         $individualCustomerIdentity->HouseNumber = isset($this->order->housenumber) ? $this->order->housenumber : "";
@@ -200,22 +200,22 @@ class WebServicePayment {
     public function formatCustomerDetails() {
         $isCompany = false;
         get_class($this->order->customerIdentity) == "CompanyCustomer" ? $isCompany = TRUE : $isCompany = FALSE;
-       
+
         $companyId ="";
         if(isset($this->order->customerIdentity->orgNumber)||isset($this->order->customerIdentity->companyVatNumber)){
             $isCompany = true;
             $companyId = isset($this->order->customerIdentity->orgNumber) ? $this->order->customerIdentity->orgNumber : $this->order->customerIdentity->companyVatNumber;
         }
-     
+
         //For european countries Individual/Company - identity required
         $idValues = array();
-        
+
         if ($this->order->countryCode != 'SE'
                 && $this->order->countryCode != 'NO'
                 && $this->order->countryCode != 'FI'
                 && $this->order->countryCode != 'DK') {
             $euIdentity = new SveaIdentity($isCompany);
-            
+
             if ($isCompany) {
                 $euIdentity->CompanyVatNumber = $companyId;
             } else {
@@ -226,7 +226,7 @@ class WebServicePayment {
                 }
                 $euIdentity->BirthDate = $this->order->customerIdentity->birthDate;
             }
-            
+
             $type = ($isCompany ? "CompanyIdentity" : "IndividualIdentity");
             $idValues[$type] = $euIdentity;
         }
@@ -237,13 +237,13 @@ class WebServicePayment {
             //set with companyVatNumber for Company and NationalIdNumber for individual
             $individualCustomerIdentity->NationalIdNumber = $isCompany ? $companyId : $this->order->customerIdentity->ssn;
         }
-        
+
         if ($isCompany) {
-            $individualCustomerIdentity->FullName = isset($this->order->customerIdentity->companyName) ? $this->order->customerIdentity->companyName : "";         
+            $individualCustomerIdentity->FullName = isset($this->order->customerIdentity->companyName) ? $this->order->customerIdentity->companyName : "";
         }  else {
-            $individualCustomerIdentity->FullName = isset($this->order->customerIdentity->firstname) && isset($this->order->customerIdentity->lastname) ? $this->order->customerIdentity->firstname. ' ' .$this->order->customerIdentity->lastname : ""; 
+            $individualCustomerIdentity->FullName = isset($this->order->customerIdentity->firstname) && isset($this->order->customerIdentity->lastname) ? $this->order->customerIdentity->firstname. ' ' .$this->order->customerIdentity->lastname : "";
         }
-        
+
         $individualCustomerIdentity->PhoneNumber = isset($this->order->customerIdentity->phonenumber) ? $this->order->customerIdentity->phonenumber : "";
         $individualCustomerIdentity->Street = isset($this->order->customerIdentity->street) ? $this->order->customerIdentity->street : "";
         $individualCustomerIdentity->HouseNumber = isset($this->order->customerIdentity->housenumber) ? $this->order->customerIdentity->housenumber : "";
@@ -259,5 +259,3 @@ class WebServicePayment {
         return $individualCustomerIdentity;
     }
 }
-
-?>

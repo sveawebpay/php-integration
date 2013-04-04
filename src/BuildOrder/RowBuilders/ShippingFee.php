@@ -15,7 +15,7 @@ class ShippingFee {
         $this->shippingId = $idAsString;
         return $this;
     }
-    
+
     /**
      * Optional
      * @param type $nameAsString
@@ -25,7 +25,7 @@ class ShippingFee {
         $this->name = $nameAsString;
         return $this;
     }
-    
+
     /**
      * Optional
      * @param type $descriptionAsString
@@ -35,7 +35,7 @@ class ShippingFee {
         $this->description = $descriptionAsString;
         return $this;
     }
-    
+
     /**
      * Optional
      * @param type $amountAsFloat
@@ -55,7 +55,7 @@ class ShippingFee {
         return $this;
     }
   /**
-   * 
+   *
    * @param type $unitDescriptionAsString
    * @return \ShippingFee
    */
@@ -64,7 +64,7 @@ class ShippingFee {
         return $this;
     }
 /**
- * 
+ *
  * @param type $percentAsInt
  * @return \ShippingFee
  */
@@ -73,7 +73,7 @@ class ShippingFee {
         return $this;
     }
 /**
- * 
+ *
  * @param type $discountPercentAsInt
  * @return \ShippingFee
  */
@@ -82,5 +82,3 @@ class ShippingFee {
         return $this;
     }
 }
-
-?>

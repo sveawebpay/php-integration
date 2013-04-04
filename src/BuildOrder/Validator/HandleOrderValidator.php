@@ -7,7 +7,7 @@
  * @package WebServiceRequests/Helper
  */
 class HandleOrderValidator {
-     
+
     public $errors = array();
     /**
      * @param type $order
@@ -40,5 +40,3 @@ class HandleOrderValidator {
         return $errors;
     }
 }
-
-?>
