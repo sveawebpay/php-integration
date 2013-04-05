@@ -10,7 +10,7 @@ require_once $root . '/../../../../test/UnitTest/BuildOrder/TestRowFactory.php';
  * @author Anneli Halld'n, Daniel Brolund for Svea Webpay
  */
 class InvoicePaymentTest extends PHPUnit_Framework_TestCase {
-   
+
      function testInvoiceRequestObjectForCustomerIdentityIndividualFromSE(){
            $request = WebPay::createOrder()
             //->setTestmode()()
@@ -29,14 +29,14 @@ class InvoicePaymentTest extends PHPUnit_Framework_TestCase {
                 ->setCustomerReference("33")
                 ->setOrderDate("2012-12-12")
                 ->setCurrency("SEK")
-                ->useInvoicePayment()// returnerar InvoiceOrder object 
+                ->useInvoicePayment()// returnerar InvoiceOrder object
                     ->prepareRequest();
 
         $this->assertEquals(194605092222, $request->request->CreateOrderInformation->CustomerIdentity->NationalIdNumber); //Check all in identity
         $this->assertEquals("SE", $request->request->CreateOrderInformation->CustomerIdentity->CountryCode); //Check all in identity
         $this->assertEquals("Individual", $request->request->CreateOrderInformation->CustomerIdentity->CustomerType); //Check all in identity
     }
-    
+
     function testSetAuth(){
            $request = WebPay::createOrder()
             //->setTestmode()()
@@ -55,16 +55,16 @@ class InvoicePaymentTest extends PHPUnit_Framework_TestCase {
                     ->setCustomerReference("33")
                     ->setOrderDate("2012-12-12")
                     ->setCurrency("SEK")
-                    ->useInvoicePayment()// returnerar InvoiceOrder object 
+                    ->useInvoicePayment()// returnerar InvoiceOrder object
                         //->setPasswordBasedAuthorization("sverigetest", "sverigetest", 79021)
                         ->prepareRequest();
-           
+
         $this->assertEquals(79021, $request->request->Auth->ClientNumber); //Check all in identity
         $this->assertEquals("sverigetest", $request->request->Auth->Username); //Check all in identity
         $this->assertEquals("sverigetest", $request->request->Auth->Password); //Check all in identity
     }
-    
-    
+
+
 
     function testInvoiceRequestObjectForCustomerIdentityIndividualFromNL(){
          $request = WebPay::createOrder()
@@ -90,9 +90,9 @@ class InvoicePaymentTest extends PHPUnit_Framework_TestCase {
                     ->setCoAddress("c/o Eriksson")
                     ->setZipCode(9999)
                     ->setLocality("Stan")
-                      
+
                       )
-              
+
                 ->setCountryCode("NL")
                 ->setCustomerReference("33")
                 ->setOrderDate("2012-12-12")
@@ -116,7 +116,55 @@ class InvoicePaymentTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals("SB", $request->request->CreateOrderInformation->CustomerIdentity->IndividualIdentity->Initials); //Check all in identity
         $this->assertEquals(19231212, $request->request->CreateOrderInformation->CustomerIdentity->IndividualIdentity->BirthDate); //Check all in identity
     }
-    
+    function testInvoiceRequestObjectForCustomerIdentityIndividualFromDE(){
+         $request = WebPay::createOrder()
+            //->setTestmode()()
+            ->addOrderRow(Item::orderRow()
+                ->setArticleNumber(1)
+                ->setQuantity(2)
+                ->setAmountExVat(100.00)
+                ->setDescription("Specification")
+                ->setName('Prod')
+                ->setUnit("st")
+                ->setVatPercent(25)
+                ->setDiscountPercent(0)
+                )
+              ->addCustomerDetails(Item::individualCustomer()
+                    ->setBirthDate(1923, 12, 12)
+                    ->setName("Tess", "Testson")
+                    ->setEmail("test@svea.com")
+                    ->setPhoneNumber(999999)
+                    ->setIpAddress("123.123.123")
+                    ->setStreetAddress("Gatan", 23)
+                    ->setCoAddress("c/o Eriksson")
+                    ->setZipCode(9999)
+                    ->setLocality("Stan")
+
+                      )
+
+                ->setCountryCode("DE")
+                ->setCustomerReference("33")
+                ->setOrderDate("2012-12-12")
+                ->setCurrency("EUR")
+                ->useInvoicePayment()// returnerar InvoiceOrder object
+                    ->prepareRequest();
+
+        $this->assertEquals("test@svea.com", $request->request->CreateOrderInformation->CustomerIdentity->Email); //Check all in identity
+        $this->assertEquals(999999, $request->request->CreateOrderInformation->CustomerIdentity->PhoneNumber); //Check all in identity
+        $this->assertEquals("123.123.123", $request->request->CreateOrderInformation->CustomerIdentity->IpAddress); //Check all in identity
+        $this->assertEquals("Tess Testson", $request->request->CreateOrderInformation->CustomerIdentity->FullName); //Check all in identity
+        $this->assertEquals("Gatan", $request->request->CreateOrderInformation->CustomerIdentity->Street); //Check all in identity
+        $this->assertEquals("c/o Eriksson", $request->request->CreateOrderInformation->CustomerIdentity->CoAddress); //Check all in identity
+        $this->assertEquals(9999, $request->request->CreateOrderInformation->CustomerIdentity->ZipCode); //Check all in identity
+        $this->assertEquals(23, $request->request->CreateOrderInformation->CustomerIdentity->HouseNumber); //Check all in identity
+        $this->assertEquals("Stan", $request->request->CreateOrderInformation->CustomerIdentity->Locality); //Check all in identity
+        $this->assertEquals("DE", $request->request->CreateOrderInformation->CustomerIdentity->CountryCode); //Check all in identity
+        $this->assertEquals("Individual", $request->request->CreateOrderInformation->CustomerIdentity->CustomerType); //Check all in identity
+        $this->assertEquals("Tess", $request->request->CreateOrderInformation->CustomerIdentity->IndividualIdentity->FirstName); //Check all in identity
+        $this->assertEquals("Testson", $request->request->CreateOrderInformation->CustomerIdentity->IndividualIdentity->LastName); //Check all in identity
+        $this->assertEquals(19231212, $request->request->CreateOrderInformation->CustomerIdentity->IndividualIdentity->BirthDate); //Check all in identity
+    }
+
     function testInvoiceRequestObjectForCustomerIdentityCompanyFromNL(){
          $request = WebPay::createOrder()
             //->setTestmode()()
@@ -129,7 +177,7 @@ class InvoicePaymentTest extends PHPUnit_Framework_TestCase {
                 ->setUnit("st")
                 ->setVatPercent(25)
                 ->setDiscountPercent(0)
-                ) 
+                )
             ->addCustomerDetails(Item::individualCustomer()
                  ->setInitials("SB")
                  ->setBirthDate(1923, 12, 12)
@@ -162,9 +210,9 @@ class InvoicePaymentTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals("Stan", $request->request->CreateOrderInformation->CustomerIdentity->Locality); //Check all in identity
         $this->assertEquals("NL", $request->request->CreateOrderInformation->CustomerIdentity->CountryCode); //Check all in identity
         $this->assertEquals("Individual", $request->request->CreateOrderInformation->CustomerIdentity->CustomerType); //Check all in identity
- 
+
     }
-    
+
     function testInvoiceRequestObjectForCustomerIdentityCompanyFromSE(){
           $request = WebPay::createOrder()
             //->setTestmode()()
@@ -177,7 +225,7 @@ class InvoicePaymentTest extends PHPUnit_Framework_TestCase {
                 ->setUnit("st")
                 ->setVatPercent(25)
                 ->setDiscountPercent(0)
-                ) 
+                )
             ->addCustomerDetails(Item::companyCustomer()->setNationalIdNumber("vat234"))
             ->setCountryCode("SE")
             ->setCustomerReference("33")
@@ -185,7 +233,7 @@ class InvoicePaymentTest extends PHPUnit_Framework_TestCase {
             ->setCurrency("SEK")
             ->useInvoicePayment()// returnerar InvoiceOrder object
                 ->prepareRequest();
-          
+
         $this->assertEquals("vat234", $request->request->CreateOrderInformation->CustomerIdentity->NationalIdNumber); //Check all in identity
         $this->assertEquals("SE", $request->request->CreateOrderInformation->CustomerIdentity->CountryCode); //Check all in identity
         $this->assertEquals("Company", $request->request->CreateOrderInformation->CustomerIdentity->CustomerType); //Check all in identity
@@ -204,7 +252,7 @@ class InvoicePaymentTest extends PHPUnit_Framework_TestCase {
                 ->setUnit("st")
                 ->setVatPercent(25)
                 ->setDiscountPercent(0)
-                ) 
+                )
                 ->run($rowFactory->buildShippingFee())
                 ->run($rowFactory->buildInvoiceFee())
                   ->addCustomerDetails(Item::individualCustomer()->setNationalIdNumber(194605092222))
@@ -214,7 +262,7 @@ class InvoicePaymentTest extends PHPUnit_Framework_TestCase {
                 ->setCurrency("SEK")
                 ->useInvoicePayment()// returnerar InvoiceOrder object
                     ->prepareRequest();
-            
+
         //First orderrow is a product
         $this->assertEquals(1, $request->request->CreateOrderInformation->OrderRows['OrderRow'][0]->ArticleNumber);
         $this->assertEquals('Prod: Specification', $request->request->CreateOrderInformation->OrderRows['OrderRow'][0]->Description);
@@ -252,7 +300,7 @@ class InvoicePaymentTest extends PHPUnit_Framework_TestCase {
                     ->setName('Prod')
                     ->setUnit("st")
                     ->setVatPercent(25)
-                    ->setDiscountPercent(0)  
+                    ->setDiscountPercent(0)
                     )
             ->addFee(Item::shippingFee()
                   ->setShippingId('33')
@@ -261,7 +309,7 @@ class InvoicePaymentTest extends PHPUnit_Framework_TestCase {
                     ->setAmountIncVat(62.50)
                     ->setUnit("st")
                     ->setVatPercent(25)
-                    ->setDiscountPercent(0)   
+                    ->setDiscountPercent(0)
                     )
             ->addFee(Item::invoiceFee()
                     ->setName('Svea fee')
@@ -269,7 +317,7 @@ class InvoicePaymentTest extends PHPUnit_Framework_TestCase {
                     ->setAmountIncVat(62.50)
                     ->setUnit("st")
                     ->setVatPercent(25)
-                    ->setDiscountPercent(0)  
+                    ->setDiscountPercent(0)
                     )
                 ->addCustomerDetails(Item::individualCustomer()->setNationalIdNumber(194605092222))
                 ->setCountryCode("SE")
@@ -278,7 +326,7 @@ class InvoicePaymentTest extends PHPUnit_Framework_TestCase {
                 ->setCurrency("SEK")
                 ->useInvoicePayment()// returnerar InvoiceOrder object
                     ->prepareRequest();
-            
+
         //First orderrow is a product
         $this->assertEquals(1, $request->request->CreateOrderInformation->OrderRows['OrderRow'][0]->ArticleNumber);
         $this->assertEquals('Prod: Specification', $request->request->CreateOrderInformation->OrderRows['OrderRow'][0]->Description);
@@ -316,7 +364,7 @@ class InvoicePaymentTest extends PHPUnit_Framework_TestCase {
                     ->setDescription("Specification")
                     ->setName('Prod')
                     ->setUnit("st")
-                    ->setDiscountPercent(0) 
+                    ->setDiscountPercent(0)
                     )
             ->addFee(Item::shippingFee()
                      ->setShippingId('33')
@@ -324,8 +372,8 @@ class InvoicePaymentTest extends PHPUnit_Framework_TestCase {
                     ->setDescription("Specification")
                     ->setAmountIncVat(62.50)
                     ->setAmountExVat(50)
-                    ->setUnit("st")                   
-                    ->setDiscountPercent(0) 
+                    ->setUnit("st")
+                    ->setDiscountPercent(0)
                     )
             ->addFee(Item::invoiceFee()
                    ->setName('Svea fee')
@@ -333,7 +381,7 @@ class InvoicePaymentTest extends PHPUnit_Framework_TestCase {
                     ->setAmountIncVat(62.50)
                     ->setAmountExVat(50)
                     ->setUnit("st")
-                    ->setDiscountPercent(0)  
+                    ->setDiscountPercent(0)
                     )
             ->addCustomerDetails(Item::individualCustomer()->setNationalIdNumber(194605092222))
                 ->setCountryCode("SE")
@@ -342,7 +390,7 @@ class InvoicePaymentTest extends PHPUnit_Framework_TestCase {
                 ->setCurrency("SEK")
                 ->useInvoicePayment()// returnerar InvoiceOrder object
                     ->prepareRequest();
-            
+
         //First orderrow is a product
         $this->assertEquals(1, $request->request->CreateOrderInformation->OrderRows['OrderRow'][0]->ArticleNumber);
         $this->assertEquals('Prod: Specification', $request->request->CreateOrderInformation->OrderRows['OrderRow'][0]->Description);
@@ -378,7 +426,7 @@ class InvoicePaymentTest extends PHPUnit_Framework_TestCase {
                     ->setAmountExVat(240.00)
                     //->setAmountIncVat(300)
                     ->setDescription("CD")
-                    ->setVatPercent(25)  
+                    ->setVatPercent(25)
                     )
                 ->addOrderRow(Item::orderRow()
                     ->setArticleNumber(1)
@@ -391,7 +439,7 @@ class InvoicePaymentTest extends PHPUnit_Framework_TestCase {
                 ->addDiscount(Item::relativeDiscount()
                     ->setDiscountId("1")
                      ->setDiscountPercent(20)
-                     ->setDescription("RelativeDiscount")   
+                     ->setDescription("RelativeDiscount")
                     )
                 ->addCustomerDetails(Item::individualCustomer()->setNationalIdNumber(194605092222))
                 ->setCountryCode("SE")
@@ -400,7 +448,7 @@ class InvoicePaymentTest extends PHPUnit_Framework_TestCase {
                 ->setCurrency("SEK")
                     ->useInvoicePayment()
                         ->prepareRequest();
-               
+
         //couponrow
         $this->assertEquals('1', $request->request->CreateOrderInformation->OrderRows['OrderRow'][2]->ArticleNumber);
         $this->assertEquals('RelativeDiscount', $request->request->CreateOrderInformation->OrderRows['OrderRow'][2]->Description);
@@ -419,19 +467,19 @@ class InvoicePaymentTest extends PHPUnit_Framework_TestCase {
                     ->setQuantity(1)
                     ->setAmountExVat(240.00)
                     ->setDescription("CD")
-                    ->setVatPercent(25)   
+                    ->setVatPercent(25)
                     )
                 ->addOrderRow(Item::orderRow()
                     ->setArticleNumber(1)
                     ->setQuantity(1)
                     ->setAmountExVat(188.68)
                     ->setDescription("Bok")
-                    ->setVatPercent(6)  
+                    ->setVatPercent(6)
                     )
                 ->addDiscount(Item::fixedDiscount()
                         ->setAmountIncVat(100.00)
                         ->setDescription('FixedDiscount')
-                        ->setDiscountId('1') 
+                        ->setDiscountId('1')
                     )
                 ->addCustomerDetails(Item::individualCustomer()->setNationalIdNumber(194605092222))
                     ->setCountryCode("SE")
@@ -450,7 +498,7 @@ class InvoicePaymentTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(16.64, $request->request->CreateOrderInformation->OrderRows['OrderRow'][2]->VatPercent);
         $this->assertEquals(0, $request->request->CreateOrderInformation->OrderRows['OrderRow'][2]->DiscountPercent);
     }
-    
+
      function testInvoiceRequestObjectWithCreateOrderInformation(){
         $rowFactory = new TestRowFactory();
            $request = WebPay::createOrder()
@@ -463,7 +511,7 @@ class InvoicePaymentTest extends PHPUnit_Framework_TestCase {
                     ->setName('Prod')
                     ->setUnit("st")
                     ->setVatPercent(25)
-                    ->setDiscountPercent(0)   
+                    ->setDiscountPercent(0)
                     )
                 ->run($rowFactory->buildShippingFee())
             ->addCustomerDetails(Item::individualCustomer()->setNationalIdNumber(194605092222))
@@ -474,7 +522,7 @@ class InvoicePaymentTest extends PHPUnit_Framework_TestCase {
                     ->setCurrency("SEK")
                     ->setAddressSelector("ad33")
                     ->useInvoicePayment()// returnerar InvoiceOrder object
-                        ->prepareRequest();   
+                        ->prepareRequest();
         /**
          * Test that all data is in the right place for SoapRequest
          */
@@ -485,7 +533,7 @@ class InvoicePaymentTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals('nr26',$request->request->CreateOrderInformation->ClientOrderNumber); //check in identity
         $this->assertEquals('ad33',$request->request->CreateOrderInformation->AddressSelector); //check in identity
      }
-    
+
     function testInvoiceRequestObjectWithAuth(){
         $rowFactory = new TestRowFactory();
             $request = WebPay::createOrder()
@@ -498,7 +546,7 @@ class InvoicePaymentTest extends PHPUnit_Framework_TestCase {
                     ->setName('Prod')
                     ->setUnit("st")
                     ->setVatPercent(25)
-                    ->setDiscountPercent(0) 
+                    ->setDiscountPercent(0)
                     )
             ->run($rowFactory->buildShippingFee())
             ->addCustomerDetails(Item::individualCustomer()->setNationalIdNumber(194605092222))
@@ -508,7 +556,7 @@ class InvoicePaymentTest extends PHPUnit_Framework_TestCase {
                 ->setOrderDate("2012-12-12")
                 ->setCurrency("SEK")
                 ->setAddressSelector("ad33")
-                ->useInvoicePayment()// returnerar InvoiceOrder object 
+                ->useInvoicePayment()// returnerar InvoiceOrder object
                 ->prepareRequest();
 
         $this->assertEquals('sverigetest', $request->request->Auth->Username);
