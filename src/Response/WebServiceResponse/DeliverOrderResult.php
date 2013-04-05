@@ -6,7 +6,7 @@ require_once 'WebServiceResponse.php';
  * @author anne-hal
  */
 class DeliverOrderResult extends WebServiceResponse{
-   
+
     public $amount;
     public $orderType;
 
@@ -16,11 +16,11 @@ class DeliverOrderResult extends WebServiceResponse{
         if(isset($message->DeliverOrderEuResult->ErrorMessage))
         $this->errormessage = $message->DeliverOrderEuResult->ErrorMessage;
     }
-    
+
      protected function formatObject($message){
         $this->accepted = $message->DeliverOrderEuResult->Accepted;
         $this->resultcode = $message->DeliverOrderEuResult->ResultCode;
-        
+
         $this->amount = $message->DeliverOrderEuResult->DeliverOrderResult->Amount;
         $this->orderType = $message->DeliverOrderEuResult->DeliverOrderResult->OrderType;
         if(property_exists($message->DeliverOrderEuResult->DeliverOrderResult, "InvoiceResultDetails")){
@@ -31,10 +31,8 @@ class DeliverOrderResult extends WebServiceResponse{
         }elseif (property_exists($message->DeliverOrderEuResult->DeliverOrderResult, "PaymentPlanResultDetails")) {
             $this->contractNumber = $message->DeliverOrderEuResult->DeliverOrderResult->PaymentPlanResultDetails->ContractNumber;
         }
-                
+
         $this->orderType = $message->DeliverOrderEuResult->DeliverOrderResult->OrderType;
 
      }
 }
-
-?>

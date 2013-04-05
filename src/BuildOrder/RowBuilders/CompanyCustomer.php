@@ -5,7 +5,7 @@
  * @author anne-hal
  */
 class CompanyCustomer {
-   
+
     /**
      * Example: 4608142222
      * Required for company customers in SE, NO, DK, FI
@@ -30,7 +30,7 @@ class CompanyCustomer {
         $this->companyVatNumber = $vatNumber;
         return $this;
     }
-       
+
    /**
      * Optional but desirable
      * @param type $emailAsString
@@ -104,7 +104,5 @@ class CompanyCustomer {
     public function setCompanyName($nameAsString) {
         $this->companyName = $nameAsString;
         return $this;
-    } 
+    }
 }
-
-?>

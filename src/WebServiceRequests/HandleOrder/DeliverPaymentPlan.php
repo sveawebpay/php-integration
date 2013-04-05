@@ -14,5 +14,3 @@ class DeliverPaymentPlan extends HandleOrder {
         parent::__construct($order);
     }
 }
-
-?>

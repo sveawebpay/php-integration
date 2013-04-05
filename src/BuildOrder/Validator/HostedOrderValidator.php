@@ -20,7 +20,7 @@ class HostedOrderValidator extends OrderValidator {
      */
     public function validate($order) {
          if(isset($order->orgNumber) || isset($order->companyVatNumber) || isset($order->companyName)){
-            $this->isCompany = TRUE;           
+            $this->isCompany = TRUE;
         }
         $this->errors = $this->validateClientOrderNumber($order,$this->errors);
         $this->errors = $this->validateCurrency($order,$this->errors);
@@ -38,7 +38,7 @@ class HostedOrderValidator extends OrderValidator {
      * @param type $errors
      */
     private function validateClientOrderNumber($order,$errors) {
-        if (isset($order->clientOrderNumber) == false || "" == $order->clientOrderNumber) {          
+        if (isset($order->clientOrderNumber) == false || "" == $order->clientOrderNumber) {
             $errors['missing value'] = "ClientOrderNumber is required. Use function setClientOrderNumber().";
         }
         return $errors;
@@ -89,10 +89,8 @@ class HostedOrderValidator extends OrderValidator {
         if(isset($order->zipCode) == false){
             $errors['missing value'] = "CustomerZipCode is required for all customers when countrycode is NL. Use function setCustomerZipCode().";
         }
-       
-        return $errors;
-    }   
-  
-}
 
-?>
+        return $errors;
+    }
+
+}

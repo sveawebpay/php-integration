@@ -4,7 +4,7 @@
  * PaymentMethodType
  */
 abstract class PaymentMethod {
-  
+
     const INVOICE = 'INVOICE';
     const PAYMENTPLAN = 'PAYMENTPLAN';
     //DIRECT
@@ -19,8 +19,8 @@ abstract class PaymentMethod {
     const SAMPOFI = 'DBSAMPOFI';
     const SEB_SE = 'DBSEBSE';
     const SEBFTG_SE = 'DBSEBFTGSE';
-    const SHB_SE = 'DBSHBSE'; 
-    const SHB_FI = 'DBSHBFI'; 
+    const SHB_SE = 'DBSHBSE';
+    const SHB_FI = 'DBSHBFI';
     const SPANKKI_FI = 'DBSPANKKIFI';
     const SWEDBANK_SE = 'DBSWEDBANKSE';
     const TAPIOLA_FI = 'DBTAPIOLAFI';
@@ -35,5 +35,3 @@ abstract class PaymentMethod {
     const PAYPAL = 'PAYPAL';
 
 }
-
-?>

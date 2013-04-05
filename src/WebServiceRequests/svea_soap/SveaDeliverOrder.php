@@ -9,5 +9,3 @@ class SveaDeliverOrder {
     public $DeliverOrderInformation;
 
 }
-
-?>

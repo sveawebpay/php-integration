@@ -21,7 +21,7 @@ class WebPay {
        $config = $config == null ? SveaConfig::getDefaultConfig() : $config;
         return new CreateOrderBuilder($config);
     }
-    
+
     /**
      * Get Payment Plan Params to present to Customer before doing PaymentPlan Payment
      * @return \GetPaymentPlanParams
@@ -32,7 +32,7 @@ class WebPay {
        $config = $config == null ? SveaConfig::getDefaultConfig() : $config;
         return new GetPaymentPlanParams($config);
     }
-    
+
     /**
      * Start Building Request Deliver Orders.
      * @return \deliverOrder
@@ -56,7 +56,7 @@ class WebPay {
         return new closeOrderBuilder($config);
        // return new OrderBuilder();
     }
-    
+
     /**
      * Start building Request for getting Address
      * @return \GetAddresses
@@ -67,8 +67,6 @@ class WebPay {
          $config = $config == null ? SveaConfig::getDefaultConfig() : $config;
         return new GetAddresses($config);
     }
-    
-    
-}
 
-?>
+
+}

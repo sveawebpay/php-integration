@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Include in SveaDeliverOrderInformation for Invoice only 
+ * Include in SveaDeliverOrderInformation for Invoice only
  */
 class SveaDeliverInvoiceDetails {
 
@@ -25,5 +25,3 @@ class SveaDeliverInvoiceDetails {
     }
 
 }
-
-?>

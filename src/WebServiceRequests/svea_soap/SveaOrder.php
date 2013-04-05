@@ -9,5 +9,3 @@ class SveaOrder {
     public $CreateOrderInformation;
 
 }
-
-?>

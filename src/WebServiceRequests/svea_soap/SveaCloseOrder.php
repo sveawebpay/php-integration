@@ -9,7 +9,5 @@ class SveaCloseOrder {
 
     public $Auth;
     public $CloseOrderInformation;
-    
-}
 
-?>
+}

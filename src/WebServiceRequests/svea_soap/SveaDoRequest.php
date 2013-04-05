@@ -3,7 +3,7 @@
 require_once SVEA_REQUEST_DIR . '/Config/SveaConfig.php';
 
 /**
- * 
+ *
  * Create SoapObject
  * Do request
  * @return Response Object
@@ -28,19 +28,19 @@ class SveaDoRequest {
      * @return CreateOrderEuResponse Object
      */
     public function CreateOrderEu($order) {
-        $builder = new SveaSoapArrayBuilder();    
-        return $this->client->CreateOrderEu($builder->object_to_array($order));    
-        
+        $builder = new SveaSoapArrayBuilder();
+        return $this->client->CreateOrderEu($builder->object_to_array($order));
+
     }
 
     /**
      * Use to get Addresses based on NationalIdNumber or orgnr. Only in SE, NO, DK.
      * @param type $request Object containing SveaAuth, IsCompany, CountryCode, SecurityNumber
-     * @return GetCustomerAddressesResponse Object. 
+     * @return GetCustomerAddressesResponse Object.
      */
     public function GetAddresses($request) {
         $builder = new SveaSoapArrayBuilder();
-        return $this->client->GetAddresses($builder->object_to_array($request));      
+        return $this->client->GetAddresses($builder->object_to_array($request));
     }
 
     /**
@@ -50,24 +50,22 @@ class SveaDoRequest {
      */
     public function GetPaymentPlanParamsEu($auth) {
         $builder = new SveaSoapArrayBuilder();
-        return $this->client->GetPaymentPlanParamsEu($builder->object_to_array($auth));       
+        return $this->client->GetPaymentPlanParamsEu($builder->object_to_array($auth));
     }
 
     /**
-     * 
+     *
      * @param type $deliverdata Object containing SveaAuth and DeliverOrderInformation
      * @return DeliverOrderResult Object
      */
     public function DeliverOrderEu($deliverdata) {
         $builder = new SveaSoapArrayBuilder();
-        return $this->client->DeliverOrderEu($builder->object_to_array($deliverdata));        
+        return $this->client->DeliverOrderEu($builder->object_to_array($deliverdata));
     }
 
     public function CloseOrderEu($closedata) {
         $builder = new SveaSoapArrayBuilder();
-        return $this->client->CloseOrderEu($builder->object_to_array($closedata));       
+        return $this->client->CloseOrderEu($builder->object_to_array($closedata));
     }
 
 }
-
-?>

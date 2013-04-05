@@ -16,9 +16,9 @@ class IndividualCustomer {
         $this->ssn = $nationalIdNumber;
         return $this;
     }
-    
+
     /**
-     * Required for private customers in NL 
+     * Required for private customers in NL
      * @param type $initialsAsString
      * @return \IndividualCustomer
      */
@@ -26,7 +26,7 @@ class IndividualCustomer {
         $this->initials = $initialsAsString;
         return $this;
     }
-    
+
     /**
      * Required for private customers in NL and DE
      * @param type $yyyy
@@ -37,11 +37,11 @@ class IndividualCustomer {
     public function setBirthDate($yyyy, $mm, $dd) {
         if($mm < 10){$mm = "0".$mm; }
         if($dd < 10){$dd = "0".$dd; }
-        
+
         $this->birthDate = $yyyy . $mm . $dd;
         return $this;
     }
-    
+
    /**
      * Optional but desirable
      * @param type $emailAsString
@@ -118,7 +118,5 @@ class IndividualCustomer {
         $this->locality = $cityAsString;
         return $this;
     }
-    
-}
 
-?>
+}

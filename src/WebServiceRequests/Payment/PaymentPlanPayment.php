@@ -20,5 +20,3 @@ class PaymentPlanPayment extends WebServicePayment {
         return $orderInformation;
     }
 }
-
-?>

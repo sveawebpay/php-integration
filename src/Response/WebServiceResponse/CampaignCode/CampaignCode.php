@@ -1,7 +1,7 @@
 <?php
 
 /**
- * 
+ *
  *
  * @author anne-hal
  */
@@ -19,5 +19,3 @@ class CampaignCode {
     public $fromAmount;
     public $toAmount;
 }
-
-?>

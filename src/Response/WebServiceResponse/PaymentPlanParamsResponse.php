@@ -6,7 +6,7 @@ require_once 'WebServiceResponse.php';
  * @author anne-hal
  */
 class PaymentPlanParamsResponse extends WebServiceResponse{
-   
+
     public $campaignCodes = array();
 
 
@@ -16,7 +16,7 @@ class PaymentPlanParamsResponse extends WebServiceResponse{
             $this->errormessage = $message->GetPaymentPlanParamsEuResult->ErrorMessage;
         }
     }
-    
+
     protected function formatObject($message){
         $this->accepted = $message->GetPaymentPlanParamsEuResult->Accepted;
         $this->resultcode = $message->GetPaymentPlanParamsEuResult->ResultCode;
@@ -35,11 +35,9 @@ class PaymentPlanParamsResponse extends WebServiceResponse{
             $campaign->numberOfPaymentFreeMonths = $code->NumberOfPaymentFreeMonths;
             $campaign->fromAmount = $code->FromAmount;
             $campaign->toAmount = $code->ToAmount;
-            
+
             array_push($this->campaignCodes, $campaign);
-            } 
+            }
         }
     }
 }
-
-?>

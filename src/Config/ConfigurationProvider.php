@@ -9,30 +9,30 @@ interface ConfigurationProvider {
      /**
     * get the return value from your database or likewise
     * @param $type eg. HOSTED, INVOICE or PAYMENTPLAN
-    * $param $country CountryCode eg. SE, NO, DK, FI, NL, DE 
+    * $param $country CountryCode eg. SE, NO, DK, FI, NL, DE
     */
     public function getUsername($type, $country);
      /**
     * get the return value from your database or likewise
     * @param $type eg. HOSTED, INVOICE or PAYMENTPLAN
-    * $param $country CountryCode eg. SE, NO, DK, FI, NL, DE 
+    * $param $country CountryCode eg. SE, NO, DK, FI, NL, DE
     */
     public function getPassword($type, $country);
      /**
     * get the return value from your database or likewise
     * @param $type eg. HOSTED, INVOICE or PAYMENTPLAN
-    * $param $country CountryCode eg. SE, NO, DK, FI, NL, DE 
+    * $param $country CountryCode eg. SE, NO, DK, FI, NL, DE
     */
     public function getclientNumber($type, $country);
      /**
     * get the return value from your database or likewise
     * @param $type eg. HOSTED, INVOICE or PAYMENTPLAN
-    * $param $country CountryCode eg. SE, NO, DK, FI, NL, DE 
+    * $param $country CountryCode eg. SE, NO, DK, FI, NL, DE
     */
     public function getMerchantId($type, $country); /**
     * get the return value from your database or likewise
     * @param $type eg. HOSTED, INVOICE or PAYMENTPLAN
-    * $param $country CountryCode eg. SE, NO, DK, FI, NL, DE 
+    * $param $country CountryCode eg. SE, NO, DK, FI, NL, DE
     */
     public function getSecret($type, $country);
      /**
@@ -41,5 +41,3 @@ interface ConfigurationProvider {
     */
     public function getEndPoint($type);
 }
-
-?>

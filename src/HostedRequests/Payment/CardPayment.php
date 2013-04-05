@@ -10,50 +10,50 @@ require_once  SVEA_REQUEST_DIR.'/Constant/PaymentMethod.php';
  * @package HostedRequests/Payment
  */
 class CardPayment extends HostedPayment {
-    
+
     public $langCode = 'en';
 
     /**
-     * 
+     *
      * @param type $order
      */
     public function __construct($order) {
         parent::__construct($order);
     }
 
-    protected function configureExcludedPaymentMethods($request) {       
-        //directbanks      
+    protected function configureExcludedPaymentMethods($request) {
+        //directbanks
         $methods[] = SystemPaymentMethod::BANKAXESS;
         $methods[] = SystemPaymentMethod::DBNORDEASE;
         $methods[] = SystemPaymentMethod::DBSEBSE;
         $methods[] = SystemPaymentMethod::DBSEBFTGSE;
         $methods[] = SystemPaymentMethod::DBSHBSE;
         $methods[] = SystemPaymentMethod::DBSWEDBANKSE;
-        //other        
-       $methods[] = SystemPaymentMethod::PAYPAL;       
-         
+        //other
+       $methods[] = SystemPaymentMethod::PAYPAL;
+
         $exclude = new ExcludePayments();
         $methods = array_merge((array)$methods, (array)$exclude->excludeInvoicesAndPaymentPlan($this->order->countryCode));
-        
+
         $request['excludePaymentMethods'] = $methods;
         return $request;
     }
-    
+
     /**
      * Alternative drop or change file in Config/SveaConfig.php
      * Note! This fuction may change in future updates.
      * @param type $merchantId
      * @param type $secret
      * @return \HostedPayment
-     
+
     public function setMerchantIdBasedAuthorization($merchantId,$secret){
         $this->order->conf->merchantId = $merchantId;
         $this->order->conf->secret = $secret;
         return $this;
     }
-     * 
+     *
      */
-    
+
     /**
      * Set return Url for redirect when payment is completed
      * @param type $returnUrlAsString
@@ -63,9 +63,9 @@ class CardPayment extends HostedPayment {
         $this->returnUrl = $returnUrlAsString;
         return $this;
     }
-    
+
     /**
-     * 
+     *
      * @param type $cancelUrlAsString
      * @return \HostedPayment
      */
@@ -73,7 +73,7 @@ class CardPayment extends HostedPayment {
         $this->cancelUrl = $cancelUrlAsString;
         return $this;
     }
-    
+
      public function setPayPageLanguage($languageCodeAsISO639){
         switch ($languageCodeAsISO639) {
             case "sv":
@@ -111,18 +111,16 @@ class CardPayment extends HostedPayment {
             case "it":
                 $this->langCode = $languageCodeAsISO639;
 
-                break;     
+                break;
             case "nl":
                 $this->langCode = $languageCodeAsISO639;
 
-                break;     
+                break;
             default:
                  $this->langCode = "en";
                 break;
         }
-        
+
         return $this;
     }
 }
-
-?>

@@ -9,11 +9,11 @@ require_once $root . '/../../../../src/Includes.php';
  * @author Anneli Halld'n, Daniel Brolund for Svea Webpay
  */
 class WebServiceOrderValidatorTest extends PHPUnit_Framework_TestCase {
-    
+
      /**
      * @expectedException ValidationException
      * @expectedExceptionMessage -missing value : Customer values are required for Invoice and PaymentPlan orders.
-    
+
     function te_stFailOnMissingCustomerIdentity() {
         $builder = WebPay::createOrder();
         $order = $builder
@@ -26,32 +26,32 @@ class WebServiceOrderValidatorTest extends PHPUnit_Framework_TestCase {
                     ->useInvoicePayment();
         $order->prepareRequest();
 
-       
+
     }
-      * 
+      *
       */
-    
+
      /**
      * @expectedException ValidationException
      * @expectedExceptionMessage -duplicated value : Customer is either an individual or a company. You can not use function setNationalIdNumber() in combination with setNationalIdNumber() or setVatNumber().
      */
     function t_estFailOnDoubleIdentity() {
         $builder = WebPay::createOrder();
-        $order = $builder 
+        $order = $builder
                 ->addOrderRow(Item::orderRow()
                     ->setAmountExVat(100)
                     ->setVatPercent(20)
                     ->setQuantity(1)
                     )
-                ->setCountryCode("SE")   
+                ->setCountryCode("SE")
                   ->setOrderDate("Mon, 15 Aug 05 15:52:01 +0000")
                 ->addCustomerDetails(Item::individualCustomer()->setNationalIdNumber(194605092222))
                 ->addCustomerDetails(Item::companyCustomer()->setNationalIdNumber(4608142222))
                     ->useInvoicePayment();
        $order->prepareRequest();
-       
+
     }
-    
+
     /**
      * Use to get paymentPlanParams to be able to test PaymentPlanRequest
      * @return type
@@ -71,7 +71,7 @@ class WebServiceOrderValidatorTest extends PHPUnit_Framework_TestCase {
     function testFailOnCompanyPaymentPlanPayment() {
         $code = $this->getGetPaymentPlanParamsForTesting();
         $builder = WebPay::CreateOrder();
-        $order = $builder 
+        $order = $builder
                 ->addOrderRow(Item::orderRow()
                     ->setAmountExVat(100)
                     ->setVatPercent(20)
@@ -82,13 +82,13 @@ class WebServiceOrderValidatorTest extends PHPUnit_Framework_TestCase {
                 ->addCustomerDetails(Item::companyCustomer()->setNationalIdNumber(4608142222))
                     ->usePaymentPlanPayment($code);
        $order->prepareRequest();
-      
+
     }
 
     /**
      * @expectedException ValidationException
      * @expectedExceptionMessage -not valid : Given countrycode does not exist in our system.
-     * 
+     *
      */
     function testFailOnBadCountryCode() {
         $builder = WebPay::createOrder();
@@ -102,11 +102,11 @@ class WebServiceOrderValidatorTest extends PHPUnit_Framework_TestCase {
                   ->setOrderDate("Mon, 15 Aug 05 15:52:01 +0000")
                 ->addCustomerDetails(Item::individualCustomer()->setNationalIdNumber(111111))
                     ->useInvoicePayment();
-        
+
      $order->prepareRequest();
     }
-    
-     
+
+
 
     /**
      * @expectedException ValidationException
@@ -123,7 +123,7 @@ class WebServiceOrderValidatorTest extends PHPUnit_Framework_TestCase {
                 ->addCustomerDetails(Item::individualCustomer()->setNationalIdNumber(111111))
                   ->setOrderDate("Mon, 15 Aug 05 15:52:01 +0000")
                     ->useInvoicePayment();
-        
+
         $order->prepareRequest();
     }
     /**
@@ -137,7 +137,7 @@ class WebServiceOrderValidatorTest extends PHPUnit_Framework_TestCase {
                   ->setOrderDate("Mon, 15 Aug 05 15:52:01 +0000")
                 ->addCustomerDetails(Item::individualCustomer()->setName("Tess", "Testson"))
                     ->useInvoicePayment();
-        
+
        $order->prepareRequest();
     }
 
@@ -152,13 +152,13 @@ class WebServiceOrderValidatorTest extends PHPUnit_Framework_TestCase {
                   ->setOrderDate("Mon, 15 Aug 05 15:52:01 +0000")
                   ->addCustomerDetails(Item::companyCustomer()->setCompanyName("Mycompany"))
                     ->useInvoicePayment();
-        
+
         $order->prepareRequest();
     }
 
     /**
      * @expectedException ValidationException
-     * @expectedExceptionMessage 
+     * @expectedExceptionMessage
      * -missing value : BirthDate is required for individual customers when countrycode is DE. Use function setBirthDate().
      * -missing value : Name is required for individual customers when countrycode is DE. Use function setName().
      * -missing value : StreetAddress is required for all customers when countrycode is DE. Use function setStreetAddress().
@@ -191,7 +191,7 @@ class WebServiceOrderValidatorTest extends PHPUnit_Framework_TestCase {
                 ->setZipCode(9999)
                 ->setLocality("Stan")
                 )
-               
+
                     ->useInvoicePayment();
         $order->prepareRequest();
 
@@ -199,7 +199,7 @@ class WebServiceOrderValidatorTest extends PHPUnit_Framework_TestCase {
 
     /**
      * @expectedException ValidationException
-     * @expectedExceptionMessage 
+     * @expectedExceptionMessage
      * -missing value : Initials is required for individual customers when countrycode is NL. Use function setInitials().
      * -missing value : BirthDate is required for individual customers when countrycode is NL. Use function setBirthDate().
      * -missing value : Name is required for individual customers when countrycode is NL. Use function setName().
@@ -218,11 +218,11 @@ class WebServiceOrderValidatorTest extends PHPUnit_Framework_TestCase {
                 ->setCountryCode("NL")
                   ->setOrderDate("Mon, 15 Aug 05 15:52:01 +0000")
                     ->useInvoicePayment();
-        //$errorArray = $order->validateOrder(); 
+        //$errorArray = $order->validateOrder();
         //print_r($errorArray);
         $order->prepareRequest(); //throws esception
-        
-      
+
+
     }
 
     /**
@@ -242,7 +242,7 @@ class WebServiceOrderValidatorTest extends PHPUnit_Framework_TestCase {
                 ->setZipCode(9999)
                 ->setLocality("Stan")
                 )
-               
+
                     ->useInvoicePayment();
 
       $order->prepareRequest();
@@ -260,13 +260,13 @@ class WebServiceOrderValidatorTest extends PHPUnit_Framework_TestCase {
                 ->addCustomerDetails(Item::individualCustomer()->setNationalIdNumber(46111111))
                     ->useInvoicePayment();
        $order->prepareRequest();
-      
+
     }
-   
+
 
     /**
      * @expectedException ValidationException
-     * @expectedExceptionMessage 
+     * @expectedExceptionMessage
      * -missing values : At least two of the values must be set in object Item::  AmountExVat, AmountIncVat or VatPercent for Orderrow. Use functions setAmountExVat(), setAmountIncVat() or setVatPercent().
      * -missing value : Quantity is required in object Item. Use function Item::setQuantity().
      */
@@ -278,11 +278,11 @@ class WebServiceOrderValidatorTest extends PHPUnit_Framework_TestCase {
                  ->setOrderDate("Mon, 15 Aug 05 15:52:01 +0000")
                  ->addCustomerDetails(Item::individualCustomer()->setNationalIdNumber(46111111))
                     ->useInvoicePayment();
-        $order->prepareRequest(); 
+        $order->prepareRequest();
     }
     /**
      * @expectedException ValidationException
-     * @expectedExceptionMessage 
+     * @expectedExceptionMessage
      * -missing values : OrderDate is Required. Use function setOrderDate().
     */
     function testFailOnMissingOrderDate() {
@@ -291,6 +291,25 @@ class WebServiceOrderValidatorTest extends PHPUnit_Framework_TestCase {
                  ->addOrderRow(Item::orderRow()
                     ->setAmountExVat(100)
                     ->setVatPercent(20)
+                    ->setQuantity(1)
+                        )
+                ->setCountryCode("SE")
+               // ->setOrderDate("Mon, 15 Aug 05 15:52:01 +0000")
+                 ->addCustomerDetails(Item::individualCustomer()->setNationalIdNumber(46111111))
+                    ->useInvoicePayment();
+        $order->prepareRequest();
+    }
+    /**
+     * @expectedException ValidationException
+     * @expectedExceptionMessage
+     * -incorrect datatype : Vat must be set as Integer.
+    */
+    function testFailOnVatAsFloat() {
+        $builder = WebPay::createOrder();
+        $order = $builder
+                 ->addOrderRow(Item::orderRow()
+                    ->setAmountExVat(100)
+                    ->setVatPercent(20.33)
                     ->setQuantity(1)
                         )
                 ->setCountryCode("SE")

@@ -5,21 +5,21 @@
  * @author anne-hal
  */
 class OrderRow {
-    
+
    /**
      * Contains empty string if not set
-     * @var type 
+     * @var type
      */
     public $unit = "";
 
     /**
      * Contains int 0 if not set
-     * @var type 
+     * @var type
      */
     public $vatDiscount = 0;
-    
-    
-    
+
+
+
     /**
      * Optional
      * @param type $articleNumberAsString
@@ -29,7 +29,7 @@ class OrderRow {
         $this->articleNumber = $articleNumberAsString;
         return $this;
     }
-    
+
     /**
      * Required
      * @param type $quantityAsInt
@@ -39,7 +39,7 @@ class OrderRow {
         $this->quantity = $quantityAsInt;
         return $this;
     }
-    
+
     /**
      * Optional
      * @param type $unitAsString
@@ -49,7 +49,7 @@ class OrderRow {
         $this->unit = $unitAsString;
         return $this;
     }
-    
+
     /**
      * Optional
      * @param type $AmountAsFloat
@@ -68,7 +68,7 @@ class OrderRow {
         $this->amountIncVat = $AmountAsFloat;
         return $this;
     }
-    
+
     /**
      * Optional
      * @param type $nameAsString
@@ -78,7 +78,7 @@ class OrderRow {
         $this->name = $nameAsString;
         return $this;
     }
-    
+
     /**
      * Optional
      * @param type $descriptionAsString
@@ -88,7 +88,7 @@ class OrderRow {
         $this->description = $descriptionAsString;
         return $this;
     }
-    
+
     /**
      * Optional
      * @param type $percentAsInt
@@ -98,7 +98,7 @@ class OrderRow {
         $this->vatPercent = $percentAsInt;
         return $this;
     }
-    
+
     /**
      * Optional
      * @param type $discountPercentAsInteger
@@ -109,5 +109,3 @@ class OrderRow {
         return $this;
     }
 }
-
-?>

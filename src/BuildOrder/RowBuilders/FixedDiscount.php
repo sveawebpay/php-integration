@@ -14,7 +14,7 @@ class FixedDiscount {
         $this->discountId = $IdAsString;
         return $this;
     }
-    
+
     /**
      * Optional
      * @param type $unitDescriptionAsString
@@ -24,7 +24,7 @@ class FixedDiscount {
         $this->unit = $unitDescriptionAsString;
         return $this;
     }
-    
+
     /**
      * Optional
      * @param type $nameAsString
@@ -34,7 +34,7 @@ class FixedDiscount {
         $this->name = $nameAsString;
         return $this;
     }
-    
+
     /**
      * Optional
      * @param type $descriptionAsString
@@ -44,7 +44,7 @@ class FixedDiscount {
         $this->description = $descriptionAsString;
         return $this;
     }
-    
+
     /**
      * Required
      * @param type $discountAmountOnTotalPriceAsFloat
@@ -56,5 +56,3 @@ class FixedDiscount {
     }
 
 }
-
-?>

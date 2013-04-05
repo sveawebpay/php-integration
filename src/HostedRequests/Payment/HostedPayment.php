@@ -9,10 +9,10 @@ require_once SVEA_REQUEST_DIR . '/Includes.php';
  * Uses SveaXmlBuilder to turn formatted $order into xml
  * @author Anneli Halld'n, Daniel Brolund for Svea Webpay
  *  * @package HostedRequests/Payment
- * 
+ *
  */
 class HostedPayment {
-    
+
     public $order;
     public $xmlMessage;
     public $xmlMessageBase64;
@@ -26,10 +26,10 @@ class HostedPayment {
     public function __construct($order) {
         $this->order = $order;
     }
-    
+
 
     /**
-     * 
+     *
      * @return type $errors
      */
     public function validateOrder(){
@@ -40,19 +40,19 @@ class HostedPayment {
 
     public function getPaymentForm() {
         //validate input
-       $errors = $this->validateOrder(); 
+       $errors = $this->validateOrder();
         $exceptionString = "";
         if(count($errors) > 0 || (isset($this->returnUrl) == FALSE && isset($this->paymentMethod) == FALSE)){
             if(isset($this->returnUrl) == FALSE){
-             $exceptionString .="-missing value : ReturnUrl is required. Use function setReturnUrl().\n";    
+             $exceptionString .="-missing value : ReturnUrl is required. Use function setReturnUrl().\n";
             }
             foreach ($errors as $key => $value) {
-                $exceptionString .="-". $key. " : ".$value."\n";                
+                $exceptionString .="-". $key. " : ".$value."\n";
             }
-           
+
             throw new ValidationException($exceptionString);
         }
-       
+
         $xmlBuilder = new HostedXmlBuilder();
         $this->xmlMessage = $xmlBuilder->getOrderXML($this->calculateRequestValues(),$this->order);
         $this->xmlMessageBase64 = base64_encode($this->xmlMessage);
@@ -62,7 +62,7 @@ class HostedPayment {
         $formObject->endPointUrl = $this->order->conf->getEndPoint("HOSTED");
         $formObject->merchantid = $this->order->conf->getMerchantId("HOSTED",  $this->order->countryCode);//$conf->getMerchantIdBasedAuthorization()[0];
         $formObject->secretWord = $this->order->conf->getSecret("HOSTED",  $this->order->countryCode);;//$conf->getMerchantIdBasedAuthorization()[1];
-        //$formObject->setSubmitMessage($this->order->countryCode);      
+        //$formObject->setSubmitMessage($this->order->countryCode);
         $formObject->setForm();
         $formObject->setHtmlFields();
         $formObject->setRawFields();
@@ -83,8 +83,6 @@ class HostedPayment {
         $request['currency'] = $currency;
         return $this->configureExcludedPaymentMethods($request); //Method in child class
     }
-    
-    
-}
 
-?>
+
+}

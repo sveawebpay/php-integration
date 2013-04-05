@@ -37,15 +37,13 @@ foreach (glob(SVEA_REQUEST_DIR . "/Response/*.php") as $config)
 foreach (glob(SVEA_REQUEST_DIR . "/Response/WebServiceResponse/*.php") as $config)
     include_once($config);
 foreach (glob(SVEA_REQUEST_DIR . "/Response/WebServiceResponse/CustomerIdentity/*.php") as $config)
-    include_once($config);   
+    include_once($config);
 foreach (glob(SVEA_REQUEST_DIR . "/Response/WebServiceResponse/CampaignCode/*.php") as $config)
-    include_once($config);   
+    include_once($config);
 foreach (glob(SVEA_REQUEST_DIR . "/Response/HostedResponse/*.php") as $config)
-    include_once($config);   
+    include_once($config);
 
 foreach (glob(SVEA_REQUEST_DIR . "/Config/*.php") as $config)
     include_once($config);
 foreach (glob(SVEA_REQUEST_DIR . "/Constant/*.php") as $config)
     include_once($config);
-
-?>

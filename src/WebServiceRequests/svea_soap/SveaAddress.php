@@ -12,5 +12,3 @@ class SveaAddress {
     public $SecurityNumber;
 
 }
-
-?>

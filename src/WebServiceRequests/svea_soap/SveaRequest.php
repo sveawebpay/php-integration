@@ -5,5 +5,3 @@ class SveaRequest {
     public $request;
 
 }
-
-?>
