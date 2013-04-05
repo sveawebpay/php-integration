@@ -525,6 +525,7 @@ $form = WebPay::createOrder()
             ->setPayPageLanguage("sv")                          //Optional, default english
             ->setReturnUrl("http://myurl.se")                   //Required
             ->setCancelUrl("http://myurl.se")                   //Optional
+            ->setSimulatorCode(107)				// Optional. Force SveaWebPay to return the error code 107 (only in testing mode)
                 ->getPaymentForm();
 
 ```

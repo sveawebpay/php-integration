@@ -19,6 +19,7 @@ class HostedPayment {
     public $returnUrl;
     public $cancelUrl;
     public $langCode;
+    public $simulatorCode;
 
     /**
      * @param type $order
@@ -78,13 +79,22 @@ class HostedPayment {
         $request['returnUrl'] = $this->returnUrl;
         $request['cancelUrl'] = $this->cancelUrl;
         $request['langCode'] = $this->langCode;
+        $request['simulatorCode'] = $this->simulatorCode;
         $currency = trim($this->order->currency);
         $currency = strtoupper($currency);
         $request['currency'] = $currency;
         return $this->configureExcludedPaymentMethods($request); //Method in child class
     }
     
-    
+    /**
+     * 
+     * @param type $simulatorCode
+     * @return \HostedPayment
+     */
+    public function setSimulatorCode($simulatorCode) {
+        $this->simulatorCode = $simulatorCode;
+        return $this;
+    } 
 }
 
 ?>
