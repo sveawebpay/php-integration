@@ -43,6 +43,9 @@ abstract class OrderValidator {
                     $errors['missing values'] = "At least one of the values must be set in combination with AmountIncVat, in object Item:: AmountExVat or VatPercent for Orderrow. Use functions setAmountExVat() or setVatPercent().";
                 }elseif (isset($row->vatPercent) && (isset($row->amountExVat) == false && isset($row->amountIncVat) == false)) {
                     $errors['missing values'] = "At least one of the values must be set in combination with VatPercent, in object Item:: AmountIncVat or AmountExVat for Orderrow. Use functions setAmountExVat() or setAmountIncVat().";
+                }elseif(isset ($row->vatPercent) && (is_numeric ($row->vatPercent) && is_float($row->vatPercent))){
+                    $errors['incorrect datatype'] = "Vat must be set as Integer.";
+
                 }
 
             }
