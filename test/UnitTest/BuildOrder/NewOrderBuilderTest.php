@@ -252,7 +252,7 @@ class NewOrderBuilderTest extends PHPUnit_Framework_TestCase {
 
             $this->assertEquals("1", $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->ArticleNumber);
             $this->assertEquals(1, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->NumberOfUnits);
-            $this->assertEquals(-50.00, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->PricePerUnit);
+            $this->assertEquals(-100.00, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->PricePerUnit);
             $this->assertEquals("Relative: RelativeDiscount", $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->Description);
             $this->assertEquals("st", $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->Unit);
             $this->assertEquals(25, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->VatPercent);
@@ -343,9 +343,45 @@ class NewOrderBuilderTest extends PHPUnit_Framework_TestCase {
             $this->assertEquals(666666, $request->request->CreateOrderInformation->CustomerIdentity->NationalIdNumber);
             $this->assertEquals("Company", $request->request->CreateOrderInformation->CustomerIdentity->CustomerType);
         }
+        public function testBuildOrderWithCompanyCustomerDE(){
+             $request = WebPay::createOrder();
+            //->setTestmode()();
+        //foreach...
+            $request = $request
+            ->addOrderRow(
+                Item::orderRow()
+                    ->setArticleNumber(1)
+                    ->setQuantity(2)
+                    ->setAmountExVat(100.00)
+                    ->setDescription("Specification")
+                    ->setName('Prod')
+                    ->setUnit("st")
+                    ->setVatPercent(25)
+                    ->setDiscountPercent(0))
+                ->addCustomerDetails(Item::companyCustomer()
+                    ->setVatNumber("SE666666")
+                    ->setCompanyName("MyCompany")
+                    ->setEmail("test@svea.com")
+                    ->setPhoneNumber(999999)
+                    ->setIpAddress("123.123.123")
+                    ->setStreetAddress("Gatan", 23)
+                    ->setCoAddress("c/o Eriksson")
+                    ->setZipCode(9999)
+                    ->setLocality("Stan")
+                       );
+        //end foreach
+            $request = $request
+            ->setCountryCode("DE")
+            ->setCustomerReference("33")
+            ->setOrderDate("2012-12-12")
+            ->setCurrency("EUR")
+            ->useInvoicePayment()// returnerar InvoiceOrder object
+                ->prepareRequest();
 
-
-
+            $this->assertEquals("SE666666", $request->request->CreateOrderInformation->CustomerIdentity->CompanyIdentity->CompanyVatNumber);
+            $this->assertEquals("Company", $request->request->CreateOrderInformation->CustomerIdentity->CustomerType);
+            $this->assertEquals("MyCompany", $request->request->CreateOrderInformation->CustomerIdentity->FullName);
+        }
 
         /** example how to integrate with array_map
         function testOrderRowsUsingMap(){

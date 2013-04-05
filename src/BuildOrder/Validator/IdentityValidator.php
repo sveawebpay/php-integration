@@ -99,17 +99,16 @@ class IdentityValidator {
      * @param type $errors
      */
     public function validateDEidentity($order, $errors) {
-
-        if(isset($order->customerIdentity->birthDate) == false && $this->isCompany == FALSE){
+        if($this->isCompany == FALSE && isset($order->customerIdentity->birthDate) == false){
             $errors['missing value'] = "BirthDate is required for individual customers when countrycode is DE. Use function setBirthDate().";
         }
-        if(isset($order->customerIdentity->firstname) == false || isset($order->customerIdentity->lastname) == false && $this->isCompany == FALSE){
+        if($this->isCompany == FALSE && (isset($order->customerIdentity->firstname) == false || isset($order->customerIdentity->lastname) == false)){
             $errors['missing value'] = "Name is required for individual customers when countrycode is DE. Use function setName().";
         }
-        if(isset($order->customerIdentity->companyVatNumber) == false && $this->isCompany == true){
+        if($this->isCompany == true && isset($order->customerIdentity->companyVatNumber) == false){
             $errors['missing value'] = "VatNumber is required for company customers when countrycode is DE. Use function setVatNumber().";
         }
-        if(isset($order->customerIdentity->companyName) == false && $this->isCompany == true){
+        if($this->isCompany == true && isset($order->customerIdentity->companyName) == false){
             $errors['missing value'] = "CompanyName is required for individual customers when countrycode is DE. Use function setCompanyName().";
         }
         if(isset($order->customerIdentity->street) == false || isset($order->customerIdentity->housenumber) == false){

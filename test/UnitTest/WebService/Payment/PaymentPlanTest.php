@@ -23,7 +23,7 @@ class PaymentPlanTest extends PHPUnit_Framework_TestCase {
                     ->setName('Prod')
                     ->setUnit("st")
                     ->setVatPercent(25)
-                    ->setDiscountPercent(0)    
+                    ->setDiscountPercent(0)
                     )
                 ->run($rowFactory->buildShippingFee())
                 ->addCustomerDetails(Item::individualCustomer()->setNationalIdNumber(194605092222))
@@ -35,9 +35,41 @@ class PaymentPlanTest extends PHPUnit_Framework_TestCase {
                 ->setAddressSelector("ad33")
                 ->usePaymentPlanPayment("camp1")// returnerar InvoiceOrder object
                     ->prepareRequest();
-        
+
         $this->assertEquals('camp1', $request->request->CreateOrderInformation->CreatePaymentPlanDetails['CampaignCode']);
         $this->assertEquals(0, $request->request->CreateOrderInformation->CreatePaymentPlanDetails['SendAutomaticGiroPaymentForm']);
+    }
+
+    function testInvoiceRequestObjectWithRelativeDiscountOnTwoProducts() {
+        $request = WebPay::createOrder()
+                //->setTestmode()()
+                ->addOrderRow(Item::orderRow()
+                    ->setArticleNumber(1)
+                    ->setQuantity(2)
+                    ->setAmountExVat(240.00)
+                    ->setAmountIncVat(300)
+                    ->setDescription("CD")
+                    )
+                ->addDiscount(Item::relativeDiscount()
+                    ->setDiscountId("1")
+                     ->setDiscountPercent(10)
+                     ->setDescription("RelativeDiscount")
+                    )
+                ->addCustomerDetails(Item::individualCustomer()->setNationalIdNumber(194605092222))
+                ->setCountryCode("SE")
+                ->setCustomerReference("33")
+                ->setOrderDate("2012-12-12")
+                ->setCurrency("SEK")
+                    ->useInvoicePayment()
+                        ->prepareRequest();
+        //couponrow
+        $this->assertEquals('1', $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->ArticleNumber);
+        $this->assertEquals('RelativeDiscount', $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->Description);
+        $this->assertEquals(-48.00, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->PricePerUnit);
+        $this->assertEquals(1, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->NumberOfUnits);
+        $this->assertEquals('', $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->Unit);
+        $this->assertEquals(25, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->VatPercent);
+        $this->assertEquals(0, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->DiscountPercent);
     }
 }
 

@@ -10,8 +10,8 @@ require_once $root . '/../../../../src/Includes.php';
  * @author Anneli Halld'n, Daniel Brolund for Svea Webpay
  */
 class NewHandleOrderTest extends PHPUnit_Framework_TestCase {
-  
-    function testNewDeliverInvoiceOrderRow(){ 
+
+    function testNewDeliverInvoiceOrderRow(){
         $request = WebPay::deliverOrder();
             //->setTestmode()();
         //foreach...
@@ -35,7 +35,7 @@ class NewHandleOrderTest extends PHPUnit_Framework_TestCase {
                 ->setCreditInvoice("id")
                 ->deliverInvoiceOrder()
                     ->prepareRequest();
-            
+
         $this->assertEquals(1, $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][0]->ArticleNumber);
         $this->assertEquals("Prod: Specification", $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][0]->Description);
         $this->assertEquals(100.00, $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][0]->PricePerUnit);
@@ -45,7 +45,7 @@ class NewHandleOrderTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(0, $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][0]->DiscountPercent);
 
         }
-        
+
         function testDeliverOrderWithInvoiceFeeAndFixedDiscount(){
              $request = WebPay::deliverOrder();
             //->setTestmode()();
@@ -61,7 +61,7 @@ class NewHandleOrderTest extends PHPUnit_Framework_TestCase {
                     ->setUnit("st")
                     ->setVatPercent(25)
                     ->setDiscountPercent(0)
-                    ) 
+                    )
                 ->addFee(Item::invoiceFee()
                     ->setName('Svea fee')
                     ->setDescription("Fee for invoice")
@@ -85,7 +85,7 @@ class NewHandleOrderTest extends PHPUnit_Framework_TestCase {
                 ->setCountryCode("SE")
                 ->deliverInvoiceOrder()
                     ->prepareRequest();
-            
+
         $this->assertEquals(1, $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][0]->ArticleNumber);
         $this->assertEquals("Prod: Specification", $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][0]->Description);
         $this->assertEquals(100.00, $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][0]->PricePerUnit);
@@ -111,7 +111,7 @@ class NewHandleOrderTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(0, $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][2]->DiscountPercent);
 
         }
-        
+
         function testDeliverOrderWithShippingFeeAndRelativeDiscount(){
              $request = WebPay::deliverOrder();
             //->setTestmode()();
@@ -126,7 +126,7 @@ class NewHandleOrderTest extends PHPUnit_Framework_TestCase {
                     ->setUnit("st")
                     ->setVatPercent(25)
                     ->setDiscountPercent(0)
-                    ) 
+                    )
                 ->addFee(Item::shippingFee()
                     ->setShippingId(1)
                     ->setName('shipping')
@@ -151,7 +151,7 @@ class NewHandleOrderTest extends PHPUnit_Framework_TestCase {
                 ->setCountryCode("SE")
                 ->deliverInvoiceOrder()
                     ->prepareRequest();
-            
+
         $this->assertEquals(1, $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][0]->ArticleNumber);
         $this->assertEquals("Prod: Specification", $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][0]->Description);
         $this->assertEquals(100.00, $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][0]->PricePerUnit);
@@ -170,7 +170,7 @@ class NewHandleOrderTest extends PHPUnit_Framework_TestCase {
         //relative discount
         $this->assertEquals("1", $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][2]->ArticleNumber);
         $this->assertEquals(1, $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][2]->NumberOfUnits);
-        $this->assertEquals(-50.00, $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][2]->PricePerUnit);
+        $this->assertEquals(-100.00, $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][2]->PricePerUnit);
         $this->assertEquals("Relative: RelativeDiscount", $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][2]->Description);
         $this->assertEquals("st", $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][2]->Unit);
         $this->assertEquals(25, $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][2]->VatPercent);
