@@ -17,10 +17,11 @@ class HostedResponse {
     public $currency;
 
 
-    function __construct($response,$secret) {
+    function __construct($response,$countryCode,$config) {
         if(is_array($response)){
             if(array_key_exists("response",$response) && array_key_exists("mac",$response)){
                 $decodedXml = base64_decode($response['response']);
+                $secret = $config->getSecret("HOSTED",$countryCode);
                 if($this->validateMac($response['response'],$response['mac'],$secret)){
                     $this->formatXml($decodedXml);
                 }  else {
@@ -421,7 +422,8 @@ class HostedResponse {
         }
     }
 
-        public function validateMac($messageEncoded,$mac,$secret){
+        public function validateMac($messageEncoded,$mac,$config){
+        $messageDecoded = base64_decode($messageEncoded);
         if($secret == null){
             $secret = SveaConfig::getConfig()->secret;
         }

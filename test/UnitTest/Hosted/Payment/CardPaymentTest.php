@@ -25,7 +25,7 @@ class testConf implements ConfigurationProvider{
         return "username";
     }
 
-    public function getclientNumber($type, $country) {
+    public function getClientNumber($type, $country) {
         return "clientnumber";
     }
 }
