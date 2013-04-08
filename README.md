@@ -9,7 +9,6 @@
 * [Introduction](https://github.com/sveawebpay/php-integration#introduction)
 * [Configuration](https://github.com/sveawebpay/php-integration#configuration)
 * [1. CreateOrder](https://github.com/sveawebpay/php-integration#1-createorder)
-    * [Test mode](https://github.com/sveawebpay/php-integration#11-test-mode)
     * [Specify order](https://github.com/sveawebpay/php-integration#12-specify-order)
     * [Customer identity](https://github.com/sveawebpay/php-integration#13-customer-identity)
     * [Other values](https://github.com/sveawebpay/php-integration#14-other-values)
