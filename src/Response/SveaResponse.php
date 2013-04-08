@@ -9,7 +9,7 @@ class SveaResponse {
 
     public $response;
 
-    public function __construct($message, $secret = NULL) {
+    public function __construct($message, $countryCode,$config = NULL) {
 
         if(is_object($message)){
             if(property_exists($message, "CreateOrderEuResult")){
@@ -25,7 +25,7 @@ class SveaResponse {
             }
 
         }elseif($message != NULL){
-            $this->response = new HostedResponse($message,$secret);
+            $this->response = new HostedResponse($message,$countryCode,$config);
         }else{
             $this->response = "Response is not recognized.";
         }
