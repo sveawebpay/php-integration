@@ -17,7 +17,6 @@ class WebPay {
      * If left blank, default settings from SveaConfig will be used
      */
     public static function createOrder($config = NULL) {
-      // $config = $config==null ? SveaConfig::getDefaultConfig() : $config;
        $config = $config == null ? SveaConfig::getDefaultConfig() : $config;
         return new CreateOrderBuilder($config);
     }
