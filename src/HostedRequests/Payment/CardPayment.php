@@ -65,7 +65,7 @@ class CardPayment extends HostedPayment {
     }
 
     /**
-     *
+     * Set return Url when hitting cancel on PayPage
      * @param type $cancelUrlAsString
      * @return \HostedPayment
      */

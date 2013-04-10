@@ -422,11 +422,8 @@ class HostedResponse {
         }
     }
 
-        public function validateMac($messageEncoded,$mac,$config){
+        public function validateMac($messageEncoded,$mac,$secret){
         $messageDecoded = base64_decode($messageEncoded);
-        if($secret == null){
-            $secret = SveaConfig::getConfig()->secret;
-        }
         $macKey = hash("sha512", $messageEncoded.$secret);
         if($mac == $macKey){
             return TRUE;

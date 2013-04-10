@@ -10,7 +10,7 @@ class SveaResponse {
     public $response;
 
     public function __construct($message, $countryCode,$config = NULL) {
-
+         $config = $config == null ? SveaConfig::getDefaultConfig() : $config;
         if(is_object($message)){
             if(property_exists($message, "CreateOrderEuResult")){
                 $this->response = new CreateOrderResponse($message);
