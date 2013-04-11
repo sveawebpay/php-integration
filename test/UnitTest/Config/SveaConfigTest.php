@@ -3,22 +3,22 @@
 $root = realpath(dirname(__FILE__));
 require_once $root . '/../../../src/Includes.php';
 
-    
+
 
 /**
  * Description of SveaConfigTest
  */
 class SveaConfigTest extends PHPUnit_Framework_TestCase {
-    
+
     function t_estInstancesOfSveaConfig(){
         $obj1 = SveaConfig::getConfig();
         $obj2 = SveaConfig::getConfig();
         $this->assertEquals($obj1->password, $obj2->password);
-        
+
         $obj1->password = "Hej";
         $this->assertNotEquals($obj1->password, $obj2->password);
     }
-    
+
     function t_estSetTestmode(){
         $conf = SveaConfig::setConfig()
                 ->setMerchantId()
@@ -30,7 +30,7 @@ class SveaConfigTest extends PHPUnit_Framework_TestCase {
                 ->setClientNumberPaymentPlan()
                 //->setTestmode()()
                 ->setAlternativeUrl(); //overwrite all urls
-        
+
         $request = WebPay::createOrder($conf)
             ->addOrderRow(Item::orderRow()
                 ->setArticleNumber(1)
@@ -47,13 +47,13 @@ class SveaConfigTest extends PHPUnit_Framework_TestCase {
                     ->setCustomerReference("33")
                     ->setOrderDate("2012-12-12")
                     ->setCurrency("SEK")
-                    ->useInvoicePayment()// returnerar InvoiceOrder object 
+                    ->useInvoicePayment()// returnerar InvoiceOrder object
                        // ->setPasswordBasedAuthorization("sverigetest", "sverigetest", 79021)
                         ->prepareRequest();
     }
-    
-    
-        function testOrderWithNoConfigFromFunction(){
+
+
+        function testOrderWithSEConfigFromFunction(){
            $request = WebPay::createOrder(SveaConfig::getTestConfig())
             ->addOrderRow(Item::orderRow()
                 ->setArticleNumber(1)
@@ -64,16 +64,16 @@ class SveaConfigTest extends PHPUnit_Framework_TestCase {
                 ->setVatPercent(25)
                 )
             ->addCustomerDetails(Item::individualCustomer()->setNationalIdNumber(194605092222))
-                    ->setCountryCode("NO")
+                    ->setCountryCode("SE")
                     ->setCustomerReference("33")
                     ->setOrderDate("2012-12-12")
                     ->setCurrency("SEK")
-                    ->useInvoicePayment()// returnerar InvoiceOrder object 
+                    ->useInvoicePayment()// returnerar InvoiceOrder object
                         ->prepareRequest();
-              
-            $this->assertEquals("webpay_test_no", $request->request->Auth->Username);
-            $this->assertEquals("dvn349hvs9+29hvs", $request->request->Auth->Password);
-            $this->assertEquals(32666, $request->request->Auth->ClientNumber);
+
+            $this->assertEquals("sverigetest", $request->request->Auth->Username);
+            $this->assertEquals("sverigetest", $request->request->Auth->Password);
+            $this->assertEquals(79021, $request->request->Auth->ClientNumber);
     }
 }
 
