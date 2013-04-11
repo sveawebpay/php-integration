@@ -26,34 +26,6 @@ class GetAddresses {
     function __construct($config) {
         $this->conf = $config;
     }
-/**
-    public function setTestmode() {
-        $this->testmode = true;
-        return $this;
-    }
- *
- */
-
-   /**
-     * Alternative drop or change file in Config/SveaConfig.php
-     * Note! This fuction may change in future updates.
-     * @param type $merchantId
-     * @param type $secret
-     * @return \HostedPayment
-
-   public function setPasswordBasedAuthorization($username, $password, $clientNumber) {
-        $this->conf = SveaConfig::getConfig();
-        $this->conf->username = $username;
-        $this->conf->password = $password;
-        if ($this->orderType == "Invoice") {
-            $this->conf->invoiceClientnumber = $clientNumber;
-        } else {
-            $this->conf->paymentPlanClientnumber = $clientNumber;
-        }
-        return $this;
-    }
-    *
-    */
 
     /**
      * Required for Invoice type

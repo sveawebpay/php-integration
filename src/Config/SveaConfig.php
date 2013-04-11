@@ -81,23 +81,23 @@ class SveaConfig {
                                 );
         $testConfig["NO"] = array("auth" =>
                                 array(
-                                    "INVOICE"       => array("username"     => "webpay_test_no", "password" => "dvn349hvs9+29hvs", "clientNumber"=> 32666),
-                                    "PAYMENTPLAN"   => array("username"     => "webpay_test_no", "password" => "dvn349hvs9+29hvs", "clientNumber"=> 36000),
-                                    "HOSTED"        => array("merchantId"   => 1130, "secret"               => "8a9cece566e808da63c6f07ff415ff9e127909d000d259aba24daa2fed6d9e3f8b0b62e8ad1fa91c7d7cd6fc3352deaae66cdb533123edf127ad7d1f4c77e7a3")
+                                    "INVOICE"       => array("username"     => "", "password" => "", "clientNumber"=> ""),
+                                    "PAYMENTPLAN"   => array("username"     => "", "password" => "", "clientNumber"=> ""),
+                                    "HOSTED"        => array("merchantId"   => 1130, "secret" => "8a9cece566e808da63c6f07ff415ff9e127909d000d259aba24daa2fed6d9e3f8b0b62e8ad1fa91c7d7cd6fc3352deaae66cdb533123edf127ad7d1f4c77e7a3")
                                     )
                                 );
         $testConfig["FI"] = array("auth" =>
                                 array(
-                                    "INVOICE"       => array("username"     => "finlandtest", "password"    => "finlandtest", "clientNumber"    => 29995),
-                                    "PAYMENTPLAN"   => array("username"     => "finlandtest", "password"    => "finlandtest", "clientNumber"    => 29992),
-                                    "HOSTED"        => array("merchantId"   => 1130, "secret"               => "8a9cece566e808da63c6f07ff415ff9e127909d000d259aba24daa2fed6d9e3f8b0b62e8ad1fa91c7d7cd6fc3352deaae66cdb533123edf127ad7d1f4c77e7a3")
+                                    "INVOICE"       => array("username"     => "", "password"    => "", "clientNumber"    => ""),
+                                    "PAYMENTPLAN"   => array("username"     => "", "password"    => "", "clientNumber"    => ""),
+                                    "HOSTED"        => array("merchantId"   => 1130, "secret"    => "8a9cece566e808da63c6f07ff415ff9e127909d000d259aba24daa2fed6d9e3f8b0b62e8ad1fa91c7d7cd6fc3352deaae66cdb533123edf127ad7d1f4c77e7a3")
                                     )
                                 );
         $testConfig["DK"] = array("auth" =>
                                 array(
-                                    "INVOICE"       => array("username"     => "danmarktest", "password"    => "danmarktest", "clientNumber"    => 60006),
-                                    "PAYMENTPLAN"   => array("username"     => "danmarktest", "password"    => "danmarktest", "clientNumber"    => 60004),
-                                    "HOSTED"        => array("merchantId"   => 1130, "secret"               => "8a9cece566e808da63c6f07ff415ff9e127909d000d259aba24daa2fed6d9e3f8b0b62e8ad1fa91c7d7cd6fc3352deaae66cdb533123edf127ad7d1f4c77e7a3")
+                                    "INVOICE"       => array("username"     => "", "password"    => "", "clientNumber"    => ""),
+                                    "PAYMENTPLAN"   => array("username"     => "", "password"    => "", "clientNumber"    => ""),
+                                    "HOSTED"        => array("merchantId"   => 1130, "secret"    => "8a9cece566e808da63c6f07ff415ff9e127909d000d259aba24daa2fed6d9e3f8b0b62e8ad1fa91c7d7cd6fc3352deaae66cdb533123edf127ad7d1f4c77e7a3")
                                     )
                                 );
         $testConfig["NL"] = array("auth" =>
