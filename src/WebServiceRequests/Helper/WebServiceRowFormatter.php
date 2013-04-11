@@ -84,7 +84,7 @@ class WebServiceRowFormatter {
                 $orderRow->PricePerUnit = $row->amountIncVat / ((0.01 * $row->vatPercent) + 1);
                 $orderRow->VatPercent = $row->vatPercent;
             }  else {
-                $orderRow->PricePerUnit = number_format($row->amountExVat, 2, '.', ' ');
+                $orderRow->PricePerUnit = number_format($row->amountExVat, 2, '.', '');
                 $orderRow->VatPercent = (($row->amountIncVat / $row->amountExVat)-1) * 100;
             }
 
@@ -119,7 +119,7 @@ class WebServiceRowFormatter {
                 $orderRow->PricePerUnit = $row->amountIncVat / ((0.01 * $row->vatPercent) + 1);
                 $orderRow->VatPercent = $row->vatPercent;
             }  else {
-                $orderRow->PricePerUnit = number_format($row->amountExVat, 2, '.', ' ');
+                $orderRow->PricePerUnit = number_format($row->amountExVat, 2, '.', '');
                 $orderRow->VatPercent = (($row->amountIncVat / $row->amountExVat)-1) * 100;
             }
             $this->newRows[] = $orderRow;
@@ -152,7 +152,7 @@ class WebServiceRowFormatter {
                 $orderRow->PricePerUnit = $row->amountIncVat / ((0.01 * $row->vatPercent) + 1);
                 $orderRow->VatPercent = $row->vatPercent;
             }  else {
-                $orderRow->PricePerUnit = number_format($row->amountExVat, 2, '.', ' ');
+                $orderRow->PricePerUnit = number_format($row->amountExVat, 2, '.', '');
                 $orderRow->VatPercent = (($row->amountIncVat / $row->amountExVat)-1) * 100;
             }
             $this->newRows[] = $orderRow;
@@ -182,7 +182,7 @@ class WebServiceRowFormatter {
             }
             $orderRow->DiscountPercent = 0; //no discount on discount
             $orderRow->NumberOfUnits = 1; //only one discount per row
-            $orderRow->PricePerUnit = - number_format($row->amount - $discountVatAsAmount, 2,'.',' ');
+            $orderRow->PricePerUnit = - number_format($row->amount - $discountVatAsAmount, 2,'.','');
             $orderRow->VatPercent = round(($discountVatAsAmount / ($row->amount - $discountVatAsAmount))*100, 2);//Discountpercent
             $this->newRows[] = $orderRow;
         }
@@ -209,7 +209,7 @@ class WebServiceRowFormatter {
             $pricePerUnitExMoms = round($this->totalAmountExVat * ($row->discountPercent * 0.01), 2);
             $orderRow->DiscountPercent = 0; //no discount on discount
             $orderRow->NumberOfUnits = 1; //only one discount per row
-            $orderRow->PricePerUnit = - number_format($pricePerUnitExMoms,2,'.',' '); //Discountpercent on toatal price ex vat.
+            $orderRow->PricePerUnit = - number_format($pricePerUnitExMoms,2,'.',''); //Discountpercent on toatal price ex vat.
             $orderRow->VatPercent = round((($this->totalVatAsAmount * ($row->discountPercent * 0.01))/$pricePerUnitExMoms)*100,2);//round((($this->totalVatAsAmount * ($row->discountPercent * 0.01))/$orderRow->PricePerUnit) * 100,2); //Discountpercent on total vatamount
             $this->newRows[] = $orderRow;
         }
