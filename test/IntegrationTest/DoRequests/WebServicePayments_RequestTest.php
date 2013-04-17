@@ -46,6 +46,29 @@ class WebServicePayments_RequestTest extends PHPUnit_Framework_TestCase {
 
         $this->assertEquals(1, $request->accepted);
     }
+    function testInvoiceRequestReturnsDeniedResult() {
+        $request = WebPay::createOrder()
+                //->setTestmode()()
+                ->addOrderRow(Item::orderRow()
+                    ->setArticleNumber(1)
+                    ->setQuantity(2)
+                    ->setAmountExVat(100.00)
+                    ->setDescription("Specification")
+                    ->setName('Prod')
+                    ->setUnit("st")
+                    ->setVatPercent(25)
+                    ->setDiscountPercent(0)
+                        )
+                   ->addCustomerDetails(Item::individualCustomer()->setNationalIdNumber(4606082222))
+                ->setCountryCode("SE")
+                ->setCustomerReference("33")
+                ->setOrderDate("2012-12-12")
+                ->setCurrency("SEK")
+                ->useInvoicePayment()
+                    ->doRequest();
+
+        $this->assertEquals(0, $request->accepted);
+    }
     function tes_tInvoiceIndividualForDK() {
         $request = WebPay::createOrder()
                 //->setTestmode()()
