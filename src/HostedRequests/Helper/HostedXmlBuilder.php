@@ -24,11 +24,11 @@ class HostedXmlBuilder {
         $this->XMLWriter->writeElement("customerrefno", $order->clientOrderNumber);
         $this->XMLWriter->writeElement("returnurl", $request['returnUrl']);
         $this->XMLWriter->writeElement("cancelurl", $request['cancelUrl']);
-        $this->XMLWriter->writeElement("amount", $request['amount']);
+        $this->XMLWriter->writeElement("amount", round($request['amount']));
         $this->XMLWriter->writeElement("currency", $request['currency']);
         $this->XMLWriter->writeElement("lang", $request['langCode']);
         if ($request['totalVat'] != null) {
-            $this->XMLWriter->writeElement("vat", $request['totalVat']);
+            $this->XMLWriter->writeElement("vat", round($request['totalVat']));
         }
         if(isset($order->ipAddress)){
              $this->XMLWriter->writeElement("ipaddress", $order->ipAddress);
@@ -107,11 +107,11 @@ class HostedXmlBuilder {
         }
 
         if (!empty($orderRow->amount) && $orderRow->amount != null) {
-            $this->XMLWriter->writeElement("amount", $orderRow->amount);
+            $this->XMLWriter->writeElement("amount", round($orderRow->amount));
         }
 
         if (!empty($orderRow->vat) && $orderRow->vat != null) {
-            $this->XMLWriter->writeElement("vat", $orderRow->vat);
+            $this->XMLWriter->writeElement("vat", round($orderRow->vat));
         }
 
         if (!empty($orderRow->unit) && $orderRow->unit != null) {

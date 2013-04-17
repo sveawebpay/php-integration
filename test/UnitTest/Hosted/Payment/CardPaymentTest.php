@@ -60,7 +60,7 @@ class CardPaymentTest extends PHPUnit_Framework_TestCase {
                     ->setPayPageLanguage("sv")
                     ->setReturnUrl("http://myurl.se")
                     ->getPaymentForm();
-        
+
         $this->assertEquals("merchant", $form->merchantid);
         $this->assertEquals('secret', $form->secretWord);
     }
@@ -98,12 +98,12 @@ class CardPaymentTest extends PHPUnit_Framework_TestCase {
                     ->setReturnUrl("http://myurl.se")
                     ->getPaymentForm();
 
-       
+
 
         $xmlMessage = new SimpleXMLElement($form->xmlMessage);
         $payment = base64_decode($form->xmlMessageBase64);
         $payment_decoded = new SimpleXMLElement($payment);
-        
+
         //test values are as expected avter transforming xml to php object
         $this->assertEquals('SEK', $xmlMessage->currency);
         $this->assertEquals('18750', $xmlMessage->amount);
@@ -135,7 +135,7 @@ class CardPaymentTest extends PHPUnit_Framework_TestCase {
                     ->setUnit("st")
                     ->setDescription("FixedDiscount")
                     ->setName("Fixed")
-                    )          
+                    )
                 ->setCountryCode("SE")
                 ->setClientOrderNumber("33")
                 ->setOrderDate("2012-12-12")
@@ -145,7 +145,7 @@ class CardPaymentTest extends PHPUnit_Framework_TestCase {
                     ->setPayPageLanguage("sv")
                     ->getPaymentForm();
         $xmlMessage = new SimpleXMLElement($form->xmlMessage);
-        
+
         $this->assertEquals('40000', $xmlMessage->amount);
         $this->assertEquals('5706', $xmlMessage->vat);
     }
@@ -181,7 +181,7 @@ class CardPaymentTest extends PHPUnit_Framework_TestCase {
                     ->setUnit("st")
                     ->setVatPercent(25)
                     ->setDiscountPercent(0)
-                    )           
+                    )
                 ->setCountryCode("SE")
                 ->setClientOrderNumber("33")
                 ->setOrderDate("2012-12-12")
@@ -191,7 +191,7 @@ class CardPaymentTest extends PHPUnit_Framework_TestCase {
                 ->getPaymentForm();
 
         $xmlMessage = new SimpleXMLElement($form->xmlMessage);
-        
+
         $this->assertEquals('46250', $xmlMessage->amount);
         $this->assertEquals('6956', $xmlMessage->vat);
     }
@@ -211,7 +211,7 @@ class CardPaymentTest extends PHPUnit_Framework_TestCase {
                     ->setAmountExVat(188.68)
                     ->setAmountIncVat(200)
                     ->setDescription("Bok")
-                    //->setVatPercent(6) 
+                    //->setVatPercent(6)
                     )
                 ->addDiscount(Item::fixedDiscount()
                     ->setDiscountId("1")
@@ -229,7 +229,7 @@ class CardPaymentTest extends PHPUnit_Framework_TestCase {
                 ->getPaymentForm();
 
         $xmlMessage = new SimpleXMLElement($form->xmlMessage);
-        
+
         $this->assertEquals('40000', $xmlMessage->amount);
         $this->assertEquals('5706', $xmlMessage->vat);
         $this->assertEquals('30000', $xmlMessage->orderrows->row[0]->amount);
@@ -243,7 +243,7 @@ class CardPaymentTest extends PHPUnit_Framework_TestCase {
                     ->setQuantity(1)
                     ->setAmountExVat(240.00)
                     ->setAmountIncVat(300)
-                    ->setDescription("CD")     
+                    ->setDescription("CD")
                     )
             ->setClientOrderNumber("33")
             ->setCurrency(" sek")
@@ -253,10 +253,10 @@ class CardPaymentTest extends PHPUnit_Framework_TestCase {
                 ->getPaymentForm();
 
         $xmlMessage = new SimpleXMLElement($form->xmlMessage);
-        
+
         $this->assertEquals('SEK', $xmlMessage->currency);
     }
-    
+
     function testBuildCardPaymentWithShippingFee(){
           $form = WebPay::createOrder()
                 ->addOrderRow(Item::orderRow()
@@ -264,11 +264,11 @@ class CardPaymentTest extends PHPUnit_Framework_TestCase {
                     ->setQuantity(1)
                     ->setAmountExVat(240.00)
                     ->setAmountIncVat(300)
-                    ->setDescription("CD")     
+                    ->setDescription("CD")
                     )
                 ->addFee(Item::shippingFee()
                         ->setAmountExVat(80)
-                        ->setAmountIncVat(100)                        
+                        ->setAmountIncVat(100)
                         )
             ->setClientOrderNumber("33")
             ->setCurrency("sek")
@@ -276,11 +276,31 @@ class CardPaymentTest extends PHPUnit_Framework_TestCase {
             ->usePayPageCardOnly() // PayPageObject
             ->setReturnUrl("http://myurl.se")
                 ->getPaymentForm();
-        
+
         $xmlMessage = new SimpleXMLElement($form->xmlMessage);
-        
+
         $this->assertEquals("8000", $xmlMessage->vat);
         $this->assertEquals("40000", $xmlMessage->amount);
+    }
+    function testBuildCardPaymentWithDecimalLongPrice(){
+          $form = WebPay::createOrder()
+                ->addOrderRow(Item::orderRow()
+                    ->setArticleNumber(1)
+                    ->setQuantity(1)
+                    ->setAmountExVat(240.303030)
+                    ->setAmountIncVat(300)
+                    ->setDescription("CD")
+                    )
+            ->setClientOrderNumber("33")
+            ->setCurrency("sek")
+            ->setCountryCode("SE")
+            ->usePayPageCardOnly() // PayPageObject
+            ->setReturnUrl("http://myurl.se")
+                ->getPaymentForm();
+
+        $xmlMessage = new SimpleXMLElement($form->xmlMessage);
+        $this->assertEquals("5970", $xmlMessage->vat);
+        $this->assertEquals("30000", $xmlMessage->amount);
     }
 }
 
