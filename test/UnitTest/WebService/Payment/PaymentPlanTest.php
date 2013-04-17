@@ -12,6 +12,19 @@ require_once $root . '/../../../../test/UnitTest/BuildOrder/TestRowFactory.php';
 
 class PaymentPlanTest extends PHPUnit_Framework_TestCase {
 
+      /**
+     * Use to get paymentPlanParams to be able to test PaymentPlanRequest
+     * @return type
+     */
+    function getGetPaymentPlanParamsForTesting() {
+        $addressRequest = WebPay::getPaymentPlanParams();
+        $response = $addressRequest
+                //->setTestmode()()
+                ->setCountryCode("SE")
+                ->doRequest();
+         return $response->campaignCodes[0]->campaignCode;
+    }
+
     function testPaymentPlanRequestObjectSpecifics() {
         $rowFactory = new TestRowFactory();
         $request = WebPay::createOrder()
@@ -70,6 +83,30 @@ class PaymentPlanTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals('', $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->Unit);
         $this->assertEquals(25, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->VatPercent);
         $this->assertEquals(0, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->DiscountPercent);
+    }
+    function testPaymentPlanWithPriceAsDecimal() {
+        $campaign = $this->getGetPaymentPlanParamsForTesting();
+        $request = WebPay::createOrder()
+                //->setTestmode()()
+                ->addOrderRow(Item::orderRow()
+                    ->setArticleNumber(1)
+                    ->setQuantity(2)
+                    ->setAmountExVat(240.00)
+                    ->setAmountIncVat(300)
+                    ->setDescription("CD")
+                    )
+                ->addCustomerDetails(Item::individualCustomer()->setNationalIdNumber(194605092222))
+                ->setCountryCode("SE")
+                ->setCustomerReference("33")
+                ->setOrderDate("2012-12-12")
+                ->setCurrency("SEK")
+                    ->usePaymentPlanPayment($campaign)
+                        ->prepareRequest();
+        //couponrow
+
+        $this->assertEquals(240.00, $request->request->CreateOrderInformation->OrderRows['OrderRow'][0]->PricePerUnit);
+        $this->assertEquals(2, $request->request->CreateOrderInformation->OrderRows['OrderRow'][0]->NumberOfUnits);
+        $this->assertEquals(25, $request->request->CreateOrderInformation->OrderRows['OrderRow'][0]->VatPercent);
     }
 }
 
