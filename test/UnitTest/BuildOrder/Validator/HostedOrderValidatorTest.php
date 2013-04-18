@@ -9,7 +9,7 @@ require_once $root . '/../../../../src/Includes.php';
  * @author Anneli Halld'n, Daniel Brolund for Svea Webpay
  */
 class HostedOrderValidatorTest extends PHPUnit_Framework_TestCase {
-   
+
     /**
      * @expectedException ValidationException
      * @expectedExceptionMessage -missing value : ClientOrderNumber is required. Use function setClientOrderNumber().
@@ -27,9 +27,9 @@ class HostedOrderValidatorTest extends PHPUnit_Framework_TestCase {
                 ->usePayPageCardOnly()
                      ->setReturnUrl("myurl.se");
                $order->getPaymentForm();
-        
+
     }
-     
+
     /**
      * @expectedException ValidationException
      * @expectedExceptionMessage -missing value : ClientOrderNumber is required. Use function setClientOrderNumber().
@@ -49,16 +49,16 @@ class HostedOrderValidatorTest extends PHPUnit_Framework_TestCase {
                      ->setReturnUrl("myurl.se");
        $order->getPaymentForm();
     }
-  
+
     /**
      * @expectedException ValidationException
-     * @expectedExceptionMessage 
-     * -missing value : CustomerInitials is required for individual customers when countrycode is NL. Use function setCustomerInitials().
-     * -missing value : CustomerBirthDate is required for individual customers when countrycode is NL. Use function setCustomerBirthDate().
-     * -missing value : CustomerName is required for individual customers when countrycode is NL. Use function setCustomerName().
-     * -missing value : CustomerStreetAddress is required for all customers when countrycode is NL. Use function setCustomerStreetAddress().
-     * -missing value : CustomerLocality is required for all customers when countrycode is NL. Use function setCustomerLocality().
-     * -missing value : CustomerZipCode is required for all customers when countrycode is NL. Use function setCustomerZipCode().
+     * @expectedExceptionMessage
+     * -missing value : Initials is required for INVOICE and PAYMENTPLAN payments for individual customers when countrycode is NL. Use function setInitials().
+     * -missing value : BirthDate is required for INVOICE and PAYMENTPLAN payments for individual customers when countrycode is NL. Use function setBirthDate().
+     * -missing value : Name is required for INVOICE and PAYMENTPLAN payments for individual customers when countrycode is NL. Use function setName().
+     * -missing value : StreetAddress is required for INVOICE and PAYMENTPLAN payments for all customers when countrycode is NL. Use function setStreetAddress().
+     * -missing value : Locality is required for INVOICE and PAYMENTPLAN payments for all customers when countrycode is NL. Use function setLocality().
+     * -missing value : ZipCode is required for INVOICE and PAYMENTPLAN payments for all customers when countrycode is NL. Use function setZipCode().
      */
     function testFailOnMissingCustomerForNL(){
           $builder = WebPay::createOrder();
@@ -71,19 +71,18 @@ class HostedOrderValidatorTest extends PHPUnit_Framework_TestCase {
                 ->setCountryCode("NL")
                 ->setCurrency("SEK")
                 ->setClientOrderNumber("55")
-                    ->usePayPage()
+                    ->usePaymentMethod(PaymentMethod::INVOICE)
                      ->setReturnUrl("myurl.se");
        $order->getPaymentForm();
      }
     /**
      * @expectedException ValidationException
-     * @expectedExceptionMessage 
-     * -missing value : CustomerInitials is required for individual customers when countrycode is NL. Use function setCustomerInitials().
-     * -missing value : CustomerBirthDate is required for individual customers when countrycode is NL. Use function setCustomerBirthDate().
-     * -missing value : CustomerName is required for individual customers when countrycode is NL. Use function setCustomerName().
-     * -missing value : CustomerStreetAddress is required for all customers when countrycode is NL. Use function setCustomerStreetAddress().
-     * -missing value : CustomerLocality is required for all customers when countrycode is NL. Use function setCustomerLocality().
-     * -missing value : CustomerZipCode is required for all customers when countrycode is NL. Use function setCustomerZipCode().
+     * @expectedExceptionMessage
+     * -missing value : StreetAddress is required for INVOICE and PAYMENTPLAN payments for all customers when countrycode is NL. Use function setStreetAddress().
+     * -missing value : Locality is required for INVOICE and PAYMENTPLAN payments for all customers when countrycode is NL. Use function setLocality().
+     * -missing value : ZipCode is required for INVOICE and PAYMENTPLAN payments for all customers when countrycode is NL. Use function setZipCode().
+     * -missing value : VatNumber is required for INVOICE and PAYMENTPLAN payments for company customers when countrycode is NL. Use function setVatNumber().
+     * -missing value : CompanyName is required for INVOICE and PAYMENTPLAN payments for individual customers when countrycode is NL. Use function setCompanyName().
      */
     function testFailOnMissingCompanyCustomerForNL(){
           $builder = WebPay::createOrder();
@@ -96,11 +95,11 @@ class HostedOrderValidatorTest extends PHPUnit_Framework_TestCase {
                 ->setCountryCode("NL")
                 ->setCurrency("SEK")
                 ->setClientOrderNumber("55")
-                    ->usePayPage()
+                    ->usePaymentMethod(PaymentMethod::INVOICE)
                      ->setReturnUrl("myurl.se");
        $order->getPaymentForm();
      }
-    
+
      /**
      * @expectedException ValidationException
      * @expectedExceptionMessage -missing value : Currency is required. Use function setCurrency().
@@ -155,13 +154,13 @@ class HostedOrderValidatorTest extends PHPUnit_Framework_TestCase {
                 ->setClientOrderNumber("34")
                     ->usePayPage()
                    // ->setReturnUrl("myurl.se")
-                    
+
                     ;
        $order->getPaymentForm();
     }
-     
-    
-     
+
+
+
 }
 
 ?>

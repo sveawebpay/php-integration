@@ -27,9 +27,7 @@ class HostedOrderValidator extends OrderValidator {
         $this->errors = $this->validateCountryCode($order, $this->errors);
         $this->errors = $this->validateRequiredFieldsForOrder($order,$this->errors);
         $this->errors = $this->validateOrderRows($order,$this->errors);
-        if (isset($order->countryCode) && $order->countryCode == "NL") {
-            $this->errors = $this->validateNlCustomer($order,  $this->errors);
-        }
+
         return $this->errors;
     }
 
@@ -64,30 +62,30 @@ class HostedOrderValidator extends OrderValidator {
         return $errors;
     }
 
-    public function validateNlCustomer($order, $errors) {
-        if(isset($order->initials) == false && $this->isCompany == FALSE){
-            $errors['missing value'] = "CustomerInitials is required for individual customers when countrycode is NL. Use function setCustomerInitials().";
+    public function validateEuroCustomer($order, $errors) {
+        if(isset($order->customerIdentity->initials) == false && $this->isCompany == FALSE && $order->countryCode == "NL"){
+            $errors['missing value'] = "Initials is required for INVOICE and PAYMENTPLAN payments for individual customers when countrycode is NL. Use function setInitials().";
         }
-        if(isset($order->birthDate) == false && $this->isCompany == FALSE){
-            $errors['missing value'] = "CustomerBirthDate is required for individual customers when countrycode is NL. Use function setCustomerBirthDate().";
+        if(isset($order->customerIdentity->birthDate) == false && $this->isCompany == FALSE){
+            $errors['missing value'] = "BirthDate is required for INVOICE and PAYMENTPLAN payments for individual customers when countrycode is NL. Use function setBirthDate().";
         }
-        if(isset($order->firstname) == false || isset($order->lastname) == false && $this->isCompany == FALSE){
-            $errors['missing value'] = "CustomerName is required for individual customers when countrycode is NL. Use function setCustomerName().";
+        if(isset($order->customerIdentity->firstname) == false || isset($order->customerIdentity->lastname) == false && $this->isCompany == FALSE){
+            $errors['missing value'] = "Name is required for INVOICE and PAYMENTPLAN payments for individual customers when countrycode is NL. Use function setName().";
         }
-        if(isset($order->companyVatNumber) == false && $this->isCompany == true){
-            $errors['missing value'] = "CustomerCompanyVatNumber is required for company customers when countrycode is NL. Use function setCustomerCompanyVatNumber().";
+        if(isset($order->customerIdentity->companyVatNumber) == false && $this->isCompany == true){
+            $errors['missing value'] = "VatNumber is required for INVOICE and PAYMENTPLAN payments for company customers when countrycode is NL. Use function setVatNumber().";
         }
-        if(isset($order->companyName) == false && $this->isCompany == true){
-            $errors['missing value'] = "CustomerCompanyName is required for individual customers when countrycode is NL. Use function setCustomerCompanyName().";
+        if(isset($order->customerIdentity->companyName) == false && $this->isCompany == true){
+            $errors['missing value'] = "CompanyName is required for INVOICE and PAYMENTPLAN payments for individual customers when countrycode is NL. Use function setCompanyName().";
         }
-        if(isset($order->street) == false || isset($order->housenumber) == false){
-            $errors['missing value'] = "CustomerStreetAddress is required for all customers when countrycode is NL. Use function setCustomerStreetAddress().";
+        if(isset($order->customerIdentity->street) == false || isset($order->customerIdentity->housenumber) == false){
+            $errors['missing value'] = "StreetAddress is required for INVOICE and PAYMENTPLAN payments for all customers when countrycode is NL. Use function setStreetAddress().";
         }
-        if(isset($order->locality) == false){
-            $errors['missing value'] = "CustomerLocality is required for all customers when countrycode is NL. Use function setCustomerLocality().";
+        if(isset($order->customerIdentity->locality) == false){
+            $errors['missing value'] = "Locality is required for INVOICE and PAYMENTPLAN payments for all customers when countrycode is NL. Use function setLocality().";
         }
-        if(isset($order->zipCode) == false){
-            $errors['missing value'] = "CustomerZipCode is required for all customers when countrycode is NL. Use function setCustomerZipCode().";
+        if(isset($order->customerIdentity->zipCode) == false){
+            $errors['missing value'] = "ZipCode is required for INVOICE and PAYMENTPLAN payments for all customers when countrycode is NL. Use function setZipCode().";
         }
 
         return $errors;
