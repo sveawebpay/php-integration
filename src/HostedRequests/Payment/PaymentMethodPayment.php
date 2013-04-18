@@ -55,19 +55,5 @@ class PaymentMethodPayment extends HostedPayment{
         return $this;
     }
 
-    /**
-     * Alternative drop or change file in Config/SveaConfig.php
-     * Note! This fuction may change in future updates.
-     * @param type $merchantId
-     * @param type $secret
-     * @return \HostedPayment
-
-
-    public function setMerchantIdBasedAuthorization($merchantId,$secret){
-        $this->order->conf->merchantId = $merchantId;
-        $this->order->conf->secret = $secret;
-        return $this;
-    }
-     *
-     */
+    
 }

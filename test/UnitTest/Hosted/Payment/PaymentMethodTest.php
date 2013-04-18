@@ -10,7 +10,7 @@ require_once $root . '/../../../../test/UnitTest/BuildOrder/TestRowFactory.php';
  * @author anne-hal
  */
 class PaymentMethodTest extends PHPUnit_Framework_TestCase{
-   
+
      function testPayPagePaymentWithSetPaymentMethod() {
         $rowFactory = new TestRowFactory();
         $form = WebPay::createOrder()
@@ -31,7 +31,7 @@ class PaymentMethodTest extends PHPUnit_Framework_TestCase{
                     ->setDiscountPercent(50)
                     ->setUnit("st")
                     ->setName('Relative')
-                    ->setDescription("RelativeDiscount") 
+                    ->setDescription("RelativeDiscount")
                     )
             ->addCustomerDetails(Item::individualCustomer()->setNationalIdNumber(194605092222))
                 ->setCountryCode("SE")
@@ -66,7 +66,7 @@ class PaymentMethodTest extends PHPUnit_Framework_TestCase{
                     ->setDiscountPercent(50)
                     ->setUnit("st")
                     ->setName('Relative')
-                    ->setDescription("RelativeDiscount") 
+                    ->setDescription("RelativeDiscount")
                     )
             ->addCustomerDetails(Item::companyCustomer()->setNationalIdNumber(4608142222))
                 ->setCountryCode("SE")
@@ -77,11 +77,47 @@ class PaymentMethodTest extends PHPUnit_Framework_TestCase{
                     ->setReturnUrl("http://myurl.se")
                     //->setMerchantIdBasedAuthorization(1130, "8a9cece566e808da63c6f07ff415ff9e127909d000d259aba24daa2fed6d9e3f8b0b62e8ad1fa91c7d7cd6fc3352deaae66cdb533123edf127ad7d1f4c77e7a3")
                         ->getPaymentForm();
-              
-        $xmlMessage = new SimpleXMLElement($form->xmlMessage);         
+
+        $xmlMessage = new SimpleXMLElement($form->xmlMessage);
         $this->assertEquals(SystemPaymentMethod::INVOICE_SE, $xmlMessage->paymentmethod[0]);
         $this->assertEquals("TRUE", $xmlMessage->iscompany);
-        $this->assertEquals("4608142222", $xmlMessage->ssn);
+        $this->assertEquals("4608142222", $xmlMessage->customer->ssn);
+    }
+     function testPaymentMethodInvoiceNL() {
+        $form = WebPay::createOrder()
+            ->addOrderRow(Item::orderRow()
+                    ->setArticleNumber(1)
+                    ->setQuantity(2)
+                    ->setAmountExVat(100.00)
+                    ->setDescription("Specification")
+                    ->setName('Prod')
+                    ->setUnit("st")
+                    ->setVatPercent(25)
+                    ->setDiscountPercent(0)
+                    )
+            ->addCustomerDetails(Item::individualCustomer()
+                    ->setInitials("SB")
+                    ->setBirthDate(1923, 12, 12)
+                    ->setName("Sneider", "Boasman")
+                    ->setEmail("test@svea.com")
+                    ->setPhoneNumber(999999)
+                    ->setIpAddress("123.123.123")
+                    ->setStreetAddress("Gatan", 23)
+                    ->setCoAddress("c/o Eriksson")
+                    ->setZipCode(9999)
+                    ->setLocality("Stan")
+                    )
+                ->setCountryCode("NL")
+                ->setClientOrderNumber("33")
+                ->setOrderDate("2012-12-12")
+                ->setCurrency("SEK")
+                    ->usePaymentMethod(PaymentMethod::INVOICE)
+                    ->setReturnUrl("http://myurl.se")
+                        ->getPaymentForm();
+        $xmlMessage = new SimpleXMLElement($form->xmlMessage);
+
+        $this->assertEquals("FALSE", $xmlMessage->iscompany);
+        $this->assertEquals("Sneider", $xmlMessage->customer->firstname);
     }
 }
 
