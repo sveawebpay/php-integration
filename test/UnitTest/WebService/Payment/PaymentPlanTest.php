@@ -45,7 +45,6 @@ class PaymentPlanTest extends PHPUnit_Framework_TestCase {
                 ->setClientOrderNumber("nr26")
                 ->setOrderDate("2012-12-12")
                 ->setCurrency("SEK")
-                ->setAddressSelector("ad33")
                 ->usePaymentPlanPayment("camp1")// returnerar InvoiceOrder object
                     ->prepareRequest();
 

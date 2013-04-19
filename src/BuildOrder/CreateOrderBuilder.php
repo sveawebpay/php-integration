@@ -38,7 +38,7 @@ class CreateOrderBuilder {
     * String recievd by using Webpay::GetAddresses() function
     * @var type String
     */
-    public $addressSelector;
+   // public $addressSelector;
     /**
      * @var Unique order number from client side
      */
@@ -213,11 +213,13 @@ class CreateOrderBuilder {
     /** Recieve string from getAddresses
      * @param type $addressSelectorAsString
      * @return \createOrder
-     */
+
     public function setAddressSelector($addressSelectorAsString) {
         $this->addressSelector = $addressSelectorAsString;
         return $this;
     }
+     *
+     */
     /**
      * Start creating cardpayment via PayPage. Returns Paymentform to integrate in shop.
      * @return \HostedPayment
