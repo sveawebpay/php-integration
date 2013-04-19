@@ -105,4 +105,17 @@ class CompanyCustomer {
         $this->companyName = $nameAsString;
         return $this;
     }
+
+   /**
+    * Optional when creating order
+    * Recieve string param from getAddresses
+     * @param type $addressSelectorAsString
+     * @return \CompanyCustomer
+     */
+    public function setAddressSelector($addressSelectorAsString) {
+        $this->addressSelector = $addressSelectorAsString;
+        return $this;
+    }
+
+
 }

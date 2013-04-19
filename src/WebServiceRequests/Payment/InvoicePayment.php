@@ -15,7 +15,7 @@ class InvoicePayment extends WebServicePayment {
     }
 
     public function setOrderType($orderInformation) {
-        $orderInformation->AddressSelector = ($this->order->addressSelector ? $this->order->addressSelector : "");
+        $orderInformation->AddressSelector = isset($this->order->customerIdentity->addressSelector) ? $this->order->customerIdentity->addressSelector : "";
         $orderInformation->OrderType = $this->orderType;
         return $orderInformation;
     }

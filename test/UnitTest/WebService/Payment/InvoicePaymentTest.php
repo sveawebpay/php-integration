@@ -514,13 +514,12 @@ class InvoicePaymentTest extends PHPUnit_Framework_TestCase {
                     ->setDiscountPercent(0)
                     )
                 ->run($rowFactory->buildShippingFee())
-            ->addCustomerDetails(Item::individualCustomer()->setNationalIdNumber(194605092222))
+            ->addCustomerDetails(Item::companyCustomer()->setNationalIdNumber(194605092222)->setAddressSelector("ad33"))
                     ->setCountryCode("SE")
                     ->setCustomerReference("33")
                     ->setClientOrderNumber("nr26")
                     ->setOrderDate("2012-12-12")
                     ->setCurrency("SEK")
-                    ->setAddressSelector("ad33")
                     ->useInvoicePayment()// returnerar InvoiceOrder object
                         ->prepareRequest();
         /**
@@ -549,13 +548,12 @@ class InvoicePaymentTest extends PHPUnit_Framework_TestCase {
                     ->setDiscountPercent(0)
                     )
             ->run($rowFactory->buildShippingFee())
-            ->addCustomerDetails(Item::individualCustomer()->setNationalIdNumber(194605092222))
+            ->addCustomerDetails(Item::companyCustomer()->setNationalIdNumber(194605092222)->setAddressSelector("ad33"))
                 ->setCountryCode("SE")
                 ->setCustomerReference("33")
                 ->setClientOrderNumber("nr26")
                 ->setOrderDate("2012-12-12")
                 ->setCurrency("SEK")
-                ->setAddressSelector("ad33")
                 ->useInvoicePayment()// returnerar InvoiceOrder object
                 ->prepareRequest();
 

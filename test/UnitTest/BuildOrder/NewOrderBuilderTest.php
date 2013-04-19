@@ -14,6 +14,49 @@ require_once $root . '/TestRowFactory.php';
  */
 class NewOrderBuilderTest extends PHPUnit_Framework_TestCase {
 
+    /**
+     * getAddressSelector for test
+     */
+     function getAddressForTesting() {
+        $addressRequest = WebPay::getAddresses();
+        $request = $addressRequest
+            ->setOrderTypeInvoice()
+            ->setCountryCode("SE")
+            ->setCompany(4608142222)
+                ->doRequest();
+
+        return $request->customerIdentity[0]->addressSelector;
+     }
+
+    function testNewInvoiceOrderCompanyAddresselector(){
+        $addresselector = $this->getAddressForTesting();
+        $request = WebPay::createOrder();
+            ////->setTestmode()()();
+        //foreach...
+        $request = $request
+            ->addOrderRow(
+                Item::orderRow()
+                    ->setArticleNumber(1)
+                    ->setQuantity(2)
+                    ->setAmountExVat(100.00)
+                    ->setDescription("Specification")
+                    ->setName('Prod')
+                    ->setUnit("st")
+                    ->setVatPercent(25)
+                    ->setDiscountPercent(0)
+                    );
+        //end foreach
+            $request = $request
+                ->addCustomerDetails(Item::companyCustomer()->setNationalIdNumber(4608142222)->setAddressSelector($addresselector))
+                ->setCountryCode("SE")
+                ->setCustomerReference("33")
+                ->setOrderDate("2012-12-12")
+                ->setCurrency("SEK")
+                ->useInvoicePayment()// returnerar InvoiceOrder object
+                    ->prepareRequest();
+            $this->assertEquals($addresselector, $request->request->CreateOrderInformation->AddressSelector);
+
+        }
     function testNewInvoiceOrderWithOrderRow(){
         $request = WebPay::createOrder();
             ////->setTestmode()()();
