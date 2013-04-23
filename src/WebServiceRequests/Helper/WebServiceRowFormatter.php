@@ -183,7 +183,7 @@ class WebServiceRowFormatter {
             $orderRow->DiscountPercent = 0; //no discount on discount
             $orderRow->NumberOfUnits = 1; //only one discount per row
             $orderRow->PricePerUnit = - number_format($row->amount - $discountVatAsAmount, 2,'.','');
-            $orderRow->VatPercent = round(($discountVatAsAmount / ($row->amount - $discountVatAsAmount))*100, 2);//Discountpercent
+            $orderRow->VatPercent = round(($discountVatAsAmount / ($row->amount - $discountVatAsAmount))*100);//Discountpercent
             $this->newRows[] = $orderRow;
         }
     }
