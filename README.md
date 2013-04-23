@@ -193,7 +193,7 @@ $response = WebPay::createOrder()
     ->setCustomerReference("33")
     ->setClientOrderNumber("nr26")
     ->setCurrency("SEK")
-    ->setAddressSelector("7fd7768")
+
 
 //Continue by choosing one of the following paths
     //Continue as an invoice payment with instant response
@@ -360,6 +360,7 @@ if(*condition*){
     ->setIpAddress("123.123.123")       //Optional but desirable
     ->setCoAddress("c/o Eriksson")      //Optional
     ->setPhoneNumber(999999)            //Optional
+    ->setAddressSelector("7fd7768")     //Optional, string recieved from WebPay::getAddress() request
     )
 ```
 [<< To top](https://github.com/sveawebpay/php-integration#php-integration-package-api-for-sveawebpay)
@@ -369,7 +370,6 @@ if(*condition*){
     ->setCountryCode("SE")                      //Required
     ->setCurrency("SEK")                        //Required for card payment, direct payment and PayPage payment.
     ->setClientOrderNumber("nr26")              //Required for card payment, direct payment, PaymentMethod payment and PayPage payments.
-    ->setAddressSelector("7fd7768")             //Optional. Recieved from getAddresses
     ->setOrderDate("2012-12-12")                //Required for synchronous payments
     ->setCustomerReference("33")                //Optional
 ```
