@@ -3,8 +3,7 @@
 /**
  * Autoload all classes
  */
-if (!defined('SVEA_DIR'))
-    define('SVEA_DIR', dirname(__DIR__));
+
 if (!defined('SVEA_REQUEST_DIR'))
     define('SVEA_REQUEST_DIR', dirname(__FILE__));
 
