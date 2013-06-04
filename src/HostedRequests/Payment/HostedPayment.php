@@ -67,9 +67,9 @@ class HostedPayment {
         $formObject = new PaymentForm();
         $formObject->xmlMessage = $this->xmlMessage;
         $formObject->xmlMessageBase64 = $this->xmlMessageBase64;
-        $formObject->endPointUrl = $this->order->conf->getEndPoint("HOSTED");
-        $formObject->merchantid = $this->order->conf->getMerchantId("HOSTED",  $this->order->countryCode);//$conf->getMerchantIdBasedAuthorization()[0];
-        $formObject->secretWord = $this->order->conf->getSecret("HOSTED",  $this->order->countryCode);//$conf->getMerchantIdBasedAuthorization()[1];
+        $formObject->endPointUrl = $this->order->conf->getEndPoint(ConfigurationProvider::HOSTED_TYPE);
+        $formObject->merchantid = $this->order->conf->getMerchantId(ConfigurationProvider::HOSTED_TYPE,  $this->order->countryCode);//$conf->getMerchantIdBasedAuthorization()[0];
+        $formObject->secretWord = $this->order->conf->getSecret(ConfigurationProvider::HOSTED_TYPE,  $this->order->countryCode);//$conf->getMerchantIdBasedAuthorization()[1];
         //$formObject->setSubmitMessage($this->order->countryCode);
         $formObject->setForm();
         $formObject->setHtmlFields();
