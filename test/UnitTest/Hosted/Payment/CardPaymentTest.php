@@ -56,8 +56,7 @@ class CardPaymentTest extends PHPUnit_Framework_TestCase {
                 ->setOrderDate("2012-12-12")
                 ->setCurrency("SEK")
                 ->usePayPageCardOnly() // PayPageObject
-                    //->setMerchantIdBasedAuthorization(4444, "secret")
-                    ->setPayPageLanguage("sv")
+                   ->setPayPageLanguage("sv")
                     ->setReturnUrl("http://myurl.se")
                     ->getPaymentForm();
 

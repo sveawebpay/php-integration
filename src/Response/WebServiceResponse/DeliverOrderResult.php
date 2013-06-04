@@ -28,6 +28,8 @@ class DeliverOrderResult extends WebServiceResponse{
                 $this->dueDate = $message->DeliverOrderEuResult->DeliverOrderResult->InvoiceResultDetails->DueDate;
                 $this->invoiceDate = $message->DeliverOrderEuResult->DeliverOrderResult->InvoiceResultDetails->InvoiceDate;
                 $this->invoiceDistributionType = $message->DeliverOrderEuResult->DeliverOrderResult->InvoiceResultDetails->InvoiceDistributionType;
+                $this->ocr = $message->DeliverOrderEuResult->DeliverOrderResult->InvoiceResultDetails->Ocr;
+                $this->lowestAmountToPay = $message->DeliverOrderEuResult->DeliverOrderResult->InvoiceResultDetails->LowestAmountToPay;
             }elseif (property_exists($message->DeliverOrderEuResult->DeliverOrderResult, "PaymentPlanResultDetails")) {
                 $this->contractNumber = $message->DeliverOrderEuResult->DeliverOrderResult->PaymentPlanResultDetails->ContractNumber;
             }

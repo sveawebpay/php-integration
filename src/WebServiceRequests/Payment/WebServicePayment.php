@@ -103,7 +103,7 @@ class WebServicePayment {
      */
     public function doRequest() {
         $object = $this->prepareRequest();
-        $url = $this->order->conf->getEndPoint($this->orderType); //$this->order->testmode ? SveaConfig::SWP_TEST_WS_URL : SveaConfig::SWP_PROD_WS_URL;
+        $url = $this->order->conf->getEndPoint($this->orderType);
         $request = new SveaDoRequest($url);
         $svea_req = $request->CreateOrderEu($object);
 
