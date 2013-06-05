@@ -93,9 +93,9 @@ There are two ways to configure Svea authorization. Choose one of the following:
         * @param $type eg. HOSTED, INVOICE or PAYMENTPLAN
         */
         public function getEndPoint($type){
-            if($type == "HOSTED"){
+            if($type == ConfigurationProvider::HOSTED_TYPE){
                 return   SveaConfig::SWP_TEST_URL;;
-            }elseif($type == "INVOICE" || $type == "PAYMENTPLAN"){
+            }elseif($type == ConfigurationProvider::INVOICE_TYPE || $type == ConfigurationProvider::PAYMENTPLAN_TYPE){
                 return SveaConfig::SWP_TEST_WS_URL;
             }  else {
                throw new Exception('Invalid type. Accepted values: INVOICE, PAYMENTPLAN or HOSTED');
