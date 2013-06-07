@@ -14,8 +14,8 @@ class SveaConfigurationProvider implements ConfigurationProvider {
 
     public $conf;
 
-    public function __construct($enviromentConfig) {
-        $this->conf = (array)$enviromentConfig;
+    public function __construct($environmentConfig) {
+        $this->conf = (array)$environmentConfig;
     }
 /**
  *
