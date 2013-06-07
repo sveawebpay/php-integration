@@ -6,6 +6,11 @@
  * @author anne-hal
  */
 interface ConfigurationProvider {
+
+    const HOSTED_TYPE = 'HOSTED';
+    const INVOICE_TYPE = 'INVOICE';
+    const PAYMENTPLAN_TYPE = 'PAYMENTPLAN';
+
      /**
     * get the return value from your database or likewise
     * @param $type eg. HOSTED, INVOICE or PAYMENTPLAN
