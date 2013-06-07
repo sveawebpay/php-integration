@@ -34,18 +34,6 @@ class PayPagePayment extends HostedPayment {
         return $request;
     }
 
-    /** Moved
-     * Set specific paymentmethod
-     * @param type $paymentMethod ex. "DBSEBSE"
-     * @return \PayPagePayment
-
-    public function setPaymentMethod($paymentMethod) {
-        $this->paymentMethod = $paymentMethod;
-        return $this;
-    }
-     *
-     */
-
     /**
      * Exclude specific payment methods.
      * @params type Paymentmethod $paymentMethod ex. PaymentMethod::DBSEBSE,Paymentmethod::SVEAINVOICE_SE

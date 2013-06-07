@@ -26,17 +26,7 @@ class DirectPayment extends HostedPayment {
         $methods[] = SystemPaymentMethod::SKRILL;
        //other
         $methods[] = SystemPaymentMethod::PAYPAL;
-       /**
-        //countrycheck
-       if($this->order->countryCode != "SE") {
-            $methods[] = SystemPaymentMethod::DBNORDEASE;
-            $methods[] = SystemPaymentMethod::DBSEBSE;
-            $methods[] = SystemPaymentMethod::DBSEBFTGSE;
-            $methods[] = SystemPaymentMethod::DBSHBSE;
-            $methods[] = SystemPaymentMethod::DBSWEDBANKSE;
-        }
-        *
-        */
+
         $exclude = new ExcludePayments();
         $methods = array_merge((array)$methods, (array)$exclude->excludeInvoicesAndPaymentPlan($this->order->countryCode));
 

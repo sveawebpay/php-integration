@@ -23,12 +23,6 @@ class GetPaymentPlanParams {
          $this->conf = $config;
     }
 
-    /**
-    public function setTestmode() {
-        $this->testmode = true;
-        return $this;
-    }
-     * /
      /*
      * @param type $countryCodeAsString
      */
@@ -38,30 +32,14 @@ class GetPaymentPlanParams {
         return $this;
     }
 
-
-    /**
-     * Alternative drop or change file in Config/SveaConfig.php
-     * Note! This fuction may change in future updates.
-     * @param type $merchantId
-     * @param type $secret
-
-    public function setPasswordBasedAuthorization($username, $password, $clientNumber) {
-        $this->conf->username = $username;
-        $this->conf->password = $password;
-        $this->conf->paymentPlanClientnumber = $clientNumber;
-        return $this;
-    }
-     *
-     */
-
     /**
      * @return Prepared Request
      */
     public function prepareRequest() {
         $auth = new SveaAuth();
-        $auth->Username = $this->conf->getUsername("PAYMENTPLAN",  $this->countryCode);//$authArray['username'];
-        $auth->Password = $this->conf->getPassword("PAYMENTPLAN",  $this->countryCode);//$authArray['password'];
-        $auth->ClientNumber = $this->conf->getClientNumber("PAYMENTPLAN",  $this->countryCode); //$authArray['clientnumber'];
+        $auth->Username = $this->conf->getUsername("PAYMENTPLAN",  $this->countryCode);
+        $auth->Password = $this->conf->getPassword("PAYMENTPLAN",  $this->countryCode);
+        $auth->ClientNumber = $this->conf->getClientNumber("PAYMENTPLAN",  $this->countryCode);
         $object = new SveaRequest();
         $object->request = (object) array("Auth" => $auth);
         $this->object = $object;
@@ -75,7 +53,7 @@ class GetPaymentPlanParams {
      */
     public function doRequest() {
         $object = $this->prepareRequest();
-        $url = $this->conf->getEndPoint("PAYMENTPLAN");//$this->testmode ? SveaConfig::SWP_TEST_WS_URL : SveaConfig::SWP_PROD_WS_URL;
+        $url = $this->conf->getEndPoint("PAYMENTPLAN");
         $request = new SveaDoRequest($url);
         $svea_req = $request->GetPaymentPlanParamsEu($object);
 

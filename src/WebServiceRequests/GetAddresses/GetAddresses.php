@@ -87,9 +87,9 @@ class GetAddresses {
      */
     public function prepareRequest() {
         $auth = new SveaAuth();
-        $auth->Username = $this->conf->getUsername($this->orderType,  $this->countryCode); //$authArray['username'];
-        $auth->Password = $this->conf->getPassword($this->orderType,  $this->countryCode);//$authArray['password'];
-        $auth->ClientNumber = $this->conf->getClientNumber($this->orderType,  $this->countryCode);//$authArray['clientnumber'];
+        $auth->Username = $this->conf->getUsername($this->orderType,  $this->countryCode);
+        $auth->Password = $this->conf->getPassword($this->orderType,  $this->countryCode);
+        $auth->ClientNumber = $this->conf->getClientNumber($this->orderType,  $this->countryCode);
 
         $address = new SveaAddress();
         $address->Auth = $auth;
@@ -110,7 +110,7 @@ class GetAddresses {
      */
     public function doRequest() {
         $object = $this->prepareRequest();
-        $url = $this->conf->getEndPoint($this->orderType); //$this->testmode ? SveaConfig::SWP_TEST_WS_URL : SveaConfig::SWP_PROD_WS_URL;
+        $url = $this->conf->getEndPoint($this->orderType);
         $request = new SveaDoRequest($url);
         $svea_req = $request->GetAddresses($object);
 
