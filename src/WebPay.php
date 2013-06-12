@@ -12,7 +12,7 @@ class WebPay {
 
     /**
      * Start Building Order Request to create order for all Payments
-     * @return \createOrder
+     * @return \CreateOrderBuilder
      * @param instance of implementation class of ConfigurationProvider Interface
      * If left blank, default settings from SveaConfig will be used
      */
@@ -34,7 +34,7 @@ class WebPay {
 
     /**
      * Start Building Request Deliver Orders.
-     * @return \deliverOrder
+     * @return \deliverOrderBuilder
      * @param instance of implementation class of ConfigurationProvider Interface
      * If left blank, default settings from SveaConfig will be used
      */
@@ -46,7 +46,7 @@ class WebPay {
 
     /**
      * Start building Request to close orders.
-     * @return \closeOrder
+     * @return \closeOrderBuilder
      * @param instance of implementation class of ConfigurationProvider Interface
      * If left blank, default settings from SveaConfig will be used
      */

@@ -38,7 +38,7 @@ class CreateOrderBuilder {
     * String recievd by using Webpay::GetAddresses() function
     * @var type String
     */
-   // public $addressSelector;
+//    public $addressSelector;
     /**
      * @var Unique order number from client side
      */
@@ -82,21 +82,23 @@ class CreateOrderBuilder {
 
     /**
      * When function is called it turns into testmode
-     * @return \createOrder
-
-    public function setTestmode() {
-        $this->testmode = TRUE;
-        return $this;
-    }
-     *
-     * @param type $itemCustomerObject
-     * @return \createOrder|\CreateOrderBuilder
+     * @return \CreateOrderBuilder
      */
+//    public function setTestmode() {
+//        $this->testmode = TRUE;
+//        return $this;
+//    }
 
+     /**
+     * @param type $itemCustomerObject
+     *
+     * @return \CreateOrderBuilder
+     */
      public function addCustomerDetails($itemCustomerObject){
         $this->customerIdentity = $itemCustomerObject;
         return $this;
     }
+
     /**
      * New!
      * @param type $orderRow
@@ -137,6 +139,7 @@ class CreateOrderBuilder {
 
        return $this;
     }
+
     /**
      * New!
      * @param type $itemDiscounObject
@@ -162,10 +165,9 @@ class CreateOrderBuilder {
        return $this;
     }
 
-
     /**
      * @param type $countryCodeAsString ex. "SE"
-     * @return \createOrder
+     * @return \CreateOrderBuilder
      */
     public function setCountryCode($countryCodeAsString) {
         $this->countryCode = $countryCodeAsString;
@@ -174,7 +176,7 @@ class CreateOrderBuilder {
 
     /**
      * @param type $currencyAsString ex. "SEK"
-     * @return \createOrder
+     * @return \CreateOrderBuilder
      */
     public function setCurrency($currencyAsString) {
         $currency = trim($currencyAsString);
@@ -185,7 +187,7 @@ class CreateOrderBuilder {
 
     /**
      * @param type $customerReferenceAsString ex. "test".rand(0 9999)
-     * @return \createOrder
+     * @return \CreateOrderBuilder
      */
     public function setCustomerReference($customerReferenceAsString) {
         $this->customerReference = $customerReferenceAsString;
@@ -194,7 +196,7 @@ class CreateOrderBuilder {
 
     /**
      * @param type $clientOrderNumberAsString
-     * @return \createOrder
+     * @return \CreateOrderBuilder
      */
     public function setClientOrderNumber($clientOrderNumberAsString){
         $this->clientOrderNumber = $clientOrderNumberAsString;
@@ -203,7 +205,7 @@ class CreateOrderBuilder {
 
     /**
      * @param type $orderDateAsString ex date('c') eg. 'Y-m-d\TH:i:s\Z'
-     * @return \createOrder
+     * @return \CreateOrderBuilder
      */
     public function setOrderDate($orderDateAsString) {
         $this->orderDate = $orderDateAsString;
@@ -212,7 +214,7 @@ class CreateOrderBuilder {
 
     /** Recieve string from getAddresses
      * @param type $addressSelectorAsString
-     * @return \createOrder
+     * @return \CreateOrderBuilder
 
     public function setAddressSelector($addressSelectorAsString) {
         $this->addressSelector = $addressSelectorAsString;
@@ -222,7 +224,7 @@ class CreateOrderBuilder {
      */
     /**
      * Start creating cardpayment via PayPage. Returns Paymentform to integrate in shop.
-     * @return \HostedPayment
+     * @return \CardPayment
      */
     public function usePayPageCardOnly() {
         return new CardPayment($this);
@@ -230,7 +232,7 @@ class CreateOrderBuilder {
 
     /**
      * Start creating direct bank payment via PayPage. Returns Paymentform to integrate in shop.
-     * @return \HostedPayment
+     * @return \DirectPayment
      */
     public function usePayPageDirectBankOnly() {
         return new DirectPayment($this);
@@ -242,8 +244,7 @@ class CreateOrderBuilder {
      * @return \PayPagePayment
      */
     public function usePayPage() {
-        $paypagepayment = new PayPagePayment($this);
-        return $paypagepayment;
+        return new PayPagePayment($this);
     }
     /**
      * Start creating payment with a specific paymentmethod. This function will go directly to the paymentmethod specified.
@@ -279,7 +280,7 @@ class CreateOrderBuilder {
    /**
      * For testfunctions
      * @param type $func
-     * @return \createOrder
+     * @return \CreateOrderBuilder
      */
     public function run($func) {
         $func($this);
