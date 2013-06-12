@@ -26,38 +26,37 @@ class HostedPayments_RequestTest extends PHPUnit_Framework_TestCase {
                     ->setVatPercent(25)
                     ->setDiscountPercent(0)
                         )
-                
-                ->run($rowFactory->buildShippingFee())              
+
+                ->run($rowFactory->buildShippingFee())
                 ->addDiscount(Item::relativeDiscount()
                         ->setDiscountId("1")
                         ->setDiscountPercent(50)
                         ->setUnit("st")
                         ->setName('Relative')
                         ->setDescription("RelativeDiscount")
-                        )        
+                        )
                 ->setCountryCode("SE")
-                ->setClientOrderNumber("33")
+                ->setClientOrderNumber(rand(0, 100))
                 ->setOrderDate("2012-12-12")
                 ->setCurrency("SEK")
                 ->usePayPage() // PayPageObject
                     ->setReturnUrl("http://myurl.se")
                     ->getPaymentForm();
-          
-        
+
             $url = "https://test.sveaekonomi.se/webpay/payment";
-            /** CURL  **/          
+            /** CURL  **/
             $fields = array('merchantid' => urlencode($form->merchantid), 'message' => urlencode($form->xmlMessageBase64), 'mac' => urlencode($form->mac));
             $fieldsString = "";
             foreach ($fields as $key => $value) {
                 $fieldsString .= $key.'='.$value.'&';
             }
             rtrim($fieldsString, '&');
-            
+
             $ch = curl_init();
             curl_setopt($ch, CURLOPT_URL, $url);
             curl_setopt($ch, CURLOPT_POST, count($fields));
             curl_setopt($ch, CURLOPT_POSTFIELDS, $fieldsString);
-            
+
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
             //force curl to trust https
             curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
@@ -72,8 +71,8 @@ class HostedPayments_RequestTest extends PHPUnit_Framework_TestCase {
              if(isset($info['redirect_url'])){
                  $payPage = $info['redirect_url'];
              }
-             
-            
+
+
             }
             curl_close($ch);
             if($response){
@@ -81,8 +80,8 @@ class HostedPayments_RequestTest extends PHPUnit_Framework_TestCase {
                 $redirect = substr($payPage, 41, 7);
             }  else {
                 $status = 'No answer';
-            }          
-            
+            }
+
              $this->assertEquals(302, $status);
              $this->assertEquals("payPage", $redirect);
     }
