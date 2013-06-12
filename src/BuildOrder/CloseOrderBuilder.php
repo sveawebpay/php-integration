@@ -31,7 +31,7 @@ class closeOrderBuilder {
 
     /**
      * When function is called it turns into testmode
-     * @return \closeOrder
+     * @return \CloseOrderBuilder
 
     public function setTestmode() {
         $this->testmode = TRUE;
@@ -43,23 +43,33 @@ class closeOrderBuilder {
     /**
      * Required
      * @param type $orderIdAsString
-     * @return \closeOrder
+     * @return \CloseOrderBuilder
      */
     public function setOrderId($orderIdAsString) {
         $this->orderId = $orderIdAsString;
         return $this;
     }
 
+    /**
+     * @param string $countryCodeAsString
+     * @return \CloseOrderBuilder
+     */
     public function setCountryCode($countryCodeAsString){
         $this->countryCode = $countryCodeAsString;
         return $this;
     }
 
+    /**
+     * @return \CloseOrder
+     */
     public function closeInvoiceOrder() {
         $this->orderType = "Invoice";
         return new CloseOrder($this);
     }
 
+    /**
+     * @return \CloseOrder
+     */
     public function closePaymentPlanOrder() {
         $this->orderType = "PaymentPlan";
         return new CloseOrder($this);
