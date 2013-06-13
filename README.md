@@ -857,7 +857,7 @@ If invoice order is credit invoice use setCreditInvoice($invoiceId) and setNumbe
 ```
 [<< To top](https://github.com/sveawebpay/php-integration#php-integration-package-api-for-sveawebpay)
 
-¨## 5. creditInvoice
+## 5. creditInvoice
 When you want to credit an invoice. The order must first be delivered. When doing [DeliverOrder](https://github.com/sveawebpay/php-integration#4-deliverorder)
 you will recieve an *InvoiceId* in the Response. To credit the invoice you follow the steps as in [4. DeliverOrder](https://github.com/sveawebpay/php-integration#4-deliverorder)
  but you add the call `->setCreditInvoice($InvoiceId)`:
@@ -883,6 +883,7 @@ you will recieve an *InvoiceId* in the Response. To credit the invoice you follo
             ->doRequest();
 
 ```
+[<< To top](https://github.com/sveawebpay/php-integration#php-integration-package-api-for-sveawebpay)
 
 ## 6. closeOrder
 Use when you want to cancel an undelivered order. Valid only for invoice and payment plan orders.
@@ -890,7 +891,7 @@ Required is the order id received when creating the order.
 
 [<< To top](https://github.com/sveawebpay/php-integration#php-integration-package-api-for-sveawebpay)
 
-### 5.1 Close by payment type
+### 6.1 Close by payment type
 ```php
     ->closeInvoiceOrder()
 or
