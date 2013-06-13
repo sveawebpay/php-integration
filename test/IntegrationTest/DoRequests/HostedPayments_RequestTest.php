@@ -10,7 +10,7 @@ require_once $root . '/../../UnitTest/BuildOrder/TestRowFactory.php';
  * @author Anneli Halld'n, Daniel Brolund for Svea Webpay
  */
 class HostedPayments_RequestTest extends PHPUnit_Framework_TestCase {
-
+    
     function testDoCardPaymentRequest() {
         $rowFactory = new TestRowFactory();
         $form = WebPay::createOrder()

@@ -18,7 +18,7 @@
 * [4. DeliverOrder](https://github.com/sveawebpay/php-integration#4-deliverorder)
     * [Specify order](https://github.com/sveawebpay/php-integration#42-specify-order)
     * [Other values](https://github.com/sveawebpay/php-integration#43-other-values)
-* [5. CreditInvoice](https://github.com/sveawebpay/php-integration#6-creditInvoice)
+* [5. CreditInvoice](https://github.com/sveawebpay/php-integration#5-creditInvoice)
 * [6. CloseOrder](https://github.com/sveawebpay/php-integration#6-closeorder)
 * [7. Response handler](https://github.com/sveawebpay/php-integration#7-response-handler)
 * [APPENDIX](https://github.com/sveawebpay/php-integration#appendix)
