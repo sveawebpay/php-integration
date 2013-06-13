@@ -15,11 +15,12 @@
     * [Choose payment](https://github.com/sveawebpay/php-integration#15-choose-payment)
 * [2. GetPaymentPlanParams](https://github.com/sveawebpay/php-integration#2-getpaymentplanparams)
 * [3. GetAddresses](https://github.com/sveawebpay/php-integration#2-getpaymentplanparams)
-* [4. DeliverOrder](https://github.com/sveawebpay/php-integration#2-getpaymentplanparams)
+* [4. DeliverOrder](https://github.com/sveawebpay/php-integration#4-deliverorder)
     * [Specify order](https://github.com/sveawebpay/php-integration#42-specify-order)
     * [Other values](https://github.com/sveawebpay/php-integration#43-other-values)
-* [5. CloseOrder](https://github.com/sveawebpay/php-integration#5-closeorder)
-* [6. Response handler](https://github.com/sveawebpay/php-integration#6-response-handler)
+* [5. CreditInvoice](https://github.com/sveawebpay/php-integration#6-creditInvoice)
+* [6. CloseOrder](https://github.com/sveawebpay/php-integration#6-closeorder)
+* [7. Response handler](https://github.com/sveawebpay/php-integration#7-response-handler)
 * [APPENDIX](https://github.com/sveawebpay/php-integration#appendix)
 
 
@@ -832,8 +833,8 @@ If invoice order is credit invoice use setCreditInvoice($invoiceId) and setNumbe
     ->setOrderId($orderId)                  //Required. Received when creating order.
     ->setNumberOfCreditDays(1)              //Use for Invoice orders.
     ->setInvoiceDistributionType('Post')    //Use for Invoice orders. "Post" or "Email"
-    ->setCreditInvoice                      //Use for invoice orders, if this should be a credit invoice.
     ->setNumberOfCreditDays(1)              //Use for invoice orders.
+
 ```
 
 ```php
@@ -856,7 +857,34 @@ If invoice order is credit invoice use setCreditInvoice($invoiceId) and setNumbe
 ```
 [<< To top](https://github.com/sveawebpay/php-integration#php-integration-package-api-for-sveawebpay)
 
-## 5. closeOrder
+¨## 5. creditInvoice
+When you want to credit an invoice. The order must first be delivered. When doing [DeliverOrder](https://github.com/sveawebpay/php-integration#4-deliverorder)
+you will recieve an *InvoiceId* in the Response. To credit the invoice you follow the steps as in [4. DeliverOrder](https://github.com/sveawebpay/php-integration#4-deliverorder)
+ but you add the call `->setCreditInvoice($InvoiceId)`:
+
+```php
+    $response = WebPay::deliverOrder()
+    ->addOrderRow(
+        Item::orderRow()
+            ->setArticleNumber(1)
+            ->setQuantity(2)
+            ->setAmountExVat(100.00)
+            ->setDescription("Specification")
+            ->setName('Prod')
+            ->setUnit("st")
+            ->setVatPercent(25)
+            ->setDiscountPercent(0)
+        )
+        ->setOrderId("id")
+        ->setInvoiceDistributionType('Post')
+        //Credit invoice flag. Note that you first must deliver the order and recieve an InvoiceId, then do the deliver request again but with this call:
+          ->setCreditInvoice($InvoiceId) //Use for invoice orders, if this should be a credit invoice. Params: InvoiceId recieved from when doing DeliverOrder
+        ->deliverInvoiceOrder()
+            ->doRequest();
+
+```
+
+## 6. closeOrder
 Use when you want to cancel an undelivered order. Valid only for invoice and payment plan orders.
 Required is the order id received when creating the order.
 
@@ -877,7 +905,7 @@ or
 ```
 [<< To top](https://github.com/sveawebpay/php-integration#php-integration-package-api-for-sveawebpay)
 
-## 6. Response handler
+## 7. Response handler
 All synchronous responses are handled through *SveaResponse* and structured into objects.
 
 Asynchronous responses recieved after sending the values *merchantid* and *xmlMessageBase64* to
