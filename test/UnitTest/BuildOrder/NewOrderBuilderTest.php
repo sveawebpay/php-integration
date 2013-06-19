@@ -221,7 +221,7 @@ class NewOrderBuilderTest extends PHPUnit_Framework_TestCase {
         }
     function testOrderWithFixedDiscount(){
         $request = WebPay::createOrder();
-            //->setTestmode()();
+
         //foreach...
         $request = $request
             ->addOrderRow(

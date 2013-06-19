@@ -21,7 +21,7 @@ class HostedResponse {
         if(is_array($response)){
             if(array_key_exists("response",$response) && array_key_exists("mac",$response)){
                 $decodedXml = base64_decode($response['response']);
-                $secret = $config->getSecret("HOSTED",$countryCode);
+                $secret = $config->getSecret(ConfigurationProvider::HOSTED_TYPE,$countryCode);
                 if($this->validateMac($response['response'],$response['mac'],$secret)){
                     $this->formatXml($decodedXml);
                 }  else {

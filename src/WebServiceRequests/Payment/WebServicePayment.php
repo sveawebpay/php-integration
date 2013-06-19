@@ -22,32 +22,12 @@ class WebServicePayment {
         $this->order = $order;
     }
 
-    /** deprecated
-     * Alternative drop or change file in Config/SveaConfig.php
-     * Note! This fuction may change in future updates.
-     * @param type $merchantId
-     * @param type $secret
-
-    public function setPasswordBasedAuthorization($username, $password, $clientNumber) {
-        $this->order->conf->username = $username;
-        $this->order->conf->password = $password;
-        if ($this->orderType == "Invoice") {
-            $this->order->conf->invoiceClientnumber = $clientNumber;
-        } else {
-            $this->order->conf->paymentPlanClientnumber = $clientNumber;
-        }
-        return $this;
-    }
-     *
-     * @return \SveaAuth
-     */
-
     private function getPasswordBasedAuthorization() {
        // $authArray = $this->order->conf->getPasswordBasedAuthorization($this->orderType);
         $auth = new SveaAuth();
-        $auth->Username = $this->order->conf->getUsername($this->orderType,  $this->order->countryCode);//$authArray['username'];
-        $auth->Password = $this->order->conf->getPassword($this->orderType,  $this->order->countryCode);//$authArray['password'];
-        $auth->ClientNumber = $this->order->conf->getClientNumber($this->orderType,  $this->order->countryCode); //$authArray['clientnumber'];
+        $auth->Username = $this->order->conf->getUsername($this->orderType,  $this->order->countryCode);
+        $auth->Password = $this->order->conf->getPassword($this->orderType,  $this->order->countryCode);
+        $auth->ClientNumber = $this->order->conf->getClientNumber($this->orderType,  $this->order->countryCode);
         return $auth;
     }
 
@@ -103,7 +83,7 @@ class WebServicePayment {
      */
     public function doRequest() {
         $object = $this->prepareRequest();
-        $url = $this->order->conf->getEndPoint($this->orderType); //$this->order->testmode ? SveaConfig::SWP_TEST_WS_URL : SveaConfig::SWP_PROD_WS_URL;
+        $url = $this->order->conf->getEndPoint($this->orderType);
         $request = new SveaDoRequest($url);
         $svea_req = $request->CreateOrderEu($object);
 

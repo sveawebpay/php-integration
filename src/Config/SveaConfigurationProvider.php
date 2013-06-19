@@ -14,8 +14,8 @@ class SveaConfigurationProvider implements ConfigurationProvider {
 
     public $conf;
 
-    public function __construct($enviromentConfig) {
-        $this->conf = (array)$enviromentConfig;
+    public function __construct($environmentConfig) {
+        $this->conf = (array)$environmentConfig;
     }
 /**
  *
@@ -25,15 +25,7 @@ class SveaConfigurationProvider implements ConfigurationProvider {
  * @throws Exception
  */
     public function getUsername($type, $country) {
-        $uType = strtoupper($type);
-        $uCountry = strtoupper($country);
-        if(array_key_exists($uCountry,$this->conf['credentials']) == FALSE){
-           throw new Exception('Invalid or missing Country code');
-        }elseif(array_key_exists($uType,$this->conf['credentials'][$uCountry]['auth']) == FALSE){
-            throw new Exception('Invalid type. Accepted values: INVOICE, PAYMENTPLAN or HOSTED');
-        }
-
-        return $this->conf['credentials'][$uCountry]['auth'][$uType]['username'];
+        return $this->getCredentialsProperty('username', $type, $country);
     }
 
     /**
@@ -44,14 +36,7 @@ class SveaConfigurationProvider implements ConfigurationProvider {
      * @throws Exception
      */
     public function getPassword($type, $country) {
-        $uType = strtoupper($type);
-        $uCountry = strtoupper($country);
-        if(array_key_exists($uCountry,$this->conf['credentials']) == FALSE){
-           throw new Exception('Invalid or missing Country code');
-        }elseif(array_key_exists($uType,$this->conf['credentials'][$uCountry]['auth']) == FALSE){
-            throw new Exception('Invalid type. Accepted values: INVOICE, PAYMENTPLAN or HOSTED');
-        }
-        return $this->conf['credentials'][$uCountry]['auth'][$uType]['password'];
+        return $this->getCredentialsProperty('password', $type, $country);
     }
     /**
      *
@@ -61,14 +46,7 @@ class SveaConfigurationProvider implements ConfigurationProvider {
      * @throws Exception
      */
     public function getClientNumber($type, $country) {
-        $uType = strtoupper($type);
-        $uCountry = strtoupper($country);
-         if(array_key_exists($uCountry,$this->conf['credentials']) == FALSE){
-           throw new Exception('Invalid or missing Country code');
-        }elseif(array_key_exists($uType,$this->conf['credentials'][$uCountry]['auth']) == FALSE){
-            throw new Exception('Invalid type. Accepted values: INVOICE, PAYMENTPLAN or HOSTED');
-        }
-        return $this->conf['credentials'][$uCountry]['auth'][$uType]['clientNumber'];
+        return $this->getCredentialsProperty('clientNumber', $type, $country);
     }
     /**
      *
@@ -78,14 +56,7 @@ class SveaConfigurationProvider implements ConfigurationProvider {
      * @throws Exception
      */
     public function getMerchantId($type, $country) {
-        $uType = strtoupper($type);
-        $uCountry = strtoupper($country);
-         if(array_key_exists($uCountry,$this->conf['credentials']) == FALSE){
-           throw new Exception('Invalid or missing Country code');
-        }elseif(array_key_exists($uType,$this->conf['credentials'][$uCountry]['auth']) == FALSE){
-            throw new Exception('Invalid type. Accepted values: INVOICE, PAYMENTPLAN or HOSTED');
-        }
-        return $this->conf['credentials'][$uCountry]['auth'][$uType]['merchantId'];
+        return $this->getCredentialsProperty('merchantId', $type, $country);
     }
     /**
      *
@@ -95,14 +66,7 @@ class SveaConfigurationProvider implements ConfigurationProvider {
      * @throws Exception
      */
     public function getSecret($type, $country) {
-        $uType = strtoupper($type);
-        $uCountry = strtoupper($country);
-         if(array_key_exists($uCountry,$this->conf['credentials']) == FALSE){
-           throw new Exception('Invalid or missing Country code');
-        }elseif(array_key_exists($uType,$this->conf['credentials'][$uCountry]['auth']) == FALSE){
-            throw new Exception('Invalid type. Accepted values: INVOICE, PAYMENTPLAN or HOSTED');
-        }
-        return $this->conf['credentials'][$uCountry]['auth'][$uType]['secret'];
+        return $this->getCredentialsProperty('secret', $type, $country);
     }
     /**
      *
@@ -113,11 +77,49 @@ class SveaConfigurationProvider implements ConfigurationProvider {
     public function getEndPoint($type) {
         $uType = strtoupper($type);
         if(array_key_exists($uType,$this->conf['url']) == FALSE){
-            throw new Exception('Invalid type. Accepted values: INVOICE, PAYMENTPLAN or HOSTED');
+            $this->throwInvalidTypeException();
         }
         return $this->conf['url'][$uType];
     }
 
+    /**
+     * @param string $property
+     * @param string $type
+     * @param string $country
+     *
+     * @return string
+     */
+    private function getCredentialsProperty($property, $type, $country)
+    {
+        $uType = strtoupper($type);
+        $uCountry = strtoupper($country);
+        if(array_key_exists($uCountry,$this->conf['credentials']) == FALSE){
+            $this->throwInvalidCountryException();
+        }elseif(array_key_exists($uType,$this->conf['credentials'][$uCountry]['auth']) == FALSE){
+            $this->throwInvalidTypeException();
+        }
 
+        return $this->conf['credentials'][$uCountry]['auth'][$uType][$property];
+    }
+
+    /**
+     * @throws Exception
+     */
+    private function throwInvalidCountryException()
+    {
+        throw new Exception('Invalid or missing Country code');
+    }
+
+    /**
+     * @throws Exception
+     */
+    private function throwInvalidTypeException() {
+        throw new Exception(sprintf(
+            'Invalid type. Accepted values: %s, %s or %s',
+            ConfigurationProvider::INVOICE_TYPE,
+            ConfigurationProvider::PAYMENTPLAN_TYPE,
+            ConfigurationProvider::HOSTED_TYPE
+        ));
+    }
 
 }

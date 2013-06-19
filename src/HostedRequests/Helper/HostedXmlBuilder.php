@@ -28,10 +28,13 @@ class HostedXmlBuilder {
         $this->XMLWriter->writeElement("amount", round($request['amount']));
         $this->XMLWriter->writeElement("currency", $request['currency']);
         $this->XMLWriter->writeElement("lang", $request['langCode']);
+        $this->XMLWriter->writeElement("addinvoicefee", "FALSE");
 
         //customer fields
         $this->serializeCustomer($order,$request);
-
+        if(isset($order->customerIdentity->addressSelector)){
+             $this->XMLWriter->writeElement("addressid", $order->customerIdentity->addressSelector);
+        }
 
         if ($request['totalVat'] != null) {
             $this->XMLWriter->writeElement("vat", round($request['totalVat']));

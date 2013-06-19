@@ -34,18 +34,6 @@ class PayPagePayment extends HostedPayment {
         return $request;
     }
 
-    /** Moved
-     * Set specific paymentmethod
-     * @param type $paymentMethod ex. "DBSEBSE"
-     * @return \PayPagePayment
-
-    public function setPaymentMethod($paymentMethod) {
-        $this->paymentMethod = $paymentMethod;
-        return $this;
-    }
-     *
-     */
-
     /**
      * Exclude specific payment methods.
      * @params type Paymentmethod $paymentMethod ex. PaymentMethod::DBSEBSE,Paymentmethod::SVEAINVOICE_SE
@@ -164,20 +152,6 @@ class PayPagePayment extends HostedPayment {
         return $this;
     }
 
-    /**
-     * Alternative drop or change file in Config/SveaConfig.php
-     * Note! This fuction may change in future updates.
-     * @param type $merchantId
-     * @param type $secret
-     * @return \HostedPayment
-
-    public function setMerchantIdBasedAuthorization($merchantId,$secret){
-        $this->order->conf->merchantId = $merchantId;
-        $this->order->conf->secret = $secret;
-        return $this;
-    }
-     *
-     */
      /**
      * @param type $languageCodeAsISO639
      * @return \HostedPayment|\PayPagePayment

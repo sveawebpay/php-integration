@@ -24,19 +24,21 @@ class CreateOrderResponse extends WebServiceResponse {
         //Required
         $this->accepted = $message->CreateOrderEuResult->Accepted;
         $this->resultcode = $message->CreateOrderEuResult->ResultCode;
-        $this->sveaOrderId = $message->CreateOrderEuResult->CreateOrderResult->SveaOrderId;
-        $this->sveaWillBuyOrder = $message->CreateOrderEuResult->CreateOrderResult->SveaWillBuyOrder;
-        $this->amount = $message->CreateOrderEuResult->CreateOrderResult->Amount;
-        $this->expirationDate = $message->CreateOrderEuResult->CreateOrderResult->ExpirationDate;
-        //Optional
-        if(isset($message->CreateOrderEuResult->CreateOrderResult->OrderType)){
-            $this->orderType = $message->CreateOrderEuResult->CreateOrderResult->OrderType;
-        }
-        if(isset($message->CreateOrderEuResult->CreateOrderResult->ClientOrderNumber)){
-            $this->clientOrderNumber = $message->CreateOrderEuResult->CreateOrderResult->ClientOrderNumber;
-        }
-        if(isset($message->CreateOrderEuResult->CreateOrderResult->CustomerIdentity)){
-            $this->formatCustomerIdentity($message->CreateOrderEuResult->CreateOrderResult->CustomerIdentity);
+        if($this->accepted == 1){
+            $this->sveaOrderId = $message->CreateOrderEuResult->CreateOrderResult->SveaOrderId;
+            $this->sveaWillBuyOrder = $message->CreateOrderEuResult->CreateOrderResult->SveaWillBuyOrder;
+            $this->amount = $message->CreateOrderEuResult->CreateOrderResult->Amount;
+            $this->expirationDate = $message->CreateOrderEuResult->CreateOrderResult->ExpirationDate;
+            //Optional
+            if(isset($message->CreateOrderEuResult->CreateOrderResult->OrderType)){
+                $this->orderType = $message->CreateOrderEuResult->CreateOrderResult->OrderType;
+            }
+            if(isset($message->CreateOrderEuResult->CreateOrderResult->ClientOrderNumber)){
+                $this->clientOrderNumber = $message->CreateOrderEuResult->CreateOrderResult->ClientOrderNumber;
+            }
+            if(isset($message->CreateOrderEuResult->CreateOrderResult->CustomerIdentity)){
+                $this->formatCustomerIdentity($message->CreateOrderEuResult->CreateOrderResult->CustomerIdentity);
+            }
         }
 
     }

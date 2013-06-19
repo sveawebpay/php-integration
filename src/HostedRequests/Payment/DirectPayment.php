@@ -26,17 +26,7 @@ class DirectPayment extends HostedPayment {
         $methods[] = SystemPaymentMethod::SKRILL;
        //other
         $methods[] = SystemPaymentMethod::PAYPAL;
-       /**
-        //countrycheck
-       if($this->order->countryCode != "SE") {
-            $methods[] = SystemPaymentMethod::DBNORDEASE;
-            $methods[] = SystemPaymentMethod::DBSEBSE;
-            $methods[] = SystemPaymentMethod::DBSEBFTGSE;
-            $methods[] = SystemPaymentMethod::DBSHBSE;
-            $methods[] = SystemPaymentMethod::DBSWEDBANKSE;
-        }
-        *
-        */
+
         $exclude = new ExcludePayments();
         $methods = array_merge((array)$methods, (array)$exclude->excludeInvoicesAndPaymentPlan($this->order->countryCode));
 
@@ -64,20 +54,6 @@ class DirectPayment extends HostedPayment {
         return $this;
     }
 
-    /**
-     * Alternative drop or change file in Config/SveaConfig.php
-     * Note! This fuction may change in future updates.
-     * @param type $merchantId
-     * @param type $secret
-     * @return \HostedPayment
-
-    public function setMerchantIdBasedAuthorization($merchantId,$secret){
-        $this->order->conf->merchantId = $merchantId;
-        $this->order->conf->secret = $secret;
-        return $this;
-    }
-     *
-     */
      /**
      * @param type $languageCodeAsISO639
      * @return \HostedPayment|\DirectPayment
