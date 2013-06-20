@@ -111,10 +111,14 @@ class HostedXmlBuilder {
 
         if (!empty($orderRow->amount) && $orderRow->amount != null) {
             $this->XMLWriter->writeElement("amount", round($orderRow->amount));
+        }else{
+              $this->XMLWriter->writeElement("amount", "0");
         }
 
         if (!empty($orderRow->vat) && $orderRow->vat != null) {
             $this->XMLWriter->writeElement("vat", round($orderRow->vat));
+        }else{
+            $this->XMLWriter->writeElement("vat", "0");
         }
 
         if (!empty($orderRow->unit) && $orderRow->unit != null) {
