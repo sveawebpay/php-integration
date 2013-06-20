@@ -321,6 +321,26 @@ class CardPaymentTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals("5970", $xmlMessage->vat);
         $this->assertEquals("30000", $xmlMessage->amount);
     }
+    function testBuildCardPaymentWithAmountAndVatCero(){
+          $form = WebPay::createOrder()
+                ->addOrderRow(Item::orderRow()
+                    ->setArticleNumber(1)
+                    ->setQuantity(1)
+                    ->setAmountExVat(0)
+                    ->setAmountIncVat(0)
+                    ->setDescription("Free shipping")
+                    )
+            ->setClientOrderNumber("33")
+            ->setCurrency("sek")
+            ->setCountryCode("NL")
+            ->usePaymentMethod("KORTCERT")
+                ->setReturnUrl("http://myurl.se")
+                ->getPaymentForm();
+
+          $xmlMessage = new SimpleXMLElement($form->xmlMessage);
+        $this->assertEquals("0", $xmlMessage->orderrows->row->vat);
+        $this->assertEquals("0", $xmlMessage->orderrows->row->amount);
+    }
 }
 
 ?>
