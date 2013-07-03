@@ -66,7 +66,12 @@ class WebPay {
          $config = $config == null ? SveaConfig::getDefaultConfig() : $config;
         return new GetAddresses($config);
     }
-
+    /**
+     *
+     * @param type decimal $price
+     * @param type object $paramsResonseObject
+     * @return \PaymentPlanPricePerMonth
+     */
     public static function paymentPlanPricePerMonth($price,$paramsResonseObject){
         return new PaymentPlanPricePerMonth($price,$paramsResonseObject);
     }
