@@ -14,6 +14,7 @@
     * [Other values](https://github.com/sveawebpay/php-integration#14-other-values)
     * [Choose payment](https://github.com/sveawebpay/php-integration#15-choose-payment)
 * [2. GetPaymentPlanParams](https://github.com/sveawebpay/php-integration#2-getpaymentplanparams)
+    *  [Calculate Price per month](https://github.com/sveawebpay/php-integration#21-paymentPlanPricePerMonth)
 * [3. GetAddresses](https://github.com/sveawebpay/php-integration#2-getpaymentplanparams)
 * [4. DeliverOrder](https://github.com/sveawebpay/php-integration#4-deliverorder)
     * [Specify order](https://github.com/sveawebpay/php-integration#42-specify-order)
@@ -726,6 +727,15 @@ Returns *PaymentPlanParamsResponse* object.
 ```php
     $response = WebPay::getPaymentPlanParams()
                 ->doRequest();
+```
+[<< To top](https://github.com/sveawebpay/php-integration#php-integration-package-api-for-sveawebpay)
+
+### 2.1 paymentPlanPricePerMonth
+The function returns array with arrays containing campaignCode and pricePerMonth. To be used when displaying options and to use lowest option to display on product level.
+**$paramsResonseObject** is response object from getPaymentPlanParams();
+```php
+   $pricePerMonthPerCampaignCode = WebPay::paymentPlanPricePerMonth($price,$paramsResonseObject);
+
 ```
 [<< To top](https://github.com/sveawebpay/php-integration#php-integration-package-api-for-sveawebpay)
 

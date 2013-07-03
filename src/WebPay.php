@@ -67,5 +67,8 @@ class WebPay {
         return new GetAddresses($config);
     }
 
+    public static function paymentPlanPricePerMonth($price,$paramsResonseObject){
+        return new PaymentPlanPricePerMonth($price,$paramsResonseObject);
+    }
 
 }
