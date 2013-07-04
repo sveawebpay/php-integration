@@ -28,6 +28,9 @@ class PaymentPlanPricePerMonth {
                    if($key == "campaignCode"){
                         $pair[$key] = $val;
                     }
+                    if($key == "description"){
+                        $pair[$key] = $val;
+                    }
 
                 }
                 array_push($this->values, $pair);

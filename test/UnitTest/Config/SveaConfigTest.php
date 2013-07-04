@@ -10,6 +10,14 @@ require_once $root . '/../../../src/Includes.php';
  */
 class SveaConfigTest extends PHPUnit_Framework_TestCase {
 
+    function testSveaConfigNotFound(){
+        $config = SveaConfig::getTestConfig();
+        $foo = WebPay::createOrder($config);
+
+        $this->assertEquals("sverigetest", $config->conf['credentials']['SE']['auth']['INVOICE']['username']);
+    }
+
+
     function t_estInstancesOfSveaConfig(){
         $obj1 = SveaConfig::getConfig();
         $obj2 = SveaConfig::getConfig();

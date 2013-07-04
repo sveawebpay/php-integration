@@ -266,8 +266,9 @@ class WebServicePayments_RequestTest extends PHPUnit_Framework_TestCase {
        $response = WebPay::paymentPlanPricePerMonth(2000,$params);
         $this->assertEquals(213060, $response->values[0]['campaignCode']);
         $this->assertEquals(2029, $response->values[0]['pricePerMonth']);
+        $this->assertEquals("Köp nu betala om 3 månader (räntefritt)", $response->values[0]['description']);
     }
-    
+
     function testBuildPriceCalculatorWithLowPrice() {
        $params = $this->getGetPaymentPlanParamsResponseForTesting();
        $response = WebPay::paymentPlanPricePerMonth(200,$params);
