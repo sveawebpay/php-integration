@@ -50,7 +50,7 @@ class closeOrderBuilder {
         return $this;
     }
 
-    public function setCountryCode($countryCodeAsString){
+    public function setCountryCode($countryCodeAsString) {
         $this->countryCode = $countryCodeAsString;
         return $this;
     }

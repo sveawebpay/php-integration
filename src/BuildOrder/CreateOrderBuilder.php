@@ -93,7 +93,7 @@ class CreateOrderBuilder {
      * @return \createOrder|\CreateOrderBuilder
      */
 
-     public function addCustomerDetails($itemCustomerObject){
+     public function addCustomerDetails($itemCustomerObject) {
         $this->customerIdentity = $itemCustomerObject;
         return $this;
     }
@@ -102,8 +102,8 @@ class CreateOrderBuilder {
      * @param type $orderRow
      * @return \CreateOrderBuilder
      */
-    public function addOrderRow($itemOrderRowObject){
-        if(is_array($itemOrderRowObject)){
+    public function addOrderRow($itemOrderRowObject) {
+        if(is_array($itemOrderRowObject)) {
             foreach ($itemOrderRowObject as $row) {
                 array_push($this->orderRows, $row);
             }
@@ -118,8 +118,8 @@ class CreateOrderBuilder {
      * @param type $itemFeeObject
      * @return \CreateOrderBuilder
      */
-    public function addFee($itemFeeObject){
-         if(is_array($itemFeeObject)){
+    public function addFee($itemFeeObject) {
+         if(is_array($itemFeeObject)) {
             foreach ($itemFeeObject as $row) {
                 if (get_class($row) == "ShippingFee") {
                      array_push($this->shippingFeeRows, $row);
@@ -142,8 +142,8 @@ class CreateOrderBuilder {
      * @param type $itemDiscounObject
      * @return \CreateOrderBuilder
      */
-    public function addDiscount($itemDiscounObject){
-         if(is_array($itemDiscounObject)){
+    public function addDiscount($itemDiscounObject) {
+         if(is_array($itemDiscounObject)) {
             foreach ($itemDiscounObject as $row) {
                 if (get_class($row) == "FixedDiscount") {
                      array_push($this->fixedDiscountRows, $row);
@@ -196,7 +196,7 @@ class CreateOrderBuilder {
      * @param type $clientOrderNumberAsString
      * @return \createOrder
      */
-    public function setClientOrderNumber($clientOrderNumberAsString){
+    public function setClientOrderNumber($clientOrderNumberAsString) {
         $this->clientOrderNumber = $clientOrderNumberAsString;
         return $this;
     }
@@ -252,7 +252,7 @@ class CreateOrderBuilder {
      * @param type PaymentMethod $paymentMethodAsConst, ex. PaymentMethod::DBSEBSE
      * @return \PaymentMethodPayment
      */
-    public function usePaymentMethod($paymentMethodAsConst){
+    public function usePaymentMethod($paymentMethodAsConst) {
         return new PaymentMethodPayment($this, $paymentMethodAsConst);
     }
 

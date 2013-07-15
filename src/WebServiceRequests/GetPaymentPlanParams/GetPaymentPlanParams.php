@@ -27,7 +27,7 @@ class GetPaymentPlanParams {
      * @param type $countryCodeAsString
      */
 
-    public function setCountryCode($countryCodeAsString){
+    public function setCountryCode($countryCodeAsString) {
         $this->countryCode = $countryCodeAsString;
         return $this;
     }

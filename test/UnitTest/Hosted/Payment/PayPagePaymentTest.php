@@ -12,7 +12,7 @@ require_once $root . '/../../../../test/UnitTest/BuildOrder/TestRowFactory.php';
 class PayPagePaymentTest extends PHPUnit_Framework_TestCase {
    
 
-     function testBuildPayPagePaymentWithExcludepaymentMethods(){
+     function testBuildPayPagePaymentWithExcludepaymentMethods() {
         $rowFactory = new TestRowFactory();
        $form = WebPay::createOrder()
             ////->setTestmode()()()
@@ -166,7 +166,7 @@ class PayPagePaymentTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(SystemPaymentMethod::BANKAXESS, $xmlMessage->excludepaymentmethods->exclude[0]);
     }
     
-     function testBuildPayPagePaymentVatIsCero(){
+     function testBuildPayPagePaymentVatIsCero() {
         $rowFactory = new TestRowFactory();
        $form = WebPay::createOrder()
            

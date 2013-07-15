@@ -19,7 +19,7 @@ class HandleOrderTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals("id", $request->orderId);
     }
     
-    function testDeliverInvoiceDistributionType(){
+    function testDeliverInvoiceDistributionType() {
          $orderBuilder = WebPay::deliverOrder();
         $request = $orderBuilder
             ->addOrderRow(Item::orderRow()

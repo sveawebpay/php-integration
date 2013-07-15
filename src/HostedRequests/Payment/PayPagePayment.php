@@ -43,7 +43,7 @@ class PayPagePayment extends HostedPayment {
     public function excludePaymentMethods() {
         $excludes = func_get_args();
         foreach ($excludes as $method) {
-             if($method == PaymentMethod::INVOICE){
+             if($method == PaymentMethod::INVOICE) {
                $this->excludedPaymentMethods[] ="SVEAINVOICEEU_".$this->order->countryCode;
                $this->excludedPaymentMethods[] ="SVEAINVOICE".$this->order->countryCode;
             }  elseif ($this->paymentMethod == PaymentMethod::PAYMENTPLAN) {
@@ -84,16 +84,16 @@ class PayPagePayment extends HostedPayment {
             //loop through the include requests
             foreach ($this->excludedPaymentMethods as $k => $v) {
                 //unset if a match in exlude array
-                if($cleanValue == $v){
+                if($cleanValue == $v) {
                      unset($this->excludedPaymentMethods[$k]);
                 //unset the invoice methods if INVOICE is desired
                 }elseif ($cleanValue == PaymentMethod::INVOICE) {
-                    if($v == "SVEAINVOICEEU_".$this->order->countryCode || $k == SystemPaymentMethod::INVOICESE){
+                    if($v == "SVEAINVOICEEU_".$this->order->countryCode || $k == SystemPaymentMethod::INVOICESE) {
                         unset($this->excludedPaymentMethods[$k]);
                     }
                 //unset the paymentplan methods if PAYMENTPLAN is desired
-                }elseif($cleanValue == PaymentMethod::PAYMENTPLAN){
-                    if($k == "SVEASPLITEU_".$this->order->countryCode || $k == SystemPaymentMethod::PAYMENTPLANSE){
+                }elseif($cleanValue == PaymentMethod::PAYMENTPLAN) {
+                    if($k == "SVEASPLITEU_".$this->order->countryCode || $k == SystemPaymentMethod::PAYMENTPLANSE) {
                         unset($this->excludedPaymentMethods[$k]);
                     }
                 }
@@ -157,7 +157,7 @@ class PayPagePayment extends HostedPayment {
      * @return \HostedPayment|\PayPagePayment
      */
 
-    public function setPayPageLanguage($languageCodeAsISO639){
+    public function setPayPageLanguage($languageCodeAsISO639) {
         switch ($languageCodeAsISO639) {
             case "sv":
                 $this->langCode = $languageCodeAsISO639;

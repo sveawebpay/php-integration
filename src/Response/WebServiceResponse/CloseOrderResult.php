@@ -13,7 +13,7 @@ class CloseOrderResult extends WebServiceResponse{
         $this->errormessage = $message->CloseOrderEuResult->ErrorMessage;
     }
 
-     protected function formatObject($message){
+     protected function formatObject($message) {
           $this->accepted = $message->CloseOrderEuResult->Accepted;
         $this->resultcode = $message->CloseOrderEuResult->ResultCode;
      }

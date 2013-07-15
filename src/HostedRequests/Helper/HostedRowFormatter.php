@@ -43,7 +43,7 @@ class HostedRowFormatter {
             if(isset($row->description)) {
                 $tempRow->setDescription($row->description);
             }
-            if(isset($row->amountExVat) && isset($row->vatPercent)){
+            if(isset($row->amountExVat) && isset($row->vatPercent)) {
                 $tempRow->setAmount(round(($row->amountExVat * 100) * $plusVatCounter));
                 $tempRow->setVat(round($tempRow->amount - ($row->amountExVat * 100)));
             }elseif (isset($row->amountIncVat) && isset($row->vatPercent)) {
@@ -60,7 +60,7 @@ class HostedRowFormatter {
             if(isset($row->articleNumber)) {
                 $tempRow->setSku($row->articleNumber);
             }
-            if(isset($row->quantity)){
+            if(isset($row->quantity)) {
                 $tempRow->setQuantity($row->quantity);
             }
 
@@ -85,7 +85,7 @@ class HostedRowFormatter {
             if(isset($row->description)) {
                 $tempRow->setDescription($row->description);
             }
-            if(isset($row->amountExVat) && isset($row->vatPercent)){
+            if(isset($row->amountExVat) && isset($row->vatPercent)) {
                 $tempRow->setAmount(round(($row->amountExVat * 100) * $plusVatCounter));
                 $tempRow->setVat(round($tempRow->amount - ($row->amountExVat * 100)));
             }elseif (isset($row->amountIncVat) && isset($row->vatPercent)) {

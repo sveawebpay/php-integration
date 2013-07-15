@@ -28,7 +28,7 @@ class HandleOrder {
         return $auth;
     }
 
-    public function validateRequest(){
+    public function validateRequest() {
         $validator = new HandleOrderValidator();
          $errors = $validator->validate($this->handler);
          return $errors;
@@ -40,7 +40,7 @@ class HandleOrder {
      */
     public function prepareRequest() {
         $errors = $this->validateRequest();
-        if(count($errors) > 0){
+        if(count($errors) > 0) {
             $exceptionString = "";
             foreach ($errors as $key => $value) {
                 $exceptionString .="-". $key. " : ".$value."\n";

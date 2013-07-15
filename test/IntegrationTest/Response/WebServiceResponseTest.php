@@ -101,7 +101,7 @@ class WebServiceResponseTest extends PHPUnit_Framework_TestCase {
      * @expectedException Exception
      * @expectedExceptionMessage Invalid or missing Country code
      */
-    function testErrorMessageResponse(){
+    function testErrorMessageResponse() {
         $addressRequest = WebPay::getPaymentPlanParams();
         $request = $addressRequest              
                     //->setCountryCode("SE")
@@ -195,7 +195,7 @@ class WebServiceResponseTest extends PHPUnit_Framework_TestCase {
         //$this->assertEquals('Invoice', $request->contractNumber); //for paymentplan
     }
     
-    function testResultCloseInvoiceOrder(){
+    function testResultCloseInvoiceOrder() {
         $orderId = $this->getInvoiceOrderId();
         $orderBuilder = WebPay::closeOrder();
         $request = $orderBuilder

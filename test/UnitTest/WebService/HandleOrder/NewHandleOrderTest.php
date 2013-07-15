@@ -11,7 +11,7 @@ require_once $root . '/../../../../src/Includes.php';
  */
 class NewHandleOrderTest extends PHPUnit_Framework_TestCase {
 
-    function testNewDeliverInvoiceOrderRow(){
+    function testNewDeliverInvoiceOrderRow() {
         $request = WebPay::deliverOrder();
             //->setTestmode()();
         //foreach...
@@ -46,7 +46,7 @@ class NewHandleOrderTest extends PHPUnit_Framework_TestCase {
 
         }
 
-        function testDeliverOrderWithInvoiceFeeAndFixedDiscount(){
+        function testDeliverOrderWithInvoiceFeeAndFixedDiscount() {
              $request = WebPay::deliverOrder();
             //->setTestmode()();
         //foreach...
@@ -112,7 +112,7 @@ class NewHandleOrderTest extends PHPUnit_Framework_TestCase {
 
         }
 
-        function testDeliverOrderWithShippingFeeAndRelativeDiscount(){
+        function testDeliverOrderWithShippingFeeAndRelativeDiscount() {
              $request = WebPay::deliverOrder();
             //->setTestmode()();
         //foreach...

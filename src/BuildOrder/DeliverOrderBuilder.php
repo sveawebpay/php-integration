@@ -71,8 +71,8 @@ class deliverOrderBuilder {
      * @param type $orderRow
      * @return \deliverOrderBuilder
      */
-     public function addOrderRow($orderRow){
-        if(is_array($orderRow)){
+     public function addOrderRow($orderRow) {
+        if(is_array($orderRow)) {
             foreach ($orderRow as $row) {
                 array_push($this->orderRows, $row);
             }
@@ -87,8 +87,8 @@ class deliverOrderBuilder {
      * @param type $itemFeeObject
      * @return \deliverOrderBuilder
      */
-    public function addFee($itemFeeObject){
-         if(is_array($itemFeeObject)){
+    public function addFee($itemFeeObject) {
+         if(is_array($itemFeeObject)) {
             foreach ($itemFeeObject as $row) {
                 if (get_class($row) == "ShippingFee") {
                      array_push($this->shippingFeeRows, $row);
@@ -113,8 +113,8 @@ class deliverOrderBuilder {
      * @param type $itemDiscounObject
      * @return \deliverOrderBuilder
      */
-    public function addDiscount($itemDiscounObject){
-         if(is_array($itemDiscounObject)){
+    public function addDiscount($itemDiscounObject) {
+         if(is_array($itemDiscounObject)) {
             foreach ($itemDiscounObject as $row) {
                 if (get_class($row) == "FixedDiscount") {
                      array_push($this->fixedDiscountRows, $row);
@@ -144,7 +144,7 @@ class deliverOrderBuilder {
      *
      */
 
-    public function setCountryCode($countryCodeAsString){
+    public function setCountryCode($countryCodeAsString) {
         $this->countryCode = $countryCodeAsString;
         return $this;
     }
@@ -165,11 +165,11 @@ class deliverOrderBuilder {
      * @return \deliverOrder
      */
     public function setInvoiceDistributionType($distributionTypeAsConst) {
-        if($distributionTypeAsConst != DistributionType::EMAIL || $distributionTypeAsConst != DistributionType::POST){
+        if($distributionTypeAsConst != DistributionType::EMAIL || $distributionTypeAsConst != DistributionType::POST) {
             $distributionTypeAsConst = trim($distributionTypeAsConst);
-            if(preg_match("/post/i", $distributionTypeAsConst)){
+            if(preg_match("/post/i", $distributionTypeAsConst)) {
                 $distributionTypeAsConst = DistributionType::POST;
-            }elseif(preg_match("/mail/i", $distributionTypeAsConst)){
+            }elseif(preg_match("/mail/i", $distributionTypeAsConst)) {
                 $distributionTypeAsConst = DistributionType::EMAIL;
             }else{
                 $distributionTypeAsConst = DistributionType::POST;

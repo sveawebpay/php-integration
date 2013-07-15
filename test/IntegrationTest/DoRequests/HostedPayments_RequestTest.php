@@ -68,14 +68,14 @@ class HostedPayments_RequestTest extends PHPUnit_Framework_TestCase {
              $info = curl_getinfo($ch);
              $payPage = "";
              $response = $info['http_code'];
-             if(isset($info['redirect_url'])){
+             if(isset($info['redirect_url'])) {
                  $payPage = $info['redirect_url'];
              }
 
 
             }
             curl_close($ch);
-            if($response){
+            if($response) {
                 $status = $response;
                 $redirect = substr($payPage, 41, 7);
             }  else {

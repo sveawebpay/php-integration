@@ -16,7 +16,7 @@ class CompanyCustomer {
      * @param type $companyIdNumberAsString
      * @return \CompanyCustomer
      */
-    public function setNationalIdNumber($companyIdNumberAsString){
+    public function setNationalIdNumber($companyIdNumberAsString) {
         $this->orgNumber = $companyIdNumberAsString;
         return $this;
     }
@@ -26,7 +26,7 @@ class CompanyCustomer {
      * Required for NL and DE
      * @return \CompanyCustomer
      */
-    public function setVatNumber($vatNumber){
+    public function setVatNumber($vatNumber) {
         $this->companyVatNumber = $vatNumber;
         return $this;
     }

@@ -11,8 +11,8 @@ class SveaResponse {
 
     public function __construct($message, $countryCode,$config = NULL) {
          $config = $config == null ? SveaConfig::getDefaultConfig() : $config;
-        if(is_object($message)){
-            if(property_exists($message, "CreateOrderEuResult")){
+        if(is_object($message)) {
+            if(property_exists($message, "CreateOrderEuResult")) {
                 $this->response = new CreateOrderResponse($message);
             }elseif (property_exists($message, "GetAddressesResult")) {
                 $this->response = new GetAddressesResponse($message);
@@ -24,7 +24,7 @@ class SveaResponse {
                 $this->response = new CloseOrderResult($message);
             }
 
-        }elseif($message != NULL){
+        }elseif($message != NULL) {
             $this->response = new HostedResponse($message,$countryCode,$config);
         }else{
             $this->response = "Response is not recognized.";

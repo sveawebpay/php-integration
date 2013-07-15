@@ -59,7 +59,7 @@ class DirectPayment extends HostedPayment {
      * @return \HostedPayment|\DirectPayment
      */
 
-         public function setPayPageLanguage($languageCodeAsISO639){
+         public function setPayPageLanguage($languageCodeAsISO639) {
         switch ($languageCodeAsISO639) {
             case "sv":
                 $this->langCode = $languageCodeAsISO639;

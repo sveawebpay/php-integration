@@ -72,7 +72,7 @@ class WebPay {
      * @param type object $paramsResonseObject
      * @return \PaymentPlanPricePerMonth
      */
-    public static function paymentPlanPricePerMonth($price,$paramsResonseObject){
+    public static function paymentPlanPricePerMonth($price,$paramsResonseObject) {
         return new PaymentPlanPricePerMonth($price,$paramsResonseObject);
     }
 

@@ -12,7 +12,7 @@ class IndividualCustomer {
      * @param for NO:  $ddmmyyxxxxx
      * @return \IndividualCustomer
      */
-    public function setNationalIdNumber($nationalIdNumber){
+    public function setNationalIdNumber($nationalIdNumber) {
         $this->ssn = $nationalIdNumber;
         return $this;
     }
@@ -35,8 +35,8 @@ class IndividualCustomer {
      * @return \IndividualCustomer
      */
     public function setBirthDate($yyyy, $mm, $dd) {
-        if($mm < 10){$mm = "0".$mm; }
-        if($dd < 10){$dd = "0".$dd; }
+        if($mm < 10) {$mm = "0".$mm; }
+        if($dd < 10) {$dd = "0".$dd; }
 
         $this->birthDate = $yyyy . $mm . $dd;
         return $this;

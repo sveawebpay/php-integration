@@ -59,7 +59,7 @@ class CardPayment extends HostedPayment {
         return $this;
     }
 
-     public function setPayPageLanguage($languageCodeAsISO639){
+     public function setPayPageLanguage($languageCodeAsISO639) {
         switch ($languageCodeAsISO639) {
             case "sv":
                 $this->langCode = $languageCodeAsISO639;
