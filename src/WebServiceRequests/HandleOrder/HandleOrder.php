@@ -19,7 +19,6 @@ class HandleOrder {
         $this->handler = $handler;
     }
 
-
     protected function getStoreAuthorization() {
         $auth = new SveaAuth();
          $auth->Username = $this->handler->conf->getUsername($this->handler->orderType,  $this->handler->countryCode);
@@ -34,7 +33,7 @@ class HandleOrder {
          return $errors;
     }
 
-        /**
+    /**
      * Returns prepared request
      * @return \SveaRequest
      */

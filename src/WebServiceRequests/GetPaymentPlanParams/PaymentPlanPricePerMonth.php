@@ -32,9 +32,7 @@ class PaymentPlanPricePerMonth {
                 }
                 array_push($this->values, $pair);
                 }
-
             }
         }
     }
-
 }

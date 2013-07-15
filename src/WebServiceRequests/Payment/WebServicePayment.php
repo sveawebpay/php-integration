@@ -38,7 +38,7 @@ class WebServicePayment {
          return $errors;
     }
 
-        /**
+    /**
      * Rebuild $order with svea_soap package to be in right format for SveaWebPay Europe Web service API
      * @return prepared SveaRequest
      */
@@ -173,10 +173,11 @@ class WebServicePayment {
 
         return $individualCustomerIdentity;
     }
-/**
- * new! If CustomerIdentity is crated by addCustomerDetails()
- * @return \SveaCustomerIdentity
- */
+    
+    /**
+     * new! If CustomerIdentity is crated by addCustomerDetails()
+     * @return \SveaCustomerIdentity
+     */
     public function formatCustomerDetails() {
         $isCompany = false;
         get_class($this->order->customerIdentity) == "CompanyCustomer" ? $isCompany = TRUE : $isCompany = FALSE;

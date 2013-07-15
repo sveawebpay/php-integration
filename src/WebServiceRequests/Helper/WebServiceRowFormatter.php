@@ -52,7 +52,6 @@ class WebServiceRowFormatter {
                 $this->totalAmountExVat += $product->amountExVat * $product->quantity;
                 $this->totalVatAsAmount += ($product->amountIncVat - $product->amountExVat)* $product->quantity;
             }
-
         }
         $this->totalAmountInclVat = $this->totalAmountExVat + $this->totalVatAsAmount;
         $this->totalAmountExVat = $this->totalAmountInclVat - $this->totalVatAsAmount;
