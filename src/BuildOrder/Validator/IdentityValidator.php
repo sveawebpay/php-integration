@@ -7,18 +7,17 @@ class IdentityValidator {
 
     private $isCompany;
 
-
     function __construct($isCompany = false) {
         $this->isCompany = $isCompany;
     }
-/**
- * Not in use
- * @param type $order
- * @param string $errors
- * @return string
- */
+    
+    /**
+     * Not in use
+     * @param type $order
+     * @param string $errors
+     * @return string
+     */
     public function validateThatCustomerIdentityExists($order,$errors) {
-
              if (isset($order->customerIdentity->ssn) == false
                 && isset($order->customerIdentity->orgNumber) == false
                 && isset($order->customerIdentity->companyVatNumber) == false
@@ -35,12 +34,10 @@ class IdentityValidator {
                 && isset($order->customerIdentity->locality) == false
                 && isset($order->customerIdentity->companyName) == false) {
             $errors['missing values'] = "Customer values are required for Invoice and PaymentPlan orders.";
-
         }
 
         return $errors;
     }
-
 
     /**
      *  NationalIdNumber or companyVanNumber required for SE, NO, DK, FI

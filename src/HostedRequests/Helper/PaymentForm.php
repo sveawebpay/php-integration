@@ -15,7 +15,6 @@ require_once SVEA_REQUEST_DIR . '/Config/SveaConfig.php';
  */
 class PaymentForm {
 
-
     public $endPointUrl;
     public $xmlMessage;
     public $xmlMessageBase64;
@@ -85,5 +84,4 @@ class PaymentForm {
         $this->htmlFormFieldsAsArray['input_submit'] = "<input type='submit' name='submit' value='".$this->submitMessage."' />";
         $this->htmlFormFieldsAsArray['form_end_tag'] = "</form>";
     }
-
 }

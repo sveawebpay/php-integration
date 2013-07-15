@@ -11,6 +11,4 @@ class CreateOrderIdentity extends CustomerIdentityResponse{
     public $ipAddress;
     public $countryCode;
     public $houseNumber;
-
-
 }

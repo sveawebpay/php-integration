@@ -5,6 +5,7 @@
  * @author anne-hal
  */
 class IndividualCustomer {
+    
     /**
      * Required for private customers in SE, NO, DK, FI
      * @param for SE, DK:  $yyyymmddxxxx
@@ -51,6 +52,7 @@ class IndividualCustomer {
         $this->email = $emailAsString;
         return $this;
     }
+    
      /**
      * Optional
      * @param type $phoneNumberAsInt
@@ -60,6 +62,7 @@ class IndividualCustomer {
         $this->phonenumber = $phoneNumberAsInt;
         return $this;
     }
+    
     /**
      * Optinal but desirable
      * @param type $ipAddressAsString
@@ -69,6 +72,7 @@ class IndividualCustomer {
         $this->ipAddress = $ipAddressAsString;
         return $this;
     }
+    
     /**
      * Required for private Customers in NL and DE
      * @param type $firstnameAsString
@@ -80,6 +84,7 @@ class IndividualCustomer {
         $this->lastname = $lastnameAsString;
         return $this;
     }
+    
     /**
      * Required in NL and DE
      * @param type $streetAsString
@@ -91,6 +96,7 @@ class IndividualCustomer {
         $this->housenumber = $houseNumberAsInt;
         return $this;
     }
+    
     /**
      * Optional in NL and DE
      * @param type $coAddressAsString
@@ -100,6 +106,7 @@ class IndividualCustomer {
         $this->coAddress = $coAddressAsString;
         return $this;
     }
+    
     /**
      * Requuired in NL and DE
      * @param type $zipCodeAsString
@@ -109,6 +116,7 @@ class IndividualCustomer {
         $this->zipCode = $zipCodeAsString;
         return $this;
     }
+    
     /**
      * Required in NL and DE
      * @param type $cityAsString
@@ -118,5 +126,4 @@ class IndividualCustomer {
         $this->locality = $cityAsString;
         return $this;
     }
-
 }

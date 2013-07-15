@@ -110,6 +110,7 @@ class HostedRowFormatter {
             //$this->totalVat += $tempRow->vat;
         }
     }
+    
     //check!
     public function formatFixedDiscountRows($order) {
         if(!isset($order->fixedDiscountRows)) {

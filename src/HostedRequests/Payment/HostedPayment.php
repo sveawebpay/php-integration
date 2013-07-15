@@ -27,7 +27,6 @@ class HostedPayment {
         $this->order = $order;
     }
 
-
     /**
      *
      * @return type $errors
@@ -89,6 +88,4 @@ class HostedPayment {
         $request['currency'] = $currency;
         return $this->configureExcludedPaymentMethods($request); //Method in child class
     }
-
-
 }

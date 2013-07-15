@@ -10,7 +10,6 @@ class DeliverOrderResult extends WebServiceResponse{
     public $amount;
     public $orderType;
 
-
     function __construct($message) {
         parent::__construct($message);
         if(isset($message->DeliverOrderEuResult->ErrorMessage))
@@ -35,7 +34,6 @@ class DeliverOrderResult extends WebServiceResponse{
             }
 
             $this->orderType = $message->DeliverOrderEuResult->DeliverOrderResult->OrderType;
-
          }
      }
 }

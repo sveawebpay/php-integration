@@ -14,6 +14,7 @@ class PayPagePayment extends HostedPayment {
     public $paymentMethod;
     public $excludedPaymentMethods;
     public $langCode = "en";
+    
     /**
      *
      * @param type $order
@@ -55,7 +56,8 @@ class PayPagePayment extends HostedPayment {
         }
         return $this;
     }
-     /**
+    
+    /**
      *
      * @return \PayPagePayment
      */
@@ -114,7 +116,6 @@ class PayPagePayment extends HostedPayment {
         return $this;
     }
 
-
     /**
      * Exclude all direct bank payments
      * @return \PayPagePayment
@@ -129,7 +130,6 @@ class PayPagePayment extends HostedPayment {
         $this->excludedPaymentMethods[] = SystemPaymentMethod::DBSWEDBANKSE;
         return $this;
     }
-
 
     /**
      * Required
@@ -152,7 +152,7 @@ class PayPagePayment extends HostedPayment {
         return $this;
     }
 
-     /**
+    /**
      * @param type $languageCodeAsISO639
      * @return \HostedPayment|\PayPagePayment
      */

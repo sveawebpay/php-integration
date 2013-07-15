@@ -1,5 +1,6 @@
 <?php
 require_once SVEA_REQUEST_DIR . '/Includes.php';
+
 /**
  * Description of SveaResponse
  *
@@ -29,6 +30,5 @@ class SveaResponse {
         }else{
             $this->response = "Response is not recognized.";
         }
-
     }
 }

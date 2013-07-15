@@ -19,9 +19,10 @@ class HostedOrderValidator extends OrderValidator {
      * @return type $errors
      */
     public function validate($order) {
-         if(isset($order->orgNumber) || isset($order->companyVatNumber) || isset($order->companyName)) {
+        if(isset($order->orgNumber) || isset($order->companyVatNumber) || isset($order->companyName)) {
             $this->isCompany = TRUE;
         }
+        
         $this->errors = $this->validateClientOrderNumber($order,$this->errors);
         $this->errors = $this->validateCurrency($order,$this->errors);
         $this->errors = $this->validateCountryCode($order, $this->errors);
@@ -41,7 +42,8 @@ class HostedOrderValidator extends OrderValidator {
         }
         return $errors;
     }
-     /**
+    
+    /**
      * @param type $order
      * @param type $errors
      */
@@ -51,6 +53,7 @@ class HostedOrderValidator extends OrderValidator {
         }
         return $errors;
     }
+    
      /**
      * @param type $order
      * @param type $errors
@@ -90,5 +93,4 @@ class HostedOrderValidator extends OrderValidator {
 
         return $errors;
     }
-
 }

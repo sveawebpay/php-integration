@@ -19,8 +19,4 @@ class CustomerIdentityResponse {
     public $coAddress;
     public $zipCode;
     public $locality;
-
-
-
-
 }

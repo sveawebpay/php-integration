@@ -16,7 +16,6 @@ class HostedXmlBuilder {
      * This method expect UTF-8 input
      */
     public function getOrderXML($request, $order) {
-
         $this->XMLWriter = new XMLWriter();
         $this->XMLWriter->openMemory();
         $this->XMLWriter->setIndent(true);
@@ -140,7 +139,6 @@ class HostedXmlBuilder {
                 } elseif(isset($order->customerIdentity->birthDate)) {
                      $this->XMLWriter->writeElement("ssn", $order->customerIdentity->birthDate);
                 }
-
 
             //customer identity for NL and DE when choosing invoice or paymentplan
 

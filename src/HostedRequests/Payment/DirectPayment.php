@@ -21,10 +21,10 @@ class DirectPayment extends HostedPayment {
     }
 
     protected function configureExcludedPaymentMethods($request) {
-         //card
+        //card
         $methods[] = SystemPaymentMethod::KORTCERT;
         $methods[] = SystemPaymentMethod::SKRILL;
-       //other
+        //other
         $methods[] = SystemPaymentMethod::PAYPAL;
 
         $exclude = new ExcludePayments();
@@ -59,7 +59,7 @@ class DirectPayment extends HostedPayment {
      * @return \HostedPayment|\DirectPayment
      */
 
-         public function setPayPageLanguage($languageCodeAsISO639) {
+    public function setPayPageLanguage($languageCodeAsISO639) {
         switch ($languageCodeAsISO639) {
             case "sv":
                 $this->langCode = $languageCodeAsISO639;

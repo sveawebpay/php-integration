@@ -1,5 +1,6 @@
 <?php
 require_once 'WebServiceResponse.php';
+
 /**
  * Description of FormatResponseObject
  *
@@ -40,7 +41,6 @@ class CreateOrderResponse extends WebServiceResponse {
                 $this->formatCustomerIdentity($message->CreateOrderEuResult->CreateOrderResult->CustomerIdentity);
             }
         }
-
     }
 
     public function formatCustomerIdentity($customer) {

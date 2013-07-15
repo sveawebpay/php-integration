@@ -9,6 +9,7 @@
 class HandleOrderValidator {
 
     public $errors = array();
+    
     /**
      * @param type $order
      */

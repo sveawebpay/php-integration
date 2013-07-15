@@ -34,11 +34,11 @@ class CreateOrderBuilder {
      * @var type Array of RelativeDiscountRows from class RelativeDiscountBuilder
      */
     public $relativeDiscountRows = array();
-   /**
+    /**
     * String recievd by using Webpay::GetAddresses() function
     * @var type String
     */
-   // public $addressSelector;
+    // public $addressSelector;
     /**
      * @var Unique order number from client side
      */
@@ -71,7 +71,6 @@ class CreateOrderBuilder {
      * @var CustomerIdentity values
      */
     public $customerIdentity;
-
 
     /**
      * @param type $orderrows
@@ -137,6 +136,7 @@ class CreateOrderBuilder {
 
        return $this;
     }
+    
     /**
      * New!
      * @param type $itemDiscounObject
@@ -161,7 +161,6 @@ class CreateOrderBuilder {
         }
        return $this;
     }
-
 
     /**
      * @param type $countryCodeAsString ex. "SE"
@@ -245,6 +244,7 @@ class CreateOrderBuilder {
         $paypagepayment = new PayPagePayment($this);
         return $paypagepayment;
     }
+    
     /**
      * Start creating payment with a specific paymentmethod. This function will go directly to the paymentmethod specified.
      * Paymentmethods are found in appendix in our documentation.

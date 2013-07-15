@@ -44,7 +44,6 @@ class deliverOrderBuilder {
     public $orderType;
     public $countryCode;
 
-
     public $numberOfCreditDays;
     /**
      * @var type String "Post" or "Email"
@@ -64,7 +63,6 @@ class deliverOrderBuilder {
         $this->handleValidator = new HandleOrderValidator();
         $this->conf = $config;
     }
-
 
     /**
      * New!
@@ -108,7 +106,7 @@ class deliverOrderBuilder {
     }
 
 
-     /**
+    /**
      * New!
      * @param type $itemDiscounObject
      * @return \deliverOrderBuilder
@@ -149,7 +147,7 @@ class deliverOrderBuilder {
         return $this;
     }
 
-        /**
+    /**
      * Required
      * @param type $orderIdAsString
      * @return \deliverOrder

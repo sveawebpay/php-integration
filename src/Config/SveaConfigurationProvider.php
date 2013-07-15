@@ -17,13 +17,14 @@ class SveaConfigurationProvider implements ConfigurationProvider {
     public function __construct($environmentConfig) {
         $this->conf = (array)$environmentConfig;
     }
-/**
- *
- * @param type $type eg. INVOICE, PAYMENTPLAN, HOSTED
- * @param type $country
- * @return Username
- * @throws Exception
- */
+    
+    /**
+     *
+     * @param type $type eg. INVOICE, PAYMENTPLAN, HOSTED
+     * @param type $country
+     * @return Username
+     * @throws Exception
+     */
     public function getUsername($type, $country) {
         return $this->getCredentialsProperty('username', $type, $country);
     }
@@ -38,6 +39,7 @@ class SveaConfigurationProvider implements ConfigurationProvider {
     public function getPassword($type, $country) {
         return $this->getCredentialsProperty('password', $type, $country);
     }
+    
     /**
      *
      * @param type $type eg. INVOICE, PAYMENTPLAN, HOSTED
@@ -48,6 +50,7 @@ class SveaConfigurationProvider implements ConfigurationProvider {
     public function getClientNumber($type, $country) {
         return $this->getCredentialsProperty('clientNumber', $type, $country);
     }
+    
     /**
      *
      * @param type $type eg. INVOICE, PAYMENTPLAN, HOSTED
@@ -58,6 +61,7 @@ class SveaConfigurationProvider implements ConfigurationProvider {
     public function getMerchantId($type, $country) {
         return $this->getCredentialsProperty('merchantId', $type, $country);
     }
+    
     /**
      *
      * @param type $type eg. INVOICE, PAYMENTPLAN, HOSTED
@@ -68,6 +72,7 @@ class SveaConfigurationProvider implements ConfigurationProvider {
     public function getSecret($type, $country) {
         return $this->getCredentialsProperty('secret', $type, $country);
     }
+    
     /**
      *
      * @param type $type eg. INVOICE, PAYMENTPLAN, HOSTED
@@ -121,5 +126,4 @@ class SveaConfigurationProvider implements ConfigurationProvider {
             ConfigurationProvider::HOSTED_TYPE
         ));
     }
-
 }

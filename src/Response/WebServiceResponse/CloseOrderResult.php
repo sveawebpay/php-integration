@@ -1,5 +1,6 @@
 <?php
 require_once 'WebServiceResponse.php';
+
 /**
  * Description of CloseOrderResult
  *
@@ -13,8 +14,8 @@ class CloseOrderResult extends WebServiceResponse{
         $this->errormessage = $message->CloseOrderEuResult->ErrorMessage;
     }
 
-     protected function formatObject($message) {
-          $this->accepted = $message->CloseOrderEuResult->Accepted;
+    protected function formatObject($message) {
+        $this->accepted = $message->CloseOrderEuResult->Accepted;
         $this->resultcode = $message->CloseOrderEuResult->ResultCode;
-     }
+    }
 }

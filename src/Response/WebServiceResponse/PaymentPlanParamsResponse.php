@@ -1,5 +1,6 @@
 <?php
 require_once 'WebServiceResponse.php';
+
 /**
  * Description of PaymentPlanParamsResponse
  *
@@ -8,7 +9,6 @@ require_once 'WebServiceResponse.php';
 class PaymentPlanParamsResponse extends WebServiceResponse{
 
     public $campaignCodes = array();
-
 
     function __construct($message) {
         parent::__construct($message);

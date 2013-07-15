@@ -63,6 +63,4 @@ class WebServiceOrderValidator extends OrderValidator {
         }
         return $this->errors;
     }
-
-
 }

@@ -35,7 +35,6 @@ class ExcludePayments {
                 $methods[] = SystemPaymentMethod::INVOICE_NO;
                 $methods[] = SystemPaymentMethod::PAYMENTPLAN_NO;
 
-
         return $methods;
     }
 }

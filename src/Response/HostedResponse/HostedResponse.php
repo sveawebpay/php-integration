@@ -16,7 +16,6 @@ class HostedResponse {
     public $amount;
     public $currency;
 
-
     function __construct($response,$countryCode,$config) {
         if(is_array($response)) {
             if(array_key_exists("response",$response) && array_key_exists("mac",$response)) {
@@ -35,8 +34,6 @@ class HostedResponse {
             $this->resultcode = '0';
             $this->errormessage = "Response is not recognized.";
         }
-
-
     }
 
     protected function formatXml($xml) {
@@ -65,8 +62,6 @@ class HostedResponse {
         $this->expiryYear = (string)$xmlElement->transaction->expiryyear;
         $this->authCode = (string)$xmlElement->transaction->authcode;
      }
-
-
     }
 
     private function setErrorParams($resultcode) {

@@ -54,6 +54,4 @@ class PaymentMethodPayment extends HostedPayment{
         $this->cancelUrl = $cancelUrlAsString;
         return $this;
     }
-
-    
 }

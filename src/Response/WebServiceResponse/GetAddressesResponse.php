@@ -8,8 +8,6 @@ require_once 'WebServiceResponse.php';
  */
 class GetAddressesResponse extends WebServiceResponse{
 
-
-
     function __construct($message) {
         if(isset($message->GetAddressesResult->ErrorMessage)) {
            // $this->errormessage = $message->GetAddressesResult->ErrorMessage; //When update comes
@@ -26,7 +24,6 @@ class GetAddressesResponse extends WebServiceResponse{
         if(property_exists($message->GetAddressesResult, "Addresses") && $this->accepted == 1) {
             $this->formatCustomerIdentity($message->GetAddressesResult->Addresses);
         }
-
     }
 
     public function formatCustomerIdentity($customers) {
@@ -47,8 +44,6 @@ class GetAddressesResponse extends WebServiceResponse{
         $temp->addressSelector = isset($customer->AddressSelector) ? $customer->AddressSelector : "";
 
         array_push($this->customerIdentity, $temp);
-
         }
-
     }
 }

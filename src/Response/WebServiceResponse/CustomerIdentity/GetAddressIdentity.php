@@ -1,6 +1,7 @@
 <?php
 
 require_once 'CustomerIdentityResponse.php';
+
 /**
  * Description of GetAddressIdentityResponse
  *
