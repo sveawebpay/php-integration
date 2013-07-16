@@ -46,6 +46,7 @@ class WebServicePayments_RequestTest extends PHPUnit_Framework_TestCase {
 
         $this->assertEquals(1, $request->accepted);
     }
+    
     function testInvoiceRequestReturnsDeniedResult() {
         $request = WebPay::createOrder()
                 //->setTestmode()()
@@ -69,6 +70,7 @@ class WebServicePayments_RequestTest extends PHPUnit_Framework_TestCase {
 
         $this->assertEquals(0, $request->accepted);
     }
+    
     function tes_tInvoiceIndividualForDK() {
         $request = WebPay::createOrder()
                 //->setTestmode()()
@@ -163,28 +165,6 @@ class WebServicePayments_RequestTest extends PHPUnit_Framework_TestCase {
 
         $this->assertEquals(1, $request->accepted);
     }
-
-    function testGetAddressesResultForPrivate() {
-        $addressRequest = WebPay::getAddresses();
-        $request = $addressRequest
-            //->setTestmode()()
-            ->setOrderTypeInvoice()
-            ->setCountryCode("SE")
-            ->setIndividual(194605092222)
-            ->doRequest();
-        $this->assertEquals(1, $request->accepted);
-     }
-    function testGetAddressesResultForCompany() {
-        $addressRequest = WebPay::getAddresses();
-        $request = $addressRequest
-            //->setTestmode()()
-            ->setOrderTypeInvoice()
-            ->setCountryCode("SE")
-            ->setCompany(4608142222)
-            ->doRequest();
-
-        $this->assertEquals(1, $request->accepted);
-     }
 
     /**
      * Function to use in testfunctions

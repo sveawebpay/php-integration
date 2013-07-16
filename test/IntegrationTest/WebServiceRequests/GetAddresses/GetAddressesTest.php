@@ -7,7 +7,30 @@ require_once $root . '/../../../../src/Includes.php';
  * @author Jonas Lith
  */
 class GetAddressesTest extends PHPUnit_Framework_TestCase {
+    
+    function testGetAddressesResultForPrivate() {
+        $addressRequest = WebPay::getAddresses();
+        $request = $addressRequest
+            //->setTestmode()()
+            ->setOrderTypeInvoice()
+            ->setCountryCode("SE")
+            ->setIndividual(194605092222)
+            ->doRequest();
+        $this->assertEquals(1, $request->accepted);
+    }
+     
+    function testGetAddressesResultForCompany() {
+        $addressRequest = WebPay::getAddresses();
+        $request = $addressRequest
+            //->setTestmode()()
+            ->setOrderTypeInvoice()
+            ->setCountryCode("SE")
+            ->setCompany(4608142222)
+            ->doRequest();
 
+        $this->assertEquals(1, $request->accepted);
+    }
+    
     function testResultGetAddresses() {
         $addressRequest = WebPay::getAddresses();
         $request = $addressRequest
