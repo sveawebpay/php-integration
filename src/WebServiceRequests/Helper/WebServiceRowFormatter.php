@@ -82,7 +82,7 @@ class WebServiceRowFormatter {
             } elseif (isset($row->vatPercent) && isset($row->amountIncVat)) {
                 $orderRow->PricePerUnit = $row->amountIncVat / ((0.01 * $row->vatPercent) + 1);
                 $orderRow->VatPercent = round($row->vatPercent);
-            }  else {
+            } else {
                 $orderRow->PricePerUnit = number_format($row->amountExVat, 2, '.', '');
                 $orderRow->VatPercent = round((($row->amountIncVat / $row->amountExVat)-1) * 100);
             }
@@ -117,7 +117,7 @@ class WebServiceRowFormatter {
             } elseif (isset($row->vatPercent) && isset($row->amountIncVat)) {
                 $orderRow->PricePerUnit = $row->amountIncVat / ((0.01 * $row->vatPercent) + 1);
                 $orderRow->VatPercent = round($row->vatPercent);
-            }  else {
+            } else {
                 $orderRow->PricePerUnit = number_format($row->amountExVat, 2, '.', '');
                 $orderRow->VatPercent = round((($row->amountIncVat / $row->amountExVat)-1) * 100);
             }
@@ -150,7 +150,7 @@ class WebServiceRowFormatter {
             } elseif (isset($row->vatPercent) && isset($row->amountIncVat)) {
                 $orderRow->PricePerUnit = $row->amountIncVat / ((0.01 * $row->vatPercent) + 1);
                 $orderRow->VatPercent = round($row->vatPercent);
-            }  else {
+            } else {
                 $orderRow->PricePerUnit = number_format($row->amountExVat, 2, '.', '');
                 $orderRow->VatPercent = round((($row->amountIncVat / $row->amountExVat)-1) * 100);
             }

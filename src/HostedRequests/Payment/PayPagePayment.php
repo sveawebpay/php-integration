@@ -47,9 +47,9 @@ class PayPagePayment extends HostedPayment {
              if ($method == PaymentMethod::INVOICE) {
                $this->excludedPaymentMethods[] ="SVEAINVOICEEU_".$this->order->countryCode;
                $this->excludedPaymentMethods[] ="SVEAINVOICE".$this->order->countryCode;
-            }  elseif ($this->paymentMethod == PaymentMethod::PAYMENTPLAN) {
+            } elseif ($this->paymentMethod == PaymentMethod::PAYMENTPLAN) {
                 $this->excludedPaymentMethods[] = "SVEASPLITEU_".$this->order->countryCode;
-            }  else {
+            } else {
                  $this->excludedPaymentMethods[] = $method;
             }
         }

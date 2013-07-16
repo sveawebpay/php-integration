@@ -59,7 +59,7 @@ class WebServicePayment {
         //paralell ways of crateing customer
         if (isset($this->order->customerIdentity)) {
             $orderinformation->CustomerIdentity = $this->formatCustomerDetails();
-        }  else {
+        } else {
             $orderinformation->CustomerIdentity = $this->formatCustomerIdentity();
         }
 
@@ -155,7 +155,7 @@ class WebServicePayment {
 
         if ($isCompany) {
             $individualCustomerIdentity->FullName = isset($this->order->companyName) ? $this->order->companyName : "";
-        }  else {
+        } else {
             $individualCustomerIdentity->FullName = isset($this->order->firstname) && isset($this->order->lastname) ? $this->order->firstname. ' ' .$this->order->lastname : "";
         }
 
@@ -221,7 +221,7 @@ class WebServicePayment {
 
         if ($isCompany) {
             $individualCustomerIdentity->FullName = isset($this->order->customerIdentity->companyName) ? $this->order->customerIdentity->companyName : "";
-        }  else {
+        } else {
             $individualCustomerIdentity->FullName = isset($this->order->customerIdentity->firstname) && isset($this->order->customerIdentity->lastname) ? $this->order->customerIdentity->firstname. ' ' .$this->order->customerIdentity->lastname : "";
         }
 

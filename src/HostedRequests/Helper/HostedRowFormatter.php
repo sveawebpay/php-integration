@@ -49,7 +49,7 @@ class HostedRowFormatter {
             } elseif (isset($row->amountIncVat) && isset($row->vatPercent)) {
                  $tempRow->setAmount(round($row->amountIncVat * 100));
                  $tempRow->setVat(round($tempRow->amount - ($tempRow->amount / $plusVatCounter)));
-            }  else {
+            } else {
                  $tempRow->setAmount(round($row->amountIncVat * 100));
                  $tempRow->setVat(($row->amountIncVat - $row->amountExVat) * 100);
             }
@@ -91,7 +91,7 @@ class HostedRowFormatter {
             } elseif (isset($row->amountIncVat) && isset($row->vatPercent)) {
                  $tempRow->setAmount(round($row->amountIncVat * 100));
                  $tempRow->setVat(round($tempRow->amount - ($tempRow->amount / $plusVatCounter)));
-            }  else {
+            } else {
                  $tempRow->setAmount(round($row->amountIncVat * 100));
                  $tempRow->setVat(($row->amountIncVat - $row->amountExVat) * 100);
             }

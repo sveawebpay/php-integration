@@ -107,7 +107,7 @@ class CreateOrderBuilder {
             foreach ($itemOrderRowObject as $row) {
                 array_push($this->orderRows, $row);
             }
-        }  else {
+        } else {
              array_push($this->orderRows, $itemOrderRowObject);
         }
        return $this;
