@@ -182,31 +182,6 @@ class WebServicePayments_RequestTest extends PHPUnit_Framework_TestCase {
 
         return $request->sveaOrderId;
     }
-
-    function testDeliverInvoiceOrderResult() {
-        $orderId = $this->getInvoiceOrderId();
-        $orderBuilder = WebPay::deliverOrder();
-        $request = $orderBuilder
-                //->setTestmode()()
-                ->addOrderRow(Item::orderRow()
-                    ->setArticleNumber(1)
-                    ->setQuantity(2)
-                    ->setAmountExVat(100.00)
-                    ->setDescription("Specification")
-                    ->setName('Prod')
-                    ->setUnit("st")
-                    ->setVatPercent(25)
-                    ->setDiscountPercent(0)
-                        )
-                    ->setOrderId($orderId)
-                    ->setNumberOfCreditDays(1)
-                    ->setCountryCode("SE")
-                    ->setInvoiceDistributionType('Post')//Post or Email
-                    ->deliverInvoiceOrder()
-                        ->doRequest();
-
-        $this->assertEquals(1, $request->accepted);
-    }
 }
 
 ?>
