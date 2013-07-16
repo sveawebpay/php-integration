@@ -1,15 +1,15 @@
 <?php
 
 $root = realpath(dirname(__FILE__));
-require_once $root . '/../../../src/Includes.php';
+require_once $root . '/../../../../src/Includes.php';
 
 /**
  * Description of WebServicePayments_RequestTest
  *
  * @author Anneli Halld'n, Daniel Brolund for Svea Webpay
  */
-class WebServicePayments_RequestTest extends PHPUnit_Framework_TestCase {
-
+class PaymentPlanPaymentTest extends PHPUnit_Framework_TestCase {
+    
     /**
      * Use to get paymentPlanParams to be able to test PaymentPlanRequest
      * @return type
@@ -17,16 +17,14 @@ class WebServicePayments_RequestTest extends PHPUnit_Framework_TestCase {
     private function getGetPaymentPlanParamsForTesting() {
         $addressRequest = WebPay::getPaymentPlanParams();
         $response = $addressRequest
-                //->setTestmode()()
                 ->setCountryCode("SE")
                 ->doRequest();
          return $response->campaignCodes[0]->campaignCode;
     }
-
-    function testPaymentPlanRequestReturnsAcceptedResult() {
+    
+    public function testPaymentPlanRequestReturnsAcceptedResult() {
         $campaigncode = $this->getGetPaymentPlanParamsForTesting();
         $request = WebPay::createOrder()
-                //->setTestmode()()
                 ->addOrderRow(Item::orderRow()
                         ->setArticleNumber(1)
                         ->setQuantity(2)
@@ -57,36 +55,8 @@ class WebServicePayments_RequestTest extends PHPUnit_Framework_TestCase {
                 ->setCurrency("SEK")
                 ->usePaymentPlanPayment($campaigncode)// returnerar InvoiceOrder object
                 ->doRequest();
-
+        
         $this->assertEquals(1, $request->accepted);
-    }
-
-    /**
-     * Function to use in testfunctions
-     * @return SveaOrderId
-     */
-    function getInvoiceOrderId() {
-        $request = WebPay::createOrder()
-                //->setTestmode()()
-                ->addOrderRow(Item::orderRow()
-                    ->setArticleNumber(1)
-                    ->setQuantity(2)
-                    ->setAmountExVat(100.00)
-                    ->setDescription("Specification")
-                    ->setName('Prod')
-                    ->setUnit("st")
-                    ->setVatPercent(25)
-                    ->setDiscountPercent(0)
-                        )
-                    ->addCustomerDetails(Item::individualCustomer()->setNationalIdNumber(194605092222))
-                    ->setCountryCode("SE")
-                    ->setCustomerReference("33")
-                    ->setOrderDate("2012-12-12")
-                    ->setCurrency("SEK")
-                    ->useInvoicePayment()// returnerar InvoiceOrder object
-                        ->doRequest();
-
-        return $request->sveaOrderId;
     }
 }
 
