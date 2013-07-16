@@ -38,7 +38,7 @@ class testConf implements ConfigurationProvider {
  */
 class CardPaymentTest extends PHPUnit_Framework_TestCase {
 
-    function testSetAuthorization() {
+    public function testSetAuthorization() {
         $form = WebPay::createOrder(new testConf())
                // ////->setTestmode()()()
                 ->addCustomerDetails(Item::individualCustomer()->setNationalIdNumber(194605092222)->setIpAddress("123.123.123"))
@@ -65,7 +65,7 @@ class CardPaymentTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals('secret', $form->secretWord);
     }
 
-    function testBuildCardPayment() {
+    public function testBuildCardPayment() {
         $rowFactory = new TestRowFactory();
         $form = WebPay::createOrder()
                 ////->setTestmode()()()
@@ -110,8 +110,8 @@ class CardPaymentTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals('6250', $xmlMessage->orderrows->row[1]->amount);
         $this->assertEquals('-12500', $xmlMessage->orderrows->row[2]->amount);
     }
-
-    function testBuildCardPaymentWithDiffrentProductVatAndDiscount() {
+    
+    public function testBuildCardPaymentWithDiffrentProductVatAndDiscount() {
         $form = WebPay::createOrder()
                 ->addOrderRow(Item::orderRow()
                     ->setArticleNumber(1)
@@ -148,7 +148,7 @@ class CardPaymentTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals('5706', $xmlMessage->vat);
     }
     
-    function testBuildCardPaymentWithAmountIncVatWithVatPercent() {
+    public function testBuildCardPaymentWithAmountIncVatWithVatPercent() {
         $form = WebPay::createOrder()
                 ->addOrderRow(Item::orderRow()
                     ->setArticleNumber(1)
@@ -195,7 +195,7 @@ class CardPaymentTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals('6956', $xmlMessage->vat);
     }
     
-    function testBuildCardPaymentWithAmountExVatWithAmountIncVat() {
+    public function testBuildCardPaymentWithAmountExVatWithAmountIncVat() {
         $form = WebPay::createOrder()
                 ->addOrderRow(Item::orderRow()
                     ->setArticleNumber(1)
@@ -237,7 +237,7 @@ class CardPaymentTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals('-10000', $xmlMessage->orderrows->row[2]->amount);
     }
     
-    function testBuildCardPaymentWithCurrency() {
+    public function testBuildCardPaymentWithCurrency() {
         $form = WebPay::createOrder()
                 ->addOrderRow(Item::orderRow()
                     ->setArticleNumber(1)
@@ -258,7 +258,7 @@ class CardPaymentTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals('SEK', $xmlMessage->currency);
     }
 
-    function testBuildCardPaymentWithShippingFee() {
+    public function testBuildCardPaymentWithShippingFee() {
           $form = WebPay::createOrder()
                 ->addOrderRow(Item::orderRow()
                     ->setArticleNumber(1)
@@ -284,7 +284,7 @@ class CardPaymentTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals("40000", $xmlMessage->amount);
     }
     
-    function testBuildCardPaymentWithDecimalLongPrice() {
+    public function testBuildCardPaymentWithDecimalLongPrice() {
           $form = WebPay::createOrder()
                 ->addOrderRow(Item::orderRow()
                     ->setArticleNumber(1)
@@ -305,7 +305,7 @@ class CardPaymentTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals("30000", $xmlMessage->amount);
     }
     
-    function testBuildCardPaymentNLCustomer() {
+    public function testBuildCardPaymentNLCustomer() {
           $form = WebPay::createOrder()
                 ->addOrderRow(Item::orderRow()
                     ->setArticleNumber(1)
@@ -326,7 +326,7 @@ class CardPaymentTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals("30000", $xmlMessage->amount);
     }
     
-    function testBuildCardPaymentWithAmountAndVatCero() {
+    public function testBuildCardPaymentWithAmountAndVatCero() {
           $form = WebPay::createOrder()
                 ->addOrderRow(Item::orderRow()
                     ->setArticleNumber(1)

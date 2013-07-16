@@ -20,7 +20,7 @@ class OrderBuilderTest extends PHPUnit_Framework_TestCase {
         $this->orderBuilder->validator = new VoidValidator();
     }
     
-    function testBuildOrderWithOrderRow() {
+    public function testBuildOrderWithOrderRow() {
         $sveaRequest = WebPay::createOrder(SveaConfig::getProdConfig())
                 ->addOrderRow(Item::orderRow()
                     ->setArticleNumber(1)
@@ -45,7 +45,7 @@ class OrderBuilderTest extends PHPUnit_Framework_TestCase {
         $this->assertInternalType("int", $sveaRequest->orderRows[0]->vatPercent);
     }
 
-    function testBuildOrderWithShippingFee() {
+    public function testBuildOrderWithShippingFee() {
         $rowFactory = new TestRowFactory();
         $sveaRequest =
                 WebPay::createOrder()
@@ -56,7 +56,7 @@ class OrderBuilderTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(25, $sveaRequest->shippingFeeRows[0]->vatPercent);
     }
 
-    function testBuildOrderWithInvoicefee() {
+    public function testBuildOrderWithInvoicefee() {
         $rowFactory = new TestRowFactory();
         $sveaRequest = WebPay::createOrder()
                 ->addOrderRow(Item::orderRow()
@@ -78,7 +78,7 @@ class OrderBuilderTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(0, $sveaRequest->invoiceFeeRows[0]->discountPercent);
     }
 
-    function testBuildOrderWithFixedDiscount() {
+    public function testBuildOrderWithFixedDiscount() {
         $sveaRequest = WebPay::createOrder()
                 ->addDiscount(Item::fixedDiscount()
                     ->setDiscountId("1")
@@ -95,7 +95,7 @@ class OrderBuilderTest extends PHPUnit_Framework_TestCase {
         $this->assertInternalType("float", $sveaRequest->fixedDiscountRows[0]->amount);
     }
 
-    function testBuildOrderWithRelativeDiscount() {
+    public function testBuildOrderWithRelativeDiscount() {
         $sveaRequest =
                 WebPay::createOrder()
                 ->addDiscount(Item::relativeDiscount()
@@ -113,7 +113,7 @@ class OrderBuilderTest extends PHPUnit_Framework_TestCase {
         $this->assertInternalType("int", $sveaRequest->relativeDiscountRows[0]->discountPercent);
     }
 
-    function testBuildOrderWithCustomer() {
+    public function testBuildOrderWithCustomer() {
         $sveaRequest =
                 WebPay::createOrder()
                 ->addCustomerDetails(Item::individualCustomer()
@@ -145,7 +145,7 @@ class OrderBuilderTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals("Stan", $sveaRequest->customerIdentity->locality);
     }
     
-    function testBuildOrderWithAllCustomerTypes() {
+    public function testBuildOrderWithAllCustomerTypes() {
         $company = TRUE;
         $sveaRequest = WebPay::createOrder();
        
@@ -179,7 +179,7 @@ class OrderBuilderTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals("Stan", $sveaRequest->customerIdentity->locality);
     }
 
-    function testBuildOrderWithCompanyDetails() {
+    public function testBuildOrderWithCompanyDetails() {
         $sveaRequest = WebPay::createOrder()
                     ->addCustomerDetails(Item::companyCustomer()
                         ->setNationalIdNumber("2345234")
@@ -190,35 +190,35 @@ class OrderBuilderTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals("TestCompagniet", $sveaRequest->customerIdentity->companyName);
     }
 
-    function testBuildOrderWithOrderDate() {
+    public function testBuildOrderWithOrderDate() {
         $sveaRequest = WebPay::createOrder()
                 ->setOrderDate("2012-12-12");
         
         $this->assertEquals("2012-12-12", $sveaRequest->orderDate);
     }
 
-    function testBuildOrderWithCountryCode() {
+    public function testBuildOrderWithCountryCode() {
         $sveaRequest = WebPay::createOrder()
                 ->setCountryCode("SE");
         
         $this->assertEquals("SE", $sveaRequest->countryCode);
     }
 
-    function testBuildOrderWithCurrency() {
+    public function testBuildOrderWithCurrency() {
         $sveaRequest = WebPay::createOrder()
                 ->setCurrency("SEK");
         
         $this->assertEquals("SEK", $sveaRequest->currency);
     }
 
-    function testBuildOrderWithCustomerRefNumber() {
+    public function testBuildOrderWithCustomerRefNumber() {
         $sveaRequest = WebPay::createOrder()
                 ->setCustomerReference("33");
         
         $this->assertEquals("33", $sveaRequest->customerReference);
     }
     
-    function testBuildOrderWithClientOrderNumber() {
+    public function testBuildOrderWithClientOrderNumber() {
         $sveaRequest = WebPay::createOrder()
                 ->setClientOrderNumber("33");
         
@@ -230,7 +230,6 @@ class OrderBuilderTest extends PHPUnit_Framework_TestCase {
       $this->orderBuilder->build();
       $this->assertEquals(1, $this->orderBuilder->validator->nrOfCalls);
       }
-     * 
      */
 }
 

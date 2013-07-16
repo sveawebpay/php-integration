@@ -11,7 +11,7 @@ require_once $root . '/../../../../test/UnitTest/BuildOrder/TestRowFactory.php';
  */
 class PayPagePaymentTest extends PHPUnit_Framework_TestCase {
 
-    function testBuildPayPagePaymentWithExcludepaymentMethods() {
+    public function testBuildPayPagePaymentWithExcludepaymentMethods() {
         $rowFactory = new TestRowFactory();
        $form = WebPay::createOrder()
             ////->setTestmode()()()
@@ -55,7 +55,7 @@ class PayPagePaymentTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(SystemPaymentMethod::INVOICE_SE, $xmlMessage->excludepaymentmethods->exclude[0]);
     }
 
-    function testpayPagePaymentExcludeCardPayments() {
+    public function testpayPagePaymentExcludeCardPayments() {
         $rowFactory = new TestRowFactory();
         $form = WebPay::createOrder()
             //->setTestmode()()
@@ -91,7 +91,7 @@ class PayPagePaymentTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(PaymentMethod::KORTCERT, $xmlMessage->excludepaymentmethods->exclude[0]);
     }
 
-    function testExcludeDirectPaymentMethods() {
+    public function testExcludeDirectPaymentMethods() {
         $rowFactory = new TestRowFactory();
         $form = WebPay::createOrder()
             //->setTestmode()()
@@ -127,7 +127,7 @@ class PayPagePaymentTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(PaymentMethod::BANKAXESS, $xmlMessage->excludepaymentmethods->exclude[0]);
     }
 
-    function testpayPagePaymentIncludePaymentMethods() {
+    public function testpayPagePaymentIncludePaymentMethods() {
         $rowFactory = new TestRowFactory();
         $form = WebPay::createOrder()
             //->setTestmode()()
@@ -164,7 +164,7 @@ class PayPagePaymentTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(SystemPaymentMethod::BANKAXESS, $xmlMessage->excludepaymentmethods->exclude[0]);
     }
     
-     function testBuildPayPagePaymentVatIsCero() {
+    public function testBuildPayPagePaymentVatIsCero() {
          $rowFactory = new TestRowFactory();
          $form = WebPay::createOrder()
             ->addOrderRow(Item::orderRow()

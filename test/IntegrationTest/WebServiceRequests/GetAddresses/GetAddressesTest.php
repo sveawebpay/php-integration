@@ -8,7 +8,7 @@ require_once $root . '/../../../../src/Includes.php';
  */
 class GetAddressesTest extends PHPUnit_Framework_TestCase {
     
-    function testGetAddressesResultForPrivate() {
+    public function testGetAddressesResultForPrivate() {
         $addressRequest = WebPay::getAddresses();
         $request = $addressRequest
             //->setTestmode()()
@@ -19,7 +19,7 @@ class GetAddressesTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(1, $request->accepted);
     }
      
-    function testGetAddressesResultForCompany() {
+    public function testGetAddressesResultForCompany() {
         $addressRequest = WebPay::getAddresses();
         $request = $addressRequest
             //->setTestmode()()
@@ -31,7 +31,7 @@ class GetAddressesTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(1, $request->accepted);
     }
     
-    function testResultGetAddresses() {
+    public function testResultGetAddresses() {
         $addressRequest = WebPay::getAddresses();
         $request = $addressRequest
                 //->setTestmode()()

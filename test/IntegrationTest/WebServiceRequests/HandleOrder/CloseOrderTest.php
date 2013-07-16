@@ -37,7 +37,7 @@ class CloseOrderTest extends PHPUnit_Framework_TestCase {
         return $request->sveaOrderId;
     }
     
-    function testCloseInvoiceOrder() {
+    public function testCloseInvoiceOrder() {
         $orderId = $this->getInvoiceOrderId();
         $orderBuilder = WebPay::closeOrder();
         $request = $orderBuilder

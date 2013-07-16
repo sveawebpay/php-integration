@@ -15,7 +15,7 @@ class OrderHandlerValidatorTest extends PHPUnit_Framework_TestCase {
      * @expectedException ValidationException
      * @expectedExceptionMessage -missing value : OrderId is required. Use function setOrderId() with the id recieved when creating an order.
      */
-    function testFailOnMissingOrderIdOnPaymentPlanDeliver() {
+    public function testFailOnMissingOrderIdOnPaymentPlanDeliver() {
         $builder = WebPay::deliverOrder();
         $object = $builder;
         
@@ -27,7 +27,7 @@ class OrderHandlerValidatorTest extends PHPUnit_Framework_TestCase {
      * @expectedException ValidationException
      * @expectedExceptionMessage -missing value : InvoiceDistributionType is requred for deliverInvoiceOrder. Use function setInvoiceDistributionType().
      */
-    function testFailOnMissingInvoiceDetailsOnInvoiceDeliver() {
+    public function testFailOnMissingInvoiceDetailsOnInvoiceDeliver() {
         $builder = WebPay::deliverOrder();
         $object = $builder
             ->addOrderRow(Item::orderRow()
@@ -58,7 +58,7 @@ class OrderHandlerValidatorTest extends PHPUnit_Framework_TestCase {
      * @expectedException ValidationException
      * @expectedExceptionMessage No rows has been included. Use function beginOrderRow(), beginShippingfee() or beginInvoiceFee().
      */
-    function testFailOnMissingOrderRowsOnInvoiceDeliver() {
+    public function testFailOnMissingOrderRowsOnInvoiceDeliver() {
         $builder = WebPay::deliverOrder();
         $object = $builder
                 ->setOrderId('id')

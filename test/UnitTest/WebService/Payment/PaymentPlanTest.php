@@ -15,7 +15,7 @@ class PaymentPlanTest extends PHPUnit_Framework_TestCase {
      * Use to get paymentPlanParams to be able to test PaymentPlanRequest
      * @return type
      */
-    function getGetPaymentPlanParamsForTesting() {
+    public function getGetPaymentPlanParamsForTesting() {
         $addressRequest = WebPay::getPaymentPlanParams();
         $response = $addressRequest
                 //->setTestmode()()
@@ -24,7 +24,7 @@ class PaymentPlanTest extends PHPUnit_Framework_TestCase {
          return $response->campaignCodes[0]->campaignCode;
     }
 
-    function testPaymentPlanRequestObjectSpecifics() {
+    public function testPaymentPlanRequestObjectSpecifics() {
         $rowFactory = new TestRowFactory();
         $request = WebPay::createOrder()
                 ->addOrderRow(Item::orderRow()
@@ -51,7 +51,7 @@ class PaymentPlanTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(0, $request->request->CreateOrderInformation->CreatePaymentPlanDetails['SendAutomaticGiroPaymentForm']);
     }
 
-    function testInvoiceRequestObjectWithRelativeDiscountOnTwoProducts() {
+    public function testInvoiceRequestObjectWithRelativeDiscountOnTwoProducts() {
         $request = WebPay::createOrder()
                 //->setTestmode()()
                 ->addOrderRow(Item::orderRow()
@@ -83,7 +83,7 @@ class PaymentPlanTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(0, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->DiscountPercent);
     }
     
-    function testPaymentPlanWithPriceAsDecimal() {
+    public function testPaymentPlanWithPriceAsDecimal() {
         $campaign = $this->getGetPaymentPlanParamsForTesting();
         $request = WebPay::createOrder()
                 //->setTestmode()()

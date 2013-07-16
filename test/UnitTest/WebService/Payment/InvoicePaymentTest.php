@@ -11,7 +11,7 @@ require_once $root . '/../../../../test/UnitTest/BuildOrder/TestRowFactory.php';
  */
 class InvoicePaymentTest extends PHPUnit_Framework_TestCase {
 
-     function testInvoiceRequestObjectForCustomerIdentityIndividualFromSE() {
+     public function testInvoiceRequestObjectForCustomerIdentityIndividualFromSE() {
            $request = WebPay::createOrder()
             //->setTestmode()()
             ->addOrderRow(Item::orderRow()
@@ -37,7 +37,7 @@ class InvoicePaymentTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals("Individual", $request->request->CreateOrderInformation->CustomerIdentity->CustomerType); //Check all in identity
     }
     
-    function testInvoiceRequestOnProductVatCero() {
+    public function testInvoiceRequestOnProductVatCero() {
            $request = WebPay::createOrder()
             //->setTestmode()()
             ->addOrderRow(Item::orderRow()
@@ -62,7 +62,7 @@ class InvoicePaymentTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(0, $request->request->CreateOrderInformation->OrderRows['OrderRow'][0]->VatPercent); //Check all in identity
     }
 
-    function testSetAuth() {
+    public function testSetAuth() {
            $request = WebPay::createOrder()
             //->setTestmode()()
             ->addOrderRow(Item::orderRow()
@@ -89,7 +89,7 @@ class InvoicePaymentTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals("sverigetest", $request->request->Auth->Password); //Check all in identity
     }
 
-    function testInvoiceRequestObjectForCustomerIdentityIndividualFromNL() {
+    public function testInvoiceRequestObjectForCustomerIdentityIndividualFromNL() {
          $request = WebPay::createOrder()
             //->setTestmode()()
             ->addOrderRow(Item::orderRow()
@@ -139,7 +139,7 @@ class InvoicePaymentTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(19231212, $request->request->CreateOrderInformation->CustomerIdentity->IndividualIdentity->BirthDate); //Check all in identity
     }
     
-    function testInvoiceRequestObjectForCustomerIdentityIndividualFromDE() {
+    public function testInvoiceRequestObjectForCustomerIdentityIndividualFromDE() {
          $request = WebPay::createOrder()
             //->setTestmode()()
             ->addOrderRow(Item::orderRow()
@@ -187,7 +187,7 @@ class InvoicePaymentTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(19231212, $request->request->CreateOrderInformation->CustomerIdentity->IndividualIdentity->BirthDate); //Check all in identity
     }
 
-    function testInvoiceRequestObjectForCustomerIdentityCompanyFromNL() {
+    public function testInvoiceRequestObjectForCustomerIdentityCompanyFromNL() {
          $request = WebPay::createOrder()
             //->setTestmode()()
             ->addOrderRow(Item::orderRow()
@@ -233,7 +233,7 @@ class InvoicePaymentTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals("Individual", $request->request->CreateOrderInformation->CustomerIdentity->CustomerType); //Check all in identity
     }
 
-    function testInvoiceRequestObjectForCustomerIdentityCompanyFromSE() {
+    public function testInvoiceRequestObjectForCustomerIdentityCompanyFromSE() {
           $request = WebPay::createOrder()
             //->setTestmode()()
               ->addOrderRow(Item::orderRow()
@@ -259,7 +259,7 @@ class InvoicePaymentTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals("Company", $request->request->CreateOrderInformation->CustomerIdentity->CustomerType); //Check all in identity
     }
 
-    function testInvoiceRequestObjectForSEorderOnOneProductRow() {
+    public function testInvoiceRequestObjectForSEorderOnOneProductRow() {
         $rowFactory = new TestRowFactory();
         $request = WebPay::createOrder()
             //->setTestmode()()
@@ -309,7 +309,7 @@ class InvoicePaymentTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(0, $request->request->CreateOrderInformation->OrderRows['OrderRow'][2]->DiscountPercent);
     }
     
-    function testInvoiceRequestUsingAmountIncVatWithVatPercent() {
+    public function testInvoiceRequestUsingAmountIncVatWithVatPercent() {
         $rowFactory = new TestRowFactory();
         $request = WebPay::createOrder()
             //->setTestmode()()
@@ -374,7 +374,7 @@ class InvoicePaymentTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(0, $request->request->CreateOrderInformation->OrderRows['OrderRow'][2]->DiscountPercent);
     }
     
-    function testInvoiceRequestUsingAmountIncVatWithAmountExVat() {
+    public function testInvoiceRequestUsingAmountIncVatWithAmountExVat() {
         $rowFactory = new TestRowFactory();
         $request = WebPay::createOrder()
             //->setTestmode()()
@@ -439,7 +439,7 @@ class InvoicePaymentTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(0, $request->request->CreateOrderInformation->OrderRows['OrderRow'][2]->DiscountPercent);
     }
 
-    function testInvoiceRequestObjectWithRelativeDiscountOnDifferentProductVat() {
+    public function testInvoiceRequestObjectWithRelativeDiscountOnDifferentProductVat() {
         $request = WebPay::createOrder()
                 //->setTestmode()()
                 ->addOrderRow(Item::orderRow()
@@ -481,7 +481,7 @@ class InvoicePaymentTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(0, $request->request->CreateOrderInformation->OrderRows['OrderRow'][2]->DiscountPercent);
     }
 
-    function testInvoiceRequestObjectWithFixedDiscountOnDifferentProductVat() {
+    public function testInvoiceRequestObjectWithFixedDiscountOnDifferentProductVat() {
         $request = WebPay::createOrder()
                 //->setTestmode()()
                 ->addOrderRow(Item::orderRow()
@@ -521,7 +521,7 @@ class InvoicePaymentTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(0, $request->request->CreateOrderInformation->OrderRows['OrderRow'][2]->DiscountPercent);
     }
     
-    function testInvoiceWithFixedDiscountWithUneavenAmount() {
+    public function testInvoiceWithFixedDiscountWithUneavenAmount() {
         $request = WebPay::createOrder()
                 //->setTestmode()()
                 ->addOrderRow(Item::orderRow()
@@ -553,7 +553,7 @@ class InvoicePaymentTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(0, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->DiscountPercent);
     }
 
-     function testInvoiceRequestObjectWithCreateOrderInformation() {
+     public function testInvoiceRequestObjectWithCreateOrderInformation() {
         $rowFactory = new TestRowFactory();
            $request = WebPay::createOrder()
             //->setTestmode()()
@@ -586,8 +586,8 @@ class InvoicePaymentTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals('nr26',$request->request->CreateOrderInformation->ClientOrderNumber); //check in identity
         $this->assertEquals('ad33',$request->request->CreateOrderInformation->AddressSelector); //check in identity
      }
-
-    function testInvoiceRequestObjectWithAuth() {
+     
+    public function testInvoiceRequestObjectWithAuth() {
         $rowFactory = new TestRowFactory();
             $request = WebPay::createOrder()
             //->setTestmode()()

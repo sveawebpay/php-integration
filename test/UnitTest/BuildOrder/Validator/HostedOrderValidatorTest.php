@@ -14,7 +14,7 @@ class HostedOrderValidatorTest extends PHPUnit_Framework_TestCase {
      * @expectedException ValidationException
      * @expectedExceptionMessage -missing value : ClientOrderNumber is required. Use function setClientOrderNumber().
      */
-    function testFailOnNullCustomerRefNo() {
+    public function testFailOnNullCustomerRefNo() {
         $builder = WebPay::createOrder();
         $order = $builder
                 ->addOrderRow(Item::orderRow()
@@ -33,7 +33,7 @@ class HostedOrderValidatorTest extends PHPUnit_Framework_TestCase {
      * @expectedException ValidationException
      * @expectedExceptionMessage -missing value : ClientOrderNumber is required. Use function setClientOrderNumber().
      */
-    function testFailOnEmptyCustomerRefNo() {
+    public function testFailOnEmptyCustomerRefNo() {
         $builder = WebPay::createOrder();
         $order = $builder
                 ->addOrderRow(Item::orderRow()
@@ -59,7 +59,7 @@ class HostedOrderValidatorTest extends PHPUnit_Framework_TestCase {
      * -missing value : Locality is required for INVOICE and PAYMENTPLAN payments for all customers when countrycode is NL. Use function setLocality().
      * -missing value : ZipCode is required for INVOICE and PAYMENTPLAN payments for all customers when countrycode is NL. Use function setZipCode().
      */
-    function testFailOnMissingCustomerForNL() {
+    public function testFailOnMissingCustomerForNL() {
         $builder = WebPay::createOrder();
         $order = $builder
                 ->addOrderRow(Item::orderRow()
@@ -84,7 +84,7 @@ class HostedOrderValidatorTest extends PHPUnit_Framework_TestCase {
      * -missing value : VatNumber is required for INVOICE and PAYMENTPLAN payments for company customers when countrycode is NL. Use function setVatNumber().
      * -missing value : CompanyName is required for INVOICE and PAYMENTPLAN payments for individual customers when countrycode is NL. Use function setCompanyName().
      */
-    function testFailOnMissingCompanyCustomerForNL() {
+    public function testFailOnMissingCompanyCustomerForNL() {
           $builder = WebPay::createOrder();
         $order = $builder
                 ->addOrderRow(Item::orderRow()
@@ -104,7 +104,7 @@ class HostedOrderValidatorTest extends PHPUnit_Framework_TestCase {
      * @expectedException ValidationException
      * @expectedExceptionMessage -missing value : Currency is required. Use function setCurrency().
      */
-    function testFailOnMissingCurrency() {
+    public function testFailOnMissingCurrency() {
         $builder = WebPay::createOrder();
         $order = $builder
                 ->addOrderRow(Item::orderRow()
@@ -123,7 +123,7 @@ class HostedOrderValidatorTest extends PHPUnit_Framework_TestCase {
      * @expectedException ValidationException
      * @expectedExceptionMessage -missing value : CountryCode is required. Use function setCountryCode().
      */
-    function testFailOnMissingCountryCode() {
+    public function testFailOnMissingCountryCode() {
         $builder = WebPay::createOrder();
         $order = $builder
                 ->addOrderRow(Item::orderRow()
@@ -143,7 +143,7 @@ class HostedOrderValidatorTest extends PHPUnit_Framework_TestCase {
      * @expectedException ValidationException
      * @expectedExceptionMessage -missing value : ReturnUrl is required. Use function setReturnUrl().
      */
-    function testFailOnMissingReturnUrl() {
+    public function testFailOnMissingReturnUrl() {
          $builder = WebPay::createOrder();
         $order = $builder
                 ->addOrderRow(Item::orderRow()

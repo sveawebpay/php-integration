@@ -8,7 +8,7 @@ require_once $root . '/../../../../src/Includes.php';
  */
 class GetPaymentPlanParamsTest extends PHPUnit_Framework_TestCase {
 
-    function testPaymentPlanParamsResult() {
+    public function testPaymentPlanParamsResult() {
         $addressRequest = WebPay::getPaymentPlanParams();
         $request = $addressRequest
                 ->setCountryCode("SE")
@@ -17,7 +17,7 @@ class GetPaymentPlanParamsTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(1, $request->accepted);
     }
     
-    function testResultGetPaymentPlanParams() {
+    public function testResultGetPaymentPlanParams() {
         $addressRequest = WebPay::getPaymentPlanParams();
         $request = $addressRequest
                 //->setTestmode()()

@@ -11,7 +11,7 @@ require_once $root . '/../../../../src/Includes.php';
  */
 class NewHandleOrderTest extends PHPUnit_Framework_TestCase {
 
-    function testNewDeliverInvoiceOrderRow() {
+    public function testNewDeliverInvoiceOrderRow() {
         $request = WebPay::deliverOrder();
             //->setTestmode()();
         //foreach...
@@ -45,7 +45,7 @@ class NewHandleOrderTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(0, $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][0]->DiscountPercent);
         }
 
-    function testDeliverOrderWithInvoiceFeeAndFixedDiscount() {
+    public function testDeliverOrderWithInvoiceFeeAndFixedDiscount() {
         $request = WebPay::deliverOrder();
             //->setTestmode()();
         //foreach...
@@ -108,10 +108,9 @@ class NewHandleOrderTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals("st", $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][2]->Unit);
         $this->assertEquals(25, $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][2]->VatPercent);
         $this->assertEquals(0, $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][2]->DiscountPercent);
-
     }
 
-    function testDeliverOrderWithShippingFeeAndRelativeDiscount() {
+    public function testDeliverOrderWithShippingFeeAndRelativeDiscount() {
         $request = WebPay::deliverOrder();
             //->setTestmode()();
         //foreach...

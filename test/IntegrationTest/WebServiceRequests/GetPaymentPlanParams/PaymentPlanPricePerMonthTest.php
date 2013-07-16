@@ -16,7 +16,7 @@ class PaymentPlanPricePerMonthTest extends PHPUnit_Framework_TestCase {
         return $response;
     }
 
-    function testBuildPriceCalculator() {
+    public function testBuildPriceCalculator() {
         $params = $this->getGetPaymentPlanParamsResponseForTesting();
         $response = WebPay::paymentPlanPricePerMonth(2000,$params);
         $this->assertEquals(213060, $response->values[0]['campaignCode']);

@@ -11,7 +11,7 @@ require_once $root . '/../../../../src/Includes.php';
  */
 class HandleOrderTest extends PHPUnit_Framework_TestCase {
 
-    function testBuildRequest() {
+    public function testBuildRequest() {
         $handler = WebPay::deliverOrder();
         $request = $handler
                 //->setTestmode()()
@@ -19,7 +19,7 @@ class HandleOrderTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals("id", $request->orderId);
     }
     
-    function testDeliverInvoiceDistributionType() {
+    public function testDeliverInvoiceDistributionType() {
          $orderBuilder = WebPay::deliverOrder();
         $request = $orderBuilder
             ->addOrderRow(Item::orderRow()
@@ -44,7 +44,7 @@ class HandleOrderTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals('Post', $request->request->DeliverOrderInformation->DeliverInvoiceDetails->InvoiceDistributionType);       
     }
 
-    function testDeliverInvoiceOrder() {
+    public function testDeliverInvoiceOrder() {
         $orderBuilder = WebPay::deliverOrder();
         $request = $orderBuilder
               ->addOrderRow(Item::orderRow()
@@ -106,7 +106,7 @@ class HandleOrderTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals("Invoice", $request->request->DeliverOrderInformation->OrderType);
     }
 
-    function testDeliverPaymentPlanOrder() {
+    public function testDeliverPaymentPlanOrder() {
         $orderBuilder = WebPay::deliverOrder();
 
         $request = $orderBuilder
@@ -120,7 +120,7 @@ class HandleOrderTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals("PaymentPlan", $request->request->DeliverOrderInformation->OrderType);
     }
 
-    function testCloseInvoiceOrder() {
+    public function testCloseInvoiceOrder() {
         $orderBuilder = WebPay::closeOrder();
 
         $request = $orderBuilder
@@ -133,7 +133,7 @@ class HandleOrderTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals("id", $request->request->CloseOrderInformation->SveaOrderId);
     }
 
-    function testClosePaymentPlanOrder() {
+    public function testClosePaymentPlanOrder() {
         $orderBuilder = WebPay::closeOrder();
 
         $request = $orderBuilder

@@ -11,7 +11,7 @@ require_once $root . '/../../../../test/UnitTest/BuildOrder/TestRowFactory.php';
  */
 class PaymentMethodTest extends PHPUnit_Framework_TestCase{
 
-     function testPayPagePaymentWithSetPaymentMethod() {
+     public function testPayPagePaymentWithSetPaymentMethod() {
         $rowFactory = new TestRowFactory();
         $form = WebPay::createOrder()
             ////->setTestmode()()()
@@ -46,7 +46,7 @@ class PaymentMethodTest extends PHPUnit_Framework_TestCase{
         $this->assertEquals(PaymentMethod::KORTCERT, $xmlMessage->paymentmethod[0]);
     }
     
-    function testPayPagePaymentWithSetPaymentMethodInvoice() {
+    public function testPayPagePaymentWithSetPaymentMethodInvoice() {
         $rowFactory = new TestRowFactory();
         $form = WebPay::createOrder()
             //->setTestmode()()
@@ -83,7 +83,7 @@ class PaymentMethodTest extends PHPUnit_Framework_TestCase{
         $this->assertEquals("4608142222", $xmlMessage->customer->ssn);
     }
     
-    function testPaymentMethodInvoiceNL() {
+    public function testPaymentMethodInvoiceNL() {
         $form = WebPay::createOrder()
             ->addOrderRow(Item::orderRow()
                     ->setArticleNumber(1)

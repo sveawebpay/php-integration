@@ -11,7 +11,7 @@ require_once $root . '/../../../UnitTest/BuildOrder/TestRowFactory.php';
  */
 class CardPaymentTest extends PHPUnit_Framework_TestCase {
     
-    function testDoCardPaymentRequest() {
+    public function testDoCardPaymentRequest() {
         $rowFactory = new TestRowFactory();
         $form = WebPay::createOrder()
                 //->setTestmode()

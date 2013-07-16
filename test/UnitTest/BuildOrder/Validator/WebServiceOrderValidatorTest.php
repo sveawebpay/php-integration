@@ -34,7 +34,7 @@ class WebServiceOrderValidatorTest extends PHPUnit_Framework_TestCase {
      * @expectedException ValidationException
      * @expectedExceptionMessage -duplicated value : Customer is either an individual or a company. You can not use function setNationalIdNumber() in combination with setNationalIdNumber() or setVatNumber().
      */
-    function t_estFailOnDoubleIdentity() {
+    public function t_estFailOnDoubleIdentity() {
         $builder = WebPay::createOrder();
         $order = $builder
                 ->addOrderRow(Item::orderRow()
@@ -54,7 +54,7 @@ class WebServiceOrderValidatorTest extends PHPUnit_Framework_TestCase {
      * Use to get paymentPlanParams to be able to test PaymentPlanRequest
      * @return type
      */
-    function getGetPaymentPlanParamsForTesting() {
+    public function getGetPaymentPlanParamsForTesting() {
         $addressRequest = WebPay::getPaymentPlanParams();
         $response = $addressRequest
                 //->setTestmode()()
@@ -67,7 +67,7 @@ class WebServiceOrderValidatorTest extends PHPUnit_Framework_TestCase {
      * @expectedException ValidationException
      * @expectedExceptionMessage -Wrong customer type : PaymentPlanPayment not allowed for Company customer.
      */
-    function testFailOnCompanyPaymentPlanPayment() {
+    public function testFailOnCompanyPaymentPlanPayment() {
         $code = $this->getGetPaymentPlanParamsForTesting();
         $builder = WebPay::CreateOrder();
         $order = $builder
@@ -87,7 +87,7 @@ class WebServiceOrderValidatorTest extends PHPUnit_Framework_TestCase {
      * @expectedException ValidationException
      * @expectedExceptionMessage -not valid : Given countrycode does not exist in our system.
      */
-    function testFailOnBadCountryCode() {
+    public function testFailOnBadCountryCode() {
         $builder = WebPay::createOrder();
         $order = $builder
                 ->addOrderRow(Item::orderRow()
@@ -107,7 +107,7 @@ class WebServiceOrderValidatorTest extends PHPUnit_Framework_TestCase {
      * @expectedException ValidationException
      * @expectedExceptionMessage -missing value : CountryCode is required. Use function setCountryCode().
      */
-    function testFailOnMissingCountryCode() {
+    public function testFailOnMissingCountryCode() {
         $builder = WebPay::createOrder();
         $order = $builder
                 ->addOrderRow(Item::orderRow()
@@ -126,7 +126,7 @@ class WebServiceOrderValidatorTest extends PHPUnit_Framework_TestCase {
      * @expectedException ValidationException
      * @expectedExceptionMessage -missing value : NationalIdNumber is required for individual customers when countrycode is SE, NO, DK or FI. Use function setNationalIdNumber().
      */
-    function testFailOnMissingNationalIdNumberForSeOrder() {
+    public function testFailOnMissingNationalIdNumberForSeOrder() {
         $builder = WebPay::createOrder();
         $order = $builder
                 ->setCountryCode("SE")
@@ -141,7 +141,7 @@ class WebServiceOrderValidatorTest extends PHPUnit_Framework_TestCase {
      * @expectedException ValidationException
      * @expectedExceptionMessage -missing value : OrgNumber is required for company customers when countrycode is SE, NO, DK or FI. Use function setNationalIdNumber().
      */
-    function testFailOnMissingOrgNumberForCompanyOrderSe() {
+    public function testFailOnMissingOrgNumberForCompanyOrderSe() {
         $builder = WebPay::createOrder();
         $order = $builder
                 ->setCountryCode("SE")
@@ -161,7 +161,7 @@ class WebServiceOrderValidatorTest extends PHPUnit_Framework_TestCase {
      * -missing value : Locality is required for all customers when countrycode is DE. Use function setLocality().
      * -missing value : ZipCode is required for all customers when countrycode is DE. Use function setZipCode().
      */
-    function testFailOnMissingIdentityValuesForDEPaymentPlanOrder() {
+    public function testFailOnMissingIdentityValuesForDEPaymentPlanOrder() {
         $builder = WebPay::createOrder();
         $order = $builder
                 ->setCountryCode("DE")
@@ -175,7 +175,7 @@ class WebServiceOrderValidatorTest extends PHPUnit_Framework_TestCase {
      * @expectedException ValidationException
      * @expectedExceptionMessage -missing value : BirthDate is required for individual customers when countrycode is DE. Use function setBirthDate().
      */
-    function testFailOnMissingBirthDateForDeOrder() {
+    public function testFailOnMissingBirthDateForDeOrder() {
         $builder = WebPay::createOrder();
         $order = $builder
                 ->setCountryCode("DE")
@@ -202,7 +202,7 @@ class WebServiceOrderValidatorTest extends PHPUnit_Framework_TestCase {
      * -missing value : Locality is required for all customers when countrycode is NL. Use function setLocality().
      * -missing value : ZipCode is required for all customers when countrycode is NL. Use function setZipCode().
      */
-    function testFailOnMissingValuesForNlOrder() {
+    public function testFailOnMissingValuesForNlOrder() {
         $builder = WebPay::createOrder();
         $order = $builder
                 ->addOrderRow(Item::orderRow()
@@ -222,7 +222,7 @@ class WebServiceOrderValidatorTest extends PHPUnit_Framework_TestCase {
      * @expectedException ValidationException
      * @expectedExceptionMessage -missing value : Initials is required for individual customers when countrycode is NL. Use function setInitials().
      */
-    function testFailOnMissingInitialsForNlOrder() {
+    public function testFailOnMissingInitialsForNlOrder() {
         $builder = WebPay::createOrder();
         $order = $builder
                 ->setCountryCode("NL")
@@ -235,8 +235,7 @@ class WebServiceOrderValidatorTest extends PHPUnit_Framework_TestCase {
                 ->setZipCode(9999)
                 ->setLocality("Stan")
                 )
-
-                    ->useInvoicePayment();
+                ->useInvoicePayment();
 
       $order->prepareRequest();
     }
@@ -245,7 +244,7 @@ class WebServiceOrderValidatorTest extends PHPUnit_Framework_TestCase {
      * @expectedException ValidationException
      * @expectedExceptionMessage -missing values : OrderRows are required. Use function addOrderRow(Item::orderRow) to get orderrow setters.
      */
-    function testFailOnMissingOrderRows() {
+    public function testFailOnMissingOrderRows() {
         $builder = WebPay::createOrder();
         $order = $builder
                 ->setCountryCode("SE")
@@ -261,7 +260,7 @@ class WebServiceOrderValidatorTest extends PHPUnit_Framework_TestCase {
      * -missing values : At least two of the values must be set in object Item::  AmountExVat, AmountIncVat or VatPercent for Orderrow. Use functions setAmountExVat(), setAmountIncVat() or setVatPercent().
      * -missing value : Quantity is required in object Item. Use function Item::setQuantity().
      */
-    function testFailOnMissingOrderRowValues() {
+    public function testFailOnMissingOrderRowValues() {
         $builder = WebPay::createOrder();
         $order = $builder
                 ->addOrderRow(Item::orderRow())
@@ -277,7 +276,7 @@ class WebServiceOrderValidatorTest extends PHPUnit_Framework_TestCase {
      * @expectedExceptionMessage
      * -missing values : OrderDate is Required. Use function setOrderDate().
     */
-    function testFailOnMissingOrderDate() {
+    public function testFailOnMissingOrderDate() {
         $builder = WebPay::createOrder();
         $order = $builder
                  ->addOrderRow(Item::orderRow()
@@ -297,7 +296,7 @@ class WebServiceOrderValidatorTest extends PHPUnit_Framework_TestCase {
      * @expectedExceptionMessage
      * -incorrect datatype : Vat must be set as Integer.
     */
-    function testFailOnVatAsFloat() {
+    public function testFailOnVatAsFloat() {
         $builder = WebPay::createOrder();
         $order = $builder
                  ->addOrderRow(Item::orderRow()

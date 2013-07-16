@@ -15,7 +15,7 @@ class DirectPaymentTest extends PHPUnit_Framework_TestCase {
      * @expectedException Exception
      * @expectedExceptionMessage Invalid or missing Country code
      */
-    function testFailOnWrongCountryCodeInConfig() {
+    public function testFailOnWrongCountryCodeInConfig() {
         $rowFactory = new TestRowFactory();
         $form = WebPay::createOrder()
                 ->addOrderRow(Item::orderRow()
@@ -51,7 +51,7 @@ class DirectPaymentTest extends PHPUnit_Framework_TestCase {
          */
     }
     
-    function testConfigureExcludedPaymentMethods() {
+    public function testConfigureExcludedPaymentMethods() {
         $rowFactory = new TestRowFactory();
         $form = WebPay::createOrder()
                 ->addOrderRow(Item::orderRow()
@@ -85,7 +85,7 @@ class DirectPaymentTest extends PHPUnit_Framework_TestCase {
        // $this->assertEquals('SKRILL', $xmlMessage->excludepaymentmethods->exclude[3]);
     }
     
-    function testBuildDirectBankPayment() {
+    public function testBuildDirectBankPayment() {
         $rowFactory = new TestRowFactory();
         $form = WebPay::createOrder()
                 ->addOrderRow(Item::orderRow()
