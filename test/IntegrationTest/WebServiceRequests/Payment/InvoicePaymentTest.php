@@ -10,9 +10,100 @@ require_once $root . '/../../../../src/Includes.php';
  */
 class InvoicePaymentTest extends PHPUnit_Framework_TestCase {
     
+    public function testInvoiceRequestAccepted() {
+        $request = WebPay::createOrder()
+                ->addOrderRow(Item::orderRow()
+                        ->setArticleNumber(1)
+                        ->setQuantity(2)
+                        ->setAmountExVat(100.00)
+                        ->setDescription("Specification")
+                        ->setName('Prod')
+                        ->setUnit("st")
+                        ->setVatPercent(25)
+                        ->setDiscountPercent(0)
+                )
+                ->addCustomerDetails(Item::individualCustomer()->setNationalIdNumber(4605092222))
+                ->setCountryCode("SE")
+                ->setCustomerReference("33")
+                ->setOrderDate("2012-12-12")
+                ->setCurrency("SEK")
+                ->useInvoicePayment()
+                ->doRequest();
+        
+        $this->assertEquals(1, $request->accepted);
+    }
+    
+    public function testInvoiceRequestDenied() {
+        $request = WebPay::createOrder()
+                ->addOrderRow(Item::orderRow()
+                        ->setArticleNumber(1)
+                        ->setQuantity(2)
+                        ->setAmountExVat(100.00)
+                        ->setDescription("Specification")
+                        ->setName('Prod')
+                        ->setUnit("st")
+                        ->setVatPercent(25)
+                        ->setDiscountPercent(0)
+                )
+                ->addCustomerDetails(Item::individualCustomer()->setNationalIdNumber(4606082222))
+                ->setCountryCode("SE")
+                ->setCustomerReference("33")
+                ->setOrderDate("2012-12-12")
+                ->setCurrency("SEK")
+                ->useInvoicePayment()
+                ->doRequest();
+        
+        $this->assertEquals(0, $request->accepted);
+    }
+    
+    //Turned off?
+    public function tes_tInvoiceIndividualForDk() {
+        $request = WebPay::createOrder()
+                ->addOrderRow(Item::orderRow()
+                        ->setArticleNumber(1)
+                        ->setQuantity(2)
+                        ->setAmountExVat(100.00)
+                        ->setDescription("Specification")
+                        ->setName('Prod')
+                        ->setUnit("st")
+                        ->setVatPercent(25)
+                        ->setDiscountPercent(0)
+                )
+                ->addCustomerDetails(Item::individualCustomer()->setNationalIdNumber(2603692503))
+                ->setCountryCode("DK")
+                ->setCustomerReference("33")
+                ->setOrderDate("2012-12-12")
+                ->setCurrency("DKK")
+                ->useInvoicePayment()
+                ->doRequest();
+        
+        $this->assertEquals(1, $request->accepted);
+    }
+
+    public function testInvoiceCompanySe() {
+        $request = WebPay::createOrder()
+                ->addOrderRow(Item::orderRow()
+                        ->setArticleNumber(1)
+                        ->setQuantity(2)
+                        ->setAmountExVat(100.00)
+                        ->setDescription("Specification")
+                        ->setName('Prod')
+                        ->setUnit("st")
+                        ->setVatPercent(25)
+                        ->setDiscountPercent(0)
+                )
+                ->addCustomerDetails(Item::companyCustomer()->setNationalIdNumber(4608142222))
+                ->setCountryCode("SE")
+                ->setOrderDate("2012-12-12")
+                ->setCurrency("SEK")
+                ->useInvoicePayment()
+                ->doRequest();
+        
+        $this->assertEquals(true, $request->accepted);
+    }
+    
     public function testResultForInvoicePaymentNL() {
         $request = WebPay::createOrder()
-                //->setTestmode()()
                 ->addOrderRow(Item::orderRow()
                         ->setArticleNumber(1)
                         ->setQuantity(2)
