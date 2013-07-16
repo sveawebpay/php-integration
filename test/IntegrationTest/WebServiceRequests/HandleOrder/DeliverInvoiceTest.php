@@ -37,7 +37,7 @@ class DeliverInvoiceTest extends PHPUnit_Framework_TestCase {
         return $request->sveaOrderId;
     }
     
-    public function testDeliverInvoiceOrderResult() {
+    public function testDeliverInvoiceOrder() {
         $orderId = $this->getInvoiceOrderId();
         $orderBuilder = WebPay::deliverOrder();
         $request = $orderBuilder
@@ -60,6 +60,15 @@ class DeliverInvoiceTest extends PHPUnit_Framework_TestCase {
                 ->doRequest();
         
         $this->assertEquals(1, $request->accepted);
+        $this->assertEquals(0, $request->resultcode);
+        $this->assertEquals(250, $request->amount);
+        $this->assertEquals('Invoice', $request->orderType);
+        //Invoice specifics
+        //$this->assertEquals(0000, $request->invoiceId); //differs in every test
+        //$this->assertEquals(date(), $request->dueDate); //differs in every test
+        //$this->assertEquals(date(), $request->invoiceDate); //differs in every test
+        $this->assertEquals('Post', $request->invoiceDistributionType);
+        //$this->assertEquals('Invoice', $request->contractNumber); //for paymentplan
     }
 }
 
