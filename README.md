@@ -73,7 +73,7 @@ There are two ways to configure Svea authorization. Choose one of the following:
     * This way makes it possible to put a condition in implemantation code to check testmode.
     */
 
-    if($testmode == TRUE) {
+    if ($testmode == TRUE) {
         $config = SveaConfig::getTestConfig();
     } else {
         $config = SveaConfig::getProdConfig();
@@ -95,9 +95,9 @@ There are two ways to configure Svea authorization. Choose one of the following:
         * @param $type eg. HOSTED, INVOICE or PAYMENTPLAN
         */
         public function getEndPoint($type) {
-            if($type == ConfigurationProvider::HOSTED_TYPE) {
+            if ($type == ConfigurationProvider::HOSTED_TYPE) {
                 return   SveaConfig::SWP_TEST_URL;;
-            } elseif($type == ConfigurationProvider::INVOICE_TYPE || $type == ConfigurationProvider::PAYMENTPLAN_TYPE) {
+            } elseif ($type == ConfigurationProvider::INVOICE_TYPE || $type == ConfigurationProvider::PAYMENTPLAN_TYPE) {
                 return SveaConfig::SWP_TEST_WS_URL;
             }  else {
                throw new Exception('Invalid type. Accepted values: INVOICE, PAYMENTPLAN or HOSTED');
@@ -152,7 +152,7 @@ There are two ways to configure Svea authorization. Choose one of the following:
 
 ```php
     //Find your testmode settings
-    if($this->testmode == 1) {
+    if ($this->testmode == 1) {
         //if test, use your class that returns test authorization
         $conf = new MyConfigTest();
     } else {
@@ -323,7 +323,7 @@ To make it easy to set the right data depending on the customer type this exampl
 
 //create company or individual object
 $foo = Item::individualCustomer();
-if(*condition*) {
+if (*condition*) {
  $foo = $foo ->setEmail("test@svea.com") ;
 }
 ->addOrderRow($foo);

@@ -12,7 +12,7 @@ class PaymentPlanParamsResponse extends WebServiceResponse{
 
     function __construct($message) {
         parent::__construct($message);
-        if(isset($message->GetPaymentPlanParamsEuResult->ErrorMessage)) {
+        if (isset($message->GetPaymentPlanParamsEuResult->ErrorMessage)) {
             $this->errormessage = $message->GetPaymentPlanParamsEuResult->ErrorMessage;
         }
     }
@@ -20,7 +20,7 @@ class PaymentPlanParamsResponse extends WebServiceResponse{
     protected function formatObject($message) {
         $this->accepted = $message->GetPaymentPlanParamsEuResult->Accepted;
         $this->resultcode = $message->GetPaymentPlanParamsEuResult->ResultCode;
-        if($this->accepted == 1) {
+        if ($this->accepted == 1) {
             foreach ($message->GetPaymentPlanParamsEuResult->CampaignCodes->CampaignCodeInfo as $code) {
             $campaign = new CampaignCode();
             $campaign->campaignCode = $code->CampaignCode;

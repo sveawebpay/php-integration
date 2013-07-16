@@ -34,8 +34,8 @@ class HostedPayment {
     public function validateOrder() {
         $validator = new HostedOrderValidator();
         $errors = $validator->validate($this->order);
-        if(($this->order->countryCode == "NL" || $this->order->countryCode == "DE") && isset($this->paymentMethod)) {
-            if(isset($this->paymentMethod) && ($this->paymentMethod == PaymentMethod::INVOICE || $this->paymentMethod == PaymentMethod::PAYMENTPLAN)) {
+        if (($this->order->countryCode == "NL" || $this->order->countryCode == "DE") && isset($this->paymentMethod)) {
+            if (isset($this->paymentMethod) && ($this->paymentMethod == PaymentMethod::INVOICE || $this->paymentMethod == PaymentMethod::PAYMENTPLAN)) {
                 $errors = $validator->validateEuroCustomer($this->order, $errors);
             }
         }
@@ -47,8 +47,8 @@ class HostedPayment {
         //validate input
        $errors = $this->validateOrder();
         $exceptionString = "";
-        if(count($errors) > 0 || (isset($this->returnUrl) == FALSE && isset($this->paymentMethod) == FALSE)) {
-            if(isset($this->returnUrl) == FALSE) {
+        if (count($errors) > 0 || (isset($this->returnUrl) == FALSE && isset($this->paymentMethod) == FALSE)) {
+            if (isset($this->returnUrl) == FALSE) {
              $exceptionString .="-missing value : ReturnUrl is required. Use function setReturnUrl().\n";
             }
             foreach ($errors as $key => $value) {

@@ -21,18 +21,18 @@ class WebServiceOrderValidator extends OrderValidator {
      * @param type $order
      */
     public function validate($order) {
-       if(isset($order->orgNumber) || isset($order->companyVatNumber) || isset($order->companyName)) {
+       if (isset($order->orgNumber) || isset($order->companyVatNumber) || isset($order->companyName)) {
             $this->isCompany = TRUE;
 
         }
         //new!
-        if(isset($order->customerIdentity->orgNumber) || isset($order->customerIdentity->companyVatNumber) || isset($order->customerIdentity->companyName)) {
+        if (isset($order->customerIdentity->orgNumber) || isset($order->customerIdentity->companyVatNumber) || isset($order->customerIdentity->companyName)) {
             $this->isCompany = TRUE;
         }
         $identityValidator = new IdentityValidator($this->isCompany);
         //$this->errors = $identityValidator->validateThatCustomerIdentityExists($order,  $this->errors); //use countries validators instead
 
-        if($order->orderType == "PaymentPlan" && $this->isCompany == TRUE) {
+        if ($order->orderType == "PaymentPlan" && $this->isCompany == TRUE) {
             $this->errors["Wrong customer type"] = "PaymentPlanPayment not allowed for Company customer.";
         }
         if (isset($order->countryCode)) {
@@ -57,7 +57,7 @@ class WebServiceOrderValidator extends OrderValidator {
         $this->errors = $identityValidator->validateDoubleIdentity($order,$this->errors);
         $this->errors = $this->validateRequiredFieldsForOrder($order,$this->errors);
         $this->errors = $this->validateOrderRows($order, $this->errors);
-        if(isset($order->orderDate) == false) {
+        if (isset($order->orderDate) == false) {
 
             $this->errors["missing value"] = "OrderDate is Required. Use function setOrderDate().";
         }

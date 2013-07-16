@@ -102,7 +102,7 @@ class CreateOrderBuilder {
      * @return \CreateOrderBuilder
      */
     public function addOrderRow($itemOrderRowObject) {
-        if(is_array($itemOrderRowObject)) {
+        if (is_array($itemOrderRowObject)) {
             foreach ($itemOrderRowObject as $row) {
                 array_push($this->orderRows, $row);
             }
@@ -118,7 +118,7 @@ class CreateOrderBuilder {
      * @return \CreateOrderBuilder
      */
     public function addFee($itemFeeObject) {
-         if(is_array($itemFeeObject)) {
+         if (is_array($itemFeeObject)) {
             foreach ($itemFeeObject as $row) {
                 if (get_class($row) == "ShippingFee") {
                      array_push($this->shippingFeeRows, $row);
@@ -143,7 +143,7 @@ class CreateOrderBuilder {
      * @return \CreateOrderBuilder
      */
     public function addDiscount($itemDiscounObject) {
-         if(is_array($itemDiscounObject)) {
+         if (is_array($itemDiscounObject)) {
             foreach ($itemDiscounObject as $row) {
                 if (get_class($row) == "FixedDiscount") {
                      array_push($this->fixedDiscountRows, $row);

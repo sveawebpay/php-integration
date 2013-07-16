@@ -41,7 +41,7 @@ class WebServiceRowFormatter {
 
         foreach ($this->order->orderRows as $product) {
             $vatPercentAsCeroDecimal = isset($product->vatPercent) ? $product->vatPercent * 0.01 : "";
-            if(isset($product->vatPercent) && isset($product->amountExVat)) {
+            if (isset($product->vatPercent) && isset($product->amountExVat)) {
                 $this->totalAmountExVat += $product->amountExVat * $product->quantity;
                 $this->totalVatAsAmount += ($vatPercentAsCeroDecimal * $product->amountExVat) * $product->quantity;
             } elseif (isset($product->vatPercent) && isset($product->amountIncVat)) {
@@ -76,7 +76,7 @@ class WebServiceRowFormatter {
             }
             $orderRow->DiscountPercent = (isset($row->discountPercent) ? $row->discountPercent : 0);
             $orderRow->NumberOfUnits = $row->quantity;
-            if(isset($row->vatPercent) && isset($row->amountExVat)) {
+            if (isset($row->vatPercent) && isset($row->amountExVat)) {
                 $orderRow->PricePerUnit = $row->amountExVat;
                 $orderRow->VatPercent = round($row->vatPercent);
             } elseif (isset($row->vatPercent) && isset($row->amountIncVat)) {
@@ -111,7 +111,7 @@ class WebServiceRowFormatter {
             }
             $orderRow->DiscountPercent = (isset($row->discountPercent) ? $row->discountPercent : 0);
             $orderRow->NumberOfUnits = 1; //only one fee per row
-           if(isset($row->vatPercent) && isset($row->amountExVat)) {
+           if (isset($row->vatPercent) && isset($row->amountExVat)) {
                 $orderRow->PricePerUnit = $row->amountExVat;
                 $orderRow->VatPercent = round($row->vatPercent);
             } elseif (isset($row->vatPercent) && isset($row->amountIncVat)) {
@@ -144,7 +144,7 @@ class WebServiceRowFormatter {
             }
             $orderRow->DiscountPercent = isset($row->discountPercent) ? $row->discountPercent : 0;
             $orderRow->NumberOfUnits = 1; //only one fee per row
-            if(isset($row->vatPercent) && isset($row->amountExVat)) {
+            if (isset($row->vatPercent) && isset($row->amountExVat)) {
                 $orderRow->PricePerUnit = $row->amountExVat;
                 $orderRow->VatPercent = round($row->vatPercent);
             } elseif (isset($row->vatPercent) && isset($row->amountIncVat)) {

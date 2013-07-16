@@ -10,7 +10,7 @@ class CloseOrderResult extends WebServiceResponse{
 
     function __construct($message) {
         parent::__construct($message);
-         if(isset($message->CloseOrderEuResult->ErrorMessage))
+         if (isset($message->CloseOrderEuResult->ErrorMessage))
         $this->errormessage = $message->CloseOrderEuResult->ErrorMessage;
     }
 

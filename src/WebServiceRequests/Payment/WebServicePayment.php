@@ -44,7 +44,7 @@ class WebServicePayment {
      */
     public function prepareRequest() {
         $errors = $this->validateOrder();
-        if(count($errors) > 0) {
+        if (count($errors) > 0) {
             $exceptionString = "";
             foreach ($errors as $key => $value) {
                 $exceptionString .="-". $key. " : ".$value."\n";
@@ -57,7 +57,7 @@ class WebServicePayment {
         //make orderrows and put in CreateOrderInfromation
         $orderinformation = $this->formatOrderInformationWithOrderRows($this->order->orderRows);
         //paralell ways of crateing customer
-        if(isset($this->order->customerIdentity)) {
+        if (isset($this->order->customerIdentity)) {
             $orderinformation->CustomerIdentity = $this->formatCustomerDetails();
         }  else {
             $orderinformation->CustomerIdentity = $this->formatCustomerIdentity();
@@ -117,7 +117,7 @@ class WebServicePayment {
     private function formatCustomerIdentity() {
         $isCompany = false;
         $companyId ="";
-        if(isset($this->order->orgNumber)||isset($this->order->companyVatNumber)) {
+        if (isset($this->order->orgNumber)||isset($this->order->companyVatNumber)) {
             $isCompany = true;
             $companyId = isset($this->order->orgNumber) ? $this->order->orgNumber : $this->order->companyVatNumber;
         }
@@ -183,7 +183,7 @@ class WebServicePayment {
         get_class($this->order->customerIdentity) == "CompanyCustomer" ? $isCompany = TRUE : $isCompany = FALSE;
 
         $companyId ="";
-        if(isset($this->order->customerIdentity->orgNumber)||isset($this->order->customerIdentity->companyVatNumber)) {
+        if (isset($this->order->customerIdentity->orgNumber)||isset($this->order->customerIdentity->companyVatNumber)) {
             $isCompany = true;
             $companyId = isset($this->order->customerIdentity->orgNumber) ? $this->order->customerIdentity->orgNumber : $this->order->customerIdentity->companyVatNumber;
         }

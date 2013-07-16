@@ -152,7 +152,7 @@ class OrderBuilderTest extends PHPUnit_Framework_TestCase {
         $company = TRUE;
         $sveaRequest = WebPay::createOrder();
        
-        if($company == TRUE) {
+        if ($company == TRUE) {
                $item = Item::companyCustomer();
                $item = $item->setNationalIdNumber(194605092222)
                     ->setEmail("test@svea.com")
@@ -162,7 +162,7 @@ class OrderBuilderTest extends PHPUnit_Framework_TestCase {
                     ->setIpAddress("123.123.123")
                     ->setPhoneNumber(999999);
           
-        if("DE" == "DE") {
+        if ("DE" == "DE") {
             $item = 
              $item
                 ->setVatNumber("NL2345234")

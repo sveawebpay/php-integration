@@ -39,7 +39,7 @@ class HandleOrder {
      */
     public function prepareRequest() {
         $errors = $this->validateRequest();
-        if(count($errors) > 0) {
+        if (count($errors) > 0) {
             $exceptionString = "";
             foreach ($errors as $key => $value) {
                 $exceptionString .="-". $key. " : ".$value."\n";

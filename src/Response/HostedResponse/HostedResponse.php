@@ -17,11 +17,11 @@ class HostedResponse {
     public $currency;
 
     function __construct($response,$countryCode,$config) {
-        if(is_array($response)) {
-            if(array_key_exists("response",$response) && array_key_exists("mac",$response)) {
+        if (is_array($response)) {
+            if (array_key_exists("response",$response) && array_key_exists("mac",$response)) {
                 $decodedXml = base64_decode($response['response']);
                 $secret = $config->getSecret(ConfigurationProvider::HOSTED_TYPE,$countryCode);
-                if($this->validateMac($response['response'],$response['mac'],$secret)) {
+                if ($this->validateMac($response['response'],$response['mac'],$secret)) {
                     $this->formatXml($decodedXml);
                 }  else {
                     $this->accepted = 0;
@@ -38,7 +38,7 @@ class HostedResponse {
 
     protected function formatXml($xml) {
      $xmlElement = new SimpleXMLElement($xml);
-     if((string)$xmlElement->statuscode == 0) {
+     if ((string)$xmlElement->statuscode == 0) {
           $this->accepted = 1;
      } else {
          $this->accepted = 0;
@@ -51,11 +51,11 @@ class HostedResponse {
      $minorAmount = (int)($xmlElement->transaction->amount);
      $this->amount = $minorAmount * 0.01;
      $this->currency = (string)$xmlElement->transaction->currency;
-     if(property_exists($xmlElement->transaction, "subscriptionid")) {
+     if (property_exists($xmlElement->transaction, "subscriptionid")) {
          $this->subscriptionId = (string)$xmlElement->transaction->subscriptionid;
          $this->subscriptionType = (string)$xmlElement->transaction->subscriptiontype;
      }
-     if(property_exists($xmlElement->transaction, "cardtype")) {
+     if (property_exists($xmlElement->transaction, "cardtype")) {
         $this->cardType = (string)$xmlElement->transaction->cardtype;
         $this->maskedCardNumber = (string)$xmlElement->transaction->maskedcardno;
         $this->expiryMonth = (string)$xmlElement->transaction->expirymonth;
@@ -420,7 +420,7 @@ class HostedResponse {
         public function validateMac($messageEncoded,$mac,$secret) {
         $messageDecoded = base64_decode($messageEncoded);
         $macKey = hash("sha512", $messageEncoded.$secret);
-        if($mac == $macKey) {
+        if ($mac == $macKey) {
             return TRUE;
         }
         return FALSE;
