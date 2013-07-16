@@ -15,7 +15,6 @@ class VoidValidator extends OrderValidator {
     function validate($order) {
         $this->nrOfCalls++;
     }
-
 }
 
 ?>

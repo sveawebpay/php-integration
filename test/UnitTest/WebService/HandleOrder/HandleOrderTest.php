@@ -19,7 +19,7 @@ class HandleOrderTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals("id", $request->orderId);
     }
     
-    function testDeliverInvoiceDistributionType(){
+    function testDeliverInvoiceDistributionType() {
          $orderBuilder = WebPay::deliverOrder();
         $request = $orderBuilder
             ->addOrderRow(Item::orderRow()
@@ -65,7 +65,7 @@ class HandleOrderTest extends PHPUnit_Framework_TestCase {
                     ->setAmountExVat(50)
                     ->setUnit("st")
                     ->setVatPercent(25)
-                    ->setDiscountPercent(0)   
+                    ->setDiscountPercent(0)
                     )                
                 //->setTestmode()()
                 ->setOrderId("id")
@@ -145,7 +145,6 @@ class HandleOrderTest extends PHPUnit_Framework_TestCase {
         //->doRequest(); 
         $this->assertEquals("id", $request->request->CloseOrderInformation->SveaOrderId);
     }
-
 }
 
 ?>

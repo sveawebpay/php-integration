@@ -33,5 +33,4 @@ abstract class PaymentMethod {
     //PSP
     const PAYGROUND = 'PAYGROUND';
     const PAYPAL = 'PAYPAL';
-
 }

@@ -1,5 +1,6 @@
 <?php
 require_once 'WebServiceResponse.php';
+
 /**
  * Description of PaymentPlanParamsResponse
  *
@@ -9,18 +10,17 @@ class PaymentPlanParamsResponse extends WebServiceResponse{
 
     public $campaignCodes = array();
 
-
     function __construct($message) {
         parent::__construct($message);
-        if(isset($message->GetPaymentPlanParamsEuResult->ErrorMessage)){
+        if (isset($message->GetPaymentPlanParamsEuResult->ErrorMessage)) {
             $this->errormessage = $message->GetPaymentPlanParamsEuResult->ErrorMessage;
         }
     }
 
-    protected function formatObject($message){
+    protected function formatObject($message) {
         $this->accepted = $message->GetPaymentPlanParamsEuResult->Accepted;
         $this->resultcode = $message->GetPaymentPlanParamsEuResult->ResultCode;
-        if($this->accepted == 1){
+        if ($this->accepted == 1) {
             foreach ($message->GetPaymentPlanParamsEuResult->CampaignCodes->CampaignCodeInfo as $code) {
             $campaign = new CampaignCode();
             $campaign->campaignCode = $code->CampaignCode;

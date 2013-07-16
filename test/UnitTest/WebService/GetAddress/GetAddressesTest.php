@@ -13,7 +13,6 @@ require_once $root . '/../../../../src/WebServiceRequests/svea_soap/SveaSoapConf
 class GetAddressesTest extends PHPUnit_Framework_TestCase {
 
     function testBuildRequest() {
-
         $addressRequest = WebPay::getAddresses();
         $addressRequest
                 //->setTestmode()()
@@ -41,6 +40,7 @@ class GetAddressesTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals("SE", $request->request->CountryCode);
         $this->assertEquals(194605092222, $request->request->SecurityNumber);
     }
+    
     function testPrepareRequestCompany() {
         $addressRequest = WebPay::getAddresses();
         $request = $addressRequest
@@ -58,7 +58,6 @@ class GetAddressesTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals("SE", $request->request->CountryCode);
         $this->assertEquals(4608142222, $request->request->SecurityNumber);
     }
-
 }
 
 ?>

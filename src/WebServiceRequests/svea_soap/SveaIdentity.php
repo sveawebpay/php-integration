@@ -18,5 +18,4 @@ class SveaIdentity {
             $this->CompanyVatNumber = "";
         }
     }
-
 }

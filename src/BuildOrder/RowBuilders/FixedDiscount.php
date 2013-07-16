@@ -54,5 +54,4 @@ class FixedDiscount {
         $this->amount = $discountAmountOnTotalPriceAsFloat;
         return $this;
     }
-
 }

@@ -7,8 +7,8 @@ class TestRowFactory {
     * Use function run($functionname) to run shorthand function
     * @return type
     */
-    function buildShippingFee(){
-        return function($orderbuilder){
+    function buildShippingFee() {
+        return function($orderbuilder) {
             return $orderbuilder
               ->addFee(
                 Item::shippingFee()
@@ -20,15 +20,14 @@ class TestRowFactory {
                     ->setVatPercent(25)
                     ->setDiscountPercent(0)
                 );
-                
         };
     }
     
     /**
-    * Returns InvoicefeeRow to use as shorthand in testFunctions
-    * Use function run($functionname) to run shorthand function
-    * @return type
-    */
+     * Returns InvoicefeeRow to use as shorthand in testFunctions
+     * Use function run($functionname) to run shorthand function
+     * @return type
+     */
     function buildInvoiceFee() {
         return function($orderbuilder) {
             return $orderbuilder
@@ -41,7 +40,6 @@ class TestRowFactory {
                     ->setVatPercent(25)
                     ->setDiscountPercent(0)
                         );
-               
         };
     }
 
@@ -50,7 +48,7 @@ class TestRowFactory {
      * Use function run($functionname) to run shorthand function
      * @return OrderBuilder
 
-      function buildRow(){
+      function buildRow() {
       return function($orderBuilder) {
       return $orderBuilder
       ->beginOrderRow()
@@ -72,8 +70,8 @@ class TestRowFactory {
      * Use function run($functionname) to run shorthand function
      * @return type
 
-      function buildFixedDiscountRow(){
-      return function ($orderbuilder){
+      function buildFixedDiscountRow() {
+      return function ($orderbuilder) {
       return $orderbuilder
       ->beginFixedDiscount()
       ->setDiscountId("1")
@@ -91,8 +89,8 @@ class TestRowFactory {
      * Use function run($functionname) to run shorthand function
      * @return type
 
-      function buildRelativeDiscountRow(){
-      return function($orderbuilder){
+      function buildRelativeDiscountRow() {
+      return function($orderbuilder) {
       return $orderbuilder
       ->beginRelativeDiscount()
       ->setDiscountId("1")
@@ -103,7 +101,6 @@ class TestRowFactory {
       ->endRelativeDiscount();
       };
       }
-     * 
      */
 
     /**
@@ -111,8 +108,8 @@ class TestRowFactory {
      * Use function run($functionname) to run shorthand function
      * @return type
 
-      function buildCustomerIdentity(){
-      return function ($orderbuilder){
+      function buildCustomerIdentity() {
+      return function ($orderbuilder) {
       return $orderbuilder
       ->beginIndividualCustomerIdentity()
       ->setNationalIdNumber(194605092222)
@@ -129,7 +126,6 @@ class TestRowFactory {
       ->endIndividualCustomerIdentity();
       };
       }
-     * 
      */
 }
 

@@ -5,6 +5,7 @@
  * @author anne-hal
  */
 class RelativeDiscount {
+    
     /**
      * Optional
      * @param type $idAsString
@@ -55,5 +56,4 @@ class RelativeDiscount {
         $this->description = $descriptionAsString;
         return $this;
     }
-
 }

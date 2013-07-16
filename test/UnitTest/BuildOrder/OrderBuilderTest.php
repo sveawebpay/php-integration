@@ -129,9 +129,6 @@ class OrderBuilderTest extends PHPUnit_Framework_TestCase {
                 ->setZipCode(9999)
                 ->setLocality("Stan")
                         );
-              
-                
-                
         
         $this->assertEquals(194605092222, $sveaRequest->customerIdentity->ssn);
         $this->assertEquals("SB", $sveaRequest->customerIdentity->initials);
@@ -148,28 +145,28 @@ class OrderBuilderTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals("Stan", $sveaRequest->customerIdentity->locality);
     }
     
-    function testBuildOrderWithAllCustomerTypes(){
+    function testBuildOrderWithAllCustomerTypes() {
         $company = TRUE;
         $sveaRequest = WebPay::createOrder();
        
-        if($company == TRUE){
+        if ($company == TRUE) {
                $item = Item::companyCustomer();
                $item = $item->setNationalIdNumber(194605092222)
                     ->setEmail("test@svea.com")
-                    ->setCompanyName("TestCompagniet")        //SET
+                    ->setCompanyName("TestCompagniet") //SET
                     ->setZipCode(9999)            
                     ->setLocality("Stan")
                     ->setIpAddress("123.123.123")
                     ->setPhoneNumber(999999);
           
-        if("DE" == "DE"){
+        if ("DE" == "DE") {
             $item = 
              $item
                 ->setVatNumber("NL2345234")
                 ->setStreetAddress("Gatan", 23);
-            }        
+            }
         }
-        $sveaRequest = $sveaRequest->addCustomerDetails($item);      
+        $sveaRequest = $sveaRequest->addCustomerDetails($item);
         
         $this->assertEquals(194605092222, $sveaRequest->customerIdentity->orgNumber);
         $this->assertEquals("NL2345234", $sveaRequest->customerIdentity->companyVatNumber);
@@ -181,7 +178,6 @@ class OrderBuilderTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(9999, $sveaRequest->customerIdentity->zipCode);
         $this->assertEquals("Stan", $sveaRequest->customerIdentity->locality);
     }
-
 
     function testBuildOrderWithCompanyDetails() {
         $sveaRequest = WebPay::createOrder()
@@ -230,7 +226,7 @@ class OrderBuilderTest extends PHPUnit_Framework_TestCase {
     }
 
     /**
-      function testThatValidatorIsCalledOnBuild(){
+      function testThatValidatorIsCalledOnBuild() {
       $this->orderBuilder->build();
       $this->assertEquals(1, $this->orderBuilder->validator->nrOfCalls);
       }

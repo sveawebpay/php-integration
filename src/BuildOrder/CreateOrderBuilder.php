@@ -34,11 +34,11 @@ class CreateOrderBuilder {
      * @var type Array of RelativeDiscountRows from class RelativeDiscountBuilder
      */
     public $relativeDiscountRows = array();
-   /**
+    /**
     * String recievd by using Webpay::GetAddresses() function
     * @var type String
     */
-   // public $addressSelector;
+    // public $addressSelector;
     /**
      * @var Unique order number from client side
      */
@@ -72,7 +72,6 @@ class CreateOrderBuilder {
      */
     public $customerIdentity;
 
-
     /**
      * @param type $orderrows
      */
@@ -93,17 +92,18 @@ class CreateOrderBuilder {
      * @return \createOrder|\CreateOrderBuilder
      */
 
-     public function addCustomerDetails($itemCustomerObject){
+     public function addCustomerDetails($itemCustomerObject) {
         $this->customerIdentity = $itemCustomerObject;
         return $this;
     }
+    
     /**
      * New!
      * @param type $orderRow
      * @return \CreateOrderBuilder
      */
-    public function addOrderRow($itemOrderRowObject){
-        if(is_array($itemOrderRowObject)){
+    public function addOrderRow($itemOrderRowObject) {
+        if (is_array($itemOrderRowObject)) {
             foreach ($itemOrderRowObject as $row) {
                 array_push($this->orderRows, $row);
             }
@@ -118,50 +118,51 @@ class CreateOrderBuilder {
      * @param type $itemFeeObject
      * @return \CreateOrderBuilder
      */
-    public function addFee($itemFeeObject){
-         if(is_array($itemFeeObject)){
+    public function addFee($itemFeeObject) {
+         if (is_array($itemFeeObject)) {
             foreach ($itemFeeObject as $row) {
                 if (get_class($row) == "ShippingFee") {
                      array_push($this->shippingFeeRows, $row);
-                }else{
+                } else {
                      array_push($this->invoiceFeeRows, $row);
                 }
             }
         } else {
              if (get_class($itemFeeObject) == "ShippingFee") {
                      array_push($this->shippingFeeRows, $itemFeeObject);
-            }else{
+            } else {
                  array_push($this->invoiceFeeRows, $itemFeeObject);
             }
         }
 
-       return $this;
+        return $this;
     }
+    
     /**
      * New!
      * @param type $itemDiscounObject
      * @return \CreateOrderBuilder
      */
-    public function addDiscount($itemDiscounObject){
-         if(is_array($itemDiscounObject)){
+    public function addDiscount($itemDiscounObject) {
+        if (is_array($itemDiscounObject)) {
             foreach ($itemDiscounObject as $row) {
                 if (get_class($row) == "FixedDiscount") {
-                     array_push($this->fixedDiscountRows, $row);
-                }else{
-                     array_push($this->relativeDiscountRows, $row);
+                    array_push($this->fixedDiscountRows, $row);
+                } else {
+                    array_push($this->relativeDiscountRows, $row);
                 }
 
             }
-        }  else {
-             if (get_class($itemDiscounObject) == "FixedDiscount") {
-                     array_push($this->fixedDiscountRows, $itemDiscounObject);
-            }else{
-                 array_push($this->relativeDiscountRows, $itemDiscounObject);
+        } else {
+            if (get_class($itemDiscounObject) == "FixedDiscount") {
+                array_push($this->fixedDiscountRows, $itemDiscounObject);
+            } else {
+                array_push($this->relativeDiscountRows, $itemDiscounObject);
             }
-        }
+       }
+       
        return $this;
     }
-
 
     /**
      * @param type $countryCodeAsString ex. "SE"
@@ -196,7 +197,7 @@ class CreateOrderBuilder {
      * @param type $clientOrderNumberAsString
      * @return \createOrder
      */
-    public function setClientOrderNumber($clientOrderNumberAsString){
+    public function setClientOrderNumber($clientOrderNumberAsString) {
         $this->clientOrderNumber = $clientOrderNumberAsString;
         return $this;
     }
@@ -218,7 +219,6 @@ class CreateOrderBuilder {
         $this->addressSelector = $addressSelectorAsString;
         return $this;
     }
-     *
      */
     /**
      * Start creating cardpayment via PayPage. Returns Paymentform to integrate in shop.
@@ -245,6 +245,7 @@ class CreateOrderBuilder {
         $paypagepayment = new PayPagePayment($this);
         return $paypagepayment;
     }
+    
     /**
      * Start creating payment with a specific paymentmethod. This function will go directly to the paymentmethod specified.
      * Paymentmethods are found in appendix in our documentation.
@@ -252,7 +253,7 @@ class CreateOrderBuilder {
      * @param type PaymentMethod $paymentMethodAsConst, ex. PaymentMethod::DBSEBSE
      * @return \PaymentMethodPayment
      */
-    public function usePaymentMethod($paymentMethodAsConst){
+    public function usePaymentMethod($paymentMethodAsConst) {
         return new PaymentMethodPayment($this, $paymentMethodAsConst);
     }
 

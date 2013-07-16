@@ -1,5 +1,6 @@
 <?php
 require_once 'CustomerIdentityResponse.php';
+
 /**
  * Description of CustomerIdentityPaymentResponse
  *
@@ -11,6 +12,4 @@ class CreateOrderIdentity extends CustomerIdentityResponse{
     public $ipAddress;
     public $countryCode;
     public $houseNumber;
-
-
 }

@@ -10,9 +10,8 @@ require_once $root . '/../../../../test/UnitTest/BuildOrder/TestRowFactory.php';
  * @author Anneli Halld'n, Daniel Brolund for Svea Webpay
  */
 class PayPagePaymentTest extends PHPUnit_Framework_TestCase {
-   
 
-     function testBuildPayPagePaymentWithExcludepaymentMethods(){
+    function testBuildPayPagePaymentWithExcludepaymentMethods() {
         $rowFactory = new TestRowFactory();
        $form = WebPay::createOrder()
             ////->setTestmode()()()
@@ -55,7 +54,6 @@ class PayPagePaymentTest extends PHPUnit_Framework_TestCase {
         //  $this->assertEquals(PaymentMethod::KORTCERT,$xmlMessage->paymentMethod);
         $this->assertEquals(SystemPaymentMethod::INVOICE_SE, $xmlMessage->excludepaymentmethods->exclude[0]);
     }
-   
 
     function testpayPagePaymentExcludeCardPayments() {
         $rowFactory = new TestRowFactory();
@@ -166,14 +164,13 @@ class PayPagePaymentTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(SystemPaymentMethod::BANKAXESS, $xmlMessage->excludepaymentmethods->exclude[0]);
     }
     
-     function testBuildPayPagePaymentVatIsCero(){
-        $rowFactory = new TestRowFactory();
-       $form = WebPay::createOrder()
-           
-            ->addOrderRow(Item::orderRow()                
+     function testBuildPayPagePaymentVatIsCero() {
+         $rowFactory = new TestRowFactory();
+         $form = WebPay::createOrder()
+            ->addOrderRow(Item::orderRow()
                     ->setQuantity(2)
                     ->setAmountExVat(100.00)
-                    ->setName('Prod')                
+                    ->setName('Prod')
                     ->setVatPercent(0)
                     )
                 ->setCountryCode("SE")
@@ -187,10 +184,7 @@ class PayPagePaymentTest extends PHPUnit_Framework_TestCase {
         $xmlMessage = new SimpleXMLElement($form->xmlMessage);
         //test values are as expected avter transforming xml to php object
         $this->assertEquals('SEK', $xmlMessage->currency);
-     
     }
-
-   
 }
 
 ?>

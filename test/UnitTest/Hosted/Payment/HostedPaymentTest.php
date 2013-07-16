@@ -5,7 +5,7 @@ require_once 'FakeHostedPayment.php';
 class HostedPaymentTest extends PHPUnit_Framework_TestCase {
     
     public function testexcludeInvoicesAndPaymentPlanSe() {
-         $exclude = new ExcludePayments();
+        $exclude = new ExcludePayments();
         $excludedPaymentMethods = $exclude->excludeInvoicesAndPaymentPlan("SE");
         $this->assertEquals(14, count((array)$excludedPaymentMethods));
         $this->assertTrue(in_array(SystemPaymentMethod::INVOICESE, $excludedPaymentMethods));

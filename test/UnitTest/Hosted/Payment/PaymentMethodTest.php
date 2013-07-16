@@ -45,7 +45,8 @@ class PaymentMethodTest extends PHPUnit_Framework_TestCase{
         $xmlMessage = new SimpleXMLElement($form->xmlMessage);
         $this->assertEquals(PaymentMethod::KORTCERT, $xmlMessage->paymentmethod[0]);
     }
-     function testPayPagePaymentWithSetPaymentMethodInvoice() {
+    
+    function testPayPagePaymentWithSetPaymentMethodInvoice() {
         $rowFactory = new TestRowFactory();
         $form = WebPay::createOrder()
             //->setTestmode()()
@@ -81,7 +82,8 @@ class PaymentMethodTest extends PHPUnit_Framework_TestCase{
         $this->assertEquals("TRUE", $xmlMessage->iscompany);
         $this->assertEquals("4608142222", $xmlMessage->customer->ssn);
     }
-     function testPaymentMethodInvoiceNL() {
+    
+    function testPaymentMethodInvoiceNL() {
         $form = WebPay::createOrder()
             ->addOrderRow(Item::orderRow()
                     ->setArticleNumber(1)

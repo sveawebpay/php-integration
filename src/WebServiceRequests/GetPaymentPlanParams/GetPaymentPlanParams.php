@@ -18,16 +18,15 @@ class GetPaymentPlanParams {
     public $conf;
     public $countryCode;
 
-
     function __construct($config) {
-         $this->conf = $config;
+        $this->conf = $config;
     }
 
-     /*
+    /*
      * @param type $countryCodeAsString
      */
 
-    public function setCountryCode($countryCodeAsString){
+    public function setCountryCode($countryCodeAsString) {
         $this->countryCode = $countryCodeAsString;
         return $this;
     }

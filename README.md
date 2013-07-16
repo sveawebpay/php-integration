@@ -73,9 +73,9 @@ There are two ways to configure Svea authorization. Choose one of the following:
     * This way makes it possible to put a condition in implemantation code to check testmode.
     */
 
-    if($testmode == TRUE){
+    if ($testmode == TRUE) {
         $config = SveaConfig::getTestConfig();
-    }else{
+    } else {
         $config = SveaConfig::getProdConfig();
     }
    $foo = WebPay::createOrder($config);
@@ -94,10 +94,10 @@ There are two ways to configure Svea authorization. Choose one of the following:
         * Constants for the endpoint url found in the class SveaConfig.php
         * @param $type eg. HOSTED, INVOICE or PAYMENTPLAN
         */
-        public function getEndPoint($type){
-            if($type == ConfigurationProvider::HOSTED_TYPE){
+        public function getEndPoint($type) {
+            if ($type == ConfigurationProvider::HOSTED_TYPE) {
                 return   SveaConfig::SWP_TEST_URL;;
-            }elseif($type == ConfigurationProvider::INVOICE_TYPE || $type == ConfigurationProvider::PAYMENTPLAN_TYPE){
+            } elseif ($type == ConfigurationProvider::INVOICE_TYPE || $type == ConfigurationProvider::PAYMENTPLAN_TYPE) {
                 return SveaConfig::SWP_TEST_WS_URL;
             }  else {
                throw new Exception('Invalid type. Accepted values: INVOICE, PAYMENTPLAN or HOSTED');
@@ -108,7 +108,7 @@ There are two ways to configure Svea authorization. Choose one of the following:
         * @param $type eg. HOSTED, INVOICE or PAYMENTPLAN
         * $param $country CountryCode eg. SE, NO, DK, FI, NL, DE
         */
-        public function getMerchantId($type, $country){
+        public function getMerchantId($type, $country) {
             //if you have different countries or types the parameters are a help to put up conditions
             return $myMerchantId;
         }
@@ -117,7 +117,7 @@ There are two ways to configure Svea authorization. Choose one of the following:
         * @param $type eg. HOSTED, INVOICE or PAYMENTPLAN
         * $param $country CountryCode eg. SE, NO, DK, FI, NL, DE
         */
-        public function getPassword($type, $country){
+        public function getPassword($type, $country) {
             return $myPassword;
         }
         /**
@@ -125,7 +125,7 @@ There are two ways to configure Svea authorization. Choose one of the following:
         * @param $type eg. HOSTED, INVOICE or PAYMENTPLAN
         * $param $country CountryCode eg. SE, NO, DK, FI, NL, DE
         */
-        public function getSecret($type, $country){
+        public function getSecret($type, $country) {
             return $mySecret;
         }
         /**
@@ -133,7 +133,7 @@ There are two ways to configure Svea authorization. Choose one of the following:
         * @param $type eg. HOSTED, INVOICE or PAYMENTPLAN
         * $param $country CountryCode eg. SE, NO, DK, FI, NL, DE
         */
-        public function getUsername($type, $country){
+        public function getUsername($type, $country) {
             return $myUsername;
         }
         /**
@@ -141,7 +141,7 @@ There are two ways to configure Svea authorization. Choose one of the following:
         * @param $type eg. HOSTED, INVOICE or PAYMENTPLAN
         * $param $country CountryCode eg. SE, NO, DK, FI, NL, DE
         */
-        public function getClientNumber($type, $country){
+        public function getClientNumber($type, $country) {
             return $myClientNumber;
         }
     }
@@ -152,10 +152,10 @@ There are two ways to configure Svea authorization. Choose one of the following:
 
 ```php
     //Find your testmode settings
-    if($this->testmode == 1){
+    if ($this->testmode == 1) {
         //if test, use your class that returns test authorization
         $conf = new MyConfigTest();
-    }else{
+    } else {
         //if production mode, use your class that returns production authorization
         $conf = new MyConfigProd();
     }
@@ -323,7 +323,7 @@ To make it easy to set the right data depending on the customer type this exampl
 
 //create company or individual object
 $foo = Item::individualCustomer();
-if(*condition*){
+if (*condition*) {
  $foo = $foo ->setEmail("test@svea.com") ;
 }
 ->addOrderRow($foo);

@@ -2,7 +2,6 @@
 
 /**
  *
- *
  * @author anne-hal
  */
 class CampaignCode {

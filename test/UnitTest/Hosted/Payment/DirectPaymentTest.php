@@ -11,7 +11,6 @@ require_once $root . '/../../../../test/UnitTest/BuildOrder/TestRowFactory.php';
  */
 class DirectPaymentTest extends PHPUnit_Framework_TestCase {
         
-      
      /**
      * @expectedException Exception
      * @expectedExceptionMessage Invalid or missing Country code
@@ -51,6 +50,7 @@ class DirectPaymentTest extends PHPUnit_Framework_TestCase {
          * 
          */
     }
+    
     function testConfigureExcludedPaymentMethods() {
         $rowFactory = new TestRowFactory();
         $form = WebPay::createOrder()

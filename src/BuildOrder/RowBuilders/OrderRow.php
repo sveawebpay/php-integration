@@ -18,8 +18,6 @@ class OrderRow {
      */
     public $vatDiscount = 0;
 
-
-
     /**
      * Optional
      * @param type $articleNumberAsString
@@ -59,6 +57,7 @@ class OrderRow {
         $this->amountExVat = $AmountAsFloat;
         return $this;
     }
+    
     /**
      * Optional
      * @param type $AmountAsFloat
