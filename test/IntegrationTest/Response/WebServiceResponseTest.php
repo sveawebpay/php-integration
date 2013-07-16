@@ -147,19 +147,6 @@ class WebServiceResponseTest extends PHPUnit_Framework_TestCase {
         
         //$this->assertEquals('Invoice', $request->contractNumber); //for paymentplan
     }
-    
-    function testResultCloseInvoiceOrder() {
-        $orderId = $this->getInvoiceOrderId();
-        $orderBuilder = WebPay::closeOrder();
-        $request = $orderBuilder
-                //->setTestmode()()
-                ->setOrderId($orderId)
-                ->setCountryCode("SE")
-                ->closeInvoiceOrder()
-                    ->doRequest();
-        $this->assertEquals(1, $request->accepted);
-        $this->assertEquals(0, $request->resultcode);
-    }
 }
 
 ?>
