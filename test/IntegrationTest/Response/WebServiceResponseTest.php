@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
 $root = realpath(dirname(__FILE__));
 require_once $root . '/../../../src/Includes.php';
@@ -9,18 +9,6 @@ require_once $root . '/../../../src/Includes.php';
  * @author Anneli Halld'n, Daniel Brolund for Svea Webpay
  */
 class WebServiceResponseTest extends PHPUnit_Framework_TestCase {
-
-    /**
-     * Use to get paymentPlanParams to be able to test PaymentPlanRequest
-     * @return type
-     */
-    function getGetPaymentPlanParamsForTesting() {
-        $addressRequest = WebPay::getPaymentPlanParams();
-        $response = $addressRequest
-                //->setTestmode()()
-                ->doRequest();
-        return $response->campaignCodes[0]->campaignCode;
-    }
 
     /**
      * Function to use in testfunctions
@@ -51,7 +39,7 @@ class WebServiceResponseTest extends PHPUnit_Framework_TestCase {
         return $request->sveaOrderId;
     }
     
-     /**
+    /**
      * @expectedException Exception
      * @expectedExceptionMessage Invalid or missing Country code
      */
@@ -61,7 +49,7 @@ class WebServiceResponseTest extends PHPUnit_Framework_TestCase {
                     //->setCountryCode("SE")
                     ->doRequest();
     }
-
+    
     function testResultForInvoicePaymentNL() {
         $request = WebPay::createOrder()
                 //->setTestmode()()
@@ -84,7 +72,7 @@ class WebServiceResponseTest extends PHPUnit_Framework_TestCase {
                     ->setInitials("SB")
                     ->setCoAddress(138)
                         )
-             
+                
                 ->setCountryCode("NL")
                 ->setCustomerReference("33")
                 ->setOrderDate("2012-12-12")
