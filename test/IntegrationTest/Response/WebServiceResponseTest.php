@@ -103,7 +103,7 @@ class WebServiceResponseTest extends PHPUnit_Framework_TestCase {
      */
     function testErrorMessageResponse() {
         $addressRequest = WebPay::getPaymentPlanParams();
-        $request = $addressRequest              
+        $request = $addressRequest
                     //->setCountryCode("SE")
                     ->doRequest();
     }

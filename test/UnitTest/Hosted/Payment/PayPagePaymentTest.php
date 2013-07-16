@@ -184,10 +184,7 @@ class PayPagePaymentTest extends PHPUnit_Framework_TestCase {
         $xmlMessage = new SimpleXMLElement($form->xmlMessage);
         //test values are as expected avter transforming xml to php object
         $this->assertEquals('SEK', $xmlMessage->currency);
-     
     }
-
-   
 }
 
 ?>

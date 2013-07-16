@@ -190,7 +190,6 @@ class WebServiceOrderValidatorTest extends PHPUnit_Framework_TestCase {
 
                     ->useInvoicePayment();
         $order->prepareRequest();
-
     }
 
     /**

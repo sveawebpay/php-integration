@@ -153,7 +153,7 @@ class OrderBuilderTest extends PHPUnit_Framework_TestCase {
                $item = Item::companyCustomer();
                $item = $item->setNationalIdNumber(194605092222)
                     ->setEmail("test@svea.com")
-                    ->setCompanyName("TestCompagniet")        //SET
+                    ->setCompanyName("TestCompagniet") //SET
                     ->setZipCode(9999)            
                     ->setLocality("Stan")
                     ->setIpAddress("123.123.123")
@@ -164,9 +164,9 @@ class OrderBuilderTest extends PHPUnit_Framework_TestCase {
              $item
                 ->setVatNumber("NL2345234")
                 ->setStreetAddress("Gatan", 23);
-            }        
+            }
         }
-        $sveaRequest = $sveaRequest->addCustomerDetails($item);      
+        $sveaRequest = $sveaRequest->addCustomerDetails($item);
         
         $this->assertEquals(194605092222, $sveaRequest->customerIdentity->orgNumber);
         $this->assertEquals("NL2345234", $sveaRequest->customerIdentity->companyVatNumber);

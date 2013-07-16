@@ -110,8 +110,7 @@ class SveaConfigurationProvider implements ConfigurationProvider {
     /**
      * @throws Exception
      */
-    private function throwInvalidCountryException()
-    {
+    private function throwInvalidCountryException() {
         throw new Exception('Invalid or missing Country code');
     }
 

@@ -19,7 +19,7 @@ class GetPaymentPlanParams {
     public $countryCode;
 
     function __construct($config) {
-         $this->conf = $config;
+        $this->conf = $config;
     }
 
     /*

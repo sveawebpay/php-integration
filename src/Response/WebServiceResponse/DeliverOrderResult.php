@@ -16,7 +16,7 @@ class DeliverOrderResult extends WebServiceResponse{
         $this->errormessage = $message->DeliverOrderEuResult->ErrorMessage;
     }
 
-     protected function formatObject($message) {
+    protected function formatObject($message) {
         $this->accepted = $message->DeliverOrderEuResult->Accepted;
         $this->resultcode = $message->DeliverOrderEuResult->ResultCode;
         if ($this->accepted == 1) {
@@ -34,6 +34,6 @@ class DeliverOrderResult extends WebServiceResponse{
             }
 
             $this->orderType = $message->DeliverOrderEuResult->DeliverOrderResult->OrderType;
-         }
-     }
+        }
+    }
 }

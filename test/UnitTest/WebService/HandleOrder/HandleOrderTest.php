@@ -65,7 +65,7 @@ class HandleOrderTest extends PHPUnit_Framework_TestCase {
                     ->setAmountExVat(50)
                     ->setUnit("st")
                     ->setVatPercent(25)
-                    ->setDiscountPercent(0)   
+                    ->setDiscountPercent(0)
                     )                
                 //->setTestmode()()
                 ->setOrderId("id")

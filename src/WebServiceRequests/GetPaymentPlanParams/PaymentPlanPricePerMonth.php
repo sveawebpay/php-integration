@@ -22,15 +22,15 @@ class PaymentPlanPricePerMonth {
         if (!empty($params)) {
             foreach ($params->campaignCodes as $key => $value) {
                 if ($price >= $value->fromAmount && $price <= $value->toAmount) {
-                                   $pair = array();
-                $pair['pricePerMonth'] = $price * $value->monthlyAnnuityFactor + $value->notificationFee;
-                foreach ($value as $key => $val) {
-                   if ($key == "campaignCode") {
-                        $pair[$key] = $val;
+                    $pair = array();
+                    $pair['pricePerMonth'] = $price * $value->monthlyAnnuityFactor + $value->notificationFee;
+                    foreach ($value as $key => $val) {
+                        if ($key == "campaignCode") {
+                            $pair[$key] = $val;
+                        }
                     }
-
-                }
-                array_push($this->values, $pair);
+                    
+                    array_push($this->values, $pair);
                 }
             }
         }

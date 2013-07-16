@@ -26,7 +26,7 @@ class NewOrderBuilderTest extends PHPUnit_Framework_TestCase {
                 ->doRequest();
 
         return $request->customerIdentity[0]->addressSelector;
-     }
+    }
 
     function testNewInvoiceOrderCompanyAddresselector() {
         $addresselector = $this->getAddressForTesting();
@@ -91,7 +91,7 @@ class NewOrderBuilderTest extends PHPUnit_Framework_TestCase {
             $this->assertEquals("st", $request->request->CreateOrderInformation->OrderRows['OrderRow'][0]->Unit);
             $this->assertEquals(25, $request->request->CreateOrderInformation->OrderRows['OrderRow'][0]->VatPercent);
             $this->assertEquals(0, $request->request->CreateOrderInformation->OrderRows['OrderRow'][0]->DiscountPercent);
-        }
+    }
 
     function testNewInvoiceOrderWithArray() {
         $orderRows[] = Item::orderrow()
@@ -125,7 +125,7 @@ class NewOrderBuilderTest extends PHPUnit_Framework_TestCase {
                 ->prepareRequest();
 
             $this->assertEquals(194605092222, $request->request->CreateOrderInformation->CustomerIdentity->NationalIdNumber); //Check all in identity
-        }
+    }
 
     function testOrderWithShippingFee() {
         $request = WebPay::createOrder();
@@ -213,7 +213,7 @@ class NewOrderBuilderTest extends PHPUnit_Framework_TestCase {
             $this->assertEquals(25, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->VatPercent);
             $this->assertEquals(0, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->DiscountPercent);
     }
-        
+    
     function testOrderWithFixedDiscount() {
         $request = WebPay::createOrder();
         //foreach...
@@ -295,7 +295,7 @@ class NewOrderBuilderTest extends PHPUnit_Framework_TestCase {
             $this->assertEquals("st", $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->Unit);
             $this->assertEquals(25, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->VatPercent);
             $this->assertEquals(0, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->DiscountPercent);
-        }
+    }
 
     public function testBuildOrderWithIndividualCustomer() {
         $request = WebPay::createOrder();
@@ -341,7 +341,7 @@ class NewOrderBuilderTest extends PHPUnit_Framework_TestCase {
             $this->assertEquals(9999, $request->request->CreateOrderInformation->CustomerIdentity->ZipCode);
             $this->assertEquals("Stan", $request->request->CreateOrderInformation->CustomerIdentity->Locality);
             $this->assertEquals("Individual", $request->request->CreateOrderInformation->CustomerIdentity->CustomerType);
-        }
+    }
 
     public function testBuildOrderWithCompanyCustomer() {
         $request = WebPay::createOrder();
@@ -441,7 +441,6 @@ class NewOrderBuilderTest extends PHPUnit_Framework_TestCase {
         }
  *
  */
-
 }
 
 ?>

@@ -52,7 +52,6 @@ class PayPagePayment extends HostedPayment {
             }  else {
                  $this->excludedPaymentMethods[] = $method;
             }
-
         }
         return $this;
     }
@@ -100,8 +99,8 @@ class PayPagePayment extends HostedPayment {
                     }
                 }
             }
-
         }
+        
         return $this;
     }
 
@@ -143,7 +142,6 @@ class PayPagePayment extends HostedPayment {
     }
 
     /**
-     *
      * @param type $cancelUrlAsString
      * @return \HostedPayment
      */
@@ -161,46 +159,36 @@ class PayPagePayment extends HostedPayment {
         switch ($languageCodeAsISO639) {
             case "sv":
                 $this->langCode = $languageCodeAsISO639;
-
                 break;
             case "en":
                 $this->langCode = $languageCodeAsISO639;
-
                 break;
             case "da":
                 $this->langCode = $languageCodeAsISO639;
-
                 break;
             case "fi":
                 $this->langCode = $languageCodeAsISO639;
-
                 break;
             case "no":
                 $this->langCode = $languageCodeAsISO639;
-
                 break;
             case "de":
                 $this->langCode = $languageCodeAsISO639;
-
                 break;
             case "es":
                 $this->langCode = $languageCodeAsISO639;
-
                 break;
             case "fr":
                 $this->langCode = $languageCodeAsISO639;
-
                 break;
             case "it":
                 $this->langCode = $languageCodeAsISO639;
-
                 break;
             case "nl":
                 $this->langCode = $languageCodeAsISO639;
-
                 break;
             default:
-                 $this->langCode = "en";
+                $this->langCode = "en";
                 break;
         }
 

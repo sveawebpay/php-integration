@@ -40,7 +40,6 @@ class TestRowFactory {
                     ->setVatPercent(25)
                     ->setDiscountPercent(0)
                         );
-               
         };
     }
 
@@ -102,7 +101,6 @@ class TestRowFactory {
       ->endRelativeDiscount();
       };
       }
-     * 
      */
 
     /**
@@ -128,7 +126,6 @@ class TestRowFactory {
       ->endIndividualCustomerIdentity();
       };
       }
-     * 
      */
 }
 

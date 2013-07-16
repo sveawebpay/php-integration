@@ -162,8 +162,7 @@ class InvoicePaymentTest extends PHPUnit_Framework_TestCase {
                     ->setCoAddress("c/o Eriksson")
                     ->setZipCode(9999)
                     ->setLocality("Stan")
-
-                      )
+                )
 
                 ->setCountryCode("DE")
                 ->setCustomerReference("33")
@@ -212,7 +211,6 @@ class InvoicePaymentTest extends PHPUnit_Framework_TestCase {
                  ->setCoAddress("c/o Eriksson")
                  ->setZipCode(9999)
                  ->setLocality("Stan")
-
                    )
 
             ->setCountryCode("NL")
@@ -233,7 +231,6 @@ class InvoicePaymentTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals("Stan", $request->request->CreateOrderInformation->CustomerIdentity->Locality); //Check all in identity
         $this->assertEquals("NL", $request->request->CreateOrderInformation->CustomerIdentity->CountryCode); //Check all in identity
         $this->assertEquals("Individual", $request->request->CreateOrderInformation->CustomerIdentity->CustomerType); //Check all in identity
-
     }
 
     function testInvoiceRequestObjectForCustomerIdentityCompanyFromSE() {

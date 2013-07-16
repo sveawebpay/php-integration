@@ -6,6 +6,7 @@
  * @author anne-hal
  */
 class InvoiceFee {
+    
     /**
      * Optional
      * @param type $nameAsString

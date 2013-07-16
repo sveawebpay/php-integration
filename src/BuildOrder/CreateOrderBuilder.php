@@ -96,6 +96,7 @@ class CreateOrderBuilder {
         $this->customerIdentity = $itemCustomerObject;
         return $this;
     }
+    
     /**
      * New!
      * @param type $orderRow
@@ -134,7 +135,7 @@ class CreateOrderBuilder {
             }
         }
 
-       return $this;
+        return $this;
     }
     
     /**
@@ -143,22 +144,23 @@ class CreateOrderBuilder {
      * @return \CreateOrderBuilder
      */
     public function addDiscount($itemDiscounObject) {
-         if (is_array($itemDiscounObject)) {
+        if (is_array($itemDiscounObject)) {
             foreach ($itemDiscounObject as $row) {
                 if (get_class($row) == "FixedDiscount") {
-                     array_push($this->fixedDiscountRows, $row);
+                    array_push($this->fixedDiscountRows, $row);
                 } else {
-                     array_push($this->relativeDiscountRows, $row);
+                    array_push($this->relativeDiscountRows, $row);
                 }
 
             }
-        }  else {
-             if (get_class($itemDiscounObject) == "FixedDiscount") {
-                     array_push($this->fixedDiscountRows, $itemDiscounObject);
+        } else {
+            if (get_class($itemDiscounObject) == "FixedDiscount") {
+                array_push($this->fixedDiscountRows, $itemDiscounObject);
             } else {
-                 array_push($this->relativeDiscountRows, $itemDiscounObject);
+                array_push($this->relativeDiscountRows, $itemDiscounObject);
             }
-        }
+       }
+       
        return $this;
     }
 
@@ -217,7 +219,6 @@ class CreateOrderBuilder {
         $this->addressSelector = $addressSelectorAsString;
         return $this;
     }
-     *
      */
     /**
      * Start creating cardpayment via PayPage. Returns Paymentform to integrate in shop.

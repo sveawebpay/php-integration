@@ -149,7 +149,6 @@ class HostedRowFormatter {
               $this->totalAmount -= $row->amount;
               $this->totalVat -= substr($tempRow->vat, 1);
             $this->newRows[] = $tempRow;
-
         }
     }
 
@@ -217,6 +216,7 @@ class HostedRowFormatter {
                 $result += $row->vat * $row->quantity;
             }
         }
+        
         return $result;
     }
 }

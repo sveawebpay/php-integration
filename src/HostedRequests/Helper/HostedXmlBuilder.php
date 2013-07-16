@@ -38,6 +38,7 @@ class HostedXmlBuilder {
         if ($request['totalVat'] != null) {
             $this->XMLWriter->writeElement("vat", round($request['totalVat']));
         }
+        
         if (isset($order->ipAddress)) {
              $this->XMLWriter->writeElement("ipaddress", $order->ipAddress);
         }

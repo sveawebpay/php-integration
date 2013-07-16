@@ -23,7 +23,6 @@ class WebServiceOrderValidator extends OrderValidator {
     public function validate($order) {
        if (isset($order->orgNumber) || isset($order->companyVatNumber) || isset($order->companyName)) {
             $this->isCompany = TRUE;
-
         }
         //new!
         if (isset($order->customerIdentity->orgNumber) || isset($order->customerIdentity->companyVatNumber) || isset($order->customerIdentity->companyName)) {
@@ -42,9 +41,7 @@ class WebServiceOrderValidator extends OrderValidator {
                     || $order->countryCode == "FI") {
                 $this->errors = $identityValidator->validateNordicIdentity($order, $this->errors);
             } elseif ($order->countryCode == "NL") {
-
                 $this->errors = $identityValidator->validateNLidentity($order, $this->errors);
-
             } elseif ($order->countryCode == "DE") {
                 $this->errors = $identityValidator->validateDEidentity($order, $this->errors);
             } else {

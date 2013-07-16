@@ -69,14 +69,15 @@ class deliverOrderBuilder {
      * @param type $orderRow
      * @return \deliverOrderBuilder
      */
-     public function addOrderRow($orderRow) {
+    public function addOrderRow($orderRow) {
         if (is_array($orderRow)) {
             foreach ($orderRow as $row) {
                 array_push($this->orderRows, $row);
             }
-        }  else {
-             array_push($this->orderRows, $orderRow);
+        } else {
+            array_push($this->orderRows, $orderRow);
         }
+        
        return $this;
     }
 
@@ -86,25 +87,24 @@ class deliverOrderBuilder {
      * @return \deliverOrderBuilder
      */
     public function addFee($itemFeeObject) {
-         if (is_array($itemFeeObject)) {
+        if (is_array($itemFeeObject)) {
             foreach ($itemFeeObject as $row) {
                 if (get_class($row) == "ShippingFee") {
-                     array_push($this->shippingFeeRows, $row);
+                    array_push($this->shippingFeeRows, $row);
                 } else {
-                     array_push($this->invoiceFeeRows, $row);
+                    array_push($this->invoiceFeeRows, $row);
                 }
             }
         } else {
-             if (get_class($itemFeeObject) == "ShippingFee") {
-                     array_push($this->shippingFeeRows, $itemFeeObject);
+            if (get_class($itemFeeObject) == "ShippingFee") {
+                array_push($this->shippingFeeRows, $itemFeeObject);
             } else {
-                 array_push($this->invoiceFeeRows, $itemFeeObject);
+                array_push($this->invoiceFeeRows, $itemFeeObject);
             }
         }
 
-       return $this;
+        return $this;
     }
-
 
     /**
      * New!
@@ -112,22 +112,22 @@ class deliverOrderBuilder {
      * @return \deliverOrderBuilder
      */
     public function addDiscount($itemDiscounObject) {
-         if (is_array($itemDiscounObject)) {
+        if (is_array($itemDiscounObject)) {
             foreach ($itemDiscounObject as $row) {
                 if (get_class($row) == "FixedDiscount") {
-                     array_push($this->fixedDiscountRows, $row);
+                    array_push($this->fixedDiscountRows, $row);
                 } else {
-                     array_push($this->relativeDiscountRows, $row);
+                    array_push($this->relativeDiscountRows, $row);
                 }
-
             }
-        }  else {
-             if (get_class($itemDiscounObject) == "FixedDiscount") {
-                     array_push($this->fixedDiscountRows, $itemDiscounObject);
+        } else {
+            if (get_class($itemDiscounObject) == "FixedDiscount") {
+                array_push($this->fixedDiscountRows, $itemDiscounObject);
             } else {
-                 array_push($this->relativeDiscountRows, $itemDiscounObject);
+                array_push($this->relativeDiscountRows, $itemDiscounObject);
             }
         }
+        
        return $this;
     }
 
@@ -139,7 +139,6 @@ class deliverOrderBuilder {
         $this->testmode = TRUE;
         return $this;
     }
-     *
      */
 
     public function setCountryCode($countryCodeAsString) {
