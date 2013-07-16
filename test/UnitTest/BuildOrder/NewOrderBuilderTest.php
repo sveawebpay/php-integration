@@ -31,8 +31,6 @@ class NewOrderBuilderTest extends PHPUnit_Framework_TestCase {
     public function testNewInvoiceOrderCompanyAddresselector() {
         $addresselector = $this->getAddressForTesting();
         $request = WebPay::createOrder();
-            ////->setTestmode()()();
-        //foreach...
         $request = $request
             ->addOrderRow(
                 Item::orderRow()
@@ -45,7 +43,6 @@ class NewOrderBuilderTest extends PHPUnit_Framework_TestCase {
                     ->setVatPercent(25)
                     ->setDiscountPercent(0)
                     );
-        //end foreach
             $request = $request
                 ->addCustomerDetails(Item::companyCustomer()->setNationalIdNumber(4608142222)->setAddressSelector($addresselector))
                 ->setCountryCode("SE")
@@ -59,8 +56,6 @@ class NewOrderBuilderTest extends PHPUnit_Framework_TestCase {
     
     public function testNewInvoiceOrderWithOrderRow() {
         $request = WebPay::createOrder();
-            ////->setTestmode()()();
-        //foreach...
         $request = $request
             ->addOrderRow(
                 Item::orderRow()
@@ -73,7 +68,6 @@ class NewOrderBuilderTest extends PHPUnit_Framework_TestCase {
                     ->setVatPercent(25)
                     ->setDiscountPercent(0)
                     );
-        //end foreach
             $request = $request
                 ->addCustomerDetails(Item::individualCustomer()->setNationalIdNumber(194605092222))
                 ->setCountryCode("SE")
@@ -114,7 +108,6 @@ class NewOrderBuilderTest extends PHPUnit_Framework_TestCase {
                     ->setDiscountPercent(0);
 
         $request = WebPay::createOrder()
-            //->setTestmode()()
             ->addOrderRow($orderRows)
             ->addCustomerDetails(Item::individualCustomer()->setNationalIdNumber(194605092222))
             ->setCountryCode("SE")
@@ -129,8 +122,6 @@ class NewOrderBuilderTest extends PHPUnit_Framework_TestCase {
 
     public function testOrderWithShippingFee() {
         $request = WebPay::createOrder();
-            //->setTestmode()();
-        //foreach...
         $request = $request
             ->addOrderRow(
                 Item::orderRow()
@@ -152,7 +143,6 @@ class NewOrderBuilderTest extends PHPUnit_Framework_TestCase {
                         ->setVatPercent(25)
                         ->setDiscountPercent(0)
                         );
-        //end foreach
             $request = $request
             ->addCustomerDetails(Item::individualCustomer()->setNationalIdNumber(194605092222))
             ->setCountryCode("SE")
@@ -173,8 +163,6 @@ class NewOrderBuilderTest extends PHPUnit_Framework_TestCase {
 
     public function testOrderWithInvoiceFee() {
         $request = WebPay::createOrder();
-            //->setTestmode()();
-        //foreach...
         $request = $request
             ->addOrderRow(
                 Item::orderRow()
@@ -195,7 +183,6 @@ class NewOrderBuilderTest extends PHPUnit_Framework_TestCase {
                     ->setVatPercent(25)
                     ->setDiscountPercent(0)
                         );
-        //end foreach
             $request = $request
             ->addCustomerDetails(Item::individualCustomer()->setNationalIdNumber(194605092222))
             ->setCountryCode("SE")
@@ -216,7 +203,6 @@ class NewOrderBuilderTest extends PHPUnit_Framework_TestCase {
     
     public function testOrderWithFixedDiscount() {
         $request = WebPay::createOrder();
-        //foreach...
         $request = $request
             ->addOrderRow(
                 Item::orderRow()
@@ -236,7 +222,6 @@ class NewOrderBuilderTest extends PHPUnit_Framework_TestCase {
                     ->setDescription("FixedDiscount")
                     ->setName("Fixed")
                         );
-        //end foreach
             $request = $request
             ->addCustomerDetails(Item::individualCustomer()->setNationalIdNumber(194605092222))
             ->setCountryCode("SE")
@@ -257,8 +242,6 @@ class NewOrderBuilderTest extends PHPUnit_Framework_TestCase {
     
     public function testOrderWithRelativeDiscount() {
         $request = WebPay::createOrder();
-            //->setTestmode()();
-        //foreach...
         $request = $request
             ->addOrderRow(
                 Item::orderRow()
@@ -278,7 +261,6 @@ class NewOrderBuilderTest extends PHPUnit_Framework_TestCase {
                         ->setName('Relative')
                         ->setDescription("RelativeDiscount")
                         );
-        //end foreach
             $request = $request
             ->addCustomerDetails(Item::individualCustomer()->setNationalIdNumber(194605092222))
             ->setCountryCode("SE")
@@ -299,8 +281,6 @@ class NewOrderBuilderTest extends PHPUnit_Framework_TestCase {
 
     public function testBuildOrderWithIndividualCustomer() {
         $request = WebPay::createOrder();
-            //->setTestmode()();
-        //foreach...
             $request = $request
             ->addOrderRow(
                 Item::orderRow()
@@ -325,7 +305,6 @@ class NewOrderBuilderTest extends PHPUnit_Framework_TestCase {
                     ->setZipCode(9999)
                     ->setLocality("Stan")
                        );
-        //end foreach
             $request = $request
             ->setCountryCode("SE")
             ->setCustomerReference("33")
@@ -345,8 +324,6 @@ class NewOrderBuilderTest extends PHPUnit_Framework_TestCase {
 
     public function testBuildOrderWithCompanyCustomer() {
         $request = WebPay::createOrder();
-            //->setTestmode()();
-        //foreach...
             $request = $request
             ->addOrderRow(
                 Item::orderRow()
@@ -368,7 +345,6 @@ class NewOrderBuilderTest extends PHPUnit_Framework_TestCase {
                     ->setZipCode(9999)
                     ->setLocality("Stan")
                        );
-        //end foreach
             $request = $request
             ->setCountryCode("SE")
             ->setCustomerReference("33")
@@ -383,8 +359,6 @@ class NewOrderBuilderTest extends PHPUnit_Framework_TestCase {
     
     public function testBuildOrderWithCompanyCustomerDE() {
              $request = WebPay::createOrder();
-            //->setTestmode()();
-        //foreach...
             $request = $request
             ->addOrderRow(
                 Item::orderRow()
@@ -407,7 +381,6 @@ class NewOrderBuilderTest extends PHPUnit_Framework_TestCase {
                     ->setZipCode(9999)
                     ->setLocality("Stan")
                        );
-        //end foreach
             $request = $request
             ->setCountryCode("DE")
             ->setCustomerReference("33")

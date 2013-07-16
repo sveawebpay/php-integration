@@ -14,7 +14,6 @@ class DeliverInvoiceTest extends PHPUnit_Framework_TestCase {
      */
     private function getInvoiceOrderId() {
         $request = WebPay::createOrder()
-                //->setTestmode()()
                 ->addOrderRow(Item::orderRow()
                         ->setArticleNumber(1)
                         ->setQuantity(2)
@@ -41,7 +40,6 @@ class DeliverInvoiceTest extends PHPUnit_Framework_TestCase {
         $orderId = $this->getInvoiceOrderId();
         $orderBuilder = WebPay::deliverOrder();
         $request = $orderBuilder
-                //->setTestmode()()
                 ->addOrderRow(Item::orderRow()
                         ->setArticleNumber(1)
                         ->setQuantity(2)

@@ -14,7 +14,6 @@ class PayPagePaymentTest extends PHPUnit_Framework_TestCase {
     public function testBuildPayPagePaymentWithExcludepaymentMethods() {
         $rowFactory = new TestRowFactory();
        $form = WebPay::createOrder()
-            ////->setTestmode()()()
             ->addOrderRow(Item::orderRow()
                     ->setArticleNumber(1)
                     ->setQuantity(2)
@@ -94,7 +93,6 @@ class PayPagePaymentTest extends PHPUnit_Framework_TestCase {
     public function testExcludeDirectPaymentMethods() {
         $rowFactory = new TestRowFactory();
         $form = WebPay::createOrder()
-            //->setTestmode()()
             ->addOrderRow(Item::orderRow()
                     ->setArticleNumber(1)
                     ->setQuantity(2)
@@ -130,7 +128,6 @@ class PayPagePaymentTest extends PHPUnit_Framework_TestCase {
     public function testpayPagePaymentIncludePaymentMethods() {
         $rowFactory = new TestRowFactory();
         $form = WebPay::createOrder()
-            //->setTestmode()()
             ->addOrderRow(Item::orderRow()
                     ->setArticleNumber(1)
                     ->setQuantity(2)

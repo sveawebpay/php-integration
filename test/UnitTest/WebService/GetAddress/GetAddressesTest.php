@@ -15,7 +15,6 @@ class GetAddressesTest extends PHPUnit_Framework_TestCase {
     public function testBuildRequest() {
         $addressRequest = WebPay::getAddresses();
         $addressRequest
-                //->setTestmode()()
                 ->setCountryCode("SE")
                 ->setCompany("SE460509");
         $this->assertEquals("SE", $addressRequest->countryCode);
@@ -25,13 +24,11 @@ class GetAddressesTest extends PHPUnit_Framework_TestCase {
     public function testPrepareRequestPrivate() {
         $addressRequest = WebPay::getAddresses();
         $request = $addressRequest
-                //->setTestmode()()
                 ->setOrderTypeInvoice()
                 //->setPasswordBasedAuthorization("sverigetest", "sverigetest", 79021)
                 ->setCountryCode("SE")
                 ->setIndividual(194605092222)
                 ->prepareRequest();
-        //->doRequest();
 
         $this->assertEquals(79021, $request->request->Auth->ClientNumber); //Check all in identity
         $this->assertEquals("sverigetest", $request->request->Auth->Username); //Check all in identity
@@ -44,13 +41,12 @@ class GetAddressesTest extends PHPUnit_Framework_TestCase {
     public function testPrepareRequestCompany() {
         $addressRequest = WebPay::getAddresses();
         $request = $addressRequest
-                //->setTestmode()()
                 ->setOrderTypeInvoice()
                // ->setPasswordBasedAuthorization("sverigetest", "sverigetest", 79021)
                 ->setCountryCode("SE")
                 ->setCompany(4608142222)
                 ->prepareRequest();
-        //->doRequest();
+        
         $this->assertEquals(79021, $request->request->Auth->ClientNumber); //Check all in identity
         $this->assertEquals("sverigetest", $request->request->Auth->Username); //Check all in identity
         $this->assertEquals("sverigetest", $request->request->Auth->Password); //Check all in identity

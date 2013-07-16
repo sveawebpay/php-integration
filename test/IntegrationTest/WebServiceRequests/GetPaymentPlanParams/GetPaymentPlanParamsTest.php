@@ -20,7 +20,6 @@ class GetPaymentPlanParamsTest extends PHPUnit_Framework_TestCase {
     public function testResultGetPaymentPlanParams() {
         $addressRequest = WebPay::getPaymentPlanParams();
         $request = $addressRequest
-                //->setTestmode()()
                 ->setCountryCode("SE")
                 ->doRequest();
         

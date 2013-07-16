@@ -11,7 +11,6 @@ class GetAddressesTest extends PHPUnit_Framework_TestCase {
     public function testGetAddressesResultForPrivate() {
         $addressRequest = WebPay::getAddresses();
         $request = $addressRequest
-            //->setTestmode()()
             ->setOrderTypeInvoice()
             ->setCountryCode("SE")
             ->setIndividual(194605092222)
@@ -22,7 +21,6 @@ class GetAddressesTest extends PHPUnit_Framework_TestCase {
     public function testGetAddressesResultForCompany() {
         $addressRequest = WebPay::getAddresses();
         $request = $addressRequest
-            //->setTestmode()()
             ->setOrderTypeInvoice()
             ->setCountryCode("SE")
             ->setCompany(4608142222)
@@ -34,7 +32,6 @@ class GetAddressesTest extends PHPUnit_Framework_TestCase {
     public function testResultGetAddresses() {
         $addressRequest = WebPay::getAddresses();
         $request = $addressRequest
-                //->setTestmode()()
                 ->setOrderTypeInvoice()
                 ->setCountryCode("SE")
                 ->setIndividual(194605092222)

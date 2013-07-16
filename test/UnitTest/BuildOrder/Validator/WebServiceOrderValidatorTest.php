@@ -57,7 +57,6 @@ class WebServiceOrderValidatorTest extends PHPUnit_Framework_TestCase {
     public function getGetPaymentPlanParamsForTesting() {
         $addressRequest = WebPay::getPaymentPlanParams();
         $response = $addressRequest
-                //->setTestmode()()
                 ->setCountryCode("SE")
                 ->doRequest();
          return $response->campaignCodes[0]->campaignCode;

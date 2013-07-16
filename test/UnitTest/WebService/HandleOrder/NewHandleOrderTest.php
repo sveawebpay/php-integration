@@ -13,8 +13,6 @@ class NewHandleOrderTest extends PHPUnit_Framework_TestCase {
 
     public function testNewDeliverInvoiceOrderRow() {
         $request = WebPay::deliverOrder();
-            //->setTestmode()();
-        //foreach...
         $request = $request
             ->addOrderRow(
                 Item::orderRow()
@@ -27,7 +25,6 @@ class NewHandleOrderTest extends PHPUnit_Framework_TestCase {
                     ->setVatPercent(25)
                     ->setDiscountPercent(0)
                     );
-        //end foreach
             $request = $request ->setOrderId("id")
                 ->setNumberOfCreditDays(1)
                 ->setCountryCode("SE")
@@ -47,8 +44,6 @@ class NewHandleOrderTest extends PHPUnit_Framework_TestCase {
 
     public function testDeliverOrderWithInvoiceFeeAndFixedDiscount() {
         $request = WebPay::deliverOrder();
-            //->setTestmode()();
-        //foreach...
         $request = $request
             ->addOrderRow(
                 Item::orderRow()
@@ -76,7 +71,6 @@ class NewHandleOrderTest extends PHPUnit_Framework_TestCase {
                     ->setDescription("FixedDiscount")
                     ->setName("Fixed")
                         );
-        //end foreach
             $request = $request ->setOrderId("id")
                 ->setNumberOfCreditDays(1)
                 ->setInvoiceDistributionType(DistributionType::POST)//Post or Email
@@ -112,8 +106,6 @@ class NewHandleOrderTest extends PHPUnit_Framework_TestCase {
 
     public function testDeliverOrderWithShippingFeeAndRelativeDiscount() {
         $request = WebPay::deliverOrder();
-            //->setTestmode()();
-        //foreach...
         $request = $request
                 ->addOrderRow(Item::orderRow()
                     ->setArticleNumber(1)
@@ -141,7 +133,6 @@ class NewHandleOrderTest extends PHPUnit_Framework_TestCase {
                     ->setName('Relative')
                     ->setDescription("RelativeDiscount")
                     );
-        //end foreach
             $request = $request ->setOrderId("id")
                 ->setNumberOfCreditDays(1)
                 ->setInvoiceDistributionType(DistributionType::POST)//Post or Email

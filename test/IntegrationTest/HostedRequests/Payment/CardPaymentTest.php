@@ -14,7 +14,6 @@ class CardPaymentTest extends PHPUnit_Framework_TestCase {
     public function testDoCardPaymentRequest() {
         $rowFactory = new TestRowFactory();
         $form = WebPay::createOrder()
-                //->setTestmode()
                 ->addOrderRow(
                 Item::orderRow()
                         ->setArticleNumber(1)

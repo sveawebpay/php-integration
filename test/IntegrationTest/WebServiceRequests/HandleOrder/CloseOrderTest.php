@@ -14,7 +14,6 @@ class CloseOrderTest extends PHPUnit_Framework_TestCase {
      */
     private function getInvoiceOrderId() {
         $request = WebPay::createOrder()
-                //->setTestmode()()
                 ->addOrderRow(Item::orderRow()
                         ->setArticleNumber(1)
                         ->setQuantity(2)
@@ -41,7 +40,6 @@ class CloseOrderTest extends PHPUnit_Framework_TestCase {
         $orderId = $this->getInvoiceOrderId();
         $orderBuilder = WebPay::closeOrder();
         $request = $orderBuilder
-                //->setTestmode()()
                 ->setOrderId($orderId)
                 ->setCountryCode("SE")
                 ->closeInvoiceOrder()

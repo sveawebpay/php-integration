@@ -40,7 +40,6 @@ class CardPaymentTest extends PHPUnit_Framework_TestCase {
 
     public function testSetAuthorization() {
         $form = WebPay::createOrder(new testConf())
-               // ////->setTestmode()()()
                 ->addCustomerDetails(Item::individualCustomer()->setNationalIdNumber(194605092222)->setIpAddress("123.123.123"))
                 ->addOrderRow(Item::orderRow()
                     ->setArticleNumber(1)
@@ -68,7 +67,6 @@ class CardPaymentTest extends PHPUnit_Framework_TestCase {
     public function testBuildCardPayment() {
         $rowFactory = new TestRowFactory();
         $form = WebPay::createOrder()
-                ////->setTestmode()()()
                 ->addOrderRow(Item::orderRow()
                     ->setArticleNumber(1)
                     ->setQuantity(2)

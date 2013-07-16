@@ -14,7 +14,6 @@ class PaymentMethodTest extends PHPUnit_Framework_TestCase{
      public function testPayPagePaymentWithSetPaymentMethod() {
         $rowFactory = new TestRowFactory();
         $form = WebPay::createOrder()
-            ////->setTestmode()()()
             ->addOrderRow(Item::orderRow()
                     ->setArticleNumber(1)
                     ->setQuantity(2)
@@ -49,7 +48,6 @@ class PaymentMethodTest extends PHPUnit_Framework_TestCase{
     public function testPayPagePaymentWithSetPaymentMethodInvoice() {
         $rowFactory = new TestRowFactory();
         $form = WebPay::createOrder()
-            //->setTestmode()()
             ->addOrderRow(Item::orderRow()
                     ->setArticleNumber(1)
                     ->setQuantity(2)

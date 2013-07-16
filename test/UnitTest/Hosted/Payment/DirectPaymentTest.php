@@ -32,7 +32,6 @@ class DirectPaymentTest extends PHPUnit_Framework_TestCase {
             ->addCustomerDetails(Item::individualCustomer()
                     ->setNationalIdNumber(194605092222)
                     )
-            //->setTestmode()()
             ->setCountryCode("ZZ")
             ->setClientOrderNumber("33")
             ->setOrderDate("2012-12-12")
@@ -68,7 +67,6 @@ class DirectPaymentTest extends PHPUnit_Framework_TestCase {
             ->addCustomerDetails(Item::individualCustomer()
                     ->setNationalIdNumber(194605092222)
                     )
-            //->setTestmode()()
             ->setCountryCode("SE")
             ->setClientOrderNumber("33")
             ->setOrderDate("2012-12-12")
@@ -119,7 +117,6 @@ class DirectPaymentTest extends PHPUnit_Framework_TestCase {
             ->setClientOrderNumber("33")
             ->setOrderDate("2012-12-12")
             ->setCurrency("SEK")
-            // ->setTestmode()
             ->usePayPageDirectBankOnly()
             ->setReturnUrl("http://myurl.se")
             ->getPaymentForm();
