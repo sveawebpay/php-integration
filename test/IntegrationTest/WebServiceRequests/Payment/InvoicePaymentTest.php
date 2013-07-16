@@ -1,49 +1,37 @@
 <?php
 
 $root = realpath(dirname(__FILE__));
-require_once $root . '/../../../src/Includes.php';
+require_once $root . '/../../../../src/Includes.php';
 
 /**
  * Description of WebServicePayments_RequestTest
  *
  * @author Anneli Halld'n, Daniel Brolund for Svea Webpay
  */
-class WebServiceResponseTest extends PHPUnit_Framework_TestCase {
+class InvoicePaymentTest extends PHPUnit_Framework_TestCase {
     
-    /**
-     * @expectedException Exception
-     * @expectedExceptionMessage Invalid or missing Country code
-     */
-    function testErrorMessageResponse() {
-        $addressRequest = WebPay::getPaymentPlanParams();
-        $request = $addressRequest
-                    //->setCountryCode("SE")
-                    ->doRequest();
-    }
-    
-    function testResultForInvoicePaymentNL() {
+    public function testResultForInvoicePaymentNL() {
         $request = WebPay::createOrder()
                 //->setTestmode()()
                 ->addOrderRow(Item::orderRow()
-                    ->setArticleNumber(1)
-                    ->setQuantity(2)
-                    ->setAmountExVat(100.00)
-                    ->setDescription("Specification")
-                    ->setName('Prod')
-                    ->setUnit("st")
-                    ->setVatPercent(25)
-                    ->setDiscountPercent(0)
-                        )
+                        ->setArticleNumber(1)
+                        ->setQuantity(2)
+                        ->setAmountExVat(100.00)
+                        ->setDescription("Specification")
+                        ->setName('Prod')
+                        ->setUnit("st")
+                        ->setVatPercent(25)
+                        ->setDiscountPercent(0)
+                )
                 ->addCustomerDetails(Item::individualCustomer()
-                    ->setBirthDate(1955, 03, 07)
-                    ->setName("Sneider", "Boasman")
-                    ->setStreetAddress("Gate", 42)
-                    ->setLocality("BARENDRECHT")
-                    ->setZipCode("1102 HG")
-                    ->setInitials("SB")
-                    ->setCoAddress(138)
-                        )
-                
+                        ->setBirthDate(1955, 03, 07)
+                        ->setName("Sneider", "Boasman")
+                        ->setStreetAddress("Gate", 42)
+                        ->setLocality("BARENDRECHT")
+                        ->setZipCode("1102 HG")
+                        ->setInitials("SB")
+                        ->setCoAddress(138)
+                )
                 ->setCountryCode("NL")
                 ->setCustomerReference("33")
                 ->setOrderDate("2012-12-12")
