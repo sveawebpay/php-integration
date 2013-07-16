@@ -23,11 +23,11 @@ class NewOrderBuilderTest extends PHPUnit_Framework_TestCase {
             ->setOrderTypeInvoice()
             ->setCountryCode("SE")
             ->setCompany(4608142222)
-                ->doRequest();
-
+            ->doRequest();
+        
         return $request->customerIdentity[0]->addressSelector;
     }
-
+    
     public function testNewInvoiceOrderCompanyAddresselector() {
         $addresselector = $this->getAddressForTesting();
         $request = WebPay::createOrder();
@@ -76,15 +76,15 @@ class NewOrderBuilderTest extends PHPUnit_Framework_TestCase {
                 ->setCurrency("SEK")
                 ->useInvoicePayment()// returnerar InvoiceOrder object
                     ->prepareRequest();
-
-            $this->assertEquals(194605092222, $request->request->CreateOrderInformation->CustomerIdentity->NationalIdNumber); //Check all in identity
-            $this->assertEquals(1, $request->request->CreateOrderInformation->OrderRows['OrderRow'][0]->ArticleNumber);
-            $this->assertEquals(2, $request->request->CreateOrderInformation->OrderRows['OrderRow'][0]->NumberOfUnits);
-            $this->assertEquals(100.00, $request->request->CreateOrderInformation->OrderRows['OrderRow'][0]->PricePerUnit);
-            $this->assertEquals("Prod: Specification", $request->request->CreateOrderInformation->OrderRows['OrderRow'][0]->Description);
-            $this->assertEquals("st", $request->request->CreateOrderInformation->OrderRows['OrderRow'][0]->Unit);
-            $this->assertEquals(25, $request->request->CreateOrderInformation->OrderRows['OrderRow'][0]->VatPercent);
-            $this->assertEquals(0, $request->request->CreateOrderInformation->OrderRows['OrderRow'][0]->DiscountPercent);
+        
+        $this->assertEquals(194605092222, $request->request->CreateOrderInformation->CustomerIdentity->NationalIdNumber); //Check all in identity
+        $this->assertEquals(1, $request->request->CreateOrderInformation->OrderRows['OrderRow'][0]->ArticleNumber);
+        $this->assertEquals(2, $request->request->CreateOrderInformation->OrderRows['OrderRow'][0]->NumberOfUnits);
+        $this->assertEquals(100.00, $request->request->CreateOrderInformation->OrderRows['OrderRow'][0]->PricePerUnit);
+        $this->assertEquals("Prod: Specification", $request->request->CreateOrderInformation->OrderRows['OrderRow'][0]->Description);
+        $this->assertEquals("st", $request->request->CreateOrderInformation->OrderRows['OrderRow'][0]->Unit);
+        $this->assertEquals(25, $request->request->CreateOrderInformation->OrderRows['OrderRow'][0]->VatPercent);
+        $this->assertEquals(0, $request->request->CreateOrderInformation->OrderRows['OrderRow'][0]->DiscountPercent);
     }
     
     public function testNewInvoiceOrderWithArray() {
@@ -106,7 +106,7 @@ class NewOrderBuilderTest extends PHPUnit_Framework_TestCase {
                     ->setUnit("st")
                     ->setVatPercent(25)
                     ->setDiscountPercent(0);
-
+        
         $request = WebPay::createOrder()
             ->addOrderRow($orderRows)
             ->addCustomerDetails(Item::individualCustomer()->setNationalIdNumber(194605092222))
@@ -115,7 +115,7 @@ class NewOrderBuilderTest extends PHPUnit_Framework_TestCase {
             ->setOrderDate("2012-12-12")
             ->setCurrency("SEK")
             ->useInvoicePayment()// returnerar InvoiceOrder object
-                ->prepareRequest();
+            ->prepareRequest();
 
         $this->assertEquals(194605092222, $request->request->CreateOrderInformation->CustomerIdentity->NationalIdNumber); //Check all in identity
     }
@@ -191,14 +191,14 @@ class NewOrderBuilderTest extends PHPUnit_Framework_TestCase {
             ->setCurrency("SEK")
             ->useInvoicePayment()// returnerar InvoiceOrder object
                 ->prepareRequest();
-
-            $this->assertEquals("", $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->ArticleNumber);
-            $this->assertEquals(1, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->NumberOfUnits);
-            $this->assertEquals(50.00, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->PricePerUnit);
-            $this->assertEquals("Svea fee: Fee for invoice", $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->Description);
-            $this->assertEquals("st", $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->Unit);
-            $this->assertEquals(25, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->VatPercent);
-            $this->assertEquals(0, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->DiscountPercent);
+        
+        $this->assertEquals("", $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->ArticleNumber);
+        $this->assertEquals(1, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->NumberOfUnits);
+        $this->assertEquals(50.00, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->PricePerUnit);
+        $this->assertEquals("Svea fee: Fee for invoice", $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->Description);
+        $this->assertEquals("st", $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->Unit);
+        $this->assertEquals(25, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->VatPercent);
+        $this->assertEquals(0, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->DiscountPercent);
     }
     
     public function testOrderWithFixedDiscount() {
@@ -214,7 +214,7 @@ class NewOrderBuilderTest extends PHPUnit_Framework_TestCase {
                     ->setUnit("st")
                     ->setVatPercent(25)
                     ->setDiscountPercent(0)
-                    )
+                )
                 ->addDiscount(Item::fixedDiscount()
                    ->setDiscountId("1")
                     ->setAmountIncVat(100.00)
@@ -231,13 +231,13 @@ class NewOrderBuilderTest extends PHPUnit_Framework_TestCase {
             ->useInvoicePayment()// returnerar InvoiceOrder object
                 ->prepareRequest();
 
-            $this->assertEquals("1", $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->ArticleNumber);
-            $this->assertEquals(1, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->NumberOfUnits);
-            $this->assertEquals(-80.00, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->PricePerUnit);
-            $this->assertEquals("Fixed: FixedDiscount", $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->Description);
-            $this->assertEquals("st", $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->Unit);
-            $this->assertEquals(25, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->VatPercent);
-            $this->assertEquals(0, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->DiscountPercent);
+        $this->assertEquals("1", $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->ArticleNumber);
+        $this->assertEquals(1, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->NumberOfUnits);
+        $this->assertEquals(-80.00, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->PricePerUnit);
+        $this->assertEquals("Fixed: FixedDiscount", $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->Description);
+        $this->assertEquals("st", $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->Unit);
+        $this->assertEquals(25, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->VatPercent);
+        $this->assertEquals(0, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->DiscountPercent);
     }
     
     public function testOrderWithRelativeDiscount() {
@@ -270,13 +270,13 @@ class NewOrderBuilderTest extends PHPUnit_Framework_TestCase {
             ->useInvoicePayment()// returnerar InvoiceOrder object
                 ->prepareRequest();
 
-            $this->assertEquals("1", $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->ArticleNumber);
-            $this->assertEquals(1, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->NumberOfUnits);
-            $this->assertEquals(-100.00, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->PricePerUnit);
-            $this->assertEquals("Relative: RelativeDiscount", $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->Description);
-            $this->assertEquals("st", $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->Unit);
-            $this->assertEquals(25, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->VatPercent);
-            $this->assertEquals(0, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->DiscountPercent);
+        $this->assertEquals("1", $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->ArticleNumber);
+        $this->assertEquals(1, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->NumberOfUnits);
+        $this->assertEquals(-100.00, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->PricePerUnit);
+        $this->assertEquals("Relative: RelativeDiscount", $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->Description);
+        $this->assertEquals("st", $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->Unit);
+        $this->assertEquals(25, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->VatPercent);
+        $this->assertEquals(0, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->DiscountPercent);
     }
 
     public function testBuildOrderWithIndividualCustomer() {
@@ -313,13 +313,13 @@ class NewOrderBuilderTest extends PHPUnit_Framework_TestCase {
             ->useInvoicePayment()// returnerar InvoiceOrder object
                 ->prepareRequest();
 
-            $this->assertEquals(194605092222, $request->request->CreateOrderInformation->CustomerIdentity->NationalIdNumber);
-            $this->assertEquals(999999, $request->request->CreateOrderInformation->CustomerIdentity->PhoneNumber);
-            $this->assertEquals("Gatan", $request->request->CreateOrderInformation->CustomerIdentity->Street);
-            $this->assertEquals(23, $request->request->CreateOrderInformation->CustomerIdentity->HouseNumber);
-            $this->assertEquals(9999, $request->request->CreateOrderInformation->CustomerIdentity->ZipCode);
-            $this->assertEquals("Stan", $request->request->CreateOrderInformation->CustomerIdentity->Locality);
-            $this->assertEquals("Individual", $request->request->CreateOrderInformation->CustomerIdentity->CustomerType);
+        $this->assertEquals(194605092222, $request->request->CreateOrderInformation->CustomerIdentity->NationalIdNumber);
+        $this->assertEquals(999999, $request->request->CreateOrderInformation->CustomerIdentity->PhoneNumber);
+        $this->assertEquals("Gatan", $request->request->CreateOrderInformation->CustomerIdentity->Street);
+        $this->assertEquals(23, $request->request->CreateOrderInformation->CustomerIdentity->HouseNumber);
+        $this->assertEquals(9999, $request->request->CreateOrderInformation->CustomerIdentity->ZipCode);
+        $this->assertEquals("Stan", $request->request->CreateOrderInformation->CustomerIdentity->Locality);
+        $this->assertEquals("Individual", $request->request->CreateOrderInformation->CustomerIdentity->CustomerType);
     }
 
     public function testBuildOrderWithCompanyCustomer() {
@@ -353,13 +353,13 @@ class NewOrderBuilderTest extends PHPUnit_Framework_TestCase {
             ->useInvoicePayment()// returnerar InvoiceOrder object
                 ->prepareRequest();
 
-            $this->assertEquals(666666, $request->request->CreateOrderInformation->CustomerIdentity->NationalIdNumber);
-            $this->assertEquals("Company", $request->request->CreateOrderInformation->CustomerIdentity->CustomerType);
+        $this->assertEquals(666666, $request->request->CreateOrderInformation->CustomerIdentity->NationalIdNumber);
+        $this->assertEquals("Company", $request->request->CreateOrderInformation->CustomerIdentity->CustomerType);
     }
     
     public function testBuildOrderWithCompanyCustomerDE() {
-             $request = WebPay::createOrder();
-            $request = $request
+        $request = WebPay::createOrder();
+        $request = $request
             ->addOrderRow(
                 Item::orderRow()
                     ->setArticleNumber(1)
@@ -387,12 +387,12 @@ class NewOrderBuilderTest extends PHPUnit_Framework_TestCase {
             ->setOrderDate("2012-12-12")
             ->setCurrency("EUR")
             ->useInvoicePayment()// returnerar InvoiceOrder object
-                ->prepareRequest();
+            ->prepareRequest();
 
-            $this->assertEquals("SE666666", $request->request->CreateOrderInformation->CustomerIdentity->CompanyIdentity->CompanyVatNumber);
-            $this->assertEquals("Company", $request->request->CreateOrderInformation->CustomerIdentity->CustomerType);
-            $this->assertEquals("MyCompany", $request->request->CreateOrderInformation->CustomerIdentity->FullName);
-        }
+        $this->assertEquals("SE666666", $request->request->CreateOrderInformation->CustomerIdentity->CompanyIdentity->CompanyVatNumber);
+        $this->assertEquals("Company", $request->request->CreateOrderInformation->CustomerIdentity->CustomerType);
+        $this->assertEquals("MyCompany", $request->request->CreateOrderInformation->CustomerIdentity->FullName);
+    }
 
         /** example how to integrate with array_map
         function testOrderRowsUsingMap() {

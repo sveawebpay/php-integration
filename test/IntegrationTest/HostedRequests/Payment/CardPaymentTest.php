@@ -61,7 +61,7 @@ class CardPaymentTest extends PHPUnit_Framework_TestCase {
         //returns a html page with redirecting to bank...
         curl_exec($ch);
         
-       // Check if any error occurred
+        // Check if any error occurred
         if (!curl_errno($ch)) {
             $info = curl_getinfo($ch);
             $payPage = "";
