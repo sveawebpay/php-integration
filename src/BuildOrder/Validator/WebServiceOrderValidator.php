@@ -50,7 +50,7 @@ class WebServiceOrderValidator extends OrderValidator {
             } else {
                 $this->errors['not valid'] = "Given countrycode does not exist in our system.";
             }
-        }else{
+        } else{
             $this->errors['missing value'] = "CountryCode is required. Use function setCountryCode().";
         }
 

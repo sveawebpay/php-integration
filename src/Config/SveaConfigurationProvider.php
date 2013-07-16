@@ -100,7 +100,7 @@ class SveaConfigurationProvider implements ConfigurationProvider {
         $uCountry = strtoupper($country);
         if(array_key_exists($uCountry,$this->conf['credentials']) == FALSE) {
             $this->throwInvalidCountryException();
-        }elseif(array_key_exists($uType,$this->conf['credentials'][$uCountry]['auth']) == FALSE) {
+        } elseif(array_key_exists($uType,$this->conf['credentials'][$uCountry]['auth']) == FALSE) {
             $this->throwInvalidTypeException();
         }
 

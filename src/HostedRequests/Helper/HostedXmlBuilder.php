@@ -110,13 +110,13 @@ class HostedXmlBuilder {
 
         if (!empty($orderRow->amount) && $orderRow->amount != null) {
             $this->XMLWriter->writeElement("amount", round($orderRow->amount));
-        }else{
+        } else{
               $this->XMLWriter->writeElement("amount", "0");
         }
 
         if (!empty($orderRow->vat) && $orderRow->vat != null) {
             $this->XMLWriter->writeElement("vat", round($orderRow->vat));
-        }else{
+        } else{
             $this->XMLWriter->writeElement("vat", "0");
         }
 
@@ -176,7 +176,7 @@ class HostedXmlBuilder {
                 if(isset($order->customerIdentity->orgNumber)|| isset($order->customerIdentity->companyVatNumber)) {
                     if(isset($order->customerIdentity->orgNumber)) {
                          $this->XMLWriter->writeElement("ssn", $order->customerIdentity->orgNumber);
-                    }else{
+                    } else{
                           $this->XMLWriter->writeElement("vatnumber", $order->customerIdentity->companyVatNumber);
                     }
 
