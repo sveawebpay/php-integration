@@ -10,7 +10,7 @@ require_once $root . '/../../../../test/UnitTest/BuildOrder/TestRowFactory.php';
  * @author anne-hal
  */
 class PaymentMethodTest extends PHPUnit_Framework_TestCase{
-
+    
      public function testPayPagePaymentWithSetPaymentMethod() {
         $rowFactory = new TestRowFactory();
         $form = WebPay::createOrder()
@@ -23,7 +23,7 @@ class PaymentMethodTest extends PHPUnit_Framework_TestCase{
                     ->setUnit("st")
                     ->setVatPercent(25)
                     ->setDiscountPercent(0)
-                    )
+            )
             ->run($rowFactory->buildShippingFee())
             ->addDiscount(Item::relativeDiscount()
                     ->setDiscountId("1")
@@ -31,16 +31,16 @@ class PaymentMethodTest extends PHPUnit_Framework_TestCase{
                     ->setUnit("st")
                     ->setName('Relative')
                     ->setDescription("RelativeDiscount")
-                    )
+            )
             ->addCustomerDetails(Item::individualCustomer()->setNationalIdNumber(194605092222))
-                ->setCountryCode("SE")
-                ->setClientOrderNumber("33")
-                ->setOrderDate("2012-12-12")
-                ->setCurrency("SEK")
-                    ->usePaymentMethod(PaymentMethod::KORTCERT)
-                    ->setReturnUrl("http://myurl.se")
-                        ->getPaymentForm();
-
+            ->setCountryCode("SE")
+            ->setClientOrderNumber("33")
+            ->setOrderDate("2012-12-12")
+            ->setCurrency("SEK")
+            ->usePaymentMethod(PaymentMethod::KORTCERT)
+            ->setReturnUrl("http://myurl.se")
+            ->getPaymentForm();
+        
         $xmlMessage = new SimpleXMLElement($form->xmlMessage);
         $this->assertEquals(PaymentMethod::KORTCERT, $xmlMessage->paymentmethod[0]);
     }
@@ -57,7 +57,7 @@ class PaymentMethodTest extends PHPUnit_Framework_TestCase{
                     ->setUnit("st")
                     ->setVatPercent(25)
                     ->setDiscountPercent(0)
-                    )
+            )
             ->run($rowFactory->buildShippingFee())
             ->addDiscount(Item::relativeDiscount()
                     ->setDiscountId("1")
@@ -65,16 +65,16 @@ class PaymentMethodTest extends PHPUnit_Framework_TestCase{
                     ->setUnit("st")
                     ->setName('Relative')
                     ->setDescription("RelativeDiscount")
-                    )
+            )
             ->addCustomerDetails(Item::companyCustomer()->setNationalIdNumber(4608142222))
-                ->setCountryCode("SE")
-                ->setClientOrderNumber("33")
-                ->setOrderDate("2012-12-12")
-                ->setCurrency("SEK")
-                    ->usePaymentMethod(PaymentMethod::INVOICE)
-                    ->setReturnUrl("http://myurl.se")
-                    ->getPaymentForm();
-
+            ->setCountryCode("SE")
+            ->setClientOrderNumber("33")
+            ->setOrderDate("2012-12-12")
+            ->setCurrency("SEK")
+            ->usePaymentMethod(PaymentMethod::INVOICE)
+            ->setReturnUrl("http://myurl.se")
+            ->getPaymentForm();
+        
         $xmlMessage = new SimpleXMLElement($form->xmlMessage);
         $this->assertEquals(SystemPaymentMethod::INVOICE_SE, $xmlMessage->paymentmethod[0]);
         $this->assertEquals("TRUE", $xmlMessage->iscompany);
@@ -92,7 +92,7 @@ class PaymentMethodTest extends PHPUnit_Framework_TestCase{
                     ->setUnit("st")
                     ->setVatPercent(25)
                     ->setDiscountPercent(0)
-                    )
+            )
             ->addCustomerDetails(Item::individualCustomer()
                     ->setInitials("SB")
                     ->setBirthDate(1923, 12, 12)
@@ -104,16 +104,16 @@ class PaymentMethodTest extends PHPUnit_Framework_TestCase{
                     ->setCoAddress("c/o Eriksson")
                     ->setZipCode(9999)
                     ->setLocality("Stan")
-                    )
-                ->setCountryCode("NL")
-                ->setClientOrderNumber("33")
-                ->setOrderDate("2012-12-12")
-                ->setCurrency("SEK")
-                    ->usePaymentMethod(PaymentMethod::INVOICE)
-                    ->setReturnUrl("http://myurl.se")
-                        ->getPaymentForm();
+            )
+            ->setCountryCode("NL")
+            ->setClientOrderNumber("33")
+            ->setOrderDate("2012-12-12")
+            ->setCurrency("SEK")
+            ->usePaymentMethod(PaymentMethod::INVOICE)
+            ->setReturnUrl("http://myurl.se")
+            ->getPaymentForm();
         $xmlMessage = new SimpleXMLElement($form->xmlMessage);
-
+        
         $this->assertEquals("FALSE", $xmlMessage->iscompany);
         $this->assertEquals("Sneider", $xmlMessage->customer->firstname);
     }

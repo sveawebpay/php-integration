@@ -7,7 +7,7 @@ require_once $root . '/../../../src/Includes.php';
  * Description of SveaConfigTest
  */
 class SveaConfigTest extends PHPUnit_Framework_TestCase {
-
+    
     public function t_estInstancesOfSveaConfig() {
         $obj1 = SveaConfig::getConfig();
         $obj2 = SveaConfig::getConfig();

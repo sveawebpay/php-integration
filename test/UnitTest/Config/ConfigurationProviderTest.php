@@ -7,7 +7,7 @@ require_once $root . '/../../../src/Includes.php';
  * Description of SveaConfigTest
  */
 class ConfigurationProviderTest extends PHPUnit_Framework_TestCase {
-
+    
     public function testDefaultTestConfig() {
         $config = SveaConfig::getDefaultConfig();
         $this->assertEquals("sverigetest", $config->getUsername("INVOICE","SE"));

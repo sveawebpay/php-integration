@@ -9,7 +9,7 @@ require_once $root . '/../../../../src/Includes.php';
  * @author Anneli Halld'n, Daniel Brolund for Svea Webpay
  */
 class WebServiceOrderValidatorTest extends PHPUnit_Framework_TestCase {
-
+    
     /**
      * @expectedException ValidationException
      * @expectedExceptionMessage -missing value : Customer values are required for Invoice and PaymentPlan orders.
@@ -171,7 +171,7 @@ class WebServiceOrderValidatorTest extends PHPUnit_Framework_TestCase {
         
         $order->prepareRequest();
     }
-
+    
     /**
      * @expectedException ValidationException
      * @expectedExceptionMessage -missing value : BirthDate is required for individual customers when countrycode is DE. Use function setBirthDate().
@@ -188,7 +188,6 @@ class WebServiceOrderValidatorTest extends PHPUnit_Framework_TestCase {
                         ->setZipCode(9999)
                         ->setLocality("Stan")
                 )
-                
                 ->useInvoicePayment();
         $order->prepareRequest();
     }
@@ -237,7 +236,6 @@ class WebServiceOrderValidatorTest extends PHPUnit_Framework_TestCase {
                         ->setLocality("Stan")
                 )
                 ->useInvoicePayment();
-        
         $order->prepareRequest();
     }
     
@@ -289,7 +287,6 @@ class WebServiceOrderValidatorTest extends PHPUnit_Framework_TestCase {
                 // ->setOrderDate("Mon, 15 Aug 05 15:52:01 +0000")
                 ->addCustomerDetails(Item::individualCustomer()->setNationalIdNumber(46111111))
                 ->useInvoicePayment();
-        
         $order->prepareRequest();
     }
     
@@ -310,7 +307,6 @@ class WebServiceOrderValidatorTest extends PHPUnit_Framework_TestCase {
                 // ->setOrderDate("Mon, 15 Aug 05 15:52:01 +0000")
                 ->addCustomerDetails(Item::individualCustomer()->setNationalIdNumber(46111111))
                 ->useInvoicePayment();
-        
         $order->prepareRequest(); 
     }
 }

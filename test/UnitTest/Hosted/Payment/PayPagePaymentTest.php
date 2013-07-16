@@ -10,10 +10,10 @@ require_once $root . '/../../../../test/UnitTest/BuildOrder/TestRowFactory.php';
  * @author Anneli Halld'n, Daniel Brolund for Svea Webpay
  */
 class PayPagePaymentTest extends PHPUnit_Framework_TestCase {
-
+    
     public function testBuildPayPagePaymentWithExcludepaymentMethods() {
         $rowFactory = new TestRowFactory();
-       $form = WebPay::createOrder()
+        $form = WebPay::createOrder()
             ->addOrderRow(Item::orderRow()
                     ->setArticleNumber(1)
                     ->setQuantity(2)
@@ -23,7 +23,7 @@ class PayPagePaymentTest extends PHPUnit_Framework_TestCase {
                     ->setUnit("st")
                     ->setVatPercent(25)
                     ->setDiscountPercent(0)
-                    )
+            )
             ->run($rowFactory->buildShippingFee())
             ->addDiscount(Item::relativeDiscount()
                      ->setDiscountId("1")
@@ -31,17 +31,17 @@ class PayPagePaymentTest extends PHPUnit_Framework_TestCase {
                     ->setUnit("st")
                     ->setName('Relative')
                     ->setDescription("RelativeDiscount")
-                    )
-               ->addCustomerDetails(Item::individualCustomer()->setNationalIdNumber(194605092222))
-                ->setCountryCode("SE")
-                ->setClientOrderNumber("33")
-                ->setOrderDate("2012-12-12")
-                ->setCurrency("SEK")
-                ->usePayPage()
-                    ->setReturnUrl("http://myurl.se")
-                    ->excludePaymentMethods(PaymentMethod::INVOICE, PaymentMethod::KORTCERT)
-                    ->getPaymentForm();
-
+            )
+            ->addCustomerDetails(Item::individualCustomer()->setNationalIdNumber(194605092222))
+            ->setCountryCode("SE")
+            ->setClientOrderNumber("33")
+            ->setOrderDate("2012-12-12")
+            ->setCurrency("SEK")
+            ->usePayPage()
+            ->setReturnUrl("http://myurl.se")
+            ->excludePaymentMethods(PaymentMethod::INVOICE, PaymentMethod::KORTCERT)
+            ->getPaymentForm();
+        
         $xmlMessage = new SimpleXMLElement($form->xmlMessage);
         //test values are as expected avter transforming xml to php object
         $this->assertEquals('SEK', $xmlMessage->currency);
@@ -67,7 +67,7 @@ class PayPagePaymentTest extends PHPUnit_Framework_TestCase {
                     ->setUnit("st")
                     ->setVatPercent(25)
                     ->setDiscountPercent(0)
-                    )
+            )
             ->run($rowFactory->buildShippingFee())
             ->addDiscount(Item::relativeDiscount()
                     ->setDiscountId("1")
@@ -75,17 +75,17 @@ class PayPagePaymentTest extends PHPUnit_Framework_TestCase {
                     ->setUnit("st")
                     ->setName('Relative')
                     ->setDescription("RelativeDiscount")
-                    )
+            )
             ->addCustomerDetails(Item::individualCustomer()->setNationalIdNumber(194605092222))
-                ->setCountryCode("SE")
-                ->setClientOrderNumber("33")
-                ->setOrderDate("2012-12-12")
-                ->setCurrency("SEK")
-                ->usePayPage()
-                    ->setReturnUrl("http://myurl.se")
-                    ->excludeCardPaymentMethods()
-                    ->getPaymentForm();
-
+            ->setCountryCode("SE")
+            ->setClientOrderNumber("33")
+            ->setOrderDate("2012-12-12")
+            ->setCurrency("SEK")
+            ->usePayPage()
+            ->setReturnUrl("http://myurl.se")
+            ->excludeCardPaymentMethods()
+            ->getPaymentForm();
+        
         $xmlMessage = new SimpleXMLElement($form->xmlMessage);
         $this->assertEquals(PaymentMethod::KORTCERT, $xmlMessage->excludepaymentmethods->exclude[0]);
     }
@@ -102,7 +102,7 @@ class PayPagePaymentTest extends PHPUnit_Framework_TestCase {
                     ->setUnit("st")
                     ->setVatPercent(25)
                     ->setDiscountPercent(0)
-                    )
+            )
             ->run($rowFactory->buildShippingFee())
             ->addDiscount(Item::relativeDiscount()
                     ->setDiscountId("1")
@@ -110,17 +110,17 @@ class PayPagePaymentTest extends PHPUnit_Framework_TestCase {
                     ->setUnit("st")
                     ->setName('Relative')
                     ->setDescription("RelativeDiscount")
-                    )
+            )
             ->addCustomerDetails(Item::individualCustomer()->setNationalIdNumber(194605092222))
-                ->setCountryCode("SE")
-                ->setClientOrderNumber("33")
-                ->setOrderDate("2012-12-12")
-                ->setCurrency("SEK")
-                ->usePayPage()
-                    ->setReturnUrl("http://myurl.se")
-                    ->excludeDirectPaymentMethods()
-                    ->getPaymentForm();
-
+            ->setCountryCode("SE")
+            ->setClientOrderNumber("33")
+            ->setOrderDate("2012-12-12")
+            ->setCurrency("SEK")
+            ->usePayPage()
+            ->setReturnUrl("http://myurl.se")
+            ->excludeDirectPaymentMethods()
+            ->getPaymentForm();
+        
         $xmlMessage = new SimpleXMLElement($form->xmlMessage);
         $this->assertEquals(PaymentMethod::BANKAXESS, $xmlMessage->excludepaymentmethods->exclude[0]);
     }
@@ -137,7 +137,7 @@ class PayPagePaymentTest extends PHPUnit_Framework_TestCase {
                     ->setUnit("st")
                     ->setVatPercent(25)
                     ->setDiscountPercent(0)
-                    )
+            )
             ->run($rowFactory->buildShippingFee())
             ->addDiscount(Item::relativeDiscount()
                     ->setDiscountId("1")
@@ -145,16 +145,16 @@ class PayPagePaymentTest extends PHPUnit_Framework_TestCase {
                     ->setUnit("st")
                     ->setName('Relative')
                     ->setDescription("RelativeDiscount")
-                    )
-                 ->addCustomerDetails(Item::individualCustomer()->setNationalIdNumber(194605092222))
-                ->setCountryCode("SE")
-                ->setClientOrderNumber("33")
-                ->setOrderDate("2012-12-12")
-                ->setCurrency("SEK")
-                ->usePayPage()
-                    ->setReturnUrl("http://myurl.se")
-                    ->includePaymentMethods(PaymentMethod::KORTCERT, PaymentMethod::SKRILL)
-                    ->getPaymentForm();
+            )
+            ->addCustomerDetails(Item::individualCustomer()->setNationalIdNumber(194605092222))
+            ->setCountryCode("SE")
+            ->setClientOrderNumber("33")
+            ->setOrderDate("2012-12-12")
+            ->setCurrency("SEK")
+            ->usePayPage()
+            ->setReturnUrl("http://myurl.se")
+            ->includePaymentMethods(PaymentMethod::KORTCERT, PaymentMethod::SKRILL)
+            ->getPaymentForm();
         
         $xmlMessage = new SimpleXMLElement($form->xmlMessage);
         //check to see if the first value is one of the excluded ones
@@ -164,20 +164,20 @@ class PayPagePaymentTest extends PHPUnit_Framework_TestCase {
     public function testBuildPayPagePaymentVatIsCero() {
          $rowFactory = new TestRowFactory();
          $form = WebPay::createOrder()
-            ->addOrderRow(Item::orderRow()
+                ->addOrderRow(Item::orderRow()
                     ->setQuantity(2)
                     ->setAmountExVat(100.00)
                     ->setName('Prod')
                     ->setVatPercent(0)
-                    )
+                )
                 ->setCountryCode("SE")
                 ->setClientOrderNumber("33")
                 ->setCurrency("SEK")
                 ->usePayPage()
-                    ->setReturnUrl("myurl")
-                    ->getPaymentForm();
-       
-
+                ->setReturnUrl("myurl")
+                ->getPaymentForm();
+        
+        
         $xmlMessage = new SimpleXMLElement($form->xmlMessage);
         //test values are as expected avter transforming xml to php object
         $this->assertEquals('SEK', $xmlMessage->currency);

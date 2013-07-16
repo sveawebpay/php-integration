@@ -44,7 +44,7 @@ class OrderBuilderTest extends PHPUnit_Framework_TestCase {
         $this->assertInternalType("int", $sveaRequest->orderRows[0]->quantity);
         $this->assertInternalType("int", $sveaRequest->orderRows[0]->vatPercent);
     }
-
+    
     public function testBuildOrderWithShippingFee() {
         $rowFactory = new TestRowFactory();
         $sveaRequest =
@@ -55,7 +55,7 @@ class OrderBuilderTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(50, $sveaRequest->shippingFeeRows[0]->amountExVat);
         $this->assertEquals(25, $sveaRequest->shippingFeeRows[0]->vatPercent);
     }
-
+    
     public function testBuildOrderWithInvoicefee() {
         $rowFactory = new TestRowFactory();
         $sveaRequest = WebPay::createOrder()
@@ -69,7 +69,7 @@ class OrderBuilderTest extends PHPUnit_Framework_TestCase {
                     ->setVatPercent(25)
                         )
                 ->run($rowFactory->buildInvoiceFee());
-
+        
         $this->assertEquals("Svea fee", $sveaRequest->invoiceFeeRows[0]->name);
         $this->assertEquals("Fee for invoice", $sveaRequest->invoiceFeeRows[0]->description);
         $this->assertEquals(50, $sveaRequest->invoiceFeeRows[0]->amountExVat);
@@ -77,7 +77,7 @@ class OrderBuilderTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(25, $sveaRequest->invoiceFeeRows[0]->vatPercent);
         $this->assertEquals(0, $sveaRequest->invoiceFeeRows[0]->discountPercent);
     }
-
+    
     public function testBuildOrderWithFixedDiscount() {
         $sveaRequest = WebPay::createOrder()
                 ->addDiscount(Item::fixedDiscount()
@@ -94,7 +94,7 @@ class OrderBuilderTest extends PHPUnit_Framework_TestCase {
         //test type
         $this->assertInternalType("float", $sveaRequest->fixedDiscountRows[0]->amount);
     }
-
+    
     public function testBuildOrderWithRelativeDiscount() {
         $sveaRequest =
                 WebPay::createOrder()
@@ -112,23 +112,22 @@ class OrderBuilderTest extends PHPUnit_Framework_TestCase {
         //test type
         $this->assertInternalType("int", $sveaRequest->relativeDiscountRows[0]->discountPercent);
     }
-
+    
     public function testBuildOrderWithCustomer() {
-        $sveaRequest =
-                WebPay::createOrder()
+        $sveaRequest = WebPay::createOrder()
                 ->addCustomerDetails(Item::individualCustomer()
-                ->setNationalIdNumber(194605092222)
-                ->setInitials("SB")
-                ->setBirthDate(1923, 12, 12)
-                ->setName("Tess", "Testson")
-                ->setEmail("test@svea.com")
-                ->setPhoneNumber(999999)
-                ->setIpAddress("123.123.123")
-                ->setStreetAddress("Gatan", 23)
-                ->setCoAddress("c/o Eriksson")
-                ->setZipCode(9999)
-                ->setLocality("Stan")
-                        );
+                        ->setNationalIdNumber(194605092222)
+                        ->setInitials("SB")
+                        ->setBirthDate(1923, 12, 12)
+                        ->setName("Tess", "Testson")
+                        ->setEmail("test@svea.com")
+                        ->setPhoneNumber(999999)
+                        ->setIpAddress("123.123.123")
+                        ->setStreetAddress("Gatan", 23)
+                        ->setCoAddress("c/o Eriksson")
+                        ->setZipCode(9999)
+                        ->setLocality("Stan")
+                );
         
         $this->assertEquals(194605092222, $sveaRequest->customerIdentity->ssn);
         $this->assertEquals("SB", $sveaRequest->customerIdentity->initials);
@@ -148,20 +147,19 @@ class OrderBuilderTest extends PHPUnit_Framework_TestCase {
     public function testBuildOrderWithAllCustomerTypes() {
         $company = TRUE;
         $sveaRequest = WebPay::createOrder();
-       
+        
         if ($company == TRUE) {
                $item = Item::companyCustomer();
                $item = $item->setNationalIdNumber(194605092222)
                     ->setEmail("test@svea.com")
-                    ->setCompanyName("TestCompagniet") //SET
-                    ->setZipCode(9999)            
+                    ->setCompanyName("TestCompagniet")
+                    ->setZipCode(9999)
                     ->setLocality("Stan")
                     ->setIpAddress("123.123.123")
                     ->setPhoneNumber(999999);
-          
+        
         if ("DE" == "DE") {
-            $item = 
-             $item
+            $item = $item
                 ->setVatNumber("NL2345234")
                 ->setStreetAddress("Gatan", 23);
             }

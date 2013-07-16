@@ -9,7 +9,7 @@ require_once $root . '/../../../../src/Includes.php';
  * @author Anneli Halld'n, Daniel Brolund for Svea Webpay
  */
 class HostedOrderValidatorTest extends PHPUnit_Framework_TestCase {
-
+    
     /**
      * @expectedException ValidationException
      * @expectedExceptionMessage -missing value : ClientOrderNumber is required. Use function setClientOrderNumber().
@@ -29,7 +29,7 @@ class HostedOrderValidatorTest extends PHPUnit_Framework_TestCase {
         
         $order->getPaymentForm();
     }
-
+    
     /**
      * @expectedException ValidationException
      * @expectedExceptionMessage -missing value : ClientOrderNumber is required. Use function setClientOrderNumber().
@@ -104,7 +104,7 @@ class HostedOrderValidatorTest extends PHPUnit_Framework_TestCase {
         $order->getPaymentForm();
     }
     
-     /**
+    /**
      * @expectedException ValidationException
      * @expectedExceptionMessage -missing value : Currency is required. Use function setCurrency().
      */
@@ -124,7 +124,7 @@ class HostedOrderValidatorTest extends PHPUnit_Framework_TestCase {
         $order->getPaymentForm();
     }
     
-     /**
+    /**
      * @expectedException ValidationException
      * @expectedExceptionMessage -missing value : CountryCode is required. Use function setCountryCode().
      */
