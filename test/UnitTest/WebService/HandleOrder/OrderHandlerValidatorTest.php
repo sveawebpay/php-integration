@@ -17,11 +17,10 @@ class OrderHandlerValidatorTest extends PHPUnit_Framework_TestCase {
      */
     function testFailOnMissingOrderIdOnPaymentPlanDeliver() {
         $builder = WebPay::deliverOrder();
-
         $object = $builder;
         
-     $object->deliverPaymentPlanOrder()
-             ->prepareRequest();
+        $object->deliverPaymentPlanOrder()
+            ->prepareRequest();
     }
 
     /**
@@ -67,7 +66,6 @@ class OrderHandlerValidatorTest extends PHPUnit_Framework_TestCase {
                 ->deliverInvoiceOrder();
         $object->prepareRequest();
     }
-
 }
 
 ?>

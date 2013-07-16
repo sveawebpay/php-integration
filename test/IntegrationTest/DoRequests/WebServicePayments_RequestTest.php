@@ -260,7 +260,6 @@ class WebServicePayments_RequestTest extends PHPUnit_Framework_TestCase {
          return $response;
     }
 
-
     function testBuildPriceCalculator() {
        $params = $this->getGetPaymentPlanParamsResponseForTesting();
        $response = WebPay::paymentPlanPricePerMonth(2000,$params);
@@ -272,7 +271,6 @@ class WebServicePayments_RequestTest extends PHPUnit_Framework_TestCase {
        $params = $this->getGetPaymentPlanParamsResponseForTesting();
        $response = WebPay::paymentPlanPricePerMonth(200,$params);
        $this->assertEmpty($response->values);
-
     }
 }
 

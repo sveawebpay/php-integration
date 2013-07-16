@@ -20,15 +20,14 @@ class TestRowFactory {
                     ->setVatPercent(25)
                     ->setDiscountPercent(0)
                 );
-                
         };
     }
     
     /**
-    * Returns InvoicefeeRow to use as shorthand in testFunctions
-    * Use function run($functionname) to run shorthand function
-    * @return type
-    */
+     * Returns InvoicefeeRow to use as shorthand in testFunctions
+     * Use function run($functionname) to run shorthand function
+     * @return type
+     */
     function buildInvoiceFee() {
         return function($orderbuilder) {
             return $orderbuilder

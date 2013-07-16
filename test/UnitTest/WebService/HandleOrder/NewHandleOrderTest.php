@@ -43,11 +43,10 @@ class NewHandleOrderTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals("st", $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][0]->Unit);
         $this->assertEquals(25, $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][0]->VatPercent);
         $this->assertEquals(0, $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][0]->DiscountPercent);
-
         }
 
-        function testDeliverOrderWithInvoiceFeeAndFixedDiscount() {
-             $request = WebPay::deliverOrder();
+    function testDeliverOrderWithInvoiceFeeAndFixedDiscount() {
+        $request = WebPay::deliverOrder();
             //->setTestmode()();
         //foreach...
         $request = $request
@@ -110,10 +109,10 @@ class NewHandleOrderTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(25, $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][2]->VatPercent);
         $this->assertEquals(0, $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][2]->DiscountPercent);
 
-        }
+    }
 
-        function testDeliverOrderWithShippingFeeAndRelativeDiscount() {
-             $request = WebPay::deliverOrder();
+    function testDeliverOrderWithShippingFeeAndRelativeDiscount() {
+        $request = WebPay::deliverOrder();
             //->setTestmode()();
         //foreach...
         $request = $request
@@ -175,8 +174,7 @@ class NewHandleOrderTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals("st", $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][2]->Unit);
         $this->assertEquals(25, $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][2]->VatPercent);
         $this->assertEquals(0, $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][2]->DiscountPercent);
-
-        }
+    }
 }
 
 ?>

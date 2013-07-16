@@ -27,7 +27,6 @@ class HostedOrderValidatorTest extends PHPUnit_Framework_TestCase {
                 ->usePayPageCardOnly()
                      ->setReturnUrl("myurl.se");
                $order->getPaymentForm();
-
     }
 
     /**
@@ -61,7 +60,7 @@ class HostedOrderValidatorTest extends PHPUnit_Framework_TestCase {
      * -missing value : ZipCode is required for INVOICE and PAYMENTPLAN payments for all customers when countrycode is NL. Use function setZipCode().
      */
     function testFailOnMissingCustomerForNL() {
-          $builder = WebPay::createOrder();
+        $builder = WebPay::createOrder();
         $order = $builder
                 ->addOrderRow(Item::orderRow()
                     ->setAmountExVat(100)
@@ -75,6 +74,7 @@ class HostedOrderValidatorTest extends PHPUnit_Framework_TestCase {
                      ->setReturnUrl("myurl.se");
        $order->getPaymentForm();
      }
+     
     /**
      * @expectedException ValidationException
      * @expectedExceptionMessage
@@ -105,7 +105,7 @@ class HostedOrderValidatorTest extends PHPUnit_Framework_TestCase {
      * @expectedExceptionMessage -missing value : Currency is required. Use function setCurrency().
      */
     function testFailOnMissingCurrency() {
-         $builder = WebPay::createOrder();
+        $builder = WebPay::createOrder();
         $order = $builder
                 ->addOrderRow(Item::orderRow()
                           ->setAmountExVat(100)
@@ -118,12 +118,13 @@ class HostedOrderValidatorTest extends PHPUnit_Framework_TestCase {
                      ->setReturnUrl("myurl.se");
        $order->getPaymentForm();
     }
+    
      /**
      * @expectedException ValidationException
      * @expectedExceptionMessage -missing value : CountryCode is required. Use function setCountryCode().
      */
     function testFailOnMissingCountryCode() {
-         $builder = WebPay::createOrder();
+        $builder = WebPay::createOrder();
         $order = $builder
                 ->addOrderRow(Item::orderRow()
                           ->setAmountExVat(100)
@@ -137,7 +138,8 @@ class HostedOrderValidatorTest extends PHPUnit_Framework_TestCase {
                      ->setReturnUrl("myurl.se");
        $order->getPaymentForm();
     }
-     /**
+    
+    /**
      * @expectedException ValidationException
      * @expectedExceptionMessage -missing value : ReturnUrl is required. Use function setReturnUrl().
      */
@@ -154,13 +156,9 @@ class HostedOrderValidatorTest extends PHPUnit_Framework_TestCase {
                 ->setClientOrderNumber("34")
                     ->usePayPage()
                    // ->setReturnUrl("myurl.se")
-
                     ;
        $order->getPaymentForm();
     }
-
-
-
 }
 
 ?>

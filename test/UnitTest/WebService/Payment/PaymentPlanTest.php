@@ -9,7 +9,6 @@ require_once $root . '/../../../../test/UnitTest/BuildOrder/TestRowFactory.php';
  *
  * @author Anneli Halld'n, Daniel Brolund for Svea Webpay
  */
-
 class PaymentPlanTest extends PHPUnit_Framework_TestCase {
 
       /**
@@ -83,6 +82,7 @@ class PaymentPlanTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(25, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->VatPercent);
         $this->assertEquals(0, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->DiscountPercent);
     }
+    
     function testPaymentPlanWithPriceAsDecimal() {
         $campaign = $this->getGetPaymentPlanParamsForTesting();
         $request = WebPay::createOrder()

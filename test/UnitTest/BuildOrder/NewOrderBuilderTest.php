@@ -17,7 +17,7 @@ class NewOrderBuilderTest extends PHPUnit_Framework_TestCase {
     /**
      * getAddressSelector for test
      */
-     function getAddressForTesting() {
+    function getAddressForTesting() {
         $addressRequest = WebPay::getAddresses();
         $request = $addressRequest
             ->setOrderTypeInvoice()
@@ -55,8 +55,8 @@ class NewOrderBuilderTest extends PHPUnit_Framework_TestCase {
                 ->useInvoicePayment()// returnerar InvoiceOrder object
                     ->prepareRequest();
             $this->assertEquals($addresselector, $request->request->CreateOrderInformation->AddressSelector);
-
-        }
+    }
+    
     function testNewInvoiceOrderWithOrderRow() {
         $request = WebPay::createOrder();
             ////->setTestmode()()();
@@ -91,12 +91,9 @@ class NewOrderBuilderTest extends PHPUnit_Framework_TestCase {
             $this->assertEquals("st", $request->request->CreateOrderInformation->OrderRows['OrderRow'][0]->Unit);
             $this->assertEquals(25, $request->request->CreateOrderInformation->OrderRows['OrderRow'][0]->VatPercent);
             $this->assertEquals(0, $request->request->CreateOrderInformation->OrderRows['OrderRow'][0]->DiscountPercent);
-
         }
 
-
-        function testNewInvoiceOrderWithArray() {
-
+    function testNewInvoiceOrderWithArray() {
         $orderRows[] = Item::orderrow()
                     ->setArticleNumber(1)
                     ->setQuantity(2)
@@ -116,7 +113,6 @@ class NewOrderBuilderTest extends PHPUnit_Framework_TestCase {
                     ->setVatPercent(25)
                     ->setDiscountPercent(0);
 
-
         $request = WebPay::createOrder()
             //->setTestmode()()
             ->addOrderRow($orderRows)
@@ -129,12 +125,10 @@ class NewOrderBuilderTest extends PHPUnit_Framework_TestCase {
                 ->prepareRequest();
 
             $this->assertEquals(194605092222, $request->request->CreateOrderInformation->CustomerIdentity->NationalIdNumber); //Check all in identity
-
-
         }
 
-        function testOrderWithShippingFee() {
-            $request = WebPay::createOrder();
+    function testOrderWithShippingFee() {
+        $request = WebPay::createOrder();
             //->setTestmode()();
         //foreach...
         $request = $request
@@ -218,10 +212,10 @@ class NewOrderBuilderTest extends PHPUnit_Framework_TestCase {
             $this->assertEquals("st", $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->Unit);
             $this->assertEquals(25, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->VatPercent);
             $this->assertEquals(0, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->DiscountPercent);
-        }
+    }
+        
     function testOrderWithFixedDiscount() {
         $request = WebPay::createOrder();
-
         //foreach...
         $request = $request
             ->addOrderRow(
@@ -259,7 +253,8 @@ class NewOrderBuilderTest extends PHPUnit_Framework_TestCase {
             $this->assertEquals("st", $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->Unit);
             $this->assertEquals(25, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->VatPercent);
             $this->assertEquals(0, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->DiscountPercent);
-        }
+    }
+    
     function testOrderWithRelativeDiscount() {
         $request = WebPay::createOrder();
             //->setTestmode()();
@@ -302,8 +297,8 @@ class NewOrderBuilderTest extends PHPUnit_Framework_TestCase {
             $this->assertEquals(0, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->DiscountPercent);
         }
 
-        public function testBuildOrderWithIndividualCustomer() {
-             $request = WebPay::createOrder();
+    public function testBuildOrderWithIndividualCustomer() {
+        $request = WebPay::createOrder();
             //->setTestmode()();
         //foreach...
             $request = $request
@@ -339,7 +334,6 @@ class NewOrderBuilderTest extends PHPUnit_Framework_TestCase {
             ->useInvoicePayment()// returnerar InvoiceOrder object
                 ->prepareRequest();
 
-
             $this->assertEquals(194605092222, $request->request->CreateOrderInformation->CustomerIdentity->NationalIdNumber);
             $this->assertEquals(999999, $request->request->CreateOrderInformation->CustomerIdentity->PhoneNumber);
             $this->assertEquals("Gatan", $request->request->CreateOrderInformation->CustomerIdentity->Street);
@@ -349,8 +343,8 @@ class NewOrderBuilderTest extends PHPUnit_Framework_TestCase {
             $this->assertEquals("Individual", $request->request->CreateOrderInformation->CustomerIdentity->CustomerType);
         }
 
-        public function testBuildOrderWithCompanyCustomer() {
-             $request = WebPay::createOrder();
+    public function testBuildOrderWithCompanyCustomer() {
+        $request = WebPay::createOrder();
             //->setTestmode()();
         //foreach...
             $request = $request
@@ -385,8 +379,9 @@ class NewOrderBuilderTest extends PHPUnit_Framework_TestCase {
 
             $this->assertEquals(666666, $request->request->CreateOrderInformation->CustomerIdentity->NationalIdNumber);
             $this->assertEquals("Company", $request->request->CreateOrderInformation->CustomerIdentity->CustomerType);
-        }
-        public function testBuildOrderWithCompanyCustomerDE() {
+    }
+    
+    public function testBuildOrderWithCompanyCustomerDE() {
              $request = WebPay::createOrder();
             //->setTestmode()();
         //foreach...
@@ -431,7 +426,6 @@ class NewOrderBuilderTest extends PHPUnit_Framework_TestCase {
             $orderRows[] = array_map(magentoRowToOrderRow, $magentoRows);
 
             WebPay::createOrder()->addOrderRow(array_map(magentoRowToOrderRow, $magentoRows));
-
         }
 
         function magentoRowToOrderRow($magentoRow) {
@@ -444,12 +438,10 @@ class NewOrderBuilderTest extends PHPUnit_Framework_TestCase {
                         ->setUnit("st")
                         ->setVatPercent(25)
                         ->setDiscountPercent(0);
-
         }
  *
  */
 
 }
-
 
 ?>

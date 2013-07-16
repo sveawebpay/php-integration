@@ -3,8 +3,6 @@
 $root = realpath(dirname(__FILE__));
 require_once $root . '/../../../src/Includes.php';
 
-
-
 /**
  * Description of SveaConfigTest
  */
@@ -52,8 +50,7 @@ class SveaConfigTest extends PHPUnit_Framework_TestCase {
                         ->prepareRequest();
     }
 
-
-        function testOrderWithSEConfigFromFunction() {
+    function testOrderWithSEConfigFromFunction() {
            $request = WebPay::createOrder(SveaConfig::getTestConfig())
             ->addOrderRow(Item::orderRow()
                 ->setArticleNumber(1)

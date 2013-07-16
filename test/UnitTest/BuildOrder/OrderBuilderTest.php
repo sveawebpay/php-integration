@@ -129,9 +129,6 @@ class OrderBuilderTest extends PHPUnit_Framework_TestCase {
                 ->setZipCode(9999)
                 ->setLocality("Stan")
                         );
-              
-                
-                
         
         $this->assertEquals(194605092222, $sveaRequest->customerIdentity->ssn);
         $this->assertEquals("SB", $sveaRequest->customerIdentity->initials);
@@ -181,7 +178,6 @@ class OrderBuilderTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(9999, $sveaRequest->customerIdentity->zipCode);
         $this->assertEquals("Stan", $sveaRequest->customerIdentity->locality);
     }
-
 
     function testBuildOrderWithCompanyDetails() {
         $sveaRequest = WebPay::createOrder()

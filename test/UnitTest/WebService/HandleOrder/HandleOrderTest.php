@@ -145,7 +145,6 @@ class HandleOrderTest extends PHPUnit_Framework_TestCase {
         //->doRequest(); 
         $this->assertEquals("id", $request->request->CloseOrderInformation->SveaOrderId);
     }
-
 }
 
 ?>

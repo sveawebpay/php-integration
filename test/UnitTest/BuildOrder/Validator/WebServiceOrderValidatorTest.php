@@ -26,12 +26,11 @@ class WebServiceOrderValidatorTest extends PHPUnit_Framework_TestCase {
                     ->useInvoicePayment();
         $order->prepareRequest();
 
-
     }
       *
       */
 
-     /**
+    /**
      * @expectedException ValidationException
      * @expectedExceptionMessage -duplicated value : Customer is either an individual or a company. You can not use function setNationalIdNumber() in combination with setNationalIdNumber() or setVatNumber().
      */
@@ -49,7 +48,6 @@ class WebServiceOrderValidatorTest extends PHPUnit_Framework_TestCase {
                 ->addCustomerDetails(Item::companyCustomer()->setNationalIdNumber(4608142222))
                     ->useInvoicePayment();
        $order->prepareRequest();
-
     }
 
     /**
@@ -64,6 +62,7 @@ class WebServiceOrderValidatorTest extends PHPUnit_Framework_TestCase {
                 ->doRequest();
          return $response->campaignCodes[0]->campaignCode;
     }
+    
     /**
      * @expectedException ValidationException
      * @expectedExceptionMessage -Wrong customer type : PaymentPlanPayment not allowed for Company customer.
@@ -82,13 +81,11 @@ class WebServiceOrderValidatorTest extends PHPUnit_Framework_TestCase {
                 ->addCustomerDetails(Item::companyCustomer()->setNationalIdNumber(4608142222))
                     ->usePaymentPlanPayment($code);
        $order->prepareRequest();
-
     }
 
     /**
      * @expectedException ValidationException
      * @expectedExceptionMessage -not valid : Given countrycode does not exist in our system.
-     *
      */
     function testFailOnBadCountryCode() {
         $builder = WebPay::createOrder();
@@ -105,8 +102,6 @@ class WebServiceOrderValidatorTest extends PHPUnit_Framework_TestCase {
 
      $order->prepareRequest();
     }
-
-
 
     /**
      * @expectedException ValidationException
@@ -126,6 +121,7 @@ class WebServiceOrderValidatorTest extends PHPUnit_Framework_TestCase {
 
         $order->prepareRequest();
     }
+    
     /**
      * @expectedException ValidationException
      * @expectedExceptionMessage -missing value : NationalIdNumber is required for individual customers when countrycode is SE, NO, DK or FI. Use function setNationalIdNumber().
@@ -221,8 +217,6 @@ class WebServiceOrderValidatorTest extends PHPUnit_Framework_TestCase {
         //$errorArray = $order->validateOrder();
         //print_r($errorArray);
         $order->prepareRequest(); //throws esception
-
-
     }
 
     /**
@@ -260,9 +254,7 @@ class WebServiceOrderValidatorTest extends PHPUnit_Framework_TestCase {
                 ->addCustomerDetails(Item::individualCustomer()->setNationalIdNumber(46111111))
                     ->useInvoicePayment();
        $order->prepareRequest();
-
     }
-
 
     /**
      * @expectedException ValidationException
@@ -280,6 +272,7 @@ class WebServiceOrderValidatorTest extends PHPUnit_Framework_TestCase {
                     ->useInvoicePayment();
         $order->prepareRequest();
     }
+    
     /**
      * @expectedException ValidationException
      * @expectedExceptionMessage
@@ -299,6 +292,7 @@ class WebServiceOrderValidatorTest extends PHPUnit_Framework_TestCase {
                     ->useInvoicePayment();
         $order->prepareRequest();
     }
+    
     /**
      * @expectedException ValidationException
      * @expectedExceptionMessage
