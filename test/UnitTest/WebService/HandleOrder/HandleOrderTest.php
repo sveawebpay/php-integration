@@ -121,7 +121,7 @@ class HandleOrderTest extends PHPUnit_Framework_TestCase {
                 ->setCountryCode("SE")
                 ->closeInvoiceOrder()
                 ->prepareRequest();
-        //->doRequest(); 
+
         $this->assertEquals("id", $request->request->CloseOrderInformation->SveaOrderId);
     }
 

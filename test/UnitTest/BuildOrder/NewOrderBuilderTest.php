@@ -6,6 +6,9 @@ require_once $root . '/../../../src/WebServiceRequests/svea_soap/SveaSoapConfig.
 require_once $root . '/../VoidValidator.php';
 
 $root = realpath(dirname(__FILE__));
+require_once $root . '/../../TestUtil.php';
+
+$root = realpath(dirname(__FILE__));
 require_once $root . '/TestRowFactory.php';
 
 /**
@@ -57,17 +60,17 @@ class NewOrderBuilderTest extends PHPUnit_Framework_TestCase {
     public function testNewInvoiceOrderWithOrderRow() {
         $request = WebPay::createOrder();
         $request = $request
-            ->addOrderRow(
-                Item::orderRow()
-                    ->setArticleNumber(1)
-                    ->setQuantity(2)
-                    ->setAmountExVat(100.00)
-                    ->setDescription("Specification")
-                    ->setName('Prod')
-                    ->setUnit("st")
-                    ->setVatPercent(25)
-                    ->setDiscountPercent(0)
-                    );
+            ->addOrderRow(TestUtil::createOrderRow());
+//                Item::orderRow()
+//                    ->setArticleNumber(1)
+//                    ->setQuantity(2)
+//                    ->setAmountExVat(100.00)
+//                    ->setDescription("Specification")
+//                    ->setName('Prod')
+//                    ->setUnit("st")
+//                    ->setVatPercent(25)
+//                    ->setDiscountPercent(0)
+//                    );
             $request = $request
                 ->addCustomerDetails(Item::individualCustomer()->setNationalIdNumber(194605092222))
                 ->setCountryCode("SE")
