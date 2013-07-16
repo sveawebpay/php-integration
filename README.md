@@ -75,7 +75,7 @@ There are two ways to configure Svea authorization. Choose one of the following:
 
     if($testmode == TRUE) {
         $config = SveaConfig::getTestConfig();
-    } else{
+    } else {
         $config = SveaConfig::getProdConfig();
     }
    $foo = WebPay::createOrder($config);
@@ -155,7 +155,7 @@ There are two ways to configure Svea authorization. Choose one of the following:
     if($this->testmode == 1) {
         //if test, use your class that returns test authorization
         $conf = new MyConfigTest();
-    } else{
+    } else {
         //if production mode, use your class that returns production authorization
         $conf = new MyConfigProd();
     }

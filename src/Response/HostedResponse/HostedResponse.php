@@ -29,7 +29,7 @@ class HostedResponse {
                     $this->errormessage = "Response failed authorization. MAC not valid.";
                 }
             }
-        } else{
+        } else {
             $this->accepted = 0;
             $this->resultcode = '0';
             $this->errormessage = "Response is not recognized.";
@@ -40,7 +40,7 @@ class HostedResponse {
      $xmlElement = new SimpleXMLElement($xml);
      if((string)$xmlElement->statuscode == 0) {
           $this->accepted = 1;
-     } else{
+     } else {
          $this->accepted = 0;
          $this->setErrorParams($xmlElement->statuscode);
      }

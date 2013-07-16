@@ -27,7 +27,7 @@ class SveaResponse {
 
         } elseif($message != NULL) {
             $this->response = new HostedResponse($message,$countryCode,$config);
-        } else{
+        } else {
             $this->response = "Response is not recognized.";
         }
     }

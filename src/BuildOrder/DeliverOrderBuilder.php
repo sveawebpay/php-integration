@@ -90,14 +90,14 @@ class deliverOrderBuilder {
             foreach ($itemFeeObject as $row) {
                 if (get_class($row) == "ShippingFee") {
                      array_push($this->shippingFeeRows, $row);
-                } else{
+                } else {
                      array_push($this->invoiceFeeRows, $row);
                 }
             }
         } else {
              if (get_class($itemFeeObject) == "ShippingFee") {
                      array_push($this->shippingFeeRows, $itemFeeObject);
-            } else{
+            } else {
                  array_push($this->invoiceFeeRows, $itemFeeObject);
             }
         }
@@ -116,7 +116,7 @@ class deliverOrderBuilder {
             foreach ($itemDiscounObject as $row) {
                 if (get_class($row) == "FixedDiscount") {
                      array_push($this->fixedDiscountRows, $row);
-                } else{
+                } else {
                      array_push($this->relativeDiscountRows, $row);
                 }
 
@@ -124,7 +124,7 @@ class deliverOrderBuilder {
         }  else {
              if (get_class($itemDiscounObject) == "FixedDiscount") {
                      array_push($this->fixedDiscountRows, $itemDiscounObject);
-            } else{
+            } else {
                  array_push($this->relativeDiscountRows, $itemDiscounObject);
             }
         }
@@ -169,7 +169,7 @@ class deliverOrderBuilder {
                 $distributionTypeAsConst = DistributionType::POST;
             } elseif(preg_match("/mail/i", $distributionTypeAsConst)) {
                 $distributionTypeAsConst = DistributionType::EMAIL;
-            } else{
+            } else {
                 $distributionTypeAsConst = DistributionType::POST;
             }
         }
