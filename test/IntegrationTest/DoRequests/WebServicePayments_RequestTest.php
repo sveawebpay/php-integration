@@ -14,7 +14,7 @@ class WebServicePayments_RequestTest extends PHPUnit_Framework_TestCase {
      * Use to get paymentPlanParams to be able to test PaymentPlanRequest
      * @return type
      */
-    function getGetPaymentPlanParamsForTesting() {
+    private function getGetPaymentPlanParamsForTesting() {
         $addressRequest = WebPay::getPaymentPlanParams();
         $response = $addressRequest
                 //->setTestmode()()
@@ -117,30 +117,20 @@ class WebServicePayments_RequestTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(true, $request->accepted);
     }
 
-    function testPaymentPlanParamsResult() {
-        $addressRequest = WebPay::getPaymentPlanParams();
-        $request = $addressRequest
-                //->setTestmode()()
-                ->setCountryCode("SE")
-                ->doRequest();
-
-        $this->assertEquals(1, $request->accepted);
-    }
-
     function testPaymentPlanRequestReturnsAcceptedResult() {
         $campaigncode = $this->getGetPaymentPlanParamsForTesting();
         $request = WebPay::createOrder()
                 //->setTestmode()()
                 ->addOrderRow(Item::orderRow()
-                    ->setArticleNumber(1)
-                    ->setQuantity(2)
-                    ->setAmountExVat(1000.00)
-                    ->setDescription("Specification")
-                    ->setName('Prod')
-                    ->setUnit("st")
-                    ->setVatPercent(25)
-                    ->setDiscountPercent(0)
-                        )
+                        ->setArticleNumber(1)
+                        ->setQuantity(2)
+                        ->setAmountExVat(1000.00)
+                        ->setDescription("Specification")
+                        ->setName('Prod')
+                        ->setUnit("st")
+                        ->setVatPercent(25)
+                        ->setDiscountPercent(0)
+                )
                 ->addCustomerDetails(Item::individualCustomer()
                         ->setNationalIdNumber(194605092222)
                         ->setInitials("SB")
@@ -153,15 +143,14 @@ class WebServicePayments_RequestTest extends PHPUnit_Framework_TestCase {
                         ->setCoAddress("c/o Eriksson")
                         ->setZipCode(9999)
                         ->setLocality("Stan")
-                        )
-
+                )
                 ->setCountryCode("SE")
                 ->setCustomerReference("33")
                 ->setClientOrderNumber("nr26")
                 ->setOrderDate("2012-12-12")
                 ->setCurrency("SEK")
-                    ->usePaymentPlanPayment($campaigncode)// returnerar InvoiceOrder object
-                    ->doRequest();
+                ->usePaymentPlanPayment($campaigncode)// returnerar InvoiceOrder object
+                ->doRequest();
 
         $this->assertEquals(1, $request->accepted);
     }
