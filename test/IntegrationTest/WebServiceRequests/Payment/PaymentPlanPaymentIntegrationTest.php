@@ -4,8 +4,6 @@ $root = realpath(dirname(__FILE__));
 require_once $root . '/../../../../src/Includes.php';
 
 /**
- * Description of WebServicePayments_RequestTest
- *
  * @author Anneli Halld'n, Daniel Brolund for Svea Webpay
  */
 class PaymentPlanPaymentIntegrationTest extends PHPUnit_Framework_TestCase {

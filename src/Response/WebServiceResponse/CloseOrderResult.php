@@ -1,9 +1,8 @@
 <?php
+
 require_once 'WebServiceResponse.php';
 
 /**
- * Description of CloseOrderResult
- *
  * @author anne-hal
  */
 class CloseOrderResult extends WebServiceResponse{

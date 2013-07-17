@@ -6,8 +6,6 @@ require_once $root . '/../../../../src/Includes.php';
 require_once $root . '/../../../../src/WebServiceRequests/svea_soap/SveaSoapConfig.php';
 
 /**
- * Description of GetAddressesTest
- *
  * @author Anneli Halld'n, Daniel Brolund for Svea Webpay
  */
 class GetAddressesTest extends PHPUnit_Framework_TestCase {

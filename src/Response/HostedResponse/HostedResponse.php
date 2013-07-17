@@ -3,8 +3,6 @@
 require_once SVEA_REQUEST_DIR . '/Includes.php';
 
 /**
- * Description of HostedResponse
- *
  * @author anne-hal
  */
 class HostedResponse {

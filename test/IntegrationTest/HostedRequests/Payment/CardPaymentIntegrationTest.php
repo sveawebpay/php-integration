@@ -8,8 +8,6 @@ $root = realpath(dirname(__FILE__));
 require_once $root . '/../../../TestUtil.php';
 
 /**
- * Description of HostedPayments_RequestTest
- *
  * @author Anneli Halld'n, Daniel Brolund for Svea Webpay
  */
 class CardPaymentIntegrationTest extends PHPUnit_Framework_TestCase {

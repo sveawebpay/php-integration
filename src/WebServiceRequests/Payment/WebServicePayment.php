@@ -4,7 +4,6 @@ require_once SVEA_REQUEST_DIR . '/WebServiceRequests/svea_soap/SveaSoapConfig.ph
 require_once SVEA_REQUEST_DIR . '/Config/SveaConfig.php';
 
 /* *
- * Description of WebServicePayment
  * Parent to InvoicePayment and PaymentPlanPaymentHandles class
  * Prepares and sends $order with php SOAP
  * Uses svea_soap package to build object formatted for SveaWebPay Europe Web service API

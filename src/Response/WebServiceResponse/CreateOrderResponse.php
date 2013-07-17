@@ -1,9 +1,9 @@
 <?php
+
 require_once 'WebServiceResponse.php';
 
 /**
- * Description of FormatResponseObject
- *
+ * 
  * @author Anneli Halld'n, Daniel Brolund for Svea Webpay
  */
 class CreateOrderResponse extends WebServiceResponse {

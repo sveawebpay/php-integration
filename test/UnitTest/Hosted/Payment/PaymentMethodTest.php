@@ -8,8 +8,6 @@ $root = realpath(dirname(__FILE__));
 require_once $root . '/../../../TestUtil.php';
 
 /**
- * Description of PaymentMethodTest
- *
  * @author anne-hal
  */
 class PaymentMethodTest extends PHPUnit_Framework_TestCase{

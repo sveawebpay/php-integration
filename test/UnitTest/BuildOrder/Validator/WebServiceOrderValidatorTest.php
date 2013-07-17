@@ -7,8 +7,6 @@ $root = realpath(dirname(__FILE__));
 require_once $root . '/../../../TestUtil.php';
 
 /**
- * Description of WebServiceOrderValidatorTest
- *
  * @author Anneli Halld'n, Daniel Brolund for Svea Webpay
  */
 class WebServiceOrderValidatorTest extends PHPUnit_Framework_TestCase {

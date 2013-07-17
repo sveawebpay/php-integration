@@ -1,9 +1,8 @@
 <?php
+
 require_once 'WebServiceResponse.php';
 
 /**
- * Description of GetAddressesResponse
- *
  * @author anne-hal
  */
 class GetAddressesResponse extends WebServiceResponse{

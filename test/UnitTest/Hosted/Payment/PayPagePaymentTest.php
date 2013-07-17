@@ -8,8 +8,6 @@ $root = realpath(dirname(__FILE__));
 require_once $root . '/../../../TestUtil.php';
 
 /**
- * Description of PayPagePaymentTest
- *
  * @author Anneli Halld'n, Daniel Brolund for Svea Webpay
  */
 class PayPagePaymentTest extends PHPUnit_Framework_TestCase {

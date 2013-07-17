@@ -11,8 +11,6 @@ $root = realpath(dirname(__FILE__));
 require_once $root . '/TestConf.php';
 
 /**
- * Description of CardPaymentTest
- *
  * @author Anneli Halld'n, Daniel Brolund for Svea Webpay
  */
 class CardPaymentTest extends PHPUnit_Framework_TestCase {

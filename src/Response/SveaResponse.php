@@ -1,9 +1,8 @@
 <?php
+
 require_once SVEA_REQUEST_DIR . '/Includes.php';
 
 /**
- * Description of SveaResponse
- *
  * @author Anneli Halld'n, Daniel Brolund for Svea Webpay
  */
 class SveaResponse {

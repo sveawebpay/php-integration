@@ -1,8 +1,7 @@
 <?php
 require_once 'WebServiceResponse.php';
+
 /**
- * Description of DeliverOrderResult
- *
  * @author anne-hal
  */
 class DeliverOrderResult extends WebServiceResponse{

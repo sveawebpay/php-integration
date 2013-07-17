@@ -1,7 +1,5 @@
 <?php
 /**
- * Description of FixedDiscount
- *
  * @author anne-hal
  */
 class FixedDiscount {

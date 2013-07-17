@@ -1,7 +1,6 @@
 <?php
+
 /**
- * Description of RelativeDiscount
- *
  * @author anne-hal
  */
 class RelativeDiscount {

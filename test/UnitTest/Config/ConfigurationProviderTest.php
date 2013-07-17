@@ -3,9 +3,6 @@
 $root = realpath(dirname(__FILE__));
 require_once $root . '/../../../src/Includes.php';
 
-/**
- * Description of SveaConfigTest
- */
 class ConfigurationProviderTest extends PHPUnit_Framework_TestCase {
     
     public function testDefaultTestConfig() {

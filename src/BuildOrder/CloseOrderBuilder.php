@@ -3,8 +3,6 @@
 require_once SVEA_REQUEST_DIR . '/Includes.php';
 
 /**
- * Description of closeOrder
- *
  * @author Anneli Halld'n, Daniel Brolund for Svea Webpay
  */
 class closeOrderBuilder {

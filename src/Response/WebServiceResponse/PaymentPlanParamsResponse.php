@@ -1,9 +1,8 @@
 <?php
+
 require_once 'WebServiceResponse.php';
 
 /**
- * Description of PaymentPlanParamsResponse
- *
  * @author anne-hal
  */
 class PaymentPlanParamsResponse extends WebServiceResponse{

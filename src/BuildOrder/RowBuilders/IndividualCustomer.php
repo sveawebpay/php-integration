@@ -1,7 +1,6 @@
 <?php
+
 /**
- * Description of IndividualCustomer
- *
  * @author anne-hal
  */
 class IndividualCustomer {

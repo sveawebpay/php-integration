@@ -6,9 +6,6 @@ require_once $root . '/../../../src/Includes.php';
 $root = realpath(dirname(__FILE__));
 require_once $root . '/../../TestUtil.php';
 
-/**
- * Description of SveaConfigTest
- */
 class SveaConfigTest extends PHPUnit_Framework_TestCase {
     
     public function t_estInstancesOfSveaConfig() {

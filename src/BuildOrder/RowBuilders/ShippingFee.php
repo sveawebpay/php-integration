@@ -1,8 +1,6 @@
 <?php
 
 /**
- * Description of ShippingFee
- *
  * @author anne-hal
  */
 class ShippingFee {

@@ -3,7 +3,6 @@
 require_once SVEA_REQUEST_DIR . '/Includes.php';
 
 /**
- * Description of HostedPayment
  * Parent to CardPayment, DirectPayment and PayPagePayment class
  * Prepares $order and creates a paymentform to integrate on webpage
  * Uses SveaXmlBuilder to turn formatted $order into xml

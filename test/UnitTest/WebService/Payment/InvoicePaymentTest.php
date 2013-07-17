@@ -8,8 +8,6 @@ $root = realpath(dirname(__FILE__));
 require_once $root . '/../../../TestUtil.php';
 
 /**
- * Description of InvoicePaymentTest
- *
  * @author Anneli Halld'n, Daniel Brolund for Svea Webpay
  */
 class InvoicePaymentTest extends PHPUnit_Framework_TestCase {
