@@ -7,32 +7,8 @@ require_once $root . '/../../../../test/UnitTest/BuildOrder/TestRowFactory.php';
 $root = realpath(dirname(__FILE__));
 require_once $root . '/../../../TestUtil.php';
 
-class testConf implements ConfigurationProvider {
-    
-    public function getEndPoint($type) {
-        return "url";
-    }
-
-    public function getMerchantId($type, $country) {
-        return "merchant";
-    }
-
-    public function getPassword($type, $country) {
-        return "pass";
-    }
-
-    public function getSecret($type, $country) {
-        return "secret";
-    }
-
-    public function getUsername($type, $country) {
-        return "username";
-    }
-
-    public function getClientNumber($type, $country) {
-        return "clientnumber";
-    }
-}
+$root = realpath(dirname(__FILE__));
+require_once $root . '/TestConf.php';
 
 /**
  * Description of CardPaymentTest
@@ -42,7 +18,7 @@ class testConf implements ConfigurationProvider {
 class CardPaymentTest extends PHPUnit_Framework_TestCase {
 
     public function testSetAuthorization() {
-        $form = WebPay::createOrder(new testConf())
+        $form = WebPay::createOrder(new TestConf())
                 ->addCustomerDetails(Item::individualCustomer()->setNationalIdNumber(194605092222)->setIpAddress("123.123.123"))
                 ->addOrderRow(TestUtil::createOrderRow())
                 ->setCountryCode("SE")
