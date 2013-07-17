@@ -5,7 +5,7 @@
  */
 class ShippingFee {
     
-  /**
+    /**
      * Optional
      * @param type $idAsString
      * @return \ShippingFee

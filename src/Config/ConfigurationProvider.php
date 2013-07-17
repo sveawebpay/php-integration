@@ -18,7 +18,7 @@ interface ConfigurationProvider {
      * $param $country CountryCode eg. SE, NO, DK, FI, NL, DE
      */
     public function getUsername($type, $country);
-     /**
+    /**
      * get the return value from your database or likewise
      * @param $type eg. HOSTED, INVOICE or PAYMENTPLAN
      * $param $country CountryCode eg. SE, NO, DK, FI, NL, DE
