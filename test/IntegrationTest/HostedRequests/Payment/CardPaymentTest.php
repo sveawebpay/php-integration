@@ -4,6 +4,9 @@ $root = realpath(dirname(__FILE__));
 require_once $root . '/../../../../src/Includes.php';
 require_once $root . '/../../../UnitTest/BuildOrder/TestRowFactory.php';
 
+$root = realpath(dirname(__FILE__));
+require_once $root . '/../../../TestUtil.php';
+
 /**
  * Description of HostedPayments_RequestTest
  *
@@ -14,17 +17,7 @@ class CardPaymentTest extends PHPUnit_Framework_TestCase {
     public function testDoCardPaymentRequest() {
         $rowFactory = new TestRowFactory();
         $form = WebPay::createOrder()
-                ->addOrderRow(
-                Item::orderRow()
-                        ->setArticleNumber(1)
-                        ->setQuantity(2)
-                        ->setAmountExVat(100.00)
-                        ->setDescription("Specification")
-                        ->setName('Prod')
-                        ->setUnit("st")
-                        ->setVatPercent(25)
-                        ->setDiscountPercent(0)
-                )
+                ->addOrderRow(TestUtil::createOrderRow())
                 ->run($rowFactory->buildShippingFee())
                 ->addDiscount(Item::relativeDiscount()
                         ->setDiscountId("1")

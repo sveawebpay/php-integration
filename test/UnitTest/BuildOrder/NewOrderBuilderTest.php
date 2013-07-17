@@ -71,15 +71,7 @@ class NewOrderBuilderTest extends PHPUnit_Framework_TestCase {
     }
     
     public function testNewInvoiceOrderWithArray() {
-        $orderRows[] = Item::orderrow()
-                    ->setArticleNumber(1)
-                    ->setQuantity(2)
-                    ->setAmountExVat(100.00)
-                    ->setDescription("Specification")
-                    ->setName('Prod')
-                    ->setUnit("st")
-                    ->setVatPercent(25)
-                    ->setDiscountPercent(0);
+        $orderRows[] = TestUtil::createOrderRow();
         $orderRows[] = Item::orderrow()
                     ->setArticleNumber(2)
                     ->setQuantity(2)

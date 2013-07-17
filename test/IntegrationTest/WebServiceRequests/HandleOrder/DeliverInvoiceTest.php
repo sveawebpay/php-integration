@@ -3,6 +3,9 @@
 $root = realpath(dirname(__FILE__));
 require_once $root . '/../../../../src/Includes.php';
 
+$root = realpath(dirname(__FILE__));
+require_once $root . '/../../../TestUtil.php';
+
 /**
  * @author jona-lit
  */
@@ -14,16 +17,7 @@ class DeliverInvoiceTest extends PHPUnit_Framework_TestCase {
      */
     private function getInvoiceOrderId() {
         $request = WebPay::createOrder()
-                ->addOrderRow(Item::orderRow()
-                        ->setArticleNumber(1)
-                        ->setQuantity(2)
-                        ->setAmountExVat(100.00)
-                        ->setDescription("Specification")
-                        ->setName('Prod')
-                        ->setUnit("st")
-                        ->setVatPercent(25)
-                        ->setDiscountPercent(0)
-                )
+                ->addOrderRow(TestUtil::createOrderRow())
                 ->addCustomerDetails(Item::individualCustomer()->setNationalIdNumber(194605092222))
                 ->setCountryCode("SE")
                 ->setCustomerReference("33")
@@ -40,16 +34,7 @@ class DeliverInvoiceTest extends PHPUnit_Framework_TestCase {
         $orderId = $this->getInvoiceOrderId();
         $orderBuilder = WebPay::deliverOrder();
         $request = $orderBuilder
-                ->addOrderRow(Item::orderRow()
-                        ->setArticleNumber(1)
-                        ->setQuantity(2)
-                        ->setAmountExVat(100.00)
-                        ->setDescription("Specification")
-                        ->setName('Prod')
-                        ->setUnit("st")
-                        ->setVatPercent(25)
-                        ->setDiscountPercent(0)
-                )
+                ->addOrderRow(TestUtil::createOrderRow())
                 ->setOrderId($orderId)
                 ->setNumberOfCreditDays(1)
                 ->setCountryCode("SE")
