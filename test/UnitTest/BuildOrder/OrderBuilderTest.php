@@ -8,6 +8,9 @@ require_once $root . '/../VoidValidator.php';
 $root = realpath(dirname(__FILE__));
 require_once $root . '/TestRowFactory.php';
 
+$root = realpath(dirname(__FILE__));
+require_once $root . '/../../TestUtil.php';
+
 /**
  * All functions named test...() will run as tests in PHP-unit framework
  * @author Anneli Halld'n, Daniel Brolund for Svea Webpay
@@ -22,16 +25,7 @@ class OrderBuilderTest extends PHPUnit_Framework_TestCase {
     
     public function testBuildOrderWithOrderRow() {
         $sveaRequest = WebPay::createOrder(SveaConfig::getProdConfig())
-                ->addOrderRow(Item::orderRow()
-                    ->setArticleNumber(1)
-                    ->setQuantity(2)
-                    ->setAmountExVat(100.00)
-                    ->setDescription("Specification")
-                    ->setName('Prod')
-                    ->setUnit("st")
-                    ->setVatPercent(25)
-                    ->setDiscountPercent(0)
-                        );
+                ->addOrderRow(TestUtil::createOrderRow());
         
         $this->assertEquals(1, $sveaRequest->orderRows[0]->articleNumber);
         $this->assertEquals(2, $sveaRequest->orderRows[0]->quantity);
@@ -59,15 +53,7 @@ class OrderBuilderTest extends PHPUnit_Framework_TestCase {
     public function testBuildOrderWithInvoicefee() {
         $rowFactory = new TestRowFactory();
         $sveaRequest = WebPay::createOrder()
-                ->addOrderRow(Item::orderRow()
-                    ->setArticleNumber(1)
-                    ->setQuantity(2)
-                    ->setAmountExVat(100.00)
-                    ->setDescription("Specification")
-                    ->setName('Prod')
-                    ->setUnit("st")
-                    ->setVatPercent(25)
-                        )
+                ->addOrderRow(TestUtil::createOrderRow())
                 ->run($rowFactory->buildInvoiceFee());
         
         $this->assertEquals("Svea fee", $sveaRequest->invoiceFeeRows[0]->name);

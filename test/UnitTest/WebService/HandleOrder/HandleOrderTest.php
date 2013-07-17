@@ -4,6 +4,9 @@ $root = realpath(dirname(__FILE__));
 
 require_once $root . '/../../../../src/Includes.php';
 
+$root = realpath(dirname(__FILE__));
+require_once $root . '/../../../TestUtil.php';
+
 /**
  * Description of DeliverOrderTest
  *
@@ -21,16 +24,7 @@ class HandleOrderTest extends PHPUnit_Framework_TestCase {
     public function testDeliverInvoiceDistributionType() {
          $orderBuilder = WebPay::deliverOrder();
         $request = $orderBuilder
-            ->addOrderRow(Item::orderRow()
-                    ->setArticleNumber(1)
-                    ->setQuantity(2)
-                    ->setAmountExVat(100.00)
-                    ->setDescription("Specification")
-                    ->setName('Prod')
-                    ->setUnit("st")
-                    ->setVatPercent(25)
-                    ->setDiscountPercent(0)
-                    )
+            ->addOrderRow(TestUtil::createOrderRow())
                 ->setOrderId("id")
                 ->setNumberOfCreditDays(1)
                 ->setCountryCode("SE")
@@ -45,16 +39,7 @@ class HandleOrderTest extends PHPUnit_Framework_TestCase {
     public function testDeliverInvoiceOrder() {
         $orderBuilder = WebPay::deliverOrder();
         $request = $orderBuilder
-              ->addOrderRow(Item::orderRow()
-                    ->setArticleNumber(1)
-                    ->setQuantity(2)
-                    ->setAmountExVat(100.00)
-                    ->setDescription("Specification")
-                    ->setName('Prod')
-                    ->setUnit("st")
-                    ->setVatPercent(25)
-                    ->setDiscountPercent(0)
-                    )
+              ->addOrderRow(TestUtil::createOrderRow())
                 ->addDiscount(Item::fixedDiscount()->setAmountIncVat(10))
                 ->addFee(Item::shippingFee()
                     ->setShippingId('33')

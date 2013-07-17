@@ -4,6 +4,9 @@ $root = realpath(dirname(__FILE__));
 require_once $root . '/../../../../test/UnitTest/BuildOrder/OrderBuilderTest.php';
 require_once $root . '/../../../../test/UnitTest/BuildOrder/TestRowFactory.php';
 
+$root = realpath(dirname(__FILE__));
+require_once $root . '/../../../TestUtil.php';
+
 /**
  * Description of PayPagePaymentTest
  *
@@ -14,16 +17,7 @@ class PayPagePaymentTest extends PHPUnit_Framework_TestCase {
     public function testBuildPayPagePaymentWithExcludepaymentMethods() {
         $rowFactory = new TestRowFactory();
         $form = WebPay::createOrder()
-            ->addOrderRow(Item::orderRow()
-                    ->setArticleNumber(1)
-                    ->setQuantity(2)
-                    ->setAmountExVat(100.00)
-                    ->setDescription("Specification")
-                    ->setName('Prod')
-                    ->setUnit("st")
-                    ->setVatPercent(25)
-                    ->setDiscountPercent(0)
-            )
+            ->addOrderRow(TestUtil::createOrderRow())
             ->run($rowFactory->buildShippingFee())
             ->addDiscount(Item::relativeDiscount()
                      ->setDiscountId("1")
@@ -58,16 +52,7 @@ class PayPagePaymentTest extends PHPUnit_Framework_TestCase {
         $rowFactory = new TestRowFactory();
         $form = WebPay::createOrder()
             //->setTestmode()()
-            ->addOrderRow(Item::orderRow()
-                    ->setArticleNumber(1)
-                    ->setQuantity(2)
-                    ->setAmountExVat(100.00)
-                    ->setDescription("Specification")
-                    ->setName('Prod')
-                    ->setUnit("st")
-                    ->setVatPercent(25)
-                    ->setDiscountPercent(0)
-            )
+            ->addOrderRow(TestUtil::createOrderRow())
             ->run($rowFactory->buildShippingFee())
             ->addDiscount(Item::relativeDiscount()
                     ->setDiscountId("1")
@@ -93,16 +78,7 @@ class PayPagePaymentTest extends PHPUnit_Framework_TestCase {
     public function testExcludeDirectPaymentMethods() {
         $rowFactory = new TestRowFactory();
         $form = WebPay::createOrder()
-            ->addOrderRow(Item::orderRow()
-                    ->setArticleNumber(1)
-                    ->setQuantity(2)
-                    ->setAmountExVat(100.00)
-                    ->setDescription("Specification")
-                    ->setName('Prod')
-                    ->setUnit("st")
-                    ->setVatPercent(25)
-                    ->setDiscountPercent(0)
-            )
+            ->addOrderRow(TestUtil::createOrderRow())
             ->run($rowFactory->buildShippingFee())
             ->addDiscount(Item::relativeDiscount()
                     ->setDiscountId("1")
@@ -128,16 +104,7 @@ class PayPagePaymentTest extends PHPUnit_Framework_TestCase {
     public function testpayPagePaymentIncludePaymentMethods() {
         $rowFactory = new TestRowFactory();
         $form = WebPay::createOrder()
-            ->addOrderRow(Item::orderRow()
-                    ->setArticleNumber(1)
-                    ->setQuantity(2)
-                    ->setAmountExVat(100.00)
-                    ->setDescription("Specification")
-                    ->setName('Prod')
-                    ->setUnit("st")
-                    ->setVatPercent(25)
-                    ->setDiscountPercent(0)
-            )
+            ->addOrderRow(TestUtil::createOrderRow())
             ->run($rowFactory->buildShippingFee())
             ->addDiscount(Item::relativeDiscount()
                     ->setDiscountId("1")

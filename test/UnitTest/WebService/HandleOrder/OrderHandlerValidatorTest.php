@@ -1,8 +1,10 @@
 <?php
 
 $root = realpath(dirname(__FILE__));
-
 require_once $root . '/../../../../src/Includes.php';
+
+$root = realpath(dirname(__FILE__));
+require_once $root . '/../../../TestUtil.php';
 
 /**
  * Description of OrderValidatorTest
@@ -30,16 +32,7 @@ class OrderHandlerValidatorTest extends PHPUnit_Framework_TestCase {
     public function testFailOnMissingInvoiceDetailsOnInvoiceDeliver() {
         $builder = WebPay::deliverOrder();
         $object = $builder
-            ->addOrderRow(Item::orderRow()
-                    ->setArticleNumber(1)
-                    ->setQuantity(2)
-                    ->setAmountExVat(100.00)
-                    ->setDescription("Specification")
-                    ->setName('Prod')
-                    ->setUnit("st")
-                    ->setVatPercent(25)
-                    ->setDiscountPercent(0)
-                    )
+            ->addOrderRow(TestUtil::createOrderRow())
                 ->addFee(Item::shippingFee()
                     ->setShippingId('33')
                     ->setName('shipping')

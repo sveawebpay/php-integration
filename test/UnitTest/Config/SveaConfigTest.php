@@ -3,6 +3,9 @@
 $root = realpath(dirname(__FILE__));
 require_once $root . '/../../../src/Includes.php';
 
+$root = realpath(dirname(__FILE__));
+require_once $root . '/../../TestUtil.php';
+
 /**
  * Description of SveaConfigTest
  */
@@ -29,16 +32,7 @@ class SveaConfigTest extends PHPUnit_Framework_TestCase {
                 ->setAlternativeUrl(); //overwrite all urls
 
         $request = WebPay::createOrder($conf)
-            ->addOrderRow(Item::orderRow()
-                ->setArticleNumber(1)
-                ->setQuantity(2)
-                ->setAmountExVat(100.00)
-                ->setDescription("Specification")
-                ->setName('Prod')
-                ->setUnit("st")
-                ->setVatPercent(25)
-                ->setDiscountPercent(0)
-                )
+            ->addOrderRow(TestUtil::createOrderRow())
             ->addCustomerDetails(Item::individualCustomer()->setNationalIdNumber(194605092222))
                     ->setCountryCode("SE")
                     ->setCustomerReference("33")
@@ -51,14 +45,7 @@ class SveaConfigTest extends PHPUnit_Framework_TestCase {
     
     public function testOrderWithSEConfigFromFunction() {
            $request = WebPay::createOrder(SveaConfig::getTestConfig())
-            ->addOrderRow(Item::orderRow()
-                ->setArticleNumber(1)
-                ->setQuantity(2)
-                ->setAmountExVat(100.00)
-                ->setDescription("Specification")
-                ->setName('Prod')
-                ->setVatPercent(25)
-                )
+            ->addOrderRow(TestUtil::createOrderRow())
             ->addCustomerDetails(Item::individualCustomer()->setNationalIdNumber(194605092222))
                     ->setCountryCode("SE")
                     ->setCustomerReference("33")

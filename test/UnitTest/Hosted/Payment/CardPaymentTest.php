@@ -4,6 +4,9 @@ $root = realpath(dirname(__FILE__));
 require_once $root . '/../../../../test/UnitTest/BuildOrder/OrderBuilderTest.php';
 require_once $root . '/../../../../test/UnitTest/BuildOrder/TestRowFactory.php';
 
+$root = realpath(dirname(__FILE__));
+require_once $root . '/../../../TestUtil.php';
+
 class testConf implements ConfigurationProvider {
     
     public function getEndPoint($type) {
@@ -41,16 +44,7 @@ class CardPaymentTest extends PHPUnit_Framework_TestCase {
     public function testSetAuthorization() {
         $form = WebPay::createOrder(new testConf())
                 ->addCustomerDetails(Item::individualCustomer()->setNationalIdNumber(194605092222)->setIpAddress("123.123.123"))
-                ->addOrderRow(Item::orderRow()
-                    ->setArticleNumber(1)
-                    ->setQuantity(2)
-                    ->setAmountExVat(100.00)
-                    ->setDescription("Specification")
-                    ->setName('Prod')
-                    ->setUnit("st")
-                    ->setVatPercent(25)
-                    ->setDiscountPercent(0)
-                    )
+                ->addOrderRow(TestUtil::createOrderRow())
                 ->setCountryCode("SE")
                 ->setClientOrderNumber("33")
                 ->setOrderDate("2012-12-12")
@@ -67,16 +61,7 @@ class CardPaymentTest extends PHPUnit_Framework_TestCase {
     public function testBuildCardPayment() {
         $rowFactory = new TestRowFactory();
         $form = WebPay::createOrder()
-                ->addOrderRow(Item::orderRow()
-                    ->setArticleNumber(1)
-                    ->setQuantity(2)
-                    ->setAmountExVat(100.00)
-                    ->setDescription("Specification")
-                    ->setName('Prod')
-                    ->setUnit("st")
-                    ->setVatPercent(25)
-                    ->setDiscountPercent(0)
-                    )
+                ->addOrderRow(TestUtil::createOrderRow())
             ->run($rowFactory->buildShippingFee())
             ->addDiscount(Item::relativeDiscount()
                     ->setDiscountId("1")

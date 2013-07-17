@@ -1,8 +1,10 @@
 <?php
 
 $root = realpath(dirname(__FILE__));
-
 require_once $root . '/../../../../src/Includes.php';
+
+$root = realpath(dirname(__FILE__));
+require_once $root . '/../../../TestUtil.php';
 
 /**
  * Description of DeliverOrderTest
@@ -14,17 +16,7 @@ class NewHandleOrderTest extends PHPUnit_Framework_TestCase {
     public function testNewDeliverInvoiceOrderRow() {
         $request = WebPay::deliverOrder();
         $request = $request
-            ->addOrderRow(
-                Item::orderRow()
-                    ->setArticleNumber(1)
-                    ->setQuantity(2)
-                    ->setAmountExVat(100.00)
-                    ->setDescription("Specification")
-                    ->setName('Prod')
-                    ->setUnit("st")
-                    ->setVatPercent(25)
-                    ->setDiscountPercent(0)
-                    );
+            ->addOrderRow(TestUtil::createOrderRow());
             $request = $request ->setOrderId("id")
                 ->setNumberOfCreditDays(1)
                 ->setCountryCode("SE")
@@ -45,17 +37,7 @@ class NewHandleOrderTest extends PHPUnit_Framework_TestCase {
     public function testDeliverOrderWithInvoiceFeeAndFixedDiscount() {
         $request = WebPay::deliverOrder();
         $request = $request
-            ->addOrderRow(
-                Item::orderRow()
-                    ->setArticleNumber(1)
-                    ->setQuantity(2)
-                    ->setAmountExVat(100.00)
-                    ->setDescription("Specification")
-                    ->setName('Prod')
-                    ->setUnit("st")
-                    ->setVatPercent(25)
-                    ->setDiscountPercent(0)
-                    )
+            ->addOrderRow(TestUtil::createOrderRow())
                 ->addFee(Item::invoiceFee()
                     ->setName('Svea fee')
                     ->setDescription("Fee for invoice")
@@ -107,16 +89,7 @@ class NewHandleOrderTest extends PHPUnit_Framework_TestCase {
     public function testDeliverOrderWithShippingFeeAndRelativeDiscount() {
         $request = WebPay::deliverOrder();
         $request = $request
-                ->addOrderRow(Item::orderRow()
-                    ->setArticleNumber(1)
-                    ->setQuantity(2)
-                    ->setAmountExVat(100.00)
-                    ->setDescription("Specification")
-                    ->setName('Prod')
-                    ->setUnit("st")
-                    ->setVatPercent(25)
-                    ->setDiscountPercent(0)
-                    )
+                ->addOrderRow(TestUtil::createOrderRow())
                 ->addFee(Item::shippingFee()
                     ->setShippingId(1)
                     ->setName('shipping')

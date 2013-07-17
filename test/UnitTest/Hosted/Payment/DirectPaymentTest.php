@@ -4,6 +4,9 @@ $root = realpath(dirname(__FILE__));
 require_once $root . '/../../../../test/UnitTest/BuildOrder/OrderBuilderTest.php';
 require_once $root . '/../../../../test/UnitTest/BuildOrder/TestRowFactory.php';
 
+$root = realpath(dirname(__FILE__));
+require_once $root . '/../../../TestUtil.php';
+
 /**
  * Description of DirectBankPaymentTest
  *
@@ -18,16 +21,7 @@ class DirectPaymentTest extends PHPUnit_Framework_TestCase {
     public function testFailOnWrongCountryCodeInConfig() {
         $rowFactory = new TestRowFactory();
         $form = WebPay::createOrder()
-                ->addOrderRow(Item::orderRow()
-                    ->setArticleNumber(1)
-                    ->setQuantity(2)
-                    ->setAmountExVat(100.00)
-                    ->setDescription("Specification")
-                    ->setName('Prod')
-                    ->setUnit("st")
-                    ->setVatPercent(25)
-                    ->setDiscountPercent(0)
-                    )
+                ->addOrderRow(TestUtil::createOrderRow())
             ->run($rowFactory->buildShippingFee())
             ->addCustomerDetails(Item::individualCustomer()
                     ->setNationalIdNumber(194605092222)
@@ -53,16 +47,7 @@ class DirectPaymentTest extends PHPUnit_Framework_TestCase {
     public function testConfigureExcludedPaymentMethods() {
         $rowFactory = new TestRowFactory();
         $form = WebPay::createOrder()
-                ->addOrderRow(Item::orderRow()
-                    ->setArticleNumber(1)
-                    ->setQuantity(2)
-                    ->setAmountExVat(100.00)
-                    ->setDescription("Specification")
-                    ->setName('Prod')
-                    ->setUnit("st")
-                    ->setVatPercent(25)
-                    ->setDiscountPercent(0)
-                    )
+                ->addOrderRow(TestUtil::createOrderRow())
             ->run($rowFactory->buildShippingFee())
             ->addCustomerDetails(Item::individualCustomer()
                     ->setNationalIdNumber(194605092222)
@@ -86,16 +71,7 @@ class DirectPaymentTest extends PHPUnit_Framework_TestCase {
     public function testBuildDirectBankPayment() {
         $rowFactory = new TestRowFactory();
         $form = WebPay::createOrder()
-                ->addOrderRow(Item::orderRow()
-                    ->setArticleNumber(1)
-                    ->setQuantity(2)
-                    ->setAmountExVat(100.00)
-                    ->setDescription("Specification")
-                    ->setName('Prod')
-                    ->setUnit("st")
-                    ->setVatPercent(25)
-                    ->setDiscountPercent(0)
-                )
+                ->addOrderRow(TestUtil::createOrderRow())
                 ->addFee(Item::shippingFee()
                     ->setShippingId('33')
                     ->setName('shipping')

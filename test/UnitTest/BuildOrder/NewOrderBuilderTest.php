@@ -6,10 +6,10 @@ require_once $root . '/../../../src/WebServiceRequests/svea_soap/SveaSoapConfig.
 require_once $root . '/../VoidValidator.php';
 
 $root = realpath(dirname(__FILE__));
-require_once $root . '/../../TestUtil.php';
+require_once $root . '/TestRowFactory.php';
 
 $root = realpath(dirname(__FILE__));
-require_once $root . '/TestRowFactory.php';
+require_once $root . '/../../TestUtil.php';
 
 /**
  * All functions named test...() will run as tests in PHP-unit framework
@@ -35,17 +35,7 @@ class NewOrderBuilderTest extends PHPUnit_Framework_TestCase {
         $addresselector = $this->getAddressForTesting();
         $request = WebPay::createOrder();
         $request = $request
-            ->addOrderRow(
-                Item::orderRow()
-                    ->setArticleNumber(1)
-                    ->setQuantity(2)
-                    ->setAmountExVat(100.00)
-                    ->setDescription("Specification")
-                    ->setName('Prod')
-                    ->setUnit("st")
-                    ->setVatPercent(25)
-                    ->setDiscountPercent(0)
-                    );
+            ->addOrderRow(TestUtil::createOrderRow());
             $request = $request
                 ->addCustomerDetails(Item::companyCustomer()->setNationalIdNumber(4608142222)->setAddressSelector($addresselector))
                 ->setCountryCode("SE")
@@ -61,16 +51,6 @@ class NewOrderBuilderTest extends PHPUnit_Framework_TestCase {
         $request = WebPay::createOrder();
         $request = $request
             ->addOrderRow(TestUtil::createOrderRow());
-//                Item::orderRow()
-//                    ->setArticleNumber(1)
-//                    ->setQuantity(2)
-//                    ->setAmountExVat(100.00)
-//                    ->setDescription("Specification")
-//                    ->setName('Prod')
-//                    ->setUnit("st")
-//                    ->setVatPercent(25)
-//                    ->setDiscountPercent(0)
-//                    );
             $request = $request
                 ->addCustomerDetails(Item::individualCustomer()->setNationalIdNumber(194605092222))
                 ->setCountryCode("SE")
@@ -117,7 +97,7 @@ class NewOrderBuilderTest extends PHPUnit_Framework_TestCase {
             ->setCustomerReference("33")
             ->setOrderDate("2012-12-12")
             ->setCurrency("SEK")
-            ->useInvoicePayment()// returnerar InvoiceOrder object
+            ->useInvoicePayment()
             ->prepareRequest();
         
         $this->assertEquals(194605092222, $request->request->CreateOrderInformation->CustomerIdentity->NationalIdNumber); //Check all in identity
@@ -126,17 +106,7 @@ class NewOrderBuilderTest extends PHPUnit_Framework_TestCase {
     public function testOrderWithShippingFee() {
         $request = WebPay::createOrder();
         $request = $request
-            ->addOrderRow(
-                Item::orderRow()
-                    ->setArticleNumber(1)
-                    ->setQuantity(2)
-                    ->setAmountExVat(100.00)
-                    ->setDescription("Specification")
-                    ->setName('Prod')
-                    ->setUnit("st")
-                    ->setVatPercent(25)
-                    ->setDiscountPercent(0)
-                    )
+            ->addOrderRow(TestUtil::createOrderRow())
                 ->addFee(Item::shippingFee()
                         ->setShippingId(1)
                         ->setName('shipping')
@@ -167,17 +137,7 @@ class NewOrderBuilderTest extends PHPUnit_Framework_TestCase {
     public function testOrderWithInvoiceFee() {
         $request = WebPay::createOrder();
         $request = $request
-            ->addOrderRow(
-                Item::orderRow()
-                    ->setArticleNumber(1)
-                    ->setQuantity(2)
-                    ->setAmountExVat(100.00)
-                    ->setDescription("Specification")
-                    ->setName('Prod')
-                    ->setUnit("st")
-                    ->setVatPercent(25)
-                    ->setDiscountPercent(0)
-                    )
+            ->addOrderRow(TestUtil::createOrderRow())
                 ->addFee(Item::invoiceFee()
                     ->setName('Svea fee')
                     ->setDescription("Fee for invoice")
@@ -207,17 +167,7 @@ class NewOrderBuilderTest extends PHPUnit_Framework_TestCase {
     public function testOrderWithFixedDiscount() {
         $request = WebPay::createOrder();
         $request = $request
-            ->addOrderRow(
-                Item::orderRow()
-                    ->setArticleNumber(1)
-                    ->setQuantity(2)
-                    ->setAmountExVat(100.00)
-                    ->setDescription("Specification")
-                    ->setName('Prod')
-                    ->setUnit("st")
-                    ->setVatPercent(25)
-                    ->setDiscountPercent(0)
-                )
+            ->addOrderRow(TestUtil::createOrderRow())
                 ->addDiscount(Item::fixedDiscount()
                    ->setDiscountId("1")
                     ->setAmountIncVat(100.00)
@@ -246,16 +196,7 @@ class NewOrderBuilderTest extends PHPUnit_Framework_TestCase {
     public function testOrderWithRelativeDiscount() {
         $request = WebPay::createOrder();
         $request = $request
-            ->addOrderRow(
-                Item::orderRow()
-                    ->setArticleNumber(1)
-                    ->setQuantity(2)
-                    ->setAmountExVat(100.00)
-                    ->setDescription("Specification")
-                    ->setName('Prod')
-                    ->setUnit("st")
-                    ->setVatPercent(25)
-                    ->setDiscountPercent(0))
+            ->addOrderRow(TestUtil::createOrderRow())
                 ->addDiscount(
                 Item::relativeDiscount()
                         ->setDiscountId("1")
@@ -285,16 +226,7 @@ class NewOrderBuilderTest extends PHPUnit_Framework_TestCase {
     public function testBuildOrderWithIndividualCustomer() {
         $request = WebPay::createOrder();
             $request = $request
-            ->addOrderRow(
-                Item::orderRow()
-                    ->setArticleNumber(1)
-                    ->setQuantity(2)
-                    ->setAmountExVat(100.00)
-                    ->setDescription("Specification")
-                    ->setName('Prod')
-                    ->setUnit("st")
-                    ->setVatPercent(25)
-                    ->setDiscountPercent(0))
+            ->addOrderRow(TestUtil::createOrderRow())
                 ->addCustomerDetails(Item::individualCustomer()
                     ->setNationalIdNumber(194605092222)
                     ->setInitials("SB")
@@ -328,16 +260,7 @@ class NewOrderBuilderTest extends PHPUnit_Framework_TestCase {
     public function testBuildOrderWithCompanyCustomer() {
         $request = WebPay::createOrder();
             $request = $request
-            ->addOrderRow(
-                Item::orderRow()
-                    ->setArticleNumber(1)
-                    ->setQuantity(2)
-                    ->setAmountExVat(100.00)
-                    ->setDescription("Specification")
-                    ->setName('Prod')
-                    ->setUnit("st")
-                    ->setVatPercent(25)
-                    ->setDiscountPercent(0))
+            ->addOrderRow(TestUtil::createOrderRow())
                 ->addCustomerDetails(Item::companyCustomer()
                     ->setNationalIdNumber(666666)
                     ->setEmail("test@svea.com")
@@ -363,16 +286,7 @@ class NewOrderBuilderTest extends PHPUnit_Framework_TestCase {
     public function testBuildOrderWithCompanyCustomerDE() {
         $request = WebPay::createOrder();
         $request = $request
-            ->addOrderRow(
-                Item::orderRow()
-                    ->setArticleNumber(1)
-                    ->setQuantity(2)
-                    ->setAmountExVat(100.00)
-                    ->setDescription("Specification")
-                    ->setName('Prod')
-                    ->setUnit("st")
-                    ->setVatPercent(25)
-                    ->setDiscountPercent(0))
+            ->addOrderRow(TestUtil::createOrderRow())
                 ->addCustomerDetails(Item::companyCustomer()
                     ->setVatNumber("SE666666")
                     ->setCompanyName("MyCompany")
