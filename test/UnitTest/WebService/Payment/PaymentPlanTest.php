@@ -4,39 +4,32 @@ $root = realpath(dirname(__FILE__));
 require_once $root . '/../../../../test/UnitTest/BuildOrder/OrderBuilderTest.php';
 require_once $root . '/../../../../test/UnitTest/BuildOrder/TestRowFactory.php';
 
+$root = realpath(dirname(__FILE__));
+require_once $root . '/../../../TestUtil.php';
+
 /**
  * Description of PaymentPlanTest
  *
  * @author Anneli Halld'n, Daniel Brolund for Svea Webpay
  */
 class PaymentPlanTest extends PHPUnit_Framework_TestCase {
-
+    
       /**
      * Use to get paymentPlanParams to be able to test PaymentPlanRequest
      * @return type
      */
-    function getGetPaymentPlanParamsForTesting() {
+    public function getGetPaymentPlanParamsForTesting() {
         $addressRequest = WebPay::getPaymentPlanParams();
         $response = $addressRequest
-                //->setTestmode()()
                 ->setCountryCode("SE")
                 ->doRequest();
          return $response->campaignCodes[0]->campaignCode;
     }
-
-    function testPaymentPlanRequestObjectSpecifics() {
+    
+    public function testPaymentPlanRequestObjectSpecifics() {
         $rowFactory = new TestRowFactory();
         $request = WebPay::createOrder()
-                ->addOrderRow(Item::orderRow()
-                    ->setArticleNumber(1)
-                    ->setQuantity(2)
-                    ->setAmountExVat(100.00)
-                    ->setDescription("Specification")
-                    ->setName('Prod')
-                    ->setUnit("st")
-                    ->setVatPercent(25)
-                    ->setDiscountPercent(0)
-                    )
+                ->addOrderRow(TestUtil::createOrderRow())
                 ->run($rowFactory->buildShippingFee())
                 ->addCustomerDetails(Item::individualCustomer()->setNationalIdNumber(194605092222))
                 ->setCountryCode("SE")
@@ -51,9 +44,8 @@ class PaymentPlanTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(0, $request->request->CreateOrderInformation->CreatePaymentPlanDetails['SendAutomaticGiroPaymentForm']);
     }
 
-    function testInvoiceRequestObjectWithRelativeDiscountOnTwoProducts() {
+    public function testInvoiceRequestObjectWithRelativeDiscountOnTwoProducts() {
         $request = WebPay::createOrder()
-                //->setTestmode()()
                 ->addOrderRow(Item::orderRow()
                     ->setArticleNumber(1)
                     ->setQuantity(2)
@@ -83,10 +75,9 @@ class PaymentPlanTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(0, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->DiscountPercent);
     }
     
-    function testPaymentPlanWithPriceAsDecimal() {
+    public function testPaymentPlanWithPriceAsDecimal() {
         $campaign = $this->getGetPaymentPlanParamsForTesting();
         $request = WebPay::createOrder()
-                //->setTestmode()()
                 ->addOrderRow(Item::orderRow()
                     ->setArticleNumber(1)
                     ->setQuantity(2)

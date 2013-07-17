@@ -1,8 +1,10 @@
 <?php
 
 $root = realpath(dirname(__FILE__));
-
 require_once $root . '/../../../../src/Includes.php';
+
+$root = realpath(dirname(__FILE__));
+require_once $root . '/../../../TestUtil.php';
 
 /**
  * Description of OrderValidatorTest
@@ -15,7 +17,7 @@ class OrderHandlerValidatorTest extends PHPUnit_Framework_TestCase {
      * @expectedException ValidationException
      * @expectedExceptionMessage -missing value : OrderId is required. Use function setOrderId() with the id recieved when creating an order.
      */
-    function testFailOnMissingOrderIdOnPaymentPlanDeliver() {
+    public function testFailOnMissingOrderIdOnPaymentPlanDeliver() {
         $builder = WebPay::deliverOrder();
         $object = $builder;
         
@@ -27,19 +29,10 @@ class OrderHandlerValidatorTest extends PHPUnit_Framework_TestCase {
      * @expectedException ValidationException
      * @expectedExceptionMessage -missing value : InvoiceDistributionType is requred for deliverInvoiceOrder. Use function setInvoiceDistributionType().
      */
-    function testFailOnMissingInvoiceDetailsOnInvoiceDeliver() {
+    public function testFailOnMissingInvoiceDetailsOnInvoiceDeliver() {
         $builder = WebPay::deliverOrder();
         $object = $builder
-            ->addOrderRow(Item::orderRow()
-                    ->setArticleNumber(1)
-                    ->setQuantity(2)
-                    ->setAmountExVat(100.00)
-                    ->setDescription("Specification")
-                    ->setName('Prod')
-                    ->setUnit("st")
-                    ->setVatPercent(25)
-                    ->setDiscountPercent(0)
-                    )
+            ->addOrderRow(TestUtil::createOrderRow())
                 ->addFee(Item::shippingFee()
                     ->setShippingId('33')
                     ->setName('shipping')
@@ -58,7 +51,7 @@ class OrderHandlerValidatorTest extends PHPUnit_Framework_TestCase {
      * @expectedException ValidationException
      * @expectedExceptionMessage No rows has been included. Use function beginOrderRow(), beginShippingfee() or beginInvoiceFee().
      */
-    function testFailOnMissingOrderRowsOnInvoiceDeliver() {
+    public function testFailOnMissingOrderRowsOnInvoiceDeliver() {
         $builder = WebPay::deliverOrder();
         $object = $builder
                 ->setOrderId('id')

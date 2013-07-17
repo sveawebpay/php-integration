@@ -23,7 +23,7 @@ class HostedResponse {
                 $secret = $config->getSecret(ConfigurationProvider::HOSTED_TYPE,$countryCode);
                 if ($this->validateMac($response['response'],$response['mac'],$secret)) {
                     $this->formatXml($decodedXml);
-                }  else {
+                } else {
                     $this->accepted = 0;
                     $this->resultcode = '0';
                     $this->errormessage = "Response failed authorization. MAC not valid.";

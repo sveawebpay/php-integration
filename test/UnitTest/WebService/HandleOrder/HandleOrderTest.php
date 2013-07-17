@@ -4,6 +4,9 @@ $root = realpath(dirname(__FILE__));
 
 require_once $root . '/../../../../src/Includes.php';
 
+$root = realpath(dirname(__FILE__));
+require_once $root . '/../../../TestUtil.php';
+
 /**
  * Description of DeliverOrderTest
  *
@@ -11,28 +14,17 @@ require_once $root . '/../../../../src/Includes.php';
  */
 class HandleOrderTest extends PHPUnit_Framework_TestCase {
 
-    function testBuildRequest() {
+    public function testBuildRequest() {
         $handler = WebPay::deliverOrder();
         $request = $handler
-                //->setTestmode()()
                 ->setOrderId("id");
         $this->assertEquals("id", $request->orderId);
     }
     
-    function testDeliverInvoiceDistributionType() {
+    public function testDeliverInvoiceDistributionType() {
          $orderBuilder = WebPay::deliverOrder();
         $request = $orderBuilder
-            ->addOrderRow(Item::orderRow()
-                    ->setArticleNumber(1)
-                    ->setQuantity(2)
-                    ->setAmountExVat(100.00)
-                    ->setDescription("Specification")
-                    ->setName('Prod')
-                    ->setUnit("st")
-                    ->setVatPercent(25)
-                    ->setDiscountPercent(0)
-                    )
-                //->setTestmode()()
+            ->addOrderRow(TestUtil::createOrderRow())
                 ->setOrderId("id")
                 ->setNumberOfCreditDays(1)
                 ->setCountryCode("SE")
@@ -44,19 +36,10 @@ class HandleOrderTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals('Post', $request->request->DeliverOrderInformation->DeliverInvoiceDetails->InvoiceDistributionType);       
     }
 
-    function testDeliverInvoiceOrder() {
+    public function testDeliverInvoiceOrder() {
         $orderBuilder = WebPay::deliverOrder();
         $request = $orderBuilder
-              ->addOrderRow(Item::orderRow()
-                    ->setArticleNumber(1)
-                    ->setQuantity(2)
-                    ->setAmountExVat(100.00)
-                    ->setDescription("Specification")
-                    ->setName('Prod')
-                    ->setUnit("st")
-                    ->setVatPercent(25)
-                    ->setDiscountPercent(0)
-                    )
+              ->addOrderRow(TestUtil::createOrderRow())
                 ->addDiscount(Item::fixedDiscount()->setAmountIncVat(10))
                 ->addFee(Item::shippingFee()
                     ->setShippingId('33')
@@ -67,17 +50,14 @@ class HandleOrderTest extends PHPUnit_Framework_TestCase {
                     ->setVatPercent(25)
                     ->setDiscountPercent(0)
                     )                
-                //->setTestmode()()
                 ->setOrderId("id")
                 ->setNumberOfCreditDays(1)
                 ->setCountryCode("SE")
                 ->setInvoiceDistributionType(DistributionType::POST)
                 ->setCreditInvoice("id")
                 ->deliverInvoiceOrder()
-                    ->prepareRequest();
-        //->doRequest();
-        //row
-
+                ->prepareRequest();
+        
         $this->assertEquals(1, $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][0]->ArticleNumber);
         $this->assertEquals("Prod: Specification", $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][0]->Description);
         $this->assertEquals(100.00, $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][0]->PricePerUnit);
@@ -105,44 +85,39 @@ class HandleOrderTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals("id", $request->request->DeliverOrderInformation->SveaOrderId);
         $this->assertEquals("Invoice", $request->request->DeliverOrderInformation->OrderType);
     }
-
-    function testDeliverPaymentPlanOrder() {
+    
+    public function testDeliverPaymentPlanOrder() {
         $orderBuilder = WebPay::deliverOrder();
 
         $request = $orderBuilder
-                //->setTestmode()()
                 ->setCountryCode("SE")
                 ->setOrderId("id")
                 ->deliverPaymentPlanOrder()
                 ->prepareRequest();
-        //->doRequest();
         $this->assertEquals("id", $request->request->DeliverOrderInformation->SveaOrderId);
         $this->assertEquals("PaymentPlan", $request->request->DeliverOrderInformation->OrderType);
     }
 
-    function testCloseInvoiceOrder() {
+    public function testCloseInvoiceOrder() {
         $orderBuilder = WebPay::closeOrder();
 
         $request = $orderBuilder
-                //->setTestmode()()
                 ->setOrderId("id")
                 ->setCountryCode("SE")
                 ->closeInvoiceOrder()
                 ->prepareRequest();
-        //->doRequest(); 
+
         $this->assertEquals("id", $request->request->CloseOrderInformation->SveaOrderId);
     }
 
-    function testClosePaymentPlanOrder() {
+    public function testClosePaymentPlanOrder() {
         $orderBuilder = WebPay::closeOrder();
 
         $request = $orderBuilder
-                //->setTestmode()()
                 ->setCountryCode("SE")
                 ->setOrderId("id")
                 ->closePaymentPlanOrder()
                 ->prepareRequest();
-        //->doRequest(); 
         $this->assertEquals("id", $request->request->CloseOrderInformation->SveaOrderId);
     }
 }

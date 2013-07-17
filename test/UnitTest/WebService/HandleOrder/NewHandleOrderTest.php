@@ -1,8 +1,10 @@
 <?php
 
 $root = realpath(dirname(__FILE__));
-
 require_once $root . '/../../../../src/Includes.php';
+
+$root = realpath(dirname(__FILE__));
+require_once $root . '/../../../TestUtil.php';
 
 /**
  * Description of DeliverOrderTest
@@ -11,23 +13,10 @@ require_once $root . '/../../../../src/Includes.php';
  */
 class NewHandleOrderTest extends PHPUnit_Framework_TestCase {
 
-    function testNewDeliverInvoiceOrderRow() {
+    public function testNewDeliverInvoiceOrderRow() {
         $request = WebPay::deliverOrder();
-            //->setTestmode()();
-        //foreach...
         $request = $request
-            ->addOrderRow(
-                Item::orderRow()
-                    ->setArticleNumber(1)
-                    ->setQuantity(2)
-                    ->setAmountExVat(100.00)
-                    ->setDescription("Specification")
-                    ->setName('Prod')
-                    ->setUnit("st")
-                    ->setVatPercent(25)
-                    ->setDiscountPercent(0)
-                    );
-        //end foreach
+            ->addOrderRow(TestUtil::createOrderRow());
             $request = $request ->setOrderId("id")
                 ->setNumberOfCreditDays(1)
                 ->setCountryCode("SE")
@@ -45,22 +34,10 @@ class NewHandleOrderTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(0, $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][0]->DiscountPercent);
         }
 
-    function testDeliverOrderWithInvoiceFeeAndFixedDiscount() {
+    public function testDeliverOrderWithInvoiceFeeAndFixedDiscount() {
         $request = WebPay::deliverOrder();
-            //->setTestmode()();
-        //foreach...
         $request = $request
-            ->addOrderRow(
-                Item::orderRow()
-                    ->setArticleNumber(1)
-                    ->setQuantity(2)
-                    ->setAmountExVat(100.00)
-                    ->setDescription("Specification")
-                    ->setName('Prod')
-                    ->setUnit("st")
-                    ->setVatPercent(25)
-                    ->setDiscountPercent(0)
-                    )
+            ->addOrderRow(TestUtil::createOrderRow())
                 ->addFee(Item::invoiceFee()
                     ->setName('Svea fee')
                     ->setDescription("Fee for invoice")
@@ -76,7 +53,6 @@ class NewHandleOrderTest extends PHPUnit_Framework_TestCase {
                     ->setDescription("FixedDiscount")
                     ->setName("Fixed")
                         );
-        //end foreach
             $request = $request ->setOrderId("id")
                 ->setNumberOfCreditDays(1)
                 ->setInvoiceDistributionType(DistributionType::POST)//Post or Email
@@ -108,24 +84,12 @@ class NewHandleOrderTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals("st", $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][2]->Unit);
         $this->assertEquals(25, $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][2]->VatPercent);
         $this->assertEquals(0, $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][2]->DiscountPercent);
-
     }
 
-    function testDeliverOrderWithShippingFeeAndRelativeDiscount() {
+    public function testDeliverOrderWithShippingFeeAndRelativeDiscount() {
         $request = WebPay::deliverOrder();
-            //->setTestmode()();
-        //foreach...
         $request = $request
-                ->addOrderRow(Item::orderRow()
-                    ->setArticleNumber(1)
-                    ->setQuantity(2)
-                    ->setAmountExVat(100.00)
-                    ->setDescription("Specification")
-                    ->setName('Prod')
-                    ->setUnit("st")
-                    ->setVatPercent(25)
-                    ->setDiscountPercent(0)
-                    )
+                ->addOrderRow(TestUtil::createOrderRow())
                 ->addFee(Item::shippingFee()
                     ->setShippingId(1)
                     ->setName('shipping')
@@ -142,7 +106,6 @@ class NewHandleOrderTest extends PHPUnit_Framework_TestCase {
                     ->setName('Relative')
                     ->setDescription("RelativeDiscount")
                     );
-        //end foreach
             $request = $request ->setOrderId("id")
                 ->setNumberOfCreditDays(1)
                 ->setInvoiceDistributionType(DistributionType::POST)//Post or Email

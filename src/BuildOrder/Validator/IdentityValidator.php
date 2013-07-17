@@ -49,7 +49,7 @@ class IdentityValidator {
         if ($this->isCompany == FALSE && isset($order->customerIdentity->ssn) == false) {
             $errors['missing value'] = "NationalIdNumber is required for individual customers when countrycode is SE, NO, DK or FI. Use function setNationalIdNumber().";
 
-        }  elseif ( $this->isCompany && isset($order->customerIdentity->orgNumber) == false) {
+        } elseif ( $this->isCompany && isset($order->customerIdentity->orgNumber) == false) {
             $errors['missing value'] =  "OrgNumber is required for company customers when countrycode is SE, NO, DK or FI. Use function setNationalIdNumber().";
 
         }

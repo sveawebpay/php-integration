@@ -1,13 +1,13 @@
 <?php
 
 class TestRowFactory {
-
-   /**
-    * Returns ShippingFeeRow to use as shorthand in testFunctions
-    * Use function run($functionname) to run shorthand function
-    * @return type
-    */
-    function buildShippingFee() {
+    
+    /**
+     * Returns ShippingFeeRow to use as shorthand in testFunctions
+     * Use function run($functionname) to run shorthand function
+     * @return type
+     */
+    public function buildShippingFee() {
         return function($orderbuilder) {
             return $orderbuilder
               ->addFee(
@@ -28,7 +28,7 @@ class TestRowFactory {
      * Use function run($functionname) to run shorthand function
      * @return type
      */
-    function buildInvoiceFee() {
+    public function buildInvoiceFee() {
         return function($orderbuilder) {
             return $orderbuilder
                 ->addFee(

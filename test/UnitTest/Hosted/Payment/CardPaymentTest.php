@@ -4,6 +4,9 @@ $root = realpath(dirname(__FILE__));
 require_once $root . '/../../../../test/UnitTest/BuildOrder/OrderBuilderTest.php';
 require_once $root . '/../../../../test/UnitTest/BuildOrder/TestRowFactory.php';
 
+$root = realpath(dirname(__FILE__));
+require_once $root . '/../../../TestUtil.php';
+
 class testConf implements ConfigurationProvider {
     
     public function getEndPoint($type) {
@@ -38,20 +41,10 @@ class testConf implements ConfigurationProvider {
  */
 class CardPaymentTest extends PHPUnit_Framework_TestCase {
 
-    function testSetAuthorization() {
+    public function testSetAuthorization() {
         $form = WebPay::createOrder(new testConf())
-               // ////->setTestmode()()()
                 ->addCustomerDetails(Item::individualCustomer()->setNationalIdNumber(194605092222)->setIpAddress("123.123.123"))
-                ->addOrderRow(Item::orderRow()
-                    ->setArticleNumber(1)
-                    ->setQuantity(2)
-                    ->setAmountExVat(100.00)
-                    ->setDescription("Specification")
-                    ->setName('Prod')
-                    ->setUnit("st")
-                    ->setVatPercent(25)
-                    ->setDiscountPercent(0)
-                    )
+                ->addOrderRow(TestUtil::createOrderRow())
                 ->setCountryCode("SE")
                 ->setClientOrderNumber("33")
                 ->setOrderDate("2012-12-12")
@@ -65,20 +58,10 @@ class CardPaymentTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals('secret', $form->secretWord);
     }
 
-    function testBuildCardPayment() {
+    public function testBuildCardPayment() {
         $rowFactory = new TestRowFactory();
         $form = WebPay::createOrder()
-                ////->setTestmode()()()
-                ->addOrderRow(Item::orderRow()
-                    ->setArticleNumber(1)
-                    ->setQuantity(2)
-                    ->setAmountExVat(100.00)
-                    ->setDescription("Specification")
-                    ->setName('Prod')
-                    ->setUnit("st")
-                    ->setVatPercent(25)
-                    ->setDiscountPercent(0)
-                    )
+                ->addOrderRow(TestUtil::createOrderRow())
             ->run($rowFactory->buildShippingFee())
             ->addDiscount(Item::relativeDiscount()
                     ->setDiscountId("1")
@@ -110,8 +93,8 @@ class CardPaymentTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals('6250', $xmlMessage->orderrows->row[1]->amount);
         $this->assertEquals('-12500', $xmlMessage->orderrows->row[2]->amount);
     }
-
-    function testBuildCardPaymentWithDiffrentProductVatAndDiscount() {
+    
+    public function testBuildCardPaymentWithDiffrentProductVatAndDiscount() {
         $form = WebPay::createOrder()
                 ->addOrderRow(Item::orderRow()
                     ->setArticleNumber(1)
@@ -148,7 +131,7 @@ class CardPaymentTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals('5706', $xmlMessage->vat);
     }
     
-    function testBuildCardPaymentWithAmountIncVatWithVatPercent() {
+    public function testBuildCardPaymentWithAmountIncVatWithVatPercent() {
         $form = WebPay::createOrder()
                 ->addOrderRow(Item::orderRow()
                     ->setArticleNumber(1)
@@ -195,7 +178,7 @@ class CardPaymentTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals('6956', $xmlMessage->vat);
     }
     
-    function testBuildCardPaymentWithAmountExVatWithAmountIncVat() {
+    public function testBuildCardPaymentWithAmountExVatWithAmountIncVat() {
         $form = WebPay::createOrder()
                 ->addOrderRow(Item::orderRow()
                     ->setArticleNumber(1)
@@ -237,7 +220,7 @@ class CardPaymentTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals('-10000', $xmlMessage->orderrows->row[2]->amount);
     }
     
-    function testBuildCardPaymentWithCurrency() {
+    public function testBuildCardPaymentWithCurrency() {
         $form = WebPay::createOrder()
                 ->addOrderRow(Item::orderRow()
                     ->setArticleNumber(1)
@@ -258,7 +241,7 @@ class CardPaymentTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals('SEK', $xmlMessage->currency);
     }
 
-    function testBuildCardPaymentWithShippingFee() {
+    public function testBuildCardPaymentWithShippingFee() {
           $form = WebPay::createOrder()
                 ->addOrderRow(Item::orderRow()
                     ->setArticleNumber(1)
@@ -284,7 +267,7 @@ class CardPaymentTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals("40000", $xmlMessage->amount);
     }
     
-    function testBuildCardPaymentWithDecimalLongPrice() {
+    public function testBuildCardPaymentWithDecimalLongPrice() {
           $form = WebPay::createOrder()
                 ->addOrderRow(Item::orderRow()
                     ->setArticleNumber(1)
@@ -305,7 +288,7 @@ class CardPaymentTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals("30000", $xmlMessage->amount);
     }
     
-    function testBuildCardPaymentNLCustomer() {
+    public function testBuildCardPaymentNLCustomer() {
           $form = WebPay::createOrder()
                 ->addOrderRow(Item::orderRow()
                     ->setArticleNumber(1)
@@ -326,7 +309,7 @@ class CardPaymentTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals("30000", $xmlMessage->amount);
     }
     
-    function testBuildCardPaymentWithAmountAndVatCero() {
+    public function testBuildCardPaymentWithAmountAndVatCero() {
           $form = WebPay::createOrder()
                 ->addOrderRow(Item::orderRow()
                     ->setArticleNumber(1)
