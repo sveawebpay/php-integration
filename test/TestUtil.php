@@ -19,6 +19,13 @@ class TestUtil {
             ->setVatPercent(25)
             ->setDiscountPercent(0);
     }
+    
+    public static function createHostedOrderRow() {
+        return Item::orderRow()
+                ->setAmountExVat(100)
+                ->setVatPercent(25)
+                ->setQuantity(1);
+    }
 }
 
 ?>

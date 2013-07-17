@@ -3,6 +3,9 @@
 $root = realpath(dirname(__FILE__));
 require_once $root . '/../../../../src/Includes.php';
 
+$root = realpath(dirname(__FILE__));
+require_once $root . '/../../../TestUtil.php';
+
 /**
  * Description of WebServiceOrderValidatorTest
  *
@@ -37,11 +40,7 @@ class WebServiceOrderValidatorTest extends PHPUnit_Framework_TestCase {
     public function t_estFailOnDoubleIdentity() {
         $builder = WebPay::createOrder();
         $order = $builder
-                ->addOrderRow(Item::orderRow()
-                    ->setAmountExVat(100)
-                    ->setVatPercent(20)
-                    ->setQuantity(1)
-                )
+                ->addOrderRow(TestUtil::createHostedOrderRow())
                 ->setCountryCode("SE")
                 ->setOrderDate("Mon, 15 Aug 05 15:52:01 +0000")
                 ->addCustomerDetails(Item::individualCustomer()->setNationalIdNumber(194605092222))
@@ -71,11 +70,7 @@ class WebServiceOrderValidatorTest extends PHPUnit_Framework_TestCase {
         $code = $this->getGetPaymentPlanParamsForTesting();
         $builder = WebPay::CreateOrder();
         $order = $builder
-                ->addOrderRow(Item::orderRow()
-                    ->setAmountExVat(100)
-                    ->setVatPercent(20)
-                    ->setQuantity(1)
-                )
+                ->addOrderRow(TestUtil::createHostedOrderRow())
                 ->setCountryCode("SE")
                 ->setOrderDate("Mon, 15 Aug 05 15:52:01 +0000")
                 ->addCustomerDetails(Item::companyCustomer()->setNationalIdNumber(4608142222))
@@ -91,11 +86,7 @@ class WebServiceOrderValidatorTest extends PHPUnit_Framework_TestCase {
     public function testFailOnBadCountryCode() {
         $builder = WebPay::createOrder();
         $order = $builder
-                ->addOrderRow(Item::orderRow()
-                    ->setAmountExVat(100)
-                    ->setVatPercent(20)
-                    ->setQuantity(1)
-                 )
+                ->addOrderRow(TestUtil::createHostedOrderRow())
                  ->setCountryCode("ZZ")
                  ->setOrderDate("Mon, 15 Aug 05 15:52:01 +0000")
                  ->addCustomerDetails(Item::individualCustomer()->setNationalIdNumber(111111))
@@ -111,11 +102,7 @@ class WebServiceOrderValidatorTest extends PHPUnit_Framework_TestCase {
     public function testFailOnMissingCountryCode() {
         $builder = WebPay::createOrder();
         $order = $builder
-                ->addOrderRow(Item::orderRow()
-                    ->setAmountExVat(100)
-                    ->setVatPercent(20)
-                    ->setQuantity(1)
-                )
+                ->addOrderRow(TestUtil::createHostedOrderRow())
                 ->addCustomerDetails(Item::individualCustomer()->setNationalIdNumber(111111))
                 ->setOrderDate("Mon, 15 Aug 05 15:52:01 +0000")
                 ->useInvoicePayment();
@@ -205,11 +192,7 @@ class WebServiceOrderValidatorTest extends PHPUnit_Framework_TestCase {
     public function testFailOnMissingValuesForNlOrder() {
         $builder = WebPay::createOrder();
         $order = $builder
-                ->addOrderRow(Item::orderRow()
-                    ->setAmountExVat(100)
-                    ->setVatPercent(20)
-                    ->setQuantity(1)
-                )
+                ->addOrderRow(TestUtil::createHostedOrderRow())
                 ->setCountryCode("NL")
                 ->setOrderDate("Mon, 15 Aug 05 15:52:01 +0000")
                 ->useInvoicePayment();
@@ -278,11 +261,7 @@ class WebServiceOrderValidatorTest extends PHPUnit_Framework_TestCase {
     public function testFailOnMissingOrderDate() {
         $builder = WebPay::createOrder();
         $order = $builder
-                ->addOrderRow(Item::orderRow()
-                    ->setAmountExVat(100)
-                    ->setVatPercent(20)
-                    ->setQuantity(1)
-                )
+                ->addOrderRow(TestUtil::createHostedOrderRow())
                 ->setCountryCode("SE")
                 // ->setOrderDate("Mon, 15 Aug 05 15:52:01 +0000")
                 ->addCustomerDetails(Item::individualCustomer()->setNationalIdNumber(46111111))
