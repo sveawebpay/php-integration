@@ -6,7 +6,7 @@ require_once $root . '/../../../../src/Includes.php';
 /**
  * @author Jonas Lith
  */
-class GetAddressesTest extends PHPUnit_Framework_TestCase {
+class GetAddressesIntegrationTest extends PHPUnit_Framework_TestCase {
     
     public function testGetAddressesResultForPrivate() {
         $addressRequest = WebPay::getAddresses();

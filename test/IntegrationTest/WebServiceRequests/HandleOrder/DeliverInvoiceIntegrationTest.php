@@ -7,9 +7,9 @@ $root = realpath(dirname(__FILE__));
 require_once $root . '/../../../TestUtil.php';
 
 /**
- * @author Jonas Lith
+ * @author jona-lit
  */
-class CloseOrderTest extends PHPUnit_Framework_TestCase {
+class DeliverInvoiceIntegrationTest extends PHPUnit_Framework_TestCase {
     
     /**
      * Function to use in testfunctions
@@ -30,17 +30,28 @@ class CloseOrderTest extends PHPUnit_Framework_TestCase {
         return $request->sveaOrderId;
     }
     
-    public function testCloseInvoiceOrder() {
+    public function testDeliverInvoiceOrder() {
         $orderId = $this->getInvoiceOrderId();
-        $orderBuilder = WebPay::closeOrder();
+        $orderBuilder = WebPay::deliverOrder();
         $request = $orderBuilder
+                ->addOrderRow(TestUtil::createOrderRow())
                 ->setOrderId($orderId)
+                ->setNumberOfCreditDays(1)
                 ->setCountryCode("SE")
-                ->closeInvoiceOrder()
+                ->setInvoiceDistributionType('Post')//Post or Email
+                ->deliverInvoiceOrder()
                 ->doRequest();
         
         $this->assertEquals(1, $request->accepted);
         $this->assertEquals(0, $request->resultcode);
+        $this->assertEquals(250, $request->amount);
+        $this->assertEquals('Invoice', $request->orderType);
+        //Invoice specifics
+        //$this->assertEquals(0000, $request->invoiceId); //differs in every test
+        //$this->assertEquals(date(), $request->dueDate); //differs in every test
+        //$this->assertEquals(date(), $request->invoiceDate); //differs in every test
+        $this->assertEquals('Post', $request->invoiceDistributionType);
+        //$this->assertEquals('Invoice', $request->contractNumber); //for paymentplan
     }
 }
 

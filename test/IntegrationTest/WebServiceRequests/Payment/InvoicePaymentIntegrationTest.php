@@ -11,7 +11,7 @@ require_once $root . '/../../../TestUtil.php';
  *
  * @author Anneli Halld'n, Daniel Brolund for Svea Webpay
  */
-class InvoicePaymentTest extends PHPUnit_Framework_TestCase {
+class InvoicePaymentIntegrationTest extends PHPUnit_Framework_TestCase {
     
     public function testInvoiceRequestAccepted() {
         $request = WebPay::createOrder()
