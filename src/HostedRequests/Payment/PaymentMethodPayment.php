@@ -1,13 +1,6 @@
 <?php
 
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 /**
- * Description of PaymentMethodPayment
- *
  * @author anne-hal
  */
 class PaymentMethodPayment extends HostedPayment{
@@ -32,6 +25,7 @@ class PaymentMethodPayment extends HostedPayment{
                 $request['paymentMethod'] = $this->paymentMethod;
             }
         }
+        
         return $request;
     }
 

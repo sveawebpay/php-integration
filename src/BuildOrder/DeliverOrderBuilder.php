@@ -173,6 +173,7 @@ class deliverOrderBuilder {
             }
         }
         $this->distributionType = $distributionTypeAsConst;
+        
         return $this;
     }
 

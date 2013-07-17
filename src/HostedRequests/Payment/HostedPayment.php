@@ -44,12 +44,13 @@ class HostedPayment {
 
     public function getPaymentForm() {
         //validate input
-       $errors = $this->validateOrder();
+        $errors = $this->validateOrder();
         $exceptionString = "";
         if (count($errors) > 0 || (isset($this->returnUrl) == FALSE && isset($this->paymentMethod) == FALSE)) {
             if (isset($this->returnUrl) == FALSE) {
              $exceptionString .="-missing value : ReturnUrl is required. Use function setReturnUrl().\n";
             }
+            
             foreach ($errors as $key => $value) {
                 $exceptionString .="-". $key. " : ".$value."\n";
             }
@@ -85,6 +86,7 @@ class HostedPayment {
         $currency = trim($this->order->currency);
         $currency = strtoupper($currency);
         $request['currency'] = $currency;
+        
         return $this->configureExcludedPaymentMethods($request); //Method in child class
     }
 }

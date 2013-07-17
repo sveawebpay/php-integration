@@ -1,7 +1,6 @@
 <?php
+
 /**
- * Description of OrderRow
- *
  * @author anne-hal
  */
 class OrderRow {

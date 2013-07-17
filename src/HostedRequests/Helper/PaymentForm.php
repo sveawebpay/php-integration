@@ -31,12 +31,12 @@ class PaymentForm {
     }
 
     public function setRawFields() {
-         $this->mac = hash("sha512", $this->xmlMessageBase64 . $this->secretWord);
-         $this->rawFields['merchantid'] = $this->merchantid;
-         $this->rawFields['message'] = $this->xmlMessageBase64;
-         $this->rawFields['mac'] = $this->mac;
-         $this->rawFields['htmlFormMethod'] = 'post';
-         $this->rawFields['htmlFormAction'] = $this->endPointUrl;
+        $this->mac = hash("sha512", $this->xmlMessageBase64 . $this->secretWord);
+        $this->rawFields['merchantid'] = $this->merchantid;
+        $this->rawFields['message'] = $this->xmlMessageBase64;
+        $this->rawFields['mac'] = $this->mac;
+        $this->rawFields['htmlFormMethod'] = 'post';
+        $this->rawFields['htmlFormAction'] = $this->endPointUrl;
     }
 
     public function setSubmitMessage($countryCode = FALSE) {

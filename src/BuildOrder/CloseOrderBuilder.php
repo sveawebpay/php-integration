@@ -37,7 +37,6 @@ class closeOrderBuilder {
         $this->testmode = TRUE;
         return $this;
     }
-     *
      */
 
     /**

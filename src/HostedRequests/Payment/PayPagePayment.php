@@ -43,16 +43,18 @@ class PayPagePayment extends HostedPayment {
      */
     public function excludePaymentMethods() {
         $excludes = func_get_args();
+        
         foreach ($excludes as $method) {
-             if ($method == PaymentMethod::INVOICE) {
-               $this->excludedPaymentMethods[] ="SVEAINVOICEEU_".$this->order->countryCode;
-               $this->excludedPaymentMethods[] ="SVEAINVOICE".$this->order->countryCode;
+            if ($method == PaymentMethod::INVOICE) {
+                $this->excludedPaymentMethods[] ="SVEAINVOICEEU_".$this->order->countryCode;
+                $this->excludedPaymentMethods[] ="SVEAINVOICE".$this->order->countryCode;
             } elseif ($this->paymentMethod == PaymentMethod::PAYMENTPLAN) {
                 $this->excludedPaymentMethods[] = "SVEASPLITEU_".$this->order->countryCode;
             } else {
-                 $this->excludedPaymentMethods[] = $method;
+                $this->excludedPaymentMethods[] = $method;
             }
         }
+        
         return $this;
     }
     
@@ -86,7 +88,7 @@ class PayPagePayment extends HostedPayment {
             foreach ($this->excludedPaymentMethods as $k => $v) {
                 //unset if a match in exlude array
                 if ($cleanValue == $v) {
-                     unset($this->excludedPaymentMethods[$k]);
+                    unset($this->excludedPaymentMethods[$k]);
                 //unset the invoice methods if INVOICE is desired
                 } elseif ($cleanValue == PaymentMethod::INVOICE) {
                     if ($v == "SVEAINVOICEEU_".$this->order->countryCode || $k == SystemPaymentMethod::INVOICESE) {

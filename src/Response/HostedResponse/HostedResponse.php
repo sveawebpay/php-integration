@@ -1,5 +1,7 @@
 <?php
+
 require_once SVEA_REQUEST_DIR . '/Includes.php';
+
 /**
  * Description of HostedResponse
  *
@@ -67,10 +69,10 @@ class HostedResponse {
     private function setErrorParams($resultcode) {
         switch ($resultcode) {
           case '1':
-             $this->resultcode = $resultcode. ' (REQUIRES_MANUAL_REVIEW)';
+            $this->resultcode = $resultcode. ' (REQUIRES_MANUAL_REVIEW)';
             $this->errormessage = 'Request performed successfully but requires manual review from merchant. Applicable paymentmethods: PAYPAL.';
             break;
-        case '100':
+          case '100':
             $this->resultcode = $resultcode. ' (INTERNAL_ERROR)';
             $this->errormessage = 'Invalid – contact integrator.';
             break;

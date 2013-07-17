@@ -4,8 +4,6 @@ require_once SVEA_REQUEST_DIR . '/Includes.php';
 require_once 'OrderValidator.php';
 
 /**
- * Description of HostedOrderValidator
- *
  * @author Anneli Halld'n, Daniel Brolund for Svea Webpay
  * @package BuildOrder
  */

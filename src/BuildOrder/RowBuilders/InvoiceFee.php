@@ -1,8 +1,6 @@
 <?php
 
 /**
- * Description of InvoiceFee
- *
  * @author anne-hal
  */
 class InvoiceFee {

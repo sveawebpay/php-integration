@@ -40,9 +40,11 @@ class HostedRowFormatter {
             if (isset($row->name)) {
                 $tempRow->setName($row->name);
             }
+            
             if (isset($row->description)) {
                 $tempRow->setDescription($row->description);
             }
+            
             if (isset($row->amountExVat) && isset($row->vatPercent)) {
                 $tempRow->setAmount(round(($row->amountExVat * 100) * $plusVatCounter));
                 $tempRow->setVat(round($tempRow->amount - ($row->amountExVat * 100)));
@@ -57,9 +59,11 @@ class HostedRowFormatter {
             if (isset($row->unit)) {
                 $tempRow->setUnit($row->unit);
             }
+            
             if (isset($row->articleNumber)) {
                 $tempRow->setSku($row->articleNumber);
             }
+            
             if (isset($row->quantity)) {
                 $tempRow->setQuantity($row->quantity);
             }
@@ -82,9 +86,11 @@ class HostedRowFormatter {
             if (isset($row->name)) {
                 $tempRow->setName($row->name);
             }
+            
             if (isset($row->description)) {
                 $tempRow->setDescription($row->description);
             }
+            
             if (isset($row->amountExVat) && isset($row->vatPercent)) {
                 $tempRow->setAmount(round(($row->amountExVat * 100) * $plusVatCounter));
                 $tempRow->setVat(round($tempRow->amount - ($row->amountExVat * 100)));
@@ -145,9 +151,10 @@ class HostedRowFormatter {
             if (isset($row->discountId)) {
                 $tempRow->setSku($row->discountId);
             }
+            
             $tempRow->setQuantity(1);
-              $this->totalAmount -= $row->amount;
-              $this->totalVat -= substr($tempRow->vat, 1);
+            $this->totalAmount -= $row->amount;
+            $this->totalVat -= substr($tempRow->vat, 1);
             $this->newRows[] = $tempRow;
         }
     }
@@ -179,11 +186,10 @@ class HostedRowFormatter {
 
             $tempRow->setAmount(- round(($discountCounter * $this->totalAmount)));
 
-
             // Vat could be 0
-           // if ($this->totalVat > 0) {
+            // if ($this->totalVat > 0) {
                 $tempRow->setVat(- round(($this->totalVat * $discountCounter)));
-           // }
+            // }
 
             $tempRow->setQuantity(1);
             $this->totalAmount -= $tempRow->amount;
