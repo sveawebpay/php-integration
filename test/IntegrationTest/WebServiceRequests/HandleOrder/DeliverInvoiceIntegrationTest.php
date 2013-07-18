@@ -54,5 +54,3 @@ class DeliverInvoiceIntegrationTest extends PHPUnit_Framework_TestCase {
         //$this->assertEquals('Invoice', $request->contractNumber); //for paymentplan
     }
 }
-
-?>

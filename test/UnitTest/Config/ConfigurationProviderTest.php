@@ -14,5 +14,3 @@ class ConfigurationProviderTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals("https://webservices.sveaekonomi.se/webpay_test/SveaWebPay.asmx?WSDL", $config->getEndPoint("INVOICE"));
     }
 }
-
-?>

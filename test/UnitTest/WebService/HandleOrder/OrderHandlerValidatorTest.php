@@ -58,5 +58,3 @@ class OrderHandlerValidatorTest extends PHPUnit_Framework_TestCase {
         $object->prepareRequest();
     }
 }
-
-?>

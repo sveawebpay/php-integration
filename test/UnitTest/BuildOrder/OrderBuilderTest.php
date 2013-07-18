@@ -216,5 +216,3 @@ class OrderBuilderTest extends PHPUnit_Framework_TestCase {
       }
      */
 }
-
-?>

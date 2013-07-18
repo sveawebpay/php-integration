@@ -97,5 +97,3 @@ class PaymentPlanTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(25, $request->request->CreateOrderInformation->OrderRows['OrderRow'][0]->VatPercent);
     }
 }
-
-?>

@@ -323,5 +323,3 @@ class NewOrderBuilderTest extends PHPUnit_Framework_TestCase {
     }
  */
 }
-
-?>

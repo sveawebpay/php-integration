@@ -56,5 +56,3 @@ class SveaConfigTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(79021, $request->request->Auth->ClientNumber);
     }
 }
-
-?>

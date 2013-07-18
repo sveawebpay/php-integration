@@ -33,5 +33,3 @@ class CloseOrderTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals("id", $request->request->CloseOrderInformation->SveaOrderId);
     }
 }
-
-?>

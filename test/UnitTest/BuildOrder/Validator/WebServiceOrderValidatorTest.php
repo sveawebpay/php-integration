@@ -287,5 +287,3 @@ class WebServiceOrderValidatorTest extends PHPUnit_Framework_TestCase {
         $order->prepareRequest(); 
     }
 }
-
-?>

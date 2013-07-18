@@ -133,5 +133,3 @@ class WebServiceRowFormatterTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals("st", $newRow->Unit);
     }
 }
-
-?>

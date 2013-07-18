@@ -19,5 +19,3 @@ class FakeHostedPayment extends HostedPayment {
         return $this;
     }
 }
-
-?>

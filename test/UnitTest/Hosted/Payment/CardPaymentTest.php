@@ -304,5 +304,3 @@ class CardPaymentTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals("0", $xmlMessage->orderrows->row->amount);
     }
 }
-
-?>

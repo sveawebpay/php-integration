@@ -53,5 +53,3 @@ class GetAddressesTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(4608142222, $request->request->SecurityNumber);
     }
 }
-
-?>

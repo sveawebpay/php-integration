@@ -139,5 +139,3 @@ class HostedOrderValidatorTest extends PHPUnit_Framework_TestCase {
         $order->getPaymentForm();
     }
 }
-
-?>
