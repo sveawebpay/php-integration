@@ -75,5 +75,3 @@ class CardPaymentIntegrationTest extends PHPUnit_Framework_TestCase {
          //$this->assertEquals("payPage", $redirect);
     }
 }
-
-?>

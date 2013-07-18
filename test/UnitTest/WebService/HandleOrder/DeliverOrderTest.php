@@ -222,5 +222,3 @@ class DeliverOrderTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(0, $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][2]->DiscountPercent);
     }
 }
-
-?>

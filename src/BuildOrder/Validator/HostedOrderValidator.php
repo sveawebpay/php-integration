@@ -9,10 +9,10 @@ require_once 'OrderValidator.php';
  */
 class HostedOrderValidator extends OrderValidator {
 
-     public $errors = array();
-     protected $isCompany = false;
+    public $errors = array();
+    protected $isCompany = false;
 
-     /**
+    /**
      * @param type $order
      * @return type $errors
      */
@@ -52,7 +52,7 @@ class HostedOrderValidator extends OrderValidator {
         return $errors;
     }
     
-     /**
+    /**
      * @param type $order
      * @param type $errors
      */

@@ -107,5 +107,3 @@ class InvoicePaymentIntegrationTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals('BARENDRECHT', $request->customerIdentity->locality);
     }
 }
-
-?>

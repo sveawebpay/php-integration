@@ -5,7 +5,7 @@
  */
 class OrderRow {
 
-   /**
+    /**
      * Contains empty string if not set
      * @var type
      */

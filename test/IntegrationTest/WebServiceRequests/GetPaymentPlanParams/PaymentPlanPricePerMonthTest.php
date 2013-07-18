@@ -29,5 +29,3 @@ class PaymentPlanPricePerMonthTest extends PHPUnit_Framework_TestCase {
         $this->assertEmpty($response->values);
     }
 }
-
-?>

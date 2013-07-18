@@ -14,5 +14,3 @@ class VoidValidator extends OrderValidator {
         $this->nrOfCalls++;
     }
 }
-
-?>

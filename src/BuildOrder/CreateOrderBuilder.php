@@ -10,7 +10,7 @@ require_once SVEA_REQUEST_DIR . '/Includes.php';
 */
 class CreateOrderBuilder {
 
-     /**
+    /**
      * @var Array Rows containing Product rows
      */
     public $orderRows = array();

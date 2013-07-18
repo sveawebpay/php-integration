@@ -20,5 +20,3 @@ class PaymentPlanParamsTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals("sverigetest", $request->request->Auth->Password); //Check all in identity
     }
 }
-
-?>

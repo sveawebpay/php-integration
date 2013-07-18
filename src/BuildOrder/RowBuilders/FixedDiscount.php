@@ -3,6 +3,7 @@
  * @author anne-hal
  */
 class FixedDiscount {
+    
     /**
      * Optional
      * @param type $IdAsString

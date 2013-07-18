@@ -150,5 +150,3 @@ class HostedRowFormatterTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(-200, $formatter->formatTotalVat($rows));
     }
 }
-
-?>

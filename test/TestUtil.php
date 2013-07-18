@@ -27,5 +27,3 @@ class TestUtil {
                 ->setQuantity(1);
     }
 }
-
-?>

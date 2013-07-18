@@ -148,5 +148,3 @@ class PayPagePaymentTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals('SEK', $xmlMessage->currency);
     }
 }
-
-?>

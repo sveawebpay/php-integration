@@ -38,5 +38,3 @@ class GetPaymentPlanParamsIntegrationTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(50000, $request->campaignCodes[0]->toAmount);
     }
 }
-
-?>

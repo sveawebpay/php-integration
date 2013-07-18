@@ -29,5 +29,3 @@ class TestConf implements ConfigurationProvider {
         return "clientnumber";
     }
 }
-
-?>

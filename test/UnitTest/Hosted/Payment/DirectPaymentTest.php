@@ -105,5 +105,3 @@ class DirectPaymentTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals('-12500', $xmlMessage->orderrows->row[2]->amount);
     }
 }
-
-?>

@@ -52,5 +52,3 @@ class GetAddressesIntegrationTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(4605092222, $request->customerIdentity[0]->nationalIdNumber);
     }
 }
-
-?>

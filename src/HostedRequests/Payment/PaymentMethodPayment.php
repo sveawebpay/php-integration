@@ -5,9 +5,9 @@
  */
 class PaymentMethodPayment extends HostedPayment{
 
-     public $paymentMethod;
-     /**
-     *
+    public $paymentMethod;
+    
+    /**
      * @param type $order, $paymentmethod
      */
     public function __construct($order, $paymentmethod) {

@@ -7,7 +7,7 @@ require_once SVEA_REQUEST_DIR . '/Includes.php';
  */
 class closeOrderBuilder {
 
-     /**
+    /**
      * Order Id recieved when creating order
      * @var Order id
      */
