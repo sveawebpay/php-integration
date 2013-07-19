@@ -70,8 +70,8 @@ class CardPaymentIntegrationTest extends PHPUnit_Framework_TestCase {
         } else {
             $status = 'No answer';
         }
-        //Test breaks when doing the request from here, but not direkt in testtool
-         //$this->assertEquals(302, $status);
-         //$this->assertEquals("payPage", $redirect);
+        
+        $this->assertEquals(302, $status); //Curl response code "Found"
+        $this->assertEquals("payPage", $redirect);
     }
 }
