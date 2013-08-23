@@ -1,4 +1,5 @@
 <?php
+namespace swp_;
 
 /**
  * Helpclass for formatting orderrows for the right format for WebServeice soap-calls

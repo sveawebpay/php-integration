@@ -1,4 +1,5 @@
 <?php
+namespace swp_;
 
 /**
  * Autoload all classes for building svea-soap object

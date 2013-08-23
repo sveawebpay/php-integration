@@ -1,4 +1,5 @@
 <?php
+namespace swp_;
 
 /* * Variables:
  * IsCompany, CountryCode, SecurityNumber

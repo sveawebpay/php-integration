@@ -1,4 +1,6 @@
 <?php
+/** namespace swp_ implicitly disambiguates classes i.e. "WebPay" maps to "\swp_\WebPay"
+namespace swp_;
 
 include_once SVEA_REQUEST_DIR . "/Includes.php";
 

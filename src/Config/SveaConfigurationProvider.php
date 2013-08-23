@@ -1,4 +1,5 @@
 <?php
+namespace swp_;
 require_once SVEA_REQUEST_DIR . '/Includes.php';
 
 /**

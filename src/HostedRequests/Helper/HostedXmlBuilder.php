@@ -1,4 +1,5 @@
 <?php
+namespace swp_;
 
 /**
  * Rewrites formatted object to xml format to put in form element and send to external service.

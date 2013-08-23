@@ -1,4 +1,5 @@
 <?php
+namespace swp_;
 /**
  * Class contains Merchant identification values for Requests to external Services
  * Options:

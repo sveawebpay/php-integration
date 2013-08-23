@@ -1,4 +1,5 @@
 <?php
+namespace swp_;
 
 require_once 'CustomerIdentityResponse.php';
 

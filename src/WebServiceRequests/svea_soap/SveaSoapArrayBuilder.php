@@ -1,4 +1,5 @@
 <?php
+namespace swp_;
 
 /**
  * Use to transform order object into array if needed for soapClient
