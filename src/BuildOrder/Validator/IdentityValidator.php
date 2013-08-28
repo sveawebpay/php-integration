@@ -78,7 +78,7 @@ class IdentityValidator {
             $errors['missing value'] = "VatNumber is required for company customers when countrycode is NL. Use function setVatNumber().";
         }
         if($this->isCompany == true && isset($order->customerIdentity->companyName) == false){
-            $errors['missing value'] = "CompanyName is required for individual customers when countrycode is NL. Use function setCompanyName().";
+            $errors['missing value'] = "CompanyName is required for company customers when countrycode is NL. Use function setCompanyName().";
         }
         if(isset($order->customerIdentity->street) == false || isset($order->customerIdentity->housenumber) == false){
             $errors['missing value'] = "StreetAddress is required for all customers when countrycode is NL. Use function setStreetAddress().";
