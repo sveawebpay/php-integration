@@ -1,9 +1,10 @@
 <?php
+namespace swp_;
 
 $root = realpath(dirname(__FILE__));
 require_once $root . '/../../../../src/Includes.php';
 
-class HostedRowFormatterTest extends PHPUnit_Framework_TestCase {
+class HostedRowFormatterTest extends \PHPUnit_Framework_TestCase {
     
     public function testFormatOrderRows() {
         $order = new createOrderBuilder(new SveaConfigurationProvider(SveaConfig::getDefaultConfig()));

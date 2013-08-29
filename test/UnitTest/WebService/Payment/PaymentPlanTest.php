@@ -1,4 +1,5 @@
 <?php
+namespace swp_;
 
 $root = realpath(dirname(__FILE__));
 require_once $root . '/../../../../test/UnitTest/BuildOrder/OrderBuilderTest.php';
@@ -10,7 +11,7 @@ require_once $root . '/../../../TestUtil.php';
 /**
  * @author Anneli Halld'n, Daniel Brolund for Svea Webpay
  */
-class PaymentPlanTest extends PHPUnit_Framework_TestCase {
+class PaymentPlanTest extends \PHPUnit_Framework_TestCase {
     
       /**
      * Use to get paymentPlanParams to be able to test PaymentPlanRequest

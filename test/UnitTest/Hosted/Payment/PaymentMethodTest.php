@@ -1,4 +1,5 @@
 <?php
+namespace swp_;
 
 $root = realpath(dirname(__FILE__));
 require_once $root . '/../../../../test/UnitTest/BuildOrder/OrderBuilderTest.php';
@@ -10,7 +11,7 @@ require_once $root . '/../../../TestUtil.php';
 /**
  * @author anne-hal
  */
-class PaymentMethodTest extends PHPUnit_Framework_TestCase{
+class PaymentMethodTest extends \PHPUnit_Framework_TestCase{
     
      public function testPayPagePaymentWithSetPaymentMethod() {
         $rowFactory = new TestRowFactory();
@@ -33,7 +34,7 @@ class PaymentMethodTest extends PHPUnit_Framework_TestCase{
             ->setReturnUrl("http://myurl.se")
             ->getPaymentForm();
         
-        $xmlMessage = new SimpleXMLElement($form->xmlMessage);
+        $xmlMessage = new \SimpleXMLElement($form->xmlMessage);
         $this->assertEquals(PaymentMethod::KORTCERT, $xmlMessage->paymentmethod[0]);
     }
     
@@ -58,7 +59,7 @@ class PaymentMethodTest extends PHPUnit_Framework_TestCase{
             ->setReturnUrl("http://myurl.se")
             ->getPaymentForm();
         
-        $xmlMessage = new SimpleXMLElement($form->xmlMessage);
+        $xmlMessage = new \SimpleXMLElement($form->xmlMessage);
         $this->assertEquals(SystemPaymentMethod::INVOICE_SE, $xmlMessage->paymentmethod[0]);
         $this->assertEquals("TRUE", $xmlMessage->iscompany);
         $this->assertEquals("4608142222", $xmlMessage->customer->ssn);
@@ -86,7 +87,7 @@ class PaymentMethodTest extends PHPUnit_Framework_TestCase{
             ->usePaymentMethod(PaymentMethod::INVOICE)
             ->setReturnUrl("http://myurl.se")
             ->getPaymentForm();
-        $xmlMessage = new SimpleXMLElement($form->xmlMessage);
+        $xmlMessage = new \SimpleXMLElement($form->xmlMessage);
         
         $this->assertEquals("FALSE", $xmlMessage->iscompany);
         $this->assertEquals("Sneider", $xmlMessage->customer->firstname);

@@ -1,4 +1,5 @@
 <?php
+namespace swp_;
 
 $root = realpath(dirname(__FILE__));
 require_once $root . '/../../../../test/UnitTest/BuildOrder/OrderBuilderTest.php';
@@ -10,7 +11,7 @@ require_once $root . '/../../../TestUtil.php';
 /**
  * @author Anneli Halld'n, Daniel Brolund for Svea Webpay
  */
-class DirectPaymentTest extends PHPUnit_Framework_TestCase {
+class DirectPaymentTest extends \PHPUnit_Framework_TestCase {
         
      /**
      * @expectedException Exception
@@ -32,7 +33,7 @@ class DirectPaymentTest extends PHPUnit_Framework_TestCase {
                 ->setReturnUrl("http://myurl.se")
                 ->getPaymentForm();
         /**
-        $xmlMessage = new SimpleXMLElement($form->xmlMessage);
+        $xmlMessage = new \SimpleXMLElement($form->xmlMessage);
        
         $this->assertEquals('KORTCERT', $xmlMessage->excludepaymentmethods->exclude[0]);      
         $this->assertEquals('KORTSKRILL', $xmlMessage->excludepaymentmethods->exclude[1]);
@@ -58,7 +59,7 @@ class DirectPaymentTest extends PHPUnit_Framework_TestCase {
                 ->setReturnUrl("http://myurl.se")
                 ->getPaymentForm();
         
-        $xmlMessage = new SimpleXMLElement($form->xmlMessage);
+        $xmlMessage = new \SimpleXMLElement($form->xmlMessage);
         
         $this->assertEquals('KORTCERT', $xmlMessage->excludepaymentmethods->exclude[0]);      
         $this->assertEquals('SKRILL', $xmlMessage->excludepaymentmethods->exclude[1]);
@@ -95,7 +96,7 @@ class DirectPaymentTest extends PHPUnit_Framework_TestCase {
                 ->setReturnUrl("http://myurl.se")
                 ->getPaymentForm();
 
-        $xmlMessage = new SimpleXMLElement($form->xmlMessage);
+        $xmlMessage = new \SimpleXMLElement($form->xmlMessage);
         //test values are as expected avter transforming xml to php object
         $this->assertEquals('SEK', $xmlMessage->currency);
         $this->assertEquals('18750', $xmlMessage->amount);

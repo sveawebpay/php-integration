@@ -1,4 +1,5 @@
 <?php
+namespace swp_;
 
 $root = realpath(dirname(__FILE__));
 require_once $root . '/../../../../test/UnitTest/BuildOrder/OrderBuilderTest.php';
@@ -10,7 +11,7 @@ require_once $root . '/../../../TestUtil.php';
 /**
  * @author Anneli Halld'n, Daniel Brolund for Svea Webpay
  */
-class PayPagePaymentTest extends PHPUnit_Framework_TestCase {
+class PayPagePaymentTest extends \PHPUnit_Framework_TestCase {
     
     public function testBuildPayPagePaymentWithExcludepaymentMethods() {
         $rowFactory = new TestRowFactory();
@@ -34,7 +35,7 @@ class PayPagePaymentTest extends PHPUnit_Framework_TestCase {
             ->excludePaymentMethods(PaymentMethod::INVOICE, PaymentMethod::KORTCERT)
             ->getPaymentForm();
         
-        $xmlMessage = new SimpleXMLElement($form->xmlMessage);
+        $xmlMessage = new \SimpleXMLElement($form->xmlMessage);
         //test values are as expected avter transforming xml to php object
         $this->assertEquals('SEK', $xmlMessage->currency);
         $this->assertEquals('18750', $xmlMessage->amount);
@@ -69,7 +70,7 @@ class PayPagePaymentTest extends PHPUnit_Framework_TestCase {
             ->excludeCardPaymentMethods()
             ->getPaymentForm();
         
-        $xmlMessage = new SimpleXMLElement($form->xmlMessage);
+        $xmlMessage = new \SimpleXMLElement($form->xmlMessage);
         $this->assertEquals(PaymentMethod::KORTCERT, $xmlMessage->excludepaymentmethods->exclude[0]);
     }
 
@@ -95,7 +96,7 @@ class PayPagePaymentTest extends PHPUnit_Framework_TestCase {
             ->excludeDirectPaymentMethods()
             ->getPaymentForm();
         
-        $xmlMessage = new SimpleXMLElement($form->xmlMessage);
+        $xmlMessage = new \SimpleXMLElement($form->xmlMessage);
         $this->assertEquals(PaymentMethod::BANKAXESS, $xmlMessage->excludepaymentmethods->exclude[0]);
     }
 
@@ -121,7 +122,7 @@ class PayPagePaymentTest extends PHPUnit_Framework_TestCase {
             ->includePaymentMethods(PaymentMethod::KORTCERT, PaymentMethod::SKRILL)
             ->getPaymentForm();
         
-        $xmlMessage = new SimpleXMLElement($form->xmlMessage);
+        $xmlMessage = new \SimpleXMLElement($form->xmlMessage);
         //check to see if the first value is one of the excluded ones
         $this->assertEquals(SystemPaymentMethod::BANKAXESS, $xmlMessage->excludepaymentmethods->exclude[0]);
     }
@@ -143,7 +144,7 @@ class PayPagePaymentTest extends PHPUnit_Framework_TestCase {
                 ->getPaymentForm();
         
         
-        $xmlMessage = new SimpleXMLElement($form->xmlMessage);
+        $xmlMessage = new \SimpleXMLElement($form->xmlMessage);
         //test values are as expected avter transforming xml to php object
         $this->assertEquals('SEK', $xmlMessage->currency);
     }

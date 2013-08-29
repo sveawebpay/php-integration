@@ -1,4 +1,5 @@
 <?php
+namespace swp_;
 
 $root = realpath(dirname(__FILE__));
 require_once $root . '/../../../../src/Includes.php';
@@ -9,10 +10,10 @@ require_once $root . '/../../../TestUtil.php';
 /**
  * @author Anneli Halld'n, Daniel Brolund for Svea Webpay
  */
-class OrderHandlerValidatorTest extends PHPUnit_Framework_TestCase {
+class OrderHandlerValidatorTest extends \PHPUnit_Framework_TestCase {
 
     /**
-     * @expectedException ValidationException
+     * @expectedException swp_\ValidationException
      * @expectedExceptionMessage -missing value : OrderId is required. Use function setOrderId() with the id recieved when creating an order.
      */
     public function testFailOnMissingOrderIdOnPaymentPlanDeliver() {
@@ -24,7 +25,7 @@ class OrderHandlerValidatorTest extends PHPUnit_Framework_TestCase {
     }
 
     /**
-     * @expectedException ValidationException
+     * @expectedException swp_\ValidationException
      * @expectedExceptionMessage -missing value : InvoiceDistributionType is requred for deliverInvoiceOrder. Use function setInvoiceDistributionType().
      */
     public function testFailOnMissingInvoiceDetailsOnInvoiceDeliver() {
@@ -46,7 +47,7 @@ class OrderHandlerValidatorTest extends PHPUnit_Framework_TestCase {
     }
 
     /**
-     * @expectedException ValidationException
+     * @expectedException swp_\ValidationException
      * @expectedExceptionMessage No rows has been included. Use function beginOrderRow(), beginShippingfee() or beginInvoiceFee().
      */
     public function testFailOnMissingOrderRowsOnInvoiceDeliver() {

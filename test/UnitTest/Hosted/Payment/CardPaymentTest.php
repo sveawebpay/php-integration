@@ -1,4 +1,5 @@
 <?php
+namespace swp_;
 
 $root = realpath(dirname(__FILE__));
 require_once $root . '/../../../../test/UnitTest/BuildOrder/OrderBuilderTest.php';
@@ -13,7 +14,7 @@ require_once $root . '/TestConf.php';
 /**
  * @author Anneli Halld'n, Daniel Brolund for Svea Webpay
  */
-class CardPaymentTest extends PHPUnit_Framework_TestCase {
+class CardPaymentTest extends \PHPUnit_Framework_TestCase {
 
     public function testSetAuthorization() {
         $form = WebPay::createOrder(new TestConf())
@@ -55,9 +56,9 @@ class CardPaymentTest extends PHPUnit_Framework_TestCase {
                 ->setReturnUrl("http://myurl.se")
                 ->getPaymentForm();
 
-        $xmlMessage = new SimpleXMLElement($form->xmlMessage);
+        $xmlMessage = new \SimpleXMLElement($form->xmlMessage);
         $payment = base64_decode($form->xmlMessageBase64);
-        $payment_decoded = new SimpleXMLElement($payment);
+        $payment_decoded = new \SimpleXMLElement($payment);
 
         //test values are as expected avter transforming xml to php object
         $this->assertEquals('SEK', $xmlMessage->currency);
@@ -99,7 +100,7 @@ class CardPaymentTest extends PHPUnit_Framework_TestCase {
                 ->setReturnUrl("http://myurl.se")
                 ->setPayPageLanguage("sv")
                 ->getPaymentForm();
-        $xmlMessage = new SimpleXMLElement($form->xmlMessage);
+        $xmlMessage = new \SimpleXMLElement($form->xmlMessage);
 
         $this->assertEquals('40000', $xmlMessage->amount);
         $this->assertEquals('5706', $xmlMessage->vat);
@@ -146,7 +147,7 @@ class CardPaymentTest extends PHPUnit_Framework_TestCase {
                 ->setReturnUrl("http://myurl.se")
                 ->getPaymentForm();
 
-        $xmlMessage = new SimpleXMLElement($form->xmlMessage);
+        $xmlMessage = new \SimpleXMLElement($form->xmlMessage);
 
         $this->assertEquals('46250', $xmlMessage->amount);
         $this->assertEquals('6956', $xmlMessage->vat);
@@ -185,7 +186,7 @@ class CardPaymentTest extends PHPUnit_Framework_TestCase {
                 ->setReturnUrl("http://myurl.se")
                 ->getPaymentForm();
 
-        $xmlMessage = new SimpleXMLElement($form->xmlMessage);
+        $xmlMessage = new \SimpleXMLElement($form->xmlMessage);
 
         $this->assertEquals('40000', $xmlMessage->amount);
         $this->assertEquals('5706', $xmlMessage->vat);
@@ -210,7 +211,7 @@ class CardPaymentTest extends PHPUnit_Framework_TestCase {
                 ->setReturnUrl("http://myurl.se")
                 ->getPaymentForm();
 
-        $xmlMessage = new SimpleXMLElement($form->xmlMessage);
+        $xmlMessage = new \SimpleXMLElement($form->xmlMessage);
 
         $this->assertEquals('SEK', $xmlMessage->currency);
     }
@@ -235,7 +236,7 @@ class CardPaymentTest extends PHPUnit_Framework_TestCase {
                 ->setReturnUrl("http://myurl.se")
                 ->getPaymentForm();
 
-        $xmlMessage = new SimpleXMLElement($form->xmlMessage);
+        $xmlMessage = new \SimpleXMLElement($form->xmlMessage);
 
         $this->assertEquals("8000", $xmlMessage->vat);
         $this->assertEquals("40000", $xmlMessage->amount);
@@ -257,7 +258,7 @@ class CardPaymentTest extends PHPUnit_Framework_TestCase {
                 ->setReturnUrl("http://myurl.se")
                 ->getPaymentForm();
 
-        $xmlMessage = new SimpleXMLElement($form->xmlMessage);
+        $xmlMessage = new \SimpleXMLElement($form->xmlMessage);
         $this->assertEquals("5970", $xmlMessage->vat);
         $this->assertEquals("30000", $xmlMessage->amount);
     }
@@ -278,7 +279,7 @@ class CardPaymentTest extends PHPUnit_Framework_TestCase {
                 ->setReturnUrl("http://myurl.se")
                 ->getPaymentForm();
 
-        $xmlMessage = new SimpleXMLElement($form->xmlMessage);
+        $xmlMessage = new \SimpleXMLElement($form->xmlMessage);
         $this->assertEquals("5970", $xmlMessage->vat);
         $this->assertEquals("30000", $xmlMessage->amount);
     }
@@ -299,7 +300,7 @@ class CardPaymentTest extends PHPUnit_Framework_TestCase {
                 ->setReturnUrl("http://myurl.se")
                 ->getPaymentForm();
 
-        $xmlMessage = new SimpleXMLElement($form->xmlMessage);
+        $xmlMessage = new \SimpleXMLElement($form->xmlMessage);
         $this->assertEquals("0", $xmlMessage->orderrows->row->vat);
         $this->assertEquals("0", $xmlMessage->orderrows->row->amount);
     }

@@ -1,8 +1,9 @@
 <?php
+namespace swp_;
 
 require_once 'FakeHostedPayment.php';
 
-class HostedPaymentTest extends PHPUnit_Framework_TestCase {
+class HostedPaymentTest extends \PHPUnit_Framework_TestCase {
     
     public function testexcludeInvoicesAndPaymentPlanSe() {
         $exclude = new ExcludePayments();

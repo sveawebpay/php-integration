@@ -1,4 +1,5 @@
 <?php
+namespace swp_;
 
 $root = realpath(dirname(__FILE__));
 require_once $root . '/../../../../src/Includes.php';
@@ -9,10 +10,10 @@ require_once $root . '/../../../TestUtil.php';
 /**
  * @author Anneli Halld'n, Daniel Brolund for Svea Webpay
  */
-class WebServiceOrderValidatorTest extends PHPUnit_Framework_TestCase {
+class WebServiceOrderValidatorTest extends \PHPUnit_Framework_TestCase {
     
     /**
-     * @expectedException ValidationException
+     * @expectedException swp_\ValidationException
      * @expectedExceptionMessage -missing value : Customer values are required for Invoice and PaymentPlan orders.
 
     function te_stFailOnMissingCustomerIdentity() {
@@ -32,7 +33,7 @@ class WebServiceOrderValidatorTest extends PHPUnit_Framework_TestCase {
       */
 
     /**
-     * @expectedException ValidationException
+     * @expectedException swp_\ValidationException
      * @expectedExceptionMessage -duplicated value : Customer is either an individual or a company. You can not use function setNationalIdNumber() in combination with setNationalIdNumber() or setVatNumber().
      */
     public function t_estFailOnDoubleIdentity() {
@@ -61,7 +62,7 @@ class WebServiceOrderValidatorTest extends PHPUnit_Framework_TestCase {
     }
     
     /**
-     * @expectedException ValidationException
+     * @expectedException swp_\ValidationException
      * @expectedExceptionMessage -Wrong customer type : PaymentPlanPayment not allowed for Company customer.
      */
     public function testFailOnCompanyPaymentPlanPayment() {
@@ -78,7 +79,7 @@ class WebServiceOrderValidatorTest extends PHPUnit_Framework_TestCase {
     }
     
     /**
-     * @expectedException ValidationException
+     * @expectedException swp_\ValidationException
      * @expectedExceptionMessage -not valid : Given countrycode does not exist in our system.
      */
     public function testFailOnBadCountryCode() {
@@ -94,7 +95,7 @@ class WebServiceOrderValidatorTest extends PHPUnit_Framework_TestCase {
     }
     
     /**
-     * @expectedException ValidationException
+     * @expectedException swp_\ValidationException
      * @expectedExceptionMessage -missing value : CountryCode is required. Use function setCountryCode().
      */
     public function testFailOnMissingCountryCode() {
@@ -109,7 +110,7 @@ class WebServiceOrderValidatorTest extends PHPUnit_Framework_TestCase {
     }
     
     /**
-     * @expectedException ValidationException
+     * @expectedException swp_\ValidationException
      * @expectedExceptionMessage -missing value : NationalIdNumber is required for individual customers when countrycode is SE, NO, DK or FI. Use function setNationalIdNumber().
      */
     public function testFailOnMissingNationalIdNumberForSeOrder() {
@@ -124,7 +125,7 @@ class WebServiceOrderValidatorTest extends PHPUnit_Framework_TestCase {
     }
     
     /**
-     * @expectedException ValidationException
+     * @expectedException swp_\ValidationException
      * @expectedExceptionMessage -missing value : OrgNumber is required for company customers when countrycode is SE, NO, DK or FI. Use function setNationalIdNumber().
      */
     public function testFailOnMissingOrgNumberForCompanyOrderSe() {
@@ -139,7 +140,7 @@ class WebServiceOrderValidatorTest extends PHPUnit_Framework_TestCase {
     }
     
     /**
-     * @expectedException ValidationException
+     * @expectedException swp_\ValidationException
      * @expectedExceptionMessage
      * -missing value : BirthDate is required for individual customers when countrycode is DE. Use function setBirthDate().
      * -missing value : Name is required for individual customers when countrycode is DE. Use function setName().
@@ -158,7 +159,7 @@ class WebServiceOrderValidatorTest extends PHPUnit_Framework_TestCase {
     }
     
     /**
-     * @expectedException ValidationException
+     * @expectedException swp_\ValidationException
      * @expectedExceptionMessage -missing value : BirthDate is required for individual customers when countrycode is DE. Use function setBirthDate().
      */
     public function testFailOnMissingBirthDateForDeOrder() {
@@ -178,7 +179,7 @@ class WebServiceOrderValidatorTest extends PHPUnit_Framework_TestCase {
     }
     
     /**
-     * @expectedException ValidationException
+     * @expectedException swp_\ValidationException
      * @expectedExceptionMessage
      * -missing value : Initials is required for individual customers when countrycode is NL. Use function setInitials().
      * -missing value : BirthDate is required for individual customers when countrycode is NL. Use function setBirthDate().
@@ -200,7 +201,7 @@ class WebServiceOrderValidatorTest extends PHPUnit_Framework_TestCase {
     }
     
     /**
-     * @expectedException ValidationException
+     * @expectedException swp_\ValidationException
      * @expectedExceptionMessage -missing value : Initials is required for individual customers when countrycode is NL. Use function setInitials().
      */
     public function testFailOnMissingInitialsForNlOrder() {
@@ -221,7 +222,7 @@ class WebServiceOrderValidatorTest extends PHPUnit_Framework_TestCase {
     }
     
     /**
-     * @expectedException ValidationException
+     * @expectedException swp_\ValidationException
      * @expectedExceptionMessage -missing values : OrderRows are required. Use function addOrderRow(Item::orderRow) to get orderrow setters.
      */
     public function testFailOnMissingOrderRows() {
@@ -235,7 +236,7 @@ class WebServiceOrderValidatorTest extends PHPUnit_Framework_TestCase {
     }
     
     /**
-     * @expectedException ValidationException
+     * @expectedException swp_\ValidationException
      * @expectedExceptionMessage
      * -missing values : At least two of the values must be set in object Item::  AmountExVat, AmountIncVat or VatPercent for Orderrow. Use functions setAmountExVat(), setAmountIncVat() or setVatPercent().
      * -missing value : Quantity is required in object Item. Use function Item::setQuantity().
@@ -252,7 +253,7 @@ class WebServiceOrderValidatorTest extends PHPUnit_Framework_TestCase {
     }
     
     /**
-     * @expectedException ValidationException
+     * @expectedException swp_\ValidationException
      * @expectedExceptionMessage
      * -missing values : OrderDate is Required. Use function setOrderDate().
     */
@@ -268,7 +269,7 @@ class WebServiceOrderValidatorTest extends PHPUnit_Framework_TestCase {
     }
     
     /**
-     * @expectedException ValidationException
+     * @expectedException swp_\ValidationException
      * @expectedExceptionMessage
      * -incorrect datatype : Vat must be set as Integer.
     */

@@ -1,4 +1,5 @@
 <?php
+namespace swp_;
 
 $root = realpath(dirname(__FILE__));
 require_once $root . '/../../../../src/Includes.php';
@@ -6,7 +7,7 @@ require_once $root . '/../../../../src/Includes.php';
 /**
  * @author Jonas Lith
  */
-class GetAddressesIntegrationTest extends PHPUnit_Framework_TestCase {
+class GetAddressesIntegrationTest extends \PHPUnit_Framework_TestCase {
     
     public function testGetAddressesResultForPrivate() {
         $addressRequest = WebPay::getAddresses();

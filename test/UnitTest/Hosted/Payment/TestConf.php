@@ -1,4 +1,5 @@
 <?php
+namespace swp_;
 
 /**
  * @author Jonas Lith

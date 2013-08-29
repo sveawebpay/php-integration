@@ -1,4 +1,5 @@
 <?php
+namespace swp_;
 
 $root = realpath(dirname(__FILE__));
 require_once $root . '/../../../../src/Includes.php';
@@ -10,7 +11,7 @@ require_once $root . '/../../../TestUtil.php';
 /**
  * @author Anneli Halld'n, Daniel Brolund for Svea Webpay
  */
-class CardPaymentIntegrationTest extends PHPUnit_Framework_TestCase {
+class CardPaymentIntegrationTest extends \PHPUnit_Framework_TestCase {
     
     public function testDoCardPaymentRequest() {
         $rowFactory = new TestRowFactory();

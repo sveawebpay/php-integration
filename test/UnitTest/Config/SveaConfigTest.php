@@ -1,4 +1,5 @@
 <?php
+namespace swp_;
 
 $root = realpath(dirname(__FILE__));
 require_once $root . '/../../../src/Includes.php';
@@ -6,7 +7,7 @@ require_once $root . '/../../../src/Includes.php';
 $root = realpath(dirname(__FILE__));
 require_once $root . '/../../TestUtil.php';
 
-class SveaConfigTest extends PHPUnit_Framework_TestCase {
+class SveaConfigTest extends \PHPUnit_Framework_TestCase {
     
     public function t_estInstancesOfSveaConfig() {
         $obj1 = SveaConfig::getConfig();

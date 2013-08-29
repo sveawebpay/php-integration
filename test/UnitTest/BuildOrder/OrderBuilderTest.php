@@ -1,4 +1,5 @@
 <?php
+namespace swp_;
 
 $root = realpath(dirname(__FILE__));
 require_once $root . '/../../../src/Includes.php';
@@ -15,7 +16,7 @@ require_once $root . '/../../TestUtil.php';
  * All functions named test...() will run as tests in PHP-unit framework
  * @author Anneli Halld'n, Daniel Brolund for Svea Webpay
  */
-class OrderBuilderTest extends PHPUnit_Framework_TestCase {
+class OrderBuilderTest extends \PHPUnit_Framework_TestCase {
 
     //Set up orderobject
     protected function setUp() {   

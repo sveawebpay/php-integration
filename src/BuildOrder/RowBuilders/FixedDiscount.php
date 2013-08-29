@@ -7,7 +7,7 @@ class FixedDiscount {
     
     /**
      * Optional
-     * @param type $IdAsString
+     * @param string $IdAsString
      * @return \FixedDiscount
      */
     public function setDiscountId($IdAsString) {
@@ -17,7 +17,7 @@ class FixedDiscount {
 
     /**
      * Optional
-     * @param type $unitDescriptionAsString
+     * @param string $unitDescriptionAsString
      * @return \FixedDiscount
      */
     public function setUnit($unitDescriptionAsString) {
@@ -27,7 +27,7 @@ class FixedDiscount {
 
     /**
      * Optional
-     * @param type $nameAsString
+     * @param string $nameAsString
      * @return \FixedDiscount
      */
     public function setName($nameAsString) {
@@ -37,7 +37,7 @@ class FixedDiscount {
 
     /**
      * Optional
-     * @param type $descriptionAsString
+     * @param string $descriptionAsString
      * @return \FixedDiscount
      */
     public function setDescription($descriptionAsString) {
@@ -47,7 +47,7 @@ class FixedDiscount {
 
     /**
      * Required
-     * @param type $discountAmountOnTotalPriceAsFloat
+     * @param float $discountAmountOnTotalPriceAsFloat
      * @return \FixedDiscount
      */
     public function setAmountIncVat($discountAmountOnTotalPriceAsFloat) {

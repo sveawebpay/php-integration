@@ -1,4 +1,5 @@
 <?php
+namespace swp_;
 
 $root = realpath(dirname(__FILE__));
 require_once $root . '/../../../../src/Includes.php';
@@ -6,7 +7,7 @@ require_once $root . '/../../../../src/Includes.php';
 /**
  * @author Jonas Lith
  */
-class PaymentPlanPricePerMonthTest extends PHPUnit_Framework_TestCase {
+class PaymentPlanPricePerMonthTest extends \PHPUnit_Framework_TestCase {
     
     private function getGetPaymentPlanParamsResponseForTesting() {
         $addressRequest = WebPay::getPaymentPlanParams();

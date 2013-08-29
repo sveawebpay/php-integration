@@ -38,7 +38,7 @@ class HostedResponse {
     }
 
     protected function formatXml($xml) {
-        $xmlElement = new SimpleXMLElement($xml);
+        $xmlElement = new \SimpleXMLElement($xml);
         if ((string)$xmlElement->statuscode == 0) {
             $this->accepted = 1;
         } else {

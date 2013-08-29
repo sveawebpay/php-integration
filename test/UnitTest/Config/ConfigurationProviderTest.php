@@ -1,9 +1,10 @@
 <?php
+namespace swp_;
 
 $root = realpath(dirname(__FILE__));
 require_once $root . '/../../../src/Includes.php';
 
-class ConfigurationProviderTest extends PHPUnit_Framework_TestCase {
+class ConfigurationProviderTest extends \PHPUnit_Framework_TestCase {
     
     public function testDefaultTestConfig() {
         $config = SveaConfig::getDefaultConfig();

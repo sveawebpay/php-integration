@@ -1,10 +1,11 @@
 <?php
+namespace swp_;
 
 $root = realpath(dirname(__FILE__));
 require_once $root . '/../../../../src/Includes.php';
 require_once $root . '/../../../../test/UnitTest/Hosted/Payment/FakeHostedPayment.php';
 
-class HostedXmlBuilderTest extends PHPUnit_Framework_TestCase {
+class HostedXmlBuilderTest extends \PHPUnit_Framework_TestCase {
     
     public function testFormatOrderRows() {
         $order = new CreateOrderBuilder(new SveaConfigurationProvider(SveaConfig::getDefaultConfig()));

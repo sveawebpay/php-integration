@@ -41,6 +41,7 @@ class WebServicePayment {
     /**
      * Rebuild $order with svea_soap package to be in right format for SveaWebPay Europe Web service API
      * @return prepared SveaRequest
+     * @throws ValidationException
      */
     public function prepareRequest() {
         $errors = $this->validateOrder();
@@ -80,9 +81,16 @@ class WebServicePayment {
     /**
      * Transforms object to array and sends it to SveaWebPay Europe Web service API by php SoapClient
      * @return CreateOrderEuResponse
+     * @throws ValidationException
      */
     public function doRequest() {
-        $object = $this->prepareRequest();
+
+        try {
+            $object = $this->prepareRequest();
+        } catch (Exception $e) {
+            echo 'Exception: ',  $e->getMessage(), "\n";        // TODO should we present this information at all?
+        }
+
         $url = $this->order->conf->getEndPoint($this->orderType);
         $request = new SveaDoRequest($url);
         $svea_req = $request->CreateOrderEu($object);
@@ -180,7 +188,7 @@ class WebServicePayment {
      */
     public function formatCustomerDetails() {
         $isCompany = false;
-        get_class($this->order->customerIdentity) == "CompanyCustomer" ? $isCompany = TRUE : $isCompany = FALSE;
+        get_class($this->order->customerIdentity) == "swp_\CompanyCustomer" ? $isCompany = TRUE : $isCompany = FALSE;
 
         $companyId ="";
         if (isset($this->order->customerIdentity->orgNumber)||isset($this->order->customerIdentity->companyVatNumber)) {

@@ -1,4 +1,5 @@
 <?php
+namespace swp_;
 
 $root = realpath(dirname(__FILE__));
 require_once $root . '/../../../../src/Includes.php';
@@ -9,7 +10,7 @@ require_once $root . '/../../../TestUtil.php';
 /**
  * @author Jonas Lith
  */
-class CloseOrderIntegrationTest extends PHPUnit_Framework_TestCase {
+class CloseOrderIntegrationTest extends \PHPUnit_Framework_TestCase {
     
     /**
      * Function to use in testfunctions

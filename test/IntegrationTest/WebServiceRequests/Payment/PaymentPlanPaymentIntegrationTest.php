@@ -1,4 +1,5 @@
 <?php
+namespace swp_;
 
 $root = realpath(dirname(__FILE__));
 require_once $root . '/../../../../src/Includes.php';
@@ -6,7 +7,7 @@ require_once $root . '/../../../../src/Includes.php';
 /**
  * @author Anneli Halld'n, Daniel Brolund for Svea Webpay
  */
-class PaymentPlanPaymentIntegrationTest extends PHPUnit_Framework_TestCase {
+class PaymentPlanPaymentIntegrationTest extends \PHPUnit_Framework_TestCase {
     
     /**
      * Use to get paymentPlanParams to be able to test PaymentPlanRequest

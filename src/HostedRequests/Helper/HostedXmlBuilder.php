@@ -17,7 +17,7 @@ class HostedXmlBuilder {
      * This method expect UTF-8 input
      */
     public function getOrderXML($request, $order) {
-        $this->XMLWriter = new XMLWriter();
+        $this->XMLWriter = new \XMLWriter();
         $this->XMLWriter->openMemory();
         $this->XMLWriter->setIndent(true);
         $this->XMLWriter->startDocument("1.0", "UTF-8");

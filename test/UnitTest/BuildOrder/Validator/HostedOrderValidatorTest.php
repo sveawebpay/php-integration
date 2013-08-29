@@ -1,4 +1,5 @@
 <?php
+namespace swp_;
 
 $root = realpath(dirname(__FILE__));
 require_once $root . '/../../../../src/Includes.php';
@@ -9,10 +10,10 @@ require_once $root . '/../../../TestUtil.php';
 /**
  * @author Anneli Halld'n, Daniel Brolund for Svea Webpay
  */
-class HostedOrderValidatorTest extends PHPUnit_Framework_TestCase {
+class HostedOrderValidatorTest extends \PHPUnit_Framework_TestCase {
     
     /**
-     * @expectedException ValidationException
+     * @expectedException swp_\ValidationException
      * @expectedExceptionMessage -missing value : ClientOrderNumber is required. Use function setClientOrderNumber().
      */
     public function testFailOnNullCustomerRefNo() {
@@ -28,7 +29,7 @@ class HostedOrderValidatorTest extends PHPUnit_Framework_TestCase {
     }
     
     /**
-     * @expectedException ValidationException
+     * @expectedException swp_\ValidationException
      * @expectedExceptionMessage -missing value : ClientOrderNumber is required. Use function setClientOrderNumber().
      */
     public function testFailOnEmptyCustomerRefNo() {
@@ -45,7 +46,7 @@ class HostedOrderValidatorTest extends PHPUnit_Framework_TestCase {
     }
     
     /**
-     * @expectedException ValidationException
+     * @expectedException swp_\ValidationException
      * @expectedExceptionMessage
      * -missing value : Initials is required for INVOICE and PAYMENTPLAN payments for individual customers when countrycode is NL. Use function setInitials().
      * -missing value : BirthDate is required for INVOICE and PAYMENTPLAN payments for individual customers when countrycode is NL. Use function setBirthDate().
@@ -68,7 +69,7 @@ class HostedOrderValidatorTest extends PHPUnit_Framework_TestCase {
     }
      
     /**
-     * @expectedException ValidationException
+     * @expectedException swp_\ValidationException
      * @expectedExceptionMessage
      * -missing value : StreetAddress is required for INVOICE and PAYMENTPLAN payments for all customers when countrycode is NL. Use function setStreetAddress().
      * -missing value : Locality is required for INVOICE and PAYMENTPLAN payments for all customers when countrycode is NL. Use function setLocality().
@@ -90,7 +91,7 @@ class HostedOrderValidatorTest extends PHPUnit_Framework_TestCase {
     }
     
     /**
-     * @expectedException ValidationException
+     * @expectedException swp_\ValidationException
      * @expectedExceptionMessage -missing value : Currency is required. Use function setCurrency().
      */
     public function testFailOnMissingCurrency() {
@@ -106,7 +107,7 @@ class HostedOrderValidatorTest extends PHPUnit_Framework_TestCase {
     }
     
     /**
-     * @expectedException ValidationException
+     * @expectedException swp_\ValidationException
      * @expectedExceptionMessage -missing value : CountryCode is required. Use function setCountryCode().
      */
     public function testFailOnMissingCountryCode() {
@@ -123,7 +124,7 @@ class HostedOrderValidatorTest extends PHPUnit_Framework_TestCase {
     }
     
     /**
-     * @expectedException ValidationException
+     * @expectedException swp_\ValidationException
      * @expectedExceptionMessage -missing value : ReturnUrl is required. Use function setReturnUrl().
      */
     public function testFailOnMissingReturnUrl() {

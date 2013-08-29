@@ -20,7 +20,7 @@ class SveaDoRequest {
     }
 
     private function SetSoapClient() {
-        $this->client = new SoapClient($this->svea_server, array('trace' => 1));
+        $this->client = new \SoapClient($this->svea_server, array('trace' => 1));
     }
 
     /**

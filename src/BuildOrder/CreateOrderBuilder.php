@@ -122,14 +122,14 @@ class CreateOrderBuilder {
     public function addFee($itemFeeObject) {
          if (is_array($itemFeeObject)) {
             foreach ($itemFeeObject as $row) {
-                if (get_class($row) == "ShippingFee") {
+                if (get_class($row) == "swp_\ShippingFee") {
                      array_push($this->shippingFeeRows, $row);
                 } else {
                      array_push($this->invoiceFeeRows, $row);
                 }
             }
         } else {
-             if (get_class($itemFeeObject) == "ShippingFee") {
+             if (get_class($itemFeeObject) == "swp_\ShippingFee") {
                      array_push($this->shippingFeeRows, $itemFeeObject);
             } else {
                  array_push($this->invoiceFeeRows, $itemFeeObject);
@@ -147,7 +147,7 @@ class CreateOrderBuilder {
     public function addDiscount($itemDiscounObject) {
         if (is_array($itemDiscounObject)) {
             foreach ($itemDiscounObject as $row) {
-                if (get_class($row) == "FixedDiscount") {
+                if (get_class($row) == "swp_\FixedDiscount") {
                     array_push($this->fixedDiscountRows, $row);
                 } else {
                     array_push($this->relativeDiscountRows, $row);
@@ -155,7 +155,7 @@ class CreateOrderBuilder {
 
             }
         } else {
-            if (get_class($itemDiscounObject) == "FixedDiscount") {
+            if (get_class($itemDiscounObject) == "swp_\FixedDiscount") {
                 array_push($this->fixedDiscountRows, $itemDiscounObject);
             } else {
                 array_push($this->relativeDiscountRows, $itemDiscounObject);
