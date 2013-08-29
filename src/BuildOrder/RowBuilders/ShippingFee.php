@@ -1,12 +1,11 @@
 <?php
 
 /**
- * Description of ShippingFee
- *
  * @author anne-hal
  */
 class ShippingFee {
-  /**
+    
+    /**
      * Optional
      * @param type $idAsString
      * @return \ShippingFee
@@ -45,6 +44,7 @@ class ShippingFee {
         $this->amountExVat = $amountAsFloat;
         return $this;
     }
+    
     /**
      * Optional
      * @param type $amountAsFloat
@@ -54,29 +54,32 @@ class ShippingFee {
         $this->amountIncVat = $amountAsFloat;
         return $this;
     }
-  /**
-   *
-   * @param type $unitDescriptionAsString
-   * @return \ShippingFee
-   */
+    
+    /**
+    *
+    * @param type $unitDescriptionAsString
+    * @return \ShippingFee
+    */
     public function setUnit($unitDescriptionAsString) {
         $this->unit = $unitDescriptionAsString;
         return $this;
     }
-/**
- *
- * @param type $percentAsInt
- * @return \ShippingFee
- */
+    
+    /**
+     *
+     * @param type $percentAsInt
+     * @return \ShippingFee
+     */
     public function setVatPercent($percentAsInt) {
         $this->vatPercent = $percentAsInt;
         return $this;
     }
-/**
- *
- * @param type $discountPercentAsInt
- * @return \ShippingFee
- */
+    
+    /**
+     *
+     * @param type $discountPercentAsInt
+     * @return \ShippingFee
+     */
     public function setDiscountPercent($discountPercentAsInt) {
         $this->discountPercent = $discountPercentAsInt;
         return $this;

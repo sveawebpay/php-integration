@@ -67,5 +67,4 @@ class SveaDoRequest {
         $builder = new SveaSoapArrayBuilder();
         return $this->client->CloseOrderEu($builder->object_to_array($closedata));
     }
-
 }

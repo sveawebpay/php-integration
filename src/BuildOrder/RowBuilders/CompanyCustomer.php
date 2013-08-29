@@ -1,7 +1,6 @@
 <?php
+
 /**
- * Description of CompanyCustomer
- *
  * @author anne-hal
  */
 class CompanyCustomer {
@@ -16,22 +15,23 @@ class CompanyCustomer {
      * @param type $companyIdNumberAsString
      * @return \CompanyCustomer
      */
-    public function setNationalIdNumber($companyIdNumberAsString){
+    public function setNationalIdNumber($companyIdNumberAsString) {
         $this->orgNumber = $companyIdNumberAsString;
         return $this;
     }
+    
     /**
      * Example: NL123456789A12
      * @param type $vatNumber
      * Required for NL and DE
      * @return \CompanyCustomer
      */
-    public function setVatNumber($vatNumber){
+    public function setVatNumber($vatNumber) {
         $this->companyVatNumber = $vatNumber;
         return $this;
     }
-
-   /**
+    
+    /**
      * Optional but desirable
      * @param type $emailAsString
      * @return \CompanyCustomer
@@ -40,6 +40,7 @@ class CompanyCustomer {
         $this->email = $emailAsString;
         return $this;
     }
+    
      /**
      * Optional
      * @param type $phoneNumberAsInt
@@ -49,6 +50,7 @@ class CompanyCustomer {
         $this->phonenumber = $phoneNumberAsInt;
         return $this;
     }
+    
     /**
      * Optinal but desirable
      * @param type $ipAddressAsString
@@ -58,6 +60,7 @@ class CompanyCustomer {
         $this->ipAddress = $ipAddressAsString;
         return $this;
     }
+    
     /**
      * Required in NL and DE
      * @param type $streetAsString
@@ -69,6 +72,7 @@ class CompanyCustomer {
         $this->housenumber = $houseNumberAsInt;
         return $this;
     }
+    
     /**
      * Optional in NL and DE
      * @param type $coAddressAsString
@@ -78,6 +82,7 @@ class CompanyCustomer {
         $this->coAddress = $coAddressAsString;
         return $this;
     }
+    
     /**
      * Requuired in NL and DE
      * @param type $zipCodeAsString
@@ -87,6 +92,7 @@ class CompanyCustomer {
         $this->zipCode = $zipCodeAsString;
         return $this;
     }
+    
     /**
      * Required in NL and DE
      * @param type $cityAsString
@@ -96,6 +102,7 @@ class CompanyCustomer {
         $this->locality = $cityAsString;
         return $this;
     }
+    
     /**
      * Required for Eu countries like NL and DE
      * @param type $nameAsString
@@ -106,7 +113,7 @@ class CompanyCustomer {
         return $this;
     }
 
-   /**
+    /**
     * Optional when creating order
     * Recieve string param from getAddresses
      * @param type $addressSelectorAsString
@@ -116,6 +123,4 @@ class CompanyCustomer {
         $this->addressSelector = $addressSelectorAsString;
         return $this;
     }
-
-
 }

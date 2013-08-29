@@ -3,13 +3,11 @@
 require_once SVEA_REQUEST_DIR . '/Includes.php';
 
 /**
- * Description of HostedPayment
  * Parent to CardPayment, DirectPayment and PayPagePayment class
  * Prepares $order and creates a paymentform to integrate on webpage
  * Uses SveaXmlBuilder to turn formatted $order into xml
  * @author Anneli Halld'n, Daniel Brolund for Svea Webpay
  *  * @package HostedRequests/Payment
- *
  */
 class HostedPayment {
 
@@ -27,16 +25,15 @@ class HostedPayment {
         $this->order = $order;
     }
 
-
     /**
      *
      * @return type $errors
      */
-    public function validateOrder(){
+    public function validateOrder() {
         $validator = new HostedOrderValidator();
         $errors = $validator->validate($this->order);
-        if(($this->order->countryCode == "NL" || $this->order->countryCode == "DE") && isset($this->paymentMethod)){
-            if(isset($this->paymentMethod) && ($this->paymentMethod == PaymentMethod::INVOICE || $this->paymentMethod == PaymentMethod::PAYMENTPLAN)){
+        if (($this->order->countryCode == "NL" || $this->order->countryCode == "DE") && isset($this->paymentMethod)) {
+            if (isset($this->paymentMethod) && ($this->paymentMethod == PaymentMethod::INVOICE || $this->paymentMethod == PaymentMethod::PAYMENTPLAN)) {
                 $errors = $validator->validateEuroCustomer($this->order, $errors);
             }
         }
@@ -46,12 +43,13 @@ class HostedPayment {
 
     public function getPaymentForm() {
         //validate input
-       $errors = $this->validateOrder();
+        $errors = $this->validateOrder();
         $exceptionString = "";
-        if(count($errors) > 0 || (isset($this->returnUrl) == FALSE && isset($this->paymentMethod) == FALSE)){
-            if(isset($this->returnUrl) == FALSE){
+        if (count($errors) > 0 || (isset($this->returnUrl) == FALSE && isset($this->paymentMethod) == FALSE)) {
+            if (isset($this->returnUrl) == FALSE) {
              $exceptionString .="-missing value : ReturnUrl is required. Use function setReturnUrl().\n";
             }
+            
             foreach ($errors as $key => $value) {
                 $exceptionString .="-". $key. " : ".$value."\n";
             }
@@ -87,8 +85,7 @@ class HostedPayment {
         $currency = trim($this->order->currency);
         $currency = strtoupper($currency);
         $request['currency'] = $currency;
+        
         return $this->configureExcludedPaymentMethods($request); //Method in child class
     }
-
-
 }

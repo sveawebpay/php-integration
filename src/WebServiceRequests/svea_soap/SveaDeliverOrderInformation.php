@@ -10,5 +10,4 @@ class SveaDeliverOrderInformation {
             $this->DeliverInvoiceDetails = "";
         }
     }
-
 }

@@ -1,12 +1,11 @@
 <?php
+
 /**
- * Description of OrderRow
- *
  * @author anne-hal
  */
 class OrderRow {
 
-   /**
+    /**
      * Contains empty string if not set
      * @var type
      */
@@ -17,8 +16,6 @@ class OrderRow {
      * @var type
      */
     public $vatDiscount = 0;
-
-
 
     /**
      * Optional
@@ -59,6 +56,7 @@ class OrderRow {
         $this->amountExVat = $AmountAsFloat;
         return $this;
     }
+    
     /**
      * Optional
      * @param type $AmountAsFloat

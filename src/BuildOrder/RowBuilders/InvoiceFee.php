@@ -1,11 +1,10 @@
 <?php
 
 /**
- * Description of InvoiceFee
- *
  * @author anne-hal
  */
 class InvoiceFee {
+    
     /**
      * Optional
      * @param type $nameAsString
@@ -36,6 +35,7 @@ class InvoiceFee {
         $this->amountExVat = $amountAsFloat;
         return $this;
     }
+    
     /**
      * Optional
      * Required to use at least two of the functions setAmountExVat(), setAmountIncVat(), setVatPercent()
@@ -77,5 +77,4 @@ class InvoiceFee {
         $this->discountPercent = $discountPercentAsInt;
         return $this;
     }
-
 }

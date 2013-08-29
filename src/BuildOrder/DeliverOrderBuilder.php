@@ -3,13 +3,11 @@
 require_once SVEA_REQUEST_DIR . '/Includes.php';
 
 /**
- * Description of deliverOrder
- *
  * @author Anneli Halld'n, Daniel Brolund for Svea Webpay
  */
 class deliverOrderBuilder {
 
-     /**
+    /**
      * @var Array Rows containing Product rows
      */
     public $orderRows = array();
@@ -44,7 +42,6 @@ class deliverOrderBuilder {
     public $orderType;
     public $countryCode;
 
-
     public $numberOfCreditDays;
     /**
      * @var type String "Post" or "Email"
@@ -65,20 +62,20 @@ class deliverOrderBuilder {
         $this->conf = $config;
     }
 
-
     /**
      * New!
      * @param type $orderRow
      * @return \deliverOrderBuilder
      */
-     public function addOrderRow($orderRow){
-        if(is_array($orderRow)){
+    public function addOrderRow($orderRow) {
+        if (is_array($orderRow)) {
             foreach ($orderRow as $row) {
                 array_push($this->orderRows, $row);
             }
-        }  else {
-             array_push($this->orderRows, $orderRow);
+        } else {
+            array_push($this->orderRows, $orderRow);
         }
+        
        return $this;
     }
 
@@ -87,49 +84,48 @@ class deliverOrderBuilder {
      * @param type $itemFeeObject
      * @return \deliverOrderBuilder
      */
-    public function addFee($itemFeeObject){
-         if(is_array($itemFeeObject)){
+    public function addFee($itemFeeObject) {
+        if (is_array($itemFeeObject)) {
             foreach ($itemFeeObject as $row) {
                 if (get_class($row) == "ShippingFee") {
-                     array_push($this->shippingFeeRows, $row);
-                }else{
-                     array_push($this->invoiceFeeRows, $row);
+                    array_push($this->shippingFeeRows, $row);
+                } else {
+                    array_push($this->invoiceFeeRows, $row);
                 }
             }
         } else {
-             if (get_class($itemFeeObject) == "ShippingFee") {
-                     array_push($this->shippingFeeRows, $itemFeeObject);
-            }else{
-                 array_push($this->invoiceFeeRows, $itemFeeObject);
+            if (get_class($itemFeeObject) == "ShippingFee") {
+                array_push($this->shippingFeeRows, $itemFeeObject);
+            } else {
+                array_push($this->invoiceFeeRows, $itemFeeObject);
             }
         }
 
-       return $this;
+        return $this;
     }
 
-
-     /**
+    /**
      * New!
      * @param type $itemDiscounObject
      * @return \deliverOrderBuilder
      */
-    public function addDiscount($itemDiscounObject){
-         if(is_array($itemDiscounObject)){
+    public function addDiscount($itemDiscounObject) {
+        if (is_array($itemDiscounObject)) {
             foreach ($itemDiscounObject as $row) {
                 if (get_class($row) == "FixedDiscount") {
-                     array_push($this->fixedDiscountRows, $row);
-                }else{
-                     array_push($this->relativeDiscountRows, $row);
+                    array_push($this->fixedDiscountRows, $row);
+                } else {
+                    array_push($this->relativeDiscountRows, $row);
                 }
-
             }
-        }  else {
-             if (get_class($itemDiscounObject) == "FixedDiscount") {
-                     array_push($this->fixedDiscountRows, $itemDiscounObject);
-            }else{
-                 array_push($this->relativeDiscountRows, $itemDiscounObject);
+        } else {
+            if (get_class($itemDiscounObject) == "FixedDiscount") {
+                array_push($this->fixedDiscountRows, $itemDiscounObject);
+            } else {
+                array_push($this->relativeDiscountRows, $itemDiscounObject);
             }
         }
+        
        return $this;
     }
 
@@ -141,15 +137,14 @@ class deliverOrderBuilder {
         $this->testmode = TRUE;
         return $this;
     }
-     *
      */
 
-    public function setCountryCode($countryCodeAsString){
+    public function setCountryCode($countryCodeAsString) {
         $this->countryCode = $countryCodeAsString;
         return $this;
     }
 
-        /**
+    /**
      * Required
      * @param type $orderIdAsString
      * @return \deliverOrder
@@ -165,17 +160,18 @@ class deliverOrderBuilder {
      * @return \deliverOrder
      */
     public function setInvoiceDistributionType($distributionTypeAsConst) {
-        if($distributionTypeAsConst != DistributionType::EMAIL || $distributionTypeAsConst != DistributionType::POST){
+        if ($distributionTypeAsConst != DistributionType::EMAIL || $distributionTypeAsConst != DistributionType::POST) {
             $distributionTypeAsConst = trim($distributionTypeAsConst);
-            if(preg_match("/post/i", $distributionTypeAsConst)){
+            if (preg_match("/post/i", $distributionTypeAsConst)) {
                 $distributionTypeAsConst = DistributionType::POST;
-            }elseif(preg_match("/mail/i", $distributionTypeAsConst)){
+            } elseif (preg_match("/mail/i", $distributionTypeAsConst)) {
                 $distributionTypeAsConst = DistributionType::EMAIL;
-            }else{
+            } else {
                 $distributionTypeAsConst = DistributionType::POST;
             }
         }
         $this->distributionType = $distributionTypeAsConst;
+        
         return $this;
     }
 

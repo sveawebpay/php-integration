@@ -1,10 +1,9 @@
 <?php
 /**
- * Description of FixedDiscount
- *
  * @author anne-hal
  */
 class FixedDiscount {
+    
     /**
      * Optional
      * @param type $IdAsString
@@ -54,5 +53,4 @@ class FixedDiscount {
         $this->amount = $discountAmountOnTotalPriceAsFloat;
         return $this;
     }
-
 }

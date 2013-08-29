@@ -3,11 +3,9 @@
 $root = realpath(dirname(__FILE__));
 require_once $root . '/../../../src/Includes.php';
 
+$root = realpath(dirname(__FILE__));
+require_once $root . '/../../TestUtil.php';
 
-
-/**
- * Description of SveaConfigTest
- */
 class SveaConfigTest extends PHPUnit_Framework_TestCase {
 
     function testSveaConfigNotFound(){
@@ -17,8 +15,8 @@ class SveaConfigTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals("sverigetest", $config->conf['credentials']['SE']['auth']['INVOICE']['username']);
     }
 
+    public function t_estInstancesOfSveaConfig() {
 
-    function t_estInstancesOfSveaConfig(){
         $obj1 = SveaConfig::getConfig();
         $obj2 = SveaConfig::getConfig();
         $this->assertEquals($obj1->password, $obj2->password);
@@ -27,7 +25,7 @@ class SveaConfigTest extends PHPUnit_Framework_TestCase {
         $this->assertNotEquals($obj1->password, $obj2->password);
     }
 
-    function t_estSetTestmode(){
+    public function t_estSetTestmode() {
         $conf = SveaConfig::setConfig()
                 ->setMerchantId()
                 ->setSecretProd()
@@ -36,20 +34,10 @@ class SveaConfigTest extends PHPUnit_Framework_TestCase {
                 ->setUsername()
                 ->setClientNumberInvoice()
                 ->setClientNumberPaymentPlan()
-                //->setTestmode()()
                 ->setAlternativeUrl(); //overwrite all urls
 
         $request = WebPay::createOrder($conf)
-            ->addOrderRow(Item::orderRow()
-                ->setArticleNumber(1)
-                ->setQuantity(2)
-                ->setAmountExVat(100.00)
-                ->setDescription("Specification")
-                ->setName('Prod')
-                ->setUnit("st")
-                ->setVatPercent(25)
-                ->setDiscountPercent(0)
-                )
+            ->addOrderRow(TestUtil::createOrderRow())
             ->addCustomerDetails(Item::individualCustomer()->setNationalIdNumber(194605092222))
                     ->setCountryCode("SE")
                     ->setCustomerReference("33")
@@ -60,17 +48,9 @@ class SveaConfigTest extends PHPUnit_Framework_TestCase {
                         ->prepareRequest();
     }
 
-
-        function testOrderWithSEConfigFromFunction(){
+    public function testOrderWithSEConfigFromFunction() {
            $request = WebPay::createOrder(SveaConfig::getTestConfig())
-            ->addOrderRow(Item::orderRow()
-                ->setArticleNumber(1)
-                ->setQuantity(2)
-                ->setAmountExVat(100.00)
-                ->setDescription("Specification")
-                ->setName('Prod')
-                ->setVatPercent(25)
-                )
+            ->addOrderRow(TestUtil::createOrderRow())
             ->addCustomerDetails(Item::individualCustomer()->setNationalIdNumber(194605092222))
                     ->setCountryCode("SE")
                     ->setCustomerReference("33")
@@ -79,10 +59,8 @@ class SveaConfigTest extends PHPUnit_Framework_TestCase {
                     ->useInvoicePayment()// returnerar InvoiceOrder object
                         ->prepareRequest();
 
-            $this->assertEquals("sverigetest", $request->request->Auth->Username);
-            $this->assertEquals("sverigetest", $request->request->Auth->Password);
-            $this->assertEquals(79021, $request->request->Auth->ClientNumber);
+        $this->assertEquals("sverigetest", $request->request->Auth->Username);
+        $this->assertEquals("sverigetest", $request->request->Auth->Password);
+        $this->assertEquals(79021, $request->request->Auth->ClientNumber);
     }
 }
-
-?>
