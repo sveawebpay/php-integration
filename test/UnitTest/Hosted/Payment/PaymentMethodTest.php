@@ -1,5 +1,5 @@
 <?php
-namespace swp_;
+namespace Svea;
 
 $root = realpath(dirname(__FILE__));
 require_once $root . '/../../../../test/UnitTest/BuildOrder/OrderBuilderTest.php';
@@ -15,7 +15,7 @@ class PaymentMethodTest extends \PHPUnit_Framework_TestCase{
     
      public function testPayPagePaymentWithSetPaymentMethod() {
         $rowFactory = new TestRowFactory();
-        $form = WebPay::createOrder()
+        $form = \WebPay::createOrder()
             ->addOrderRow(TestUtil::createOrderRow())
             ->run($rowFactory->buildShippingFee())
             ->addDiscount(Item::relativeDiscount()
@@ -40,7 +40,7 @@ class PaymentMethodTest extends \PHPUnit_Framework_TestCase{
     
     public function testPayPagePaymentWithSetPaymentMethodInvoice() {
         $rowFactory = new TestRowFactory();
-        $form = WebPay::createOrder()
+        $form = \WebPay::createOrder()
             ->addOrderRow(TestUtil::createOrderRow())
             ->run($rowFactory->buildShippingFee())
             ->addDiscount(Item::relativeDiscount()
@@ -66,7 +66,7 @@ class PaymentMethodTest extends \PHPUnit_Framework_TestCase{
     }
     
     public function testPaymentMethodInvoiceNL() {
-        $form = WebPay::createOrder()
+        $form = \WebPay::createOrder()
             ->addOrderRow(TestUtil::createOrderRow())
             ->addCustomerDetails(Item::individualCustomer()
                     ->setInitials("SB")

@@ -1,5 +1,5 @@
 <?php
-namespace swp_;
+namespace Svea;
 
 require_once SVEA_REQUEST_DIR . '/WebServiceRequests/svea_soap/SveaSoapConfig.php';
 require_once SVEA_REQUEST_DIR . '/Config/SveaConfig.php';
@@ -85,12 +85,7 @@ class WebServicePayment {
      */
     public function doRequest() {
 
-        try {
-            $object = $this->prepareRequest();
-        } catch (Exception $e) {
-            echo 'Exception: ',  $e->getMessage(), "\n";        // TODO should we present this information at all?
-        }
-
+        $object = $this->prepareRequest();
         $url = $this->order->conf->getEndPoint($this->orderType);
         $request = new SveaDoRequest($url);
         $svea_req = $request->CreateOrderEu($object);
@@ -188,7 +183,7 @@ class WebServicePayment {
      */
     public function formatCustomerDetails() {
         $isCompany = false;
-        get_class($this->order->customerIdentity) == "swp_\CompanyCustomer" ? $isCompany = TRUE : $isCompany = FALSE;
+        get_class($this->order->customerIdentity) == "Svea\CompanyCustomer" ? $isCompany = TRUE : $isCompany = FALSE;
 
         $companyId ="";
         if (isset($this->order->customerIdentity->orgNumber)||isset($this->order->customerIdentity->companyVatNumber)) {

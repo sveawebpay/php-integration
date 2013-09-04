@@ -1,5 +1,5 @@
 <?php
-namespace swp_;
+namespace Svea;
 require_once 'WebServiceResponse.php';
 
 /**

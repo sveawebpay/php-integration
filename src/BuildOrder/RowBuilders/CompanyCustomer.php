@@ -1,5 +1,5 @@
 <?php
-namespace swp_;
+namespace Svea;
 
 /**
  * @author anne-hal
@@ -13,7 +13,7 @@ class CompanyCustomer {
      * For NO: Organisasjonsnummer
      * For DK: CVR
      * For FI: Yritystunnus
-     * @param type $companyIdNumberAsString
+     * @param string $companyIdNumberAsString
      * @return \CompanyCustomer
      */
     public function setNationalIdNumber($companyIdNumberAsString) {
@@ -106,7 +106,7 @@ class CompanyCustomer {
     
     /**
      * Required for Eu countries like NL and DE
-     * @param type $nameAsString
+     * @param string $nameAsString
      * @return \CompanyCustomer
      */
     public function setCompanyName($nameAsString) {

@@ -1,5 +1,5 @@
 <?php
-namespace swp_;
+namespace Svea;
 
 $root = realpath(dirname(__FILE__));
 require_once $root . '/../../../../src/Includes.php';
@@ -13,7 +13,7 @@ require_once $root . '/../../../TestUtil.php';
 class InvoicePaymentIntegrationTest extends \PHPUnit_Framework_TestCase {
     
     public function testInvoiceRequestAccepted() {
-        $request = WebPay::createOrder()
+        $request = \WebPay::createOrder()
                 ->addOrderRow(TestUtil::createOrderRow())
                 ->addCustomerDetails(Item::individualCustomer()->setNationalIdNumber(4605092222))
                 ->setCountryCode("SE")
@@ -27,7 +27,7 @@ class InvoicePaymentIntegrationTest extends \PHPUnit_Framework_TestCase {
     }
     
     public function testInvoiceRequestDenied() {
-        $request = WebPay::createOrder()
+        $request = \WebPay::createOrder()
                 ->addOrderRow(TestUtil::createOrderRow())
                 ->addCustomerDetails(Item::individualCustomer()->setNationalIdNumber(4606082222))
                 ->setCountryCode("SE")
@@ -42,7 +42,7 @@ class InvoicePaymentIntegrationTest extends \PHPUnit_Framework_TestCase {
     
     //Turned off?
     public function tes_tInvoiceIndividualForDk() {
-        $request = WebPay::createOrder()
+        $request = \WebPay::createOrder()
                 ->addOrderRow(TestUtil::createOrderRow())
                 ->addCustomerDetails(Item::individualCustomer()->setNationalIdNumber(2603692503))
                 ->setCountryCode("DK")
@@ -56,7 +56,7 @@ class InvoicePaymentIntegrationTest extends \PHPUnit_Framework_TestCase {
     }
 
     public function testInvoiceCompanySe() {
-        $request = WebPay::createOrder()
+        $request = \WebPay::createOrder()
                 ->addOrderRow(TestUtil::createOrderRow())
                 ->addCustomerDetails(Item::companyCustomer()->setNationalIdNumber(4608142222))
                 ->setCountryCode("SE")
@@ -69,7 +69,7 @@ class InvoicePaymentIntegrationTest extends \PHPUnit_Framework_TestCase {
     }
     
     public function testResultForInvoicePaymentNL() {
-        $request = WebPay::createOrder()
+        $request = \WebPay::createOrder()
                 ->addOrderRow(TestUtil::createOrderRow())
                 ->addCustomerDetails(Item::individualCustomer()
                         ->setBirthDate(1955, 03, 07)

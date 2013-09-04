@@ -1,5 +1,5 @@
 <?php
-namespace swp_;
+namespace Svea;
 
 $root = realpath(dirname(__FILE__));
 require_once $root . '/../../../../test/UnitTest/BuildOrder/OrderBuilderTest.php';
@@ -17,7 +17,7 @@ require_once $root . '/TestConf.php';
 class CardPaymentTest extends \PHPUnit_Framework_TestCase {
 
     public function testSetAuthorization() {
-        $form = WebPay::createOrder(new TestConf())
+        $form = \WebPay::createOrder(new TestConf())
                 ->addCustomerDetails(Item::individualCustomer()->setNationalIdNumber(194605092222)->setIpAddress("123.123.123"))
                 ->addOrderRow(TestUtil::createOrderRow())
                 ->setCountryCode("SE")
@@ -35,7 +35,7 @@ class CardPaymentTest extends \PHPUnit_Framework_TestCase {
 
     public function testBuildCardPayment() {
         $rowFactory = new TestRowFactory();
-        $form = WebPay::createOrder()
+        $form = \WebPay::createOrder()
                 ->addOrderRow(TestUtil::createOrderRow())
                 ->run($rowFactory->buildShippingFee())
                 ->addDiscount(Item::relativeDiscount()
@@ -70,7 +70,7 @@ class CardPaymentTest extends \PHPUnit_Framework_TestCase {
     }
     
     public function testBuildCardPaymentWithDiffrentProductVatAndDiscount() {
-        $form = WebPay::createOrder()
+        $form = \WebPay::createOrder()
                 ->addOrderRow(Item::orderRow()
                     ->setArticleNumber(1)
                     ->setQuantity(1)
@@ -107,7 +107,7 @@ class CardPaymentTest extends \PHPUnit_Framework_TestCase {
     }
     
     public function testBuildCardPaymentWithAmountIncVatWithVatPercent() {
-        $form = WebPay::createOrder()
+        $form = \WebPay::createOrder()
                 ->addOrderRow(Item::orderRow()
                     ->setArticleNumber(1)
                     ->setQuantity(1)
@@ -154,7 +154,7 @@ class CardPaymentTest extends \PHPUnit_Framework_TestCase {
     }
     
     public function testBuildCardPaymentWithAmountExVatWithAmountIncVat() {
-        $form = WebPay::createOrder()
+        $form = \WebPay::createOrder()
                 ->addOrderRow(Item::orderRow()
                     ->setArticleNumber(1)
                     ->setQuantity(1)
@@ -196,7 +196,7 @@ class CardPaymentTest extends \PHPUnit_Framework_TestCase {
     }
     
     public function testBuildCardPaymentWithCurrency() {
-        $form = WebPay::createOrder()
+        $form = \WebPay::createOrder()
                 ->addOrderRow(Item::orderRow()
                         ->setArticleNumber(1)
                         ->setQuantity(1)
@@ -217,7 +217,7 @@ class CardPaymentTest extends \PHPUnit_Framework_TestCase {
     }
 
     public function testBuildCardPaymentWithShippingFee() {
-        $form = WebPay::createOrder()
+        $form = \WebPay::createOrder()
                 ->addOrderRow(Item::orderRow()
                         ->setArticleNumber(1)
                         ->setQuantity(1)
@@ -243,7 +243,7 @@ class CardPaymentTest extends \PHPUnit_Framework_TestCase {
     }
     
     public function testBuildCardPaymentWithDecimalLongPrice() {
-        $form = WebPay::createOrder()
+        $form = \WebPay::createOrder()
                 ->addOrderRow(Item::orderRow()
                         ->setArticleNumber(1)
                         ->setQuantity(1)
@@ -264,7 +264,7 @@ class CardPaymentTest extends \PHPUnit_Framework_TestCase {
     }
     
     public function testBuildCardPaymentNLCustomer() {
-        $form = WebPay::createOrder()
+        $form = \WebPay::createOrder()
                 ->addOrderRow(Item::orderRow()
                         ->setArticleNumber(1)
                         ->setQuantity(1)
@@ -285,7 +285,7 @@ class CardPaymentTest extends \PHPUnit_Framework_TestCase {
     }
     
     public function testBuildCardPaymentWithAmountAndVatCero() {
-        $form = WebPay::createOrder()
+        $form = \WebPay::createOrder()
                 ->addOrderRow(Item::orderRow()
                         ->setArticleNumber(1)
                         ->setQuantity(1)

@@ -1,5 +1,5 @@
 <?php
-namespace swp_;
+namespace Svea;
 
 /**
  * Update Created PaymentPlanorder with additional information and prepare it for delivery.

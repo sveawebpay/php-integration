@@ -1,5 +1,6 @@
 <?php
-namespace swp_;
+namespace Svea;
+
 
 $root = realpath(dirname(__FILE__));
 require_once $root . '/../../../../src/Includes.php';
@@ -15,7 +16,7 @@ class CardPaymentIntegrationTest extends \PHPUnit_Framework_TestCase {
     
     public function testDoCardPaymentRequest() {
         $rowFactory = new TestRowFactory();
-        $form = WebPay::createOrder()
+        $form = \WebPay::createOrder()                      // workaround to not include namespace in WebPay.php
                 ->addOrderRow(TestUtil::createOrderRow())
                 ->run($rowFactory->buildShippingFee())
                 ->addDiscount(Item::relativeDiscount()

@@ -1,5 +1,5 @@
 <?php
-namespace swp_;
+namespace Svea;
 
 $root = realpath(dirname(__FILE__));
 require_once $root . '/../../../../test/UnitTest/BuildOrder/OrderBuilderTest.php';
@@ -19,7 +19,7 @@ class DirectPaymentTest extends \PHPUnit_Framework_TestCase {
      */
     public function testFailOnWrongCountryCodeInConfig() {
         $rowFactory = new TestRowFactory();
-        $form = WebPay::createOrder()
+        $form = \WebPay::createOrder()
                 ->addOrderRow(TestUtil::createOrderRow())
             ->run($rowFactory->buildShippingFee())
             ->addCustomerDetails(Item::individualCustomer()
@@ -45,7 +45,7 @@ class DirectPaymentTest extends \PHPUnit_Framework_TestCase {
     
     public function testConfigureExcludedPaymentMethods() {
         $rowFactory = new TestRowFactory();
-        $form = WebPay::createOrder()
+        $form = \WebPay::createOrder()
                 ->addOrderRow(TestUtil::createOrderRow())
             ->run($rowFactory->buildShippingFee())
             ->addCustomerDetails(Item::individualCustomer()
@@ -69,7 +69,7 @@ class DirectPaymentTest extends \PHPUnit_Framework_TestCase {
     
     public function testBuildDirectBankPayment() {
         $rowFactory = new TestRowFactory();
-        $form = WebPay::createOrder()
+        $form = \WebPay::createOrder()
                 ->addOrderRow(TestUtil::createOrderRow())
                 ->addFee(Item::shippingFee()
                     ->setShippingId('33')

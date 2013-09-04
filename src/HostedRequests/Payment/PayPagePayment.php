@@ -1,5 +1,5 @@
 <?php
-namespace swp_;
+namespace Svea;
 
 require_once  SVEA_REQUEST_DIR.'/Constant/PaymentMethod.php';
 

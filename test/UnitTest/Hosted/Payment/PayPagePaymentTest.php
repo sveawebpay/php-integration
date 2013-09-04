@@ -1,5 +1,5 @@
 <?php
-namespace swp_;
+namespace Svea;
 
 $root = realpath(dirname(__FILE__));
 require_once $root . '/../../../../test/UnitTest/BuildOrder/OrderBuilderTest.php';
@@ -15,7 +15,7 @@ class PayPagePaymentTest extends \PHPUnit_Framework_TestCase {
     
     public function testBuildPayPagePaymentWithExcludepaymentMethods() {
         $rowFactory = new TestRowFactory();
-        $form = WebPay::createOrder()
+        $form = \WebPay::createOrder()
             ->addOrderRow(TestUtil::createOrderRow())
             ->run($rowFactory->buildShippingFee())
             ->addDiscount(Item::relativeDiscount()
@@ -49,7 +49,7 @@ class PayPagePaymentTest extends \PHPUnit_Framework_TestCase {
 
     public function testpayPagePaymentExcludeCardPayments() {
         $rowFactory = new TestRowFactory();
-        $form = WebPay::createOrder()
+        $form = \WebPay::createOrder()
             //->setTestmode()()
             ->addOrderRow(TestUtil::createOrderRow())
             ->run($rowFactory->buildShippingFee())
@@ -76,7 +76,7 @@ class PayPagePaymentTest extends \PHPUnit_Framework_TestCase {
 
     public function testExcludeDirectPaymentMethods() {
         $rowFactory = new TestRowFactory();
-        $form = WebPay::createOrder()
+        $form = \WebPay::createOrder()
             ->addOrderRow(TestUtil::createOrderRow())
             ->run($rowFactory->buildShippingFee())
             ->addDiscount(Item::relativeDiscount()
@@ -102,7 +102,7 @@ class PayPagePaymentTest extends \PHPUnit_Framework_TestCase {
 
     public function testpayPagePaymentIncludePaymentMethods() {
         $rowFactory = new TestRowFactory();
-        $form = WebPay::createOrder()
+        $form = \WebPay::createOrder()
             ->addOrderRow(TestUtil::createOrderRow())
             ->run($rowFactory->buildShippingFee())
             ->addDiscount(Item::relativeDiscount()
@@ -129,7 +129,7 @@ class PayPagePaymentTest extends \PHPUnit_Framework_TestCase {
     
     public function testBuildPayPagePaymentVatIsCero() {
          $rowFactory = new TestRowFactory();
-         $form = WebPay::createOrder()
+         $form = \WebPay::createOrder()
                 ->addOrderRow(Item::orderRow()
                     ->setQuantity(2)
                     ->setAmountExVat(100.00)

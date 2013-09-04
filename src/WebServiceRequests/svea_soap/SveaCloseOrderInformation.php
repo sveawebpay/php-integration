@@ -1,5 +1,5 @@
 <?php
-namespace swp_;
+namespace Svea;
 
 /**
  * @author Anneli Halld'n, Daniel Brolund for Svea Webpay

@@ -1,5 +1,5 @@
 <?php
-namespace swp_;
+namespace Svea;
 
 $root = realpath(dirname(__FILE__));
 require_once $root . '/../../../../src/Includes.php';
@@ -13,11 +13,11 @@ require_once $root . '/../../../TestUtil.php';
 class OrderHandlerValidatorTest extends \PHPUnit_Framework_TestCase {
 
     /**
-     * @expectedException swp_\ValidationException
+     * @expectedException Svea\ValidationException
      * @expectedExceptionMessage -missing value : OrderId is required. Use function setOrderId() with the id recieved when creating an order.
      */
     public function testFailOnMissingOrderIdOnPaymentPlanDeliver() {
-        $builder = WebPay::deliverOrder();
+        $builder = \WebPay::deliverOrder();
         $object = $builder;
         
         $object->deliverPaymentPlanOrder()
@@ -25,11 +25,11 @@ class OrderHandlerValidatorTest extends \PHPUnit_Framework_TestCase {
     }
 
     /**
-     * @expectedException swp_\ValidationException
+     * @expectedException Svea\ValidationException
      * @expectedExceptionMessage -missing value : InvoiceDistributionType is requred for deliverInvoiceOrder. Use function setInvoiceDistributionType().
      */
     public function testFailOnMissingInvoiceDetailsOnInvoiceDeliver() {
-        $builder = WebPay::deliverOrder();
+        $builder = \WebPay::deliverOrder();
         $object = $builder
             ->addOrderRow(TestUtil::createOrderRow())
                 ->addFee(Item::shippingFee()
@@ -47,11 +47,11 @@ class OrderHandlerValidatorTest extends \PHPUnit_Framework_TestCase {
     }
 
     /**
-     * @expectedException swp_\ValidationException
+     * @expectedException Svea\ValidationException
      * @expectedExceptionMessage No rows has been included. Use function beginOrderRow(), beginShippingfee() or beginInvoiceFee().
      */
     public function testFailOnMissingOrderRowsOnInvoiceDeliver() {
-        $builder = WebPay::deliverOrder();
+        $builder = \WebPay::deliverOrder();
         $object = $builder
                 ->setOrderId('id')
                 ->setInvoiceDistributionType('Post')

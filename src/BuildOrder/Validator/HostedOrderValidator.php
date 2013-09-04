@@ -1,5 +1,5 @@
 <?php
-namespace swp_;
+namespace Svea;
 
 require_once SVEA_REQUEST_DIR . '/Includes.php';
 require_once 'OrderValidator.php';

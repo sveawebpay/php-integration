@@ -1,5 +1,5 @@
 <?php
-namespace swp_;
+namespace Svea;
 
 $root = realpath(dirname(__FILE__));
 require_once $root . '/../../../../test/UnitTest/BuildOrder/OrderBuilderTest.php';
@@ -14,7 +14,7 @@ require_once $root . '/../../../TestUtil.php';
 class InvoicePaymentTest extends \PHPUnit_Framework_TestCase {
     
      public function testInvoiceRequestObjectForCustomerIdentityIndividualFromSE() {
-           $request = WebPay::createOrder()
+           $request = \WebPay::createOrder()
             ->addOrderRow(TestUtil::createOrderRow())
             ->addCustomerDetails(Item::individualCustomer()->setNationalIdNumber(194605092222))
                 ->setCountryCode("SE")
@@ -30,7 +30,7 @@ class InvoicePaymentTest extends \PHPUnit_Framework_TestCase {
     }
     
     public function testInvoiceRequestOnProductVatCero() {
-           $request = WebPay::createOrder()
+           $request = \WebPay::createOrder()
             ->addOrderRow(Item::orderRow()
                 ->setArticleNumber(1)
                 ->setQuantity(2)
@@ -54,7 +54,7 @@ class InvoicePaymentTest extends \PHPUnit_Framework_TestCase {
     }
     
     public function testSetAuth() {
-        $request = WebPay::createOrder()
+        $request = \WebPay::createOrder()
                 ->addOrderRow(TestUtil::createOrderRow())
                 ->addCustomerDetails(Item::individualCustomer()->setNationalIdNumber(194605092222))
                 ->setCountryCode("SE")
@@ -71,7 +71,7 @@ class InvoicePaymentTest extends \PHPUnit_Framework_TestCase {
     }
     
     public function testInvoiceRequestObjectForCustomerIdentityIndividualFromNL() {
-        $request = WebPay::createOrder()
+        $request = \WebPay::createOrder()
                 ->addOrderRow(TestUtil::createOrderRow())
                 ->addCustomerDetails(Item::individualCustomer()
                         ->setInitials("SB")
@@ -110,7 +110,7 @@ class InvoicePaymentTest extends \PHPUnit_Framework_TestCase {
     }
     
     public function testInvoiceRequestObjectForCustomerIdentityIndividualFromDE() {
-        $request = WebPay::createOrder()
+        $request = \WebPay::createOrder()
             ->addOrderRow(TestUtil::createOrderRow())
             ->addCustomerDetails(Item::individualCustomer()
                     ->setBirthDate(1923, 12, 12)
@@ -147,7 +147,7 @@ class InvoicePaymentTest extends \PHPUnit_Framework_TestCase {
     }
     
     public function testInvoiceRequestObjectForCustomerIdentityCompanyFromNL() {
-        $request = WebPay::createOrder()
+        $request = \WebPay::createOrder()
             ->addOrderRow(TestUtil::createOrderRow())
             ->addCustomerDetails(Item::individualCustomer()
                  ->setInitials("SB")
@@ -182,7 +182,7 @@ class InvoicePaymentTest extends \PHPUnit_Framework_TestCase {
     }
     
     public function testInvoiceRequestObjectForCustomerIdentityCompanyFromSE() {
-        $request = WebPay::createOrder()
+        $request = \WebPay::createOrder()
                 ->addOrderRow(TestUtil::createOrderRow())
                 ->addCustomerDetails(Item::companyCustomer()->setNationalIdNumber("vat234"))
                 ->setCountryCode("SE")
@@ -199,7 +199,7 @@ class InvoicePaymentTest extends \PHPUnit_Framework_TestCase {
     
     public function testInvoiceRequestObjectForSEorderOnOneProductRow() {
         $rowFactory = new TestRowFactory();
-        $request = WebPay::createOrder()
+        $request = \WebPay::createOrder()
              ->addOrderRow(TestUtil::createOrderRow())
                 ->run($rowFactory->buildShippingFee())
                 ->run($rowFactory->buildInvoiceFee())
@@ -239,7 +239,7 @@ class InvoicePaymentTest extends \PHPUnit_Framework_TestCase {
     
     public function testInvoiceRequestUsingAmountIncVatWithVatPercent() {
         $rowFactory = new TestRowFactory();
-        $request = WebPay::createOrder()
+        $request = \WebPay::createOrder()
             ->addOrderRow(Item::orderRow()
                     ->setArticleNumber(1)
                     ->setQuantity(2)
@@ -303,7 +303,7 @@ class InvoicePaymentTest extends \PHPUnit_Framework_TestCase {
     
     public function testInvoiceRequestUsingAmountIncVatWithAmountExVat() {
         $rowFactory = new TestRowFactory();
-        $request = WebPay::createOrder()
+        $request = \WebPay::createOrder()
             ->addOrderRow(Item::orderRow()
                     ->setArticleNumber(1)
                     ->setQuantity(2)
@@ -366,7 +366,7 @@ class InvoicePaymentTest extends \PHPUnit_Framework_TestCase {
     }
 
     public function testInvoiceRequestObjectWithRelativeDiscountOnDifferentProductVat() {
-        $request = WebPay::createOrder()
+        $request = \WebPay::createOrder()
                 ->addOrderRow(Item::orderRow()
                     ->setArticleNumber(1)
                     ->setQuantity(1)
@@ -407,7 +407,7 @@ class InvoicePaymentTest extends \PHPUnit_Framework_TestCase {
     }
 
     public function testInvoiceRequestObjectWithFixedDiscountOnDifferentProductVat() {
-        $request = WebPay::createOrder()
+        $request = \WebPay::createOrder()
                 ->addOrderRow(Item::orderRow()
                     ->setArticleNumber(1)
                     ->setQuantity(1)
@@ -446,7 +446,7 @@ class InvoicePaymentTest extends \PHPUnit_Framework_TestCase {
     }
     
     public function testInvoiceWithFixedDiscountWithUneavenAmount() {
-        $request = WebPay::createOrder()
+        $request = \WebPay::createOrder()
                 ->addOrderRow(Item::orderRow()
                     ->setArticleNumber(1)
                     ->setQuantity(1)
@@ -478,7 +478,7 @@ class InvoicePaymentTest extends \PHPUnit_Framework_TestCase {
 
      public function testInvoiceRequestObjectWithCreateOrderInformation() {
         $rowFactory = new TestRowFactory();
-           $request = WebPay::createOrder()
+           $request = \WebPay::createOrder()
             ->addOrderRow(TestUtil::createOrderRow())
                 ->run($rowFactory->buildShippingFee())
             ->addCustomerDetails(Item::companyCustomer()->setNationalIdNumber(194605092222)->setAddressSelector("ad33"))
@@ -502,7 +502,7 @@ class InvoicePaymentTest extends \PHPUnit_Framework_TestCase {
      
     public function testInvoiceRequestObjectWithAuth() {
         $rowFactory = new TestRowFactory();
-            $request = WebPay::createOrder()
+            $request = \WebPay::createOrder()
             ->addOrderRow(TestUtil::createOrderRow())
             ->run($rowFactory->buildShippingFee())
             ->addCustomerDetails(Item::companyCustomer()->setNationalIdNumber(194605092222)->setAddressSelector("ad33"))

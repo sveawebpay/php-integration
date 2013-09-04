@@ -1,5 +1,5 @@
 <?php
-namespace swp_;
+namespace Svea;
 
 $root = realpath(dirname(__FILE__));
 require_once $root . '/../../../../src/Includes.php';
@@ -13,7 +13,7 @@ require_once $root . '/../../../TestUtil.php';
 class CloseOrderTest extends \PHPUnit_Framework_TestCase {
     
     public function testCloseInvoiceOrder() {
-        $orderBuilder = WebPay::closeOrder();
+        $orderBuilder = \WebPay::closeOrder();
         $request = $orderBuilder
                 ->setOrderId("id")
                 ->setCountryCode("SE")
@@ -24,7 +24,7 @@ class CloseOrderTest extends \PHPUnit_Framework_TestCase {
     }
     
     public function testClosePaymentPlanOrder() {
-        $orderBuilder = WebPay::closeOrder();
+        $orderBuilder = \WebPay::closeOrder();
         $request = $orderBuilder
                 ->setCountryCode("SE")
                 ->setOrderId("id")

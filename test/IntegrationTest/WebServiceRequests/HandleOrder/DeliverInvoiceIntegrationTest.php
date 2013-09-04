@@ -1,5 +1,5 @@
 <?php
-namespace swp_;
+namespace Svea;
 
 $root = realpath(dirname(__FILE__));
 require_once $root . '/../../../../src/Includes.php';
@@ -17,7 +17,7 @@ class DeliverInvoiceIntegrationTest extends \PHPUnit_Framework_TestCase {
      * @return SveaOrderId
      */
     private function getInvoiceOrderId() {
-        $request = WebPay::createOrder()
+        $request = \WebPay::createOrder()
                 ->addOrderRow(TestUtil::createOrderRow())
                 ->addCustomerDetails(Item::individualCustomer()->setNationalIdNumber(194605092222))
                 ->setCountryCode("SE")
@@ -33,7 +33,7 @@ class DeliverInvoiceIntegrationTest extends \PHPUnit_Framework_TestCase {
     
     public function testDeliverInvoiceOrder() {
         $orderId = $this->getInvoiceOrderId();
-        $orderBuilder = WebPay::deliverOrder();
+        $orderBuilder = \WebPay::deliverOrder();
         $request = $orderBuilder
                 ->addOrderRow(TestUtil::createOrderRow())
                 ->setOrderId($orderId)

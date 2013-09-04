@@ -1,5 +1,5 @@
 <?php
-namespace swp_;
+namespace Svea;
 
 $root = realpath(dirname(__FILE__));
 require_once $root . '/../../../../src/Includes.php';
@@ -14,7 +14,7 @@ class PaymentPlanPaymentIntegrationTest extends \PHPUnit_Framework_TestCase {
      * @return type
      */
     private function getGetPaymentPlanParamsForTesting() {
-        $addressRequest = WebPay::getPaymentPlanParams();
+        $addressRequest = \WebPay::getPaymentPlanParams();
         $response = $addressRequest
                 ->setCountryCode("SE")
                 ->doRequest();
@@ -23,7 +23,7 @@ class PaymentPlanPaymentIntegrationTest extends \PHPUnit_Framework_TestCase {
     
     public function testPaymentPlanRequestReturnsAcceptedResult() {
         $campaigncode = $this->getGetPaymentPlanParamsForTesting();
-        $request = WebPay::createOrder()
+        $request = \WebPay::createOrder()
                 ->addOrderRow(Item::orderRow()
                         ->setArticleNumber(1)
                         ->setQuantity(2)

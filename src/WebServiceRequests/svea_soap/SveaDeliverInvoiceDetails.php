@@ -1,5 +1,5 @@
 <?php
-namespace swp_;
+namespace Svea;
 
 /**
  * Include in SveaDeliverOrderInformation for Invoice only

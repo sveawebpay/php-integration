@@ -14,7 +14,7 @@
     * [Other values](https://github.com/sveawebpay/php-integration#14-other-values)
     * [Choose payment](https://github.com/sveawebpay/php-integration#15-choose-payment)
 * [2. GetPaymentPlanParams](https://github.com/sveawebpay/php-integration#2-getpaymentplanparams)
-    *  [PaymentPlanPricePerMonth](https://github.com/sveawebpay/php-integration#21-paymentPlanPricePerMonth)
+    *  [PaymentPlanPricePerMonth](https://github.com/sveawebpay/php-integration#21-paymentplanpricepermonth)
 * [3. GetAddresses](https://github.com/sveawebpay/php-integration#2-getpaymentplanparams)
 * [4. DeliverOrder](https://github.com/sveawebpay/php-integration#4-deliverorder)
     * [Specify order](https://github.com/sveawebpay/php-integration#42-specify-order)
@@ -760,18 +760,18 @@ or
 
 ### 3.2 Customer type
 ```php
-    ->setIndividual(194605092222)   //Required if this is an individual customer
+    ->setIndividual("194605092222")   //Required if this is an individual customer
 or
     ->setCompany("CompanyId")       //Required if this is a company customer
 ```
 [<< To top](https://github.com/sveawebpay/php-integration#php-integration-package-api-for-sveawebpay)
 
-### 3.3
+### 3.3 Do request
 ```php
     $response = WebPay::getAddresses()
         ->setOrderTypeInvoice()                                              //See 3.1
         ->setCountryCode("SE")                                               //Required
-        ->setIndividual(194605092222)                                        //See 3.2
+        ->setIndividual("194605092222")                                      //See 3.2
         ->doRequest();
 ```
 [<< To top](https://github.com/sveawebpay/php-integration#php-integration-package-api-for-sveawebpay)

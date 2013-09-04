@@ -1,5 +1,5 @@
 <?php
-namespace swp_;
+namespace Svea;
 
 /**
  * Use to transform order object into array if needed for soapClient

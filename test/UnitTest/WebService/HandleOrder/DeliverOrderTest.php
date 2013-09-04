@@ -1,5 +1,5 @@
 <?php
-namespace swp_;
+namespace Svea;
 
 $root = realpath(dirname(__FILE__));
 require_once $root . '/../../../../src/Includes.php';
@@ -13,7 +13,7 @@ require_once $root . '/../../../TestUtil.php';
 class DeliverOrderTest extends \PHPUnit_Framework_TestCase {
     
     public function testBuildRequest() {
-        $handler = WebPay::deliverOrder();
+        $handler = \WebPay::deliverOrder();
         $request = $handler
                 ->setOrderId("id");
         
@@ -21,7 +21,7 @@ class DeliverOrderTest extends \PHPUnit_Framework_TestCase {
     }
     
     public function testDeliverInvoiceDistributionType() {
-        $orderBuilder = WebPay::deliverOrder();
+        $orderBuilder = \WebPay::deliverOrder();
         $request = $orderBuilder
             ->addOrderRow(TestUtil::createOrderRow())
                 ->setOrderId("id")
@@ -36,7 +36,7 @@ class DeliverOrderTest extends \PHPUnit_Framework_TestCase {
     }
     
     public function testDeliverInvoiceOrder() {
-        $orderBuilder = WebPay::deliverOrder();
+        $orderBuilder = \WebPay::deliverOrder();
         $request = $orderBuilder
                 ->addOrderRow(TestUtil::createOrderRow())
                 ->addDiscount(Item::fixedDiscount()->setAmountIncVat(10))
@@ -86,7 +86,7 @@ class DeliverOrderTest extends \PHPUnit_Framework_TestCase {
     }
     
     public function testDeliverPaymentPlanOrder() {
-        $orderBuilder = WebPay::deliverOrder();
+        $orderBuilder = \WebPay::deliverOrder();
         
         $request = $orderBuilder
                 ->setCountryCode("SE")
@@ -98,7 +98,7 @@ class DeliverOrderTest extends \PHPUnit_Framework_TestCase {
     }
     
     public function testNewDeliverInvoiceOrderRow() {
-        $request = WebPay::deliverOrder();
+        $request = \WebPay::deliverOrder();
         $request = $request
             ->addOrderRow(TestUtil::createOrderRow());
             $request = $request ->setOrderId("id")
@@ -119,7 +119,7 @@ class DeliverOrderTest extends \PHPUnit_Framework_TestCase {
     }
 
     public function testDeliverOrderWithInvoiceFeeAndFixedDiscount() {
-        $request = WebPay::deliverOrder();
+        $request = \WebPay::deliverOrder();
         $request = $request
             ->addOrderRow(TestUtil::createOrderRow())
                 ->addFee(Item::invoiceFee()
@@ -171,7 +171,7 @@ class DeliverOrderTest extends \PHPUnit_Framework_TestCase {
     }
     
     public function testDeliverOrderWithShippingFeeAndRelativeDiscount() {
-        $request = WebPay::deliverOrder();
+        $request = \WebPay::deliverOrder();
         $request = $request
                 ->addOrderRow(TestUtil::createOrderRow())
                 ->addFee(Item::shippingFee()

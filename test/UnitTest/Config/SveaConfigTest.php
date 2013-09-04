@@ -1,5 +1,5 @@
 <?php
-namespace swp_;
+namespace Svea;
 
 $root = realpath(dirname(__FILE__));
 require_once $root . '/../../../src/Includes.php';
@@ -29,7 +29,7 @@ class SveaConfigTest extends \PHPUnit_Framework_TestCase {
                 ->setClientNumberPaymentPlan()
                 ->setAlternativeUrl(); //overwrite all urls
 
-        $request = WebPay::createOrder($conf)
+        $request = \WebPay::createOrder($conf)
             ->addOrderRow(TestUtil::createOrderRow())
             ->addCustomerDetails(Item::individualCustomer()->setNationalIdNumber(194605092222))
                     ->setCountryCode("SE")
@@ -42,7 +42,7 @@ class SveaConfigTest extends \PHPUnit_Framework_TestCase {
     }
     
     public function testOrderWithSEConfigFromFunction() {
-           $request = WebPay::createOrder(SveaConfig::getTestConfig())
+           $request = \WebPay::createOrder(SveaConfig::getTestConfig())
             ->addOrderRow(TestUtil::createOrderRow())
             ->addCustomerDetails(Item::individualCustomer()->setNationalIdNumber(194605092222))
                     ->setCountryCode("SE")

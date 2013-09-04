@@ -1,5 +1,5 @@
 <?php
-namespace swp_;
+namespace Svea;
 
 /**
  * @author anne-hal
@@ -8,7 +8,7 @@ class ShippingFee {
     
     /**
      * Optional
-     * @param type $idAsString
+     * @param string $idAsString
      * @return \ShippingFee
      */
     public function setShippingId($idAsString) {
@@ -18,7 +18,7 @@ class ShippingFee {
 
     /**
      * Optional
-     * @param type $nameAsString
+     * @param string $nameAsString
      * @return \ShippingFee
      */
     public function setName($nameAsString) {
@@ -28,7 +28,7 @@ class ShippingFee {
 
     /**
      * Optional
-     * @param type $descriptionAsString
+     * @param string $descriptionAsString
      * @return \ShippingFee
      */
     public function setDescription($descriptionAsString) {
@@ -38,7 +38,7 @@ class ShippingFee {
 
     /**
      * Optional
-     * @param type $amountAsFloat
+     * @param float $amountAsFloat
      * @return \ShippingFee
      */
     public function setAmountExVat($amountAsFloat) {
@@ -48,7 +48,7 @@ class ShippingFee {
     
     /**
      * Optional
-     * @param type $amountAsFloat
+     * @param float $amountAsFloat
      * @return \ShippingFee
      */
     public function setAmountIncVat($amountAsFloat) {
@@ -58,7 +58,7 @@ class ShippingFee {
     
     /**
     *
-    * @param type $unitDescriptionAsString
+    * @param string $unitDescriptionAsString
     * @return \ShippingFee
     */
     public function setUnit($unitDescriptionAsString) {
@@ -68,7 +68,7 @@ class ShippingFee {
     
     /**
      *
-     * @param type $percentAsInt
+     * @param int $percentAsInt
      * @return \ShippingFee
      */
     public function setVatPercent($percentAsInt) {
@@ -78,7 +78,7 @@ class ShippingFee {
     
     /**
      *
-     * @param type $discountPercentAsInt
+     * @param int $discountPercentAsInt
      * @return \ShippingFee
      */
     public function setDiscountPercent($discountPercentAsInt) {

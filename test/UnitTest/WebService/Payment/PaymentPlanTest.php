@@ -1,5 +1,5 @@
 <?php
-namespace swp_;
+namespace Svea;
 
 $root = realpath(dirname(__FILE__));
 require_once $root . '/../../../../test/UnitTest/BuildOrder/OrderBuilderTest.php';
@@ -18,7 +18,7 @@ class PaymentPlanTest extends \PHPUnit_Framework_TestCase {
      * @return type
      */
     public function getGetPaymentPlanParamsForTesting() {
-        $addressRequest = WebPay::getPaymentPlanParams();
+        $addressRequest = \WebPay::getPaymentPlanParams();
         $response = $addressRequest
                 ->setCountryCode("SE")
                 ->doRequest();
@@ -27,7 +27,7 @@ class PaymentPlanTest extends \PHPUnit_Framework_TestCase {
     
     public function testPaymentPlanRequestObjectSpecifics() {
         $rowFactory = new TestRowFactory();
-        $request = WebPay::createOrder()
+        $request = \WebPay::createOrder()
                 ->addOrderRow(TestUtil::createOrderRow())
                 ->run($rowFactory->buildShippingFee())
                 ->addCustomerDetails(Item::individualCustomer()->setNationalIdNumber(194605092222))
@@ -44,7 +44,7 @@ class PaymentPlanTest extends \PHPUnit_Framework_TestCase {
     }
 
     public function testInvoiceRequestObjectWithRelativeDiscountOnTwoProducts() {
-        $request = WebPay::createOrder()
+        $request = \WebPay::createOrder()
                 ->addOrderRow(Item::orderRow()
                     ->setArticleNumber(1)
                     ->setQuantity(2)
@@ -76,7 +76,7 @@ class PaymentPlanTest extends \PHPUnit_Framework_TestCase {
     
     public function testPaymentPlanWithPriceAsDecimal() {
         $campaign = $this->getGetPaymentPlanParamsForTesting();
-        $request = WebPay::createOrder()
+        $request = \WebPay::createOrder()
                 ->addOrderRow(Item::orderRow()
                     ->setArticleNumber(1)
                     ->setQuantity(2)

@@ -1,5 +1,5 @@
 <?php
-namespace swp_;
+namespace Svea;
 
 /**
  * Helpclass for formatting orderrows for the right format for WebServeice soap-calls

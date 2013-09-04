@@ -1,9 +1,9 @@
 <?php
-namespace swp_;
+namespace Svea;
 
 /**
  * @author Anneli Halld'n, Daniel Brolund for Svea Webpay
  */
-class ValidationException extends \Exception {  // \Exception referes to class Exception outside our \swp_\ namespace
+class ValidationException extends \Exception {  // \Exception referes to class Exception outside our \Svea\ namespace
 
 }

@@ -1,5 +1,5 @@
 <?php
-namespace swp_;
+namespace Svea;
 
 require_once SVEA_REQUEST_DIR . '/Config/SveaConfig.php';
 
@@ -30,7 +30,7 @@ class SveaDoRequest {
      */
     public function CreateOrderEu($order) {
         $builder = new SveaSoapArrayBuilder();
-        return $this->client->CreateOrderEu($builder->object_to_array($order));
+        return $this->client->CreateOrderEu($builder->object_to_array($order)); //result of SoapClient CreateOrderEu method
 
     }
 

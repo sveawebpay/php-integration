@@ -1,5 +1,5 @@
 <?php
-namespace swp_;
+namespace Svea;
 
 /**
  * Rewrites formatted object to xml format to put in form element and send to external service.

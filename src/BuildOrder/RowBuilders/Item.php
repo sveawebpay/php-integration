@@ -1,5 +1,5 @@
 <?php
-namespace swp_;
+namespace Svea;
 
 include_once SVEA_REQUEST_DIR . "/Includes.php";
 
