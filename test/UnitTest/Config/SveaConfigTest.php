@@ -8,8 +8,16 @@ $root = realpath(dirname(__FILE__));
 require_once $root . '/../../TestUtil.php';
 
 class SveaConfigTest extends \PHPUnit_Framework_TestCase {
+
+    function testSveaConfigNotFound(){
+        $config = SveaConfig::getTestConfig();
+        $foo = \WebPay::createOrder($config);
+
+        $this->assertEquals("sverigetest", $config->conf['credentials']['SE']['auth']['INVOICE']['username']);
+    }
     
     public function t_estInstancesOfSveaConfig() {
+
         $obj1 = SveaConfig::getConfig();
         $obj2 = SveaConfig::getConfig();
         $this->assertEquals($obj1->password, $obj2->password);
@@ -40,7 +48,7 @@ class SveaConfigTest extends \PHPUnit_Framework_TestCase {
                        // ->setPasswordBasedAuthorization("sverigetest", "sverigetest", 79021)
                         ->prepareRequest();
     }
-    
+
     public function testOrderWithSEConfigFromFunction() {
            $request = \WebPay::createOrder(SveaConfig::getTestConfig())
             ->addOrderRow(TestUtil::createOrderRow())
@@ -51,7 +59,7 @@ class SveaConfigTest extends \PHPUnit_Framework_TestCase {
                     ->setCurrency("SEK")
                     ->useInvoicePayment()// returnerar InvoiceOrder object
                         ->prepareRequest();
-        
+
         $this->assertEquals("sverigetest", $request->request->Auth->Username);
         $this->assertEquals("sverigetest", $request->request->Auth->Password);
         $this->assertEquals(79021, $request->request->Auth->ClientNumber);
