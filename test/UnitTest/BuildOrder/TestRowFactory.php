@@ -1,7 +1,7 @@
 <?php
 
 class TestRowFactory {
-    
+
     /**
      * Returns ShippingFeeRow to use as shorthand in testFunctions
      * Use function run($functionname) to run shorthand function
@@ -22,7 +22,7 @@ class TestRowFactory {
                 );
         };
     }
-    
+
     /**
      * Returns InvoicefeeRow to use as shorthand in testFunctions
      * Use function run($functionname) to run shorthand function
@@ -63,7 +63,7 @@ class TestRowFactory {
       ->endOrderRow();
       };
       }
-     * 
+     *
      */
     /**
      *  Returns FixedDiscountRow to use as shorthand in testFunctions
@@ -82,7 +82,7 @@ class TestRowFactory {
       ->endFixedDiscount(0);
       };
       }
-     * 
+     *
      */
     /**
      *  Returns RelativeDiscountRow to use as shorthand in testFunctions

@@ -133,12 +133,11 @@ class WebServiceRowFormatter {
         foreach ($this->order->invoiceFeeRows as $row) {
             $orderRow = new SveaOrderRow();
             $orderRow->ArticleNumber = "";
-            if (isset($row->description))
-                if (isset($row->description)) {
-                    $orderRow->Description = (isset($row->name) ? $row->name . ': ' : "") . $row->description;
-                } elseif (isset($row->name) && isset($row->description) == false) {
-                    $orderRow->Description = $row->name;
-                }
+            if (isset($row->description)) {
+                $orderRow->Description = (isset($row->name) ? $row->name . ': ' : "") . $row->description;
+            } elseif (isset($row->name) && isset($row->description) == false) {
+                $orderRow->Description = $row->name;
+            }
             if (isset($row->unit)) {
                 $orderRow->Unit = $row->unit;
             }
