@@ -4,7 +4,7 @@ namespace Svea;
 /**
  * @author Jonas Lith
  */
-class TestConf implements ConfigurationProvider {
+class TestConf implements \ConfigurationProvider {
     
     public function getEndPoint($type) {
         return "url";

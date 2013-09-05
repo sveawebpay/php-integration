@@ -11,7 +11,7 @@ require_once SVEA_REQUEST_DIR . '/Includes.php';
  *
  * @author anne-hal
  */
-class SveaConfigurationProvider implements ConfigurationProvider {
+class SveaConfigurationProvider implements \ConfigurationProvider {
 
     public $conf;
 
@@ -121,9 +121,9 @@ class SveaConfigurationProvider implements ConfigurationProvider {
     private function throwInvalidTypeException() {
         throw new \Exception(sprintf(
             'Invalid type. Accepted values: %s, %s or %s',
-            ConfigurationProvider::INVOICE_TYPE,
-            ConfigurationProvider::PAYMENTPLAN_TYPE,
-            ConfigurationProvider::HOSTED_TYPE
+            \ConfigurationProvider::INVOICE_TYPE,
+            \ConfigurationProvider::PAYMENTPLAN_TYPE,
+            \ConfigurationProvider::HOSTED_TYPE
         ));
     }
 }

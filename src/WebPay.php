@@ -1,4 +1,5 @@
 <?php
+// WebPay class is not included in Svea namespace
 
 include_once SVEA_REQUEST_DIR . "/Includes.php";
 

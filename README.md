@@ -48,17 +48,19 @@ $foo = $foo->...
 ## Changes in release 1.2.0
 
 ### Namespace
-From release 1.2.0 on the package makes use of a namespace "Svea". We have made
+From release 1.2.0 on the package makes use of a namespace, Svea. We have made
 efforts to avoid impacting existing integrations, so the classes WebPay and Item
-are excluded from the namespace along with the new class WebPayItem. 
+are excluded from the namespace along with the new class WebPayItem. Also, the
+interface ConfigurationProvider lies outside the Svea namespace.
 
-Also, the provided Item class is a now a wrapper for WebPayItem. Item is marked 
-as deprecated in release 1.2.0. Please use WebPayItem instead from now on. 
+For compatibility with existing integrations, the provided Item class is a now 
+a wrapper for the WebPayItem class. Item is marked as deprecated with release 
+1.2.0, please use WebPayItem instead. 
 
-In the event that you make use of other classes than WebPay or WebPayItem, 
-you'll need to prefix the Svea namespace to classnames. 
+In the event that you make use of other classes than WebPay, WebPayItem, you'll 
+need to prefix the Svea namespace to classnames. 
 
-See [PHP.net on namespaces](http://php.net/manual/en/language.namespaces.php) for details.
+See the PHP documentation for more information on [namespaces in PHP](http://php.net/manual/en/language.namespaces.php).
 
 [<< To top](https://github.com/sveawebpay/php-integration#php-integration-package-api-for-sveawebpay)
 
@@ -116,7 +118,7 @@ There are two ways to configure Svea authorization. Choose one of the following:
             } elseif ($type == ConfigurationProvider::INVOICE_TYPE || $type == ConfigurationProvider::PAYMENTPLAN_TYPE) {
                 return SveaConfig::SWP_TEST_WS_URL;
             } else {
-               throw new \Exception('Invalid type. Accepted values: INVOICE, PAYMENTPLAN or HOSTED');
+               throw new Exception('Invalid type. Accepted values: INVOICE, PAYMENTPLAN or HOSTED');
             }
         }
         /**

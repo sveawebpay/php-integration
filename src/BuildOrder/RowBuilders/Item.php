@@ -1,4 +1,6 @@
 <?php
+// Item class is not included in Svea namespace, is wrapper for WebPayItem
+
 include_once SVEA_REQUEST_DIR . "/Includes.php";
 
 /**
