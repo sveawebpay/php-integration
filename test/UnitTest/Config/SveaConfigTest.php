@@ -39,7 +39,7 @@ class SveaConfigTest extends \PHPUnit_Framework_TestCase {
 
         $request = \WebPay::createOrder($conf)
             ->addOrderRow(TestUtil::createOrderRow())
-            ->addCustomerDetails(Item::individualCustomer()->setNationalIdNumber(194605092222))
+            ->addCustomerDetails(\WebPayItem::individualCustomer()->setNationalIdNumber(194605092222))
                     ->setCountryCode("SE")
                     ->setCustomerReference("33")
                     ->setOrderDate("2012-12-12")
@@ -52,7 +52,7 @@ class SveaConfigTest extends \PHPUnit_Framework_TestCase {
     public function testOrderWithSEConfigFromFunction() {
            $request = \WebPay::createOrder(SveaConfig::getTestConfig())
             ->addOrderRow(TestUtil::createOrderRow())
-            ->addCustomerDetails(Item::individualCustomer()->setNationalIdNumber(194605092222))
+            ->addCustomerDetails(\WebPayItem::individualCustomer()->setNationalIdNumber(194605092222))
                     ->setCountryCode("SE")
                     ->setCustomerReference("33")
                     ->setOrderDate("2012-12-12")

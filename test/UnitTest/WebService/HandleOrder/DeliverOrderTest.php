@@ -39,8 +39,8 @@ class DeliverOrderTest extends \PHPUnit_Framework_TestCase {
         $orderBuilder = \WebPay::deliverOrder();
         $request = $orderBuilder
                 ->addOrderRow(TestUtil::createOrderRow())
-                ->addDiscount(Item::fixedDiscount()->setAmountIncVat(10))
-                ->addFee(Item::shippingFee()
+                ->addDiscount(\WebPayItem::fixedDiscount()->setAmountIncVat(10))
+                ->addFee(\WebPayItem::shippingFee()
                     ->setShippingId('33')
                     ->setName('shipping')
                     ->setDescription("Specification")
@@ -122,7 +122,7 @@ class DeliverOrderTest extends \PHPUnit_Framework_TestCase {
         $request = \WebPay::deliverOrder();
         $request = $request
             ->addOrderRow(TestUtil::createOrderRow())
-                ->addFee(Item::invoiceFee()
+                ->addFee(\WebPayItem::invoiceFee()
                     ->setName('Svea fee')
                     ->setDescription("Fee for invoice")
                     ->setAmountExVat(50)
@@ -130,7 +130,7 @@ class DeliverOrderTest extends \PHPUnit_Framework_TestCase {
                     ->setVatPercent(25)
                     ->setDiscountPercent(0)
                 )
-                ->addDiscount(Item::fixedDiscount()
+                ->addDiscount(\WebPayItem::fixedDiscount()
                    ->setDiscountId("1")
                     ->setAmountIncVat(100.00)
                     ->setUnit("st")
@@ -174,7 +174,7 @@ class DeliverOrderTest extends \PHPUnit_Framework_TestCase {
         $request = \WebPay::deliverOrder();
         $request = $request
                 ->addOrderRow(TestUtil::createOrderRow())
-                ->addFee(Item::shippingFee()
+                ->addFee(\WebPayItem::shippingFee()
                     ->setShippingId(1)
                     ->setName('shipping')
                     ->setDescription("Specification")
@@ -183,7 +183,7 @@ class DeliverOrderTest extends \PHPUnit_Framework_TestCase {
                     ->setVatPercent(25)
                     ->setDiscountPercent(0)
                 )
-                ->addDiscount(Item::relativeDiscount()
+                ->addDiscount(\WebPayItem::relativeDiscount()
                     ->setDiscountId("1")
                     ->setDiscountPercent(50)
                     ->setUnit("st")

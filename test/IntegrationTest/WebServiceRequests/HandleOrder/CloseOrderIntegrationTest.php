@@ -19,7 +19,7 @@ class CloseOrderIntegrationTest extends \PHPUnit_Framework_TestCase {
     private function getInvoiceOrderId() {
         $request = \WebPay::createOrder()
                 ->addOrderRow(TestUtil::createOrderRow())
-                ->addCustomerDetails(Item::individualCustomer()->setNationalIdNumber(194605092222))
+                ->addCustomerDetails(\WebPayItem::individualCustomer()->setNationalIdNumber(194605092222))
                 ->setCountryCode("SE")
                 ->setCustomerReference("33")
                 ->setOrderDate("2012-12-12")

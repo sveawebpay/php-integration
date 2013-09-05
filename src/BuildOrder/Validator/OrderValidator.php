@@ -18,7 +18,7 @@ abstract class OrderValidator {
      */
     protected function validateRequiredFieldsForOrder($order,$errors) {
         if (isset($order->orderRows) == false || count($order->orderRows) == 0) {
-            $errors['missing values'] = "OrderRows are required. Use function addOrderRow(Item::orderRow) to get orderrow setters. ";
+            $errors['missing values'] = "OrderRows are required. Use function addOrderRow(WebPayItem::orderRow) to get orderrow setters. ";
         }
         return $errors;
     }

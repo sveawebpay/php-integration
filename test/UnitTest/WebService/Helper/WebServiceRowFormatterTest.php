@@ -9,7 +9,7 @@ class WebServiceRowFormatterTest extends \PHPUnit_Framework_TestCase {
     
     public function testFormatOrderRows() {
         $order = \WebPay::createOrder();
-        $order->addOrderRow(Item::orderRow()
+        $order->addOrderRow(\WebPayItem::orderRow()
                 ->setArticleNumber("0")
                 ->setName("Tess")
                 ->setDescription("Tester")
@@ -34,7 +34,7 @@ class WebServiceRowFormatterTest extends \PHPUnit_Framework_TestCase {
     
     public function testFormatShippingFeeRows() {
         $order = \WebPay::createOrder();
-        $order->addFee(Item::shippingFee()
+        $order->addFee(\WebPayItem::shippingFee()
                     ->setShippingId("0")
                     ->setName("Tess")
                     ->setDescription("Tester")
@@ -58,7 +58,7 @@ class WebServiceRowFormatterTest extends \PHPUnit_Framework_TestCase {
     
     public function testFormatInvoiceFeeRows() {
         $order = \WebPay::createOrder();
-        $order->addFee(Item::invoiceFee()
+        $order->addFee(\WebPayItem::invoiceFee()
                 ->setName("Tess")
                 ->setDescription("Tester")
                 ->setAmountExVat(4)
@@ -81,12 +81,12 @@ class WebServiceRowFormatterTest extends \PHPUnit_Framework_TestCase {
     
     public function testFormatFixedDiscountRows() {
         $order = \WebPay::createOrder();
-        $order->addOrderRow(Item::orderRow()
+        $order->addOrderRow(\WebPayItem::orderRow()
                 ->setAmountExVat(4)
                 ->setVatPercent(25)
                 ->setQuantity(1)
                 )
-                ->addDiscount(Item::fixedDiscount()
+                ->addDiscount(\WebPayItem::fixedDiscount()
                     ->setDiscountId("0")
                     ->setName("Tess")
                     ->setDescription("Tester")
@@ -108,12 +108,12 @@ class WebServiceRowFormatterTest extends \PHPUnit_Framework_TestCase {
     
     public function testFormatRelativeDiscountRows() {
         $order = \WebPay::createOrder();
-        $order->addOrderRow(Item::orderRow()
+        $order->addOrderRow(\WebPayItem::orderRow()
                 ->setAmountExVat(4)
                 ->setVatPercent(25)
                 ->setQuantity(1)
                 )
-            ->addDiscount(Item::relativeDiscount()
+            ->addDiscount(\WebPayItem::relativeDiscount()
                 ->setDiscountId("0")
                 ->setName("Tess")
                 ->setDescription("Tester")

@@ -1,38 +1,40 @@
 <?php
-namespace Svea;
-
 include_once SVEA_REQUEST_DIR . "/Includes.php";
 
 /**
- * @author anne-hal
+ * Wraps class WebPayItem, while providing backwards compatibility.
+ * 
+ * @deprecated Please use class WebPayItem instead.
+ * 
+ * @author Kristian Madsen, anne-hal
  */
 class Item {
 
      public static function orderRow() {
-         return new OrderRow();
+         return WebPayItem::orderRow();
     }
 
     public static function shippingFee() {
-        return new ShippingFee();
+        return WebPayItem::shippingFee();
     }
 
     public static function invoiceFee() {
-        return new InvoiceFee();
+        return WebPayItem::invoiceFee();
     }
 
     public static function fixedDiscount() {
-        return new FixedDiscount();
+        return WebPayItem::fixedDiscount();
     }
 
     public static function relativeDiscount() {
-        return new RelativeDiscount();
+        return WebPayItem::relativeDiscount();
     }
 
     public static function individualCustomer() {
-        return new IndividualCustomer();
+        return WebPayItem::individualCustomer();
     }
 
     public static function companyCustomer() {
-        return new CompanyCustomer();
+        return WebPayItem::companyCustomer();
     }
 }

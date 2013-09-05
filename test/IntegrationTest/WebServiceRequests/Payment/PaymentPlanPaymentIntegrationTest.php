@@ -24,7 +24,7 @@ class PaymentPlanPaymentIntegrationTest extends \PHPUnit_Framework_TestCase {
     public function testPaymentPlanRequestReturnsAcceptedResult() {
         $campaigncode = $this->getGetPaymentPlanParamsForTesting();
         $request = \WebPay::createOrder()
-                ->addOrderRow(Item::orderRow()
+                ->addOrderRow(\WebPayItem::orderRow()
                         ->setArticleNumber(1)
                         ->setQuantity(2)
                         ->setAmountExVat(1000.00)
@@ -34,7 +34,7 @@ class PaymentPlanPaymentIntegrationTest extends \PHPUnit_Framework_TestCase {
                         ->setVatPercent(25)
                         ->setDiscountPercent(0)
                 )
-                ->addCustomerDetails(Item::individualCustomer()
+                ->addCustomerDetails(\WebPayItem::individualCustomer()
                         ->setNationalIdNumber(194605092222)
                         ->setInitials("SB")
                         ->setBirthDate(1923, 12, 12)

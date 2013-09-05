@@ -3,13 +3,13 @@
 include_once SVEA_REQUEST_DIR . "/Includes.php";
 
 /**
- * Start Building Request Objects By choosing the right Method.
+ * Start building request objects by choosing the right method in WebPay.
  * 
- * This file, WebPay.php is the only one not to include the php "namespace Svea"
- * directive, this is so that existing integrations don't need to worry about 
- * prefixing their calls to WebPay:: functions et al.
+ * Class WebPay is external to Svea namespace along with class WebPayItem.
+ * This is so that existing integrations don't need to worry about 
+ * prefixing their existing calls to WebPay:: and orderrow item functions.
  *  
- * @author Anneli Halld'n, Daniel Brolund for Svea Webpay
+ * @author Anneli Halld'n, Daniel Brolund, Kristian Madsen for Svea WebPay
  * @package WebPay
  */
 class WebPay {

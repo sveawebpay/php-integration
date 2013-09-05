@@ -67,7 +67,7 @@ class OrderBuilderTest extends \PHPUnit_Framework_TestCase {
     
     public function testBuildOrderWithFixedDiscount() {
         $sveaRequest = \WebPay::createOrder()
-                ->addDiscount(Item::fixedDiscount()
+                ->addDiscount(\WebPayItem::fixedDiscount()
                     ->setDiscountId("1")
                     ->setAmountIncVat(100.00)
                     ->setUnit("st")
@@ -85,7 +85,7 @@ class OrderBuilderTest extends \PHPUnit_Framework_TestCase {
     public function testBuildOrderWithRelativeDiscount() {
         $sveaRequest =
                 \WebPay::createOrder()
-                ->addDiscount(Item::relativeDiscount()
+                ->addDiscount(\WebPayItem::relativeDiscount()
                     ->setDiscountId("1")
                     ->setDiscountPercent(50)
                     ->setUnit("st")
@@ -102,7 +102,7 @@ class OrderBuilderTest extends \PHPUnit_Framework_TestCase {
     
     public function testBuildOrderWithCustomer() {
         $sveaRequest = \WebPay::createOrder()
-                ->addCustomerDetails(Item::individualCustomer()
+                ->addCustomerDetails(\WebPayItem::individualCustomer()
                         ->setNationalIdNumber(194605092222)
                         ->setInitials("SB")
                         ->setBirthDate(1923, 12, 12)
@@ -136,7 +136,7 @@ class OrderBuilderTest extends \PHPUnit_Framework_TestCase {
         $sveaRequest = \WebPay::createOrder();
         
         if ($company == TRUE) {
-               $item = Item::companyCustomer();
+               $item = \WebPayItem::companyCustomer();
                $item = $item->setNationalIdNumber(194605092222)
                     ->setEmail("test@svea.com")
                     ->setCompanyName("TestCompagniet")
@@ -166,7 +166,7 @@ class OrderBuilderTest extends \PHPUnit_Framework_TestCase {
 
     public function testBuildOrderWithCompanyDetails() {
         $sveaRequest = \WebPay::createOrder()
-                    ->addCustomerDetails(Item::companyCustomer()
+                    ->addCustomerDetails(\WebPayItem::companyCustomer()
                         ->setNationalIdNumber("2345234")
                         ->setCompanyName("TestCompagniet")
                     );

@@ -42,8 +42,8 @@ class WebServiceOrderValidatorTest extends \PHPUnit_Framework_TestCase {
                 ->addOrderRow(TestUtil::createHostedOrderRow())
                 ->setCountryCode("SE")
                 ->setOrderDate("Mon, 15 Aug 05 15:52:01 +0000")
-                ->addCustomerDetails(Item::individualCustomer()->setNationalIdNumber(194605092222))
-                ->addCustomerDetails(Item::companyCustomer()->setNationalIdNumber(4608142222))
+                ->addCustomerDetails(\WebPayItem::individualCustomer()->setNationalIdNumber(194605092222))
+                ->addCustomerDetails(\WebPayItem::companyCustomer()->setNationalIdNumber(4608142222))
                 ->useInvoicePayment();
         
         $order->prepareRequest();
@@ -72,7 +72,7 @@ class WebServiceOrderValidatorTest extends \PHPUnit_Framework_TestCase {
                 ->addOrderRow(TestUtil::createHostedOrderRow())
                 ->setCountryCode("SE")
                 ->setOrderDate("Mon, 15 Aug 05 15:52:01 +0000")
-                ->addCustomerDetails(Item::companyCustomer()->setNationalIdNumber(4608142222))
+                ->addCustomerDetails(\WebPayItem::companyCustomer()->setNationalIdNumber(4608142222))
                 ->usePaymentPlanPayment($code);
         
         $order->prepareRequest();
@@ -88,7 +88,7 @@ class WebServiceOrderValidatorTest extends \PHPUnit_Framework_TestCase {
                 ->addOrderRow(TestUtil::createHostedOrderRow())
                  ->setCountryCode("ZZ")
                  ->setOrderDate("Mon, 15 Aug 05 15:52:01 +0000")
-                 ->addCustomerDetails(Item::individualCustomer()->setNationalIdNumber(111111))
+                 ->addCustomerDetails(\WebPayItem::individualCustomer()->setNationalIdNumber(111111))
                  ->useInvoicePayment();
         
         $order->prepareRequest();
@@ -102,7 +102,7 @@ class WebServiceOrderValidatorTest extends \PHPUnit_Framework_TestCase {
         $builder = \WebPay::createOrder();
         $order = $builder
                 ->addOrderRow(TestUtil::createHostedOrderRow())
-                ->addCustomerDetails(Item::individualCustomer()->setNationalIdNumber(111111))
+                ->addCustomerDetails(\WebPayItem::individualCustomer()->setNationalIdNumber(111111))
                 ->setOrderDate("Mon, 15 Aug 05 15:52:01 +0000")
                 ->useInvoicePayment();
         
@@ -118,7 +118,7 @@ class WebServiceOrderValidatorTest extends \PHPUnit_Framework_TestCase {
         $order = $builder
                 ->setCountryCode("SE")
                 ->setOrderDate("Mon, 15 Aug 05 15:52:01 +0000")
-                ->addCustomerDetails(Item::individualCustomer()->setName("Tess", "Testson"))
+                ->addCustomerDetails(\WebPayItem::individualCustomer()->setName("Tess", "Testson"))
                 ->useInvoicePayment();
         
         $order->prepareRequest();
@@ -133,7 +133,7 @@ class WebServiceOrderValidatorTest extends \PHPUnit_Framework_TestCase {
         $order = $builder
                 ->setCountryCode("SE")
                   ->setOrderDate("Mon, 15 Aug 05 15:52:01 +0000")
-                  ->addCustomerDetails(Item::companyCustomer()->setCompanyName("Mycompany"))
+                  ->addCustomerDetails(\WebPayItem::companyCustomer()->setCompanyName("Mycompany"))
                     ->useInvoicePayment();
         
         $order->prepareRequest();
@@ -167,7 +167,7 @@ class WebServiceOrderValidatorTest extends \PHPUnit_Framework_TestCase {
         $order = $builder
                 ->setCountryCode("DE")
                 ->setOrderDate("Mon, 15 Aug 05 15:52:01 +0000")
-                ->addCustomerDetails(Item::individualCustomer()
+                ->addCustomerDetails(\WebPayItem::individualCustomer()
                         //->setBirthDate(1923, 12, 12)
                         ->setName("Tess", "Testson")
                         ->setStreetAddress("Gatan", 23)
@@ -209,7 +209,7 @@ class WebServiceOrderValidatorTest extends \PHPUnit_Framework_TestCase {
         $order = $builder
                 ->setCountryCode("NL")
                 ->setOrderDate("Mon, 15 Aug 05 15:52:01 +0000")
-                ->addCustomerDetails(Item::individualCustomer()
+                ->addCustomerDetails(\WebPayItem::individualCustomer()
                         //->setInitials("SB")
                         ->setBirthDate(1923, 12, 12)
                         ->setName("Tess", "Testson")
@@ -223,14 +223,14 @@ class WebServiceOrderValidatorTest extends \PHPUnit_Framework_TestCase {
     
     /**
      * @expectedException Svea\ValidationException
-     * @expectedExceptionMessage -missing values : OrderRows are required. Use function addOrderRow(Item::orderRow) to get orderrow setters.
+     * @expectedExceptionMessage -missing values : OrderRows are required. Use function addOrderRow(WebPayItem::orderRow) to get orderrow setters.
      */
     public function testFailOnMissingOrderRows() {
         $builder = \WebPay::createOrder();
         $order = $builder
                 ->setCountryCode("SE")
                 ->setOrderDate("Mon, 15 Aug 05 15:52:01 +0000")
-                ->addCustomerDetails(Item::individualCustomer()->setNationalIdNumber(46111111))
+                ->addCustomerDetails(\WebPayItem::individualCustomer()->setNationalIdNumber(46111111))
                 ->useInvoicePayment();
         $order->prepareRequest();
     }
@@ -238,16 +238,16 @@ class WebServiceOrderValidatorTest extends \PHPUnit_Framework_TestCase {
     /**
      * @expectedException Svea\ValidationException
      * @expectedExceptionMessage
-     * -missing values : At least two of the values must be set in object Item::  AmountExVat, AmountIncVat or VatPercent for Orderrow. Use functions setAmountExVat(), setAmountIncVat() or setVatPercent().
-     * -missing value : Quantity is required in object Item. Use function Item::setQuantity().
+     * -missing values : At least two of the values must be set in object \WebPayItem::  AmountExVat, AmountIncVat or VatPercent for Orderrow. Use functions setAmountExVat(), setAmountIncVat() or setVatPercent().
+     * -missing value : Quantity is required in object \WebPayItem. Use function \WebPayItem::setQuantity().
      */
     public function testFailOnMissingOrderRowValues() {
         $builder = \WebPay::createOrder();
         $order = $builder
-                ->addOrderRow(Item::orderRow())
+                ->addOrderRow(\WebPayItem::orderRow())
                 ->setCountryCode("SE")
                 ->setOrderDate("Mon, 15 Aug 05 15:52:01 +0000")
-                ->addCustomerDetails(Item::individualCustomer()->setNationalIdNumber(46111111))
+                ->addCustomerDetails(\WebPayItem::individualCustomer()->setNationalIdNumber(46111111))
                 ->useInvoicePayment();
         $order->prepareRequest();
     }
@@ -263,7 +263,7 @@ class WebServiceOrderValidatorTest extends \PHPUnit_Framework_TestCase {
                 ->addOrderRow(TestUtil::createHostedOrderRow())
                 ->setCountryCode("SE")
                 // ->setOrderDate("Mon, 15 Aug 05 15:52:01 +0000")
-                ->addCustomerDetails(Item::individualCustomer()->setNationalIdNumber(46111111))
+                ->addCustomerDetails(\WebPayItem::individualCustomer()->setNationalIdNumber(46111111))
                 ->useInvoicePayment();
         $order->prepareRequest();
     }
@@ -276,14 +276,14 @@ class WebServiceOrderValidatorTest extends \PHPUnit_Framework_TestCase {
     public function testFailOnVatAsFloat() {
         $builder = \WebPay::createOrder();
         $order = $builder
-                ->addOrderRow(Item::orderRow()
+                ->addOrderRow(\WebPayItem::orderRow()
                     ->setAmountExVat(100)
                     ->setVatPercent(20.33)
                     ->setQuantity(1)
                 )
                 ->setCountryCode("SE")
                 // ->setOrderDate("Mon, 15 Aug 05 15:52:01 +0000")
-                ->addCustomerDetails(Item::individualCustomer()->setNationalIdNumber(46111111))
+                ->addCustomerDetails(\WebPayItem::individualCustomer()->setNationalIdNumber(46111111))
                 ->useInvoicePayment();
         $order->prepareRequest(); 
     }

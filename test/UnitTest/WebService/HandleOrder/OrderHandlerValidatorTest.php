@@ -32,7 +32,7 @@ class OrderHandlerValidatorTest extends \PHPUnit_Framework_TestCase {
         $builder = \WebPay::deliverOrder();
         $object = $builder
             ->addOrderRow(TestUtil::createOrderRow())
-                ->addFee(Item::shippingFee()
+                ->addFee(\WebPayItem::shippingFee()
                     ->setShippingId('33')
                     ->setName('shipping')
                     ->setDescription("Specification")

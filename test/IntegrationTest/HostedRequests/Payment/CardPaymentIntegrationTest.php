@@ -19,7 +19,7 @@ class CardPaymentIntegrationTest extends \PHPUnit_Framework_TestCase {
         $form = \WebPay::createOrder()                      // workaround to not include namespace in WebPay.php
                 ->addOrderRow(TestUtil::createOrderRow())
                 ->run($rowFactory->buildShippingFee())
-                ->addDiscount(Item::relativeDiscount()
+                ->addDiscount(\WebPayItem::relativeDiscount()
                         ->setDiscountId("1")
                         ->setDiscountPercent(50)
                         ->setUnit("st")
