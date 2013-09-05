@@ -1,4 +1,5 @@
 <?php
+namespace Svea;
 
 require_once 'WebServicePayment.php';
 

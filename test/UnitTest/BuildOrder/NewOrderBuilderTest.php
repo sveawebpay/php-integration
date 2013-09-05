@@ -1,4 +1,5 @@
 <?php
+namespace Svea;
 
 $root = realpath(dirname(__FILE__));
 require_once $root . '/../../../src/Includes.php';
@@ -15,13 +16,13 @@ require_once $root . '/../../TestUtil.php';
  * All functions named test...() will run as tests in PHP-unit framework
  * @author Anneli Halld'n, Daniel Brolund for Svea Webpay
  */
-class NewOrderBuilderTest extends PHPUnit_Framework_TestCase {
+class NewOrderBuilderTest extends \PHPUnit_Framework_TestCase {
 
     /**
      * getAddressSelector for test
      */
     public function getAddressForTesting() {
-        $addressRequest = WebPay::getAddresses();
+        $addressRequest = \WebPay::getAddresses();
         $request = $addressRequest
             ->setOrderTypeInvoice()
             ->setCountryCode("SE")
@@ -33,11 +34,11 @@ class NewOrderBuilderTest extends PHPUnit_Framework_TestCase {
     
     public function testNewInvoiceOrderCompanyAddresselector() {
         $addresselector = $this->getAddressForTesting();
-        $request = WebPay::createOrder();
+        $request = \WebPay::createOrder();
         $request = $request
             ->addOrderRow(TestUtil::createOrderRow());
             $request = $request
-                ->addCustomerDetails(Item::companyCustomer()->setNationalIdNumber(4608142222)->setAddressSelector($addresselector))
+                ->addCustomerDetails(\WebPayItem::companyCustomer()->setNationalIdNumber(4608142222)->setAddressSelector($addresselector))
                 ->setCountryCode("SE")
                 ->setCustomerReference("33")
                 ->setOrderDate("2012-12-12")
@@ -48,11 +49,11 @@ class NewOrderBuilderTest extends PHPUnit_Framework_TestCase {
     }
     
     public function testNewInvoiceOrderWithOrderRow() {
-        $request = WebPay::createOrder();
+        $request = \WebPay::createOrder();
         $request = $request
             ->addOrderRow(TestUtil::createOrderRow());
             $request = $request
-                ->addCustomerDetails(Item::individualCustomer()->setNationalIdNumber(194605092222))
+                ->addCustomerDetails(\WebPayItem::individualCustomer()->setNationalIdNumber(194605092222))
                 ->setCountryCode("SE")
                 ->setCustomerReference("33")
                 ->setOrderDate("2012-12-12")
@@ -72,7 +73,7 @@ class NewOrderBuilderTest extends PHPUnit_Framework_TestCase {
     
     public function testNewInvoiceOrderWithArray() {
         $orderRows[] = TestUtil::createOrderRow();
-        $orderRows[] = Item::orderrow()
+        $orderRows[] = \WebPayItem::orderrow()
                     ->setArticleNumber(2)
                     ->setQuantity(2)
                     ->setAmountExVat(110.00)
@@ -82,9 +83,9 @@ class NewOrderBuilderTest extends PHPUnit_Framework_TestCase {
                     ->setVatPercent(25)
                     ->setDiscountPercent(0);
         
-        $request = WebPay::createOrder()
+        $request = \WebPay::createOrder()
             ->addOrderRow($orderRows)
-            ->addCustomerDetails(Item::individualCustomer()->setNationalIdNumber(194605092222))
+            ->addCustomerDetails(\WebPayItem::individualCustomer()->setNationalIdNumber(194605092222))
             ->setCountryCode("SE")
             ->setCustomerReference("33")
             ->setOrderDate("2012-12-12")
@@ -96,10 +97,10 @@ class NewOrderBuilderTest extends PHPUnit_Framework_TestCase {
     }
     
     public function testOrderWithShippingFee() {
-        $request = WebPay::createOrder();
+        $request = \WebPay::createOrder();
         $request = $request
             ->addOrderRow(TestUtil::createOrderRow())
-                ->addFee(Item::shippingFee()
+                ->addFee(\WebPayItem::shippingFee()
                         ->setShippingId(1)
                         ->setName('shipping')
                         ->setDescription("Specification")
@@ -109,7 +110,7 @@ class NewOrderBuilderTest extends PHPUnit_Framework_TestCase {
                         ->setDiscountPercent(0)
                         );
             $request = $request
-            ->addCustomerDetails(Item::individualCustomer()->setNationalIdNumber(194605092222))
+            ->addCustomerDetails(\WebPayItem::individualCustomer()->setNationalIdNumber(194605092222))
             ->setCountryCode("SE")
             ->setCustomerReference("33")
             ->setOrderDate("2012-12-12")
@@ -127,10 +128,10 @@ class NewOrderBuilderTest extends PHPUnit_Framework_TestCase {
     }
     
     public function testOrderWithInvoiceFee() {
-        $request = WebPay::createOrder();
+        $request = \WebPay::createOrder();
         $request = $request
             ->addOrderRow(TestUtil::createOrderRow())
-                ->addFee(Item::invoiceFee()
+                ->addFee(\WebPayItem::invoiceFee()
                     ->setName('Svea fee')
                     ->setDescription("Fee for invoice")
                     ->setAmountExVat(50)
@@ -139,7 +140,7 @@ class NewOrderBuilderTest extends PHPUnit_Framework_TestCase {
                     ->setDiscountPercent(0)
                         );
             $request = $request
-            ->addCustomerDetails(Item::individualCustomer()->setNationalIdNumber(194605092222))
+            ->addCustomerDetails(\WebPayItem::individualCustomer()->setNationalIdNumber(194605092222))
             ->setCountryCode("SE")
             ->setCustomerReference("33")
             ->setOrderDate("2012-12-12")
@@ -157,10 +158,10 @@ class NewOrderBuilderTest extends PHPUnit_Framework_TestCase {
     }
     
     public function testOrderWithFixedDiscount() {
-        $request = WebPay::createOrder();
+        $request = \WebPay::createOrder();
         $request = $request
             ->addOrderRow(TestUtil::createOrderRow())
-                ->addDiscount(Item::fixedDiscount()
+                ->addDiscount(\WebPayItem::fixedDiscount()
                    ->setDiscountId("1")
                     ->setAmountIncVat(100.00)
                     ->setUnit("st")
@@ -168,7 +169,7 @@ class NewOrderBuilderTest extends PHPUnit_Framework_TestCase {
                     ->setName("Fixed")
                         );
             $request = $request
-            ->addCustomerDetails(Item::individualCustomer()->setNationalIdNumber(194605092222))
+            ->addCustomerDetails(\WebPayItem::individualCustomer()->setNationalIdNumber(194605092222))
             ->setCountryCode("SE")
             ->setCustomerReference("33")
             ->setOrderDate("2012-12-12")
@@ -186,11 +187,11 @@ class NewOrderBuilderTest extends PHPUnit_Framework_TestCase {
     }
     
     public function testOrderWithRelativeDiscount() {
-        $request = WebPay::createOrder();
+        $request = \WebPay::createOrder();
         $request = $request
             ->addOrderRow(TestUtil::createOrderRow())
                 ->addDiscount(
-                Item::relativeDiscount()
+                \WebPayItem::relativeDiscount()
                         ->setDiscountId("1")
                         ->setDiscountPercent(50)
                         ->setUnit("st")
@@ -198,7 +199,7 @@ class NewOrderBuilderTest extends PHPUnit_Framework_TestCase {
                         ->setDescription("RelativeDiscount")
                         );
             $request = $request
-            ->addCustomerDetails(Item::individualCustomer()->setNationalIdNumber(194605092222))
+            ->addCustomerDetails(\WebPayItem::individualCustomer()->setNationalIdNumber(194605092222))
             ->setCountryCode("SE")
             ->setCustomerReference("33")
             ->setOrderDate("2012-12-12")
@@ -216,10 +217,10 @@ class NewOrderBuilderTest extends PHPUnit_Framework_TestCase {
     }
     
     public function testBuildOrderWithIndividualCustomer() {
-        $request = WebPay::createOrder();
+        $request = \WebPay::createOrder();
             $request = $request
             ->addOrderRow(TestUtil::createOrderRow())
-                ->addCustomerDetails(Item::individualCustomer()
+                ->addCustomerDetails(\WebPayItem::individualCustomer()
                     ->setNationalIdNumber(194605092222)
                     ->setInitials("SB")
                     ->setBirthDate(1923, 12, 12)
@@ -250,10 +251,10 @@ class NewOrderBuilderTest extends PHPUnit_Framework_TestCase {
     }
 
     public function testBuildOrderWithCompanyCustomer() {
-        $request = WebPay::createOrder();
+        $request = \WebPay::createOrder();
             $request = $request
             ->addOrderRow(TestUtil::createOrderRow())
-                ->addCustomerDetails(Item::companyCustomer()
+                ->addCustomerDetails(\WebPayItem::companyCustomer()
                     ->setNationalIdNumber(666666)
                     ->setEmail("test@svea.com")
                     ->setPhoneNumber(999999)
@@ -276,10 +277,10 @@ class NewOrderBuilderTest extends PHPUnit_Framework_TestCase {
     }
     
     public function testBuildOrderWithCompanyCustomerDE() {
-        $request = WebPay::createOrder();
+        $request = \WebPay::createOrder();
         $request = $request
             ->addOrderRow(TestUtil::createOrderRow())
-                ->addCustomerDetails(Item::companyCustomer()
+                ->addCustomerDetails(\WebPayItem::companyCustomer()
                     ->setVatNumber("SE666666")
                     ->setCompanyName("MyCompany")
                     ->setEmail("test@svea.com")
@@ -307,11 +308,11 @@ class NewOrderBuilderTest extends PHPUnit_Framework_TestCase {
         function testOrderRowsUsingMap() {
             $orderRows[] = array_map(magentoRowToOrderRow, $magentoRows);
 
-            WebPay::createOrder()->addOrderRow(array_map(magentoRowToOrderRow, $magentoRows));
+            \WebPay::createOrder()->addOrderRow(array_map(magentoRowToOrderRow, $magentoRows));
         }
 
         function magentoRowToOrderRow($magentoRow) {
-             return WebPay::orderrow()
+             return \WebPay::orderrow()
                         ->setArticleNumber($magentoRow->productId)
                         ->setQuantity(..)
                         ->setAmountExVat(...)

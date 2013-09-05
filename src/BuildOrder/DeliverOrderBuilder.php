@@ -1,4 +1,5 @@
 <?php
+namespace Svea;
 
 require_once SVEA_REQUEST_DIR . '/Includes.php';
 
@@ -87,14 +88,14 @@ class deliverOrderBuilder {
     public function addFee($itemFeeObject) {
         if (is_array($itemFeeObject)) {
             foreach ($itemFeeObject as $row) {
-                if (get_class($row) == "ShippingFee") {
+                if (get_class($row) == "Svea\ShippingFee") {
                     array_push($this->shippingFeeRows, $row);
                 } else {
                     array_push($this->invoiceFeeRows, $row);
                 }
             }
         } else {
-            if (get_class($itemFeeObject) == "ShippingFee") {
+            if (get_class($itemFeeObject) == "Svea\ShippingFee") {
                 array_push($this->shippingFeeRows, $itemFeeObject);
             } else {
                 array_push($this->invoiceFeeRows, $itemFeeObject);
@@ -112,14 +113,14 @@ class deliverOrderBuilder {
     public function addDiscount($itemDiscounObject) {
         if (is_array($itemDiscounObject)) {
             foreach ($itemDiscounObject as $row) {
-                if (get_class($row) == "FixedDiscount") {
+                if (get_class($row) == "Svea\FixedDiscount") {
                     array_push($this->fixedDiscountRows, $row);
                 } else {
                     array_push($this->relativeDiscountRows, $row);
                 }
             }
         } else {
-            if (get_class($itemDiscounObject) == "FixedDiscount") {
+            if (get_class($itemDiscounObject) == "Svea\FixedDiscount") {
                 array_push($this->fixedDiscountRows, $itemDiscounObject);
             } else {
                 array_push($this->relativeDiscountRows, $itemDiscounObject);

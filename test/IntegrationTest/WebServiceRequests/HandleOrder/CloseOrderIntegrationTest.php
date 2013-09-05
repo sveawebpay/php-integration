@@ -1,4 +1,5 @@
 <?php
+namespace Svea;
 
 $root = realpath(dirname(__FILE__));
 require_once $root . '/../../../../src/Includes.php';
@@ -9,16 +10,16 @@ require_once $root . '/../../../TestUtil.php';
 /**
  * @author Jonas Lith
  */
-class CloseOrderIntegrationTest extends PHPUnit_Framework_TestCase {
+class CloseOrderIntegrationTest extends \PHPUnit_Framework_TestCase {
     
     /**
      * Function to use in testfunctions
      * @return SveaOrderId
      */
     private function getInvoiceOrderId() {
-        $request = WebPay::createOrder()
+        $request = \WebPay::createOrder()
                 ->addOrderRow(TestUtil::createOrderRow())
-                ->addCustomerDetails(Item::individualCustomer()->setNationalIdNumber(194605092222))
+                ->addCustomerDetails(\WebPayItem::individualCustomer()->setNationalIdNumber(194605092222))
                 ->setCountryCode("SE")
                 ->setCustomerReference("33")
                 ->setOrderDate("2012-12-12")
@@ -32,7 +33,7 @@ class CloseOrderIntegrationTest extends PHPUnit_Framework_TestCase {
     
     public function testCloseInvoiceOrder() {
         $orderId = $this->getInvoiceOrderId();
-        $orderBuilder = WebPay::closeOrder();
+        $orderBuilder = \WebPay::closeOrder();
         $request = $orderBuilder
                 ->setOrderId($orderId)
                 ->setCountryCode("SE")

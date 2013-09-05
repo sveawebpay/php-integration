@@ -1,4 +1,5 @@
 <?php
+namespace Svea;
 
 require_once SVEA_REQUEST_DIR . '/WebServiceRequests/svea_soap/SveaSoapConfig.php';
 require_once SVEA_REQUEST_DIR . '/Config/SveaConfig.php';
@@ -40,6 +41,7 @@ class WebServicePayment {
     /**
      * Rebuild $order with svea_soap package to be in right format for SveaWebPay Europe Web service API
      * @return prepared SveaRequest
+     * @throws ValidationException
      */
     public function prepareRequest() {
         $errors = $this->validateOrder();
@@ -79,8 +81,10 @@ class WebServicePayment {
     /**
      * Transforms object to array and sends it to SveaWebPay Europe Web service API by php SoapClient
      * @return CreateOrderEuResponse
+     * @throws ValidationException
      */
     public function doRequest() {
+
         $object = $this->prepareRequest();
         $url = $this->order->conf->getEndPoint($this->orderType);
         $request = new SveaDoRequest($url);
@@ -179,7 +183,7 @@ class WebServicePayment {
      */
     public function formatCustomerDetails() {
         $isCompany = false;
-        get_class($this->order->customerIdentity) == "CompanyCustomer" ? $isCompany = TRUE : $isCompany = FALSE;
+        get_class($this->order->customerIdentity) == "Svea\CompanyCustomer" ? $isCompany = TRUE : $isCompany = FALSE;
 
         $companyId ="";
         if (isset($this->order->customerIdentity->orgNumber)||isset($this->order->customerIdentity->companyVatNumber)) {

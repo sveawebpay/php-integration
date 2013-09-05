@@ -1,4 +1,5 @@
 <?php
+namespace Svea;
 
 $root = realpath(dirname(__FILE__));
 require_once $root . '/../../../../test/UnitTest/BuildOrder/OrderBuilderTest.php';
@@ -10,7 +11,7 @@ require_once $root . '/../../../TestUtil.php';
 /**
  * @author Anneli Halld'n, Daniel Brolund for Svea Webpay
  */
-class DirectPaymentTest extends PHPUnit_Framework_TestCase {
+class DirectPaymentTest extends \PHPUnit_Framework_TestCase {
         
      /**
      * @expectedException Exception
@@ -18,10 +19,10 @@ class DirectPaymentTest extends PHPUnit_Framework_TestCase {
      */
     public function testFailOnWrongCountryCodeInConfig() {
         $rowFactory = new TestRowFactory();
-        $form = WebPay::createOrder()
+        $form = \WebPay::createOrder()
                 ->addOrderRow(TestUtil::createOrderRow())
             ->run($rowFactory->buildShippingFee())
-            ->addCustomerDetails(Item::individualCustomer()
+            ->addCustomerDetails(\WebPayItem::individualCustomer()
                     ->setNationalIdNumber(194605092222)
                     )
             ->setCountryCode("ZZ")
@@ -32,7 +33,7 @@ class DirectPaymentTest extends PHPUnit_Framework_TestCase {
                 ->setReturnUrl("http://myurl.se")
                 ->getPaymentForm();
         /**
-        $xmlMessage = new SimpleXMLElement($form->xmlMessage);
+        $xmlMessage = new \SimpleXMLElement($form->xmlMessage);
        
         $this->assertEquals('KORTCERT', $xmlMessage->excludepaymentmethods->exclude[0]);      
         $this->assertEquals('KORTSKRILL', $xmlMessage->excludepaymentmethods->exclude[1]);
@@ -44,10 +45,10 @@ class DirectPaymentTest extends PHPUnit_Framework_TestCase {
     
     public function testConfigureExcludedPaymentMethods() {
         $rowFactory = new TestRowFactory();
-        $form = WebPay::createOrder()
+        $form = \WebPay::createOrder()
                 ->addOrderRow(TestUtil::createOrderRow())
             ->run($rowFactory->buildShippingFee())
-            ->addCustomerDetails(Item::individualCustomer()
+            ->addCustomerDetails(\WebPayItem::individualCustomer()
                     ->setNationalIdNumber(194605092222)
             )
             ->setCountryCode("SE")
@@ -58,7 +59,7 @@ class DirectPaymentTest extends PHPUnit_Framework_TestCase {
                 ->setReturnUrl("http://myurl.se")
                 ->getPaymentForm();
         
-        $xmlMessage = new SimpleXMLElement($form->xmlMessage);
+        $xmlMessage = new \SimpleXMLElement($form->xmlMessage);
         
         $this->assertEquals('KORTCERT', $xmlMessage->excludepaymentmethods->exclude[0]);      
         $this->assertEquals('SKRILL', $xmlMessage->excludepaymentmethods->exclude[1]);
@@ -68,9 +69,9 @@ class DirectPaymentTest extends PHPUnit_Framework_TestCase {
     
     public function testBuildDirectBankPayment() {
         $rowFactory = new TestRowFactory();
-        $form = WebPay::createOrder()
+        $form = \WebPay::createOrder()
                 ->addOrderRow(TestUtil::createOrderRow())
-                ->addFee(Item::shippingFee()
+                ->addFee(\WebPayItem::shippingFee()
                     ->setShippingId('33')
                     ->setName('shipping')
                     ->setDescription("Specification")
@@ -79,14 +80,14 @@ class DirectPaymentTest extends PHPUnit_Framework_TestCase {
                     ->setVatPercent(25)
                     ->setDiscountPercent(0)
                 )
-                ->addDiscount(Item::relativeDiscount()
+                ->addDiscount(\WebPayItem::relativeDiscount()
                     ->setDiscountId("1")
                     ->setDiscountPercent(50)
                     ->setUnit("st")
                     ->setName('Relative')
                     ->setDescription("RelativeDiscount")
                 )
-                ->addCustomerDetails(Item::individualCustomer()->setNationalIdNumber(194605092222))
+                ->addCustomerDetails(\WebPayItem::individualCustomer()->setNationalIdNumber(194605092222))
                 ->setCountryCode("SE")
                 ->setClientOrderNumber("33")
                 ->setOrderDate("2012-12-12")
@@ -95,7 +96,7 @@ class DirectPaymentTest extends PHPUnit_Framework_TestCase {
                 ->setReturnUrl("http://myurl.se")
                 ->getPaymentForm();
 
-        $xmlMessage = new SimpleXMLElement($form->xmlMessage);
+        $xmlMessage = new \SimpleXMLElement($form->xmlMessage);
         //test values are as expected avter transforming xml to php object
         $this->assertEquals('SEK', $xmlMessage->currency);
         $this->assertEquals('18750', $xmlMessage->amount);

@@ -1,4 +1,5 @@
 <?php
+namespace Svea;
 
 $root = realpath(dirname(__FILE__));
 require_once $root . '/../../../../src/Includes.php';
@@ -6,10 +7,10 @@ require_once $root . '/../../../../src/Includes.php';
 /**
  * @author Jonas Lith
  */
-class GetPaymentPlanParamsIntegrationTest extends PHPUnit_Framework_TestCase {
+class GetPaymentPlanParamsIntegrationTest extends \PHPUnit_Framework_TestCase {
 
     public function testPaymentPlanParamsResult() {
-        $addressRequest = WebPay::getPaymentPlanParams();
+        $addressRequest = \WebPay::getPaymentPlanParams();
         $request = $addressRequest
                 ->setCountryCode("SE")
                 ->doRequest();
@@ -18,7 +19,7 @@ class GetPaymentPlanParamsIntegrationTest extends PHPUnit_Framework_TestCase {
     }
     
     public function testResultGetPaymentPlanParams() {
-        $addressRequest = WebPay::getPaymentPlanParams();
+        $addressRequest = \WebPay::getPaymentPlanParams();
         $request = $addressRequest
                 ->setCountryCode("SE")
                 ->doRequest();

@@ -1,4 +1,5 @@
 <?php
+namespace Svea;
 
 $root = realpath(dirname(__FILE__));
 require_once $root . '/../../../src/Includes.php';
@@ -6,15 +7,15 @@ require_once $root . '/../../../src/Includes.php';
 $root = realpath(dirname(__FILE__));
 require_once $root . '/../../TestUtil.php';
 
-class SveaConfigTest extends PHPUnit_Framework_TestCase {
+class SveaConfigTest extends \PHPUnit_Framework_TestCase {
 
     function testSveaConfigNotFound(){
         $config = SveaConfig::getTestConfig();
-        $foo = WebPay::createOrder($config);
+        $foo = \WebPay::createOrder($config);
 
         $this->assertEquals("sverigetest", $config->conf['credentials']['SE']['auth']['INVOICE']['username']);
     }
-
+    
     public function t_estInstancesOfSveaConfig() {
 
         $obj1 = SveaConfig::getConfig();
@@ -36,9 +37,9 @@ class SveaConfigTest extends PHPUnit_Framework_TestCase {
                 ->setClientNumberPaymentPlan()
                 ->setAlternativeUrl(); //overwrite all urls
 
-        $request = WebPay::createOrder($conf)
+        $request = \WebPay::createOrder($conf)
             ->addOrderRow(TestUtil::createOrderRow())
-            ->addCustomerDetails(Item::individualCustomer()->setNationalIdNumber(194605092222))
+            ->addCustomerDetails(\WebPayItem::individualCustomer()->setNationalIdNumber(194605092222))
                     ->setCountryCode("SE")
                     ->setCustomerReference("33")
                     ->setOrderDate("2012-12-12")
@@ -49,9 +50,9 @@ class SveaConfigTest extends PHPUnit_Framework_TestCase {
     }
 
     public function testOrderWithSEConfigFromFunction() {
-           $request = WebPay::createOrder(SveaConfig::getTestConfig())
+           $request = \WebPay::createOrder(SveaConfig::getTestConfig())
             ->addOrderRow(TestUtil::createOrderRow())
-            ->addCustomerDetails(Item::individualCustomer()->setNationalIdNumber(194605092222))
+            ->addCustomerDetails(\WebPayItem::individualCustomer()->setNationalIdNumber(194605092222))
                     ->setCountryCode("SE")
                     ->setCustomerReference("33")
                     ->setOrderDate("2012-12-12")

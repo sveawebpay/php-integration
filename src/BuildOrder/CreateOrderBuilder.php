@@ -1,4 +1,5 @@
 <?php
+namespace Svea;
 
 require_once SVEA_REQUEST_DIR . '/Includes.php';
 
@@ -43,7 +44,9 @@ class CreateOrderBuilder {
      * @var Unique order number from client side
      */
     public $clientOrderNumber;
-    /*
+
+    /**
+     * Country code as described by Iso 3166-1 (alpha-2), see http://www.iso.org/iso/country_code for a list.
      * Ex: "SE", "NO", "DK", "FI","DE", "NL"
      * @var type String.
      */
@@ -121,14 +124,14 @@ class CreateOrderBuilder {
     public function addFee($itemFeeObject) {
          if (is_array($itemFeeObject)) {
             foreach ($itemFeeObject as $row) {
-                if (get_class($row) == "ShippingFee") {
+                if (get_class($row) == "Svea\ShippingFee") {
                      array_push($this->shippingFeeRows, $row);
                 } else {
                      array_push($this->invoiceFeeRows, $row);
                 }
             }
         } else {
-             if (get_class($itemFeeObject) == "ShippingFee") {
+             if (get_class($itemFeeObject) == "Svea\ShippingFee") {
                      array_push($this->shippingFeeRows, $itemFeeObject);
             } else {
                  array_push($this->invoiceFeeRows, $itemFeeObject);
@@ -146,7 +149,7 @@ class CreateOrderBuilder {
     public function addDiscount($itemDiscounObject) {
         if (is_array($itemDiscounObject)) {
             foreach ($itemDiscounObject as $row) {
-                if (get_class($row) == "FixedDiscount") {
+                if (get_class($row) == "Svea\FixedDiscount") {
                     array_push($this->fixedDiscountRows, $row);
                 } else {
                     array_push($this->relativeDiscountRows, $row);
@@ -154,7 +157,7 @@ class CreateOrderBuilder {
 
             }
         } else {
-            if (get_class($itemDiscounObject) == "FixedDiscount") {
+            if (get_class($itemDiscounObject) == "Svea\FixedDiscount") {
                 array_push($this->fixedDiscountRows, $itemDiscounObject);
             } else {
                 array_push($this->relativeDiscountRows, $itemDiscounObject);

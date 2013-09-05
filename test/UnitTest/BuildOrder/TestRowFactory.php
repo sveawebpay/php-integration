@@ -1,4 +1,5 @@
 <?php
+namespace Svea;
 
 class TestRowFactory {
 
@@ -11,7 +12,7 @@ class TestRowFactory {
         return function($orderbuilder) {
             return $orderbuilder
               ->addFee(
-                Item::shippingFee()
+                \WebPayItem::shippingFee()
                      ->setShippingId('33')
                     ->setName('shipping')
                     ->setDescription("Specification")
@@ -32,7 +33,7 @@ class TestRowFactory {
         return function($orderbuilder) {
             return $orderbuilder
                 ->addFee(
-                Item::invoiceFee()
+                \WebPayItem::invoiceFee()
                     ->setName('Svea fee')
                     ->setDescription("Fee for invoice")
                     ->setAmountExVat(50)

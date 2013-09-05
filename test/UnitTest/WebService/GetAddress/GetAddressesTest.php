@@ -1,4 +1,5 @@
 <?php
+namespace Svea;
 
 $root = realpath(dirname(__FILE__));
 
@@ -8,10 +9,10 @@ require_once $root . '/../../../../src/WebServiceRequests/svea_soap/SveaSoapConf
 /**
  * @author Anneli Halld'n, Daniel Brolund for Svea Webpay
  */
-class GetAddressesTest extends PHPUnit_Framework_TestCase {
+class GetAddressesTest extends \PHPUnit_Framework_TestCase {
 
     public function testBuildRequest() {
-        $addressRequest = WebPay::getAddresses();
+        $addressRequest = \WebPay::getAddresses();
         $addressRequest
                 ->setCountryCode("SE")
                 ->setCompany("SE460509");
@@ -20,7 +21,7 @@ class GetAddressesTest extends PHPUnit_Framework_TestCase {
     }
 
     public function testPrepareRequestPrivate() {
-        $addressRequest = WebPay::getAddresses();
+        $addressRequest = \WebPay::getAddresses();
         $request = $addressRequest
                 ->setOrderTypeInvoice()
                 //->setPasswordBasedAuthorization("sverigetest", "sverigetest", 79021)
@@ -37,7 +38,7 @@ class GetAddressesTest extends PHPUnit_Framework_TestCase {
     }
     
     public function testPrepareRequestCompany() {
-        $addressRequest = WebPay::getAddresses();
+        $addressRequest = \WebPay::getAddresses();
         $request = $addressRequest
                 ->setOrderTypeInvoice()
                // ->setPasswordBasedAuthorization("sverigetest", "sverigetest", 79021)

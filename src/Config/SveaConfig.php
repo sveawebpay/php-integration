@@ -1,4 +1,5 @@
 <?php
+namespace Svea;
 /**
  * Class contains Merchant identification values for Requests to external Services
  * Options:

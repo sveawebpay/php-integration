@@ -1,4 +1,5 @@
 <?php
+namespace Svea;
 
 /**
  * Constants for Hosted payments

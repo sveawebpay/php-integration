@@ -1,4 +1,5 @@
 <?php
+namespace Svea;
 
 $root = realpath(dirname(__FILE__));
 require_once $root . '/../../../../src/Includes.php';
@@ -6,10 +7,10 @@ require_once $root . '/../../../../src/Includes.php';
 /**
  * @author Jonas Lith
  */
-class GetAddressesIntegrationTest extends PHPUnit_Framework_TestCase {
+class GetAddressesIntegrationTest extends \PHPUnit_Framework_TestCase {
     
     public function testGetAddressesResultForPrivate() {
-        $addressRequest = WebPay::getAddresses();
+        $addressRequest = \WebPay::getAddresses();
         $request = $addressRequest
             ->setOrderTypeInvoice()
             ->setCountryCode("SE")
@@ -19,7 +20,7 @@ class GetAddressesIntegrationTest extends PHPUnit_Framework_TestCase {
     }
      
     public function testGetAddressesResultForCompany() {
-        $addressRequest = WebPay::getAddresses();
+        $addressRequest = \WebPay::getAddresses();
         $request = $addressRequest
             ->setOrderTypeInvoice()
             ->setCountryCode("SE")
@@ -30,7 +31,7 @@ class GetAddressesIntegrationTest extends PHPUnit_Framework_TestCase {
     }
     
     public function testResultGetAddresses() {
-        $addressRequest = WebPay::getAddresses();
+        $addressRequest = \WebPay::getAddresses();
         $request = $addressRequest
                 ->setOrderTypeInvoice()
                 ->setCountryCode("SE")
@@ -42,7 +43,7 @@ class GetAddressesIntegrationTest extends PHPUnit_Framework_TestCase {
         //$this->assertEquals('5F445B19E8C87954904FB7531A51AEE57C5E9413', $request->customerIdentity[0]->addressSelector);
         $this->assertEquals('Person', $request->customerIdentity[0]->customerType);
         $this->assertEquals('08 - 111 111 11', $request->customerIdentity[0]->phoneNumber);
-        $this->assertEquals('Persson, Tess T', $request->customerIdentity[0]->legalName);
+        $this->assertEquals('Persson, Tess T', $request->customerIdentity[0]->fullName);
         $this->assertEquals('Tess T', $request->customerIdentity[0]->firstName);
         $this->assertEquals('Persson', $request->customerIdentity[0]->lastName);
         $this->assertEquals('Testgatan 1', $request->customerIdentity[0]->street);

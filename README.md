@@ -14,8 +14,8 @@
     * [Other values](https://github.com/sveawebpay/php-integration#14-other-values)
     * [Choose payment](https://github.com/sveawebpay/php-integration#15-choose-payment)
 * [2. GetPaymentPlanParams](https://github.com/sveawebpay/php-integration#2-getpaymentplanparams)
-    *  [PaymentPlanPricePerMonth](https://github.com/sveawebpay/php-integration#21-paymentPlanPricePerMonth)
-* [3. GetAddresses](https://github.com/sveawebpay/php-integration#2-getpaymentplanparams)
+    *  [PaymentPlanPricePerMonth](https://github.com/sveawebpay/php-integration#21-paymentplanpricepermonth)
+* [3. GetAddresses](https://github.com/sveawebpay/php-integration#3-getaddresses)
 * [4. DeliverOrder](https://github.com/sveawebpay/php-integration#4-deliverorder)
     * [Specify order](https://github.com/sveawebpay/php-integration#42-specify-order)
     * [Other values](https://github.com/sveawebpay/php-integration#43-other-values)
@@ -44,6 +44,22 @@ $foo = WebPay::createOrder();
 $foo = $foo->...
         ->..;
 ```
+
+## Changes in release 1.2.0
+
+### Namespace
+From release 1.2.0 on the package makes use of a namespace "Svea". We have made
+efforts to avoid impacting existing integrations, so the classes WebPay and Item
+are excluded from the namespace along with the new class WebPayItem. 
+
+Also, the provided Item class is a now a wrapper for WebPayItem. Item is marked 
+as deprecated in release 1.2.0. Please use WebPayItem instead from now on. 
+
+In the event that you make use of other classes than WebPay or WebPayItem, 
+you'll need to prefix the Svea namespace to classnames. 
+
+See [PHP.net on namespaces](http://php.net/manual/en/language.namespaces.php) for details.
+
 [<< To top](https://github.com/sveawebpay/php-integration#php-integration-package-api-for-sveawebpay)
 
 ## Configuration
@@ -100,7 +116,7 @@ There are two ways to configure Svea authorization. Choose one of the following:
             } elseif ($type == ConfigurationProvider::INVOICE_TYPE || $type == ConfigurationProvider::PAYMENTPLAN_TYPE) {
                 return SveaConfig::SWP_TEST_WS_URL;
             } else {
-               throw new Exception('Invalid type. Accepted values: INVOICE, PAYMENTPLAN or HOSTED');
+               throw new \Exception('Invalid type. Accepted values: INVOICE, PAYMENTPLAN or HOSTED');
             }
         }
         /**
@@ -176,19 +192,19 @@ Build order -> choose payment type -> doRequest/getPaymentForm
 ```php
 $response = WebPay::createOrder()
 //For all products and other items
-   ->addOrderRow(Item::orderRow()...)
+   ->addOrderRow(WebPayItem::orderRow()...)
 //If shipping fee
-   ->addFee(Item::shippingFee()...)
+   ->addFee(WebPayItem::shippingFee()...)
 //If invoice with invoice fee
-    ->addFee(Item::invoiceFee()
+    ->addFee(WebPayItem::invoiceFee()
 //If discount or coupon with fixed amount
-    ->addDiscount(Item::fixedDiscount()
+    ->addDiscount(WebPayItem::fixedDiscount()
 //If discount or coupon with percent discount
-   ->addDiscount(Item::relativeDiscount()
+   ->addDiscount(WebPayItem::relativeDiscount()
 //Individual customer values.
-    ->addCustomerDetails(Item::individualCustomer()...)
+    ->addCustomerDetails(WebPayItem::individualCustomer()...)
 //Company customer values
-    ->addCustomerDetails(Item::companyCustomer()...)
+    ->addCustomerDetails(WebPayItem::companyCustomer()...)
 //Other values
     ->setCountryCode("SE")
     ->setOrderDate("2012-12-12")
@@ -228,14 +244,14 @@ $response = WebPay::createOrder()
 [<< To top](https://github.com/sveawebpay/php-integration#php-integration-package-api-for-sveawebpay)
 
 ### 1.2 Specify order
-Continue by adding values for products and other. You can add OrderRow, Fee and Discount. Chose the right Item object as parameter.
-You can use the *add-* functions with an Item object or an array of Item objects as parameters.
+Continue by adding values for products and other. You can add OrderRow, Fee and Discount. Chose the right WebPayItem object as parameter.
+You can use the *add-* functions with an WebPayItem object or an array of WebPayItem objects as parameters.
 
 ```php
-->addOrderRow(Item::orderRow()->...)
+->addOrderRow(WebPayItem::orderRow()->...)
 
 //or
-$orderRows[] = Item::orderRow()->...;
+$orderRows[] = WebPayItem::orderRow()->...;
 ->addOrderRow($orderRows);
 
 ```
@@ -245,7 +261,7 @@ All products and other items. It´s required to have a minimum of one orderrow.
 **The price can be set in a combination by using a minimum of two out of three functions: setAmountExVat(), setAmountIncVat() and setVatPercent().**
 ```php
 ->addOrderRow(
-      Item::orderRow()
+      WebPayItem::orderRow()
         ->setQuantity(2)                        //Required
         ->setAmountExVat(100.00)                //Optional, see info above
         ->setAmountIncVat(125.00)               //Optional, see info above
@@ -262,7 +278,7 @@ All products and other items. It´s required to have a minimum of one orderrow.
 **The price can be set in a combination by using a minimum of two out of three functions: setAmountExVat(), setAmountIncVat()and setVatPercent().**
 ```php
 ->addFee(
-    Item::shippingFee()
+    WebPayItem::shippingFee()
         ->setShippingId('33')                   //Optional
         ->setName('shipping')                   //Optional
         ->setDescription("Specification")       //Optional
@@ -277,7 +293,7 @@ All products and other items. It´s required to have a minimum of one orderrow.
 **The price can be set in a combination by using a minimum of two out of three functions: setAmountExVat(), setAmountIncVat() and setVatPercent().**
 ```php
 ->addFee(
-    Item::invoiceFee()
+    WebPayItem::invoiceFee()
         ->setName('Svea fee')                   //Optional
         ->setDescription("Fee for invoice")     //Optional
         ->setAmountExVat(50)                    //Optional, see info above
@@ -291,7 +307,7 @@ All products and other items. It´s required to have a minimum of one orderrow.
 When discount or coupon is a fixed amount on total product amount.
 ```php
 ->addDiscount(
-    Item::fixedDiscount()
+    WebPayItem::fixedDiscount()
         ->setAmountIncVat(100.00)               //Required
         ->setDiscountId("1")                    //Optional
         ->setUnit("st")                         //Optional
@@ -303,7 +319,7 @@ When discount or coupon is a fixed amount on total product amount.
 When discount or coupon is a percentage on total product amount.
 ```php
 ->addDiscount(
-    Item::relativeDiscount()
+    WebPayItem::relativeDiscount()
         ->setDiscountPercent(50)                //Required
         ->setDiscountId("1")                    //Optional
         ->setUnit("st")                         //Optional
@@ -322,7 +338,7 @@ To make it easy to set the right data depending on the customer type this exampl
 ```php
 
 //create company or individual object
-$foo = Item::individualCustomer();
+$foo = WebPayItem::individualCustomer();
 if (*condition*) {
  $foo = $foo ->setEmail("test@svea.com") ;
 }
@@ -333,7 +349,7 @@ if (*condition*) {
 ####1.3.1 Options for individual customers
 ```php
 ->addCustomerDetails(
-    Item::individualCustomer()
+    WebPayItem::individualCustomer()
     ->setNationalIdNumber(194605092222) //Required for individual customers in SE, NO, DK, FI
     ->setInitials("SB")                 //Required for individual customers in NL
     ->setBirthDate(1923, 12, 20)        //Required for individual customers in NL and DE
@@ -351,7 +367,7 @@ if (*condition*) {
 ####1.3.2 Options for company customers
 ```php
 ->addCustomerDetails(
-    Item::companyCustomer()
+    WebPayItem::companyCustomer()
     ->setNationalIdNumber(2345234)       //Required in SE, NO, DK, FI
     ->setVatNumber("NL2345234")         //Required in NL and DE
     ->setCompanyName("TestCompagniet")  //Required in NL and DE
@@ -425,7 +441,7 @@ Returns *CreateOrderResponse* object.
 ```php
     $response = WebPay::createOrder()
       ->addOrderRow(
-    Item::orderRow()
+    WebPayItem::orderRow()
         ->setArticleNumber(1)
         ->setQuantity(2)
         ->setAmountExVat(100.00)
@@ -450,7 +466,7 @@ Param: Campaign code recieved from getPaymentPlanParams().
 ```php
 $response = WebPay::createOrder()
 ->addOrderRow(
-    Item::orderRow()
+    WebPayItem::orderRow()
         ->setArticleNumber(1)
         ->setQuantity(2)
         ->setAmountExVat(100.00)
@@ -492,7 +508,7 @@ to format the response.
 ```php
 $form = WebPay::createOrder()
 ->addOrderRow(
-    Item::orderRow()
+    WebPayItem::orderRow()
         ->setArticleNumber(1)
         ->setQuantity(2)
         ->setAmountExVat(100.00)
@@ -542,7 +558,7 @@ echo $form->completeHtmlFormWithSubmitButton; //Will render a hidden form with s
 ```php
 $form = WebPay::createOrder()
 ->addOrderRow(
-    Item::orderRow()
+    WebPayItem::orderRow()
         ->setArticleNumber(1)
         ->setQuantity(2)
         ->setAmountExVat(100.00)
@@ -591,7 +607,7 @@ setPaymentMethod, includePaymentMethods, excludeCardPaymentMethods or excludeDir
 ```php
 $form = WebPay::createOrder()
     ->addOrderRow(
-        Item::orderRow()
+        WebPayItem::orderRow()
             ->setArticleNumber(1)
             ->setQuantity(2)
             ->setAmountExVat(100.00)
@@ -675,7 +691,7 @@ Go direct to specified payment method without the step *PayPage*.
 ```php
 $form = WebPay::createOrder()
   ->addOrderRow(
-    Item::orderRow()
+    WebPayItem::orderRow()
         ->setArticleNumber(1)
         ->setQuantity(2)
         ->setAmountExVat(100.00)
@@ -760,18 +776,18 @@ or
 
 ### 3.2 Customer type
 ```php
-    ->setIndividual(194605092222)   //Required if this is an individual customer
+    ->setIndividual("194605092222")   //Required if this is an individual customer
 or
     ->setCompany("CompanyId")       //Required if this is a company customer
 ```
 [<< To top](https://github.com/sveawebpay/php-integration#php-integration-package-api-for-sveawebpay)
 
-### 3.3
+### 3.3 Do request
 ```php
     $response = WebPay::getAddresses()
         ->setOrderTypeInvoice()                                              //See 3.1
         ->setCountryCode("SE")                                               //Required
-        ->setIndividual(194605092222)                                        //See 3.2
+        ->setIndividual("194605092222")                                      //See 3.2
         ->doRequest();
 ```
 [<< To top](https://github.com/sveawebpay/php-integration#php-integration-package-api-for-sveawebpay)
@@ -785,14 +801,14 @@ Returns *DeliverOrderResult* object.
 [<< To top](https://github.com/sveawebpay/php-integration#php-integration-package-api-for-sveawebpay)
 
 ### 4.2 Specify order
-Continue by adding values for products and other. You can add OrderRow, Fee and Discount. Chose the right Item object as parameter.
-You can use the **add-** functions with an Item object or an array of Item objects as parameters.
+Continue by adding values for products and other. You can add OrderRow, Fee and Discount. Chose the right WebPayItem object as parameter.
+You can use the **add-** functions with an WebPayItem object or an array of WebPayItem objects as parameters.
 
 ```php
-->addOrderRow(Item::orderRow()->...)
+->addOrderRow(WebPayItem::orderRow()->...)
 
 //or
-$orderRows[] = Item::orderRow()->...;
+$orderRows[] = WebPayItem::orderRow()->...;
 ->addOrderRow($orderRows)
 ```
 
@@ -802,7 +818,7 @@ $orderRows[] = Item::orderRow()->...;
 All products and other items. It is required to have a minimum of one row.
 ```php
   ->addOrderRow(
-    Item::orderRow()
+    WebPayItem::orderRow()
        ->setQuantity(2)                     //Required
        ->setAmountExVat(100.00)             //Required
        ->setVatPercent(25)                  //Required
@@ -817,7 +833,7 @@ All products and other items. It is required to have a minimum of one row.
 #### 4.2.2 ShippingFee
 ```php
 ->addFee(
-    Item::shippingFee()
+    WebPayItem::shippingFee()
         ->setAmountExVat(50)                //Required
         ->setVatPercent(25)                 //Required
         ->setShippingId('33')               //Optional
@@ -830,7 +846,7 @@ All products and other items. It is required to have a minimum of one row.
 #### 4.2.3 InvoiceFee
 ```php
 ->addFee(
-    Item::invoiceFee()
+    WebPayItem::invoiceFee()
         ->setAmountExVat(50)                //Required
         ->setVatPercent(25)                 //Required
         ->setName('Svea fee')               //Optional
@@ -855,7 +871,7 @@ If invoice order is credit invoice use setCreditInvoice($invoiceId) and setNumbe
 ```php
     $response = WebPay::deliverOrder()
     ->addOrderRow(
-        Item::orderRow()
+        WebPayItem::orderRow()
             ->setArticleNumber(1)
             ->setQuantity(2)
             ->setAmountExVat(100.00)
@@ -880,7 +896,7 @@ you will recieve an *InvoiceId* in the Response. To credit the invoice you follo
 ```php
     $response = WebPay::deliverOrder()
     ->addOrderRow(
-        Item::orderRow()
+        WebPayItem::orderRow()
             ->setArticleNumber(1)
             ->setQuantity(2)
             ->setAmountExVat(100.00)

@@ -1,4 +1,5 @@
 <?php
+namespace Svea;
 
 $root = realpath(dirname(__FILE__));
 require_once $root . '/../../../src/Includes.php';
@@ -15,16 +16,17 @@ require_once $root . '/../../TestUtil.php';
  * All functions named test...() will run as tests in PHP-unit framework
  * @author Anneli Halld'n, Daniel Brolund for Svea Webpay
  */
-class OrderBuilderTest extends PHPUnit_Framework_TestCase {
+class OrderBuilderTest extends \PHPUnit_Framework_TestCase {
 
     //Set up orderobject
+
     protected function setUp() {
-        $this->orderBuilder = WebPay::createOrder();
+        $this->orderBuilder = \WebPay::createOrder();
         $this->orderBuilder->validator = new VoidValidator();
     }
 
     public function testBuildOrderWithOrderRow() {
-        $sveaRequest = WebPay::createOrder(SveaConfig::getProdConfig())
+        $sveaRequest = \WebPay::createOrder(SveaConfig::getProdConfig())
                 ->addOrderRow(TestUtil::createOrderRow());
 
         $this->assertEquals(1, $sveaRequest->orderRows[0]->articleNumber);
@@ -42,7 +44,7 @@ class OrderBuilderTest extends PHPUnit_Framework_TestCase {
     public function testBuildOrderWithShippingFee() {
         $rowFactory = new TestRowFactory();
         $sveaRequest =
-                WebPay::createOrder()
+                \WebPay::createOrder()
                 ->run($rowFactory->buildShippingFee());
 
         $this->assertEquals("Specification", $sveaRequest->shippingFeeRows[0]->description);
@@ -52,7 +54,7 @@ class OrderBuilderTest extends PHPUnit_Framework_TestCase {
 
     public function testBuildOrderWithInvoicefee() {
         $rowFactory = new TestRowFactory();
-        $sveaRequest = WebPay::createOrder()
+        $sveaRequest = \WebPay::createOrder()
                 ->addOrderRow(TestUtil::createOrderRow())
                 ->run($rowFactory->buildInvoiceFee());
 
@@ -65,8 +67,8 @@ class OrderBuilderTest extends PHPUnit_Framework_TestCase {
     }
 
     public function testBuildOrderWithFixedDiscount() {
-        $sveaRequest = WebPay::createOrder()
-                ->addDiscount(Item::fixedDiscount()
+        $sveaRequest = \WebPay::createOrder()
+                ->addDiscount(\WebPayItem::fixedDiscount()
                     ->setDiscountId("1")
                     ->setAmountIncVat(100.00)
                     ->setUnit("st")
@@ -83,8 +85,8 @@ class OrderBuilderTest extends PHPUnit_Framework_TestCase {
 
     public function testBuildOrderWithRelativeDiscount() {
         $sveaRequest =
-                WebPay::createOrder()
-                ->addDiscount(Item::relativeDiscount()
+                \WebPay::createOrder()
+                ->addDiscount(\WebPayItem::relativeDiscount()
                     ->setDiscountId("1")
                     ->setDiscountPercent(50)
                     ->setUnit("st")
@@ -100,8 +102,8 @@ class OrderBuilderTest extends PHPUnit_Framework_TestCase {
     }
 
     public function testBuildOrderWithCustomer() {
-        $sveaRequest = WebPay::createOrder()
-                ->addCustomerDetails(Item::individualCustomer()
+        $sveaRequest = \WebPay::createOrder()
+                ->addCustomerDetails(\WebPayItem::individualCustomer()
                         ->setNationalIdNumber(194605092222)
                         ->setInitials("SB")
                         ->setBirthDate(1923, 12, 12)
@@ -132,10 +134,9 @@ class OrderBuilderTest extends PHPUnit_Framework_TestCase {
 
     public function testBuildOrderWithAllCustomerTypes() {
         $company = TRUE;
-        $sveaRequest = WebPay::createOrder();
-
+        $sveaRequest = \WebPay::createOrder();
         if ($company == TRUE) {
-               $item = Item::companyCustomer();
+               $item = \WebPayItem::companyCustomer();
                $item = $item->setNationalIdNumber(194605092222)
                     ->setEmail("test@svea.com")
                     ->setCompanyName("TestCompagniet")
@@ -164,8 +165,8 @@ class OrderBuilderTest extends PHPUnit_Framework_TestCase {
     }
 
     public function testBuildOrderWithCompanyDetails() {
-        $sveaRequest = WebPay::createOrder()
-                    ->addCustomerDetails(Item::companyCustomer()
+        $sveaRequest = \WebPay::createOrder()
+                    ->addCustomerDetails(\WebPayItem::companyCustomer()
                         ->setNationalIdNumber("2345234")
                         ->setCompanyName("TestCompagniet")
                     );
@@ -175,35 +176,35 @@ class OrderBuilderTest extends PHPUnit_Framework_TestCase {
     }
 
     public function testBuildOrderWithOrderDate() {
-        $sveaRequest = WebPay::createOrder()
+        $sveaRequest = \WebPay::createOrder()
                 ->setOrderDate("2012-12-12");
 
         $this->assertEquals("2012-12-12", $sveaRequest->orderDate);
     }
 
     public function testBuildOrderWithCountryCode() {
-        $sveaRequest = WebPay::createOrder()
+        $sveaRequest = \WebPay::createOrder()
                 ->setCountryCode("SE");
 
         $this->assertEquals("SE", $sveaRequest->countryCode);
     }
 
     public function testBuildOrderWithCurrency() {
-        $sveaRequest = WebPay::createOrder()
+        $sveaRequest = \WebPay::createOrder()
                 ->setCurrency("SEK");
 
         $this->assertEquals("SEK", $sveaRequest->currency);
     }
 
     public function testBuildOrderWithCustomerRefNumber() {
-        $sveaRequest = WebPay::createOrder()
+        $sveaRequest = \WebPay::createOrder()
                 ->setCustomerReference("33");
 
         $this->assertEquals("33", $sveaRequest->customerReference);
     }
 
     public function testBuildOrderWithClientOrderNumber() {
-        $sveaRequest = WebPay::createOrder()
+        $sveaRequest = \WebPay::createOrder()
                 ->setClientOrderNumber("33");
 
         $this->assertEquals("33", $sveaRequest->clientOrderNumber);

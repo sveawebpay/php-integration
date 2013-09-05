@@ -1,4 +1,5 @@
 <?php
+namespace Svea;
 
 /**
  *  Create a class (eg. one for testing values, one for production) that implements the ConfigurationProvider Interface. Let the implemented functions return the authorization values asked for.

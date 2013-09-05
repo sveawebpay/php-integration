@@ -1,4 +1,5 @@
 <?php
+namespace Svea;
 
 $root = realpath(dirname(__FILE__));
 require_once $root . '/../../../../test/UnitTest/BuildOrder/OrderBuilderTest.php';
@@ -13,11 +14,11 @@ require_once $root . '/TestConf.php';
 /**
  * @author Anneli Halld'n, Daniel Brolund for Svea Webpay
  */
-class CardPaymentTest extends PHPUnit_Framework_TestCase {
+class CardPaymentTest extends \PHPUnit_Framework_TestCase {
 
     public function testSetAuthorization() {
-        $form = WebPay::createOrder(new TestConf())
-                ->addCustomerDetails(Item::individualCustomer()->setNationalIdNumber(194605092222)->setIpAddress("123.123.123"))
+        $form = \WebPay::createOrder(new TestConf())
+                ->addCustomerDetails(\WebPayItem::individualCustomer()->setNationalIdNumber(194605092222)->setIpAddress("123.123.123"))
                 ->addOrderRow(TestUtil::createOrderRow())
                 ->setCountryCode("SE")
                 ->setClientOrderNumber("33")
@@ -34,17 +35,17 @@ class CardPaymentTest extends PHPUnit_Framework_TestCase {
 
     public function testBuildCardPayment() {
         $rowFactory = new TestRowFactory();
-        $form = WebPay::createOrder()
+        $form = \WebPay::createOrder()
                 ->addOrderRow(TestUtil::createOrderRow())
                 ->run($rowFactory->buildShippingFee())
-                ->addDiscount(Item::relativeDiscount()
+                ->addDiscount(\WebPayItem::relativeDiscount()
                     ->setDiscountId("1")
                     ->setDiscountPercent(50)
                     ->setUnit("st")
                     ->setName('Relative')
                     ->setDescription("RelativeDiscount")
                 )
-                ->addCustomerDetails(Item::companyCustomer()
+                ->addCustomerDetails(\WebPayItem::companyCustomer()
                     ->setNationalIdNumber("2345234")
                 )
                 ->setCountryCode("SE")
@@ -55,9 +56,9 @@ class CardPaymentTest extends PHPUnit_Framework_TestCase {
                 ->setReturnUrl("http://myurl.se")
                 ->getPaymentForm();
 
-        $xmlMessage = new SimpleXMLElement($form->xmlMessage);
+        $xmlMessage = new \SimpleXMLElement($form->xmlMessage);
         $payment = base64_decode($form->xmlMessageBase64);
-        $payment_decoded = new SimpleXMLElement($payment);
+        $payment_decoded = new \SimpleXMLElement($payment);
 
         //test values are as expected avter transforming xml to php object
         $this->assertEquals('SEK', $xmlMessage->currency);
@@ -69,22 +70,22 @@ class CardPaymentTest extends PHPUnit_Framework_TestCase {
     }
     
     public function testBuildCardPaymentWithDiffrentProductVatAndDiscount() {
-        $form = WebPay::createOrder()
-                ->addOrderRow(Item::orderRow()
+        $form = \WebPay::createOrder()
+                ->addOrderRow(\WebPayItem::orderRow()
                     ->setArticleNumber(1)
                     ->setQuantity(1)
                     ->setAmountExVat(240.00)
                     ->setDescription("CD")
                     ->setVatPercent(25)
                 )
-                ->addOrderRow(Item::orderRow()
+                ->addOrderRow(\WebPayItem::orderRow()
                     ->setArticleNumber(1)
                     ->setQuantity(1)
                     ->setAmountExVat(188.68)
                     ->setDescription("Bok")
                     ->setVatPercent(6)
                 )
-                ->addDiscount(Item::fixedDiscount()
+                ->addDiscount(\WebPayItem::fixedDiscount()
                     ->setDiscountId("1")
                     ->setAmountIncVat(100.00)
                     ->setUnit("st")
@@ -99,15 +100,15 @@ class CardPaymentTest extends PHPUnit_Framework_TestCase {
                 ->setReturnUrl("http://myurl.se")
                 ->setPayPageLanguage("sv")
                 ->getPaymentForm();
-        $xmlMessage = new SimpleXMLElement($form->xmlMessage);
+        $xmlMessage = new \SimpleXMLElement($form->xmlMessage);
 
         $this->assertEquals('40000', $xmlMessage->amount);
         $this->assertEquals('5706', $xmlMessage->vat);
     }
     
     public function testBuildCardPaymentWithAmountIncVatWithVatPercent() {
-        $form = WebPay::createOrder()
-                ->addOrderRow(Item::orderRow()
+        $form = \WebPay::createOrder()
+                ->addOrderRow(\WebPayItem::orderRow()
                     ->setArticleNumber(1)
                     ->setQuantity(1)
                     ->setAmountIncVat(300)
@@ -115,21 +116,21 @@ class CardPaymentTest extends PHPUnit_Framework_TestCase {
                     ->setDescription("CD")
                     ->setVatPercent(25)
                 )
-                ->addOrderRow(Item::orderRow()
+                ->addOrderRow(\WebPayItem::orderRow()
                     ->setArticleNumber(1)
                     ->setQuantity(1)
                     ->setAmountIncVat(200)
                     ->setDescription("Bok")
                     ->setVatPercent(6)
                 )
-                ->addDiscount(Item::fixedDiscount()
+                ->addDiscount(\WebPayItem::fixedDiscount()
                     ->setDiscountId("1")
                     ->setAmountIncVat(100.00)
                     ->setUnit("st")
                     ->setDescription("FixedDiscount")
                     ->setName("Fixed")
                 )
-                ->addFee(Item::shippingFee()
+                ->addFee(\WebPayItem::shippingFee()
                     ->setShippingId('33')
                     ->setName('shipping')
                     ->setDescription("Specification")
@@ -146,15 +147,15 @@ class CardPaymentTest extends PHPUnit_Framework_TestCase {
                 ->setReturnUrl("http://myurl.se")
                 ->getPaymentForm();
 
-        $xmlMessage = new SimpleXMLElement($form->xmlMessage);
+        $xmlMessage = new \SimpleXMLElement($form->xmlMessage);
 
         $this->assertEquals('46250', $xmlMessage->amount);
         $this->assertEquals('6956', $xmlMessage->vat);
     }
     
     public function testBuildCardPaymentWithAmountExVatWithAmountIncVat() {
-        $form = WebPay::createOrder()
-                ->addOrderRow(Item::orderRow()
+        $form = \WebPay::createOrder()
+                ->addOrderRow(\WebPayItem::orderRow()
                     ->setArticleNumber(1)
                     ->setQuantity(1)
                     ->setAmountExVat(240.00)
@@ -162,7 +163,7 @@ class CardPaymentTest extends PHPUnit_Framework_TestCase {
                     ->setDescription("CD")
                     //->setVatPercent(25)
                 )
-                ->addOrderRow(Item::orderRow()
+                ->addOrderRow(\WebPayItem::orderRow()
                     ->setArticleNumber(1)
                     ->setQuantity(1)
                     ->setAmountExVat(188.68)
@@ -170,7 +171,7 @@ class CardPaymentTest extends PHPUnit_Framework_TestCase {
                     ->setDescription("Bok")
                     //->setVatPercent(6)
                 )
-                ->addDiscount(Item::fixedDiscount()
+                ->addDiscount(\WebPayItem::fixedDiscount()
                     ->setDiscountId("1")
                     ->setAmountIncVat(100.00)
                     ->setUnit("st")
@@ -185,7 +186,7 @@ class CardPaymentTest extends PHPUnit_Framework_TestCase {
                 ->setReturnUrl("http://myurl.se")
                 ->getPaymentForm();
 
-        $xmlMessage = new SimpleXMLElement($form->xmlMessage);
+        $xmlMessage = new \SimpleXMLElement($form->xmlMessage);
 
         $this->assertEquals('40000', $xmlMessage->amount);
         $this->assertEquals('5706', $xmlMessage->vat);
@@ -195,8 +196,8 @@ class CardPaymentTest extends PHPUnit_Framework_TestCase {
     }
     
     public function testBuildCardPaymentWithCurrency() {
-        $form = WebPay::createOrder()
-                ->addOrderRow(Item::orderRow()
+        $form = \WebPay::createOrder()
+                ->addOrderRow(\WebPayItem::orderRow()
                         ->setArticleNumber(1)
                         ->setQuantity(1)
                         ->setAmountExVat(240.00)
@@ -210,21 +211,21 @@ class CardPaymentTest extends PHPUnit_Framework_TestCase {
                 ->setReturnUrl("http://myurl.se")
                 ->getPaymentForm();
 
-        $xmlMessage = new SimpleXMLElement($form->xmlMessage);
+        $xmlMessage = new \SimpleXMLElement($form->xmlMessage);
 
         $this->assertEquals('SEK', $xmlMessage->currency);
     }
 
     public function testBuildCardPaymentWithShippingFee() {
-        $form = WebPay::createOrder()
-                ->addOrderRow(Item::orderRow()
+        $form = \WebPay::createOrder()
+                ->addOrderRow(\WebPayItem::orderRow()
                         ->setArticleNumber(1)
                         ->setQuantity(1)
                         ->setAmountExVat(240.00)
                         ->setAmountIncVat(300)
                         ->setDescription("CD")
                 )
-                ->addFee(Item::shippingFee()
+                ->addFee(\WebPayItem::shippingFee()
                         ->setAmountExVat(80)
                         ->setAmountIncVat(100)
                 )
@@ -235,15 +236,15 @@ class CardPaymentTest extends PHPUnit_Framework_TestCase {
                 ->setReturnUrl("http://myurl.se")
                 ->getPaymentForm();
 
-        $xmlMessage = new SimpleXMLElement($form->xmlMessage);
+        $xmlMessage = new \SimpleXMLElement($form->xmlMessage);
 
         $this->assertEquals("8000", $xmlMessage->vat);
         $this->assertEquals("40000", $xmlMessage->amount);
     }
     
     public function testBuildCardPaymentWithDecimalLongPrice() {
-        $form = WebPay::createOrder()
-                ->addOrderRow(Item::orderRow()
+        $form = \WebPay::createOrder()
+                ->addOrderRow(\WebPayItem::orderRow()
                         ->setArticleNumber(1)
                         ->setQuantity(1)
                         ->setAmountExVat(240.303030)
@@ -257,14 +258,14 @@ class CardPaymentTest extends PHPUnit_Framework_TestCase {
                 ->setReturnUrl("http://myurl.se")
                 ->getPaymentForm();
 
-        $xmlMessage = new SimpleXMLElement($form->xmlMessage);
+        $xmlMessage = new \SimpleXMLElement($form->xmlMessage);
         $this->assertEquals("5970", $xmlMessage->vat);
         $this->assertEquals("30000", $xmlMessage->amount);
     }
     
     public function testBuildCardPaymentNLCustomer() {
-        $form = WebPay::createOrder()
-                ->addOrderRow(Item::orderRow()
+        $form = \WebPay::createOrder()
+                ->addOrderRow(\WebPayItem::orderRow()
                         ->setArticleNumber(1)
                         ->setQuantity(1)
                         ->setAmountExVat(240.303030)
@@ -278,14 +279,14 @@ class CardPaymentTest extends PHPUnit_Framework_TestCase {
                 ->setReturnUrl("http://myurl.se")
                 ->getPaymentForm();
 
-        $xmlMessage = new SimpleXMLElement($form->xmlMessage);
+        $xmlMessage = new \SimpleXMLElement($form->xmlMessage);
         $this->assertEquals("5970", $xmlMessage->vat);
         $this->assertEquals("30000", $xmlMessage->amount);
     }
     
     public function testBuildCardPaymentWithAmountAndVatCero() {
-        $form = WebPay::createOrder()
-                ->addOrderRow(Item::orderRow()
+        $form = \WebPay::createOrder()
+                ->addOrderRow(\WebPayItem::orderRow()
                         ->setArticleNumber(1)
                         ->setQuantity(1)
                         ->setAmountExVat(0)
@@ -299,7 +300,7 @@ class CardPaymentTest extends PHPUnit_Framework_TestCase {
                 ->setReturnUrl("http://myurl.se")
                 ->getPaymentForm();
 
-        $xmlMessage = new SimpleXMLElement($form->xmlMessage);
+        $xmlMessage = new \SimpleXMLElement($form->xmlMessage);
         $this->assertEquals("0", $xmlMessage->orderrows->row->vat);
         $this->assertEquals("0", $xmlMessage->orderrows->row->amount);
     }
