@@ -1,8 +1,7 @@
 <?php
+namespace Svea;
 
 /**
- * Description of SveaCloseOrderInformation
- *
  * @author Anneli Halld'n, Daniel Brolund for Svea Webpay
  */
 class SveaCloseOrderInformation {

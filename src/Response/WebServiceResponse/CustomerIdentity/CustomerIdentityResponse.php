@@ -1,13 +1,7 @@
 <?php
-
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+namespace Svea;
 
 /**
- * Description of CustomerIdentityResponse
- *
  * @author Anneli Halld'n, Daniel Brolund for Svea Webpay
  */
 class CustomerIdentityResponse {
@@ -19,8 +13,4 @@ class CustomerIdentityResponse {
     public $coAddress;
     public $zipCode;
     public $locality;
-
-
-
-
 }

@@ -1,28 +1,26 @@
 <?php
+namespace Svea;
+
 /**
- * Description of OrderRow
- *
  * @author anne-hal
  */
 class OrderRow {
 
-   /**
+    /**
      * Contains empty string if not set
-     * @var type
+     * @var string
      */
     public $unit = "";
 
     /**
      * Contains int 0 if not set
-     * @var type
+     * @var int
      */
     public $vatDiscount = 0;
 
-
-
     /**
      * Optional
-     * @param type $articleNumberAsString
+     * @param string $articleNumberAsString
      * @return \OrderRow
      */
     public function setArticleNumber($articleNumberAsString) {
@@ -32,7 +30,7 @@ class OrderRow {
 
     /**
      * Required
-     * @param type $quantityAsInt
+     * @param int $quantityAsInt
      * @return \OrderRow
      */
     public function setQuantity($quantityAsInt) {
@@ -42,7 +40,7 @@ class OrderRow {
 
     /**
      * Optional
-     * @param type $unitAsString
+     * @param string $unitAsString
      * @return \OrderRow
      */
     public function setUnit($unitAsString) {
@@ -52,16 +50,17 @@ class OrderRow {
 
     /**
      * Optional
-     * @param type $AmountAsFloat
+     * @param float $AmountAsFloat
      * @return \OrderRow
      */
     public function setAmountExVat($AmountAsFloat) {
         $this->amountExVat = $AmountAsFloat;
         return $this;
     }
+    
     /**
      * Optional
-     * @param type $AmountAsFloat
+     * @param float $AmountAsFloat
      * @return \OrderRow
      */
     public function setAmountIncVat($AmountAsFloat) {
@@ -71,7 +70,7 @@ class OrderRow {
 
     /**
      * Optional
-     * @param type $nameAsString
+     * @param string $nameAsString
      * @return \OrderRow
      */
     public function setName($nameAsString) {
@@ -81,7 +80,7 @@ class OrderRow {
 
     /**
      * Optional
-     * @param type $descriptionAsString
+     * @param string $descriptionAsString
      * @return \OrderRow
      */
     public function setDescription($descriptionAsString) {
@@ -91,7 +90,7 @@ class OrderRow {
 
     /**
      * Optional
-     * @param type $percentAsInt
+     * @param int $percentAsInt
      * @return \OrderRow
      */
     public function setVatPercent($percentAsInt) {
@@ -101,7 +100,7 @@ class OrderRow {
 
     /**
      * Optional
-     * @param type $discountPercentAsInteger
+     * @param int $discountPercentAsInteger
      * @return \OrderRow
      */
     public function setDiscountPercent($discountPercentAsInteger) {

@@ -1,8 +1,10 @@
 <?php
+namespace Svea;
+
 require_once 'WebServiceResponse.php';
+
 /**
- * Description of FormatResponseObject
- *
+ * 
  * @author Anneli Halld'n, Daniel Brolund for Svea Webpay
  */
 class CreateOrderResponse extends WebServiceResponse {
@@ -14,33 +16,32 @@ class CreateOrderResponse extends WebServiceResponse {
     public $customerIdentity;
 
     function __construct($message) {
-        if(isset($message->CreateOrderEuResult->ErrorMessage)){
+        if (isset($message->CreateOrderEuResult->ErrorMessage)) {
             $this->errormessage = $message->CreateOrderEuResult->ErrorMessage;
         }
         parent::__construct($message);
     }
 
-    protected function formatObject($message){
+    protected function formatObject($message) {
         //Required
         $this->accepted = $message->CreateOrderEuResult->Accepted;
         $this->resultcode = $message->CreateOrderEuResult->ResultCode;
-        if($this->accepted == 1){
+        if ($this->accepted == 1) {
             $this->sveaOrderId = $message->CreateOrderEuResult->CreateOrderResult->SveaOrderId;
             $this->sveaWillBuyOrder = $message->CreateOrderEuResult->CreateOrderResult->SveaWillBuyOrder;
             $this->amount = $message->CreateOrderEuResult->CreateOrderResult->Amount;
             $this->expirationDate = $message->CreateOrderEuResult->CreateOrderResult->ExpirationDate;
             //Optional
-            if(isset($message->CreateOrderEuResult->CreateOrderResult->OrderType)){
+            if (isset($message->CreateOrderEuResult->CreateOrderResult->OrderType)) {
                 $this->orderType = $message->CreateOrderEuResult->CreateOrderResult->OrderType;
             }
-            if(isset($message->CreateOrderEuResult->CreateOrderResult->ClientOrderNumber)){
+            if (isset($message->CreateOrderEuResult->CreateOrderResult->ClientOrderNumber)) {
                 $this->clientOrderNumber = $message->CreateOrderEuResult->CreateOrderResult->ClientOrderNumber;
             }
-            if(isset($message->CreateOrderEuResult->CreateOrderResult->CustomerIdentity)){
+            if (isset($message->CreateOrderEuResult->CreateOrderResult->CustomerIdentity)) {
                 $this->formatCustomerIdentity($message->CreateOrderEuResult->CreateOrderResult->CustomerIdentity);
             }
         }
-
     }
 
     public function formatCustomerIdentity($customer) {
@@ -48,7 +49,7 @@ class CreateOrderResponse extends WebServiceResponse {
               //required
         $this->customerIdentity->customerType = $customer->CustomerType;
         //optional
-        if(property_exists($customer, "NationalIdNumber") && $customer->NationalIdNumber != ""){
+        if (property_exists($customer, "NationalIdNumber") && $customer->NationalIdNumber != "") {
             $this->customerIdentity->nationalIdNumber = $customer->NationalIdNumber;
         }
         $this->customerIdentity->email = isset($customer->Email) ? $customer->Email : "";

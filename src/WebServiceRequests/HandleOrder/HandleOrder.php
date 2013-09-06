@@ -1,4 +1,5 @@
 <?php
+namespace Svea;
 
 require_once SVEA_REQUEST_DIR . '/WebServiceRequests/svea_soap/SveaSoapConfig.php';
 require_once SVEA_REQUEST_DIR . '/Config/SveaConfig.php';
@@ -19,7 +20,6 @@ class HandleOrder {
         $this->handler = $handler;
     }
 
-
     protected function getStoreAuthorization() {
         $auth = new SveaAuth();
          $auth->Username = $this->handler->conf->getUsername($this->handler->orderType,  $this->handler->countryCode);
@@ -28,19 +28,19 @@ class HandleOrder {
         return $auth;
     }
 
-    public function validateRequest(){
+    public function validateRequest() {
         $validator = new HandleOrderValidator();
          $errors = $validator->validate($this->handler);
          return $errors;
     }
 
-        /**
+    /**
      * Returns prepared request
      * @return \SveaRequest
      */
     public function prepareRequest() {
         $errors = $this->validateRequest();
-        if(count($errors) > 0){
+        if (count($errors) > 0) {
             $exceptionString = "";
             foreach ($errors as $key => $value) {
                 $exceptionString .="-". $key. " : ".$value."\n";

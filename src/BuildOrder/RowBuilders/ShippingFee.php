@@ -1,14 +1,14 @@
 <?php
+namespace Svea;
 
 /**
- * Description of ShippingFee
- *
  * @author anne-hal
  */
 class ShippingFee {
-  /**
+    
+    /**
      * Optional
-     * @param type $idAsString
+     * @param string $idAsString
      * @return \ShippingFee
      */
     public function setShippingId($idAsString) {
@@ -18,7 +18,7 @@ class ShippingFee {
 
     /**
      * Optional
-     * @param type $nameAsString
+     * @param string $nameAsString
      * @return \ShippingFee
      */
     public function setName($nameAsString) {
@@ -28,7 +28,7 @@ class ShippingFee {
 
     /**
      * Optional
-     * @param type $descriptionAsString
+     * @param string $descriptionAsString
      * @return \ShippingFee
      */
     public function setDescription($descriptionAsString) {
@@ -38,45 +38,49 @@ class ShippingFee {
 
     /**
      * Optional
-     * @param type $amountAsFloat
+     * @param float $amountAsFloat
      * @return \ShippingFee
      */
     public function setAmountExVat($amountAsFloat) {
         $this->amountExVat = $amountAsFloat;
         return $this;
     }
+    
     /**
      * Optional
-     * @param type $amountAsFloat
+     * @param float $amountAsFloat
      * @return \ShippingFee
      */
     public function setAmountIncVat($amountAsFloat) {
         $this->amountIncVat = $amountAsFloat;
         return $this;
     }
-  /**
-   *
-   * @param type $unitDescriptionAsString
-   * @return \ShippingFee
-   */
+    
+    /**
+    *
+    * @param string $unitDescriptionAsString
+    * @return \ShippingFee
+    */
     public function setUnit($unitDescriptionAsString) {
         $this->unit = $unitDescriptionAsString;
         return $this;
     }
-/**
- *
- * @param type $percentAsInt
- * @return \ShippingFee
- */
+    
+    /**
+     *
+     * @param int $percentAsInt
+     * @return \ShippingFee
+     */
     public function setVatPercent($percentAsInt) {
         $this->vatPercent = $percentAsInt;
         return $this;
     }
-/**
- *
- * @param type $discountPercentAsInt
- * @return \ShippingFee
- */
+    
+    /**
+     *
+     * @param int $discountPercentAsInt
+     * @return \ShippingFee
+     */
     public function setDiscountPercent($discountPercentAsInt) {
         $this->discountPercent = $discountPercentAsInt;
         return $this;

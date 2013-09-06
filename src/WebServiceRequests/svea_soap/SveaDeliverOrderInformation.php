@@ -1,4 +1,5 @@
 <?php
+namespace Svea;
 
 class SveaDeliverOrderInformation {
 
@@ -10,5 +11,4 @@ class SveaDeliverOrderInformation {
             $this->DeliverInvoiceDetails = "";
         }
     }
-
 }

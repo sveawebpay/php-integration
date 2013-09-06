@@ -1,14 +1,14 @@
 <?php
+namespace Svea;
 
 /**
- * Description of HandleOrderValidator
- *
  * @author Anneli Halld'n, Daniel Brolund for Svea Webpay
  * @package WebServiceRequests/Helper
  */
 class HandleOrderValidator {
 
     public $errors = array();
+    
     /**
      * @param type $order
      */

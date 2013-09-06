@@ -1,13 +1,11 @@
 <?php
+namespace Svea;
 
 $root = realpath(dirname(__FILE__));
 require_once $root . '/../../../../src/Includes.php';
 require_once $root . '/../../../../test/UnitTest/Hosted/Payment/FakeHostedPayment.php';
 
-/**
- * Description of HostedXmlBuilderTest
- */
-class HostedXmlBuilderTest extends PHPUnit_Framework_TestCase {
+class HostedXmlBuilderTest extends \PHPUnit_Framework_TestCase {
     
     public function testFormatOrderRows() {
         $order = new CreateOrderBuilder(new SveaConfigurationProvider(SveaConfig::getDefaultConfig()));
@@ -21,6 +19,3 @@ class HostedXmlBuilderTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(1, substr_count($xml, "http://www.cancel.com"));
     }
 }
-
-
-?>

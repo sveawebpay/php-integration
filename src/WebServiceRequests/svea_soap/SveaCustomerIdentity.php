@@ -1,4 +1,5 @@
 <?php
+namespace Svea;
 
 /**
  *
@@ -36,5 +37,4 @@ class SveaCustomerIdentity {
             }
         }
     }
-
 }

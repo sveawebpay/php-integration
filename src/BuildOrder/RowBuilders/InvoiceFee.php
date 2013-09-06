@@ -1,14 +1,14 @@
 <?php
+namespace Svea;
 
 /**
- * Description of InvoiceFee
- *
  * @author anne-hal
  */
 class InvoiceFee {
+    
     /**
      * Optional
-     * @param type $nameAsString
+     * @param string $nameAsString
      * @return \InvoiceFee
      */
     public function setName($nameAsString) {
@@ -18,7 +18,7 @@ class InvoiceFee {
 
     /**
      * Optional
-     * @param type $descriptionAsString
+     * @param string $descriptionAsString
      * @return \InvoiceFee
      */
     public function setDescription($descriptionAsString) {
@@ -29,17 +29,18 @@ class InvoiceFee {
     /**
      * Optional
      * Required to use at least two of the functions setAmountExVat(), setAmountIncVat(), setVatPercent()
-     * @param type $amountAsFloat
+     * @param float $amountAsFloat
      * @return \InvoiceFee
      */
     public function setAmountExVat($amountAsFloat) {
         $this->amountExVat = $amountAsFloat;
         return $this;
     }
+    
     /**
      * Optional
      * Required to use at least two of the functions setAmountExVat(), setAmountIncVat(), setVatPercent()
-     * @param type $amountAsFloat
+     * @param float $amountAsFloat
      * @return \InvoiceFee
      */
     public function setAmountIncVat($amountAsFloat) {
@@ -49,7 +50,8 @@ class InvoiceFee {
 
     /**
      * Optional
-     * @param type $unitDescriptionAsString
+     * TODO describe what constitutes a "unit" in this context
+     * @param string $unitDescriptionAsString
      * @return \InvoiceFee
      */
     public function setUnit($unitDescriptionAsString) {
@@ -60,7 +62,7 @@ class InvoiceFee {
     /**
      * Optional
      * Required to use at least two of the functions setAmountExVat(), setAmountIncVat(), setVatPercent()
-     * @param type $vatPercentAsInt
+     * @param int $vatPercentAsInt
      * @return \InvoiceFee
      */
     public function setVatPercent($vatPercentAsInt) {
@@ -70,12 +72,11 @@ class InvoiceFee {
 
     /**
      * Optional
-     * @param type $discountPercentAsInt
+     * @param int $discountPercentAsInt
      * @return \InvoiceFee
      */
     public function setDiscountPercent($discountPercentAsInt) {
         $this->discountPercent = $discountPercentAsInt;
         return $this;
     }
-
 }

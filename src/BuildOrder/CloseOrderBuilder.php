@@ -1,15 +1,14 @@
 <?php
+namespace Svea;
 
 require_once SVEA_REQUEST_DIR . '/Includes.php';
 
 /**
- * Description of closeOrder
- *
  * @author Anneli Halld'n, Daniel Brolund for Svea Webpay
  */
 class closeOrderBuilder {
 
-     /**
+    /**
      * Order Id recieved when creating order
      * @var Order id
      */
@@ -37,7 +36,6 @@ class closeOrderBuilder {
         $this->testmode = TRUE;
         return $this;
     }
-     *
      */
 
     /**
@@ -50,7 +48,7 @@ class closeOrderBuilder {
         return $this;
     }
 
-    public function setCountryCode($countryCodeAsString){
+    public function setCountryCode($countryCodeAsString) {
         $this->countryCode = $countryCodeAsString;
         return $this;
     }

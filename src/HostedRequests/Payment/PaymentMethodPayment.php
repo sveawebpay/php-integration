@@ -1,20 +1,14 @@
 <?php
-
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+namespace Svea;
 
 /**
- * Description of PaymentMethodPayment
- *
  * @author anne-hal
  */
 class PaymentMethodPayment extends HostedPayment{
 
-     public $paymentMethod;
-     /**
-     *
+    public $paymentMethod;
+    
+    /**
      * @param type $order, $paymentmethod
      */
     public function __construct($order, $paymentmethod) {
@@ -24,14 +18,15 @@ class PaymentMethodPayment extends HostedPayment{
 
      protected function configureExcludedPaymentMethods($request) {
         if (isset($this->paymentMethod)) {
-            if($this->paymentMethod == PaymentMethod::INVOICE){
+            if ($this->paymentMethod == PaymentMethod::INVOICE) {
                 $request['paymentMethod'] = "SVEAINVOICEEU_".$this->order->countryCode;
-            }  elseif ($this->paymentMethod == PaymentMethod::PAYMENTPLAN) {
+            } elseif ($this->paymentMethod == PaymentMethod::PAYMENTPLAN) {
                 $request['paymentMethod'] = "PAYMENTPLAN_".$this->order->countryCode;
-            }  else {
+            } else {
                 $request['paymentMethod'] = $this->paymentMethod;
             }
         }
+        
         return $request;
     }
 
@@ -54,6 +49,4 @@ class PaymentMethodPayment extends HostedPayment{
         $this->cancelUrl = $cancelUrlAsString;
         return $this;
     }
-
-    
 }

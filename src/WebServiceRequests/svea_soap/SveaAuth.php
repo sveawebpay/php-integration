@@ -1,4 +1,5 @@
 <?php
+namespace Svea;
 
 /**
  * Auth object, holder of

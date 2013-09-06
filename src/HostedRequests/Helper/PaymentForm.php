@@ -1,4 +1,5 @@
 <?php
+namespace Svea;
 
 require_once SVEA_REQUEST_DIR . '/Config/SveaConfig.php';
 
@@ -15,7 +16,6 @@ require_once SVEA_REQUEST_DIR . '/Config/SveaConfig.php';
  */
 class PaymentForm {
 
-
     public $endPointUrl;
     public $xmlMessage;
     public $xmlMessageBase64;
@@ -31,16 +31,16 @@ class PaymentForm {
         $this->setSubmitMessage();
     }
 
-    public function setRawFields(){
-         $this->mac = hash("sha512", $this->xmlMessageBase64 . $this->secretWord);
-         $this->rawFields['merchantid'] = $this->merchantid;
-         $this->rawFields['message'] = $this->xmlMessageBase64;
-         $this->rawFields['mac'] = $this->mac;
-         $this->rawFields['htmlFormMethod'] = 'post';
-         $this->rawFields['htmlFormAction'] = $this->endPointUrl;
+    public function setRawFields() {
+        $this->mac = hash("sha512", $this->xmlMessageBase64 . $this->secretWord);
+        $this->rawFields['merchantid'] = $this->merchantid;
+        $this->rawFields['message'] = $this->xmlMessageBase64;
+        $this->rawFields['mac'] = $this->mac;
+        $this->rawFields['htmlFormMethod'] = 'post';
+        $this->rawFields['htmlFormAction'] = $this->endPointUrl;
     }
 
-    public function setSubmitMessage($countryCode = FALSE){
+    public function setSubmitMessage($countryCode = FALSE) {
         switch ($countryCode) {
             case "SE":
                 $this->submitMessage = "Betala";
@@ -85,5 +85,4 @@ class PaymentForm {
         $this->htmlFormFieldsAsArray['input_submit'] = "<input type='submit' name='submit' value='".$this->submitMessage."' />";
         $this->htmlFormFieldsAsArray['form_end_tag'] = "</form>";
     }
-
 }

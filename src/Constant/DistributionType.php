@@ -1,4 +1,5 @@
 <?php
+namespace Svea;
 
 /**
  *constants for InvoiceDistributionType

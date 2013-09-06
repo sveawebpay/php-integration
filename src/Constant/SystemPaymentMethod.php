@@ -1,4 +1,5 @@
 <?php
+namespace Svea;
 
 /**
  * Constants for Hosted payments
@@ -48,5 +49,4 @@ abstract class SystemPaymentMethod {
     const PAYMENTPLAN_FI = 'SVEASPLITEU_FI';
     const PAYMENTPLAN_DE = 'SVEASPLITEU_DE';
     const PAYMENTPLAN_NL = 'SVEASPLITEU_NL';
-
 }

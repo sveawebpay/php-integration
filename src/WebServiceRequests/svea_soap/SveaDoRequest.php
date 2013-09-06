@@ -1,4 +1,5 @@
 <?php
+namespace Svea;
 
 require_once SVEA_REQUEST_DIR . '/Config/SveaConfig.php';
 
@@ -19,7 +20,7 @@ class SveaDoRequest {
     }
 
     private function SetSoapClient() {
-        $this->client = new SoapClient($this->svea_server, array('trace' => 1));
+        $this->client = new \SoapClient($this->svea_server, array('trace' => 1));
     }
 
     /**
@@ -29,7 +30,7 @@ class SveaDoRequest {
      */
     public function CreateOrderEu($order) {
         $builder = new SveaSoapArrayBuilder();
-        return $this->client->CreateOrderEu($builder->object_to_array($order));
+        return $this->client->CreateOrderEu($builder->object_to_array($order)); //result of SoapClient CreateOrderEu method
 
     }
 
@@ -67,5 +68,4 @@ class SveaDoRequest {
         $builder = new SveaSoapArrayBuilder();
         return $this->client->CloseOrderEu($builder->object_to_array($closedata));
     }
-
 }

@@ -1,7 +1,7 @@
 <?php
+namespace Svea;
 
 /**
- *
  *
  * @author anne-hal
  */

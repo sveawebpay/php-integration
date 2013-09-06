@@ -1,16 +1,21 @@
 <?php
+namespace Svea;
 
 require_once SVEA_REQUEST_DIR . '/WebServiceRequests/svea_soap/SveaSoapConfig.php';
 require_once SVEA_REQUEST_DIR . '/Config/SveaConfig.php';
 
 /**
  * Applicable for SE, NO & DK.
- * If customer has multiple addresses or you just want to show the address which
- * the invoice / product is to be delivered to for the customer you can use this
- * class. It returns an array with all the associated addresses for a specific
- * SecurityNumber.
- * Each address gets an "AddressSelector" - hash to signify the address. This can
- * be used when Creating order to have the invoice be sent to the specified address.
+ * 
+ * If customer has multiple addresses, or you just want to show the customer
+ * the address which the invoice or product is to be delivered to, you can use
+ * this class. It returns an array with all the associated addresses for a 
+ * specific SecurityNumber.
+ * 
+ * Each address gets an AddressSelector-hash that identifies the address. This 
+ * can be used when creating orders to have the invoice be sent to the specified
+ * address.
+ * 
  * @author Anneli Halld'n, Daniel Brolund for Svea Webpay
  * @package WebServiceRequests/GetAddresses
  */
@@ -47,7 +52,7 @@ class GetAddresses {
 
     /**
      * Required
-     * @param type $countryCodeAsString
+     * @param string $countryCodeAsString
      * @return \GetAddresses
      */
     public function setCountryCode($countryCodeAsString) {
@@ -57,7 +62,7 @@ class GetAddresses {
 
     /**
      * Required if customer is Company
-     * @param type $companyIdAsString
+     * @param string $companyIdAsString
      * Sweden: Organisationsnummer,
      * Norway: Vat number,
      * Denmark: CVR
@@ -70,14 +75,15 @@ class GetAddresses {
 
     /**
      * Required if customer is Individual
-     * @param type $NationalIdNumberAsInt
+     * @param string $NationalIdNumberAsString
      * Sweden: Personnummer,
-     * Norway: Persnonalnumber,
+     * Norway: Personalnumber,
      * Denmark: CPR
      * @return \GetAddresses
      */
-    public function setIndividual($NationalIdNumberAsInt) {
-        $this->ssn = $NationalIdNumberAsInt;
+    public function setIndividual($NationalIdNumberAsString) {
+
+        $this->ssn = $NationalIdNumberAsString;
         return $this;
     }
 

@@ -1,4 +1,5 @@
 <?php
+namespace Svea;
 
 require_once  SVEA_REQUEST_DIR.'/Constant/PaymentMethod.php';
 
@@ -14,6 +15,7 @@ class PayPagePayment extends HostedPayment {
     public $paymentMethod;
     public $excludedPaymentMethods;
     public $langCode = "en";
+    
     /**
      *
      * @param type $order
@@ -42,20 +44,22 @@ class PayPagePayment extends HostedPayment {
      */
     public function excludePaymentMethods() {
         $excludes = func_get_args();
+        
         foreach ($excludes as $method) {
-             if($method == PaymentMethod::INVOICE){
-               $this->excludedPaymentMethods[] ="SVEAINVOICEEU_".$this->order->countryCode;
-               $this->excludedPaymentMethods[] ="SVEAINVOICE".$this->order->countryCode;
-            }  elseif ($this->paymentMethod == PaymentMethod::PAYMENTPLAN) {
+            if ($method == PaymentMethod::INVOICE) {
+                $this->excludedPaymentMethods[] ="SVEAINVOICEEU_".$this->order->countryCode;
+                $this->excludedPaymentMethods[] ="SVEAINVOICE".$this->order->countryCode;
+            } elseif ($this->paymentMethod == PaymentMethod::PAYMENTPLAN) {
                 $this->excludedPaymentMethods[] = "SVEASPLITEU_".$this->order->countryCode;
-            }  else {
-                 $this->excludedPaymentMethods[] = $method;
+            } else {
+                $this->excludedPaymentMethods[] = $method;
             }
-
         }
+        
         return $this;
     }
-     /**
+    
+    /**
      *
      * @return \PayPagePayment
      */
@@ -84,22 +88,22 @@ class PayPagePayment extends HostedPayment {
             //loop through the include requests
             foreach ($this->excludedPaymentMethods as $k => $v) {
                 //unset if a match in exlude array
-                if($cleanValue == $v){
-                     unset($this->excludedPaymentMethods[$k]);
+                if ($cleanValue == $v) {
+                    unset($this->excludedPaymentMethods[$k]);
                 //unset the invoice methods if INVOICE is desired
-                }elseif ($cleanValue == PaymentMethod::INVOICE) {
-                    if($v == "SVEAINVOICEEU_".$this->order->countryCode || $k == SystemPaymentMethod::INVOICESE){
+                } elseif ($cleanValue == PaymentMethod::INVOICE) {
+                    if ($v == "SVEAINVOICEEU_".$this->order->countryCode || $k == SystemPaymentMethod::INVOICESE) {
                         unset($this->excludedPaymentMethods[$k]);
                     }
                 //unset the paymentplan methods if PAYMENTPLAN is desired
-                }elseif($cleanValue == PaymentMethod::PAYMENTPLAN){
-                    if($k == "SVEASPLITEU_".$this->order->countryCode || $k == SystemPaymentMethod::PAYMENTPLANSE){
+                } elseif ($cleanValue == PaymentMethod::PAYMENTPLAN) {
+                    if ($k == "SVEASPLITEU_".$this->order->countryCode || $k == SystemPaymentMethod::PAYMENTPLANSE) {
                         unset($this->excludedPaymentMethods[$k]);
                     }
                 }
             }
-
         }
+        
         return $this;
     }
 
@@ -113,7 +117,6 @@ class PayPagePayment extends HostedPayment {
         $this->excludedPaymentMethods[] = SystemPaymentMethod::KORTWN;
         return $this;
     }
-
 
     /**
      * Exclude all direct bank payments
@@ -130,7 +133,6 @@ class PayPagePayment extends HostedPayment {
         return $this;
     }
 
-
     /**
      * Required
      * Set return Url for redirect when payment is completed
@@ -143,7 +145,6 @@ class PayPagePayment extends HostedPayment {
     }
 
     /**
-     *
      * @param type $cancelUrlAsString
      * @return \HostedPayment
      */
@@ -152,55 +153,45 @@ class PayPagePayment extends HostedPayment {
         return $this;
     }
 
-     /**
+    /**
      * @param type $languageCodeAsISO639
      * @return \HostedPayment|\PayPagePayment
      */
 
-    public function setPayPageLanguage($languageCodeAsISO639){
+    public function setPayPageLanguage($languageCodeAsISO639) {
         switch ($languageCodeAsISO639) {
             case "sv":
                 $this->langCode = $languageCodeAsISO639;
-
                 break;
             case "en":
                 $this->langCode = $languageCodeAsISO639;
-
                 break;
             case "da":
                 $this->langCode = $languageCodeAsISO639;
-
                 break;
             case "fi":
                 $this->langCode = $languageCodeAsISO639;
-
                 break;
             case "no":
                 $this->langCode = $languageCodeAsISO639;
-
                 break;
             case "de":
                 $this->langCode = $languageCodeAsISO639;
-
                 break;
             case "es":
                 $this->langCode = $languageCodeAsISO639;
-
                 break;
             case "fr":
                 $this->langCode = $languageCodeAsISO639;
-
                 break;
             case "it":
                 $this->langCode = $languageCodeAsISO639;
-
                 break;
             case "nl":
                 $this->langCode = $languageCodeAsISO639;
-
                 break;
             default:
-                 $this->langCode = "en";
+                $this->langCode = "en";
                 break;
         }
 

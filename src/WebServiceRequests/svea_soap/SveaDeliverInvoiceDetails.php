@@ -1,4 +1,5 @@
 <?php
+namespace Svea;
 
 /**
  * Include in SveaDeliverOrderInformation for Invoice only
@@ -23,5 +24,4 @@ class SveaDeliverInvoiceDetails {
     public function addOrderRow($orderRow) {
         array_push($this->OrderRows['OrderRow'], $orderRow);
     }
-
 }

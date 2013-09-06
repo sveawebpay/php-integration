@@ -1,4 +1,5 @@
 <?php
+namespace Svea;
 
 class SveaIdentity {
 
@@ -18,5 +19,4 @@ class SveaIdentity {
             $this->CompanyVatNumber = "";
         }
     }
-
 }

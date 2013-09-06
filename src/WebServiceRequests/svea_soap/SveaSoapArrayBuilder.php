@@ -1,4 +1,5 @@
 <?php
+namespace Svea;
 
 /**
  * Use to transform order object into array if needed for soapClient
@@ -11,7 +12,7 @@ class SveaSoapArrayBuilder {
      * @return request, type array
      */
     /*
-      public function __construct($object){
+      public function __construct($object) {
       return $this->object_to_array($object);
       }
      *

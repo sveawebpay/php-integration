@@ -1,11 +1,16 @@
 <?php
+// WebPay class is not included in Svea namespace
 
 include_once SVEA_REQUEST_DIR . "/Includes.php";
 
 /**
- * Start Building Request Objects By choosing the right Method.
- *
- * @author Anneli Halld'n, Daniel Brolund for Svea Webpay
+ * Start building request objects by choosing the right method in WebPay.
+ * 
+ * Class WebPay is external to Svea namespace along with class WebPayItem.
+ * This is so that existing integrations don't need to worry about 
+ * prefixing their existing calls to WebPay:: and orderrow item functions.
+ *  
+ * @author Anneli Halld'n, Daniel Brolund, Kristian Madsen for Svea WebPay
  * @package WebPay
  */
 class WebPay {
@@ -17,8 +22,8 @@ class WebPay {
      * If left blank, default settings from SveaConfig will be used
      */
     public static function createOrder($config = NULL) {
-       $config = $config == null ? SveaConfig::getDefaultConfig() : $config;
-        return new CreateOrderBuilder($config);
+       $config = $config == null ? Svea\SveaConfig::getDefaultConfig() : $config;
+        return new Svea\CreateOrderBuilder($config);
     }
 
     /**
@@ -28,8 +33,8 @@ class WebPay {
      * If left blank, default settings from SveaConfig will be used
      */
     public static function getPaymentPlanParams($config = NULL) {
-       $config = $config == null ? SveaConfig::getDefaultConfig() : $config;
-        return new GetPaymentPlanParams($config);
+       $config = $config == null ? Svea\SveaConfig::getDefaultConfig() : $config;
+        return new Svea\GetPaymentPlanParams($config);
     }
 
     /**
@@ -39,8 +44,8 @@ class WebPay {
      * If left blank, default settings from SveaConfig will be used
      */
     public static function deliverOrder($config = NULL) {
-         $config = $config == null ?SveaConfig::getDefaultConfig() : $config;
-        return new deliverOrderBuilder($config);
+         $config = $config == null ? Svea\SveaConfig::getDefaultConfig() : $config;
+        return new Svea\deliverOrderBuilder($config);
        // return new OrderBuilder();
     }
 
@@ -51,8 +56,8 @@ class WebPay {
      * If left blank, default settings from SveaConfig will be used
      */
     public static function closeOrder($config = NULL) {
-         $config = $config == null ? SveaConfig::getDefaultConfig() : $config;
-        return new closeOrderBuilder($config);
+         $config = $config == null ? Svea\SveaConfig::getDefaultConfig() : $config;
+        return new Svea\closeOrderBuilder($config);
        // return new OrderBuilder();
     }
 
@@ -63,17 +68,17 @@ class WebPay {
      * If left blank, default settings from SveaConfig will be used
      */
     public static function getAddresses($config = NULL) {
-         $config = $config == null ? SveaConfig::getDefaultConfig() : $config;
-        return new GetAddresses($config);
+         $config = $config == null ? Svea\SveaConfig::getDefaultConfig() : $config;
+        return new Svea\GetAddresses($config);
     }
+    
     /**
      *
      * @param type decimal $price
      * @param type object $paramsResonseObject
      * @return \PaymentPlanPricePerMonth
      */
-    public static function paymentPlanPricePerMonth($price,$paramsResonseObject){
-        return new PaymentPlanPricePerMonth($price,$paramsResonseObject);
+    public static function paymentPlanPricePerMonth($price,$paramsResonseObject) {
+        return new Svea\PaymentPlanPricePerMonth($price,$paramsResonseObject);
     }
-
 }

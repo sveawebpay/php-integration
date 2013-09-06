@@ -1,14 +1,15 @@
 <?php
+namespace Svea;
 
 $root = realpath(dirname(__FILE__));
 require_once $root . '/../../../../src/Includes.php';
 
-class HostedRowFormatterTest extends PHPUnit_Framework_TestCase {
+class HostedRowFormatterTest extends \PHPUnit_Framework_TestCase {
     
     public function testFormatOrderRows() {
         $order = new createOrderBuilder(new SveaConfigurationProvider(SveaConfig::getDefaultConfig()));
         $order->
-        addOrderRow(Item::orderRow()
+        addOrderRow(\WebPayItem::orderRow()
                 ->setArticleNumber("0")
                 ->setName("Tess")
                 ->setDescription("Tester")
@@ -33,7 +34,7 @@ class HostedRowFormatterTest extends PHPUnit_Framework_TestCase {
     public function testFormatShippingFeeRows() {
         $order = new createOrderBuilder(new SveaConfigurationProvider(SveaConfig::getDefaultConfig()));
         $order
-        ->addFee(Item::shippingFee()
+        ->addFee(\WebPayItem::shippingFee()
                 ->setShippingId("0")
                 ->setName("Tess")
                 ->setDescription("Tester")
@@ -57,12 +58,12 @@ class HostedRowFormatterTest extends PHPUnit_Framework_TestCase {
     public function testFormatFixedDiscountRows() {
         $order = new createOrderBuilder(new SveaConfigurationProvider(SveaConfig::getDefaultConfig()));
         $order->
-        addOrderRow(Item::orderRow()
+        addOrderRow(\WebPayItem::orderRow()
                   ->setAmountExVat(4)
                 ->setVatPercent(25)
                 ->setQuantity(1)
                 )
-                ->addDiscount(Item::fixedDiscount()
+                ->addDiscount(\WebPayItem::fixedDiscount()
                     ->setDiscountId("0")
                     ->setName("Tess")
                     ->setDescription("Tester")
@@ -83,12 +84,12 @@ class HostedRowFormatterTest extends PHPUnit_Framework_TestCase {
     public function testFormatRelativeDiscountRows() {
         $order = new createOrderBuilder(new SveaConfigurationProvider(SveaConfig::getDefaultConfig()));
         $order->
-        addOrderRow(Item::orderRow()
+        addOrderRow(\WebPayItem::orderRow()
                 ->setAmountExVat(4)
                 ->setVatPercent(25)
                 ->setQuantity(1)
                 )
-        ->addDiscount(Item::relativeDiscount()
+        ->addDiscount(\WebPayItem::relativeDiscount()
                 ->setDiscountId("0")
                 ->setName("Tess")
                 ->setDescription("Tester")
@@ -150,5 +151,3 @@ class HostedRowFormatterTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(-200, $formatter->formatTotalVat($rows));
     }
 }
-
-?>

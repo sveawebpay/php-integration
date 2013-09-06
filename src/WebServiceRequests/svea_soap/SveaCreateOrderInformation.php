@@ -1,4 +1,5 @@
 <?php
+namespace Svea;
 
 class SveaCreateOrderInformation {
 
@@ -27,5 +28,4 @@ class SveaCreateOrderInformation {
     public function addOrderRow($orderRow) {
         array_push($this->OrderRows['OrderRow'], $orderRow);
     }
-
 }

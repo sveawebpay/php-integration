@@ -1,10 +1,11 @@
 <?php
+namespace Svea;
+
 /**
- * Description of IndividualCustomer
- *
  * @author anne-hal
  */
 class IndividualCustomer {
+    
     /**
      * Required for private customers in SE, NO, DK, FI
      * @param for SE, DK:  $yyyymmddxxxx
@@ -12,7 +13,7 @@ class IndividualCustomer {
      * @param for NO:  $ddmmyyxxxxx
      * @return \IndividualCustomer
      */
-    public function setNationalIdNumber($nationalIdNumber){
+    public function setNationalIdNumber($nationalIdNumber) {
         $this->ssn = $nationalIdNumber;
         return $this;
     }
@@ -35,8 +36,8 @@ class IndividualCustomer {
      * @return \IndividualCustomer
      */
     public function setBirthDate($yyyy, $mm, $dd) {
-        if($mm < 10){$mm = "0".$mm; }
-        if($dd < 10){$dd = "0".$dd; }
+        if ($mm < 10) {$mm = "0".$mm; }
+        if ($dd < 10) {$dd = "0".$dd; }
 
         $this->birthDate = $yyyy . $mm . $dd;
         return $this;
@@ -51,6 +52,7 @@ class IndividualCustomer {
         $this->email = $emailAsString;
         return $this;
     }
+    
      /**
      * Optional
      * @param type $phoneNumberAsInt
@@ -60,6 +62,7 @@ class IndividualCustomer {
         $this->phonenumber = $phoneNumberAsInt;
         return $this;
     }
+    
     /**
      * Optinal but desirable
      * @param type $ipAddressAsString
@@ -69,6 +72,7 @@ class IndividualCustomer {
         $this->ipAddress = $ipAddressAsString;
         return $this;
     }
+    
     /**
      * Required for private Customers in NL and DE
      * @param type $firstnameAsString
@@ -80,6 +84,7 @@ class IndividualCustomer {
         $this->lastname = $lastnameAsString;
         return $this;
     }
+    
     /**
      * Required in NL and DE
      * @param type $streetAsString
@@ -91,6 +96,7 @@ class IndividualCustomer {
         $this->housenumber = $houseNumberAsInt;
         return $this;
     }
+    
     /**
      * Optional in NL and DE
      * @param type $coAddressAsString
@@ -100,6 +106,7 @@ class IndividualCustomer {
         $this->coAddress = $coAddressAsString;
         return $this;
     }
+    
     /**
      * Requuired in NL and DE
      * @param type $zipCodeAsString
@@ -109,6 +116,7 @@ class IndividualCustomer {
         $this->zipCode = $zipCodeAsString;
         return $this;
     }
+    
     /**
      * Required in NL and DE
      * @param type $cityAsString
@@ -118,5 +126,4 @@ class IndividualCustomer {
         $this->locality = $cityAsString;
         return $this;
     }
-
 }
