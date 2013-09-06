@@ -7,9 +7,6 @@ require_once $root . '/../../../src/WebServiceRequests/svea_soap/SveaSoapConfig.
 require_once $root . '/../VoidValidator.php';
 
 $root = realpath(dirname(__FILE__));
-require_once $root . '/TestRowFactory.php';
-
-$root = realpath(dirname(__FILE__));
 require_once $root . '/../../TestUtil.php';
 
 /**
@@ -36,7 +33,7 @@ class NewOrderBuilderTest extends \PHPUnit_Framework_TestCase {
         $addresselector = $this->getAddressForTesting();
         $request = \WebPay::createOrder();
         $request = $request
-            ->addOrderRow(TestUtil::createOrderRow());
+            ->addOrderRow(\TestUtil::createOrderRow());
             $request = $request
                 ->addCustomerDetails(\WebPayItem::companyCustomer()->setNationalIdNumber(4608142222)->setAddressSelector($addresselector))
                 ->setCountryCode("SE")
@@ -51,7 +48,7 @@ class NewOrderBuilderTest extends \PHPUnit_Framework_TestCase {
     public function testNewInvoiceOrderWithOrderRow() {
         $request = \WebPay::createOrder();
         $request = $request
-            ->addOrderRow(TestUtil::createOrderRow());
+            ->addOrderRow(\TestUtil::createOrderRow());
             $request = $request
                 ->addCustomerDetails(\WebPayItem::individualCustomer()->setNationalIdNumber(194605092222))
                 ->setCountryCode("SE")
@@ -72,7 +69,7 @@ class NewOrderBuilderTest extends \PHPUnit_Framework_TestCase {
     }
     
     public function testNewInvoiceOrderWithArray() {
-        $orderRows[] = TestUtil::createOrderRow();
+        $orderRows[] = \TestUtil::createOrderRow();
         $orderRows[] = \WebPayItem::orderrow()
                     ->setArticleNumber(2)
                     ->setQuantity(2)
@@ -99,7 +96,7 @@ class NewOrderBuilderTest extends \PHPUnit_Framework_TestCase {
     public function testOrderWithShippingFee() {
         $request = \WebPay::createOrder();
         $request = $request
-            ->addOrderRow(TestUtil::createOrderRow())
+            ->addOrderRow(\TestUtil::createOrderRow())
                 ->addFee(\WebPayItem::shippingFee()
                         ->setShippingId(1)
                         ->setName('shipping')
@@ -130,7 +127,7 @@ class NewOrderBuilderTest extends \PHPUnit_Framework_TestCase {
     public function testOrderWithInvoiceFee() {
         $request = \WebPay::createOrder();
         $request = $request
-            ->addOrderRow(TestUtil::createOrderRow())
+            ->addOrderRow(\TestUtil::createOrderRow())
                 ->addFee(\WebPayItem::invoiceFee()
                     ->setName('Svea fee')
                     ->setDescription("Fee for invoice")
@@ -160,7 +157,7 @@ class NewOrderBuilderTest extends \PHPUnit_Framework_TestCase {
     public function testOrderWithFixedDiscount() {
         $request = \WebPay::createOrder();
         $request = $request
-            ->addOrderRow(TestUtil::createOrderRow())
+            ->addOrderRow(\TestUtil::createOrderRow())
                 ->addDiscount(\WebPayItem::fixedDiscount()
                    ->setDiscountId("1")
                     ->setAmountIncVat(100.00)
@@ -189,7 +186,7 @@ class NewOrderBuilderTest extends \PHPUnit_Framework_TestCase {
     public function testOrderWithRelativeDiscount() {
         $request = \WebPay::createOrder();
         $request = $request
-            ->addOrderRow(TestUtil::createOrderRow())
+            ->addOrderRow(\TestUtil::createOrderRow())
                 ->addDiscount(
                 \WebPayItem::relativeDiscount()
                         ->setDiscountId("1")
@@ -219,7 +216,7 @@ class NewOrderBuilderTest extends \PHPUnit_Framework_TestCase {
     public function testBuildOrderWithIndividualCustomer() {
         $request = \WebPay::createOrder();
             $request = $request
-            ->addOrderRow(TestUtil::createOrderRow())
+            ->addOrderRow(\TestUtil::createOrderRow())
                 ->addCustomerDetails(\WebPayItem::individualCustomer()
                     ->setNationalIdNumber(194605092222)
                     ->setInitials("SB")
@@ -253,7 +250,7 @@ class NewOrderBuilderTest extends \PHPUnit_Framework_TestCase {
     public function testBuildOrderWithCompanyCustomer() {
         $request = \WebPay::createOrder();
             $request = $request
-            ->addOrderRow(TestUtil::createOrderRow())
+            ->addOrderRow(\TestUtil::createOrderRow())
                 ->addCustomerDetails(\WebPayItem::companyCustomer()
                     ->setNationalIdNumber(666666)
                     ->setEmail("test@svea.com")
@@ -279,7 +276,7 @@ class NewOrderBuilderTest extends \PHPUnit_Framework_TestCase {
     public function testBuildOrderWithCompanyCustomerDE() {
         $request = \WebPay::createOrder();
         $request = $request
-            ->addOrderRow(TestUtil::createOrderRow())
+            ->addOrderRow(\TestUtil::createOrderRow())
                 ->addCustomerDetails(\WebPayItem::companyCustomer()
                     ->setVatNumber("SE666666")
                     ->setCompanyName("MyCompany")

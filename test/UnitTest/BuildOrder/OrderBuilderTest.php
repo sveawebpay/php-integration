@@ -7,9 +7,6 @@ require_once $root . '/../../../src/WebServiceRequests/svea_soap/SveaSoapConfig.
 require_once $root . '/../VoidValidator.php';
 
 $root = realpath(dirname(__FILE__));
-require_once $root . '/TestRowFactory.php';
-
-$root = realpath(dirname(__FILE__));
 require_once $root . '/../../TestUtil.php';
 
 /**
@@ -27,7 +24,7 @@ class OrderBuilderTest extends \PHPUnit_Framework_TestCase {
 
     public function testBuildOrderWithOrderRow() {
         $sveaRequest = \WebPay::createOrder(SveaConfig::getProdConfig())
-                ->addOrderRow(TestUtil::createOrderRow());
+                ->addOrderRow(\TestUtil::createOrderRow());
 
         $this->assertEquals(1, $sveaRequest->orderRows[0]->articleNumber);
         $this->assertEquals(2, $sveaRequest->orderRows[0]->quantity);
@@ -42,7 +39,7 @@ class OrderBuilderTest extends \PHPUnit_Framework_TestCase {
     }
 
     public function testBuildOrderWithShippingFee() {
-        $rowFactory = new TestRowFactory();
+        $rowFactory = new \TestUtil();
         $sveaRequest =
                 \WebPay::createOrder()
                 ->run($rowFactory->buildShippingFee());
@@ -53,9 +50,9 @@ class OrderBuilderTest extends \PHPUnit_Framework_TestCase {
     }
 
     public function testBuildOrderWithInvoicefee() {
-        $rowFactory = new TestRowFactory();
+        $rowFactory = new \TestUtil();
         $sveaRequest = \WebPay::createOrder()
-                ->addOrderRow(TestUtil::createOrderRow())
+                ->addOrderRow(\TestUtil::createOrderRow())
                 ->run($rowFactory->buildInvoiceFee());
 
         $this->assertEquals("Svea fee", $sveaRequest->invoiceFeeRows[0]->name);

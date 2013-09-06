@@ -84,7 +84,7 @@ class HandleOrder {
         $request = new SveaDoRequest($url);
         $svea_req = $request->DeliverOrderEu($object);
 
-        $response = new SveaResponse($svea_req,"");
+        $response = new \SveaResponse($svea_req,"");
         return $response->response;
     }
 }

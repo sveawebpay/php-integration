@@ -39,7 +39,7 @@ class WebServiceOrderValidatorTest extends \PHPUnit_Framework_TestCase {
     public function t_estFailOnDoubleIdentity() {
         $builder = \WebPay::createOrder();
         $order = $builder
-                ->addOrderRow(TestUtil::createHostedOrderRow())
+                ->addOrderRow(\TestUtil::createHostedOrderRow())
                 ->setCountryCode("SE")
                 ->setOrderDate("Mon, 15 Aug 05 15:52:01 +0000")
                 ->addCustomerDetails(\WebPayItem::individualCustomer()->setNationalIdNumber(194605092222))
@@ -69,7 +69,7 @@ class WebServiceOrderValidatorTest extends \PHPUnit_Framework_TestCase {
         $code = $this->getGetPaymentPlanParamsForTesting();
         $builder = \WebPay::CreateOrder();
         $order = $builder
-                ->addOrderRow(TestUtil::createHostedOrderRow())
+                ->addOrderRow(\TestUtil::createHostedOrderRow())
                 ->setCountryCode("SE")
                 ->setOrderDate("Mon, 15 Aug 05 15:52:01 +0000")
                 ->addCustomerDetails(\WebPayItem::companyCustomer()->setNationalIdNumber(4608142222))
@@ -85,7 +85,7 @@ class WebServiceOrderValidatorTest extends \PHPUnit_Framework_TestCase {
     public function testFailOnBadCountryCode() {
         $builder = \WebPay::createOrder();
         $order = $builder
-                ->addOrderRow(TestUtil::createHostedOrderRow())
+                ->addOrderRow(\TestUtil::createHostedOrderRow())
                  ->setCountryCode("ZZ")
                  ->setOrderDate("Mon, 15 Aug 05 15:52:01 +0000")
                  ->addCustomerDetails(\WebPayItem::individualCustomer()->setNationalIdNumber(111111))
@@ -101,7 +101,7 @@ class WebServiceOrderValidatorTest extends \PHPUnit_Framework_TestCase {
     public function testFailOnMissingCountryCode() {
         $builder = \WebPay::createOrder();
         $order = $builder
-                ->addOrderRow(TestUtil::createHostedOrderRow())
+                ->addOrderRow(\TestUtil::createHostedOrderRow())
                 ->addCustomerDetails(\WebPayItem::individualCustomer()->setNationalIdNumber(111111))
                 ->setOrderDate("Mon, 15 Aug 05 15:52:01 +0000")
                 ->useInvoicePayment();
@@ -191,7 +191,7 @@ class WebServiceOrderValidatorTest extends \PHPUnit_Framework_TestCase {
     public function testFailOnMissingValuesForNlOrder() {
         $builder = \WebPay::createOrder();
         $order = $builder
-                ->addOrderRow(TestUtil::createHostedOrderRow())
+                ->addOrderRow(\TestUtil::createHostedOrderRow())
                 ->setCountryCode("NL")
                 ->setOrderDate("Mon, 15 Aug 05 15:52:01 +0000")
                 ->useInvoicePayment();
@@ -260,7 +260,7 @@ class WebServiceOrderValidatorTest extends \PHPUnit_Framework_TestCase {
     public function testFailOnMissingOrderDate() {
         $builder = \WebPay::createOrder();
         $order = $builder
-                ->addOrderRow(TestUtil::createHostedOrderRow())
+                ->addOrderRow(\TestUtil::createHostedOrderRow())
                 ->setCountryCode("SE")
                 // ->setOrderDate("Mon, 15 Aug 05 15:52:01 +0000")
                 ->addCustomerDetails(\WebPayItem::individualCustomer()->setNationalIdNumber(46111111))

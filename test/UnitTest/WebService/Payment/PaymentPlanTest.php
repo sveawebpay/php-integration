@@ -3,7 +3,6 @@ namespace Svea;
 
 $root = realpath(dirname(__FILE__));
 require_once $root . '/../../../../test/UnitTest/BuildOrder/OrderBuilderTest.php';
-require_once $root . '/../../../../test/UnitTest/BuildOrder/TestRowFactory.php';
 
 $root = realpath(dirname(__FILE__));
 require_once $root . '/../../../TestUtil.php';
@@ -26,9 +25,9 @@ class PaymentPlanTest extends \PHPUnit_Framework_TestCase {
     }
     
     public function testPaymentPlanRequestObjectSpecifics() {
-        $rowFactory = new TestRowFactory();
+        $rowFactory = new \TestUtil();
         $request = \WebPay::createOrder()
-                ->addOrderRow(TestUtil::createOrderRow())
+                ->addOrderRow(\TestUtil::createOrderRow())
                 ->run($rowFactory->buildShippingFee())
                 ->addCustomerDetails(\WebPayItem::individualCustomer()->setNationalIdNumber(194605092222))
                 ->setCountryCode("SE")

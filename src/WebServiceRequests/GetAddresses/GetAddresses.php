@@ -120,7 +120,7 @@ class GetAddresses {
         $request = new SveaDoRequest($url);
         $svea_req = $request->GetAddresses($object);
 
-        $response = new SveaResponse($svea_req,"");
+        $response = new \SveaResponse($svea_req,"");
         return $response->response;
     }
 }

@@ -23,7 +23,7 @@ class DeliverOrderTest extends \PHPUnit_Framework_TestCase {
     public function testDeliverInvoiceDistributionType() {
         $orderBuilder = \WebPay::deliverOrder();
         $request = $orderBuilder
-            ->addOrderRow(TestUtil::createOrderRow())
+            ->addOrderRow(\TestUtil::createOrderRow())
                 ->setOrderId("id")
                 ->setNumberOfCreditDays(1)
                 ->setCountryCode("SE")
@@ -38,7 +38,7 @@ class DeliverOrderTest extends \PHPUnit_Framework_TestCase {
     public function testDeliverInvoiceOrder() {
         $orderBuilder = \WebPay::deliverOrder();
         $request = $orderBuilder
-                ->addOrderRow(TestUtil::createOrderRow())
+                ->addOrderRow(\TestUtil::createOrderRow())
                 ->addDiscount(\WebPayItem::fixedDiscount()->setAmountIncVat(10))
                 ->addFee(\WebPayItem::shippingFee()
                     ->setShippingId('33')
@@ -100,7 +100,7 @@ class DeliverOrderTest extends \PHPUnit_Framework_TestCase {
     public function testNewDeliverInvoiceOrderRow() {
         $request = \WebPay::deliverOrder();
         $request = $request
-            ->addOrderRow(TestUtil::createOrderRow());
+            ->addOrderRow(\TestUtil::createOrderRow());
             $request = $request ->setOrderId("id")
                 ->setNumberOfCreditDays(1)
                 ->setCountryCode("SE")
@@ -121,7 +121,7 @@ class DeliverOrderTest extends \PHPUnit_Framework_TestCase {
     public function testDeliverOrderWithInvoiceFeeAndFixedDiscount() {
         $request = \WebPay::deliverOrder();
         $request = $request
-            ->addOrderRow(TestUtil::createOrderRow())
+            ->addOrderRow(\TestUtil::createOrderRow())
                 ->addFee(\WebPayItem::invoiceFee()
                     ->setName('Svea fee')
                     ->setDescription("Fee for invoice")
@@ -173,7 +173,7 @@ class DeliverOrderTest extends \PHPUnit_Framework_TestCase {
     public function testDeliverOrderWithShippingFeeAndRelativeDiscount() {
         $request = \WebPay::deliverOrder();
         $request = $request
-                ->addOrderRow(TestUtil::createOrderRow())
+                ->addOrderRow(\TestUtil::createOrderRow())
                 ->addFee(\WebPayItem::shippingFee()
                     ->setShippingId(1)
                     ->setName('shipping')

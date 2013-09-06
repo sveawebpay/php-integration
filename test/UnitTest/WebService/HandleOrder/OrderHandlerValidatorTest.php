@@ -31,7 +31,7 @@ class OrderHandlerValidatorTest extends \PHPUnit_Framework_TestCase {
     public function testFailOnMissingInvoiceDetailsOnInvoiceDeliver() {
         $builder = \WebPay::deliverOrder();
         $object = $builder
-            ->addOrderRow(TestUtil::createOrderRow())
+            ->addOrderRow(\TestUtil::createOrderRow())
                 ->addFee(\WebPayItem::shippingFee()
                     ->setShippingId('33')
                     ->setName('shipping')
