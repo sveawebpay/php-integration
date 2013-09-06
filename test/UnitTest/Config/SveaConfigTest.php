@@ -38,7 +38,7 @@ class SveaConfigTest extends \PHPUnit_Framework_TestCase {
                 ->setAlternativeUrl(); //overwrite all urls
 
         $request = \WebPay::createOrder($conf)
-            ->addOrderRow(TestUtil::createOrderRow())
+            ->addOrderRow(\TestUtil::createOrderRow())
             ->addCustomerDetails(\WebPayItem::individualCustomer()->setNationalIdNumber(194605092222))
                     ->setCountryCode("SE")
                     ->setCustomerReference("33")
@@ -51,7 +51,7 @@ class SveaConfigTest extends \PHPUnit_Framework_TestCase {
 
     public function testOrderWithSEConfigFromFunction() {
            $request = \WebPay::createOrder(SveaConfig::getTestConfig())
-            ->addOrderRow(TestUtil::createOrderRow())
+            ->addOrderRow(\TestUtil::createOrderRow())
             ->addCustomerDetails(\WebPayItem::individualCustomer()->setNationalIdNumber(194605092222))
                     ->setCountryCode("SE")
                     ->setCustomerReference("33")

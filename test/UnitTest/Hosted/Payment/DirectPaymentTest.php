@@ -3,7 +3,6 @@ namespace Svea;
 
 $root = realpath(dirname(__FILE__));
 require_once $root . '/../../../../test/UnitTest/BuildOrder/OrderBuilderTest.php';
-require_once $root . '/../../../../test/UnitTest/BuildOrder/TestRowFactory.php';
 
 $root = realpath(dirname(__FILE__));
 require_once $root . '/../../../TestUtil.php';
@@ -18,9 +17,9 @@ class DirectPaymentTest extends \PHPUnit_Framework_TestCase {
      * @expectedExceptionMessage Invalid or missing Country code
      */
     public function testFailOnWrongCountryCodeInConfig() {
-        $rowFactory = new TestRowFactory();
+        $rowFactory = new \TestUtil();
         $form = \WebPay::createOrder()
-                ->addOrderRow(TestUtil::createOrderRow())
+                ->addOrderRow(\TestUtil::createOrderRow())
             ->run($rowFactory->buildShippingFee())
             ->addCustomerDetails(\WebPayItem::individualCustomer()
                     ->setNationalIdNumber(194605092222)
@@ -44,9 +43,9 @@ class DirectPaymentTest extends \PHPUnit_Framework_TestCase {
     }
     
     public function testConfigureExcludedPaymentMethods() {
-        $rowFactory = new TestRowFactory();
+        $rowFactory = new \TestUtil();
         $form = \WebPay::createOrder()
-                ->addOrderRow(TestUtil::createOrderRow())
+                ->addOrderRow(\TestUtil::createOrderRow())
             ->run($rowFactory->buildShippingFee())
             ->addCustomerDetails(\WebPayItem::individualCustomer()
                     ->setNationalIdNumber(194605092222)
@@ -68,9 +67,9 @@ class DirectPaymentTest extends \PHPUnit_Framework_TestCase {
     }
     
     public function testBuildDirectBankPayment() {
-        $rowFactory = new TestRowFactory();
+        $rowFactory = new \TestUtil();
         $form = \WebPay::createOrder()
-                ->addOrderRow(TestUtil::createOrderRow())
+                ->addOrderRow(\TestUtil::createOrderRow())
                 ->addFee(\WebPayItem::shippingFee()
                     ->setShippingId('33')
                     ->setName('shipping')

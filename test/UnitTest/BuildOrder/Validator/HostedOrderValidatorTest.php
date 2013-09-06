@@ -19,7 +19,7 @@ class HostedOrderValidatorTest extends \PHPUnit_Framework_TestCase {
     public function testFailOnNullCustomerRefNo() {
         $builder = \WebPay::createOrder();
         $order = $builder
-                ->addOrderRow(TestUtil::createHostedOrderRow())
+                ->addOrderRow(\TestUtil::createHostedOrderRow())
                 ->setCountryCode("SE")
                 ->setCurrency("SEK")
                 ->usePayPageCardOnly()
@@ -35,7 +35,7 @@ class HostedOrderValidatorTest extends \PHPUnit_Framework_TestCase {
     public function testFailOnEmptyCustomerRefNo() {
         $builder = \WebPay::createOrder();
         $order = $builder
-                ->addOrderRow(TestUtil::createHostedOrderRow())
+                ->addOrderRow(\TestUtil::createHostedOrderRow())
                 ->setCountryCode("SE")
                 ->setCurrency("SEK")
                 ->setClientOrderNumber("")
@@ -58,7 +58,7 @@ class HostedOrderValidatorTest extends \PHPUnit_Framework_TestCase {
     public function testFailOnMissingCustomerForNL() {
         $builder = \WebPay::createOrder();
         $order = $builder
-                ->addOrderRow(TestUtil::createHostedOrderRow())
+                ->addOrderRow(\TestUtil::createHostedOrderRow())
                 ->setCountryCode("NL")
                 ->setCurrency("SEK")
                 ->setClientOrderNumber("55")
@@ -80,7 +80,7 @@ class HostedOrderValidatorTest extends \PHPUnit_Framework_TestCase {
     public function testFailOnMissingCompanyCustomerForNL() {
         $builder = \WebPay::createOrder();
         $order = $builder
-                ->addOrderRow(TestUtil::createHostedOrderRow())
+                ->addOrderRow(\TestUtil::createHostedOrderRow())
                 ->setCountryCode("NL")
                 ->setCurrency("SEK")
                 ->setClientOrderNumber("55")
@@ -97,7 +97,7 @@ class HostedOrderValidatorTest extends \PHPUnit_Framework_TestCase {
     public function testFailOnMissingCurrency() {
         $builder = \WebPay::createOrder();
         $order = $builder
-                ->addOrderRow(TestUtil::createHostedOrderRow())
+                ->addOrderRow(\TestUtil::createHostedOrderRow())
                 ->setCountryCode("SE")
                 ->setClientOrderNumber("34")
                 ->usePayPageCardOnly()
@@ -113,7 +113,7 @@ class HostedOrderValidatorTest extends \PHPUnit_Framework_TestCase {
     public function testFailOnMissingCountryCode() {
         $builder = \WebPay::createOrder();
         $order = $builder
-                ->addOrderRow(TestUtil::createHostedOrderRow())
+                ->addOrderRow(\TestUtil::createHostedOrderRow())
                 //->setCountryCode("SE")
                 ->setCurrency("SEK")
                 ->setClientOrderNumber("34")
@@ -130,7 +130,7 @@ class HostedOrderValidatorTest extends \PHPUnit_Framework_TestCase {
     public function testFailOnMissingReturnUrl() {
         $builder = \WebPay::createOrder();
         $order = $builder
-                ->addOrderRow(TestUtil::createHostedOrderRow())
+                ->addOrderRow(\TestUtil::createHostedOrderRow())
                 ->setCountryCode("SE")
                 ->setCurrency("SEK")
                 ->setClientOrderNumber("34")

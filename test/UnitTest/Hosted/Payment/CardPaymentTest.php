@@ -3,7 +3,6 @@ namespace Svea;
 
 $root = realpath(dirname(__FILE__));
 require_once $root . '/../../../../test/UnitTest/BuildOrder/OrderBuilderTest.php';
-require_once $root . '/../../../../test/UnitTest/BuildOrder/TestRowFactory.php';
 
 $root = realpath(dirname(__FILE__));
 require_once $root . '/../../../TestUtil.php';
@@ -19,7 +18,7 @@ class CardPaymentTest extends \PHPUnit_Framework_TestCase {
     public function testSetAuthorization() {
         $form = \WebPay::createOrder(new TestConf())
                 ->addCustomerDetails(\WebPayItem::individualCustomer()->setNationalIdNumber(194605092222)->setIpAddress("123.123.123"))
-                ->addOrderRow(TestUtil::createOrderRow())
+                ->addOrderRow(\TestUtil::createOrderRow())
                 ->setCountryCode("SE")
                 ->setClientOrderNumber("33")
                 ->setOrderDate("2012-12-12")
@@ -34,9 +33,9 @@ class CardPaymentTest extends \PHPUnit_Framework_TestCase {
     }
 
     public function testBuildCardPayment() {
-        $rowFactory = new TestRowFactory();
+        $rowFactory = new \TestUtil();
         $form = \WebPay::createOrder()
-                ->addOrderRow(TestUtil::createOrderRow())
+                ->addOrderRow(\TestUtil::createOrderRow())
                 ->run($rowFactory->buildShippingFee())
                 ->addDiscount(\WebPayItem::relativeDiscount()
                     ->setDiscountId("1")

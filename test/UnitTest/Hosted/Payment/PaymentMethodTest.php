@@ -3,7 +3,6 @@ namespace Svea;
 
 $root = realpath(dirname(__FILE__));
 require_once $root . '/../../../../test/UnitTest/BuildOrder/OrderBuilderTest.php';
-require_once $root . '/../../../../test/UnitTest/BuildOrder/TestRowFactory.php';
 
 $root = realpath(dirname(__FILE__));
 require_once $root . '/../../../TestUtil.php';
@@ -14,9 +13,9 @@ require_once $root . '/../../../TestUtil.php';
 class PaymentMethodTest extends \PHPUnit_Framework_TestCase{
     
      public function testPayPagePaymentWithSetPaymentMethod() {
-        $rowFactory = new TestRowFactory();
+        $rowFactory = new \TestUtil();
         $form = \WebPay::createOrder()
-            ->addOrderRow(TestUtil::createOrderRow())
+            ->addOrderRow(\TestUtil::createOrderRow())
             ->run($rowFactory->buildShippingFee())
             ->addDiscount(\WebPayItem::relativeDiscount()
                     ->setDiscountId("1")
@@ -39,9 +38,9 @@ class PaymentMethodTest extends \PHPUnit_Framework_TestCase{
     }
     
     public function testPayPagePaymentWithSetPaymentMethodInvoice() {
-        $rowFactory = new TestRowFactory();
+        $rowFactory = new \TestUtil();
         $form = \WebPay::createOrder()
-            ->addOrderRow(TestUtil::createOrderRow())
+            ->addOrderRow(\TestUtil::createOrderRow())
             ->run($rowFactory->buildShippingFee())
             ->addDiscount(\WebPayItem::relativeDiscount()
                     ->setDiscountId("1")
@@ -67,7 +66,7 @@ class PaymentMethodTest extends \PHPUnit_Framework_TestCase{
     
     public function testPaymentMethodInvoiceNL() {
         $form = \WebPay::createOrder()
-            ->addOrderRow(TestUtil::createOrderRow())
+            ->addOrderRow(\TestUtil::createOrderRow())
             ->addCustomerDetails(\WebPayItem::individualCustomer()
                     ->setInitials("SB")
                     ->setBirthDate(1923, 12, 12)

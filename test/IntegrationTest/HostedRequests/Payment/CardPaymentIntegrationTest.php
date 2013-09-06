@@ -1,12 +1,8 @@
 <?php
-namespace Svea;
-
+// Integration tests should not need to use the namespace
 
 $root = realpath(dirname(__FILE__));
 require_once $root . '/../../../../src/Includes.php';
-require_once $root . '/../../../UnitTest/BuildOrder/TestRowFactory.php';
-
-$root = realpath(dirname(__FILE__));
 require_once $root . '/../../../TestUtil.php';
 
 /**
@@ -15,11 +11,11 @@ require_once $root . '/../../../TestUtil.php';
 class CardPaymentIntegrationTest extends \PHPUnit_Framework_TestCase {
     
     public function testDoCardPaymentRequest() {
-        $rowFactory = new TestRowFactory();
-        $form = \WebPay::createOrder()                      // workaround to not include namespace in WebPay.php
+        $rowFactory = new TestUtil();
+        $form = WebPay::createOrder()                      
                 ->addOrderRow(TestUtil::createOrderRow())
                 ->run($rowFactory->buildShippingFee())
-                ->addDiscount(\WebPayItem::relativeDiscount()
+                ->addDiscount(WebPayItem::relativeDiscount()
                         ->setDiscountId("1")
                         ->setDiscountPercent(50)
                         ->setUnit("st")

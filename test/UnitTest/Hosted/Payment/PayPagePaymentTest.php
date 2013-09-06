@@ -3,7 +3,6 @@ namespace Svea;
 
 $root = realpath(dirname(__FILE__));
 require_once $root . '/../../../../test/UnitTest/BuildOrder/OrderBuilderTest.php';
-require_once $root . '/../../../../test/UnitTest/BuildOrder/TestRowFactory.php';
 
 $root = realpath(dirname(__FILE__));
 require_once $root . '/../../../TestUtil.php';
@@ -14,9 +13,9 @@ require_once $root . '/../../../TestUtil.php';
 class PayPagePaymentTest extends \PHPUnit_Framework_TestCase {
     
     public function testBuildPayPagePaymentWithExcludepaymentMethods() {
-        $rowFactory = new TestRowFactory();
+        $rowFactory = new \TestUtil();
         $form = \WebPay::createOrder()
-            ->addOrderRow(TestUtil::createOrderRow())
+            ->addOrderRow(\TestUtil::createOrderRow())
             ->run($rowFactory->buildShippingFee())
             ->addDiscount(\WebPayItem::relativeDiscount()
                      ->setDiscountId("1")
@@ -48,10 +47,10 @@ class PayPagePaymentTest extends \PHPUnit_Framework_TestCase {
     }
 
     public function testpayPagePaymentExcludeCardPayments() {
-        $rowFactory = new TestRowFactory();
+        $rowFactory = new \TestUtil();
         $form = \WebPay::createOrder()
             //->setTestmode()()
-            ->addOrderRow(TestUtil::createOrderRow())
+            ->addOrderRow(\TestUtil::createOrderRow())
             ->run($rowFactory->buildShippingFee())
             ->addDiscount(\WebPayItem::relativeDiscount()
                     ->setDiscountId("1")
@@ -75,9 +74,9 @@ class PayPagePaymentTest extends \PHPUnit_Framework_TestCase {
     }
 
     public function testExcludeDirectPaymentMethods() {
-        $rowFactory = new TestRowFactory();
+        $rowFactory = new \TestUtil();
         $form = \WebPay::createOrder()
-            ->addOrderRow(TestUtil::createOrderRow())
+            ->addOrderRow(\TestUtil::createOrderRow())
             ->run($rowFactory->buildShippingFee())
             ->addDiscount(\WebPayItem::relativeDiscount()
                     ->setDiscountId("1")
@@ -101,9 +100,9 @@ class PayPagePaymentTest extends \PHPUnit_Framework_TestCase {
     }
 
     public function testpayPagePaymentIncludePaymentMethods() {
-        $rowFactory = new TestRowFactory();
+        $rowFactory = new \TestUtil();
         $form = \WebPay::createOrder()
-            ->addOrderRow(TestUtil::createOrderRow())
+            ->addOrderRow(\TestUtil::createOrderRow())
             ->run($rowFactory->buildShippingFee())
             ->addDiscount(\WebPayItem::relativeDiscount()
                     ->setDiscountId("1")
@@ -128,7 +127,7 @@ class PayPagePaymentTest extends \PHPUnit_Framework_TestCase {
     }
     
     public function testBuildPayPagePaymentVatIsCero() {
-         $rowFactory = new TestRowFactory();
+         $rowFactory = new \TestUtil();
          $form = \WebPay::createOrder()
                 ->addOrderRow(\WebPayItem::orderRow()
                     ->setQuantity(2)
