@@ -8,7 +8,7 @@ include_once SVEA_REQUEST_DIR . "/Includes.php";
  * 
  * @deprecated Please use class WebPayItem instead.
  * 
- * @author Kristian Madsen, anne-hal
+ * @author Kristian Grossman-Madsen, anne-hal
  */
 class Item {
 

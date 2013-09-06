@@ -27,7 +27,7 @@ class DeliverOrderTest extends \PHPUnit_Framework_TestCase {
                 ->setOrderId("id")
                 ->setNumberOfCreditDays(1)
                 ->setCountryCode("SE")
-                ->setInvoiceDistributionType(DistributionType::POST)//Post or Email
+                ->setInvoiceDistributionType(\DistributionType::POST)//Post or Email
                 ->setCreditInvoice("id")
                 ->deliverInvoiceOrder()
                 ->prepareRequest();
@@ -52,7 +52,7 @@ class DeliverOrderTest extends \PHPUnit_Framework_TestCase {
                 ->setOrderId("id")
                 ->setNumberOfCreditDays(1)
                 ->setCountryCode("SE")
-                ->setInvoiceDistributionType(DistributionType::POST)
+                ->setInvoiceDistributionType(\DistributionType::POST)
                 ->setCreditInvoice("id")
                 ->deliverInvoiceOrder()
                 ->prepareRequest();
@@ -104,7 +104,7 @@ class DeliverOrderTest extends \PHPUnit_Framework_TestCase {
             $request = $request ->setOrderId("id")
                 ->setNumberOfCreditDays(1)
                 ->setCountryCode("SE")
-                ->setInvoiceDistributionType(DistributionType::POST)//Post or Email
+                ->setInvoiceDistributionType(\DistributionType::POST)//Post or Email
                 ->setCreditInvoice("id")
                 ->deliverInvoiceOrder()
                 ->prepareRequest();
@@ -139,7 +139,7 @@ class DeliverOrderTest extends \PHPUnit_Framework_TestCase {
                 );
             $request = $request ->setOrderId("id")
                 ->setNumberOfCreditDays(1)
-                ->setInvoiceDistributionType(DistributionType::POST)//Post or Email
+                ->setInvoiceDistributionType(\DistributionType::POST)//Post or Email
                 ->setCreditInvoice("id")
                 ->setCountryCode("SE")
                 ->deliverInvoiceOrder()
@@ -192,7 +192,7 @@ class DeliverOrderTest extends \PHPUnit_Framework_TestCase {
                 );
             $request = $request ->setOrderId("id")
                 ->setNumberOfCreditDays(1)
-                ->setInvoiceDistributionType(DistributionType::POST)//Post or Email
+                ->setInvoiceDistributionType(\DistributionType::POST)//Post or Email
                 ->setCreditInvoice("id")
                 ->setCountryCode("SE")
                 ->deliverInvoiceOrder()

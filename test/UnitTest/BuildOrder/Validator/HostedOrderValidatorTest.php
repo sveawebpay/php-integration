@@ -62,7 +62,7 @@ class HostedOrderValidatorTest extends \PHPUnit_Framework_TestCase {
                 ->setCountryCode("NL")
                 ->setCurrency("SEK")
                 ->setClientOrderNumber("55")
-                ->usePaymentMethod(PaymentMethod::INVOICE)
+                ->usePaymentMethod(\PaymentMethod::INVOICE)
                 ->setReturnUrl("myurl.se");
         
         $order->getPaymentForm();
@@ -84,7 +84,7 @@ class HostedOrderValidatorTest extends \PHPUnit_Framework_TestCase {
                 ->setCountryCode("NL")
                 ->setCurrency("SEK")
                 ->setClientOrderNumber("55")
-                ->usePaymentMethod(PaymentMethod::INVOICE)
+                ->usePaymentMethod(\PaymentMethod::INVOICE)
                 ->setReturnUrl("myurl.se");
         
         $order->getPaymentForm();

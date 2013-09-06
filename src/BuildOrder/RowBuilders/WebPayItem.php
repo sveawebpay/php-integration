@@ -7,7 +7,7 @@ include_once SVEA_REQUEST_DIR . "/Includes.php";
  * Supercedes class Item, while providing the same functionality.
  * WebPayItem is external to Svea namespace along with class WebPay.
  *  
- * @author Kristian Madsen
+ * @author Kristian Grossman-Madsen
  */
 class WebPayItem {
 

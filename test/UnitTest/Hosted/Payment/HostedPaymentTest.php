@@ -35,8 +35,8 @@ class HostedPaymentTest extends \PHPUnit_Framework_TestCase {
         $excludedPaymentMethods = $exclude->excludeInvoicesAndPaymentPlan("DE");
         
         $this->assertEquals(2, count((array)$excludedPaymentMethods));
-        $this->assertTrue(in_array(PaymentMethod::INVOICE_DE, $excludedPaymentMethods));
-        $this->assertTrue(in_array(PaymentMethod::PAYMENTPLAN_DE, $excludedPaymentMethods));
+        $this->assertTrue(in_array(\PaymentMethod::INVOICE_DE, $excludedPaymentMethods));
+        $this->assertTrue(in_array(\PaymentMethod::PAYMENTPLAN_DE, $excludedPaymentMethods));
     }
     
     public function te_stexcludeInvoicesAndPaymentPlanDk() {
@@ -44,8 +44,8 @@ class HostedPaymentTest extends \PHPUnit_Framework_TestCase {
         $excludedPaymentMethods = $exclude->excludeInvoicesAndPaymentPlan("DK");
         
         $this->assertEquals(2, count((array)$excludedPaymentMethods));
-        $this->assertTrue(in_array(PaymentMethod::INVOICE_DK, $excludedPaymentMethods));
-        $this->assertTrue(in_array(PaymentMethod::PAYMENTPLAN_DK, $excludedPaymentMethods));
+        $this->assertTrue(in_array(\PaymentMethod::INVOICE_DK, $excludedPaymentMethods));
+        $this->assertTrue(in_array(\PaymentMethod::PAYMENTPLAN_DK, $excludedPaymentMethods));
     }
     
     public function te_stexcludeInvoicesAndPaymentPlanFi() {
@@ -53,8 +53,8 @@ class HostedPaymentTest extends \PHPUnit_Framework_TestCase {
         $excludedPaymentMethods = $exclude->excludeInvoicesAndPaymentPlan("FI");
         
         $this->assertEquals(2, count((array)$excludedPaymentMethods));
-        $this->assertTrue(in_array(PaymentMethod::INVOICE_FI, $excludedPaymentMethods));
-        $this->assertTrue(in_array(PaymentMethod::PAYMENTPLAN_FI, $excludedPaymentMethods));
+        $this->assertTrue(in_array(\PaymentMethod::INVOICE_FI, $excludedPaymentMethods));
+        $this->assertTrue(in_array(\PaymentMethod::PAYMENTPLAN_FI, $excludedPaymentMethods));
     }
     
     public function te_stexcludeInvoicesAndPaymentPlanNl() {
@@ -62,8 +62,8 @@ class HostedPaymentTest extends \PHPUnit_Framework_TestCase {
         $excludedPaymentMethods = $exclude->excludeInvoicesAndPaymentPlan("NL");
         
         $this->assertEquals(2, count((array)$excludedPaymentMethods));
-        $this->assertTrue(in_array(PaymentMethod::INVOICE_NL, $excludedPaymentMethods));
-        $this->assertTrue(in_array(PaymentMethod::PAYMENTPLAN_NL, $excludedPaymentMethods));
+        $this->assertTrue(in_array(\PaymentMethod::INVOICE_NL, $excludedPaymentMethods));
+        $this->assertTrue(in_array(\PaymentMethod::PAYMENTPLAN_NL, $excludedPaymentMethods));
     }
     
     public function t_estexcludeInvoicesAndPaymentPlanNo() {
@@ -71,8 +71,8 @@ class HostedPaymentTest extends \PHPUnit_Framework_TestCase {
         $excludedPaymentMethods = $exclude->excludeInvoicesAndPaymentPlan("NO");
         
         $this->assertEquals(2, count((array)$excludedPaymentMethods));
-        $this->assertTrue(in_array(PaymentMethod::INVOICE_NO, $excludedPaymentMethods));
-        $this->assertTrue(in_array(PaymentMethod::PAYMENTPLAN_NO, $excludedPaymentMethods));
+        $this->assertTrue(in_array(\PaymentMethod::INVOICE_NO, $excludedPaymentMethods));
+        $this->assertTrue(in_array(\PaymentMethod::PAYMENTPLAN_NO, $excludedPaymentMethods));
     }
     
     public function te_stexcludeInvoicesAndPaymentPlanNull() {

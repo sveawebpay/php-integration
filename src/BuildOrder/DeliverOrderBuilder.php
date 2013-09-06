@@ -161,14 +161,14 @@ class deliverOrderBuilder {
      * @return \deliverOrder
      */
     public function setInvoiceDistributionType($distributionTypeAsConst) {
-        if ($distributionTypeAsConst != DistributionType::EMAIL || $distributionTypeAsConst != DistributionType::POST) {
+        if ($distributionTypeAsConst != \ DistributionType::EMAIL || $distributionTypeAsConst != \ DistributionType::POST) {
             $distributionTypeAsConst = trim($distributionTypeAsConst);
             if (preg_match("/post/i", $distributionTypeAsConst)) {
-                $distributionTypeAsConst = DistributionType::POST;
+                $distributionTypeAsConst = \ DistributionType::POST;
             } elseif (preg_match("/mail/i", $distributionTypeAsConst)) {
-                $distributionTypeAsConst = DistributionType::EMAIL;
+                $distributionTypeAsConst = \ DistributionType::EMAIL;
             } else {
-                $distributionTypeAsConst = DistributionType::POST;
+                $distributionTypeAsConst = \ DistributionType::POST;
             }
         }
         $this->distributionType = $distributionTypeAsConst;

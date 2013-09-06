@@ -30,12 +30,12 @@ class PaymentMethodTest extends \PHPUnit_Framework_TestCase{
             ->setClientOrderNumber("33")
             ->setOrderDate("2012-12-12")
             ->setCurrency("SEK")
-            ->usePaymentMethod(PaymentMethod::KORTCERT)
+            ->usePaymentMethod(\PaymentMethod::KORTCERT)
             ->setReturnUrl("http://myurl.se")
             ->getPaymentForm();
         
         $xmlMessage = new \SimpleXMLElement($form->xmlMessage);
-        $this->assertEquals(PaymentMethod::KORTCERT, $xmlMessage->paymentmethod[0]);
+        $this->assertEquals(\PaymentMethod::KORTCERT, $xmlMessage->paymentmethod[0]);
     }
     
     public function testPayPagePaymentWithSetPaymentMethodInvoice() {
@@ -55,7 +55,7 @@ class PaymentMethodTest extends \PHPUnit_Framework_TestCase{
             ->setClientOrderNumber("33")
             ->setOrderDate("2012-12-12")
             ->setCurrency("SEK")
-            ->usePaymentMethod(PaymentMethod::INVOICE)
+            ->usePaymentMethod(\PaymentMethod::INVOICE)
             ->setReturnUrl("http://myurl.se")
             ->getPaymentForm();
         
@@ -84,7 +84,7 @@ class PaymentMethodTest extends \PHPUnit_Framework_TestCase{
             ->setClientOrderNumber("33")
             ->setOrderDate("2012-12-12")
             ->setCurrency("SEK")
-            ->usePaymentMethod(PaymentMethod::INVOICE)
+            ->usePaymentMethod(\PaymentMethod::INVOICE)
             ->setReturnUrl("http://myurl.se")
             ->getPaymentForm();
         $xmlMessage = new \SimpleXMLElement($form->xmlMessage);

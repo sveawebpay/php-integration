@@ -45,20 +45,21 @@ $foo = $foo->...
         ->..;
 ```
 
-## Changes in release 1.2.0
+## Changes in release 1.2.1
 
 ### Namespace
 From release 1.2.0 on the package makes use of a namespace, Svea. We have made
 efforts to avoid impacting existing integrations, so the classes WebPay and Item
 are excluded from the namespace along with the new class WebPayItem. Also, the
-interface ConfigurationProvider lies outside the Svea namespace.
+interface ConfigurationProvider and the two constant container classes 
+DistributionType and PaymentMethod lie outside the Svea namespace.
 
 For compatibility with existing integrations, the provided Item class is a now 
 a wrapper for the WebPayItem class. Item is marked as deprecated with release 
 1.2.0, please use WebPayItem instead. 
 
-In the event that you make use of other classes than WebPay, WebPayItem, you'll 
-need to prefix the Svea namespace to classnames. 
+In the event that you make use of other classes than WebPay or WebPayItem, 
+you'll need to prefix the Svea namespace to package classnames. 
 
 See the PHP documentation for more information on [namespaces in PHP](http://php.net/manual/en/language.namespaces.php).
 
@@ -237,7 +238,7 @@ $response = WebPay::createOrder()
         ...
         ->getPaymentForm();
     //Go direct to specified paymentmethod, whithout stopping on the PayPage, with asynchronous response
-    ->usePaymentMethod (PaymentMethod::SEB_SE) //see APPENDIX for Constants
+    ->usePaymentMethod (\PaymentMethod::SEB_SE) //see APPENDIX for Constants
         ...
         ->getPaymentForm();
 
@@ -419,7 +420,7 @@ I am using card and/or direct bank payments.
 >and [`->usePayPageDirectBankOnly()`] (https://github.com/sveawebpay/php-integration#152-paypage-with-direct-bank-payment-options).
 >
 >If you for example only have one specific bank payment, you can go direct to that specific bank payment by using
->[`->usePaymentMethod(PaymentMethod)`] (https://github.com/sveawebpay/php-integration#154-paymentmethod-specified)
+>[`->usePaymentMethod(\PaymentMethod)`] (https://github.com/sveawebpay/php-integration#154-paymentmethod-specified)
 
 I am using all payments.
 
@@ -636,7 +637,7 @@ Optional if you want to include specific payment methods for *PayPage*.
     ->usePayPage()
         ->setReturnUrl("http://myurl.se")                                               //Required
         ->setCancelUrl("http://myurl.se")                                               //Optional
-        ->excludePaymentMethods(PaymentMethod::SEB_SE,PaymentMethod::INVOICE)   //Optional
+        ->excludePaymentMethods(\PaymentMethod::SEB_SE,PaymentMethod::INVOICE)   //Optional
         ->getPaymentForm();
 ```
 ###### 1.5.3.1.2 Include specific payment methods
@@ -644,7 +645,7 @@ Optional if you want to include specific payment methods for *PayPage*.
 ```php
     ->usePayPage()
         ->setReturnUrl("http://myurl.se")                                               //Required
-        ->includePaymentMethods(PaymentMethod::SEB_SE,PaymentMethod::INVOICE)   //Optional
+        ->includePaymentMethods(\PaymentMethod::SEB_SE,PaymentMethod::INVOICE)   //Optional
         ->getPaymentForm();
 ```
 
@@ -707,7 +708,7 @@ $form = WebPay::createOrder()
     ->setClientOrderNumber("33")
     ->setOrderDate("2012-12-12")
     ->setCurrency("SEK")
-        ->usePaymentMethod(PaymentMethod::KORTCERT)             //Se APPENDIX for paymentmethods
+        ->usePaymentMethod(\PaymentMethod::KORTCERT)             //Se APPENDIX for paymentmethods
             ->setReturnUrl("http://myurl.se")                   //Required
             ->setCancelUrl("http://myurl.se")                   //Optional
             ->getPaymentForm();

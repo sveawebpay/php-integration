@@ -34,7 +34,7 @@ class HostedPayment {
         $validator = new HostedOrderValidator();
         $errors = $validator->validate($this->order);
         if (($this->order->countryCode == "NL" || $this->order->countryCode == "DE") && isset($this->paymentMethod)) {
-            if (isset($this->paymentMethod) && ($this->paymentMethod == PaymentMethod::INVOICE || $this->paymentMethod == PaymentMethod::PAYMENTPLAN)) {
+            if (isset($this->paymentMethod) && ($this->paymentMethod == \PaymentMethod::INVOICE || $this->paymentMethod ==  \PaymentMethod::PAYMENTPLAN)) {
                 $errors = $validator->validateEuroCustomer($this->order, $errors);
             }
         }

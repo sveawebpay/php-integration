@@ -1,5 +1,5 @@
 <?php
-// WebPay class is not included in Svea namespace
+// WebPay class is excluded from Svea namespace
 
 include_once SVEA_REQUEST_DIR . "/Includes.php";
 
@@ -10,14 +10,14 @@ include_once SVEA_REQUEST_DIR . "/Includes.php";
  * This is so that existing integrations don't need to worry about 
  * prefixing their existing calls to WebPay:: and orderrow item functions.
  *  
- * @author Anneli Halld'n, Daniel Brolund, Kristian Madsen for Svea WebPay
+ * @author Anneli Halld'n, Daniel Brolund, Kristian Grossman-Madsen for Svea WebPay
  * @package WebPay
  */
 class WebPay {
 
     /**
      * Start Building Order Request to create order for all Payments
-     * @return \createOrder
+     * @return \CreateOrderBuilder object
      * @param instance of implementation class of ConfigurationProvider Interface
      * If left blank, default settings from SveaConfig will be used
      */
@@ -28,7 +28,7 @@ class WebPay {
 
     /**
      * Get Payment Plan Params to present to Customer before doing PaymentPlan Payment
-     * @return \GetPaymentPlanParams
+     * @return \GetPaymentPlanParams object
      * @param instance of implementation class of ConfigurationProvider Interface
      * If left blank, default settings from SveaConfig will be used
      */
@@ -39,7 +39,7 @@ class WebPay {
 
     /**
      * Start Building Request Deliver Orders.
-     * @return \deliverOrder
+     * @return \deliverOrderBuilder object
      * @param instance of implementation class of ConfigurationProvider Interface
      * If left blank, default settings from SveaConfig will be used
      */
@@ -51,7 +51,7 @@ class WebPay {
 
     /**
      * Start building Request to close orders.
-     * @return \closeOrder
+     * @return \closeOrderBuilder object
      * @param instance of implementation class of ConfigurationProvider Interface
      * If left blank, default settings from SveaConfig will be used
      */
@@ -63,7 +63,7 @@ class WebPay {
 
     /**
      * Start building Request for getting Address
-     * @return \GetAddresses
+     * @return \GetAddresses object
      * @param instance of implementation class of ConfigurationProvider Interface
      * If left blank, default settings from SveaConfig will be used
      */

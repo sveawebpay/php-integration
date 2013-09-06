@@ -1,5 +1,5 @@
 <?php
-namespace Svea;
+// PaymentMethodType is excluded from the Svea namespace
 
 /**
  * PaymentMethodType
