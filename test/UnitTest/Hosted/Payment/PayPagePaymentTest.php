@@ -32,7 +32,7 @@ class PayPagePaymentTest extends \PHPUnit_Framework_TestCase {
             ->setCurrency("SEK")
             ->usePayPage()
             ->setReturnUrl("http://myurl.se")
-            ->excludePaymentMethods(PaymentMethod::INVOICE, PaymentMethod::KORTCERT)
+            ->excludePaymentMethods(\PaymentMethod::INVOICE, \PaymentMethod::KORTCERT)
             ->getPaymentForm();
         
         $xmlMessage = new \SimpleXMLElement($form->xmlMessage);
@@ -43,7 +43,7 @@ class PayPagePaymentTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals('12500', $xmlMessage->orderrows->row[0]->amount);
         $this->assertEquals('6250', $xmlMessage->orderrows->row[1]->amount);
         $this->assertEquals('-12500', $xmlMessage->orderrows->row[2]->amount);
-        //  $this->assertEquals(PaymentMethod::KORTCERT,$xmlMessage->paymentMethod);
+        //  $this->assertEquals(\PaymentMethod::KORTCERT,$xmlMessage->paymentMethod);
         $this->assertEquals(SystemPaymentMethod::INVOICE_SE, $xmlMessage->excludepaymentmethods->exclude[0]);
     }
 
@@ -71,7 +71,7 @@ class PayPagePaymentTest extends \PHPUnit_Framework_TestCase {
             ->getPaymentForm();
         
         $xmlMessage = new \SimpleXMLElement($form->xmlMessage);
-        $this->assertEquals(PaymentMethod::KORTCERT, $xmlMessage->excludepaymentmethods->exclude[0]);
+        $this->assertEquals(\PaymentMethod::KORTCERT, $xmlMessage->excludepaymentmethods->exclude[0]);
     }
 
     public function testExcludeDirectPaymentMethods() {
@@ -97,7 +97,7 @@ class PayPagePaymentTest extends \PHPUnit_Framework_TestCase {
             ->getPaymentForm();
         
         $xmlMessage = new \SimpleXMLElement($form->xmlMessage);
-        $this->assertEquals(PaymentMethod::BANKAXESS, $xmlMessage->excludepaymentmethods->exclude[0]);
+        $this->assertEquals(\PaymentMethod::BANKAXESS, $xmlMessage->excludepaymentmethods->exclude[0]);
     }
 
     public function testpayPagePaymentIncludePaymentMethods() {
@@ -119,7 +119,7 @@ class PayPagePaymentTest extends \PHPUnit_Framework_TestCase {
             ->setCurrency("SEK")
             ->usePayPage()
             ->setReturnUrl("http://myurl.se")
-            ->includePaymentMethods(PaymentMethod::KORTCERT, PaymentMethod::SKRILL)
+            ->includePaymentMethods(\PaymentMethod::KORTCERT, \PaymentMethod::SKRILL)
             ->getPaymentForm();
         
         $xmlMessage = new \SimpleXMLElement($form->xmlMessage);
