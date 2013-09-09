@@ -1,5 +1,4 @@
 <?php
-namespace Svea;
 
 $root = realpath(dirname(__FILE__));
 require_once $root . '/../../../../test/UnitTest/BuildOrder/OrderBuilderTest.php';
@@ -10,26 +9,26 @@ require_once $root . '/../../../TestUtil.php';
 /**
  * @author Anneli Halld'n, Daniel Brolund for Svea Webpay
  */
-class PaymentPlanTest extends \PHPUnit_Framework_TestCase {
-    
+class PaymentPlanTest extends PHPUnit_Framework_TestCase {
+
       /**
      * Use to get paymentPlanParams to be able to test PaymentPlanRequest
      * @return type
      */
     public function getGetPaymentPlanParamsForTesting() {
-        $addressRequest = \WebPay::getPaymentPlanParams();
+        $addressRequest = WebPay::getPaymentPlanParams();
         $response = $addressRequest
                 ->setCountryCode("SE")
                 ->doRequest();
          return $response->campaignCodes[0]->campaignCode;
     }
-    
+
     public function testPaymentPlanRequestObjectSpecifics() {
-        $rowFactory = new \TestUtil();
-        $request = \WebPay::createOrder()
-                ->addOrderRow(\TestUtil::createOrderRow())
+        $rowFactory = new TestUtil();
+        $request = WebPay::createOrder()
+                ->addOrderRow(TestUtil::createOrderRow())
                 ->run($rowFactory->buildShippingFee())
-                ->addCustomerDetails(\WebPayItem::individualCustomer()->setNationalIdNumber(194605092222))
+                ->addCustomerDetails(WebPayItem::individualCustomer()->setNationalIdNumber(194605092222))
                 ->setCountryCode("SE")
                 ->setCustomerReference("33")
                 ->setClientOrderNumber("nr26")
@@ -43,20 +42,20 @@ class PaymentPlanTest extends \PHPUnit_Framework_TestCase {
     }
 
     public function testInvoiceRequestObjectWithRelativeDiscountOnTwoProducts() {
-        $request = \WebPay::createOrder()
-                ->addOrderRow(\WebPayItem::orderRow()
+        $request = WebPay::createOrder()
+                ->addOrderRow(WebPayItem::orderRow()
                     ->setArticleNumber(1)
                     ->setQuantity(2)
                     ->setAmountExVat(240.00)
                     ->setAmountIncVat(300)
                     ->setDescription("CD")
                     )
-                ->addDiscount(\WebPayItem::relativeDiscount()
+                ->addDiscount(WebPayItem::relativeDiscount()
                     ->setDiscountId("1")
                      ->setDiscountPercent(10)
                      ->setDescription("RelativeDiscount")
                     )
-                ->addCustomerDetails(\WebPayItem::individualCustomer()->setNationalIdNumber(194605092222))
+                ->addCustomerDetails(WebPayItem::individualCustomer()->setNationalIdNumber(194605092222))
                 ->setCountryCode("SE")
                 ->setCustomerReference("33")
                 ->setOrderDate("2012-12-12")
@@ -72,18 +71,18 @@ class PaymentPlanTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals(25, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->VatPercent);
         $this->assertEquals(0, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->DiscountPercent);
     }
-    
+
     public function testPaymentPlanWithPriceAsDecimal() {
         $campaign = $this->getGetPaymentPlanParamsForTesting();
-        $request = \WebPay::createOrder()
-                ->addOrderRow(\WebPayItem::orderRow()
+        $request = WebPay::createOrder()
+                ->addOrderRow(WebPayItem::orderRow()
                     ->setArticleNumber(1)
                     ->setQuantity(2)
                     ->setAmountExVat(240.00)
                     ->setAmountIncVat(300)
                     ->setDescription("CD")
                     )
-                ->addCustomerDetails(\WebPayItem::individualCustomer()->setNationalIdNumber(194605092222))
+                ->addCustomerDetails(WebPayItem::individualCustomer()->setNationalIdNumber(194605092222))
                 ->setCountryCode("SE")
                 ->setCustomerReference("33")
                 ->setOrderDate("2012-12-12")

@@ -1,5 +1,4 @@
 <?php
-namespace Svea;
 
 $root = realpath(dirname(__FILE__));
 require_once $root . '/../../../../src/Includes.php';
@@ -10,37 +9,37 @@ require_once $root . '/../../../TestUtil.php';
 /**
  * @author Anneli Halld'n, Daniel Brolund for Svea Webpay
  */
-class DeliverOrderTest extends \PHPUnit_Framework_TestCase {
-    
+class DeliverOrderTest extends PHPUnit_Framework_TestCase {
+
     public function testBuildRequest() {
-        $handler = \WebPay::deliverOrder();
+        $handler = WebPay::deliverOrder();
         $request = $handler
                 ->setOrderId("id");
-        
+
         $this->assertEquals("id", $request->orderId);
     }
-    
+
     public function testDeliverInvoiceDistributionType() {
-        $orderBuilder = \WebPay::deliverOrder();
+        $orderBuilder = WebPay::deliverOrder();
         $request = $orderBuilder
-            ->addOrderRow(\TestUtil::createOrderRow())
+            ->addOrderRow(TestUtil::createOrderRow())
                 ->setOrderId("id")
                 ->setNumberOfCreditDays(1)
                 ->setCountryCode("SE")
-                ->setInvoiceDistributionType(\DistributionType::POST)//Post or Email
+                ->setInvoiceDistributionType(DistributionType::POST)//Post or Email
                 ->setCreditInvoice("id")
                 ->deliverInvoiceOrder()
                 ->prepareRequest();
-        
-        $this->assertEquals('Post', $request->request->DeliverOrderInformation->DeliverInvoiceDetails->InvoiceDistributionType);       
+
+        $this->assertEquals('Post', $request->request->DeliverOrderInformation->DeliverInvoiceDetails->InvoiceDistributionType);
     }
-    
+
     public function testDeliverInvoiceOrder() {
-        $orderBuilder = \WebPay::deliverOrder();
+        $orderBuilder = WebPay::deliverOrder();
         $request = $orderBuilder
-                ->addOrderRow(\TestUtil::createOrderRow())
-                ->addDiscount(\WebPayItem::fixedDiscount()->setAmountIncVat(10))
-                ->addFee(\WebPayItem::shippingFee()
+                ->addOrderRow(TestUtil::createOrderRow())
+                ->addDiscount(WebPayItem::fixedDiscount()->setAmountIncVat(10))
+                ->addFee(WebPayItem::shippingFee()
                     ->setShippingId('33')
                     ->setName('shipping')
                     ->setDescription("Specification")
@@ -56,7 +55,7 @@ class DeliverOrderTest extends \PHPUnit_Framework_TestCase {
                 ->setCreditInvoice("id")
                 ->deliverInvoiceOrder()
                 ->prepareRequest();
-        
+
         $this->assertEquals(1, $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][0]->ArticleNumber);
         $this->assertEquals("Prod: Specification", $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][0]->Description);
         $this->assertEquals(100.00, $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][0]->PricePerUnit);
@@ -64,7 +63,7 @@ class DeliverOrderTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals("st", $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][0]->Unit);
         $this->assertEquals(25, $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][0]->VatPercent);
         $this->assertEquals(0, $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][0]->DiscountPercent);
-        
+
         //shippingfee
         $this->assertEquals("33", $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][1]->ArticleNumber);
         $this->assertEquals("shipping: Specification", $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][1]->Description);
@@ -73,10 +72,10 @@ class DeliverOrderTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals("st", $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][1]->Unit);
         $this->assertEquals(25, $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][1]->VatPercent);
         $this->assertEquals(0, $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][1]->DiscountPercent);
-        
+
         //discount
         $this->assertEquals(-8.0, $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][2]->PricePerUnit);
-        
+
         $this->assertEquals(1, $request->request->DeliverOrderInformation->DeliverInvoiceDetails->NumberOfCreditDays);
         $this->assertEquals("Post", $request->request->DeliverOrderInformation->DeliverInvoiceDetails->InvoiceDistributionType);
         $this->assertEquals(true, $request->request->DeliverOrderInformation->DeliverInvoiceDetails->IsCreditInvoice);
@@ -84,10 +83,10 @@ class DeliverOrderTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals("id", $request->request->DeliverOrderInformation->SveaOrderId);
         $this->assertEquals("Invoice", $request->request->DeliverOrderInformation->OrderType);
     }
-    
+
     public function testDeliverPaymentPlanOrder() {
-        $orderBuilder = \WebPay::deliverOrder();
-        
+        $orderBuilder = WebPay::deliverOrder();
+
         $request = $orderBuilder
                 ->setCountryCode("SE")
                 ->setOrderId("id")
@@ -96,11 +95,11 @@ class DeliverOrderTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals("id", $request->request->DeliverOrderInformation->SveaOrderId);
         $this->assertEquals("PaymentPlan", $request->request->DeliverOrderInformation->OrderType);
     }
-    
+
     public function testNewDeliverInvoiceOrderRow() {
-        $request = \WebPay::deliverOrder();
+        $request = WebPay::deliverOrder();
         $request = $request
-            ->addOrderRow(\TestUtil::createOrderRow());
+            ->addOrderRow(TestUtil::createOrderRow());
             $request = $request ->setOrderId("id")
                 ->setNumberOfCreditDays(1)
                 ->setCountryCode("SE")
@@ -119,10 +118,10 @@ class DeliverOrderTest extends \PHPUnit_Framework_TestCase {
     }
 
     public function testDeliverOrderWithInvoiceFeeAndFixedDiscount() {
-        $request = \WebPay::deliverOrder();
+        $request = WebPay::deliverOrder();
         $request = $request
-            ->addOrderRow(\TestUtil::createOrderRow())
-                ->addFee(\WebPayItem::invoiceFee()
+            ->addOrderRow(TestUtil::createOrderRow())
+                ->addFee(WebPayItem::invoiceFee()
                     ->setName('Svea fee')
                     ->setDescription("Fee for invoice")
                     ->setAmountExVat(50)
@@ -130,7 +129,7 @@ class DeliverOrderTest extends \PHPUnit_Framework_TestCase {
                     ->setVatPercent(25)
                     ->setDiscountPercent(0)
                 )
-                ->addDiscount(\WebPayItem::fixedDiscount()
+                ->addDiscount(WebPayItem::fixedDiscount()
                    ->setDiscountId("1")
                     ->setAmountIncVat(100.00)
                     ->setUnit("st")
@@ -144,7 +143,7 @@ class DeliverOrderTest extends \PHPUnit_Framework_TestCase {
                 ->setCountryCode("SE")
                 ->deliverInvoiceOrder()
                 ->prepareRequest();
-        
+
         $this->assertEquals(1, $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][0]->ArticleNumber);
         $this->assertEquals("Prod: Specification", $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][0]->Description);
         $this->assertEquals(100.00, $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][0]->PricePerUnit);
@@ -169,12 +168,12 @@ class DeliverOrderTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals(25, $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][2]->VatPercent);
         $this->assertEquals(0, $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][2]->DiscountPercent);
     }
-    
+
     public function testDeliverOrderWithShippingFeeAndRelativeDiscount() {
-        $request = \WebPay::deliverOrder();
+        $request = WebPay::deliverOrder();
         $request = $request
-                ->addOrderRow(\TestUtil::createOrderRow())
-                ->addFee(\WebPayItem::shippingFee()
+                ->addOrderRow(TestUtil::createOrderRow())
+                ->addFee(WebPayItem::shippingFee()
                     ->setShippingId(1)
                     ->setName('shipping')
                     ->setDescription("Specification")
@@ -183,7 +182,7 @@ class DeliverOrderTest extends \PHPUnit_Framework_TestCase {
                     ->setVatPercent(25)
                     ->setDiscountPercent(0)
                 )
-                ->addDiscount(\WebPayItem::relativeDiscount()
+                ->addDiscount(WebPayItem::relativeDiscount()
                     ->setDiscountId("1")
                     ->setDiscountPercent(50)
                     ->setUnit("st")
@@ -192,12 +191,12 @@ class DeliverOrderTest extends \PHPUnit_Framework_TestCase {
                 );
             $request = $request ->setOrderId("id")
                 ->setNumberOfCreditDays(1)
-                ->setInvoiceDistributionType(\DistributionType::POST)//Post or Email
+                ->setInvoiceDistributionType(DistributionType::POST)//Post or Email
                 ->setCreditInvoice("id")
                 ->setCountryCode("SE")
                 ->deliverInvoiceOrder()
                 ->prepareRequest();
-        
+
         $this->assertEquals(1, $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][0]->ArticleNumber);
         $this->assertEquals("Prod: Specification", $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][0]->Description);
         $this->assertEquals(100.00, $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][0]->PricePerUnit);
