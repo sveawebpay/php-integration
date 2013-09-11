@@ -90,7 +90,7 @@ class WebServicePayment {
         $request = new SveaDoRequest($url);
         $svea_req = $request->CreateOrderEu($object);
 
-        $response = new SveaResponse($svea_req,"");
+        $response = new \SveaResponse($svea_req,"");
         return $response->response;
     }
 

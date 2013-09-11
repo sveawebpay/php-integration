@@ -57,7 +57,7 @@ class GetPaymentPlanParams {
         $request = new SveaDoRequest($url);
         $svea_req = $request->GetPaymentPlanParamsEu($object);
 
-        $response = new SveaResponse($svea_req,"");
+        $response = new \SveaResponse($svea_req,"");
         return $response->response;
     }
 }
