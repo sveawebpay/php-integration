@@ -4,7 +4,8 @@ namespace Svea;
 require_once SVEA_REQUEST_DIR . '/Includes.php';
 
 /**
- * Description of GetPaymentMethods
+ * Returns Array with all paymentmethods
+ * conected to the merchantId and/or ClientId
  *
  * @author anne-hal
  */
@@ -24,26 +25,19 @@ class GetPaymentMethods {
     }
 
     public function prepareRequest(){
-        //url
-        //data(mac, base64,merchantId)
-        //validera
-        //gör reauest
-        //har jag faktura/delbetala? -fyll på
-
 
         $xmlBuilder = new HostedXmlBuilder();
         $requestXML = $xmlBuilder->getPaymentMethodsXML($this->config->getMerchantId("HOSTED",  $this->countryCode));
-        $request = array(    'merchantid' => urlencode($this->config->getMerchantId("HOSTED",  $this->countryCode)),
+        $request = array(   'merchantid' => urlencode($this->config->getMerchantId("HOSTED",  $this->countryCode)),
                             'message' => urlencode(base64_encode($requestXML)),
                             'mac' => urlencode(hash("sha512", base64_encode($requestXML) . $this->config->getSecret("HOSTED",  $this->countryCode)))
                         );
-
-
-
-
         return $request;
     }
-
+    /**
+     * Do request using cURL
+     * @return array
+     */
     public function doRequest(){
         $fields = $this->prepareRequest();
                $fieldsString = "";
@@ -53,7 +47,7 @@ class GetPaymentMethods {
         rtrim($fieldsString, '&');
 
         $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, "https://test.sveaekonomi.se/webpay/rest/".  $this->method);
+        curl_setopt($ch, CURLOPT_URL, $this->config->getEndpoint(SveaConfigurationProvider::HOSTED_ADMIN_TYPE).  $this->method);
         curl_setopt($ch, CURLOPT_POST, count($fields));
         curl_setopt($ch, CURLOPT_POSTFIELDS, $fieldsString);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
@@ -67,7 +61,6 @@ class GetPaymentMethods {
         $message = new \SimpleXMLElement($messageXML);
         $SveaResponse = new \SveaResponse((array)$responseObj, $this->countryCode, $this->config);
         //add Invoice and Paymentplan
-
         $paymentmethods = (array)$SveaResponse->response->paymentMethods;
         //If there is a clientnumber for invoice, we assume you hav it configured at Svea
         $clientIdInvoice = $this->config->getClientNumber(\PaymentMethod::INVOICE,  $this->countryCode);
@@ -78,10 +71,9 @@ class GetPaymentMethods {
         if(is_numeric($clientIdPaymentPlan) && strlen($clientIdPaymentPlan) > 0 ){
             $paymentmethods[] = \PaymentMethod::PAYMENTPLAN;
         }
-
-
         curl_close($ch);
-          return $paymentmethods;
+
+        return $paymentmethods;
 
     }
 }
