@@ -17,10 +17,7 @@ class HostedXmlBuilder {
      * This method expect UTF-8 input
      */
     public function getOrderXML($request, $order) {
-        $this->XMLWriter = new \XMLWriter();
-        $this->XMLWriter->openMemory();
-        $this->XMLWriter->setIndent(true);
-        $this->XMLWriter->startDocument("1.0", "UTF-8");
+        $this->setBaseXML();
         $this->XMLWriter->startElement("payment");
         $this->XMLWriter->writeElement("customerrefno", $order->clientOrderNumber);
         $this->XMLWriter->writeElement("returnurl", $request['returnUrl']);
@@ -32,7 +29,7 @@ class HostedXmlBuilder {
 
         //customer fields
         $this->serializeCustomer($order,$request);
-        
+
         if (isset($order->customerIdentity->addressSelector)) {
              $this->XMLWriter->writeElement("addressid", $order->customerIdentity->addressSelector);
         }
@@ -40,7 +37,7 @@ class HostedXmlBuilder {
         if ($request['totalVat'] != null) {
             $this->XMLWriter->writeElement("vat", round($request['totalVat']));
         }
-        
+
         if (isset($order->ipAddress)) {
              $this->XMLWriter->writeElement("ipaddress", $order->ipAddress);
         }
@@ -148,44 +145,44 @@ class HostedXmlBuilder {
         if (isset($order->customerIdentity->firstname)) {
              $this->XMLWriter->writeElement("firstname", $order->customerIdentity->firstname);
         }
-        
+
         if (isset($order->customerIdentity->lastname)) {
              $this->XMLWriter->writeElement("lastname", $order->customerIdentity->lastname);
         }
-        
+
         if (isset($order->customerIdentity->initials)) {
              $this->XMLWriter->writeElement("initials", $order->customerIdentity->initials);
         }
-        
+
         if (isset($order->customerIdentity->email)) {
              $this->XMLWriter->writeElement("email", $order->customerIdentity->email);
         }
-        
+
         if (isset($order->customerIdentity->phonenumber)) {
              $this->XMLWriter->writeElement("phone", $order->customerIdentity->phonenumber);
         }
-        
+
         if (isset($order->customerIdentity->street)) {
             $this->XMLWriter->writeElement("address", $order->customerIdentity->street);
         }
-        
+
         if (isset($order->customerIdentity->housenumber)) {
             $this->XMLWriter->writeElement("housenumber", $order->customerIdentity->housenumber);
         }
-        
+
         if (isset($order->customerIdentity->coAddress)) {
             $this->XMLWriter->writeElement("address2", $order->customerIdentity->coAddress);
         }
-        
+
         if (isset($order->customerIdentity->locality)) {
             $this->XMLWriter->writeElement("city", $order->customerIdentity->locality);
         }
-        
+
         //country
         if (isset($order->countryCode)) {
             $this->XMLWriter->writeElement("country", $order->countryCode);
         }
-        
+
         if (isset($order->customerIdentity->orgNumber)|| isset($order->customerIdentity->companyVatNumber)) {
             if (isset($order->customerIdentity->orgNumber)) {
                  $this->XMLWriter->writeElement("ssn", $order->customerIdentity->orgNumber);
@@ -197,5 +194,22 @@ class HostedXmlBuilder {
         }
 
         $this->XMLWriter->endElement();
+    }
+
+    private function setBaseXML(){
+        $this->XMLWriter = new \XMLWriter();
+        $this->XMLWriter->openMemory();
+        $this->XMLWriter->setIndent(true);
+        $this->XMLWriter->startDocument("1.0", "UTF-8");
+    }
+
+    public function getPaymentMethodsXML($merchantId){
+        $this->setBaseXML();
+        $this->XMLWriter->startElement("getpaymentmethods");
+        $this->XMLWriter->writeElement("merchantid",$merchantId);
+        $this->XMLWriter->endElement();
+        $this->XMLWriter->endDocument();
+
+        return $this->XMLWriter->flush();
     }
 }
