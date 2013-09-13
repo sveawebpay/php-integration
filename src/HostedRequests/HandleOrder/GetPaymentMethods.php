@@ -57,12 +57,14 @@ class GetPaymentMethods {
         $responseXML = curl_exec($ch);
 
         $responseObj = new \SimpleXMLElement($responseXML);
-        $messageXML = base64_decode($responseObj->message);
-        $message = new \SimpleXMLElement($messageXML);
-        $SveaResponse = new \SveaResponse((array)$responseObj, $this->countryCode, $this->config);
-        //add Invoice and Paymentplan
-        $paymentmethods = (array)$SveaResponse->response->paymentMethods;
-        //If there is a clientnumber for invoice, we assume you hav it configured at Svea
+
+
+        $sveaResponse = new \SveaResponse($responseObj, $this->countryCode, $this->config);
+        $paymentmethods = array();
+        foreach ($sveaResponse->response->paymentMethods as $method) {
+            $paymentmethods[] = (string)$method;
+        }
+        //Add Invoice and Paymentplan. If there is a clientnumber for invoice, we assume you hav it configured at Svea
         $clientIdInvoice = $this->config->getClientNumber(\PaymentMethod::INVOICE,  $this->countryCode);
         if(is_numeric($clientIdInvoice) && strlen($clientIdInvoice) > 0 ){
             $paymentmethods[] = \PaymentMethod::INVOICE;
@@ -73,7 +75,7 @@ class GetPaymentMethods {
         }
         curl_close($ch);
 
-        return $paymentmethods;
+       return $paymentmethods;
 
     }
 }

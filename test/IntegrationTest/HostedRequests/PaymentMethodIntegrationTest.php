@@ -14,7 +14,6 @@ class PaymentMethodIntegrationTest extends \PHPUnit_Framework_TestCase {
         $response = WebPay::getPaymentMethods()
                 ->setContryCode("SE")
                 ->doRequest();
-        
         $this->assertEquals(PaymentMethod::NORDEA_SE, $response[0]);
         $this->assertEquals(PaymentMethod::KORTCERT, $response[1]);
         $this->assertEquals(\Svea\SystemPaymentMethod::INVOICE_SE, $response[2]);
