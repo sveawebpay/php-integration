@@ -1,14 +1,13 @@
 <?php
-namespace Svea;
 
 $root = realpath(dirname(__FILE__));
 
 require_once $root . '/../../../../src/Includes.php';
 
-class WebServiceRowFormatterTest extends \PHPUnit_Framework_TestCase {
-    
+class WebServiceRowFormatterTest extends PHPUnit_Framework_TestCase {
+
     public function testFormatOrderRows() {
-        $order = \WebPay::createOrder();
+        $order = WebPay::createOrder();
         $order->addOrderRow(\WebPayItem::orderRow()
                 ->setArticleNumber("0")
                 ->setName("Tess")
@@ -18,11 +17,11 @@ class WebServiceRowFormatterTest extends \PHPUnit_Framework_TestCase {
                 ->setQuantity(1)
                 ->setUnit("st")
                 );
-        
-        $formatter = new WebServiceRowFormatter($order);
+
+        $formatter = new Svea\WebServiceRowFormatter($order);
         $newRows = $formatter->formatRows();
         $newRow = $newRows[0];
-        
+
         $this->assertEquals("0", $newRow->ArticleNumber);
         $this->assertEquals("Tess: Tester", $newRow->Description);
         $this->assertEquals(4.0, $newRow->PricePerUnit);
@@ -31,10 +30,10 @@ class WebServiceRowFormatterTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals(1, $newRow->NumberOfUnits);
         $this->assertEquals("st", $newRow->Unit);
     }
-    
+
     public function testFormatShippingFeeRows() {
-        $order = \WebPay::createOrder();
-        $order->addFee(\WebPayItem::shippingFee()
+        $order = WebPay::createOrder();
+        $order->addFee(WebPayItem::shippingFee()
                     ->setShippingId("0")
                     ->setName("Tess")
                     ->setDescription("Tester")
@@ -42,11 +41,11 @@ class WebServiceRowFormatterTest extends \PHPUnit_Framework_TestCase {
                     ->setVatPercent(25)
                     ->setUnit("st")
                 );
-        
-        $formatter = new WebServiceRowFormatter($order);
+
+        $formatter = new Svea\WebServiceRowFormatter($order);
         $newRows = $formatter->formatRows();
         $newRow = $newRows[0];
-        
+
         $this->assertEquals("0", $newRow->ArticleNumber);
         $this->assertEquals("Tess: Tester", $newRow->Description);
         $this->assertEquals(4.0, $newRow->PricePerUnit);
@@ -55,21 +54,21 @@ class WebServiceRowFormatterTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals(1, $newRow->NumberOfUnits);
         $this->assertEquals("st", $newRow->Unit);
     }
-    
+
     public function testFormatInvoiceFeeRows() {
-        $order = \WebPay::createOrder();
-        $order->addFee(\WebPayItem::invoiceFee()
+        $order = WebPay::createOrder();
+        $order->addFee(WebPayItem::invoiceFee()
                 ->setName("Tess")
                 ->setDescription("Tester")
                 ->setAmountExVat(4)
                 ->setVatPercent(25)
                 ->setUnit("st")
                 );
-        
-        $formatter = new WebServiceRowFormatter($order);
+
+        $formatter = new Svea\WebServiceRowFormatter($order);
         $newRows = $formatter->formatRows();
         $newRow = $newRows[0];
-        
+
         $this->assertEquals("", $newRow->ArticleNumber);
         $this->assertEquals("Tess: Tester", $newRow->Description);
         $this->assertEquals(4.0, $newRow->PricePerUnit);
@@ -78,23 +77,23 @@ class WebServiceRowFormatterTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals(1, $newRow->NumberOfUnits);
         $this->assertEquals("st", $newRow->Unit);
     }
-    
+
     public function testFormatFixedDiscountRows() {
-        $order = \WebPay::createOrder();
-        $order->addOrderRow(\WebPayItem::orderRow()
+        $order = WebPay::createOrder();
+        $order->addOrderRow(WebPayItem::orderRow()
                 ->setAmountExVat(4)
                 ->setVatPercent(25)
                 ->setQuantity(1)
                 )
-                ->addDiscount(\WebPayItem::fixedDiscount()
+                ->addDiscount(WebPayItem::fixedDiscount()
                     ->setDiscountId("0")
                     ->setName("Tess")
                     ->setDescription("Tester")
                     ->setAmountIncVat(1)
                     ->setUnit("st")
                 );
-        
-        $formatter = new WebServiceRowFormatter($order);
+
+        $formatter = new Svea\WebServiceRowFormatter($order);
         $newRows = $formatter->formatRows();
         $newRow = $newRows[1];
         $this->assertEquals("0", $newRow->ArticleNumber);
@@ -105,26 +104,26 @@ class WebServiceRowFormatterTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals(1, $newRow->NumberOfUnits);
         $this->assertEquals("st", $newRow->Unit);
     }
-    
+
     public function testFormatRelativeDiscountRows() {
-        $order = \WebPay::createOrder();
-        $order->addOrderRow(\WebPayItem::orderRow()
+        $order = WebPay::createOrder();
+        $order->addOrderRow(WebPayItem::orderRow()
                 ->setAmountExVat(4)
                 ->setVatPercent(25)
                 ->setQuantity(1)
                 )
-            ->addDiscount(\WebPayItem::relativeDiscount()
+            ->addDiscount(WebPayItem::relativeDiscount()
                 ->setDiscountId("0")
                 ->setName("Tess")
                 ->setDescription("Tester")
                 ->setDiscountPercent(10)
-                ->setUnit("st")  
+                ->setUnit("st")
                 );
-        
-        $formatter = new WebServiceRowFormatter($order);
+
+        $formatter = new Svea\WebServiceRowFormatter($order);
         $newRows = $formatter->formatRows();
         $newRow = $newRows[1];
-        
+
         $this->assertEquals("0", $newRow->ArticleNumber);
         $this->assertEquals("Tess: Tester", $newRow->Description);
         $this->assertEquals(-0.4, $newRow->PricePerUnit);

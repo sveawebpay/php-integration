@@ -5,11 +5,11 @@ include_once SVEA_REQUEST_DIR . "/Includes.php";
 
 /**
  * Start building request objects by choosing the right method in WebPay.
- * 
+ *
  * Class WebPay is external to Svea namespace along with class WebPayItem.
- * This is so that existing integrations don't need to worry about 
+ * This is so that existing integrations don't need to worry about
  * prefixing their existing calls to WebPay:: and orderrow item functions.
- *  
+ *
  * @author Anneli Halld'n, Daniel Brolund, Kristian Grossman-Madsen for Svea WebPay
  * @package WebPay
  */
@@ -71,7 +71,7 @@ class WebPay {
          $config = $config == null ? Svea\SveaConfig::getDefaultConfig() : $config;
         return new Svea\GetAddresses($config);
     }
-    
+
     /**
      *
      * @param type decimal $price
@@ -80,5 +80,11 @@ class WebPay {
      */
     public static function paymentPlanPricePerMonth($price,$paramsResonseObject) {
         return new Svea\PaymentPlanPricePerMonth($price,$paramsResonseObject);
+    }
+
+    public static function getPaymentMethods($config = NULL) {
+        //todo: hämta från config även faktura o delbetala
+        $config = $config == null ? Svea\SveaConfig::getDefaultConfig() : $config;
+        return new Svea\GetPaymentMethods($config);
     }
 }

@@ -22,6 +22,7 @@
 * [5. CreditInvoice](https://github.com/sveawebpay/php-integration#5-creditInvoice)
 * [6. CloseOrder](https://github.com/sveawebpay/php-integration#6-closeorder)
 * [7. Response handler](https://github.com/sveawebpay/php-integration#7-response-handler)
+* [8. GetPaymentMethods](https://github.com/sveawebpay/php-integration#8-GetPaymentMethods)
 * [APPENDIX](https://github.com/sveawebpay/php-integration#appendix)
 
 
@@ -51,15 +52,15 @@ $foo = $foo->...
 From release 1.2.0 on the package makes use of a namespace, Svea. We have made
 efforts to avoid impacting existing integrations, so the classes WebPay and Item
 are excluded from the namespace along with the new class WebPayItem. Also, the
-interface ConfigurationProvider and the two constant container classes 
+interface ConfigurationProvider and the two constant container classes
 DistributionType and PaymentMethod lie outside the Svea namespace.
 
-For compatibility with existing integrations, the provided Item class is a now 
-a wrapper for the WebPayItem class. Item is marked as deprecated with release 
-1.2.0, please use WebPayItem instead. 
+For compatibility with existing integrations, the provided Item class is a now
+a wrapper for the WebPayItem class. Item is marked as deprecated with release
+1.2.0, please use WebPayItem instead.
 
-In the event that you make use of other classes than WebPay or WebPayItem, 
-you'll need to prefix the Svea namespace to package classnames. 
+In the event that you make use of other classes than WebPay or WebPayItem,
+you'll need to prefix the Svea namespace to package classnames.
 
 See the PHP documentation for more information on [namespaces in PHP](http://php.net/manual/en/language.namespaces.php).
 
@@ -958,6 +959,14 @@ Params:
 ```
 
 [<< To top](https://github.com/sveawebpay/php-integration#php-integration-package-api-for-sveawebpay)
+
+##8. GetPaymentMethods
+Returns an Array of SystemPaymentMethods (See Constants).
+```php
+  $fooArray = WebPay::getPaymentMethods()
+                    ->setContryCode("SE") //optional. Default SE
+                    ->doRequest();
+```
 
 ## APPENDIX
 
