@@ -7,7 +7,7 @@ require_once $root . '/../../../../src/Includes.php';
 /**
  * @author Jonas Lith
  */
-class PaymentPlanPricePerMonthTest extends \PHPUnit_Framework_TestCase {
+class PaymentPlanPricePerMonthTest extends PHPUnit_Framework_TestCase {
     
     private function getGetPaymentPlanParamsResponseForTesting() {
         $addressRequest = WebPay::getPaymentPlanParams();

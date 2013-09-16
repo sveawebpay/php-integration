@@ -34,7 +34,7 @@ class PaymentPlanPaymentIntegrationTest extends PHPUnit_Framework_TestCase {
                         ->setVatPercent(25)
                         ->setDiscountPercent(0)
                 )
-                ->addCustomerDetails(\WebPayItem::individualCustomer()
+                ->addCustomerDetails(WebPayItem::individualCustomer()
                         ->setNationalIdNumber(194605092222)
                         ->setInitials("SB")
                         ->setBirthDate(1923, 12, 12)
