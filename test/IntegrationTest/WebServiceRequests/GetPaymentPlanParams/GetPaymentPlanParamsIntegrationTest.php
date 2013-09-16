@@ -10,8 +10,8 @@ require_once $root . '/../../../../src/Includes.php';
 class GetPaymentPlanParamsIntegrationTest extends PHPUnit_Framework_TestCase {
 
     public function testPaymentPlanParamsResult() {
-        $addressRequest = WebPay::getPaymentPlanParams();
-        $request = $addressRequest
+        $paymentPlanRequest = WebPay::getPaymentPlanParams();
+        $request = $paymentPlanRequest
                 ->setCountryCode("SE")
                 ->doRequest();
 
@@ -19,8 +19,8 @@ class GetPaymentPlanParamsIntegrationTest extends PHPUnit_Framework_TestCase {
     }
     
     public function testResultGetPaymentPlanParams() {
-        $addressRequest = WebPay::getPaymentPlanParams();
-        $request = $addressRequest
+        $paymentPlanRequest = WebPay::getPaymentPlanParams();
+        $request = $paymentPlanRequest
                 ->setCountryCode("SE")
                 ->doRequest();
         
