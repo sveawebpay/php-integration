@@ -18,7 +18,7 @@ class SveaConfigurationProvider implements \ConfigurationProvider {
     public function __construct($environmentConfig) {
         $this->conf = (array)$environmentConfig;
     }
-    
+
     /**
      *
      * @param type $type eg. INVOICE, PAYMENTPLAN, HOSTED
@@ -40,7 +40,7 @@ class SveaConfigurationProvider implements \ConfigurationProvider {
     public function getPassword($type, $country) {
         return $this->getCredentialsProperty('password', $type, $country);
     }
-    
+
     /**
      *
      * @param type $type eg. INVOICE, PAYMENTPLAN, HOSTED
@@ -51,7 +51,7 @@ class SveaConfigurationProvider implements \ConfigurationProvider {
     public function getClientNumber($type, $country) {
         return $this->getCredentialsProperty('clientNumber', $type, $country);
     }
-    
+
     /**
      *
      * @param type $type eg. INVOICE, PAYMENTPLAN, HOSTED
@@ -62,7 +62,7 @@ class SveaConfigurationProvider implements \ConfigurationProvider {
     public function getMerchantId($type, $country) {
         return $this->getCredentialsProperty('merchantId', $type, $country);
     }
-    
+
     /**
      *
      * @param type $type eg. INVOICE, PAYMENTPLAN, HOSTED
@@ -73,10 +73,10 @@ class SveaConfigurationProvider implements \ConfigurationProvider {
     public function getSecret($type, $country) {
         return $this->getCredentialsProperty('secret', $type, $country);
     }
-    
+
     /**
      *
-     * @param type $type eg. INVOICE, PAYMENTPLAN, HOSTED
+     * @param type $type eg. INVOICE, PAYMENTPLAN, HOSTED, HOSTED_ADMIN
      * @return type
      * @throws Exception
      */
@@ -123,7 +123,8 @@ class SveaConfigurationProvider implements \ConfigurationProvider {
             'Invalid type. Accepted values: %s, %s or %s',
             \ConfigurationProvider::INVOICE_TYPE,
             \ConfigurationProvider::PAYMENTPLAN_TYPE,
-            \ConfigurationProvider::HOSTED_TYPE
+            \ConfigurationProvider::HOSTED_TYPE,
+            \ConfigurationProvider::HOSTED_ADMIN_TYPE
         ));
     }
 }

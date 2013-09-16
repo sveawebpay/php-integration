@@ -21,10 +21,13 @@ class SveaResponse {
                 $this->response = new Svea\DeliverOrderResult($message);
             } elseif (property_exists($message, "CloseOrderEuResult")) {
                 $this->response = new Svea\CloseOrderResult($message);
+                //webservice from hosted_admin
+            }elseif(property_exists($message, "message")){
+                 $this->response = new Svea\HostedAdminResponse($message,$countryCode,$config);
             }
 
         } elseif ($message != NULL) {
-            $this->response = new Svea\HostedResponse($message,$countryCode,$config);
+            $this->response = new Svea\HostedPaymentResponse($message,$countryCode,$config);
         } else {
             $this->response = "Response is not recognized.";
         }
