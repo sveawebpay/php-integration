@@ -5,10 +5,18 @@ require_once SVEA_REQUEST_DIR . '/WebServiceRequests/svea_soap/SveaSoapConfig.ph
 require_once SVEA_REQUEST_DIR . '/Config/SveaConfig.php';
 
 /**
- * Calculates price per month for all campaigns
+ * Calculates price per month for all available campaigns.
+ * 
+ * This is a helper function provided to calculate the monthly price for the 
+ * different payment plan options for a given sum. This information may be used 
+ * when displaying i.e. payment options to the customer by checkout, or to 
+ * display the lowest amount due per month to display on a product level.
  *
  * @author Anneli Halld'n, Daniel Brolund for Svea Webpay
  * @package WebServiceRequests/GetPaymentPlanParams
+ * 
+ * @param type decimal $price
+ * @param type object $paramsResonseObject
  */
 class PaymentPlanPricePerMonth {
 
@@ -16,7 +24,6 @@ class PaymentPlanPricePerMonth {
 
     function __construct($price,$params) {
         $this->calculate($price,$params);
-        return $this->values;
     }
 
     private function calculate($price, $params) {
