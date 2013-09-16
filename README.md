@@ -740,16 +740,40 @@ echo $form->completeHtmlFormWithSubmitButton; //Will render a hidden form with s
 
 ## 2. getPaymentPlanParams
 Use this function to retrieve campaign codes for possible payment plan options. Use prior to create payment plan payment.
-Returns *PaymentPlanParamsResponse* object.
 
 ```php
     $response = WebPay::getPaymentPlanParams()
+                ->setCountryCode("SE")
                 ->doRequest();
 ```
+
+The *PaymentPlanParamsResponse* object contains the available payment campaigns in the array "campaignCodes":
+```php
+    $response->accepted
+    $response->resultcode
+    $response->campaignCodes[0..n]      // all available campaign payment plans in an array
+        ->campaignCode                      // numeric campaign code identifier
+        ->description                       // localised description string
+        ->paymentPlanType                   // human readable identifier (not guaranteed unique)
+        ->contractLengthInMonths
+        ->monthlyAnnuityFactor              // pricePerMonth = price * monthlyAnnuityFactor + notificationFee
+        ->initialFee
+        ->notificationFee
+        ->interestRatePercent
+        ->numberOfInterestFreeMonths
+        ->numberOfPaymentFreeMonths
+        ->fromAmount                        // amount lower limit for plan availability
+        ->toAmount                          // amount upper limit for plan availability
+```
+
 [<< To top](https://github.com/sveawebpay/php-integration#php-integration-package-api-for-sveawebpay)
 
 ### 2.1 paymentPlanPricePerMonth
-The function returns array with arrays containing campaignCode and pricePerMonth. To be used when displaying options and to use lowest option to display on product level.
+
+This is a helper function provided to calculate the monthly price for the different payment plan options for a given sum. 
+This information may be used when displaying i.e. payment options to the customer by checkout, or to display the lowest 
+amount due per month to display on a product level.
+
 **$paramsResonseObject** is response object from getPaymentPlanParams();
 ```php
     /**
@@ -758,7 +782,7 @@ The function returns array with arrays containing campaignCode and pricePerMonth
      * @param type object $paramsResonseObject
      * @return \PaymentPlanPricePerMonth
      */
-   $pricePerMonthPerCampaignCode = WebPay::paymentPlanPricePerMonth($price,$paramsResonseObject);
+   $pricePerMonthPerCampaignCode = WebPay::paymentPlanPricePerMonth($price,$paymentPlanParamsResonseObject);
 
 ```
 [<< To top](https://github.com/sveawebpay/php-integration#php-integration-package-api-for-sveawebpay)

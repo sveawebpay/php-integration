@@ -14,9 +14,6 @@ require_once SVEA_REQUEST_DIR . '/Config/SveaConfig.php';
  *
  * @author Anneli Halld'n, Daniel Brolund for Svea Webpay
  * @package WebServiceRequests/GetPaymentPlanParams
- * 
- * @param type decimal $price
- * @param type object $paramsResonseObject
  */
 class PaymentPlanPricePerMonth {
 
