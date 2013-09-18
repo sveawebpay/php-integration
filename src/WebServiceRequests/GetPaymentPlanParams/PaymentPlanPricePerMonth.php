@@ -12,6 +12,11 @@ require_once SVEA_REQUEST_DIR . '/Config/SveaConfig.php';
  * when displaying i.e. payment options to the customer by checkout, or to 
  * display the lowest amount due per month to display on a product level.
  *
+ * The returned instance of PaymentPlanPricePerMonth contains an array "values", where each element in turn contains an array of campaign code,   * description and price per month:
+ * 
+ * $paymentPlanParamsResonseObject->values[0..n] (for n campaignCodes), where 
+ * values['campaignCode' => campaignCode, 'pricePerMonth' => pricePerMonth, 'description' => description]
+ * 
  * @author Anneli Halld'n, Daniel Brolund for Svea Webpay
  * @package WebServiceRequests/GetPaymentPlanParams
  */
@@ -38,8 +43,8 @@ class PaymentPlanPricePerMonth {
                         $pair[$key] = $val;
                     }
 
-                }
-                array_push($this->values, $pair);
+                    }
+                    array_push($this->values, $pair);
                 }
             }
         }

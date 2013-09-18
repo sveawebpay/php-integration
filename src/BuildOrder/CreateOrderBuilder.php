@@ -52,7 +52,8 @@ class CreateOrderBuilder {
      */
     public $countryCode;
     /**
-     * @var type Date time
+     * ISO 8601 date, as produced by php date('c'): 2004-02-12T15:19:21+00:00, also accepts date in format "2004-02-12"
+     * @var string time, ISO 8601 date
      */
     public $orderDate;
     /**
@@ -181,8 +182,7 @@ class CreateOrderBuilder {
      * @return \createOrder
      */
     public function setCurrency($currencyAsString) {
-        $currency = trim($currencyAsString);
-        $currency = strtoupper($currency);
+        $currency = strtoupper( trim($currencyAsString) );
         $this->currency = $currency;
         return $this;
     }
