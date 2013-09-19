@@ -239,7 +239,7 @@ $response = WebPay::createOrder()
         ...
         ->getPaymentForm();
     //Go direct to specified paymentmethod, whithout stopping on the PayPage, with asynchronous response
-    ->usePaymentMethod (\PaymentMethod::SEB_SE) //see APPENDIX for Constants
+    ->usePaymentMethod (PaymentMethod::SEB_SE) //see APPENDIX for Constants
         ...
         ->getPaymentForm();
 
@@ -421,7 +421,7 @@ I am using card and/or direct bank payments.
 >and [`->usePayPageDirectBankOnly()`] (https://github.com/sveawebpay/php-integration#152-paypage-with-direct-bank-payment-options).
 >
 >If you for example only have one specific bank payment, you can go direct to that specific bank payment by using
->[`->usePaymentMethod(\PaymentMethod)`] (https://github.com/sveawebpay/php-integration#154-paymentmethod-specified)
+>[`->usePaymentMethod(PaymentMethod)`] (https://github.com/sveawebpay/php-integration#154-paymentmethod-specified)
 
 I am using all payments.
 
@@ -638,7 +638,7 @@ Optional if you want to include specific payment methods for *PayPage*.
     ->usePayPage()
         ->setReturnUrl("http://myurl.se")                                               //Required
         ->setCancelUrl("http://myurl.se")                                               //Optional
-        ->excludePaymentMethods(\PaymentMethod::SEB_SE,PaymentMethod::INVOICE)   //Optional
+        ->excludePaymentMethods(PaymentMethod::SEB_SE,PaymentMethod::INVOICE)   //Optional
         ->getPaymentForm();
 ```
 ###### 1.5.3.1.2 Include specific payment methods
@@ -646,7 +646,7 @@ Optional if you want to include specific payment methods for *PayPage*.
 ```php
     ->usePayPage()
         ->setReturnUrl("http://myurl.se")                                               //Required
-        ->includePaymentMethods(\PaymentMethod::SEB_SE,PaymentMethod::INVOICE)   //Optional
+        ->includePaymentMethods(PaymentMethod::SEB_SE,PaymentMethod::INVOICE)   //Optional
         ->getPaymentForm();
 ```
 
@@ -709,7 +709,7 @@ $form = WebPay::createOrder()
     ->setClientOrderNumber("33")
     ->setOrderDate("2012-12-12")
     ->setCurrency("SEK")
-        ->usePaymentMethod(\PaymentMethod::KORTCERT)             //Se APPENDIX for paymentmethods
+        ->usePaymentMethod(PaymentMethod::KORTCERT)             //Se APPENDIX for paymentmethods
             ->setReturnUrl("http://myurl.se")                   //Required
             ->setCancelUrl("http://myurl.se")                   //Optional
             ->getPaymentForm();

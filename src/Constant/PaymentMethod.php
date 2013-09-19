@@ -1,8 +1,8 @@
 <?php
-// PaymentMethodType is excluded from the Svea namespace
+// PaymentMethod is excluded from the Svea namespace
 
 /**
- * PaymentMethodType
+ * PaymentMethod
  */
 abstract class PaymentMethod {
 
