@@ -81,7 +81,12 @@ class WebPay {
     public static function paymentPlanPricePerMonth($price,$paramsResonseObject) {
         return new Svea\PaymentPlanPricePerMonth($price,$paramsResonseObject);
     }
-
+    /**
+     * Get all paymentmethods connected to your account
+     * @param instance of implementation class of ConfigurationProvider Interface
+     * If left blank, default settings from SveaConfig will be used
+     * @return \Svea\GetPaymentMethods Array of Paymentmethods
+     */
     public static function getPaymentMethods($config = NULL) {
         //todo: hämta från config även faktura o delbetala
         $config = $config == null ? Svea\SveaConfig::getDefaultConfig() : $config;

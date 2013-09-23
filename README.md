@@ -1,4 +1,5 @@
 # PHP Integration Package API for SveaWebPay
+## Version 1.3.0
 
 | Branch                            | Build status                               |
 |---------------------------------- |------------------------------------------- |
