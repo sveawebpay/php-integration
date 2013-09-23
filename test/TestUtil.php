@@ -5,10 +5,15 @@ $root = realpath(dirname(__FILE__));
 require_once $root . '/../src/Includes.php';
 
 /**
- * @author Jonas Lith
+ * @author Jonas Lith, Kristian Grossman-Madsen
  */
 class TestUtil {
-    
+
+    /**
+     * Creates an OrderRow object for use in populating order objects.
+     * 
+     * @return Svea\OrderRow object
+     */
     public static function createOrderRow() {
         return WebPayItem::orderRow()
             ->setArticleNumber(1)
@@ -20,6 +25,24 @@ class TestUtil {
             ->setVatPercent(25)
             ->setDiscountPercent(0);
     }
+
+    /**
+     * Creates an OrderRow object using a given tax rate
+     * 
+     * @param int vatPercent the tax rate for this order row (defaults to 25 if omitted)
+     * @return Svea\OrderRow object
+     */
+    public static function createOrderRowWithVat( $vatPercent = 25 ) {
+        return WebPayItem::orderRow()
+            ->setArticleNumber(1)
+            ->setQuantity(1)
+            ->setAmountExVat(100.00)
+            ->setDescription("Specification")
+            ->setName('Prod')
+            ->setUnit("st")
+            ->setVatPercent( $vatPercent )
+            ->setDiscountPercent(0);
+    } 
     
     public static function createHostedOrderRow() {
         return WebPayItem::orderRow()

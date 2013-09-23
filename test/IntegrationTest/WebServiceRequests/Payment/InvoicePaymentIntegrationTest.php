@@ -70,7 +70,7 @@ class InvoicePaymentIntegrationTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(1, $request->accepted);
     }
 
-    public function testInvoiceCompanySe() {
+    public function testInvoiceCompanySE() {
         $request = WebPay::createOrder()
                 ->addOrderRow(TestUtil::createOrderRow())
                 ->addCustomerDetails(WebPayItem::companyCustomer()->setNationalIdNumber(4608142222))
@@ -85,7 +85,7 @@ class InvoicePaymentIntegrationTest extends PHPUnit_Framework_TestCase {
     
     public function testResultForInvoicePaymentNL() {
         $request = WebPay::createOrder()
-                ->addOrderRow(TestUtil::createOrderRow())
+                ->addOrderRow( TestUtil::createOrderRowWithVat( 6 ) )
                 ->addCustomerDetails(WebPayItem::individualCustomer()
                         ->setBirthDate(1955, 03, 07)
                         ->setName("Sneider", "Boasman")
@@ -102,13 +102,13 @@ class InvoicePaymentIntegrationTest extends PHPUnit_Framework_TestCase {
                 ->useInvoicePayment()
                 //->setPasswordBasedAuthorization("hollandtest", "hollandtest", 85997)
                 ->doRequest();
-        
+            
         $this->assertEquals(1, $request->accepted);
         $this->assertEquals(0, $request->resultcode);
         $this->assertEquals('Invoice', $request->orderType);
         //$this->assertEquals(54086, $request->sveaOrderId);
         $this->assertEquals(1, $request->sveaWillBuyOrder);
-        $this->assertEquals(250, $request->amount);
+        $this->assertEquals(106, $request->amount);                    // 1x100 @ 6% vat
         //$this->assertEquals(date(), $request->expirationDate);
         $this->assertEquals('', $request->customerIdentity->email);
         $this->assertEquals('', $request->customerIdentity->ipAddress);
