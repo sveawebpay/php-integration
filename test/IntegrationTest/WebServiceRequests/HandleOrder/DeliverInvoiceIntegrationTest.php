@@ -10,7 +10,7 @@ require_once $root . '/../../../TestUtil.php';
 /**
  * @author jona-lit
  */
-class DeliverInvoiceIntegrationTest extends \PHPUnit_Framework_TestCase {
+class DeliverInvoiceIntegrationTest extends PHPUnit_Framework_TestCase {
 
     /**
      * Function to use in testfunctions
