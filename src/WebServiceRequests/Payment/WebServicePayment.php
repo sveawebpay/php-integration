@@ -80,7 +80,7 @@ class WebServicePayment {
 
     /**
      * Transforms object to array and sends it to SveaWebPay Europe Web service API by php SoapClient
-     * @return CreateOrderEuResponse
+     * @return CreateOrderEuResponse 
      * @throws ValidationException
      */
     public function doRequest() {
@@ -91,7 +91,7 @@ class WebServicePayment {
         $svea_req = $request->CreateOrderEu($object);
 
         $response = new \SveaResponse($svea_req,"");
-        return $response->response;
+        return $response->getResponse();                    // returns a specific type of response object created in SveaResponse
     }
 
     /**
