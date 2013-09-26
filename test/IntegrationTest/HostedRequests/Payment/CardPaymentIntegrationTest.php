@@ -12,7 +12,7 @@ class CardPaymentIntegrationTest extends \PHPUnit_Framework_TestCase {
     
     public function testDoCardPaymentRequest() {
         $rowFactory = new TestUtil();
-        $form = WebPay::createOrder()                      
+        $form = WebPay::createOrder()
                 ->addOrderRow(TestUtil::createOrderRow())
                 ->run($rowFactory->buildShippingFee())
                 ->addDiscount(WebPayItem::relativeDiscount()
