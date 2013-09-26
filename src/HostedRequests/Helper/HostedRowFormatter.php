@@ -47,8 +47,8 @@ class HostedRowFormatter {
             }
             
             // calculate amount, vat from two out of three given by customer, see unit tests HostedRowFormater
-            if (isset($row->amountExVat) && isset($row->vatPercent)) {
-                $tempRow->setAmount(round(($row->amountExVat * 100) * $plusVatCounter));
+            if (isset($row->amountExVat) && isset($row->vatPercent)) {           
+                $tempRow->setAmount( round( (floatval($row->amountExVat) * $plusVatCounter) * 100), 2 )  ;
                 $tempRow->setVat(round($tempRow->amount - ($row->amountExVat * 100)));                               
             } elseif (isset($row->amountIncVat) && isset($row->vatPercent)) {
                  $tempRow->setAmount(round($row->amountIncVat * 100));
