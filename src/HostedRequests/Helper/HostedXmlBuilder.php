@@ -20,27 +20,25 @@ class HostedXmlBuilder {
         $this->setBaseXML();
         $this->XMLWriter->startElement("payment");
         $this->XMLWriter->writeElement("customerrefno", $order->clientOrderNumber);
-        $this->XMLWriter->writeElement("returnurl", $request['returnUrl']);
-        $this->XMLWriter->writeElement("cancelurl", $request['cancelUrl']);
-        $this->XMLWriter->writeElement("amount", round($request['amount']));
         $this->XMLWriter->writeElement("currency", $request['currency']);
-        $this->XMLWriter->writeElement("lang", $request['langCode']);
-        $this->XMLWriter->writeElement("addinvoicefee", "FALSE");
-
-        //customer fields
-        $this->serializeCustomer($order,$request);
-
-        if (isset($order->customerIdentity->addressSelector)) {
-             $this->XMLWriter->writeElement("addressid", $order->customerIdentity->addressSelector);
-        }
+        $this->XMLWriter->writeElement("amount", round($request['amount']));
 
         if ($request['totalVat'] != null) {
             $this->XMLWriter->writeElement("vat", round($request['totalVat']));
         }
 
+        $this->XMLWriter->writeElement("addinvoicefee", "FALSE");
+        $this->XMLWriter->writeElement("lang", $request['langCode']);
+        $this->XMLWriter->writeElement("returnurl", $request['returnUrl']);
+        $this->XMLWriter->writeElement("cancelurl", $request['cancelUrl']);
+
+        $this->serializeCustomer($order,$request);
+
         if (isset($order->ipAddress)) {
              $this->XMLWriter->writeElement("ipaddress", $order->ipAddress);
         }
+
+        $this->XMLWriter->writeElement("iscompany", $this->isCompany);
 
         $this->serializeOrderRows($request['rows']);
 
@@ -52,7 +50,6 @@ class HostedXmlBuilder {
             $this->XMLWriter->writeElement("paymentmethod", $request['paymentMethod']);
         }
 
-        $this->XMLWriter->writeElement("iscompany", $this->isCompany);
         /*
           $this->serializeMap($order->params);
          */
@@ -198,6 +195,10 @@ class HostedXmlBuilder {
         }
 
         $this->XMLWriter->endElement();
+
+        if (isset($order->customerIdentity->addressSelector)) {
+             $this->XMLWriter->writeElement("addressid", $order->customerIdentity->addressSelector);
+        }
     }
 
     private function setBaseXML(){

@@ -126,7 +126,7 @@ class HostedXmlBuilderTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals(1, substr_count($xml, "<unit>kg</unit>"));
     }
     
-    public function testFormatOrderRows() {
+    public function testXmlWithCancelUrl() {
         $order = new CreateOrderBuilder(new SveaConfigurationProvider(SveaConfig::getDefaultConfig()));
         $payment = new FakeHostedPayment($order);
         $payment->order = $order;
