@@ -16,7 +16,7 @@ class TestUtil {
      */
     public static function createOrderRow() {
         return WebPayItem::orderRow()
-            ->setArticleNumber(1)
+            ->setArticleNumber("1")
             ->setQuantity(2)
             ->setAmountExVat(100.00)
             ->setDescription("Specification")
@@ -34,7 +34,7 @@ class TestUtil {
      */
     public static function createOrderRowWithVat( $vatPercent = 25 ) {
         return WebPayItem::orderRow()
-            ->setArticleNumber(1)
+            ->setArticleNumber("1")
             ->setQuantity(1)
             ->setAmountExVat(100.00)
             ->setDescription("Specification")
@@ -46,7 +46,7 @@ class TestUtil {
     
     public static function createHostedOrderRow() {
         return WebPayItem::orderRow()
-                ->setAmountExVat(100)
+                ->setAmountExVat(100.00)
                 ->setVatPercent(25)
                 ->setQuantity(1);
     }
@@ -101,7 +101,7 @@ class TestUtil {
       return function($orderBuilder) {
       return $orderBuilder
       ->beginOrderRow()
-      ->setArticleNumber(1)
+      ->setArticleNumber("1")
       ->setQuantity(2)
       ->setAmountExVat(100.00)
       ->setDesc("Specification")

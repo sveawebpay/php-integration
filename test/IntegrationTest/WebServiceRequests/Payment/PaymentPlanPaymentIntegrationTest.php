@@ -25,7 +25,7 @@ class PaymentPlanPaymentIntegrationTest extends PHPUnit_Framework_TestCase {
         $campaigncode = $this->getGetPaymentPlanParamsForTesting();
         $request = WebPay::createOrder()
                 ->addOrderRow(WebPayItem::orderRow()
-                        ->setArticleNumber(1)
+                        ->setArticleNumber("1")
                         ->setQuantity(2)
                         ->setAmountExVat(1000.00)
                         ->setDescription("Specification")
