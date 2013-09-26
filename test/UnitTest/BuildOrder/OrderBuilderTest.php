@@ -11,7 +11,7 @@ require_once $root . '/../../TestUtil.php';
 
 /**
  * All functions named test...() will run as tests in PHP-unit framework
- * @author Anneli Halld'n, Daniel Brolund for Svea Webpay
+ * @author Anneli Halld'n, Daniel Brolund, Kristian Grossman-Madsen for Svea Webpay
  */
 class OrderBuilderTest extends \PHPUnit_Framework_TestCase {
 
@@ -172,13 +172,22 @@ class OrderBuilderTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals("TestCompagniet", $sveaRequest->customerIdentity->companyName);
     }
 
-    public function testBuildOrderWithOrderDate() {
+    public function testBuildOrderWithShortOrderDate() {
         $sveaRequest = \WebPay::createOrder()
                 ->setOrderDate("2012-12-12");
 
         $this->assertEquals("2012-12-12", $sveaRequest->orderDate);
     }
 
+    public function testBuildOrderWithFullISO8601OrderDate() {
+        $iso8601date = date('c');        
+        
+        $sveaRequest = \WebPay::createOrder()
+                ->setOrderDate($iso8601date);
+
+        $this->assertEquals($iso8601date, $sveaRequest->orderDate);
+    }
+    
     public function testBuildOrderWithCountryCode() {
         $sveaRequest = \WebPay::createOrder()
                 ->setCountryCode("SE");

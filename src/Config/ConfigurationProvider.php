@@ -52,7 +52,7 @@ interface ConfigurationProvider {
     public function getSecret($type, $country);
     /**
      * Constants for the endpoint url found in the class SveaConfig.php
-     * @param $type eg. HOSTED, INVOICE or PAYMENTPLAN
+     * @param $type eg. HOSTED, INVOICE or PAYMENTPLAN, HOSTED_ADMIN
      */
     public function getEndPoint($type);
 }

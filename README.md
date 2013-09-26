@@ -1,4 +1,5 @@
 # PHP Integration Package API for SveaWebPay
+## Version 1.3.0
 
 | Branch                            | Build status                               |
 |---------------------------------- |------------------------------------------- |
@@ -211,7 +212,7 @@ $response = WebPay::createOrder()
     ->addCustomerDetails(WebPayItem::companyCustomer()...)
 //Other values
     ->setCountryCode("SE")
-    ->setOrderDate("2012-12-12")
+    ->setOrderDate("2012-12-12")    // or ISO801 date produced by i.e. date('c')
     ->setCustomerReference("33")
     ->setClientOrderNumber("nr26")
     ->setCurrency("SEK")
@@ -239,7 +240,7 @@ $response = WebPay::createOrder()
         ...
         ->getPaymentForm();
     //Go direct to specified paymentmethod, whithout stopping on the PayPage, with asynchronous response
-    ->usePaymentMethod (\PaymentMethod::SEB_SE) //see APPENDIX for Constants
+    ->usePaymentMethod (PaymentMethod::SEB_SE) //see APPENDIX for Constants
         ...
         ->getPaymentForm();
 
@@ -421,7 +422,7 @@ I am using card and/or direct bank payments.
 >and [`->usePayPageDirectBankOnly()`] (https://github.com/sveawebpay/php-integration#152-paypage-with-direct-bank-payment-options).
 >
 >If you for example only have one specific bank payment, you can go direct to that specific bank payment by using
->[`->usePaymentMethod(\PaymentMethod)`] (https://github.com/sveawebpay/php-integration#154-paymentmethod-specified)
+>[`->usePaymentMethod(PaymentMethod)`] (https://github.com/sveawebpay/php-integration#154-paymentmethod-specified)
 
 I am using all payments.
 
@@ -638,7 +639,7 @@ Optional if you want to include specific payment methods for *PayPage*.
     ->usePayPage()
         ->setReturnUrl("http://myurl.se")                                               //Required
         ->setCancelUrl("http://myurl.se")                                               //Optional
-        ->excludePaymentMethods(\PaymentMethod::SEB_SE,PaymentMethod::INVOICE)   //Optional
+        ->excludePaymentMethods(PaymentMethod::SEB_SE,PaymentMethod::INVOICE)   //Optional
         ->getPaymentForm();
 ```
 ###### 1.5.3.1.2 Include specific payment methods
@@ -646,7 +647,7 @@ Optional if you want to include specific payment methods for *PayPage*.
 ```php
     ->usePayPage()
         ->setReturnUrl("http://myurl.se")                                               //Required
-        ->includePaymentMethods(\PaymentMethod::SEB_SE,PaymentMethod::INVOICE)   //Optional
+        ->includePaymentMethods(PaymentMethod::SEB_SE,PaymentMethod::INVOICE)   //Optional
         ->getPaymentForm();
 ```
 
@@ -709,7 +710,7 @@ $form = WebPay::createOrder()
     ->setClientOrderNumber("33")
     ->setOrderDate("2012-12-12")
     ->setCurrency("SEK")
-        ->usePaymentMethod(\PaymentMethod::KORTCERT)             //Se APPENDIX for paymentmethods
+        ->usePaymentMethod(PaymentMethod::KORTCERT)             //Se APPENDIX for paymentmethods
             ->setReturnUrl("http://myurl.se")                   //Required
             ->setCancelUrl("http://myurl.se")                   //Optional
             ->getPaymentForm();
@@ -741,16 +742,44 @@ echo $form->completeHtmlFormWithSubmitButton; //Will render a hidden form with s
 
 ## 2. getPaymentPlanParams
 Use this function to retrieve campaign codes for possible payment plan options. Use prior to create payment plan payment.
-Returns *PaymentPlanParamsResponse* object.
 
 ```php
     $response = WebPay::getPaymentPlanParams()
+                ->setCountryCode("SE")
                 ->doRequest();
 ```
+
+The *PaymentPlanParamsResponse* object contains the available payment campaigns in the array "campaignCodes":
+```php
+    $response->accepted
+    $response->resultcode
+    $response->campaignCodes[0..n]      // all available campaign payment plans in an array
+        ->campaignCode                      // numeric campaign code identifier
+        ->description                       // localised description string
+        ->paymentPlanType                   // human readable identifier (not guaranteed unique)
+        ->contractLengthInMonths
+        ->monthlyAnnuityFactor              // pricePerMonth = price * monthlyAnnuityFactor + notificationFee
+        ->initialFee
+        ->notificationFee
+        ->interestRatePercent
+        ->numberOfInterestFreeMonths
+        ->numberOfPaymentFreeMonths
+        ->fromAmount                        // amount lower limit for plan availability
+        ->toAmount                          // amount upper limit for plan availability
+```
+
 [<< To top](https://github.com/sveawebpay/php-integration#php-integration-package-api-for-sveawebpay)
 
 ### 2.1 paymentPlanPricePerMonth
-The function returns array with arrays containing campaignCode and pricePerMonth. To be used when displaying options and to use lowest option to display on product level.
+
+This is a helper function provided to calculate the monthly price for the different payment plan options for a given sum. 
+This information may be used when displaying i.e. payment options to the customer by checkout, or to display the lowest 
+amount due per month to display on a product level.
+
+The returned instance of PaymentPlanPricePerMonth contains an array "values", where each element in turn contains an array of campaign code, description and price per month:
+
+$paymentPlanParamsResonseObject->values[0..n] (for n campaignCodes), where values['campaignCode' => campaignCode, 'pricePerMonth' => pricePerMonth, 'description' => description] 
+
 **$paramsResonseObject** is response object from getPaymentPlanParams();
 ```php
     /**
@@ -759,8 +788,7 @@ The function returns array with arrays containing campaignCode and pricePerMonth
      * @param type object $paramsResonseObject
      * @return \PaymentPlanPricePerMonth
      */
-   $pricePerMonthPerCampaignCode = WebPay::paymentPlanPricePerMonth($price,$paramsResonseObject);
-
+   $pricePerMonthPerCampaignCode = WebPay::paymentPlanPricePerMonth($price,$paymentPlanParamsResonseObject);
 ```
 [<< To top](https://github.com/sveawebpay/php-integration#php-integration-package-api-for-sveawebpay)
 
@@ -947,15 +975,19 @@ All synchronous responses are handled through *SveaResponse* and structured into
 Asynchronous responses recieved after sending the values *merchantid* and *xmlMessageBase64* to
 hosted solutions can also be processed through the *SveaResponse* class. The response from server will be sent to the *returnUrl*
 with POST or GET. The response contains the parameters:
-*response*, *merchantid*, and *mac*. The *response* is a Base64 encoded message.The *mac* is a calculated authorization message.
-Class *SveaResponse* will return a structured object similar to the synchronous answer instead.
+*response*, *merchantid*, and *mac*. The *response* is a Base64 encoded message.The *mac* is a calculated authorization message. Use *SveaResponse* to get a structured object similar to the synchronous answer instead.
+
+For asynchronous services, create an instance of SveaResponse, pass it the resulting xml response as part of the $_REQUEST response along with countryCode and config, then receive your HostedResponse instance by calling the getResponse() method.
+
 Params:
 * The POST or GET message
 * CountryCode
 * [Config](https://github.com/sveawebpay/php-integration#configuration) object. //Optional. If not given, test values from SveaConfig.php will be used
 
+(For synchronous services, the appropriate WebServiceResponse instance is returned when calling ->doRequest() on the order object.)
+ 
 ```php
-  $respObject = new SveaResponse($_REQUEST,$countryCode,$config);
+  $response = (new SveaResponse($_REQUEST,$countryCode,$config))->getResponse();
 ```
 
 [<< To top](https://github.com/sveawebpay/php-integration#php-integration-package-api-for-sveawebpay)

@@ -9,7 +9,7 @@ include_once SVEA_REQUEST_DIR . "/Includes.php";
  * Class WebPay is external to Svea namespace along with class WebPayItem.
  * This is so that existing integrations don't need to worry about
  * prefixing their existing calls to WebPay:: and orderrow item functions.
- *
+ * @version 1.3.1
  * @author Anneli Halld'n, Daniel Brolund, Kristian Grossman-Madsen for Svea WebPay
  * @package WebPay
  */
@@ -17,6 +17,9 @@ class WebPay {
 
     /**
      * Start Building Order Request to create order for all Payments
+     *
+     * See CreateOrderBuilder class for more info on order contents
+     *
      * @return \CreateOrderBuilder object
      * @param instance of implementation class of ConfigurationProvider Interface
      * If left blank, default settings from SveaConfig will be used
@@ -35,6 +38,28 @@ class WebPay {
     public static function getPaymentPlanParams($config = NULL) {
        $config = $config == null ? Svea\SveaConfig::getDefaultConfig() : $config;
         return new Svea\GetPaymentPlanParams($config);
+    }
+
+    /**
+     * Calculates price per month for all available campaigns.
+     *
+     * This is a helper function provided to calculate the monthly price for the
+     * different payment plan options for a given sum. This information may be
+     * used when displaying i.e. payment options to the customer by checkout, or
+     * to display the lowest amount due per month to display on a product level.
+     *
+     * The returned instance contains an array value, where each element in turn
+     * contains a pair of campaign code and price per month:
+     * $paymentPlanParamsResonseObject->value[0..n] (for n campaignCodes), where
+     * value['campaignCode' => campaignCode, 'pricePerMonth' => pricePerMonth]
+     *
+     * @param type decimal $price
+     * @param type object $paramsResonseObject
+     * @return Svea\PaymentPlanPricePerMonth $paymentPlanParamsResonseObject
+     *
+     */
+    public static function paymentPlanPricePerMonth($price, $paymentPlanParamsResonseObject) {
+        return new Svea\PaymentPlanPricePerMonth($price, $paymentPlanParamsResonseObject);
     }
 
     /**
@@ -73,17 +98,12 @@ class WebPay {
     }
 
     /**
-     *
-     * @param type decimal $price
-     * @param type object $paramsResonseObject
-     * @return \PaymentPlanPricePerMonth
+     * Get all paymentmethods connected to your account
+     * @param instance of implementation class of ConfigurationProvider Interface
+     * If left blank, default settings from SveaConfig will be used
+     * @return \Svea\GetPaymentMethods Array of Paymentmethods
      */
-    public static function paymentPlanPricePerMonth($price,$paramsResonseObject) {
-        return new Svea\PaymentPlanPricePerMonth($price,$paramsResonseObject);
-    }
-
     public static function getPaymentMethods($config = NULL) {
-        //todo: hämta från config även faktura o delbetala
         $config = $config == null ? Svea\SveaConfig::getDefaultConfig() : $config;
         return new Svea\GetPaymentMethods($config);
     }

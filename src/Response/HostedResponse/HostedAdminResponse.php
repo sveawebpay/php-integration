@@ -14,7 +14,7 @@ class HostedAdminResponse extends HostedResponse{
     function __construct($response,$countryCode,$config) {
         if (is_object($response)) {
 
-            if (property_exists($response,"mac")&& property_exists($response,"message")) {
+            if (property_exists($response,"mac") && property_exists($response,"message")) {
                 $decodedXml = base64_decode($response->message);
                 $secret = $config->getSecret(\ConfigurationProvider::HOSTED_TYPE,$countryCode);
                 if ($this->validateMac($response->message,$response->mac,$secret)) {

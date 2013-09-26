@@ -8,7 +8,7 @@ $root = realpath(dirname(__FILE__));
 require_once $root . '/../../../TestUtil.php';
 
 /**
- * @author Anneli Halld'n, Daniel Brolund for Svea Webpay
+ * @author Anneli Halld'n, Daniel Brolund, Kristian Grossman-Madsen for Svea Webpay
  */
 class InvoicePaymentIntegrationTest extends PHPUnit_Framework_TestCase {
     
@@ -25,6 +25,21 @@ class InvoicePaymentIntegrationTest extends PHPUnit_Framework_TestCase {
         
         $this->assertEquals(1, $request->accepted);
     }
+    
+    public function testInvoiceRequestUsingISO8601dateAccepted() {
+        $request = WebPay::createOrder()
+                ->addOrderRow(TestUtil::createOrderRow())
+                ->addCustomerDetails(WebPayItem::individualCustomer()->setNationalIdNumber(4605092222))
+                ->setCountryCode("SE")
+                ->setCustomerReference("33")
+                ->setOrderDate( date('c') )
+                ->setCurrency("SEK")
+                ->useInvoicePayment()
+                ->doRequest();
+        
+        $this->assertEquals(1, $request->accepted);
+    }
+ 
     
     public function testInvoiceRequestDenied() {
         $request = WebPay::createOrder()
