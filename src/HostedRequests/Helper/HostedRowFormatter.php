@@ -36,8 +36,7 @@ class HostedRowFormatter {
     private function formatOrderRows($order) {
         foreach ($order->orderRows as $row ) {
             $tempRow = new HostedOrderRowBuilder();     // new empty object
-                
-            $plusVatCounter = isset($row->vatPercent) ? (($row->vatPercent*0.01)+1) : NULL;
+            $plusVatCounter = isset($row->vatPercent) ? (($row->vatPercent * 0.01) + 1) : "";
 
             if (isset($row->name)) {
                 $tempRow->setName($row->name);

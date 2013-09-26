@@ -71,7 +71,7 @@ class NewOrderBuilderTest extends \PHPUnit_Framework_TestCase {
     public function testNewInvoiceOrderWithArray() {
         $orderRows[] = \TestUtil::createOrderRow();
         $orderRows[] = \WebPayItem::orderrow()
-                    ->setArticleNumber("2")
+                    ->setArticleNumber(2)
                     ->setQuantity(2)
                     ->setAmountExVat(110.00)
                     ->setDescription("Specification")

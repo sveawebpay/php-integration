@@ -12,7 +12,7 @@ class WebServiceRowFormatterTest extends PHPUnit_Framework_TestCase {
                 ->setArticleNumber("0")
                 ->setName("Tess")
                 ->setDescription("Tester")
-                ->setAmountExVat(4.0)
+                ->setAmountExVat(4)
                 ->setVatPercent(25)
                 ->setQuantity(1)
                 ->setUnit("st")
@@ -37,7 +37,7 @@ class WebServiceRowFormatterTest extends PHPUnit_Framework_TestCase {
                     ->setShippingId("0")
                     ->setName("Tess")
                     ->setDescription("Tester")
-                    ->setAmountExVat(4.0)
+                    ->setAmountExVat(4)
                     ->setVatPercent(25)
                     ->setUnit("st")
                 );
@@ -60,7 +60,7 @@ class WebServiceRowFormatterTest extends PHPUnit_Framework_TestCase {
         $order->addFee(WebPayItem::invoiceFee()
                 ->setName("Tess")
                 ->setDescription("Tester")
-                ->setAmountExVat(4.0)
+                ->setAmountExVat(4)
                 ->setVatPercent(25)
                 ->setUnit("st")
                 );
@@ -81,7 +81,7 @@ class WebServiceRowFormatterTest extends PHPUnit_Framework_TestCase {
     public function testFormatFixedDiscountRows() {
         $order = WebPay::createOrder();
         $order->addOrderRow(WebPayItem::orderRow()
-                ->setAmountExVat(4.0)
+                ->setAmountExVat(4)
                 ->setVatPercent(25)
                 ->setQuantity(1)
                 )
@@ -108,7 +108,7 @@ class WebServiceRowFormatterTest extends PHPUnit_Framework_TestCase {
     public function testFormatRelativeDiscountRows() {
         $order = WebPay::createOrder();
         $order->addOrderRow(WebPayItem::orderRow()
-                ->setAmountExVat(4.0)
+                ->setAmountExVat(4)
                 ->setVatPercent(25)
                 ->setQuantity(1)
                 )

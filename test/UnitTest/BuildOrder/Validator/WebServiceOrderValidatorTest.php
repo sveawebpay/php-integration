@@ -268,35 +268,16 @@ class WebServiceOrderValidatorTest extends \PHPUnit_Framework_TestCase {
         $order->prepareRequest();
     }
     
-//    /**
-//     * @expectedException Svea\ValidationException
-//     * @expectedExceptionMessage
-//     * -incorrect datatype : Vat must be set as Integer.
-//    */
-//    public function testFailOnVatAsFloat() {
-//        $builder = \WebPay::createOrder();
-//        $order = $builder
-//                ->addOrderRow(\WebPayItem::orderRow()
-//                    ->setAmountExVat(100)
-//                    ->setVatPercent(20.33)
-//                    ->setQuantity(1)
-//                )
-//                ->setCountryCode("SE")
-//                // ->setOrderDate("Mon, 15 Aug 05 15:52:01 +0000")
-//                ->addCustomerDetails(\WebPayItem::individualCustomer()->setNationalIdNumber(46111111))
-//                ->useInvoicePayment();
-//        $order->prepareRequest(); 
-//    }
     /**
-     * @expectedException InvalidArgumentException
+     * @expectedException Svea\ValidationException
      * @expectedExceptionMessage
      * -incorrect datatype : Vat must be set as Integer.
-     */
+    */
     public function testFailOnVatAsFloat() {
         $builder = \WebPay::createOrder();
         $order = $builder
                 ->addOrderRow(\WebPayItem::orderRow()
-                    ->setAmountExVat(100.00)
+                    ->setAmountExVat(100)
                     ->setVatPercent(20.33)
                     ->setQuantity(1)
                 )

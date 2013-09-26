@@ -2,15 +2,7 @@
 namespace Svea;
 
 /**
- * Instances of OrderRow usually conform to a single order row, containing one
- * or more order items which have certain attributes. These are all optional
- * and are created with the vaious set<Attribute> methods below.
- * 
- * Argument type is enforced when populating the order row through these 
- * methods, which throw InvalidArgumentException if the argument has the wrong 
- * type.
- * 
- * @author anne-hal, Kristian Grossman-Madsen
+ * @author anne-hal
  */
 class OrderRow {
 
@@ -30,12 +22,8 @@ class OrderRow {
      * Optional
      * @param string $articleNumberAsString
      * @return Svea\OrderRow
-     * @throws \InvalidArgumentException
      */
     public function setArticleNumber($articleNumberAsString) {
-        if( !is_string( $articleNumberAsString ) )
-            throw new \InvalidArgumentException( '$articleNumberAsString is not of type string.');
-
         $this->articleNumber = $articleNumberAsString;
         return $this;
     }
@@ -46,9 +34,6 @@ class OrderRow {
      * @return Svea\OrderRow
      */
     public function setQuantity($quantityAsInt) {
-        if( !is_int( $quantityAsInt ) )
-            throw new \InvalidArgumentException( '$quantityAsInt is not of type int.');
-
         $this->quantity = $quantityAsInt;
         return $this;
     }
@@ -59,9 +44,6 @@ class OrderRow {
      * @return Svea\OrderRow
      */
     public function setUnit($unitAsString) {
-        if( !is_string( $unitAsString ) )
-            throw new \InvalidArgumentException( '$unitAsString is not of type string.');   
-        
         $this->unit = $unitAsString;
         return $this;
     }
@@ -71,11 +53,8 @@ class OrderRow {
      * @param float $AmountAsFloat
      * @return Svea\OrderRow
      */
-    public function setAmountExVat($amountAsFloat) {
-        if( !is_float( $amountAsFloat ) )
-            throw new \InvalidArgumentException( '$amountAsFloat is not of type float.');    
-                
-        $this->amountExVat = $amountAsFloat;
+    public function setAmountExVat($AmountAsFloat) {
+        $this->amountExVat = $AmountAsFloat;
         return $this;
     }
     
@@ -84,11 +63,8 @@ class OrderRow {
      * @param float $AmountAsFloat
      * @return Svea\OrderRow
      */
-    public function setAmountIncVat($amountAsFloat) {
-        if( !is_float( $amountAsFloat ) )
-            throw new \InvalidArgumentException( '$amountAsFloat is not of type float.');    
-          
-        $this->amountIncVat = $amountAsFloat;
+    public function setAmountIncVat($AmountAsFloat) {
+        $this->amountIncVat = $AmountAsFloat;
         return $this;
     }
 
@@ -98,9 +74,6 @@ class OrderRow {
      * @return Svea\OrderRow
      */
     public function setName($nameAsString) {
-        if( !is_string( $nameAsString ) )
-            throw new \InvalidArgumentException( '$nameAsString is not of type string.');   
-
         $this->name = $nameAsString;
         return $this;
     }
@@ -111,36 +84,27 @@ class OrderRow {
      * @return Svea\OrderRow
      */
     public function setDescription($descriptionAsString) {
-        if( !is_string( $descriptionAsString ) )
-            throw new \InvalidArgumentException( '$descriptionAsString is not of type string.');   
-
         $this->description = $descriptionAsString;
         return $this;
     }
 
     /**
      * Optional
-     * @param int $vatPercentAsInt
+     * @param int $percentAsInt
      * @return Svea\OrderRow
      */
-    public function setVatPercent($vatPercentAsInt) {
-        if( !is_int( $vatPercentAsInt ) )
-            throw new \InvalidArgumentException( '$vatPercentAsInt is not of type int.');
-
-        $this->vatPercent = $vatPercentAsInt;
+    public function setVatPercent($percentAsInt) {
+        $this->vatPercent = $percentAsInt;
         return $this;
     }
 
     /**
      * Optional
-     * @param int $discountPercentAsInt
+     * @param int $discountPercentAsInteger
      * @return Svea\OrderRow
      */
-    public function setDiscountPercent($discountPercentAsInt) {
-        if( !is_int( $discountPercentAsInt ) )
-            throw new \InvalidArgumentException( '$discountPercentAsInt is not of type int.');
-
-        $this->discountPercent = $discountPercentAsInt;
+    public function setDiscountPercent($discountPercentAsInteger) {
+        $this->discountPercent = $discountPercentAsInteger;
         return $this;
     }
 }
