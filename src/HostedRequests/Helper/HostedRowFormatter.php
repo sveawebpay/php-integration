@@ -35,8 +35,8 @@ class HostedRowFormatter {
 
     private function formatOrderRows($order) {
         foreach ($order->orderRows as $row ) {
-            $tempRow = new HostedOrderRowBuilder();
-            $plusVatCounter = isset($row->vatPercent) ? ($row->vatPercent * 0.01) + 1 : "";
+            $tempRow = new HostedOrderRowBuilder();     // new empty object
+            $plusVatCounter = isset($row->vatPercent) ? (($row->vatPercent * 0.01) + 1) : "";
 
             if (isset($row->name)) {
                 $tempRow->setName($row->name);
@@ -46,12 +46,13 @@ class HostedRowFormatter {
                 $tempRow->setDescription($row->description);
             }
             
+            // calculate amount, vat from two out of three given by customer, see unit tests HostedRowFormater
             if (isset($row->amountExVat) && isset($row->vatPercent)) {
                 $tempRow->setAmount(round(($row->amountExVat * 100) * $plusVatCounter));
-                $tempRow->setVat(round($tempRow->amount - ($row->amountExVat * 100)));
+                $tempRow->setVat(round($tempRow->amount - ($row->amountExVat * 100)));                               
             } elseif (isset($row->amountIncVat) && isset($row->vatPercent)) {
                  $tempRow->setAmount(round($row->amountIncVat * 100));
-                 $tempRow->setVat(round($tempRow->amount - ($tempRow->amount / $plusVatCounter)));
+                 $tempRow->setVat(round($tempRow->amount - ($tempRow->amount / $plusVatCounter)));              
             } else {
                  $tempRow->setAmount(round($row->amountIncVat * 100));
                  $tempRow->setVat(($row->amountIncVat - $row->amountExVat) * 100);
