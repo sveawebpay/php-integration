@@ -4,7 +4,7 @@ namespace Svea;
 class HostedOrderRowBuilder {
 
     /**
-     * @param type $skuAsString
+     * @param string $skuAsString
      * @return \HostedOrderRowBuilder
      */
     public function setSku($skuAsString) {
@@ -13,7 +13,7 @@ class HostedOrderRowBuilder {
     }
 
     /**
-     * @param type $nameAsString
+     * @param string $nameAsString
      * @return \HostedOrderRowBuilder
      */
     public function setName($nameAsString) {
@@ -22,7 +22,7 @@ class HostedOrderRowBuilder {
     }
 
     /**
-     * @param type $descriptionAsString
+     * @param string $descriptionAsString
      * @return \OrderRowBuilder
      */
     public function setDescription($descriptionAsString) {
@@ -31,7 +31,7 @@ class HostedOrderRowBuilder {
     }
 
     /**
-     * @param type $AmountAsInt
+     * @param int $AmountAsInt
      * @return \HostedOrderRowBuilder
      */
     public function setAmount($AmountAsInt) {
@@ -40,7 +40,7 @@ class HostedOrderRowBuilder {
     }
 
     /**
-     * @param type $vatAsInt
+     * @param int $vatAsInt
      * @return \OrderRowBuilder
      */
     public function setVat($vatAsInt) {
@@ -49,7 +49,7 @@ class HostedOrderRowBuilder {
     }
 
     /**
-     * @param type $quantityAsInt
+     * @param int $quantityAsInt
      * @return \HostedOrderRowBuilder
      */
     public function setQuantity($quantityAsInt) {
@@ -58,7 +58,7 @@ class HostedOrderRowBuilder {
     }
 
     /**
-     * @param type $unitAsString
+     * @param string $unitAsString
      * @return \HostedOrderRowBuilder
      */
     public function setUnit($unitAsString) {
