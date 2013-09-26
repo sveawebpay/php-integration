@@ -2,13 +2,27 @@
 require_once SVEA_REQUEST_DIR . '/Includes.php';
 
 /**
- * @author Anneli Halld'n, Daniel Brolund for Svea Webpay
+ * SveaResponse creates a uniform response object from a call to Svea services.
+ * 
+ * For asynchronous services, create an instance of SveaResponse, pass it the 
+ * resulting xml response as part of the $_REQUEST response along with 
+ * countryCode and config, then receive your HostedResponse instance by calling 
+ * the getResponse() method. 
+ * 
+ * For synchronous services, the appropriate WebServiceResponse instance is 
+ * returned by calling ->doRequest() on the order object.
+ * 
+ * @author Anneli Halld'n, Daniel Brolund, Kristian Grossman-Madsen for Svea WebPay
  */
 class SveaResponse {
 
+    /**
+     * @deprecated, use SveaResponse->getResponse() to access the $response object directly
+     * @var public $response, instance of HostedResponse or WebServiceResponse
+     */
     public $response;
 
-    public function __construct($message, $countryCode,$config = NULL) {
+    public function __construct($message, $countryCode, $config = NULL) {
          
         $config = $config == null ? Svea\SveaConfig::getDefaultConfig() : $config;
         
@@ -41,5 +55,12 @@ class SveaResponse {
         else {
             $this->response = "Response is not recognized.";
         }
+    }
+    
+    /**
+     * @returns an instance of WebServiceResponse or HostedResponse, depending
+     */
+    public function getResponse() {
+        return $this->response;
     }
 }
