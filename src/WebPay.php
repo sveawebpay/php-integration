@@ -104,7 +104,6 @@ class WebPay {
      * @return \Svea\GetPaymentMethods Array of Paymentmethods
      */
     public static function getPaymentMethods($config = NULL) {
-        //todo: hämta från config även faktura o delbetala
         $config = $config == null ? Svea\SveaConfig::getDefaultConfig() : $config;
         return new Svea\GetPaymentMethods($config);
     }
