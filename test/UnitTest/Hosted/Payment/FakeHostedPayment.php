@@ -11,7 +11,15 @@ class FakeHostedPayment extends HostedPayment {
     }
     
     /**
-     * 
+     * @param type $returnUrlAsString
+     * @return \HostedPayment
+     */
+    public function setReturnUrl($returnUrlAsString) {
+        $this->returnUrl = $returnUrlAsString;
+        return $this;
+    }
+    
+    /**
      * @param type $cancelUrlAsString
      * @return \HostedPayment
      */
