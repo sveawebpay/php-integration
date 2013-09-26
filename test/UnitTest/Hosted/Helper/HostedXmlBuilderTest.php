@@ -7,21 +7,23 @@ require_once $root . '/../../../../test/UnitTest/Hosted/Payment/FakeHostedPaymen
 
 class HostedXmlBuilderTest extends \PHPUnit_Framework_TestCase {
     
+    protected function setUp() {
+        $this->individualCustomer = new IndividualCustomer();
+        $this->individualCustomer->setNationalIdNumber("123456");
+        
+        $this->orderRow = new OrderRow();
+        $this->orderRow->setAmountExVat(100.00);
+        $this->orderRow->setVatPercent(25);
+        $this->orderRow->setQuantity(2);
+    }
+    
     public function testBasicXml() {
-        $customer = new IndividualCustomer();
-        $customer->setNationalIdNumber("123456");
-        
-        $orderRow = new OrderRow();
-        $orderRow->setAmountExVat(100.00);
-        $orderRow->setVatPercent(25);
-        $orderRow->setQuantity(2);
-        
         $order = new CreateOrderBuilder(new SveaConfigurationProvider(SveaConfig::getDefaultConfig()));
         $order->setClientOrderNumber("1234")
                 ->setCountryCode("SE")
                 ->setCurrency("SEK")
-                ->addCustomerDetails($customer)
-                ->addOrderRow($orderRow);
+                ->addCustomerDetails($this->individualCustomer)
+                ->addOrderRow($this->orderRow);
         
         $payment = new FakeHostedPayment($order);
         $payment->order = $order;
@@ -55,6 +57,46 @@ class HostedXmlBuilderTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals(1, substr_count($xml, "</orderrows>"));
         $this->assertEquals(1, substr_count($xml, "<iscompany>FALSE</iscompany>"));
         $this->assertEquals(1, substr_count($xml, "</payment>"));
+    }
+    
+    public function testXmlWithIndividualCustomer() {
+        $customer = $this->individualCustomer;
+        $customer->setName("Julius", "Caesar");
+        $customer->setInitials("JS");
+        $customer->setPhoneNumber("999999");
+        $customer->setEmail("test@svea.com");
+        $customer->setIpAddress("123.123.123.123");
+        $customer->setStreetAddress("Gatan", "23");
+        $customer->setCoAddress("c/o Eriksson");
+        $customer->setZipCode("9999");
+        $customer->setLocality("Stan");
+        
+        $order = new CreateOrderBuilder(new SveaConfigurationProvider(SveaConfig::getDefaultConfig()));
+        $order->setClientOrderNumber("1234")
+                ->setCountryCode("SE")
+                ->setCurrency("SEK")
+                ->addCustomerDetails($customer)
+                ->addOrderRow($this->orderRow);
+        
+        $payment = new FakeHostedPayment($order);
+        $payment->order = $order;
+        $payment->setReturnUrl("http://myurl.se");
+        
+        $xmlBuilder = new HostedXmlBuilder();
+        $xml = $xmlBuilder->getOrderXML($payment->calculateRequestValues(), $order);
+        
+        $this->assertEquals(1, substr_count($xml, "<ssn>123456</ssn>"));
+        $this->assertEquals(1, substr_count($xml, "<firstname>Julius</firstname>"));
+        $this->assertEquals(1, substr_count($xml, "<lastname>Caesar</lastname>"));
+        $this->assertEquals(1, substr_count($xml, "<initials>JS</initials>"));
+        $this->assertEquals(1, substr_count($xml, "<phone>999999</phone>"));
+        $this->assertEquals(1, substr_count($xml, "<email>test@svea.com</email>"));
+        $this->assertEquals(1, substr_count($xml, "<address>Gatan</address>"));
+        $this->assertEquals(1, substr_count($xml, "<housenumber>23</housenumber>"));
+        $this->assertEquals(1, substr_count($xml, "<address2>c/o Eriksson</address2>"));
+        $this->assertEquals(1, substr_count($xml, "<zip>9999</zip>"));
+        $this->assertEquals(1, substr_count($xml, "<city>Stan</city>"));
+        $this->assertEquals(1, substr_count($xml, "<country>SE</country>"));
     }
     
     public function testFormatOrderRows() {

@@ -174,6 +174,10 @@ class HostedXmlBuilder {
             $this->XMLWriter->writeElement("address2", $order->customerIdentity->coAddress);
         }
 
+        if (isset($order->customerIdentity->zipCode)) {
+            $this->XMLWriter->writeElement("zip", $order->customerIdentity->zipCode);
+        }
+
         if (isset($order->customerIdentity->locality)) {
             $this->XMLWriter->writeElement("city", $order->customerIdentity->locality);
         }
