@@ -85,6 +85,10 @@ class HostedRowFormatter {
             $tempRow = new HostedOrderRowBuilder();
             $plusVatCounter = isset($row->vatPercent) ? ($row->vatPercent * 0.01) + 1 : "";
 
+            if (isset($row->articleNumber)) {
+                $tempRow->setSku($row->articleNumber);
+            }
+            
             if (isset($row->name)) {
                 $tempRow->setName($row->name);
             }

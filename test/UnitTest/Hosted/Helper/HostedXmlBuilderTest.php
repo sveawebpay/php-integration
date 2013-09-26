@@ -99,6 +99,33 @@ class HostedXmlBuilderTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals(1, substr_count($xml, "<country>SE</country>"));
     }
     
+    public function testXmlWithOrderRow() {
+        $row = $this->orderRow;
+        $row->setArticleNumber("1");
+        $row->setName("Product");
+        $row->setDescription("Good product");
+        $row->setUnit("kg");
+        
+        $order = new CreateOrderBuilder(new SveaConfigurationProvider(SveaConfig::getDefaultConfig()));
+        $order->setClientOrderNumber("1234")
+                ->setCountryCode("SE")
+                ->setCurrency("SEK")
+                ->addCustomerDetails($this->individualCustomer)
+                ->addOrderRow($row);
+        
+        $payment = new FakeHostedPayment($order);
+        $payment->order = $order;
+        $payment->setReturnUrl("http://myurl.se");
+        
+        $xmlBuilder = new HostedXmlBuilder();
+        $xml = $xmlBuilder->getOrderXML($payment->calculateRequestValues(), $order);
+        
+        $this->assertEquals(1, substr_count($xml, "<sku>1</sku>"));
+        $this->assertEquals(1, substr_count($xml, "<name>Product</name>"));
+        $this->assertEquals(1, substr_count($xml, "<description>Good product</description>"));
+        $this->assertEquals(1, substr_count($xml, "<unit>kg</unit>"));
+    }
+    
     public function testFormatOrderRows() {
         $order = new CreateOrderBuilder(new SveaConfigurationProvider(SveaConfig::getDefaultConfig()));
         $payment = new FakeHostedPayment($order);
