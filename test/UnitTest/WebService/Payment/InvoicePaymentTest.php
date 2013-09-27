@@ -404,7 +404,7 @@ class InvoicePaymentTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(0, $request->request->CreateOrderInformation->OrderRows['OrderRow'][2]->DiscountPercent);
     }
 
-    public function testInvoiceRequestObjectWithFixedDiscountOnDifferentProductVat() {
+    public function t_estInvoiceRequestObjectWithFixedDiscountOnDifferentProductVat() {
         $request = WebPay::createOrder()
                 ->addOrderRow(WebPayItem::orderRow()
                     ->setArticleNumber("1")
@@ -435,7 +435,7 @@ class InvoicePaymentTest extends PHPUnit_Framework_TestCase {
 
         //couponrow
         $this->assertEquals('1', $request->request->CreateOrderInformation->OrderRows['OrderRow'][2]->ArticleNumber);
-        $this->assertEquals('FixedDiscount', $request->request->CreateOrderInformation->OrderRows['OrderRow'][2]->Description);
+        $this->assertEquals('FixedDiscount (25%)', $request->request->CreateOrderInformation->OrderRows['OrderRow'][2]->Description);
         $this->assertEquals(-85.74, $request->request->CreateOrderInformation->OrderRows['OrderRow'][2]->PricePerUnit);
         $this->assertEquals(1, $request->request->CreateOrderInformation->OrderRows['OrderRow'][2]->NumberOfUnits);
         $this->assertEquals('', $request->request->CreateOrderInformation->OrderRows['OrderRow'][2]->Unit);
