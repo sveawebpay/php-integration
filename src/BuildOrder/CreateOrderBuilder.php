@@ -6,7 +6,7 @@ require_once SVEA_REQUEST_DIR . '/Includes.php';
 /**
  * Continue OrderBuilder by using Create Order functions.
  * End by choosing paymenttype.
- * @author Anneli Halld'n, Daniel Brolund for Svea Webpay
+ * @author Anneli Halld'n, Daniel Brolund, Kristian Grossman-Madsen for Svea Webpay
  * @package BuildOrder/CreateOrder
 */
 class CreateOrderBuilder {
@@ -127,14 +127,16 @@ class CreateOrderBuilder {
             foreach ($itemFeeObject as $row) {
                 if (get_class($row) == "Svea\ShippingFee") {
                      array_push($this->shippingFeeRows, $row);
-                } else {
+                } 
+                if (get_class($row) == "Svea\InvoiceFee") {
                      array_push($this->invoiceFeeRows, $row);
                 }
             }
         } else {
              if (get_class($itemFeeObject) == "Svea\ShippingFee") {
                      array_push($this->shippingFeeRows, $itemFeeObject);
-            } else {
+            }
+             if (get_class($itemFeeObject) == "Svea\InvoiceFee") {
                  array_push($this->invoiceFeeRows, $itemFeeObject);
             }
         }
@@ -152,15 +154,18 @@ class CreateOrderBuilder {
             foreach ($itemDiscounObject as $row) {
                 if (get_class($row) == "Svea\FixedDiscount") {
                     array_push($this->fixedDiscountRows, $row);
-                } else {
+                } 
+                if (get_class($row) == "Svea\RelativeDiscount") {
                     array_push($this->relativeDiscountRows, $row);
                 }
 
             }
-        } else {
+        } 
+        else {
             if (get_class($itemDiscounObject) == "Svea\FixedDiscount") {
                 array_push($this->fixedDiscountRows, $itemDiscounObject);
-            } else {
+            }
+            if (get_class($itemDiscounObject) == "Svea\RelativeDiscount") {
                 array_push($this->relativeDiscountRows, $itemDiscounObject);
             }
        }
