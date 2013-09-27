@@ -271,7 +271,7 @@ All products and other items. It´s required to have a minimum of one orderrow.
         ->setAmountExVat(100.00)                //Optional, see info above
         ->setAmountIncVat(125.00)               //Optional, see info above
         ->setVatPercent(25)                     //Optional, see info above
-        ->setArticleNumber(1)                   //Optional
+        ->setArticleNumber("1")                   //Optional
         ->setDescription("Specification")       //Optional
         ->setName('Prod')                       //Optional
         ->setUnit("st")                         //Optional
@@ -447,7 +447,7 @@ Returns *CreateOrderResponse* object.
     $response = WebPay::createOrder()
       ->addOrderRow(
     WebPayItem::orderRow()
-        ->setArticleNumber(1)
+        ->setArticleNumber("1")
         ->setQuantity(2)
         ->setAmountExVat(100.00)
         ->setDescription("Specification")
@@ -472,7 +472,7 @@ Param: Campaign code recieved from getPaymentPlanParams().
 $response = WebPay::createOrder()
 ->addOrderRow(
     WebPayItem::orderRow()
-        ->setArticleNumber(1)
+        ->setArticleNumber("1")
         ->setQuantity(2)
         ->setAmountExVat(100.00)
         ->setDescription("Specification")
@@ -514,7 +514,7 @@ to format the response.
 $form = WebPay::createOrder()
 ->addOrderRow(
     WebPayItem::orderRow()
-        ->setArticleNumber(1)
+        ->setArticleNumber("1")
         ->setQuantity(2)
         ->setAmountExVat(100.00)
         ->setDescription("Specification")
@@ -564,7 +564,7 @@ echo $form->completeHtmlFormWithSubmitButton; //Will render a hidden form with s
 $form = WebPay::createOrder()
 ->addOrderRow(
     WebPayItem::orderRow()
-        ->setArticleNumber(1)
+        ->setArticleNumber("1")
         ->setQuantity(2)
         ->setAmountExVat(100.00)
         ->setDescription("Specification")
@@ -613,7 +613,7 @@ setPaymentMethod, includePaymentMethods, excludeCardPaymentMethods or excludeDir
 $form = WebPay::createOrder()
     ->addOrderRow(
         WebPayItem::orderRow()
-            ->setArticleNumber(1)
+            ->setArticleNumber("1")
             ->setQuantity(2)
             ->setAmountExVat(100.00)
             ->setDescription("Specification")
@@ -697,7 +697,7 @@ Go direct to specified payment method without the step *PayPage*.
 $form = WebPay::createOrder()
   ->addOrderRow(
     WebPayItem::orderRow()
-        ->setArticleNumber(1)
+        ->setArticleNumber("1")
         ->setQuantity(2)
         ->setAmountExVat(100.00)
         ->setDescription("Specification")
@@ -854,7 +854,7 @@ All products and other items. It is required to have a minimum of one row.
        ->setQuantity(2)                     //Required
        ->setAmountExVat(100.00)             //Required
        ->setVatPercent(25)                  //Required
-       ->setArticleNumber(1)                //Optional
+       ->setArticleNumber("1")                //Optional
        ->setDescription("Specification")    //Optional
        ->setName('Prod')                    //Optional
        ->setUnit("st")                      //Optional
@@ -904,7 +904,7 @@ If invoice order is credit invoice use setCreditInvoice($invoiceId) and setNumbe
     $response = WebPay::deliverOrder()
     ->addOrderRow(
         WebPayItem::orderRow()
-            ->setArticleNumber(1)
+            ->setArticleNumber("1")
             ->setQuantity(2)
             ->setAmountExVat(100.00)
             ->setDescription("Specification")
@@ -929,7 +929,7 @@ you will recieve an *InvoiceId* in the Response. To credit the invoice you follo
     $response = WebPay::deliverOrder()
     ->addOrderRow(
         WebPayItem::orderRow()
-            ->setArticleNumber(1)
+            ->setArticleNumber("1")
             ->setQuantity(2)
             ->setAmountExVat(100.00)
             ->setDescription("Specification")

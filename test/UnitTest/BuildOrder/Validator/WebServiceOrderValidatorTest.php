@@ -268,23 +268,174 @@ class WebServiceOrderValidatorTest extends \PHPUnit_Framework_TestCase {
         $order->prepareRequest();
     }
     
+    // order row type validation
+
     /**
      * @expectedException Svea\ValidationException
-     * @expectedExceptionMessage
-     * -incorrect datatype : Vat must be set as Integer.
+     * @expectedExceptionMessage -incorrect datatype : articleNumber is not of type string.
     */
-    public function testFailOnVatAsFloat() {
+    public function testFailOnArticleNumberNotString() {
         $builder = \WebPay::createOrder();
         $order = $builder
                 ->addOrderRow(\WebPayItem::orderRow()
-                    ->setAmountExVat(100)
-                    ->setVatPercent(20.33)
+                    ->setAmountExVat(100.00)
+                    ->setVatPercent(20)
+                    ->setQuantity(1)
+                    ->setArticleNumber(42)
+                )
+                ->setCountryCode("SE")
+                ->setOrderDate("Mon, 15 Aug 05 15:52:01 +0000")
+                ->addCustomerDetails(\WebPayItem::individualCustomer()->setNationalIdNumber(46111111))
+                ->useInvoicePayment();
+        $order->prepareRequest(); 
+    } 
+    
+    /**
+     * @expectedException Svea\ValidationException
+     * @expectedExceptionMessage -incorrect datatype : quantity is not of type int.
+    */
+    public function testFailOnQuantityNotInt() {
+        $builder = \WebPay::createOrder();
+        $order = $builder
+                ->addOrderRow(\WebPayItem::orderRow()
+                    ->setAmountExVat(100.00)
+                    ->setVatPercent(20)
+                    ->setQuantity(1.0)
+                )
+                ->setCountryCode("SE")
+                ->setOrderDate("Mon, 15 Aug 05 15:52:01 +0000")
+                ->addCustomerDetails(\WebPayItem::individualCustomer()->setNationalIdNumber(46111111))
+                ->useInvoicePayment();
+        $order->prepareRequest(); 
+    } 
+    
+        /**
+     * @expectedException Svea\ValidationException
+     * @expectedExceptionMessage -incorrect datatype : unit is not of type string.
+    */
+    public function testFailOnUnitNotString() {
+        $builder = \WebPay::createOrder();
+        $order = $builder
+                ->addOrderRow(\WebPayItem::orderRow()
+                    ->setAmountExVat(100.00)
+                    ->setVatPercent(20)
+                    ->setQuantity(1)
+                    ->setUnit(1)
+                )
+                ->setCountryCode("SE")
+                ->setOrderDate("Mon, 15 Aug 05 15:52:01 +0000")
+                ->addCustomerDetails(\WebPayItem::individualCustomer()->setNationalIdNumber(46111111))
+                ->useInvoicePayment();
+        $order->prepareRequest(); 
+    } 
+    
+    /**
+     * @expectedException Svea\ValidationException
+     * @expectedExceptionMessage -incorrect datatype : amountExVat is not of type float.
+    */
+    public function testFailOnAmountExVatNotFloat() {
+        $builder = \WebPay::createOrder();
+        $order = $builder
+                ->addOrderRow(\WebPayItem::orderRow()
+                    ->setAmountExVat("100.00")
+                    ->setVatPercent(20)
                     ->setQuantity(1)
                 )
                 ->setCountryCode("SE")
-                // ->setOrderDate("Mon, 15 Aug 05 15:52:01 +0000")
+                ->setOrderDate("Mon, 15 Aug 05 15:52:01 +0000")
                 ->addCustomerDetails(\WebPayItem::individualCustomer()->setNationalIdNumber(46111111))
                 ->useInvoicePayment();
         $order->prepareRequest(); 
     }
+    
+    /**
+     * @expectedException Svea\ValidationException
+     * @expectedExceptionMessage -incorrect datatype : amountIncVat is not of type float.
+    */
+    public function testFailOnAmountIncVatNotFloat() {
+        $builder = \WebPay::createOrder();
+        $order = $builder
+                ->addOrderRow(\WebPayItem::orderRow()
+                    ->setAmountIncVat("100.00")  
+                    ->setVatPercent(20)
+                    ->setQuantity(1)
+                )
+                ->setCountryCode("SE")
+                ->setOrderDate("Mon, 15 Aug 05 15:52:01 +0000")
+                ->addCustomerDetails(\WebPayItem::individualCustomer()->setNationalIdNumber(46111111))
+                ->useInvoicePayment();
+        $order->prepareRequest(); 
+    } 
+    
+  /**
+     * @expectedException Svea\ValidationException
+     * @expectedExceptionMessage -incorrect datatype : name is not of type string.
+    */
+    public function testFailOnNameNotString() {
+        $builder = \WebPay::createOrder();
+        $order = $builder
+                ->addOrderRow(\WebPayItem::orderRow()
+                    ->setAmountExVat(100.00)
+                    ->setVatPercent(20)
+                    ->setName(1701)
+                    ->setQuantity(1)
+                )
+                ->setCountryCode("SE")
+                ->setOrderDate("Mon, 15 Aug 05 15:52:01 +0000")
+                ->addCustomerDetails(\WebPayItem::individualCustomer()->setNationalIdNumber(46111111))
+                ->useInvoicePayment();
+        $order->prepareRequest(); 
+    }    
+    
+  /**
+     * @expectedException Svea\ValidationException
+     * @expectedExceptionMessage -incorrect datatype : description is not of type string.
+    */
+    public function testFailOnDescriptionNotString() {
+        $builder = \WebPay::createOrder();
+        $order = $builder
+                ->addOrderRow(\WebPayItem::orderRow()
+                    ->setAmountExVat(100.00)
+                    ->setVatPercent(20)
+                    ->setDescription(1701)
+                    ->setQuantity(1)
+                )
+                ->setCountryCode("SE")
+                ->setOrderDate("Mon, 15 Aug 05 15:52:01 +0000")
+                ->addCustomerDetails(\WebPayItem::individualCustomer()->setNationalIdNumber(46111111))
+                ->useInvoicePayment();
+        $order->prepareRequest(); 
+    }    
+     
+  /**
+     * @expectedException Svea\ValidationException
+     * @expectedExceptionMessage -incorrect datatype : vatPercent is not of type int.
+    */
+    public function testFailOnVatNotInt() {
+        $builder = \WebPay::createOrder();
+        $order = $builder
+                ->addOrderRow(\WebPayItem::orderRow()
+                    ->setAmountExVat(100.00)
+                    ->setVatPercent(20.33)
+                    ->setQuantity(1)
+                )
+                ->setCountryCode("SE")
+                ->setOrderDate("Mon, 15 Aug 05 15:52:01 +0000")
+                ->addCustomerDetails(\WebPayItem::individualCustomer()->setNationalIdNumber(46111111))
+                ->useInvoicePayment();
+        $order->prepareRequest(); 
+    }    
+    
+ 
+    // public function testFailOnVatDiscountNotInt() {} This attribute has no setter in OrderRow, so not tested
+    
+    // TODO look for? -- example of how localised string prices may also fail with floatval: floatval("100,23") => 100.00
+    
+    // TODO add forced throw to validation, and use that to clean up tests et al (print out error array to see failing validations from tests)
+
+    /**
+     * @expectedException Svea\ValidationException
+     * @expectedExceptionMessage -incorrect datatype : amountExVat is not of type float
+     */
+
 }
