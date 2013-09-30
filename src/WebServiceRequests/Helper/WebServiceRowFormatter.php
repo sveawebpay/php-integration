@@ -48,9 +48,7 @@ class WebServiceRowFormatter {
         foreach ($this->order->orderRows as $product) {
             $vatPercentAsCeroDecimal = isset($product->vatPercent) ? $product->vatPercent * 0.01 : "";
 
-            if (isset($product->vatPercent) && isset($product->amountExVat)) {
-                print_r("\nvp: ".$product->vatPercent." aE: ".$product->amountExVat."\n");
-                
+            if (isset($product->vatPercent) && isset($product->amountExVat)) {                
                 $this->totalAmountExVat += $product->amountExVat * $product->quantity;
                 $this->totalVatAsAmount += ($vatPercentAsCeroDecimal * $product->amountExVat) * $product->quantity;
 
@@ -60,7 +58,6 @@ class WebServiceRowFormatter {
                 } else {
                     $this->totalAmountPerVatRate[$product->vatPercent] = ($product->amountExVat * $product->quantity * (1+$vatPercentAsCeroDecimal));
                 }
-
 
             } elseif (isset($product->vatPercent) && isset($product->amountIncVat)) {
                 $this->totalAmountIncVat += $product->amountIncVat * $product->quantity;
@@ -227,15 +224,8 @@ class WebServiceRowFormatter {
                 
                 $orderRow->PricePerUnit = - number_format($discountAtThisVatRateExVat, 2,'.','');
                 $orderRow->VatPercent = $vatRate;
-                $discountRows[] = $orderRow;    
+                $this->newRows[] = $orderRow;    
             } 
-        }
-
-        
-        if( isset($discountRows[0]) )
-            print_r( $discountRows );
-        foreach( $discountRows as $dr ) {
-            $this->newRows[] = $dr;
         }
     }
 
