@@ -235,20 +235,57 @@ class WebServiceOrderValidatorTest extends \PHPUnit_Framework_TestCase {
         $order->prepareRequest();
     }
     
+//    /**
+//     * @expectedException Svea\ValidationException
+//     * @expectedExceptionMessage -missing values : At least two of the values must be set in object \WebPayItem::  AmountExVat, AmountIncVat or VatPercent for Orderrow. Use functions setAmountExVat(), setAmountIncVat() or setVatPercent().
+//     * -missing value : Quantity is required in object \WebPayItem. Use function \WebPayItem::setQuantity().
+//     */
+//    public function testFailOnMissingOrderRowValues() {
+//        $builder = \WebPay::createOrder();
+//        $order = $builder
+//                ->addOrderRow(\WebPayItem::orderRow())
+//                ->setCountryCode("SE")
+//                ->setOrderDate("Mon, 15 Aug 05 15:52:01 +0000")
+//                ->addCustomerDetails(\WebPayItem::individualCustomer()->setNationalIdNumber(46111111))
+//                ->useInvoicePayment();
+//        $order->prepareRequest();
+//    }
+    
     /**
      * @expectedException Svea\ValidationException
-     * @expectedExceptionMessage
-     * -missing values : At least two of the values must be set in object \WebPayItem::  AmountExVat, AmountIncVat or VatPercent for Orderrow. Use functions setAmountExVat(), setAmountIncVat() or setVatPercent().
-     * -missing value : Quantity is required in object \WebPayItem. Use function \WebPayItem::setQuantity().
+     * @expectedExceptionMessage -missing values : Precisely two of these values must be set in the WebPayItem object:  AmountExVat, AmountIncVat or VatPercent for Orderrow. Use functions setAmountExVat(), setAmountIncVat() or setVatPercent().
      */
-    public function testFailOnMissingOrderRowValues() {
-        $builder = \WebPay::createOrder();
+    public function testFailOnOrderRowMissingAllOfAmountExVatAmountIncVatAndVatPercent() {
+        $builder = \WebPay::createOrder();   
         $order = $builder
-                ->addOrderRow(\WebPayItem::orderRow())
-                ->setCountryCode("SE")
-                ->setOrderDate("Mon, 15 Aug 05 15:52:01 +0000")
-                ->addCustomerDetails(\WebPayItem::individualCustomer()->setNationalIdNumber(46111111))
-                ->useInvoicePayment();
+            ->addOrderRow(\WebPayItem::orderRow()
+                ->setQuantity(1)       
+            )
+            ->setCountryCode("SE")
+            ->setOrderDate("Mon, 15 Aug 05 15:52:01 +0000")
+            ->addCustomerDetails(\WebPayItem::individualCustomer()->setNationalIdNumber(46111111))
+            ->useInvoicePayment()
+        ;
+        $order->prepareRequest();
+    }
+    /**
+     * @expectedException Svea\ValidationException
+     * @expectedExceptionMessage -missing values : Precisely two of these values must be set in the WebPayItem object:  AmountExVat, AmountIncVat or VatPercent for Orderrow. Use functions setAmountExVat(), setAmountIncVat() or setVatPercent().
+     */
+    public function testFailOnOrderRowIncludesAllOfAmountExVatAmountIncVatAndVatPercent() {
+        $builder = \WebPay::createOrder();   
+        $order = $builder
+            ->addOrderRow(\WebPayItem::orderRow()
+                ->setAmountIncVat(100.00) 
+                ->setAmountExVat(125.00) 
+                ->setVatPercent(25) 
+                ->setQuantity(1)       
+            )
+            ->setCountryCode("SE")
+            ->setOrderDate("Mon, 15 Aug 05 15:52:01 +0000")
+            ->addCustomerDetails(\WebPayItem::individualCustomer()->setNationalIdNumber(46111111))
+            ->useInvoicePayment()
+        ;
         $order->prepareRequest();
     }
     

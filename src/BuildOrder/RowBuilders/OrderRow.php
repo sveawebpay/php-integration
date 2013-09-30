@@ -49,7 +49,9 @@ class OrderRow {
     }
 
     /**
-     * Optional
+     * Precisely two of these values must be set in the WebPayItem object:  AmountExVat, AmountIncVat or VatPercent for Orderrow. 
+     * Use functions setAmountExVat(), setAmountIncVat() or setVatPercent().
+     * 
      * @param float $AmountAsFloat
      * @return Svea\OrderRow
      */
@@ -59,7 +61,9 @@ class OrderRow {
     }
     
     /**
-     * Optional
+     * Precisely two of these values must be set in the WebPayItem object:  AmountExVat, AmountIncVat or VatPercent for Orderrow. 
+     * Use functions setAmountExVat(), setAmountIncVat() or setVatPercent().
+     * 
      * @param float $AmountAsFloat
      * @return Svea\OrderRow
      */
@@ -89,12 +93,14 @@ class OrderRow {
     }
 
     /**
-     * Optional
-     * @param int $percentAsInt
+     * Precisely two of these values must be set in the WebPayItem object:  AmountExVat, AmountIncVat or VatPercent for Orderrow. 
+     * Use functions setAmountExVat(), setAmountIncVat() or setVatPercent().
+     * 
+     * @param int $vatPercentAsInt
      * @return Svea\OrderRow
      */
-    public function setVatPercent($percentAsInt) {
-        $this->vatPercent = $percentAsInt;
+    public function setVatPercent($vatPercentAsInt) {
+        $this->vatPercent = $vatPercentAsInt;
         return $this;
     }
 

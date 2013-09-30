@@ -263,7 +263,9 @@ $orderRows[] = WebPayItem::orderRow()->...;
 
 #### 1.2.1 OrderRow
 All products and other items. It´s required to have a minimum of one orderrow.
-**The price can be set in a combination by using a minimum of two out of three functions: setAmountExVat(), setAmountIncVat() and setVatPercent().**
+**Precisely two of these values must be set in the WebPayItem object, in order to specify the item tax rate:  
+AmountExVat, AmountIncVat or VatPercent for Orderrow.**
+
 ```php
 ->addOrderRow(
       WebPayItem::orderRow()
@@ -295,7 +297,7 @@ All products and other items. It´s required to have a minimum of one orderrow.
    )
 ```
 #### 1.2.3 InvoiceFee
-**The price can be set in a combination by using a minimum of two out of three functions: setAmountExVat(), setAmountIncVat() and setVatPercent().**
+**The price can be set in a combination by using a minimum of two out of three functions: setAmountExVat(), setAmountIncVat()and setVatPercent().**
 ```php
 ->addFee(
     WebPayItem::invoiceFee()
@@ -309,11 +311,17 @@ All products and other items. It´s required to have a minimum of one orderrow.
     )
 ```
 #### 1.2.4 Fixed Discount
-When discount or coupon is a fixed amount on total product amount.
+
+**If only AmountIncVat is given, we calculate the discount split across the tax (vat) rates present in the order. This will
+ensure that the correct discount vat is applied to the order.**
+
+**Otherwise, it is required to use at least two of the functions setAmountExVat(), setAmountIncVat() and setVatPercent().
+If two of these three attributes are specified, we respect the amount indicated and include a discount with the appropriate tax rate.**
+
 ```php
 ->addDiscount(
     WebPayItem::fixedDiscount()
-        ->setAmountIncVat(100.00)               //Required
+        ->setAmountIncVat(100.00)               //Recommended, see info above
         ->setDiscountId("1")                    //Optional
         ->setUnit("st")                         //Optional
         ->setDescription("FixedDiscount")       //Optional

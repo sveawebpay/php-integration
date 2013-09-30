@@ -38,9 +38,10 @@ abstract class OrderValidator {
                     $errors['missing value'] = "Quantity is required in object Item. Use function Item::setQuantity().";
                 }
                 
-                // At least two of the following attributes must be set in order to calculate total amount and vat
-                if (isset($row->amountExVat) == false && isset($row->vatPercent) == false && isset($row->amountIncVat) == false) {
-                    $errors['missing values'] = "At least two of these values must be set in the WebPayItem object:  AmountExVat, AmountIncVat or VatPercent for Orderrow. Use functions setAmountExVat(), setAmountIncVat() or setVatPercent().";
+                // Precisely two of the following attributes must be set in order to calculate total amount and vat
+                if( (isset($row->amountExVat) == false && isset($row->vatPercent) == false && isset($row->amountIncVat) == false) ||
+                    (isset($row->amountExVat) == true && isset($row->vatPercent) == true && isset($row->amountIncVat) == true) ) {
+                    $errors['missing values'] = "Precisely two of these values must be set in the WebPayItem object:  AmountExVat, AmountIncVat or VatPercent for Orderrow. Use functions setAmountExVat(), setAmountIncVat() or setVatPercent().";
                 } elseif (isset($row->amountExVat) && (isset($row->vatPercent) == false && isset($row->amountIncVat) == false)) {
                     $errors['missing values'] = "At least one of these values must be set in combination with AmountExVat, in object Item:: AmountIncVat or VatPercent for Orderrow. Use functions setAmountIncVat() or setVatPercent().";
                 } elseif (isset($row->amountIncVat) && (isset($row->amountExVat) == false) && isset($row->vatPercent) == false) {
@@ -79,12 +80,8 @@ abstract class OrderValidator {
 
                 if( isset($row->discountPercent) && !is_int($row->discountPercent) )
                     $errors['incorrect datatype'] = "discountPercent is not of type int.";
-
-
-
             }
         }
-        //print_r($errors);
         return $errors;
     }
 }
