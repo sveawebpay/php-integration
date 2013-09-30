@@ -78,9 +78,38 @@ class WebServiceRowFormatterTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals("st", $newRow->Unit);
     }
 
+    // only amountIncVat => calculate mean vat split into diffrent tax rates present
+    public function testFormatFixedDiscountRows_amountIncVat_WithSingleVatRatePresent() {
+        $order = WebPay::createOrder();
+        $order->addOrderRow(WebPayItem::orderRow()
+                ->setAmountExVat(4.0)
+                ->setVatPercent(25)
+                ->setQuantity(1)
+                )
+                ->addDiscount(WebPayItem::fixedDiscount()
+                    ->setDiscountId("0")
+                    ->setName("Tess")
+                    ->setDescription("Tester")
+                    ->setAmountIncVat(1.0)
+                    ->setUnit("st")
+                );
+
+        $formatter = new Svea\WebServiceRowFormatter($order);
+        $newRows = $formatter->formatRows();
+        $newRow = $newRows[1];
+        $this->assertEquals("0", $newRow->ArticleNumber);
+        $this->assertEquals("Tess: Tester", $newRow->Description);
+        $this->assertEquals(-0.8, $newRow->PricePerUnit);
+        $this->assertEquals(25, $newRow->VatPercent);
+        $this->assertEquals(0, $newRow->DiscountPercent);
+        $this->assertEquals(1, $newRow->NumberOfUnits);
+        $this->assertEquals("st", $newRow->Unit);
+    }
+
+    // only amountIncVat => calculate mean vat split into diffrent tax rates present
     // if we have two orders items with different vat rate, we need to create
     // two discount order rows, one for each vat rate
-    public function testFormatFixedDiscountRowsWithDifferentVatRatesPresent() {
+    public function testFormatFixedDiscountRows_amountIncVat_WithDifferentVatRatesPresent() {
         $order = WebPay::createOrder();
         $order->addOrderRow(WebPayItem::orderRow()
                 ->setAmountExVat(100.00)
@@ -122,28 +151,78 @@ class WebServiceRowFormatterTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(0, $newRow->DiscountPercent);
         $this->assertEquals(1, $newRow->NumberOfUnits);
         $this->assertEquals("st", $newRow->Unit);
-
-//            $orderRow = new SveaOrderRow();
-//            if (isset($row->discountId)) {
-//                $orderRow->ArticleNumber = $row->discountId;
-//            }
-//            if (isset($row->description)) {
-//                $orderRow->Description = (isset($row->name) ? $row->name . ': ' : "") . $row->description;
-//            } elseif (isset($row->name) && isset($row->description) == false) {
-//                $orderRow->Description = $row->name;
-//            }
-//            if (isset($row->unit)) {
-//                $orderRow->Unit = $row->unit;
-//            }
-//            $orderRow->DiscountPercent = 0; //no discount on discount
-//            $orderRow->NumberOfUnits = 1; //only one discount per row
-//            $orderRow->PricePerUnit = - number_format($row->amount - $discountVatAsAmount, 2,'.','');
-//            $orderRow->VatPercent = round(($discountVatAsAmount / ($row->amount - $discountVatAsAmount))*100);//Discountpercent
-   }    
-        public function testFormatFixedDiscountRows() {
+   }
+   
+   // amountIncVat and vatPercent => add as one row with specified vat rate only
+   public function testFormatFixedDiscountRows_amountIncVatAndVatPercent_WithSingleVatRatePresent() {
         $order = WebPay::createOrder();
         $order->addOrderRow(WebPayItem::orderRow()
-                ->setAmountExVat(4)
+                ->setAmountExVat(4.0)
+                ->setVatPercent(25)
+                ->setQuantity(1)
+                )
+                ->addDiscount(WebPayItem::fixedDiscount()
+                    ->setDiscountId("0")
+                    ->setName("->setAmountExVat(4.0), ->setVatPercent(25)")
+                    ->setDescription("testFormatFixedDiscountRows_amountIncVatAndVatPercent_WithSingleVatRatePresent")
+                    ->setAmountIncVat(1.0)
+                    ->setVatPercent(25)
+                    ->setUnit("st")
+                );
+
+        $formatter = new Svea\WebServiceRowFormatter($order);
+        $newRows = $formatter->formatRows();
+        $newRow = $newRows[1];
+        $this->assertEquals("0", $newRow->ArticleNumber);
+        $this->assertEquals("->setAmountExVat(4.0), ->setVatPercent(25): testFormatFixedDiscountRows_amountIncVatAndVatPercent_WithSingleVatRatePresent", $newRow->Description);
+        $this->assertEquals(-0.8, $newRow->PricePerUnit);
+        $this->assertEquals(25, $newRow->VatPercent);
+        $this->assertEquals(0, $newRow->DiscountPercent);
+        $this->assertEquals(1, $newRow->NumberOfUnits);
+        $this->assertEquals("st", $newRow->Unit);
+    }   
+    
+    // amountIncVat and vatPercent => add as one row with specified vat rate only
+    public function testFormatFixedDiscountRows_amountIncVatAndVatPercent_WithDifferentVatRatesPresent() {
+        $order = WebPay::createOrder();
+        $order->addOrderRow(WebPayItem::orderRow()
+                ->setAmountExVat(100.00)
+                ->setVatPercent(25)
+                ->setQuantity(2)
+                )
+                ->addOrderRow(WebPayItem::orderRow()
+                ->setAmountExVat(100.00)
+                ->setVatPercent(6)
+                ->setQuantity(1)
+                )
+                ->addDiscount(WebPayItem::fixedDiscount()
+                    ->setDiscountId("42")
+                    ->setName("->setAmountIncVat(111), ->vatPercent(25)")
+                    ->setDescription("testFormatFixedDiscountRows_amountIncVatAndVatPercent_WithDifferentVatRatesPresent")
+                    ->setAmountIncVat(111)
+                    ->setVatPercent(25)
+                    ->setUnit("st")
+                );
+
+        $formatter = new Svea\WebServiceRowFormatter($order);
+        $newRows = $formatter->formatRows();
+        
+        // 100 @25% vat = -80 excl. vat
+        $newRow = $newRows[2];
+        $this->assertEquals("42", $newRow->ArticleNumber);
+        $this->assertEquals("->setAmountIncVat(111), ->vatPercent(25): testFormatFixedDiscountRows_amountIncVatAndVatPercent_WithDifferentVatRatesPresent", $newRow->Description);
+        $this->assertEquals(-88.80, $newRow->PricePerUnit);
+        $this->assertEquals(25, $newRow->VatPercent);
+        $this->assertEquals(0, $newRow->DiscountPercent);
+        $this->assertEquals(1, $newRow->NumberOfUnits);
+        $this->assertEquals("st", $newRow->Unit);
+   }  
+
+   // amountExVat and vatPercent => add as one row with specified vat rate only
+   public function testFormatFixedDiscountRows_amountExVatAndVatPercent_WithSingleVatRatePresent() {
+        $order = WebPay::createOrder();
+        $order->addOrderRow(WebPayItem::orderRow()
+                ->setAmountExVat(4.0)
                 ->setVatPercent(25)
                 ->setQuantity(1)
                 )
@@ -151,7 +230,8 @@ class WebServiceRowFormatterTest extends PHPUnit_Framework_TestCase {
                     ->setDiscountId("0")
                     ->setName("Tess")
                     ->setDescription("Tester")
-                    ->setAmountIncVat(1)
+                    ->setAmountExVat(1.0)
+                    ->setVatPercent(25)
                     ->setUnit("st")
                 );
 
@@ -160,13 +240,49 @@ class WebServiceRowFormatterTest extends PHPUnit_Framework_TestCase {
         $newRow = $newRows[1];
         $this->assertEquals("0", $newRow->ArticleNumber);
         $this->assertEquals("Tess: Tester", $newRow->Description);
-        $this->assertEquals(-0.8, $newRow->PricePerUnit);
+        $this->assertEquals(-1.0, $newRow->PricePerUnit);
         $this->assertEquals(25, $newRow->VatPercent);
         $this->assertEquals(0, $newRow->DiscountPercent);
         $this->assertEquals(1, $newRow->NumberOfUnits);
         $this->assertEquals("st", $newRow->Unit);
-    }
+    }   
+    
+    // amountExVat and vatPercent => add as one row with specified vat rate only
+    public function testFormatFixedDiscountRows_amountExVatAndVatPercent_WithDifferentVatRatesPresent() {
+        $order = WebPay::createOrder();
+        $order->addOrderRow(WebPayItem::orderRow()
+                ->setAmountExVat(100.00)
+                ->setVatPercent(25)
+                ->setQuantity(2)
+                )
+                ->addOrderRow(WebPayItem::orderRow()
+                ->setAmountExVat(100.00)
+                ->setVatPercent(6)
+                ->setQuantity(1)
+                )
+                ->addDiscount(WebPayItem::fixedDiscount()
+                    ->setDiscountId("42")
+                    ->setName("->setAmountIncVat(100)")
+                    ->setDescription("testFormatFixedDiscountRowsWithDifferentVatRatesPresent")
+                    ->setAmountExVat(111)
+                    ->setVatPercent(25)
+                    ->setUnit("st")
+                );
 
+        $formatter = new Svea\WebServiceRowFormatter($order);
+        $newRows = $formatter->formatRows();
+        
+        // 100 @25% vat = -80 excl. vat
+        $newRow = $newRows[2];
+        $this->assertEquals("42", $newRow->ArticleNumber);
+        $this->assertEquals("->setAmountIncVat(100): testFormatFixedDiscountRowsWithDifferentVatRatesPresent", $newRow->Description);
+        $this->assertEquals(-111.00, $newRow->PricePerUnit);
+        $this->assertEquals(25, $newRow->VatPercent);
+        $this->assertEquals(0, $newRow->DiscountPercent);
+        $this->assertEquals(1, $newRow->NumberOfUnits);
+        $this->assertEquals("st", $newRow->Unit);
+   }  
+   
 //        public function testBuildCardPaymentWithDiffrentProductVatAndDiscount() {
 //        $form = \WebPay::createOrder()
 //                ->addOrderRow(\WebPayItem::orderRow()
