@@ -2,7 +2,7 @@
 namespace Svea;
 
 /**
- * Helpclass for formatting orderrows in the right format for WebService soap-calls
+ * Helper class for formatting orderrows in the right format for WebService soap-calls
  * 
  * @author Anneli Halld'n, Daniel Brolund, Kristian Grossman-Madsen for Svea Webpay
  * @package WebServiceRequests/Helper
@@ -47,22 +47,22 @@ class WebServiceRowFormatter {
         $this->totalAmountPerVatRate = array();
 
         foreach ($this->order->orderRows as $product) {
-            $vatPercentAsCeroDecimal = isset($product->vatPercent) ? $product->vatPercent * 0.01 : "";
+            $vatPercentAsZeroDecimal = isset($product->vatPercent) ? $product->vatPercent * 0.01 : "";
 
             if (isset($product->vatPercent) && isset($product->amountExVat)) {                
                 $this->totalAmountExVat += $product->amountExVat * $product->quantity;
-                $this->totalVatAsAmount += ($vatPercentAsCeroDecimal * $product->amountExVat) * $product->quantity;
+                $this->totalVatAsAmount += ($vatPercentAsZeroDecimal * $product->amountExVat) * $product->quantity;
 
                 // add to or create cummulative amount for this tax rate 
                 if( isset($this->totalAmountPerVatRate[$product->vatPercent]) ) {
-                    $this->totalAmountPerVatRate[$product->vatPercent] += ($product->amountExVat * $product->quantity * (1+$vatPercentAsCeroDecimal));
+                    $this->totalAmountPerVatRate[$product->vatPercent] += ($product->amountExVat * $product->quantity * (1+$vatPercentAsZeroDecimal));
                 } else {
-                    $this->totalAmountPerVatRate[$product->vatPercent] = ($product->amountExVat * $product->quantity * (1+$vatPercentAsCeroDecimal));
+                    $this->totalAmountPerVatRate[$product->vatPercent] = ($product->amountExVat * $product->quantity * (1+$vatPercentAsZeroDecimal));
                 }
 
             } elseif (isset($product->vatPercent) && isset($product->amountIncVat)) {
                 $this->totalAmountIncVat += $product->amountIncVat * $product->quantity;
-                $this->totalVatAsAmount += (($vatPercentAsCeroDecimal /(1 + $vatPercentAsCeroDecimal)) * $product->amountIncVat) * $product->quantity;
+                $this->totalVatAsAmount += (($vatPercentAsZeroDecimal /(1 + $vatPercentAsZeroDecimal)) * $product->amountIncVat) * $product->quantity;
 
                 // add to or create cummulative amount for this tax rate 
                 if( isset($this->totalAmountPerVatRate[$product->vatPercent]) ) {
@@ -79,9 +79,9 @@ class WebServiceRowFormatter {
                 // add to or create cummulative amount for this tax rate 
                 $vatRate = round((($product->amountIncVat / $product->amountExVat)-1) * 100);
                 if( isset($this->totalAmountPerVatRate[$vatRate]) ) {
-                    $this->totalAmountPerVatRate[$vatRate] += ($product->amountExVat * $product->quantity * (1+$vatPercentAsCeroDecimal));
+                    $this->totalAmountPerVatRate[$vatRate] += ($product->amountExVat * $product->quantity * (1+$vatPercentAsZeroDecimal));
                 } else {
-                    $this->totalAmountPerVatRate[$vatRate] = ($product->amountExVat * $product->quantity * (1+$vatPercentAsCeroDecimal));
+                    $this->totalAmountPerVatRate[$vatRate] = ($product->amountExVat * $product->quantity * (1+$vatPercentAsZeroDecimal));
                 }
             }
         }
