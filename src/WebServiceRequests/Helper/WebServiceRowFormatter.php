@@ -92,6 +92,16 @@ class WebServiceRowFormatter {
         }
     }
 
+    /**
+     * Helper function, calculates vat percentage as int from prices with and without vat.
+     */
+    private function calculateVatPercentFromPriceExVatAndPriceIncVat( $incVat, $exVat ) {
+        if( $exVat === 0.0 || $incVat === 0.0 ) // avoid -100% vat on i.e. free products or fees
+            return 0;
+        else
+            return round( (($incVat/$exVat) -1) *100);        
+    }
+    
     private function formatOrderRows() {
         foreach ($this->order->orderRows as $row) {
             $orderRow = new SveaOrderRow();
@@ -116,13 +126,13 @@ class WebServiceRowFormatter {
                 $orderRow->VatPercent = round($row->vatPercent);
             } else {
                 $orderRow->PricePerUnit = number_format($row->amountExVat, 2, '.', '');
-                $orderRow->VatPercent = round((($row->amountIncVat / $row->amountExVat)-1) * 100);
+                $orderRow->VatPercent = $this->calculateVatPercentFromPriceExVatAndPriceIncVat( $row->amountIncVat, $row->amountExVat );
             }
 
             $this->newRows[] = $orderRow;
         }
     }
-
+ 
     private function formatShippingFeeRows() {
         if (!isset($this->order->shippingFeeRows)) {
             return;
@@ -151,7 +161,8 @@ class WebServiceRowFormatter {
                 $orderRow->VatPercent = round($row->vatPercent);
             } else {
                 $orderRow->PricePerUnit = number_format($row->amountExVat, 2, '.', '');
-                $orderRow->VatPercent = round((($row->amountIncVat / $row->amountExVat)-1) * 100);
+                $orderRow->VatPercent = $this->calculateVatPercentFromPriceExVatAndPriceIncVat( $row->amountIncVat, $row->amountExVat );
+
             }
             $this->newRows[] = $orderRow;
         }
@@ -183,7 +194,8 @@ class WebServiceRowFormatter {
                 $orderRow->VatPercent = round($row->vatPercent);
             } else {
                 $orderRow->PricePerUnit = number_format($row->amountExVat, 2, '.', '');
-                $orderRow->VatPercent = round((($row->amountIncVat / $row->amountExVat)-1) * 100);
+                $orderRow->VatPercent = $this->calculateVatPercentFromPriceExVatAndPriceIncVat( $row->amountIncVat, $row->amountExVat );
+
             }
             $this->newRows[] = $orderRow;
         }
