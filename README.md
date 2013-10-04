@@ -1001,10 +1001,13 @@ Params:
 [<< To top](https://github.com/sveawebpay/php-integration#php-integration-package-api-for-sveawebpay)
 
 ##8. GetPaymentMethods
-Returns an Array of SystemPaymentMethods (See Constants).
+Returns an array of SystemPaymentMethods available to a certain merchantId, which are constants defined in class PaymentMethod. Used to i.e. determine available Banks for direct bank payments.
+
+See file PaymentMethodIntegrationTest.php for usage.
+
 ```php
-  $fooArray = WebPay::getPaymentMethods()
-                    ->setContryCode("SE") //optional. Default SE
+  $fooArray = WebPay::getPaymentMethods( $config )  // optional, if no $config given, will use defaults from SveaConfig
+                    ->setContryCode("SE")           // optional, if no country given, will use default country "SE"
                     ->doRequest();
 ```
 
@@ -1012,7 +1015,7 @@ Returns an Array of SystemPaymentMethods (See Constants).
 
 ### PaymentMethods
 Used in usePaymentMethod($paymentMethod) and in usePayPage(),
-->includePaymentMethods(...,...,...), ->excludeCardPaymentMethods(...,...,...), ->excludeDirectPaymentMethods(), ->excludeCardPaymentMethods().
+->includePaymentMethods(..., ..., ...), ->excludeCardPaymentMethods(..., ..., ...), ->excludeDirectPaymentMethods(), ->excludeCardPaymentMethods().
 
 | Payment method                    | Description                                   |
 |-----------------------------------|-----------------------------------------------|
