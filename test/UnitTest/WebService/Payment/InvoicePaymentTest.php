@@ -394,14 +394,23 @@ class InvoicePaymentTest extends PHPUnit_Framework_TestCase {
                     ->useInvoicePayment()
                         ->prepareRequest();
 
-        //couponrow
+        //couponrows
+        
         $this->assertEquals('1', $request->request->CreateOrderInformation->OrderRows['OrderRow'][2]->ArticleNumber);
-        $this->assertEquals('RelativeDiscount', $request->request->CreateOrderInformation->OrderRows['OrderRow'][2]->Description);
-        $this->assertEquals(-85.74, $request->request->CreateOrderInformation->OrderRows['OrderRow'][2]->PricePerUnit);
+        $this->assertEquals('RelativeDiscount (25%)', $request->request->CreateOrderInformation->OrderRows['OrderRow'][2]->Description);
+        $this->assertEquals(-48.00, $request->request->CreateOrderInformation->OrderRows['OrderRow'][2]->PricePerUnit);
         $this->assertEquals(1, $request->request->CreateOrderInformation->OrderRows['OrderRow'][2]->NumberOfUnits);
         $this->assertEquals('', $request->request->CreateOrderInformation->OrderRows['OrderRow'][2]->Unit);
-        $this->assertEquals(16.64, $request->request->CreateOrderInformation->OrderRows['OrderRow'][2]->VatPercent);
+        $this->assertEquals(25, $request->request->CreateOrderInformation->OrderRows['OrderRow'][2]->VatPercent);
         $this->assertEquals(0, $request->request->CreateOrderInformation->OrderRows['OrderRow'][2]->DiscountPercent);
+        
+        $this->assertEquals('1', $request->request->CreateOrderInformation->OrderRows['OrderRow'][3]->ArticleNumber);
+        $this->assertEquals('RelativeDiscount (6%)', $request->request->CreateOrderInformation->OrderRows['OrderRow'][3]->Description);
+        $this->assertEquals(-37.74, $request->request->CreateOrderInformation->OrderRows['OrderRow'][3]->PricePerUnit);
+        $this->assertEquals(1, $request->request->CreateOrderInformation->OrderRows['OrderRow'][3]->NumberOfUnits);
+        $this->assertEquals('', $request->request->CreateOrderInformation->OrderRows['OrderRow'][3]->Unit);
+        $this->assertEquals(6, $request->request->CreateOrderInformation->OrderRows['OrderRow'][3]->VatPercent);
+        $this->assertEquals(0, $request->request->CreateOrderInformation->OrderRows['OrderRow'][3]->DiscountPercent);
     }
 
     public function t_estInvoiceRequestObjectWithFixedDiscountOnDifferentProductVat() {
