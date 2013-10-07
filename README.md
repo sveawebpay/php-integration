@@ -1,5 +1,5 @@
 # PHP Integration Package API for SveaWebPay
-## Version 1.3.0
+## Version 1.3.2
 
 | Branch                            | Build status                               |
 |---------------------------------- |------------------------------------------- |
@@ -263,7 +263,7 @@ $orderRows[] = WebPayItem::orderRow()->...;
 
 #### 1.2.1 OrderRow
 All products and other items. It´s required to have a minimum of one orderrow.
-**Precisely two of these values must be set in the WebPayItem object, in order to specify the item tax rate:  
+**Precisely two of these values must be set in the WebPayItem object, in order to specify the item tax rate:
 AmountExVat, AmountIncVat or VatPercent for Orderrow.**
 
 ```php
@@ -780,13 +780,13 @@ The *PaymentPlanParamsResponse* object contains the available payment campaigns 
 
 ### 2.1 paymentPlanPricePerMonth
 
-This is a helper function provided to calculate the monthly price for the different payment plan options for a given sum. 
-This information may be used when displaying i.e. payment options to the customer by checkout, or to display the lowest 
+This is a helper function provided to calculate the monthly price for the different payment plan options for a given sum.
+This information may be used when displaying i.e. payment options to the customer by checkout, or to display the lowest
 amount due per month to display on a product level.
 
 The returned instance of PaymentPlanPricePerMonth contains an array "values", where each element in turn contains an array of campaign code, description and price per month:
 
-$paymentPlanParamsResonseObject->values[0..n] (for n campaignCodes), where values['campaignCode' => campaignCode, 'pricePerMonth' => pricePerMonth, 'description' => description] 
+$paymentPlanParamsResonseObject->values[0..n] (for n campaignCodes), where values['campaignCode' => campaignCode, 'pricePerMonth' => pricePerMonth, 'description' => description]
 
 **$paramsResonseObject** is response object from getPaymentPlanParams();
 ```php
@@ -993,7 +993,7 @@ Params:
 * [Config](https://github.com/sveawebpay/php-integration#configuration) object. //Optional. If not given, test values from SveaConfig.php will be used
 
 (For synchronous services, the appropriate WebServiceResponse instance is returned when calling ->doRequest() on the order object.)
- 
+
 ```php
   $response = (new SveaResponse($_REQUEST,$countryCode,$config))->getResponse();
 ```
