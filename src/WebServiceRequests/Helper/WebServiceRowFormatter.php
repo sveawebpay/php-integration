@@ -31,14 +31,6 @@ class WebServiceRowFormatter {
 
         $this->calculateTotals();
 
-                
-        print_r( "totalAmountExVat: " .$this->totalAmountExVat. "\n " );
-        print_r( "totalAmountIncVat: ".$this->totalAmountIncVat."\n " );
-        print_r( "totalVatAsAmount: ".$this->totalVatAsAmount."\n " );
-        print_r( "totalVatAsPercent: ".$this->totalVatAsPercent."\n " );
-        print_r( $this->totalAmountPerVatRateIncVat );
-  
-        
         $this->formatOrderRows();
         $this->formatShippingFeeRows();
         $this->formatInvoiceFeeRows();
@@ -318,8 +310,6 @@ class WebServiceRowFormatter {
            
             foreach( $this->totalAmountPerVatRateIncVat as $vatRate => $amountAtThisVatRateIncVat ) {
                 
-                //print_r('[' .$vatRate.'] '. $amountAtThisVatRateIncVat);
-                
                 $orderRow = new SveaOrderRow();
                 if (isset($row->discountId)) {
                     $orderRow->ArticleNumber = $row->discountId;
@@ -337,8 +327,6 @@ class WebServiceRowFormatter {
                 }
 
                 $amountAtThisVatRateExVat = $amountAtThisVatRateIncVat - $amountAtThisVatRateIncVat * (1-(1/(1+$vatRate/100)));   // calculate "reverse vat", i.e. 25% => 20%
-                
-                //print_r($amountAtThisVatRateExVat);
                 
                 $discountExVat = round($amountAtThisVatRateExVat * ($row->discountPercent * 0.01), 2);
                 $orderRow->DiscountPercent = 0; //no discount on discount
