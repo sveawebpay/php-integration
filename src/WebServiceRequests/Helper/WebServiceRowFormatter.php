@@ -2,17 +2,21 @@
 namespace Svea;
 
 /**
- * Helpclass for formatting orderrows for the right format for WebServeice soap-calls
- * @author Anneli Halld'n, Daniel Brolund for Svea Webpay
+ * Helper class for formatting orderrows in the right format for WebService soap-calls
+ *
+ * @author Anneli Halld'n, Daniel Brolund, Kristian Grossman-Madsen for Svea Webpay
  * @package WebServiceRequests/Helper
  */
 class WebServiceRowFormatter {
 
     private $order;
-    private $totalAmountExVat;
-    private $totalAmountInclVat;
-    private $totalVatAsAmount;
-    private $totalVatAsPercent;
+    private $totalAmountExVat;      // summed in calculateTotals
+    private $totalVatAsAmount;      // summed in calculateTotals
+    private $totalAmountIncVat;     // derived from ExVat + IncVat
+    private $totalVatAsPercent;     // derived from ExVat + IncVat
+
+    private $totalAmountPerVatRateIncVat;   // summed in calculateTotals, used to calculate "mean vat" split into given vat rates
+
     private $newRows;
 
     /**
@@ -40,25 +44,62 @@ class WebServiceRowFormatter {
         $this->totalAmountExVat = 0;
         $this->totalVatAsAmount = 0;
 
+        $this->totalAmountPerVatRateIncVat = array();
+
         foreach ($this->order->orderRows as $product) {
-            $vatPercentAsCeroDecimal = isset($product->vatPercent) ? $product->vatPercent * 0.01 : "";
+
             if (isset($product->vatPercent) && isset($product->amountExVat)) {
                 $this->totalAmountExVat += $product->amountExVat * $product->quantity;
-                $this->totalVatAsAmount += ($vatPercentAsCeroDecimal * $product->amountExVat) * $product->quantity;
+                $this->totalVatAsAmount += ($product->vatPercent/100 * $product->amountExVat) * $product->quantity;
+
+                // add to or create cummulative amount for this tax rate
+                if( isset($this->totalAmountPerVatRateIncVat[$product->vatPercent]) ) {
+                    $this->totalAmountPerVatRateIncVat[$product->vatPercent] += ($product->amountExVat * $product->quantity * (1+$product->vatPercent/100));
+                } else {
+                    $this->totalAmountPerVatRateIncVat[$product->vatPercent] = ($product->amountExVat * $product->quantity * (1+$product->vatPercent/100));
+                }
+
             } elseif (isset($product->vatPercent) && isset($product->amountIncVat)) {
-                $this->totalAmountInclVat += $product->amountIncVat * $product->quantity;
-                $this->totalVatAsAmount += (($vatPercentAsCeroDecimal /(1 + $vatPercentAsCeroDecimal)) * $product->amountIncVat) * $product->quantity;
+                $amountExVat = $product->amountIncVat * (1/(1+$product->vatPercent/100));
+                $this->totalAmountExVat += $amountExVat * $product->quantity;
+                $this->totalVatAsAmount += ($product->vatPercent/100 * $amountExVat) * $product->quantity;
+
+
+                // add to or create cummulative amount for this tax rate
+                if( isset($this->totalAmountPerVatRateIncVat[$product->vatPercent]) ) {
+                    $this->totalAmountPerVatRateIncVat[$product->vatPercent] += ($product->amountIncVat * $product->quantity);
+                } else {
+                    $this->totalAmountPerVatRateIncVat[$product->vatPercent] = ($product->amountIncVat * $product->quantity);
+                }
+
             } else {
-                $this->totalAmountInclVat += $product->amountIncVat * $product->quantity;
                 $this->totalAmountExVat += $product->amountExVat * $product->quantity;
-                $this->totalVatAsAmount += ($product->amountIncVat - $product->amountExVat)* $product->quantity;
+                $this->totalVatAsAmount += ($product->amountIncVat - $product->amountExVat) * $product->quantity;
+
+                // add to or create cumulative amount for this tax rate
+                $vatRate = round((($product->amountIncVat / $product->amountExVat)-1) * 100);
+                if( isset($this->totalAmountPerVatRateIncVat[$vatRate]) ) {
+                    $this->totalAmountPerVatRateIncVat[$vatRate] += ($product->amountExVat * $product->quantity * (1+$vatRate/100));
+                } else {
+                    $this->totalAmountPerVatRateIncVat[$vatRate] = ($product->amountExVat * $product->quantity * (1+$vatRate/100));
+                }
             }
         }
-        $this->totalAmountInclVat = $this->totalAmountExVat + $this->totalVatAsAmount;
-        $this->totalAmountExVat = $this->totalAmountInclVat - $this->totalVatAsAmount;
+        $this->totalAmountIncVat = $this->totalAmountExVat + $this->totalVatAsAmount;
+        $this->totalAmountExVat = $this->totalAmountIncVat - $this->totalVatAsAmount;
         if ($this->totalAmountExVat > 0) {
-            $this->totalVatAsPercent = $this->totalVatAsAmount / $this->totalAmountInclVat; //e.g. 0,20 if percentage 20
+            $this->totalVatAsPercent = $this->totalVatAsAmount / $this->totalAmountIncVat; //e.g. 0,20 if percentage 20
         }
+    }
+
+    /**
+     * Helper function, calculates vat percentage as int from prices with and without vat.
+     */
+    private function calculateVatPercentFromPriceExVatAndPriceIncVat( $incVat, $exVat ) {
+        if( $exVat == 0.0 || $incVat == 0.0 ) // avoid -100% vat on i.e. free products or fees
+            return 0;
+        else
+            return round( (($incVat/$exVat) -1) *100);
     }
 
     private function formatOrderRows() {
@@ -85,7 +126,7 @@ class WebServiceRowFormatter {
                 $orderRow->VatPercent = round($row->vatPercent);
             } else {
                 $orderRow->PricePerUnit = number_format($row->amountExVat, 2, '.', '');
-                $orderRow->VatPercent = round((($row->amountIncVat / $row->amountExVat)-1) * 100);
+                $orderRow->VatPercent = $this->calculateVatPercentFromPriceExVatAndPriceIncVat( $row->amountIncVat, $row->amountExVat );
             }
 
             $this->newRows[] = $orderRow;
@@ -120,7 +161,7 @@ class WebServiceRowFormatter {
                 $orderRow->VatPercent = round($row->vatPercent);
             } else {
                 $orderRow->PricePerUnit = number_format($row->amountExVat, 2, '.', '');
-                $orderRow->VatPercent = round((($row->amountIncVat / $row->amountExVat)-1) * 100);
+                $orderRow->VatPercent = $this->calculateVatPercentFromPriceExVatAndPriceIncVat( $row->amountIncVat, $row->amountExVat );
             }
             $this->newRows[] = $orderRow;
         }
@@ -152,7 +193,8 @@ class WebServiceRowFormatter {
                 $orderRow->VatPercent = round($row->vatPercent);
             } else {
                 $orderRow->PricePerUnit = number_format($row->amountExVat, 2, '.', '');
-                $orderRow->VatPercent = round((($row->amountIncVat / $row->amountExVat)-1) * 100);
+                $orderRow->VatPercent = $this->calculateVatPercentFromPriceExVatAndPriceIncVat( $row->amountIncVat, $row->amountExVat );
+
             }
             $this->newRows[] = $orderRow;
         }
@@ -162,28 +204,100 @@ class WebServiceRowFormatter {
         if (!isset($this->order->fixedDiscountRows)) {
             return;
         }
-
         foreach ($this->order->fixedDiscountRows as $row) {
-            $productTotalAfterDiscount = $this->totalAmountInclVat - $row->amount; //e.g. 400 if total 500 and discount 100
-            $totalProductVatAsAmountAfterDiscount = $this->totalVatAsPercent * $productTotalAfterDiscount;
-            $discountVatAsAmount = $this->totalVatAsAmount - $totalProductVatAsAmountAfterDiscount;
-            $orderRow = new SveaOrderRow();
-            if (isset($row->discountId)) {
-                $orderRow->ArticleNumber = $row->discountId;
+            // only amountIncVat (i.e. amount) is set:
+            if( isset($row->amount) && !isset($row->vatPercent) && !isset($row->amountExVat) ) {
+
+                foreach( $this->totalAmountPerVatRateIncVat as $vatRate => $amountAtThisVatRateIncVat ) {
+
+                    $orderRow = new SveaOrderRow();
+
+                    if (isset($row->discountId)) {
+                        $orderRow->ArticleNumber = $row->discountId;
+                    }
+                    if (isset($row->description)) {
+                        $orderRow->Description = (isset($row->name) ? $row->name . ': ' : "") . $row->description;
+                    } elseif (isset($row->name) && isset($row->description) == false) {
+                        $orderRow->Description = $row->name;
+                    }
+                    if( sizeof($this->totalAmountPerVatRateIncVat)>1 ) {  // add tax rate for split discount to description
+                        $orderRow->Description .= " (".$vatRate."%)";
+                    }
+                    if (isset($row->unit)) {
+                        $orderRow->Unit = $row->unit;
+                    }
+                    $orderRow->DiscountPercent = 0; //no discount on discount
+                    $orderRow->NumberOfUnits = 1; //only one discount per row
+
+                    //calculate discount
+                    $discountAtThisVatRateIncVat = $row->amount * ($amountAtThisVatRateIncVat / $this->totalAmountIncVat );
+                    $discountAtThisVatRateExVat = $discountAtThisVatRateIncVat - $discountAtThisVatRateIncVat * (1-(1/(1+$vatRate/100)));   // calculate "reverse vat", i.e. 25% => 20%
+
+                    $orderRow->PricePerUnit = - number_format($discountAtThisVatRateExVat, 2,'.','');
+                    $orderRow->VatPercent = $vatRate;
+                    $this->newRows[] = $orderRow;
+                }
             }
-            if (isset($row->description)) {
-                $orderRow->Description = (isset($row->name) ? $row->name . ': ' : "") . $row->description;
-            } elseif (isset($row->name) && isset($row->description) == false) {
-                $orderRow->Description = $row->name;
+
+            // only amountIncVat (i.e. amount) and vatPercent is set, so we use that vatPercent:
+            if( isset($row->amount) && isset($row->vatPercent) && !isset($row->amountExVat) ) {
+
+                    $orderRow = new SveaOrderRow();
+
+                    if (isset($row->discountId)) {
+                        $orderRow->ArticleNumber = $row->discountId;
+                    }
+                    if (isset($row->description)) {
+                        $orderRow->Description = (isset($row->name) ? $row->name . ': ' : "") . $row->description;
+                    } elseif (isset($row->name) && isset($row->description) == false) {
+                        $orderRow->Description = $row->name;
+                    }
+
+                    if (isset($row->unit)) {
+                        $orderRow->Unit = $row->unit;
+                    }
+                    $orderRow->DiscountPercent = 0; //no discount on discount
+                    $orderRow->NumberOfUnits = 1; //only one discount per row
+
+                    //calculate discount
+                    $vatRate = $row->vatPercent;
+                    $discountAtThisVatRateIncVat = $row->amount;
+                    $discountAtThisVatRateExVat = $discountAtThisVatRateIncVat - $discountAtThisVatRateIncVat * (1-(1/(1+$vatRate/100)));   // calculate "reverse vat", i.e. 25% => 20%
+
+                    $orderRow->PricePerUnit = - number_format($discountAtThisVatRateExVat, 2,'.','');
+                    $orderRow->VatPercent = $vatRate;
+
+                    $this->newRows[] = $orderRow;
             }
-            if (isset($row->unit)) {
-                $orderRow->Unit = $row->unit;
+            // only amountIncVat (i.e. amount) and vatPercent is set, so we use that vatPercent:
+            if( !isset($row->amount) && isset($row->vatPercent) && isset($row->amountExVat) ) {
+
+                    $orderRow = new SveaOrderRow();
+
+                    if (isset($row->discountId)) {
+                        $orderRow->ArticleNumber = $row->discountId;
+                    }
+                    if (isset($row->description)) {
+                        $orderRow->Description = (isset($row->name) ? $row->name . ': ' : "") . $row->description;
+                    } elseif (isset($row->name) && isset($row->description) == false) {
+                        $orderRow->Description = $row->name;
+                    }
+
+                    if (isset($row->unit)) {
+                        $orderRow->Unit = $row->unit;
+                    }
+                    $orderRow->DiscountPercent = 0; //no discount on discount
+                    $orderRow->NumberOfUnits = 1; //only one discount per row
+
+                    //calculate discount
+                    $vatRate = $row->vatPercent;
+                    $discountAtThisVatRateExVat = $row->amountExVat;
+
+                    $orderRow->PricePerUnit = - number_format($discountAtThisVatRateExVat, 2,'.','');
+                    $orderRow->VatPercent = $vatRate;
+
+                    $this->newRows[] = $orderRow;
             }
-            $orderRow->DiscountPercent = 0; //no discount on discount
-            $orderRow->NumberOfUnits = 1; //only one discount per row
-            $orderRow->PricePerUnit = - number_format($row->amount - $discountVatAsAmount, 2,'.','');
-            $orderRow->VatPercent = round(($discountVatAsAmount / ($row->amount - $discountVatAsAmount))*100);//Discountpercent
-            $this->newRows[] = $orderRow;
         }
     }
 
@@ -193,24 +307,35 @@ class WebServiceRowFormatter {
         }
 
         foreach ($this->order->relativeDiscountRows as $row) {
-            $orderRow = new SveaOrderRow();
-            if (isset($row->discountId)) {
-                $orderRow->ArticleNumber = $row->discountId;
+
+            foreach( $this->totalAmountPerVatRateIncVat as $vatRate => $amountAtThisVatRateIncVat ) {
+
+                $orderRow = new SveaOrderRow();
+                if (isset($row->discountId)) {
+                    $orderRow->ArticleNumber = $row->discountId;
+                }
+                if (isset($row->description)) {
+                    $orderRow->Description = (isset($row->name) ? $row->name . ': ' : "") . $row->description;
+                } elseif (isset($row->name) && isset($row->description) == false) {
+                    $orderRow->Description = $row->name;
+                }
+                if( sizeof($this->totalAmountPerVatRateIncVat)>1 ) {  // add tax rate for split discount to description
+                    $orderRow->Description .= " (".$vatRate."%)";
+                }
+                if (isset($row->unit)) {
+                    $orderRow->Unit = $row->unit;
+                }
+
+                $amountAtThisVatRateExVat = $amountAtThisVatRateIncVat - $amountAtThisVatRateIncVat * (1-(1/(1+$vatRate/100)));   // calculate "reverse vat", i.e. 25% => 20%
+
+                $discountExVat = round($amountAtThisVatRateExVat * ($row->discountPercent * 0.01), 2);
+                $orderRow->DiscountPercent = 0; //no discount on discount
+                $orderRow->NumberOfUnits = 1; //only one discount per row
+                $orderRow->PricePerUnit = - number_format($discountExVat,2,'.',''); //Discountpercent on total price ex vat.
+                $orderRow->VatPercent = $vatRate;
+
+                $this->newRows[] = $orderRow;
             }
-            if (isset($row->description)) {
-                $orderRow->Description = (isset($row->name) ? $row->name . ': ' : "") . $row->description;
-            } elseif (isset($row->name) && isset($row->description) == false) {
-                $orderRow->Description = $row->name;
-            }
-            if (isset($row->unit)) {
-                $orderRow->Unit = $row->unit;
-            }
-            $pricePerUnitExMoms = round($this->totalAmountExVat * ($row->discountPercent * 0.01), 2);
-            $orderRow->DiscountPercent = 0; //no discount on discount
-            $orderRow->NumberOfUnits = 1; //only one discount per row
-            $orderRow->PricePerUnit = - number_format($pricePerUnitExMoms,2,'.',''); //Discountpercent on toatal price ex vat.
-            $orderRow->VatPercent = round((($this->totalVatAsAmount * ($row->discountPercent * 0.01))/$pricePerUnitExMoms)*100,2);//round((($this->totalVatAsAmount * ($row->discountPercent * 0.01))/$orderRow->PricePerUnit) * 100,2); //Discountpercent on total vatamount
-            $this->newRows[] = $orderRow;
         }
     }
 }

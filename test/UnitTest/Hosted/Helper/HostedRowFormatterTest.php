@@ -173,7 +173,7 @@ class HostedRowFormatterTest extends \PHPUnit_Framework_TestCase {
     public function testFormatOrderRows_SingleRowWithMultipleItems() {
         $order = new createOrderBuilder(new SveaConfigurationProvider(SveaConfig::getDefaultConfig()));
         $order->
-        addOrderRow(\WebPayItem::orderRow()
+            addOrderRow(\WebPayItem::orderRow()
                 ->setArticleNumber("0")
                 ->setName("Tess")
                 ->setDescription("Tester")
@@ -199,7 +199,7 @@ class HostedRowFormatterTest extends \PHPUnit_Framework_TestCase {
     public function testFormatOrderRows_SingleRowSingleItemWithFractionalPrice() {
         $order = new createOrderBuilder(new SveaConfigurationProvider(SveaConfig::getDefaultConfig()));
         $order->
-        addOrderRow(\WebPayItem::orderRow()
+            addOrderRow(\WebPayItem::orderRow()
                 ->setArticleNumber("0")
                 ->setName("Tess")
                 ->setDescription("Tester")
@@ -221,11 +221,10 @@ class HostedRowFormatterTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals("st", $newRow->unit);
     }
 
-    // TODO also to integration tests, check total amount charged!
     public function testFormatOrderRows_SingleRowMultipleItemsWithFractionalPrice() {
         $order = new createOrderBuilder(new SveaConfigurationProvider(SveaConfig::getDefaultConfig()));
         $order->
-        addOrderRow(\WebPayItem::orderRow()
+            addOrderRow(\WebPayItem::orderRow()
                 ->setArticleNumber("0")
                 ->setName("Tess")
                 ->setDescription("Tester")
@@ -250,7 +249,7 @@ class HostedRowFormatterTest extends \PHPUnit_Framework_TestCase {
     public function testFormatOrderRows_SingleRowSingleItemWithNoVat()    {
         $order = new createOrderBuilder(new SveaConfigurationProvider(SveaConfig::getDefaultConfig()));
         $order->
-        addOrderRow(\WebPayItem::orderRow()
+            addOrderRow(\WebPayItem::orderRow()
                 ->setArticleNumber("0")
                 ->setName("Tess")
                 ->setDescription("Tester")
@@ -362,7 +361,7 @@ class HostedRowFormatterTest extends \PHPUnit_Framework_TestCase {
     public function testFormatShippingFeeRows() {
         $order = new createOrderBuilder(new SveaConfigurationProvider(SveaConfig::getDefaultConfig()));
         $order
-        ->addFee(\WebPayItem::shippingFee()
+            ->addFee(\WebPayItem::shippingFee()
                 ->setShippingId("0")
                 ->setName("Tess")
                 ->setDescription("Tester")
@@ -385,18 +384,19 @@ class HostedRowFormatterTest extends \PHPUnit_Framework_TestCase {
     
     public function testFormatFixedDiscountRows() {
         $order = new createOrderBuilder(new SveaConfigurationProvider(SveaConfig::getDefaultConfig()));
-        $order->
-        addOrderRow(\WebPayItem::orderRow()
-                  ->setAmountExVat(4)
+        $order
+            ->addOrderRow(\WebPayItem::orderRow()
+                ->setAmountExVat(4)
                 ->setVatPercent(25)
                 ->setQuantity(1)
-                )
-                ->addDiscount(\WebPayItem::fixedDiscount()
+            )
+            ->addDiscount(\WebPayItem::fixedDiscount()
                     ->setDiscountId("0")
                     ->setName("Tess")
                     ->setDescription("Tester")
                     ->setAmountIncVat(1)
-                    );
+            )
+        ;
         
         $formatter = new HostedRowFormatter();
         $newRows = $formatter->formatRows($order);

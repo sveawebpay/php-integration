@@ -1,5 +1,5 @@
 # PHP Integration Package API for SveaWebPay
-## Version 1.3.0
+## Version 1.4.0
 
 | Branch                            | Build status                               |
 |---------------------------------- |------------------------------------------- |
@@ -263,7 +263,9 @@ $orderRows[] = WebPayItem::orderRow()->...;
 
 #### 1.2.1 OrderRow
 All products and other items. It´s required to have a minimum of one orderrow.
-**The price can be set in a combination by using a minimum of two out of three functions: setAmountExVat(), setAmountIncVat() and setVatPercent().**
+Precisely two of these values must be set in the WebPayItem object, in order to specify the item tax rate:
+AmountExVat, AmountIncVat or VatPercent for Orderrow.
+
 ```php
 ->addOrderRow(
       WebPayItem::orderRow()
@@ -271,7 +273,7 @@ All products and other items. It´s required to have a minimum of one orderrow.
         ->setAmountExVat(100.00)                //Optional, see info above
         ->setAmountIncVat(125.00)               //Optional, see info above
         ->setVatPercent(25)                     //Optional, see info above
-        ->setArticleNumber(1)                   //Optional
+        ->setArticleNumber("1")                   //Optional
         ->setDescription("Specification")       //Optional
         ->setName('Prod')                       //Optional
         ->setUnit("st")                         //Optional
@@ -280,7 +282,7 @@ All products and other items. It´s required to have a minimum of one orderrow.
 ```
 
 #### 1.2.2 ShippingFee
-**The price can be set in a combination by using a minimum of two out of three functions: setAmountExVat(), setAmountIncVat()and setVatPercent().**
+The price can be set in a combination by using a minimum of two out of three functions: setAmountExVat(), setAmountIncVat()and setVatPercent().
 ```php
 ->addFee(
     WebPayItem::shippingFee()
@@ -295,7 +297,7 @@ All products and other items. It´s required to have a minimum of one orderrow.
    )
 ```
 #### 1.2.3 InvoiceFee
-**The price can be set in a combination by using a minimum of two out of three functions: setAmountExVat(), setAmountIncVat() and setVatPercent().**
+The price can be set in a combination by using a minimum of two out of three functions: setAmountExVat(), setAmountIncVat()and setVatPercent().
 ```php
 ->addFee(
     WebPayItem::invoiceFee()
@@ -309,11 +311,19 @@ All products and other items. It´s required to have a minimum of one orderrow.
     )
 ```
 #### 1.2.4 Fixed Discount
-When discount or coupon is a fixed amount on total product amount.
+
+If only AmountIncVat is given, we calculate the discount split across the tax (vat) rates present in the order. This will
+ensure that the correct discount vat is applied to the order.
+
+Otherwise, it is required to use at least two of the functions setAmountExVat(), setAmountIncVat() and setVatPercent().
+If two of these three attributes are specified, we respect the amount indicated and include a discount with the appropriate tax rate.
+
 ```php
 ->addDiscount(
     WebPayItem::fixedDiscount()
-        ->setAmountIncVat(100.00)               //Required
+        ->setAmountIncVat(100.00)               //Recommended, see info above
+        ->setAmountExVat(1.0)                   //Optional, see info above
+        ->setVatPercent(25)                     //Optional, see info above
         ->setDiscountId("1")                    //Optional
         ->setUnit("st")                         //Optional
         ->setDescription("FixedDiscount")       //Optional
@@ -447,7 +457,7 @@ Returns *CreateOrderResponse* object.
     $response = WebPay::createOrder()
       ->addOrderRow(
     WebPayItem::orderRow()
-        ->setArticleNumber(1)
+        ->setArticleNumber("1")
         ->setQuantity(2)
         ->setAmountExVat(100.00)
         ->setDescription("Specification")
@@ -472,7 +482,7 @@ Param: Campaign code recieved from getPaymentPlanParams().
 $response = WebPay::createOrder()
 ->addOrderRow(
     WebPayItem::orderRow()
-        ->setArticleNumber(1)
+        ->setArticleNumber("1")
         ->setQuantity(2)
         ->setAmountExVat(100.00)
         ->setDescription("Specification")
@@ -514,7 +524,7 @@ to format the response.
 $form = WebPay::createOrder()
 ->addOrderRow(
     WebPayItem::orderRow()
-        ->setArticleNumber(1)
+        ->setArticleNumber("1")
         ->setQuantity(2)
         ->setAmountExVat(100.00)
         ->setDescription("Specification")
@@ -564,7 +574,7 @@ echo $form->completeHtmlFormWithSubmitButton; //Will render a hidden form with s
 $form = WebPay::createOrder()
 ->addOrderRow(
     WebPayItem::orderRow()
-        ->setArticleNumber(1)
+        ->setArticleNumber("1")
         ->setQuantity(2)
         ->setAmountExVat(100.00)
         ->setDescription("Specification")
@@ -613,7 +623,7 @@ setPaymentMethod, includePaymentMethods, excludeCardPaymentMethods or excludeDir
 $form = WebPay::createOrder()
     ->addOrderRow(
         WebPayItem::orderRow()
-            ->setArticleNumber(1)
+            ->setArticleNumber("1")
             ->setQuantity(2)
             ->setAmountExVat(100.00)
             ->setDescription("Specification")
@@ -697,7 +707,7 @@ Go direct to specified payment method without the step *PayPage*.
 $form = WebPay::createOrder()
   ->addOrderRow(
     WebPayItem::orderRow()
-        ->setArticleNumber(1)
+        ->setArticleNumber("1")
         ->setQuantity(2)
         ->setAmountExVat(100.00)
         ->setDescription("Specification")
@@ -772,13 +782,13 @@ The *PaymentPlanParamsResponse* object contains the available payment campaigns 
 
 ### 2.1 paymentPlanPricePerMonth
 
-This is a helper function provided to calculate the monthly price for the different payment plan options for a given sum. 
-This information may be used when displaying i.e. payment options to the customer by checkout, or to display the lowest 
+This is a helper function provided to calculate the monthly price for the different payment plan options for a given sum.
+This information may be used when displaying i.e. payment options to the customer by checkout, or to display the lowest
 amount due per month to display on a product level.
 
 The returned instance of PaymentPlanPricePerMonth contains an array "values", where each element in turn contains an array of campaign code, description and price per month:
 
-$paymentPlanParamsResonseObject->values[0..n] (for n campaignCodes), where values['campaignCode' => campaignCode, 'pricePerMonth' => pricePerMonth, 'description' => description] 
+$paymentPlanParamsResonseObject->values[0..n] (for n campaignCodes), where values['campaignCode' => campaignCode, 'pricePerMonth' => pricePerMonth, 'description' => description]
 
 **$paramsResonseObject** is response object from getPaymentPlanParams();
 ```php
@@ -854,7 +864,7 @@ All products and other items. It is required to have a minimum of one row.
        ->setQuantity(2)                     //Required
        ->setAmountExVat(100.00)             //Required
        ->setVatPercent(25)                  //Required
-       ->setArticleNumber(1)                //Optional
+       ->setArticleNumber("1")                //Optional
        ->setDescription("Specification")    //Optional
        ->setName('Prod')                    //Optional
        ->setUnit("st")                      //Optional
@@ -904,7 +914,7 @@ If invoice order is credit invoice use setCreditInvoice($invoiceId) and setNumbe
     $response = WebPay::deliverOrder()
     ->addOrderRow(
         WebPayItem::orderRow()
-            ->setArticleNumber(1)
+            ->setArticleNumber("1")
             ->setQuantity(2)
             ->setAmountExVat(100.00)
             ->setDescription("Specification")
@@ -929,7 +939,7 @@ you will recieve an *InvoiceId* in the Response. To credit the invoice you follo
     $response = WebPay::deliverOrder()
     ->addOrderRow(
         WebPayItem::orderRow()
-            ->setArticleNumber(1)
+            ->setArticleNumber("1")
             ->setQuantity(2)
             ->setAmountExVat(100.00)
             ->setDescription("Specification")
@@ -985,7 +995,7 @@ Params:
 * [Config](https://github.com/sveawebpay/php-integration#configuration) object. //Optional. If not given, test values from SveaConfig.php will be used
 
 (For synchronous services, the appropriate WebServiceResponse instance is returned when calling ->doRequest() on the order object.)
- 
+
 ```php
   $response = (new SveaResponse($_REQUEST,$countryCode,$config))->getResponse();
 ```
@@ -993,10 +1003,13 @@ Params:
 [<< To top](https://github.com/sveawebpay/php-integration#php-integration-package-api-for-sveawebpay)
 
 ##8. GetPaymentMethods
-Returns an Array of SystemPaymentMethods (See Constants).
+Returns an array of SystemPaymentMethods available to a certain merchantId, which are constants defined in class PaymentMethod. Used to i.e. determine available Banks for direct bank payments.
+
+See file PaymentMethodIntegrationTest.php for usage.
+
 ```php
-  $fooArray = WebPay::getPaymentMethods()
-                    ->setContryCode("SE") //optional. Default SE
+  $fooArray = WebPay::getPaymentMethods( $config )  // optional, if no $config given, will use defaults from SveaConfig
+                    ->setContryCode("SE")           // optional, if no country given, will use default country "SE"
                     ->doRequest();
 ```
 
@@ -1004,7 +1017,7 @@ Returns an Array of SystemPaymentMethods (See Constants).
 
 ### PaymentMethods
 Used in usePaymentMethod($paymentMethod) and in usePayPage(),
-->includePaymentMethods(...,...,...), ->excludeCardPaymentMethods(...,...,...), ->excludeDirectPaymentMethods(), ->excludeCardPaymentMethods().
+->includePaymentMethods(..., ..., ...), ->excludeCardPaymentMethods(..., ..., ...), ->excludeDirectPaymentMethods(), ->excludeCardPaymentMethods().
 
 | Payment method                    | Description                                   |
 |-----------------------------------|-----------------------------------------------|

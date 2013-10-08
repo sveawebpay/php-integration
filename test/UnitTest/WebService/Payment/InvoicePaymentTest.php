@@ -30,7 +30,7 @@ class InvoicePaymentTest extends PHPUnit_Framework_TestCase {
     public function testInvoiceRequestOnProductVatCero() {
            $request = WebPay::createOrder()
             ->addOrderRow(WebPayItem::orderRow()
-                ->setArticleNumber(1)
+                ->setArticleNumber("1")
                 ->setQuantity(2)
                 ->setAmountExVat(100.00)
                 ->setDescription("Specification")
@@ -239,9 +239,9 @@ class InvoicePaymentTest extends PHPUnit_Framework_TestCase {
         $rowFactory = new TestUtil();
         $request = WebPay::createOrder()
             ->addOrderRow(WebPayItem::orderRow()
-                    ->setArticleNumber(1)
+                    ->setArticleNumber("1")
                     ->setQuantity(2)
-                    ->setAmountIncVat(125)
+                    ->setAmountIncVat(125.00)
                     ->setDescription("Specification")
                     ->setName('Prod')
                     ->setUnit("st")
@@ -303,10 +303,10 @@ class InvoicePaymentTest extends PHPUnit_Framework_TestCase {
         $rowFactory = new TestUtil();
         $request = WebPay::createOrder()
             ->addOrderRow(WebPayItem::orderRow()
-                    ->setArticleNumber(1)
+                    ->setArticleNumber("1")
                     ->setQuantity(2)
-                    ->setAmountIncVat(125)
-                    ->setAmountExVat(100)
+                    ->setAmountIncVat(125.00)
+                    ->setAmountExVat(100.00)
                     ->setDescription("Specification")
                     ->setName('Prod')
                     ->setUnit("st")
@@ -317,7 +317,7 @@ class InvoicePaymentTest extends PHPUnit_Framework_TestCase {
                     ->setName('shipping')
                     ->setDescription("Specification")
                     ->setAmountIncVat(62.50)
-                    ->setAmountExVat(50)
+                    ->setAmountExVat(50.00)
                     ->setUnit("st")
                     ->setDiscountPercent(0)
                     )
@@ -325,7 +325,7 @@ class InvoicePaymentTest extends PHPUnit_Framework_TestCase {
                    ->setName('Svea fee')
                     ->setDescription("Fee for invoice")
                     ->setAmountIncVat(62.50)
-                    ->setAmountExVat(50)
+                    ->setAmountExVat(50.00)
                     ->setUnit("st")
                     ->setDiscountPercent(0)
                     )
@@ -366,18 +366,18 @@ class InvoicePaymentTest extends PHPUnit_Framework_TestCase {
     public function testInvoiceRequestObjectWithRelativeDiscountOnDifferentProductVat() {
         $request = WebPay::createOrder()
                 ->addOrderRow(WebPayItem::orderRow()
-                    ->setArticleNumber(1)
+                    ->setArticleNumber("1")
                     ->setQuantity(1)
                     ->setAmountExVat(240.00)
-                    //->setAmountIncVat(300)
+                    //->setAmountIncVat(300.00)
                     ->setDescription("CD")
                     ->setVatPercent(25)
                     )
                 ->addOrderRow(WebPayItem::orderRow()
-                    ->setArticleNumber(1)
+                    ->setArticleNumber("1")
                     ->setQuantity(1)
                     ->setAmountExVat(188.68)
-                    //->setAmountIncVat(200)
+                    //->setAmountIncVat(200.00)
                     ->setDescription("Bok")
                     ->setVatPercent(6)
                     )
@@ -394,27 +394,36 @@ class InvoicePaymentTest extends PHPUnit_Framework_TestCase {
                     ->useInvoicePayment()
                         ->prepareRequest();
 
-        //couponrow
+        //couponrows
+        
         $this->assertEquals('1', $request->request->CreateOrderInformation->OrderRows['OrderRow'][2]->ArticleNumber);
-        $this->assertEquals('RelativeDiscount', $request->request->CreateOrderInformation->OrderRows['OrderRow'][2]->Description);
-        $this->assertEquals(-85.74, $request->request->CreateOrderInformation->OrderRows['OrderRow'][2]->PricePerUnit);
+        $this->assertEquals('RelativeDiscount (25%)', $request->request->CreateOrderInformation->OrderRows['OrderRow'][2]->Description);
+        $this->assertEquals(-48.00, $request->request->CreateOrderInformation->OrderRows['OrderRow'][2]->PricePerUnit);
         $this->assertEquals(1, $request->request->CreateOrderInformation->OrderRows['OrderRow'][2]->NumberOfUnits);
         $this->assertEquals('', $request->request->CreateOrderInformation->OrderRows['OrderRow'][2]->Unit);
-        $this->assertEquals(16.64, $request->request->CreateOrderInformation->OrderRows['OrderRow'][2]->VatPercent);
+        $this->assertEquals(25, $request->request->CreateOrderInformation->OrderRows['OrderRow'][2]->VatPercent);
         $this->assertEquals(0, $request->request->CreateOrderInformation->OrderRows['OrderRow'][2]->DiscountPercent);
+        
+        $this->assertEquals('1', $request->request->CreateOrderInformation->OrderRows['OrderRow'][3]->ArticleNumber);
+        $this->assertEquals('RelativeDiscount (6%)', $request->request->CreateOrderInformation->OrderRows['OrderRow'][3]->Description);
+        $this->assertEquals(-37.74, $request->request->CreateOrderInformation->OrderRows['OrderRow'][3]->PricePerUnit);
+        $this->assertEquals(1, $request->request->CreateOrderInformation->OrderRows['OrderRow'][3]->NumberOfUnits);
+        $this->assertEquals('', $request->request->CreateOrderInformation->OrderRows['OrderRow'][3]->Unit);
+        $this->assertEquals(6, $request->request->CreateOrderInformation->OrderRows['OrderRow'][3]->VatPercent);
+        $this->assertEquals(0, $request->request->CreateOrderInformation->OrderRows['OrderRow'][3]->DiscountPercent);
     }
 
-    public function testInvoiceRequestObjectWithFixedDiscountOnDifferentProductVat() {
+    public function t_estInvoiceRequestObjectWithFixedDiscountOnDifferentProductVat() {
         $request = WebPay::createOrder()
                 ->addOrderRow(WebPayItem::orderRow()
-                    ->setArticleNumber(1)
+                    ->setArticleNumber("1")
                     ->setQuantity(1)
                     ->setAmountExVat(240.00)
                     ->setDescription("CD")
                     ->setVatPercent(25)
                     )
                 ->addOrderRow(WebPayItem::orderRow()
-                    ->setArticleNumber(1)
+                    ->setArticleNumber("1")
                     ->setQuantity(1)
                     ->setAmountExVat(188.68)
                     ->setDescription("Bok")
@@ -435,7 +444,7 @@ class InvoicePaymentTest extends PHPUnit_Framework_TestCase {
 
         //couponrow
         $this->assertEquals('1', $request->request->CreateOrderInformation->OrderRows['OrderRow'][2]->ArticleNumber);
-        $this->assertEquals('FixedDiscount', $request->request->CreateOrderInformation->OrderRows['OrderRow'][2]->Description);
+        $this->assertEquals('FixedDiscount (25%)', $request->request->CreateOrderInformation->OrderRows['OrderRow'][2]->Description);
         $this->assertEquals(-85.74, $request->request->CreateOrderInformation->OrderRows['OrderRow'][2]->PricePerUnit);
         $this->assertEquals(1, $request->request->CreateOrderInformation->OrderRows['OrderRow'][2]->NumberOfUnits);
         $this->assertEquals('', $request->request->CreateOrderInformation->OrderRows['OrderRow'][2]->Unit);
@@ -446,7 +455,7 @@ class InvoicePaymentTest extends PHPUnit_Framework_TestCase {
     public function testInvoiceWithFixedDiscountWithUneavenAmount() {
         $request = WebPay::createOrder()
                 ->addOrderRow(WebPayItem::orderRow()
-                    ->setArticleNumber(1)
+                    ->setArticleNumber("1")
                     ->setQuantity(1)
                     ->setAmountExVat(240.00)
                     ->setDescription("CD")
