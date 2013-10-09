@@ -3,7 +3,7 @@
 
 /**
  * Usage: Create one or more classes that implements the \ConfigurationProvider
- * Interface (e.g. one class for testing values, one for production values).
+ * Interface (eg. one class for testing values, one for production values).
  * The implemented functions should return the authorization values for the
  * configuration in question.
  *
@@ -26,33 +26,48 @@ interface ConfigurationProvider {
      * $param $country CountryCode eg. SE, NO, DK, FI, NL, DE
      */
     public function getUsername($type, $country);
+    
     /**
      * get the return value from your database or likewise
      * @param $type eg. HOSTED, INVOICE or PAYMENTPLAN
      * $param $country CountryCode eg. SE, NO, DK, FI, NL, DE
      */
     public function getPassword($type, $country);
-     /**
-     * get the return value from your database or likewise
-     * @param $type eg. HOSTED, INVOICE or PAYMENTPLAN
-     * $param $country CountryCode eg. SE, NO, DK, FI, NL, DE
+
+    /**
+     * getClientNumber() should return the client number corresponding to $type 
+     * and $country. Get it from your shop configuration database or likewise.
+     * 
+     * In case of a request for an unsupported payment, i.e. $type is set to
+     * ConfigurationProvider::INVOICE_TYPE and we does not have invoice payments 
+     * configured w/Svea, getEndPoint() should throw an InvalidArgumentException
+     * 
+     * @param $type eg. "HOSTED", "INVOICE" or "PAYMENTPLAN", "HOSTED_ADMIN"
+     * @param $country iso3166 alpha-2 CountryCode, eg. SE, NO, DK, FI, NL, DE
+     * @throws InvalidTypeException in case of unsupported $type 
+     * @throws InvalidCountryException in case of unsupported $country
      */
     public function getClientNumber($type, $country);
+    
     /**
      * get the return value from your database or likewise
-     * @param $type eg. HOSTED, INVOICE or PAYMENTPLAN
+     * @param $type one of ConfigurationProvider::HOSTED_TYPE, ::INVOICE_TYPE, ::PAYMENTPLAN_TYPE
      * $param $country CountryCode eg. SE, NO, DK, FI, NL, DE
      */
     public function getMerchantId($type, $country);
+    
     /**
      * get the return value from your database or likewise
-     * @param $type eg. HOSTED, INVOICE or PAYMENTPLAN
+     * @param $type one of ConfigurationProvider::HOSTED_TYPE, ::INVOICE_TYPE, ::PAYMENTPLAN_TYPE
      * $param $country CountryCode eg. SE, NO, DK, FI, NL, DE
      */
     public function getSecret($type, $country);
+    
     /**
      * Constants for the endpoint url found in the class SveaConfig.php
-     * @param $type eg. HOSTED, INVOICE or PAYMENTPLAN, HOSTED_ADMIN
+     * getEndPoint() should return an url corresponding to $type.
+     * 
+     * @param $type one of ConfigurationProvider::HOSTED_TYPE, ::INVOICE_TYPE, ::PAYMENTPLAN_TYPE, ::HOSTED_ADMIN_TYPE
      */
     public function getEndPoint($type);
 }
