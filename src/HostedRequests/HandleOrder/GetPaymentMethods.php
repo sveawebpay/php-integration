@@ -73,7 +73,7 @@ class GetPaymentMethods {
                 $paymentmethods[] = \PaymentMethod::INVOICE;
             }
         }
-        catch( InvalidArgumentException $e ) {
+        catch( InvalidTypeException $e ) {
             // assume that client configuration does not support $type INVOICE
         }
         try {
@@ -83,7 +83,7 @@ class GetPaymentMethods {
                 $paymentmethods[] = \PaymentMethod::PAYMENTPLAN;
             }
         }
-        catch( InvalidArgumentException $e ) {
+        catch( InvalidTypeException $e ) {
             // assume that client configuration does not support $type INVOICE
         }
         curl_close($ch);

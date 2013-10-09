@@ -33,6 +33,7 @@ interface ConfigurationProvider {
      * $param $country CountryCode eg. SE, NO, DK, FI, NL, DE
      */
     public function getPassword($type, $country);
+
     /**
      * getClientNumber() should return the client number corresponding to $type 
      * and $country. Get it from your shop configuration database or likewise.
@@ -43,7 +44,8 @@ interface ConfigurationProvider {
      * 
      * @param $type eg. "HOSTED", "INVOICE" or "PAYMENTPLAN", "HOSTED_ADMIN"
      * @param $country iso3166 alpha-2 CountryCode, eg. SE, NO, DK, FI, NL, DE
-     * @throws InvalidArgumentException in case of unsupported $type or $country
+     * @throws InvalidTypeException in case of unsupported $type 
+     * @throws InvalidCountryException in case of unsupported $country
      */
     public function getClientNumber($type, $country);
     
