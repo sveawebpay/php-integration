@@ -79,7 +79,7 @@ class CardPaymentTest extends \PHPUnit_Framework_TestCase {
                 ->usePayPageCardOnly() // PayPageObject
                 ->setReturnUrl("http://myurl.se")
                 ->getPaymentForm();
-        
+
         $xmlMessage = new \SimpleXMLElement($form->xmlMessage);
         $payment = base64_decode($form->xmlMessageBase64);
         $payment_decoded = new \SimpleXMLElement($payment);
@@ -322,5 +322,29 @@ class CardPaymentTest extends \PHPUnit_Framework_TestCase {
         $xmlMessage = new \SimpleXMLElement($form->xmlMessage);
         $this->assertEquals("0", $xmlMessage->orderrows->row->vat);
         $this->assertEquals("0", $xmlMessage->orderrows->row->amount);
+    }
+
+    /*
+     * new feature 2013-10-08
+     */
+    public function testSetCardPageLanguage() {
+        $form = \WebPay::createOrder()
+                ->addOrderRow(\WebPayItem::orderRow()
+                        ->setArticleNumber("1")
+                        ->setQuantity(1)
+                        ->setAmountExVat(0.00)
+                        ->setAmountIncVat(0.00)
+                        ->setDescription("Free shipping")
+                )
+                ->setClientOrderNumber("33")
+                ->setCurrency("sek")
+                ->setCountryCode("NL")
+                ->usePaymentMethod("KORTCERT")
+                    ->setCardPageLanguage("sv")
+                    ->setReturnUrl("http://myurl.se")
+                    ->getPaymentForm();
+
+        $xmlMessage = new \SimpleXMLElement($form->xmlMessage);
+        $this->assertEquals("sv", $xmlMessage->lang);
     }
 }
