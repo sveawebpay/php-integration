@@ -109,17 +109,17 @@ class SveaConfigurationProvider implements \ConfigurationProvider {
     }
 
     /**
-     * @throws Exception
+     * @throws InvalidCountryException
      */
     private function throwInvalidCountryException() {
-        throw new \Exception('Invalid or missing Country code');
+        throw new InvalidCountryException('Invalid or missing Country code');
     }
 
     /**
-     * @throws Exception
+     * @throws InvalidTypeException
      */
     private function throwInvalidTypeException() {
-        throw new \Exception(sprintf(
+        throw new InvalidTypeException(sprintf(
             'Invalid type. Accepted values: %s, %s or %s',
             \ConfigurationProvider::INVOICE_TYPE,
             \ConfigurationProvider::PAYMENTPLAN_TYPE,

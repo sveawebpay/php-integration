@@ -7,7 +7,7 @@ namespace Svea;
 class PaymentMethodPayment extends HostedPayment{
 
     public $paymentMethod;
-    
+    public $langCode = "en";
     /**
      * @param type $order, $paymentmethod
      */
@@ -26,7 +26,7 @@ class PaymentMethodPayment extends HostedPayment{
                 $request['paymentMethod'] = $this->paymentMethod;
             }
         }
-        
+
         return $request;
     }
 
@@ -47,6 +47,49 @@ class PaymentMethodPayment extends HostedPayment{
      */
     public function setCancelUrl($cancelUrlAsString) {
         $this->cancelUrl = $cancelUrlAsString;
+        return $this;
+    }
+    /*
+     * @param type $languageCodeAsISO639
+     * @return \HostedPayment
+     */
+    public function setCardPageLanguage($languageCodeAsISO639){
+        switch ($languageCodeAsISO639) {
+            case "sv":
+                $this->langCode = $languageCodeAsISO639;
+                break;
+            case "en":
+                $this->langCode = $languageCodeAsISO639;
+                break;
+            case "da":
+                $this->langCode = $languageCodeAsISO639;
+                break;
+            case "fi":
+                $this->langCode = $languageCodeAsISO639;
+                break;
+            case "no":
+                $this->langCode = $languageCodeAsISO639;
+                break;
+            case "de":
+                $this->langCode = $languageCodeAsISO639;
+                break;
+            case "es":
+                $this->langCode = $languageCodeAsISO639;
+                break;
+            case "fr":
+                $this->langCode = $languageCodeAsISO639;
+                break;
+            case "it":
+                $this->langCode = $languageCodeAsISO639;
+                break;
+            case "nl":
+                $this->langCode = $languageCodeAsISO639;
+                break;
+            default:
+                $this->langCode = "en";
+                break;
+        }
+
         return $this;
     }
 }

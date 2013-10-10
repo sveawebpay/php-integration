@@ -637,7 +637,7 @@ $form = WebPay::createOrder()
         ->setOrderDate("2012-12-12")
         ->setCurrency("SEK")
             ->usePayPage()
-                ->setPayPageLanguage("sv")                          //Optional, default english
+                ->setPayPageLanguage("sv")                          //Optional,@param: languageCode As ISO639, eg. "en", defalut english
                 ->setReturnUrl("http://myurl.se")                   //Required
                 ->setCancelUrl("http://myurl.se")                   //Optional
                 ->getPaymentForm();
@@ -723,6 +723,7 @@ $form = WebPay::createOrder()
         ->usePaymentMethod(PaymentMethod::KORTCERT)             //Se APPENDIX for paymentmethods
             ->setReturnUrl("http://myurl.se")                   //Required
             ->setCancelUrl("http://myurl.se")                   //Optional
+            ->setCardPageLanguage("se")                         //Optional,@param: languageCode As ISO639, eg. "en", defalut english
             ->getPaymentForm();
 
 ```
