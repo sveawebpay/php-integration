@@ -835,10 +835,24 @@ or
 [<< To top](https://github.com/sveawebpay/php-integration#php-integration-package-api-for-sveawebpay)
 
 ## 4. deliverOrder
-Updates the status on a previous created order as delivered. Add rows that you want delivered. The rows will automatically be
-matched with the rows that was sent when creating the order.
-Only applicable for invoice and payment plan payments.
-Returns *DeliverOrderResult* object.
+Use the WebPay::deliverOrder request to deliver to the customer invoices for fulfilled orders. Svea will invoice the customer upon receiving the deliverOrder request. A deliverOrder request may also be used to i.e. fulfill an order in parts, invoicing only the items sent out to the customer, see below. 
+
+When Svea receives the deliverOrder request the status on the previous created order is set to *delivered*. Add the corresponding order id and the order rows that you want delivered before making the deliverOrder request. The specified rows will automatically be matched with the previous rows that was sent when creating the order.
+
+The deliverOrder functionallity is only applicable to invoice and payment plan payment method payments.
+[<< To top](https://github.com/sveawebpay/php-integration#php-integration-package-api-for-sveawebpay)
+
+### 4.1 Create order
+This works more or less like WebPay::createOrder above, and makes use of the same order item information. In doing this, we make use of the orderId received in the response to the createdOrder request to link the deliverOrder request to the (previously sent) createOrder invoice. 
+
+Create an DeliverOrderBuilder object using WebPay::deliverOrder(). Then add orderRows to the instance, here it is important that order rows match between the requests. We recommend storing the order row data to ensure that matching orderrows can be recreated in the deliverOrder request. 
+
+If an item is left out from the deliverOrder request that was present in the createOrder request, a new invoice will be created as the order is assumed to be partially fulfilled. Any left out items should not be delivered physically, as they will not be invoiced when the deliverOrder request is sent.
+
+```php
+    WebPay::deliverOrder( $sveaConfig );
+
+```
 
 [<< To top](https://github.com/sveawebpay/php-integration#php-integration-package-api-for-sveawebpay)
 
@@ -864,7 +878,7 @@ All products and other items. It is required to have a minimum of one row.
        ->setQuantity(2)                     //Required
        ->setAmountExVat(100.00)             //Required
        ->setVatPercent(25)                  //Required
-       ->setArticleNumber("1")                //Optional
+       ->setArticleNumber("1")              //Optional
        ->setDescription("Specification")    //Optional
        ->setName('Prod')                    //Optional
        ->setUnit("st")                      //Optional

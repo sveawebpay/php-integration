@@ -51,16 +51,19 @@ class CreateOrderBuilder {
      * @var type String.
      */
     public $countryCode;
+
     /**
      * ISO 8601 date, as produced by php date('c'): 2004-02-12T15:19:21+00:00, also accepts date in format "2004-02-12"
      * @var string time, ISO 8601 date
      */
     public $orderDate;
+
     /**
      * Ex: "SEK", "EUR"
      * @var type String
      */
     public $currency;
+
     /**
      * @var Your customer Reference number
      */
@@ -69,6 +72,7 @@ class CreateOrderBuilder {
     /**
      * @var Instance of class SveaConfig
      */
+
     public $conf;
     /**
      *

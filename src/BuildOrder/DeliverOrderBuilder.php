@@ -32,11 +32,14 @@ class deliverOrderBuilder {
      * @var testmode. False means in production mode
      */
     public $testmode = false;
+    
      /**
-     * Order Id recieved when creating order
+     * Order Id is recieved in response to ->doRequest when creating order.
+     * This is the link between deliverOrder and createOrder.
      * @var Order id
      */
     public $orderId;
+    
     /**
      * @var type String "Invoice" or "PaymentPlan"
      */
@@ -90,14 +93,16 @@ class deliverOrderBuilder {
             foreach ($itemFeeObject as $row) {
                 if (get_class($row) == "Svea\ShippingFee") {
                     array_push($this->shippingFeeRows, $row);
-                } else {
+                }
+                if (get_class($row) == "Svea\InvoiceFee") {
                     array_push($this->invoiceFeeRows, $row);
                 }
             }
         } else {
             if (get_class($itemFeeObject) == "Svea\ShippingFee") {
                 array_push($this->shippingFeeRows, $itemFeeObject);
-            } else {
+            }
+            if (get_class($itemFeeObject) == "Svea\InvoiceFee") {
                 array_push($this->invoiceFeeRows, $itemFeeObject);
             }
         }
@@ -115,14 +120,16 @@ class deliverOrderBuilder {
             foreach ($itemDiscounObject as $row) {
                 if (get_class($row) == "Svea\FixedDiscount") {
                     array_push($this->fixedDiscountRows, $row);
-                } else {
+                }
+                if (get_class($row) == "Svea\RelativeDiscount") {
                     array_push($this->relativeDiscountRows, $row);
                 }
             }
         } else {
             if (get_class($itemDiscounObject) == "Svea\FixedDiscount") {
                 array_push($this->fixedDiscountRows, $itemDiscounObject);
-            } else {
+            }
+            if (get_class($itemDiscounObject) == "Svea\RelativeDiscount") {
                 array_push($this->relativeDiscountRows, $itemDiscounObject);
             }
         }
