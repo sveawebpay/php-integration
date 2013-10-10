@@ -838,9 +838,9 @@ or
 ## 4. deliverOrder
 Use the WebPay::deliverOrder request to deliver to the customer invoices for fulfilled orders.
 Svea will invoice the customer upon receiving the deliverOrder request.
-A deliverOrder request may also be used to parly deliver an order on Invoice orders.
+A deliverOrder request may also be used to partly deliver an order on Invoice orders.
 
-When Svea receives the deliverOrder request the status on the previous created order is set to *delivered*. Add the corresponding order id and the order rows that you want delivered before making the deliverOrder request. The specified rows will automatically be matched with the previous rows that was sent when creating the order.
+When Svea receives the deliverOrder request the status on the previous created order is set to *delivered*.
 
 The deliverOrder functionallity is only applicable to invoice and payment plan payment method payments.
 
@@ -860,7 +860,8 @@ Create an DeliverOrderBuilder object using WebPay::deliverOrder().
 ### 4.2 Deliver Invoice order
 
 This works more or less like WebPay::createOrder above, and makes use of the same order item information.
-Then add orderRows to the instance, here it is important that order rows match between the requests.
+Add the corresponding order id and the order rows that you want delivered before making the deliverOrder request.
+The specified rows will automatically be matched with the previous rows that was sent when creating the order.
 We recommend storing the order row data to ensure that matching orderrows can be recreated in the deliverOrder request.
 
 If an item is left out from the deliverOrder request that was present in the createOrder request, a new invoice will be created as the order is assumed to be partially fulfilled.
@@ -956,8 +957,7 @@ If invoice order is credit invoice use setCreditInvoice($invoiceId) and setNumbe
 [<< To top](https://github.com/sveawebpay/php-integration#php-integration-package-api-for-sveawebpay)
 
 ### 4.3 Deliver PaymentPlan order
-
-A payment plan order can not be partly delivered, and does therefore not need any orderrows.
+You cannot partially deliver paymentplans. When executing an deliverOrder on a payment plan all orderrows that aren’t cancelled will be delivered.
 
 ```php
     $response = WebPay::deliverOrder()
