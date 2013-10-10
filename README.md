@@ -1,5 +1,5 @@
 # PHP Integration Package API for SveaWebPay
-## Version 1.4.0
+## Version 1.5.0
 
 | Branch                            | Build status                               |
 |---------------------------------- |------------------------------------------- |
@@ -637,7 +637,7 @@ $form = WebPay::createOrder()
         ->setOrderDate("2012-12-12")
         ->setCurrency("SEK")
             ->usePayPage()
-                ->setPayPageLanguage("sv")                          //Optional, default english
+                ->setPayPageLanguage("sv")                          //Optional,@param: languageCode As ISO639, eg. "en", defalut english
                 ->setReturnUrl("http://myurl.se")                   //Required
                 ->setCancelUrl("http://myurl.se")                   //Optional
                 ->getPaymentForm();
@@ -723,6 +723,7 @@ $form = WebPay::createOrder()
         ->usePaymentMethod(PaymentMethod::KORTCERT)             //Se APPENDIX for paymentmethods
             ->setReturnUrl("http://myurl.se")                   //Required
             ->setCancelUrl("http://myurl.se")                   //Optional
+            ->setCardPageLanguage("se")                         //Optional,@param: languageCode As ISO639, eg. "en", defalut english
             ->getPaymentForm();
 
 ```
@@ -835,15 +836,57 @@ or
 [<< To top](https://github.com/sveawebpay/php-integration#php-integration-package-api-for-sveawebpay)
 
 ## 4. deliverOrder
-Updates the status on a previous created order as delivered. Add rows that you want delivered. The rows will automatically be
-matched with the rows that was sent when creating the order.
-Only applicable for invoice and payment plan payments.
-Returns *DeliverOrderResult* object.
+Use the WebPay::deliverOrder request to deliver to the customer invoices for fulfilled orders.
+Svea will invoice the customer upon receiving the deliverOrder request.
+A deliverOrder request may also be used to partly deliver an order on Invoice orders.
+
+When Svea receives the deliverOrder request the status on the previous created order is set to *delivered*.
+
+The deliverOrder functionallity is only applicable to invoice and payment plan payment method payments.
 
 [<< To top](https://github.com/sveawebpay/php-integration#php-integration-package-api-for-sveawebpay)
 
-### 4.2 Specify order
-Continue by adding values for products and other. You can add OrderRow, Fee and Discount. Chose the right WebPayItem object as parameter.
+### 4.1 Build request object
+
+Create an DeliverOrderBuilder object using WebPay::deliverOrder().
+
+```php
+    $foo = WebPay::deliverOrder( $sveaConfig );
+
+```
+
+[<< To top](https://github.com/sveawebpay/php-integration#php-integration-package-api-for-sveawebpay)
+
+### 4.2 Deliver Invoice order
+
+This works more or less like WebPay::createOrder above, and makes use of the same order item information.
+Add the corresponding order id and the order rows that you want delivered before making the deliverOrder request.
+The specified rows will automatically be matched with the previous rows that was sent when creating the order.
+We recommend storing the order row data to ensure that matching orderrows can be recreated in the deliverOrder request.
+
+If an item is left out from the deliverOrder request that was present in the createOrder request, a new invoice will be created as the order is assumed to be partially fulfilled.
+Any left out items should not be delivered physically, as they will not be invoiced when the deliverOrder request is sent.
+
+```php
+    $response = WebPay::deliverOrder()
+    ->addOrderRow(
+        WebPayItem::orderRow()
+            ->setArticleNumber("1")
+            ->setQuantity(2)
+            ->setAmountExVat(100.00)
+            ->setDescription("Specification")
+            ->setName('Prod')
+            ->setUnit("st")
+            ->setVatPercent(25)
+            ->setDiscountPercent(0)
+        )
+        ->setOrderId("id") //Recieved from CreateOrder request
+        ->setInvoiceDistributionType('Post')
+        ->deliverInvoiceOrder()
+            ->doRequest();
+```
+
+You can add OrderRow, Fee and Discount. Choose the right WebPayItem object as parameter.
 You can use the **add-** functions with an WebPayItem object or an array of WebPayItem objects as parameters.
 
 ```php
@@ -853,6 +896,7 @@ You can use the **add-** functions with an WebPayItem object or an array of WebP
 $orderRows[] = WebPayItem::orderRow()->...;
 ->addOrderRow($orderRows)
 ```
+
 
 [<< To top](https://github.com/sveawebpay/php-integration#php-integration-package-api-for-sveawebpay)
 
@@ -864,7 +908,7 @@ All products and other items. It is required to have a minimum of one row.
        ->setQuantity(2)                     //Required
        ->setAmountExVat(100.00)             //Required
        ->setVatPercent(25)                  //Required
-       ->setArticleNumber("1")                //Optional
+       ->setArticleNumber("1")              //Optional
        ->setDescription("Specification")    //Optional
        ->setName('Prod')                    //Optional
        ->setUnit("st")                      //Optional
@@ -899,7 +943,7 @@ All products and other items. It is required to have a minimum of one row.
 ```
 [<< To top](https://github.com/sveawebpay/php-integration#php-integration-package-api-for-sveawebpay)
 
-### 4.3 Other values
+#### 4.2.4 Other values
 Required is the order id received when creating the order. Required for invoice orders are *InvoiceDistributionType*.
 If invoice order is credit invoice use setCreditInvoice($invoiceId) and setNumberOfCreditDays($creditDaysAsInt)
 ```php
@@ -910,25 +954,19 @@ If invoice order is credit invoice use setCreditInvoice($invoiceId) and setNumbe
 
 ```
 
+[<< To top](https://github.com/sveawebpay/php-integration#php-integration-package-api-for-sveawebpay)
+
+### 4.3 Deliver PaymentPlan order
+You cannot partially deliver paymentplans. When executing an deliverOrder on a payment plan all orderrows that aren’t cancelled will be delivered.
+
 ```php
     $response = WebPay::deliverOrder()
-    ->addOrderRow(
-        WebPayItem::orderRow()
-            ->setArticleNumber("1")
-            ->setQuantity(2)
-            ->setAmountExVat(100.00)
-            ->setDescription("Specification")
-            ->setName('Prod')
-            ->setUnit("st")
-            ->setVatPercent(25)
-            ->setDiscountPercent(0)
-        )
-        ->setOrderId("id")
-        ->setInvoiceDistributionType('Post')
-        ->deliverInvoiceOrder()
-            ->doRequest();
+         ->setCountryCode("SE")
+            ->setOrderId("id") //Recieved from CreateOrder request
+            ->deliverPaymentPlanOrder()
+                ->doRequest();
 ```
-[<< To top](https://github.com/sveawebpay/php-integration#php-integration-package-api-for-sveawebpay)
+
 
 ## 5. creditInvoice
 When you want to credit an invoice. The order must first be delivered. When doing [DeliverOrder](https://github.com/sveawebpay/php-integration#4-deliverorder)

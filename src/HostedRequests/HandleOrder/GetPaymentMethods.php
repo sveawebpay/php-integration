@@ -64,17 +64,30 @@ class GetPaymentMethods {
         foreach ($sveaResponse->response->paymentMethods as $method) {
             $paymentmethods[] = (string)$method;
         }
-        //Add Invoice and Paymentplan. If there is a clientnumber for invoice, we assume you hav it configured at Svea
-        $clientIdInvoice = $this->config->getClientNumber(\PaymentMethod::INVOICE,  $this->countryCode);
-        if(is_numeric($clientIdInvoice) && strlen($clientIdInvoice) > 0 ){
-            $paymentmethods[] = \PaymentMethod::INVOICE;
+
+        //Add Invoice and Paymentplan. If there is a clientnumber for i.e. invoice, we assume you have invoice payments configured at Svea
+        try {
+            $clientIdInvoice = $this->config->getClientNumber(\PaymentMethod::INVOICE,  $this->countryCode);
+            
+            if(is_numeric($clientIdInvoice) && strlen($clientIdInvoice) > 0 ){
+                $paymentmethods[] = \PaymentMethod::INVOICE;
+            }
         }
-        $clientIdPaymentPlan = $this->config->getClientNumber(\PaymentMethod::PAYMENTPLAN, $this->countryCode);
-        if(is_numeric($clientIdPaymentPlan) && strlen($clientIdPaymentPlan) > 0 ){
-            $paymentmethods[] = \PaymentMethod::PAYMENTPLAN;
+        catch( InvalidTypeException $e ) {
+            // assumes that client configuration does not support $type INVOICE
+        }
+        try {
+            $clientIdPaymentPlan = $this->config->getClientNumber(\PaymentMethod::PAYMENTPLAN, $this->countryCode);
+            
+            if(is_numeric($clientIdPaymentPlan) && strlen($clientIdPaymentPlan) > 0 ){
+                $paymentmethods[] = \PaymentMethod::PAYMENTPLAN;
+            }
+        }
+        catch( InvalidTypeException $e ) {
+            // assumes that client configuration does not support $type PAYMENTPLAN
         }
         curl_close($ch);
-
+     
        return $paymentmethods;
 
     }
