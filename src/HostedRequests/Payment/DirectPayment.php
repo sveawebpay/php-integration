@@ -46,6 +46,17 @@ class DirectPayment extends HostedPayment {
     }
 
     /**
+     * Set callback Url which contacts the store in case the return success URL
+     * wasn't reached
+     * @param type $callbackUrlAsString
+     * @return \HostedPayment
+     */
+    public function setCallbackUrl($callbackUrlAsString) {
+        $this->callbackUrl = $callbackUrlAsString;
+        return $this;
+    }
+
+    /**
      *
      * @param type $cancelUrlAsString
      * @return \HostedPayment

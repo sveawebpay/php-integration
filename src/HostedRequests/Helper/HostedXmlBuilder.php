@@ -31,6 +31,7 @@ class HostedXmlBuilder {
         $this->XMLWriter->writeElement("lang", $request['langCode']);
         $this->XMLWriter->writeElement("returnurl", $request['returnUrl']);
         $this->XMLWriter->writeElement("cancelurl", $request['cancelUrl']);
+        $this->XMLWriter->writeElement("callbackurl", $request['callbackUrl']);
 
         $this->serializeCustomer($order,$request);
 

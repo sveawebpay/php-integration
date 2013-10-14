@@ -16,6 +16,7 @@ class HostedPayment {
     public $xmlMessage;
     public $xmlMessageBase64;
     public $returnUrl;
+    public $callbackUrl;
     public $cancelUrl;
     public $langCode;
 
@@ -50,7 +51,7 @@ class HostedPayment {
             if (isset($this->returnUrl) == FALSE) {
              $exceptionString .="-missing value : ReturnUrl is required. Use function setReturnUrl().\n";
             }
-            
+
             foreach ($errors as $key => $value) {
                 $exceptionString .="-". $key. " : ".$value."\n";
             }
@@ -81,12 +82,13 @@ class HostedPayment {
         $request['amount'] = $formatter->formatTotalAmount($request['rows']);
         $request['totalVat'] = $formatter->formatTotalVat( $request['rows']);
         $request['returnUrl'] = $this->returnUrl;
+        $request['callbackUrl'] = $this->callbackUrl;
         $request['cancelUrl'] = $this->cancelUrl;
         $request['langCode'] = $this->langCode;
         $currency = trim($this->order->currency);
         $currency = strtoupper($currency);
         $request['currency'] = $currency;
-        
+
         return $this->configureExcludedPaymentMethods($request); //Method in child class
     }
 }
