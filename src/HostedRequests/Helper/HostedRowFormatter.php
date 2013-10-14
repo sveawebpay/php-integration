@@ -36,43 +36,50 @@ class HostedRowFormatter {
     private function formatOrderRows($order) {
         foreach ($order->orderRows as $row ) {
             $tempRow = new HostedOrderRowBuilder();     // new empty object
-            $plusVatCounter = isset($row->vatPercent) ? (($row->vatPercent * 0.01) + 1) : "";
+            if (isset($row->vatPercent)) {
+                $plusVatCounter = bcmul($row->vatPercent, 0.01) + 1;
+            } else {
+                $plusVatCounter = '';
+            }
 
             if (isset($row->name)) {
                 $tempRow->setName($row->name);
             }
-            
+
             if (isset($row->description)) {
                 $tempRow->setDescription($row->description);
             }
-            
+
             // calculate amount, vat from two out of three given by customer, see unit tests HostedRowFormater
-            if (isset($row->amountExVat) && isset($row->vatPercent)) {           
-                $tempRow->setAmount( round( (floatval($row->amountExVat) * $plusVatCounter) * 100), 2 )  ;
-                $tempRow->setVat(round($tempRow->amount - ($row->amountExVat * 100)));                               
+            if (isset($row->amountExVat) && isset($row->vatPercent)) {
+                $amount = bcmul(bcmul($row->amountExVat, 100), $plusVatCounter);
+                $vat = bcsub($amount, bcmul($row->amountExVat, 100));
             } elseif (isset($row->amountIncVat) && isset($row->vatPercent)) {
-                 $tempRow->setAmount(round($row->amountIncVat * 100));
-                 $tempRow->setVat(round($tempRow->amount - ($tempRow->amount / $plusVatCounter)));              
+                $amount = bcmul($row->amountIncVat, 100);
+                $vat = bcsub($amount, bcdiv($amount, $plusVatCounter));
             } else {
-                 $tempRow->setAmount(round($row->amountIncVat * 100));
-                 $tempRow->setVat(($row->amountIncVat - $row->amountExVat) * 100);
+                $amount = bcmul($row->amountIncVat, 100);
+                $vat = bcmul(bcsub($row->amountIncVat, $row->amountExVat), 100);
             }
+
+            $tempRow->setAmount($amount);
+            $tempRow->setVat($vat);
 
             if (isset($row->unit)) {
                 $tempRow->setUnit($row->unit);
             }
-            
+
             if (isset($row->articleNumber)) {
                 $tempRow->setSku($row->articleNumber);
             }
-            
+
             if (isset($row->quantity)) {
                 $tempRow->setQuantity($row->quantity);
             }
 
             $this->newRows[] = $tempRow;
-            $this->totalAmount += $tempRow->amount * $row->quantity;
-            $this->totalVat +=  $tempRow->vat * $row->quantity;
+            $this->totalAmount += bcmul($tempRow->amount, $row->quantity);
+            $this->totalVat += bcmul($tempRow->vat, $row->quantity);
         }
     }
 
@@ -83,30 +90,37 @@ class HostedRowFormatter {
 
         foreach ($order->shippingFeeRows as $row) {
             $tempRow = new HostedOrderRowBuilder();
-            $plusVatCounter = isset($row->vatPercent) ? ($row->vatPercent * 0.01) + 1 : "";
+            if (isset($row->vatPercent)) {
+                $plusVatCounter = bcmul($row->vatPercent, 0.01) + 1;
+            } else {
+                $plusVatCounter = '';
+            }
 
             if (isset($row->articleNumber)) {
                 $tempRow->setSku($row->articleNumber);
             }
-            
+
             if (isset($row->name)) {
                 $tempRow->setName($row->name);
             }
-            
+
             if (isset($row->description)) {
                 $tempRow->setDescription($row->description);
             }
-            
+
             if (isset($row->amountExVat) && isset($row->vatPercent)) {
-                $tempRow->setAmount(round(($row->amountExVat * 100) * $plusVatCounter));
-                $tempRow->setVat(round($tempRow->amount - ($row->amountExVat * 100)));
+                $amount = bcmul(bcmul($row->amountExVat, 100), $plusVatCounter);
+                $vat = bcsub($amount, bcmul($row->amountExVat, 100));
             } elseif (isset($row->amountIncVat) && isset($row->vatPercent)) {
-                 $tempRow->setAmount(round($row->amountIncVat * 100));
-                 $tempRow->setVat(round($tempRow->amount - ($tempRow->amount / $plusVatCounter)));
+                $amount = bcmul($row->amountIncVat, 100);
+                $vat = bcsub($amount, bcdiv($amount, $plusVatCounter));
             } else {
-                 $tempRow->setAmount(round($row->amountIncVat * 100));
-                 $tempRow->setVat(($row->amountIncVat - $row->amountExVat) * 100);
+                $amount = bcmul($row->amountIncVat, 100);
+                $vat = bcmul(bcsub($row->amountIncVat, $row->amountExVat), 100);
             }
+
+            $tempRow->setAmount($amount);
+            $tempRow->setVat($vat);
 
             if (isset($row->unit)) {
                 $tempRow->setUnit($row->unit);
@@ -122,7 +136,7 @@ class HostedRowFormatter {
             //$this->totalVat += $tempRow->vat;
         }
     }
-    
+
     //check!
     public function formatFixedDiscountRows($order) {
         if (!isset($order->fixedDiscountRows)) {
@@ -130,7 +144,7 @@ class HostedRowFormatter {
         }
 
         foreach ($order->fixedDiscountRows as $row) {
-            $discountInPercent = ($row->amount * 100)/ $this->totalAmount;
+            $discountInPercent = bcdiv(bcmul($row->amount, 100), $this->totalAmount);
             $tempRow = new HostedOrderRowBuilder();
 
             if (isset($row->name)) {
@@ -145,9 +159,8 @@ class HostedRowFormatter {
 
             //Fix: vat could bu 0
            // if ($this->totalVat > 0) {
-                $vat = $this->totalVat * $discountInPercent;
-                $tempRow->setVat(-round($vat));
-
+                $vat = bcmul($this->totalVat, $discountInPercent);
+                $tempRow->setVat(-$vat);
            // }
 
             if (isset($row->unit)) {
@@ -157,10 +170,10 @@ class HostedRowFormatter {
             if (isset($row->discountId)) {
                 $tempRow->setSku($row->discountId);
             }
-            
+
             $tempRow->setQuantity(1);
             $this->totalAmount -= $row->amount;
-            $this->totalVat -= substr($tempRow->vat, 1);
+            $this->totalVat -= abs($tempRow->vat);
             $this->newRows[] = $tempRow;
         }
     }
@@ -171,7 +184,7 @@ class HostedRowFormatter {
         }
 
         foreach ($order->relativeDiscountRows as $row) {
-            $discountCounter = $row->discountPercent * 0.01; //e.g. 0.20
+            $discountCounter = bcmul($row->discountPercent, 0.01); //e.g. 0.20
             $tempRow = new HostedOrderRowBuilder();
 
             if (isset($row->name)) {
@@ -190,16 +203,16 @@ class HostedRowFormatter {
                 $tempRow->setUnit($row->unit);
             }
 
-            $tempRow->setAmount(- round(($discountCounter * $this->totalAmount)));
+            $tempRow->setAmount(-bcmul($discountCounter, $this->totalAmount));
 
             // Vat could be 0
             // if ($this->totalVat > 0) {
-                $tempRow->setVat(- round(($this->totalVat * $discountCounter)));
+                $tempRow->setVat(-bcmul($this->totalVat, $discountCounter));
             // }
 
             $tempRow->setQuantity(1);
             $this->totalAmount -= $tempRow->amount;
-            $this->totalVat -= substr($tempRow->vat,1);
+            $this->totalVat -= abs($tempRow->vat);
             $this->newRows[] = $tempRow;
         }
     }
@@ -208,10 +221,10 @@ class HostedRowFormatter {
         $result = 0;
 
         foreach ($rows as $row) {
-            if (substr($row->amount, 0,1) == "-") {
-                $result -= (substr($row->amount, 1))*$row->quantity;
+            if ($row->amount < 0) {
+                $result -= bcmul(abs($row->amount), $row->quantity);
             } else {
-                $result += $row->amount * $row->quantity;
+                $result += bcmul($row->amount, $row->quantity);
             }
         }
 
@@ -222,13 +235,13 @@ class HostedRowFormatter {
         $result = 0;
 
         foreach ($rows as $row) {
-            if (substr($row->vat, 0,1) == "-") {
-                $result -= substr($row->vat, 1) * $row->quantity;
+            if ($row->vat < 0) {
+                $result -= bcmul(abs($row->vat), $row->quantity);
             } else {
-                $result += $row->vat * $row->quantity;
+                $result += bcmul($row->vat, $row->quantity);
             }
         }
-        
+
         return $result;
     }
 }
