@@ -11,7 +11,7 @@ require_once $root . '/../../../TestUtil.php';
  * @author Anneli Halld'n, Daniel Brolund for Svea Webpay
  */
 class PayPagePaymentTest extends \PHPUnit_Framework_TestCase {
-    
+
     public function testBuildPayPagePaymentWithExcludepaymentMethods() {
         $rowFactory = new \TestUtil();
         $form = \WebPay::createOrder()
@@ -33,7 +33,7 @@ class PayPagePaymentTest extends \PHPUnit_Framework_TestCase {
             ->setReturnUrl("http://myurl.se")
             ->excludePaymentMethods(\PaymentMethod::INVOICE, \PaymentMethod::KORTCERT)
             ->getPaymentForm();
-        
+
         $xmlMessage = new \SimpleXMLElement($form->xmlMessage);
         //test values are as expected avter transforming xml to php object
         $this->assertEquals('SEK', $xmlMessage->currency);
@@ -68,7 +68,7 @@ class PayPagePaymentTest extends \PHPUnit_Framework_TestCase {
             ->setReturnUrl("http://myurl.se")
             ->excludeCardPaymentMethods()
             ->getPaymentForm();
-        
+
         $xmlMessage = new \SimpleXMLElement($form->xmlMessage);
         $this->assertEquals(\PaymentMethod::KORTCERT, $xmlMessage->excludepaymentmethods->exclude[0]);
     }
@@ -94,7 +94,7 @@ class PayPagePaymentTest extends \PHPUnit_Framework_TestCase {
             ->setReturnUrl("http://myurl.se")
             ->excludeDirectPaymentMethods()
             ->getPaymentForm();
-        
+
         $xmlMessage = new \SimpleXMLElement($form->xmlMessage);
         $this->assertEquals(\PaymentMethod::BANKAXESS, $xmlMessage->excludepaymentmethods->exclude[0]);
     }
@@ -120,12 +120,12 @@ class PayPagePaymentTest extends \PHPUnit_Framework_TestCase {
             ->setReturnUrl("http://myurl.se")
             ->includePaymentMethods(\PaymentMethod::KORTCERT, \PaymentMethod::SKRILL)
             ->getPaymentForm();
-        
+
         $xmlMessage = new \SimpleXMLElement($form->xmlMessage);
         //check to see if the first value is one of the excluded ones
         $this->assertEquals(SystemPaymentMethod::BANKAXESS, $xmlMessage->excludepaymentmethods->exclude[0]);
     }
-    
+
     public function testBuildPayPagePaymentVatIsCero() {
          $rowFactory = new \TestUtil();
          $form = \WebPay::createOrder()
@@ -141,10 +141,32 @@ class PayPagePaymentTest extends \PHPUnit_Framework_TestCase {
                 ->usePayPage()
                 ->setReturnUrl("myurl")
                 ->getPaymentForm();
-        
-        
+
+
         $xmlMessage = new \SimpleXMLElement($form->xmlMessage);
         //test values are as expected avter transforming xml to php object
         $this->assertEquals('SEK', $xmlMessage->currency);
     }
+    public function testBuildPayPagePaymentCallBackUrl() {
+         $rowFactory = new \TestUtil();
+         $form = \WebPay::createOrder()
+                ->addOrderRow(\WebPayItem::orderRow()
+                    ->setQuantity(2)
+                    ->setAmountExVat(100.00)
+                    ->setName('Prod')
+                    ->setVatPercent(0)
+                )
+                ->setCountryCode("SE")
+                ->setClientOrderNumber("33")
+                ->setCurrency("SEK")
+                ->usePayPage()
+                ->setReturnUrl("myurl")
+                ->setCallbackUrl("http://myurl.se")
+                ->getPaymentForm();
+
+
+        $xmlMessage = new \SimpleXMLElement($form->xmlMessage);
+        $this->assertEquals("http://myurl.se", $xmlMessage->callbackurl);
+    }
+
 }

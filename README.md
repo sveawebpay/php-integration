@@ -541,6 +541,7 @@ $form = WebPay::createOrder()
             ->setPayPageLanguage("sv")                          //Optional, default english
             ->setReturnUrl("http://myurl.se")                   //Required
             ->setCancelUrl("http://myurl.se")                   //Optional
+            ->setCall("http://myurl.se")                   //Optional
                 ->getPaymentForm();
 
 ```
