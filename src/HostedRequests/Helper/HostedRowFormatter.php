@@ -25,6 +25,7 @@ class HostedRowFormatter {
      * @return int
      */
     public function formatRows($order) {
+        bcscale(10);
         $this->formatOrderRows($order);
         $this->formatShippingFeeRows($order);
         $this->formatFixedDiscountRows($order);
@@ -37,9 +38,9 @@ class HostedRowFormatter {
         foreach ($order->orderRows as $row ) {
             $tempRow = new HostedOrderRowBuilder();     // new empty object
             if (isset($row->vatPercent)) {
-                $plusVatCounter = bcmul($row->vatPercent, 0.01) + 1;
+                $plusVatCounter = bcdiv($row->vatPercent, 100) + 1;
             } else {
-                $plusVatCounter = '';
+                $plusVatCounter = '1';
             }
 
             if (isset($row->name)) {
@@ -91,9 +92,9 @@ class HostedRowFormatter {
         foreach ($order->shippingFeeRows as $row) {
             $tempRow = new HostedOrderRowBuilder();
             if (isset($row->vatPercent)) {
-                $plusVatCounter = bcmul($row->vatPercent, 0.01) + 1;
+                $plusVatCounter = bcdiv($row->vatPercent, 100) + 1;
             } else {
-                $plusVatCounter = '';
+                $plusVatCounter = '1';
             }
 
             if (isset($row->articleNumber)) {
@@ -228,7 +229,7 @@ class HostedRowFormatter {
             }
         }
 
-        return $result;
+        return round($result);
     }
 
     public function formatTotalVat($rows) {
@@ -242,6 +243,6 @@ class HostedRowFormatter {
             }
         }
 
-        return $result;
+        return round($result);
     }
 }
