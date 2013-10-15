@@ -88,7 +88,7 @@ class HostedPaymentTest extends \PHPUnit_Framework_TestCase {
      * problem, sums to 2624.7, in xml request, i.e. calculates 30* round( (69.99*1.25), 2) :( 
      * 
      */
-    public function testCalculateRequestValues_CorrectTotalAmountFromMultipleItems() {
+    public function testCalculateRequestValues_CorrectTotalAmountFromMultipleItems_ItemsDefinedWithExVatAndVatPercent() {
         $order = new createOrderBuilder(new SveaConfigurationProvider(SveaConfig::getDefaultConfig()));
         $order->
             addOrderRow(\WebPayItem::orderRow()
@@ -111,23 +111,9 @@ class HostedPaymentTest extends \PHPUnit_Framework_TestCase {
         
         $this->assertEquals(262462, $request['amount']);
         $this->assertEquals(52492, $request['totalVat']);
-        
-        
-//        public function calculateRequestValues() {
-//        $formatter = new HostedRowFormatter();
-//        $request = array();
-//        $request['rows'] = $formatter->formatRows($this->order);
-//        $request['amount'] = $formatter->formatTotalAmount($request['rows']);
-//        $request['totalVat'] = $formatter->formatTotalVat( $request['rows']);
-//        $request['returnUrl'] = $this->returnUrl;
-//        $request['callbackUrl'] = $this->callbackUrl;
-//        $request['cancelUrl'] = $this->cancelUrl;
-//        $request['langCode'] = $this->langCode;
-//        $currency = trim($this->order->currency);
-//        $currency = strtoupper($currency);
-//        $request['currency'] = $currency;
-//
-//        return $this->configureExcludedPaymentMethods($request); //Method in child class
-    }
-    
+    }  
+
+    // TODO 
+    public function testCalculateRequestValues_CorrectTotalAmountFromMultipleItems_ItemsDefinedWithIncVatAndVatPercent() {}
+    public function testCalculateRequestValues_CorrectTotalAmountFromMultipleItems_ItemsDefinedWithIncVatAndExVat() {}
 }

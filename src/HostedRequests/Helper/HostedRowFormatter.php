@@ -33,10 +33,23 @@ class HostedRowFormatter {
         return $this->newRows;
     }
 
+    /**
+     * formatOrderRows goes through the orderBuilder object order-, shipping & discount rows
+     * and translates them to a format suitable for use by the HostedXmlBuilder.
+     * 
+     * This includes translating all prices to integer, multiplying by 100 to remove fractions.
+     * Svea employs Bankers rounding, also known as "half-to-even rounding". 
+     * 
+     * We also calculate a total amount including taxes, and the total tax amount, for the order.
+     * When calculating the amounts, all rounding takes place last, in order to avoid cumulative
+     * rounding errors. (See HostedPaymentTest for an example.)
+     * 
+     * TODO implement bankers rounding
+     */
     private function formatOrderRows($order) {
         foreach ($order->orderRows as $row ) {
             $tempRow = new HostedOrderRowBuilder();     // new empty object
-            $plusVatCounter = isset($row->vatPercent) ? (($row->vatPercent * 0.01) + 1) : "";
+            $plusVatCounter = isset($row->vatPercent) ? (($row->vatPercent * 0.01) + 1) : 0.0;
 
             if (isset($row->name)) {
                 $tempRow->setName($row->name);
@@ -46,16 +59,22 @@ class HostedRowFormatter {
                 $tempRow->setDescription($row->description);
             }
 
+            $tempAmount = 0.0;
             // calculate amount, vat from two out of three given by customer, see unit tests HostedRowFormater
             if (isset($row->amountExVat) && isset($row->vatPercent)) {
-                $tempRow->setAmount( round( (floatval($row->amountExVat) * $plusVatCounter) * 100), 2 )  ;
-                $tempRow->setVat(round($tempRow->amount - ($row->amountExVat * 100)));
+                $tempAmount = floatval($row->amountExVat) *$plusVatCounter *100;               
+                $tempRow->setAmount( round($tempAmount) );    // store rounded amount for row
+                $tempRow->setVat( round( $tempRow->amount -($row->amountExVat * 100 ) ) );
+                
             } elseif (isset($row->amountIncVat) && isset($row->vatPercent)) {
-                 $tempRow->setAmount(round($row->amountIncVat * 100));
-                 $tempRow->setVat(round($tempRow->amount - ($tempRow->amount / $plusVatCounter)));
+                $tempAmount = $row->amountIncVat *100;
+                $tempRow->setAmount( round($tempAmount) );
+                $tempRow->setVat( round( $tempRow->amount -($tempRow->amount/$plusVatCounter)) );
+             
             } else {
-                 $tempRow->setAmount(round($row->amountIncVat * 100));
-                 $tempRow->setVat(($row->amountIncVat - $row->amountExVat) * 100);
+                $tempAmount = $row->amountIncVat * 100;
+                $tempRow->setAmount( round($tempAmount) );
+                $tempRow->setVat(($row->amountIncVat - $row->amountExVat) * 100);
             }
 
             if (isset($row->unit)) {
@@ -71,7 +90,7 @@ class HostedRowFormatter {
             }
 
             $this->newRows[] = $tempRow;
-            $this->totalAmount += $tempRow->amount * $row->quantity;
+            $this->totalAmount += $tempAmount * $row->quantity;
             $this->totalVat +=  $tempRow->vat * $row->quantity;
         }
     }
@@ -83,7 +102,7 @@ class HostedRowFormatter {
 
         foreach ($order->shippingFeeRows as $row) {
             $tempRow = new HostedOrderRowBuilder();
-            $plusVatCounter = isset($row->vatPercent) ? ($row->vatPercent * 0.01) + 1 : "";
+            $plusVatCounter = isset($row->vatPercent) ? ($row->vatPercent * 0.01) + 1 : 0.0;
 
             if (isset($row->articleNumber)) {
                 $tempRow->setSku($row->articleNumber);
@@ -202,6 +221,10 @@ class HostedRowFormatter {
         }
     }
 
+    
+   /**
+    * used by HostedPayment calculateRequestValues to get sum to charge card/directbank
+    */
     public function formatTotalAmount($rows) {
         $result = 0;
 
@@ -212,6 +235,9 @@ class HostedRowFormatter {
         return $result;
     }
 
+    /**
+    * used by HostedPayment calculateRequestValues to get sum to charge card/directbank
+    */
     public function formatTotalVat($rows) {
         $result = 0;
 
