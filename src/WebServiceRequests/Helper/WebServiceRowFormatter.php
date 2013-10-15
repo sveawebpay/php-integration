@@ -77,7 +77,7 @@ class WebServiceRowFormatter {
                 $this->totalVatAsAmount += ($product->amountIncVat - $product->amountExVat) * $product->quantity;
 
                 // add to or create cumulative amount for this tax rate
-                $vatRate = round((($product->amountIncVat / $product->amountExVat)-1) * 100);
+                $vatRate = (($product->amountIncVat / $product->amountExVat)-1) * 100;
                 if( isset($this->totalAmountPerVatRateIncVat[$vatRate]) ) {
                     $this->totalAmountPerVatRateIncVat[$vatRate] += ($product->amountExVat * $product->quantity * (1+$vatRate/100));
                 } else {
@@ -99,7 +99,7 @@ class WebServiceRowFormatter {
         if( $exVat == 0.0 || $incVat == 0.0 ) // avoid -100% vat on i.e. free products or fees
             return 0;
         else
-            return round( (($incVat/$exVat) -1) *100);
+            return (($incVat/$exVat) -1) *100;
     }
 
     private function formatOrderRows() {
@@ -120,10 +120,10 @@ class WebServiceRowFormatter {
             $orderRow->NumberOfUnits = $row->quantity;
             if (isset($row->vatPercent) && isset($row->amountExVat)) {
                 $orderRow->PricePerUnit = $row->amountExVat;
-                $orderRow->VatPercent = round($row->vatPercent);
+                $orderRow->VatPercent = $row->vatPercent;
             } elseif (isset($row->vatPercent) && isset($row->amountIncVat)) {
                 $orderRow->PricePerUnit = $row->amountIncVat / ((0.01 * $row->vatPercent) + 1);
-                $orderRow->VatPercent = round($row->vatPercent);
+                $orderRow->VatPercent = $row->vatPercent;
             } else {
                 $orderRow->PricePerUnit = number_format($row->amountExVat, 2, '.', '');
                 $orderRow->VatPercent = $this->calculateVatPercentFromPriceExVatAndPriceIncVat( $row->amountIncVat, $row->amountExVat );
@@ -155,10 +155,10 @@ class WebServiceRowFormatter {
             $orderRow->NumberOfUnits = 1; //only one fee per row
            if (isset($row->vatPercent) && isset($row->amountExVat)) {
                 $orderRow->PricePerUnit = $row->amountExVat;
-                $orderRow->VatPercent = round($row->vatPercent);
+                $orderRow->VatPercent = $row->vatPercent;
             } elseif (isset($row->vatPercent) && isset($row->amountIncVat)) {
                 $orderRow->PricePerUnit = $row->amountIncVat / ((0.01 * $row->vatPercent) + 1);
-                $orderRow->VatPercent = round($row->vatPercent);
+                $orderRow->VatPercent = $row->vatPercent;
             } else {
                 $orderRow->PricePerUnit = number_format($row->amountExVat, 2, '.', '');
                 $orderRow->VatPercent = $this->calculateVatPercentFromPriceExVatAndPriceIncVat( $row->amountIncVat, $row->amountExVat );
@@ -187,10 +187,10 @@ class WebServiceRowFormatter {
             $orderRow->NumberOfUnits = 1; //only one fee per row
             if (isset($row->vatPercent) && isset($row->amountExVat)) {
                 $orderRow->PricePerUnit = $row->amountExVat;
-                $orderRow->VatPercent = round($row->vatPercent);
+                $orderRow->VatPercent = $row->vatPercent;
             } elseif (isset($row->vatPercent) && isset($row->amountIncVat)) {
                 $orderRow->PricePerUnit = $row->amountIncVat / ((0.01 * $row->vatPercent) + 1);
-                $orderRow->VatPercent = round($row->vatPercent);
+                $orderRow->VatPercent = $row->vatPercent;
             } else {
                 $orderRow->PricePerUnit = number_format($row->amountExVat, 2, '.', '');
                 $orderRow->VatPercent = $this->calculateVatPercentFromPriceExVatAndPriceIncVat( $row->amountIncVat, $row->amountExVat );
@@ -328,7 +328,7 @@ class WebServiceRowFormatter {
 
                 $amountAtThisVatRateExVat = $amountAtThisVatRateIncVat - $amountAtThisVatRateIncVat * (1-(1/(1+$vatRate/100)));   // calculate "reverse vat", i.e. 25% => 20%
 
-                $discountExVat = round($amountAtThisVatRateExVat * ($row->discountPercent * 0.01), 2);
+                $discountExVat = $amountAtThisVatRateExVat * ($row->discountPercent * 0.01);
                 $orderRow->DiscountPercent = 0; //no discount on discount
                 $orderRow->NumberOfUnits = 1; //only one discount per row
                 $orderRow->PricePerUnit = - number_format($discountExVat,2,'.',''); //Discountpercent on total price ex vat.
