@@ -118,8 +118,6 @@ class HostedRowFormatter {
 
             $tempRow->setQuantity(1);
             $this->newRows[] = $tempRow;
-           // $this->totalAmount += $tempRow->amount;
-            //$this->totalVat += $tempRow->vat;
         }
     }
 
@@ -160,7 +158,7 @@ class HostedRowFormatter {
 
             $tempRow->setQuantity(1);
             $this->totalAmount -= $row->amount;
-            $this->totalVat -= gmp_abs($tempRow->vat);
+            $this->totalVat -= abs($tempRow->vat);
             $this->newRows[] = $tempRow;
         }
     }
@@ -199,7 +197,7 @@ class HostedRowFormatter {
 
             $tempRow->setQuantity(1);
             $this->totalAmount -= $tempRow->amount;
-            $this->totalVat -= substr($tempRow->vat,1);
+            $this->totalVat -= abs($tempRow->vat);
             $this->newRows[] = $tempRow;
         }
     }
@@ -208,11 +206,7 @@ class HostedRowFormatter {
         $result = 0;
 
         foreach ($rows as $row) {
-            if (substr($row->amount, 0,1) == "-") {
-                $result -= (substr($row->amount, 1))*$row->quantity;
-            } else {
-                $result += $row->amount * $row->quantity;
-            }
+            $result += $row->amount * $row->quantity;
         }
 
         return $result;
@@ -222,11 +216,7 @@ class HostedRowFormatter {
         $result = 0;
 
         foreach ($rows as $row) {
-            if (substr($row->vat, 0,1) == "-") {
-                $result -= substr($row->vat, 1) * $row->quantity;
-            } else {
-                $result += $row->vat * $row->quantity;
-            }
+            $result += $row->vat * $row->quantity;
         }
 
         return $result;
