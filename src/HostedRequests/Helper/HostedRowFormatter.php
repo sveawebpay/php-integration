@@ -41,18 +41,18 @@ class HostedRowFormatter {
             if (isset($row->name)) {
                 $tempRow->setName($row->name);
             }
-            
+
             if (isset($row->description)) {
                 $tempRow->setDescription($row->description);
             }
-            
+
             // calculate amount, vat from two out of three given by customer, see unit tests HostedRowFormater
-            if (isset($row->amountExVat) && isset($row->vatPercent)) {           
+            if (isset($row->amountExVat) && isset($row->vatPercent)) {
                 $tempRow->setAmount( round( (floatval($row->amountExVat) * $plusVatCounter) * 100), 2 )  ;
-                $tempRow->setVat(round($tempRow->amount - ($row->amountExVat * 100)));                               
+                $tempRow->setVat(round($tempRow->amount - ($row->amountExVat * 100)));
             } elseif (isset($row->amountIncVat) && isset($row->vatPercent)) {
                  $tempRow->setAmount(round($row->amountIncVat * 100));
-                 $tempRow->setVat(round($tempRow->amount - ($tempRow->amount / $plusVatCounter)));              
+                 $tempRow->setVat(round($tempRow->amount - ($tempRow->amount / $plusVatCounter)));
             } else {
                  $tempRow->setAmount(round($row->amountIncVat * 100));
                  $tempRow->setVat(($row->amountIncVat - $row->amountExVat) * 100);
@@ -61,11 +61,11 @@ class HostedRowFormatter {
             if (isset($row->unit)) {
                 $tempRow->setUnit($row->unit);
             }
-            
+
             if (isset($row->articleNumber)) {
                 $tempRow->setSku($row->articleNumber);
             }
-            
+
             if (isset($row->quantity)) {
                 $tempRow->setQuantity($row->quantity);
             }
@@ -88,15 +88,15 @@ class HostedRowFormatter {
             if (isset($row->articleNumber)) {
                 $tempRow->setSku($row->articleNumber);
             }
-            
+
             if (isset($row->name)) {
                 $tempRow->setName($row->name);
             }
-            
+
             if (isset($row->description)) {
                 $tempRow->setDescription($row->description);
             }
-            
+
             if (isset($row->amountExVat) && isset($row->vatPercent)) {
                 $tempRow->setAmount(round(($row->amountExVat * 100) * $plusVatCounter));
                 $tempRow->setVat(round($tempRow->amount - ($row->amountExVat * 100)));
@@ -122,7 +122,7 @@ class HostedRowFormatter {
             //$this->totalVat += $tempRow->vat;
         }
     }
-    
+
     //check!
     public function formatFixedDiscountRows($order) {
         if (!isset($order->fixedDiscountRows)) {
@@ -157,10 +157,10 @@ class HostedRowFormatter {
             if (isset($row->discountId)) {
                 $tempRow->setSku($row->discountId);
             }
-            
+
             $tempRow->setQuantity(1);
             $this->totalAmount -= $row->amount;
-            $this->totalVat -= substr($tempRow->vat, 1);
+            $this->totalVat -= gmp_abs($tempRow->vat);
             $this->newRows[] = $tempRow;
         }
     }
@@ -228,7 +228,7 @@ class HostedRowFormatter {
                 $result += $row->vat * $row->quantity;
             }
         }
-        
+
         return $result;
     }
 }

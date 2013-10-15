@@ -11,7 +11,7 @@ require_once $root . '/../../../TestUtil.php';
  * @author Anneli Halld'n, Daniel Brolund for Svea Webpay
  */
 class DirectPaymentTest extends \PHPUnit_Framework_TestCase {
-        
+
      /**
      * @expectedException Exception
      * @expectedExceptionMessage Invalid or missing Country code
@@ -33,15 +33,15 @@ class DirectPaymentTest extends \PHPUnit_Framework_TestCase {
                 ->getPaymentForm();
         /**
         $xmlMessage = new \SimpleXMLElement($form->xmlMessage);
-       
-        $this->assertEquals('KORTCERT', $xmlMessage->excludepaymentmethods->exclude[0]);      
+
+        $this->assertEquals('KORTCERT', $xmlMessage->excludepaymentmethods->exclude[0]);
         $this->assertEquals('KORTSKRILL', $xmlMessage->excludepaymentmethods->exclude[1]);
-        $this->assertEquals('PAYPAL', $xmlMessage->excludepaymentmethods->exclude[2]);  
+        $this->assertEquals('PAYPAL', $xmlMessage->excludepaymentmethods->exclude[2]);
        // $this->assertEquals('SKRILL', $xmlMessage->excludepaymentmethods->exclude[3]);
-         * 
+         *
          */
     }
-    
+
     public function testConfigureExcludedPaymentMethods() {
         $rowFactory = new \TestUtil();
         $form = \WebPay::createOrder()
@@ -57,15 +57,15 @@ class DirectPaymentTest extends \PHPUnit_Framework_TestCase {
             ->usePayPageDirectBankOnly()
                 ->setReturnUrl("http://myurl.se")
                 ->getPaymentForm();
-        
+
         $xmlMessage = new \SimpleXMLElement($form->xmlMessage);
-        
-        $this->assertEquals('KORTCERT', $xmlMessage->excludepaymentmethods->exclude[0]);      
+
+        $this->assertEquals('KORTCERT', $xmlMessage->excludepaymentmethods->exclude[0]);
         $this->assertEquals('SKRILL', $xmlMessage->excludepaymentmethods->exclude[1]);
-        $this->assertEquals('PAYPAL', $xmlMessage->excludepaymentmethods->exclude[2]);  
+        $this->assertEquals('PAYPAL', $xmlMessage->excludepaymentmethods->exclude[2]);
        // $this->assertEquals('SKRILL', $xmlMessage->excludepaymentmethods->exclude[3]);
     }
-    
+
     public function testBuildDirectBankPayment() {
         $rowFactory = new \TestUtil();
         $form = \WebPay::createOrder()
@@ -104,4 +104,23 @@ class DirectPaymentTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals('6250', $xmlMessage->orderrows->row[1]->amount);
         $this->assertEquals('-12500', $xmlMessage->orderrows->row[2]->amount);
     }
+    public function testBuildDirectBankPaymentCallBackUrl() {
+        $rowFactory = new \TestUtil();
+        $form = \WebPay::createOrder()
+                ->addOrderRow(\TestUtil::createOrderRow())
+                ->addCustomerDetails(\WebPayItem::individualCustomer()->setNationalIdNumber(194605092222))
+                ->setCountryCode("SE")
+                ->setClientOrderNumber("33")
+                ->setOrderDate("2012-12-12")
+                ->setCurrency("SEK")
+                ->usePayPageDirectBankOnly()
+                ->setReturnUrl("http://myurl.se")
+                ->setCallbackUrl("http://myurl.se")
+                ->getPaymentForm();
+
+        $xmlMessage = new \SimpleXMLElement($form->xmlMessage);
+       $this->assertEquals("http://myurl.se", $xmlMessage->callbackurl);
+    }
+
+
 }

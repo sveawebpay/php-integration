@@ -15,7 +15,7 @@ class PayPagePayment extends HostedPayment {
     public $paymentMethod;
     public $excludedPaymentMethods;
     public $langCode = "en";
-    
+
     /**
      *
      * @param type $order
@@ -44,7 +44,7 @@ class PayPagePayment extends HostedPayment {
      */
     public function excludePaymentMethods() {
         $excludes = func_get_args();
-        
+
         foreach ($excludes as $method) {
             if ($method == \PaymentMethod::INVOICE) {
                 $this->excludedPaymentMethods[] ="SVEAINVOICEEU_".$this->order->countryCode;
@@ -55,10 +55,10 @@ class PayPagePayment extends HostedPayment {
                 $this->excludedPaymentMethods[] = $method;
             }
         }
-        
+
         return $this;
     }
-    
+
     /**
      *
      * @return \PayPagePayment
@@ -103,7 +103,7 @@ class PayPagePayment extends HostedPayment {
                 }
             }
         }
-        
+
         return $this;
     }
 
@@ -141,6 +141,17 @@ class PayPagePayment extends HostedPayment {
      */
     public function setReturnUrl($returnUrlAsString) {
         $this->returnUrl = $returnUrlAsString;
+        return $this;
+    }
+
+    /**
+     * Set callback Url which contacts the store in case the return success URL
+     * wasn't reached
+     * @param type $callbackUrlAsString
+     * @return \HostedPayment
+     */
+    public function setCallbackUrl($callbackUrlAsString) {
+        $this->callbackUrl = $callbackUrlAsString;
         return $this;
     }
 
