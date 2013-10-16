@@ -109,11 +109,11 @@ class HostedPaymentTest extends \PHPUnit_Framework_TestCase {
         $request['amount'] = $formatter->formatTotalAmount($request['rows']);
         $request['totalVat'] = $formatter->formatTotalVat( $request['rows']);
         
-        $this->assertEquals(262462, $request['amount']);
-        $this->assertEquals(52492, $request['totalVat']);
+        $this->assertEquals(262462, $request['amount']);    // 262462,5 rounded half-to-even
+        $this->assertEquals(52492, $request['totalVat']);   // 52492,5 rounded half-to-even
     }  
 
     // TODO 
-    public function testCalculateRequestValues_CorrectTotalAmountFromMultipleItems_ItemsDefinedWithIncVatAndVatPercent() {}
-    public function testCalculateRequestValues_CorrectTotalAmountFromMultipleItems_ItemsDefinedWithIncVatAndExVat() {}
+//    public function testCalculateRequestValues_CorrectTotalAmountFromMultipleItems_ItemsDefinedWithIncVatAndVatPercent() {}
+//    public function testCalculateRequestValues_CorrectTotalAmountFromMultipleItems_ItemsDefinedWithIncVatAndExVat() {}
 }

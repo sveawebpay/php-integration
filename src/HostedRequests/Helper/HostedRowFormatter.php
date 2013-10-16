@@ -6,10 +6,12 @@ namespace Svea;
  */
 class HostedRowFormatter {
 
-    private $totalAmount;
-    private $totalVat;
-    private $newRows;
-
+    private $totalAmount;       // multiplied by 100, rounded to integer
+    private $totalVat;          // multiplied by 100, rounded to integer
+    private $newRows;           // all order rows, as above
+    private $rawAmount;       // multiplied by 100, rounded to integer
+    private $rawVat;          // multiplied by 100, rounded to integer    
+           
     /**
      *
      */
@@ -49,8 +51,7 @@ class HostedRowFormatter {
     private function formatOrderRows($order) {
         foreach ($order->orderRows as $row ) {
             $tempRow = new HostedOrderRowBuilder();     // new empty object
-            $plusVatCounter = isset($row->vatPercent) ? (($row->vatPercent * 0.01) + 1) : 0.0;
-
+           
             if (isset($row->name)) {
                 $tempRow->setName($row->name);
             }
@@ -59,22 +60,26 @@ class HostedRowFormatter {
                 $tempRow->setDescription($row->description);
             }
 
-            $tempAmount = 0.0;
+            $rawAmount = 0.0;
+            $rawVat = 0.0;
             // calculate amount, vat from two out of three given by customer, see unit tests HostedRowFormater
             if (isset($row->amountExVat) && isset($row->vatPercent)) {
-                $tempAmount = floatval($row->amountExVat) *$plusVatCounter *100;               
-                $tempRow->setAmount( round($tempAmount) );    // store rounded amount for row
-                $tempRow->setVat( round( $tempRow->amount -($row->amountExVat * 100 ) ) );
+                $rawAmount = floatval($row->amountExVat) *($row->vatPercent/100+1);
+                $rawVat = floatval($row->amountExVat) *($row->vatPercent/100);
+                $tempRow->setAmount( round($rawAmount,2) *100 );
+                $tempRow->setVat( round($rawVat,2) *100 );
                 
             } elseif (isset($row->amountIncVat) && isset($row->vatPercent)) {
-                $tempAmount = $row->amountIncVat *100;
-                $tempRow->setAmount( round($tempAmount) );
-                $tempRow->setVat( round( $tempRow->amount -($tempRow->amount/$plusVatCounter)) );
+                $rawAmount = $row->amountIncVat;
+                $rawVat = $row->amountIncVat - ($row->amountIncVat/($row->vatPercent/100+1));
+                $tempRow->setAmount( round($rawAmount,2) *100 );
+                $tempRow->setVat( round($rawVat,2) *100 );
              
             } else {
-                $tempAmount = $row->amountIncVat * 100;
-                $tempRow->setAmount( round($tempAmount) );
-                $tempRow->setVat(($row->amountIncVat - $row->amountExVat) * 100);
+                $rawAmount = $row->amountIncVat;
+                $rawVat = ($row->amountIncVat - $row->amountExVat);
+                $tempRow->setAmount( round($rawAmount,2)*100 );
+                $tempRow->setVat( round($rawVat,2) *100);
             }
 
             if (isset($row->unit)) {
@@ -90,8 +95,13 @@ class HostedRowFormatter {
             }
 
             $this->newRows[] = $tempRow;
-            $this->totalAmount += $tempAmount * $row->quantity;
-            $this->totalVat +=  $tempRow->vat * $row->quantity;
+            $this->totalAmount += ($tempRow->amount * $row->quantity);
+            $this->totalVat +=  ($tempRow->vat * $row->quantity);            
+            $this->rawAmount += round( ($rawAmount * $row->quantity) ,2) *100;
+            $this->rawVat +=  round( ($rawVat * $row->quantity) ,2) *100;
+            
+            print_r($this->totalAmount); echo " "; print_r($this->rawAmount);
+            
         }
     }
 
