@@ -386,8 +386,8 @@ class CardPaymentTest extends \PHPUnit_Framework_TestCase {
                     ->getPaymentForm();
 
         $xmlMessage = new \SimpleXMLElement($form->xmlMessage);
-         $this->assertEquals(-12500, $xmlMessage->amount);
-         $this->assertEquals(-2500, $xmlMessage->vat);
+         $this->assertEquals("-12500", $xmlMessage->amount);
+         $this->assertEquals("-2500", $xmlMessage->vat);
     }
 
 

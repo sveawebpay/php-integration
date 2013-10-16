@@ -160,7 +160,7 @@ class HostedRowFormatter {
 
             $tempRow->setQuantity(1);
             $this->totalAmount -= $row->amount;
-            $this->totalVat -= gmp_abs($tempRow->vat);
+            $this->totalVat -= abs($tempRow->vat);
             $this->newRows[] = $tempRow;
         }
     }
