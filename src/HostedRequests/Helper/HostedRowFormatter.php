@@ -192,10 +192,9 @@ class HostedRowFormatter {
                 $discountInPercent = ($row->amount * 100) / $this->totalAmount;   // discount as fraction of total order sum
                 
                 $rawAmount = $row->amount;
-                $rawVat = $this->totalVat * $discountInPercent;
+                $rawVat = $this->totalVat/100 * $discountInPercent;     // divide by 100 so that our "round and multiply" works in setVat below
                 $tempRow->setAmount( - round($rawAmount,2)*100 );
-                $tempRow->setVat( - round($rawVat,2) );             // calculated from multiplied amount, so no *100
-
+                $tempRow->setVat( - round($rawVat,2)*100 );
             }
             // calculate amount, vat from two out of three given by customer, see unit tests in HostedPaymentTest
             elseif (isset($row->amountExVat) && isset($row->vatPercent)) {
@@ -260,8 +259,11 @@ class HostedRowFormatter {
                 $tempRow->setUnit($row->unit);
             }
 
-            $tempRow->setAmount( - round((($row->discountPercent *0.01) * $this->rawAmount) ,2) );    
-            $tempRow->setVat( - round(($row->discountPercent *0.01) * $this->rawVat ,2 ) );
+            $rawAmount = $this->totalAmount/100 * $row->discountPercent/100;    
+            $rawVat = $this->rawVat/100 * $row->discountPercent/100;                
+            
+            $tempRow->setAmount( - round($rawAmount,2)*100 );    
+            $tempRow->setVat( - round($rawVat,2)*100 );
 
             $tempRow->setQuantity(1);
             

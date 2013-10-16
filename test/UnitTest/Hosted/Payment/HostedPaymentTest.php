@@ -88,7 +88,7 @@ class HostedPaymentTest extends \PHPUnit_Framework_TestCase {
      * problem, sums to 2624.7, in xml request, i.e. calculates 30* round( (69.99*1.25), 2) :( 
      * 
      */
-    public function t___estCalculateRequestValues_CorrectTotalAmountFromMultipleItems_ItemsDefinedWithExVatAndVatPercent() {
+    public function testCalculateRequestValues_CorrectTotalAmountFromMultipleItems_ItemsDefinedWithExVatAndVatPercent() {
         $order = new createOrderBuilder(new SveaConfigurationProvider(SveaConfig::getDefaultConfig()));
         $order->
             addOrderRow(\WebPayItem::orderRow()
@@ -118,7 +118,7 @@ class HostedPaymentTest extends \PHPUnit_Framework_TestCase {
 //    public function testCalculateRequestValues_CorrectTotalAmountFromMultipleItems_ItemsDefinedWithIncVatAndExVat() {}
     
     // calculated fixed discount vat rate, single vat rate in order
-    public function t___estCalculateRequestValues_CorrectTotalAmountFromMultipleItems_WithFixedDiscountIncVatOnly() {
+    public function testCalculateRequestValues_CorrectTotalAmountFromMultipleItems_WithFixedDiscountIncVatOnly() {
         $order = new createOrderBuilder(new SveaConfigurationProvider(SveaConfig::getDefaultConfig()));
         $order
             ->addOrderRow(\WebPayItem::orderRow()
@@ -143,7 +143,7 @@ class HostedPaymentTest extends \PHPUnit_Framework_TestCase {
     }  
     
     // explicit fixed discount vat rate, , single vat rate in order 
-    public function t___estCalculateRequestValues_CorrectTotalAmountFromMultipleItems_WithFixedDiscountIncVatAndVatPercent() {
+    public function testCalculateRequestValues_CorrectTotalAmountFromMultipleItems_WithFixedDiscountIncVatAndVatPercent() {
         $order = new createOrderBuilder(new SveaConfigurationProvider(SveaConfig::getDefaultConfig()));
         $order
             ->addOrderRow(\WebPayItem::orderRow()
@@ -169,7 +169,7 @@ class HostedPaymentTest extends \PHPUnit_Framework_TestCase {
     }
     
     // calculated fixed discount vat rate, multiple vat rate in order
-    public function t______estCalculateRequestValues_CorrectTotalAmount_WithFixedDiscountIncVatOnly_WithDifferentVatRatesPresent() {
+    public function testCalculateRequestValues_CorrectTotalAmount_WithFixedDiscountIncVatOnly_WithDifferentVatRatesPresent() {
         $order = \WebPay::createOrder();
         $order
             ->addOrderRow(\WebPayItem::orderRow()
@@ -293,7 +293,7 @@ class HostedPaymentTest extends \PHPUnit_Framework_TestCase {
     }     
 
     // calculated relative discount vat rate, single vat rate in order
-    public function t______estCalculateRequestValues_CorrectTotalAmountFromMultipleItems_WithRelativeDiscount_WithDifferentVatRatesPresent() {
+    public function testCalculateRequestValues_CorrectTotalAmountFromMultipleItems_WithRelativeDiscount_WithDifferentVatRatesPresent() {
         $order = new createOrderBuilder(new SveaConfigurationProvider(SveaConfig::getDefaultConfig()));
         $order
             ->addOrderRow(\WebPayItem::orderRow()
