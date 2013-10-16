@@ -367,6 +367,7 @@ class CardPaymentTest extends \PHPUnit_Framework_TestCase {
 
         $xmlMessage = new \SimpleXMLElement($form->xmlMessage);
          $this->assertEquals("http://myurl.se", $xmlMessage->callbackurl);
+
     }
     public function testNegativeOrderrow() {
         $form = \WebPay::createOrder()
@@ -392,3 +393,4 @@ class CardPaymentTest extends \PHPUnit_Framework_TestCase {
 
 
 }
+

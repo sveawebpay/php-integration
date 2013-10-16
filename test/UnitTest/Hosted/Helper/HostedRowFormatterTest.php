@@ -436,46 +436,57 @@ class HostedRowFormatterTest extends \PHPUnit_Framework_TestCase {
     }
     
     public function testFormatTotalAmount() {
-        $row = new HostedOrderRowBuilder(new SveaConfigurationProvider(SveaConfig::getDefaultConfig()));
-        $row->setAmount(100);
-        $row->setQuantity(2);
-        $rows = array();
-        array_push($rows, $row);
+        $order = new createOrderBuilder(new SveaConfigurationProvider(SveaConfig::getDefaultConfig()));
+        $order->
+        addOrderRow(\WebPayItem::orderRow()
+                ->setAmountExVat(100)
+                ->setVatPercent(0)
+                ->setQuantity(2)
+                );
         
         $formatter = new HostedRowFormatter();
-        $this->assertEquals(200, $formatter->formatTotalAmount($rows));
+        $rows = $formatter->formatRows($order);
+        $this->assertEquals(20000, $formatter->formatTotalAmount($rows));
     }
     
     public function testFormatTotalAmountNegative() {
-        $row = new HostedOrderRowBuilder(new SveaConfigurationProvider(SveaConfig::getDefaultConfig()));
-        $row->setAmount(-100)
-            ->setQuantity(2);
-        $rows = array();
-        array_push($rows, $row);
-        
+        $order = new createOrderBuilder(new SveaConfigurationProvider(SveaConfig::getDefaultConfig()));
+        $order->
+        addOrderRow(\WebPayItem::orderRow()
+                ->setAmountExVat(-100)
+                ->setVatPercent(0)
+                ->setQuantity(2)
+                );
         $formatter = new HostedRowFormatter();
-        $this->assertEquals(-200, $formatter->formatTotalAmount($rows));
+        $rows = $formatter->formatRows($order);
+        $this->assertEquals(-20000, $formatter->formatTotalAmount($rows));
     }
     
     public function testFormatTotalVat() {
-        $row = new HostedOrderRowBuilder(new SveaConfigurationProvider(SveaConfig::getDefaultConfig()));
-        $row->setVat(100);
-        $row->setQuantity(2);
-        $rows = array();
-        array_push($rows, $row);
+        $order = new createOrderBuilder(new SveaConfigurationProvider(SveaConfig::getDefaultConfig()));
+        $order->
+        addOrderRow(\WebPayItem::orderRow()
+                ->setAmountExVat(100)
+                ->setVatPercent(100)
+                ->setQuantity(2)
+                );
         
         $formatter = new HostedRowFormatter();
-        $this->assertEquals(200, $formatter->formatTotalVat($rows));
+        $rows = $formatter->formatRows($order);
+        $this->assertEquals(20000, $formatter->formatTotalVat($rows));
     }
     
-    public function testFormatTotalVatNegative() {
-        $row = new HostedOrderRowBuilder(new SveaConfigurationProvider(SveaConfig::getDefaultConfig()));
-        $row->setVat(-100);
-        $row->setQuantity(2);
-        $rows = array();
-        array_push($rows, $row);
-        
+    public function testFormatTotalVatNegative() { 
+        $order = new createOrderBuilder(new SveaConfigurationProvider(SveaConfig::getDefaultConfig()));
+        $order->
+        addOrderRow(\WebPayItem::orderRow()
+                ->setAmountExVat(-100)
+                ->setVatPercent(100)
+                ->setQuantity(2)
+                );
+             
         $formatter = new HostedRowFormatter();
-        $this->assertEquals(-200, $formatter->formatTotalVat($rows));
+        $rows = $formatter->formatRows($order);
+        $this->assertEquals(-20000, $formatter->formatTotalVat($rows));
     }
 }

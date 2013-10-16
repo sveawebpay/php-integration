@@ -46,8 +46,12 @@ class FixedDiscount {
     }
 
     /**
-     * If only AmountIncVat is given, we calculate the discount split across the tax (vat) rates present in the order. This will
-     * ensure that the correct discount vat is applied to the order.
+     * If only AmountIncVat is given, for Invoice and Payment plan payment methods we calculate the discount split across the tax (vat) rates present 
+     * in the order. This will ensure that the correct discount vat is applied to the order. This means that the discount will show up split across 
+     * multiple rows on the invoice, one for each tax rate present in the order.
+     * 
+     * For Card and Direct bank payments we only subtract the appropriate amount from the request, but we still honour the specified percentage, if
+     * given using two the functions below. 
      * 
      * Otherwise, it is required to use precisely two of the functions setAmountExVat(), setAmountIncVat() and setVatPercent().
      * If two of these three attributes are specified, we respect the amount indicated and include the discount with the specified tax rate.

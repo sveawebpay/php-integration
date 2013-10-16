@@ -466,10 +466,6 @@ class WebServiceOrderValidatorTest extends \PHPUnit_Framework_TestCase {
  
     // public function testFailOnVatDiscountNotInt() {} This attribute has no setter in OrderRow, so not tested
     
-    // TODO look for? -- example of how localised string prices may also fail with floatval: floatval("100,23") => 100.00
-    
-    // TODO add forced throw to validation, and use that to clean up tests et al (print out error array to see failing validations from tests)
-
     /**
      * @expectedException Svea\ValidationException
      * @expectedExceptionMessage -incorrect datatype : amountExVat is not of type float

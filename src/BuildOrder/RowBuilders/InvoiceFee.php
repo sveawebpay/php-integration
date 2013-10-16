@@ -50,7 +50,6 @@ class InvoiceFee {
 
     /**
      * Optional
-     * TODO describe what constitutes a "unit" in this context
      * @param string $unitDescriptionAsString
      * @return \InvoiceFee
      */
