@@ -199,22 +199,22 @@ class HostedRowFormatter {
             }
             // calculate amount, vat from two out of three given by customer, see unit tests in HostedPaymentTest
             elseif (isset($row->amountExVat) && isset($row->vatPercent)) {
-                $rawAmount = floatval($row->amountExVat) *($row->vatPercent/100+1);
-                $rawVat = floatval($row->amountExVat) *($row->vatPercent/100);
-                $tempRow->setAmount( round($rawAmount,2) *100 );
-                $tempRow->setVat( round($rawVat,2) *100 );
+                $rawAmount = $row->amountExVat *($row->vatPercent/100+1);
+                $rawVat = $row->amountExVat *($row->vatPercent/100);
+                $tempRow->setAmount( - round($rawAmount,2) *100 );
+                $tempRow->setVat( - round($rawVat,2) *100 );
                 
             } elseif (isset($row->amount) && isset($row->vatPercent)) {
                 $rawAmount = $row->amount;
                 $rawVat = $row->amount - ($row->amount/($row->vatPercent/100+1));
-                $tempRow->setAmount( round($rawAmount,2) *100 );
-                $tempRow->setVat( round($rawVat,2) *100 );
+                $tempRow->setAmount( - round($rawAmount,2) *100 );
+                $tempRow->setVat( - round($rawVat,2) *100 );
              
             } else {
-                $rawAmount = $row->amountIncVat;
-                $rawVat = ($row->amountIncVat - $row->amountExVat);
-                $tempRow->setAmount( round($rawAmount,2)*100 );
-                $tempRow->setVat( round($rawVat,2) *100);
+                $rawAmount = $row->amount;
+                $rawVat = ($row->amount - $row->amountExVat);
+                $tempRow->setAmount( - round($rawAmount,2)*100 );
+                $tempRow->setVat( - round($rawVat,2) *100);
             }
 
             if (isset($row->unit)) {
@@ -227,8 +227,8 @@ class HostedRowFormatter {
 
             $tempRow->setQuantity(1);
             
-            $this->totalAmount -= $tempRow->amount;
-            $this->totalVat -= abs($tempRow->vat);
+            $this->totalAmount += $tempRow->amount;
+            $this->totalVat += $tempRow->vat;
             $this->newRows[] = $tempRow;
             
             $this->discountAmount += $tempRow->amount;

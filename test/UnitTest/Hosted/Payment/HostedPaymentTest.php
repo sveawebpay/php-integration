@@ -169,7 +169,7 @@ class HostedPaymentTest extends \PHPUnit_Framework_TestCase {
     }
     
     // calculated fixed discount vat rate, multiple vat rate in order
-    public function testCalculateRequestValues_CorrectTotalAmount_WithRelativeDiscountIncVatOnly_WithDifferentVatRatesPresent() {
+    public function testCalculateRequestValues_CorrectTotalAmount_WithFixedDiscountIncVatOnly_WithDifferentVatRatesPresent() {
         $order = \WebPay::createOrder();
         $order
             ->addOrderRow(\WebPayItem::orderRow()
@@ -202,7 +202,37 @@ class HostedPaymentTest extends \PHPUnit_Framework_TestCase {
     }
     
     // explicit fixed discount vat rate, multiple vat rate in order
-    public function testCalculateRequestValues_CorrectTotalAmount_WithRelativeDiscountExVatAndVatPercent_WithDifferentVatRatesPresent() {
+        public function testCalculateRequestValues_CorrectTotalAmount_WithFixedDiscountIncVatAndVatPercent_WithDifferentVatRatesPresent() {
+        $order = \WebPay::createOrder();
+        $order
+            ->addOrderRow(\WebPayItem::orderRow()
+                ->setAmountExVat(100.00)
+                ->setVatPercent(25)
+                ->setQuantity(2)
+            )
+            ->addOrderRow(\WebPayItem::orderRow()
+                ->setAmountExVat(100.00)
+                ->setVatPercent(6)
+                ->setQuantity(1)
+            )
+            ->addDiscount(\WebPayItem::fixedDiscount()
+                ->setAmountIncVat(125.00)
+                ->setVatPercent(25)
+            );
+
+        // follows HostedPayment calculateRequestValues() outline:
+        $formatter = new HostedRowFormatter();
+        $request = array();
+        
+        $request['rows'] = $formatter->formatRows($order);
+        $request['amount'] = $formatter->formatTotalAmount($request['rows']);
+        $request['totalVat'] = $formatter->formatTotalVat( $request['rows']);
+        
+        $this->assertEquals(23100, $request['amount']);    // 35600    - 12500 discount
+        $this->assertEquals(3100, $request['totalVat']);   //  5600    -  2500 discount
+    }     
+  
+    public function testCalculateRequestValues_CorrectTotalAmount_WithFixedDiscountExVatAndVatPercent_WithDifferentVatRatesPresent() {
         $order = \WebPay::createOrder();
         $order
             ->addOrderRow(\WebPayItem::orderRow()
@@ -231,6 +261,36 @@ class HostedPaymentTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals(25600, $request['amount']);    // 35600    - 10000 discount
         $this->assertEquals(5600, $request['totalVat']);   //  5600    -     0 discount
     }     
+    
+    public function testCalculateRequestValues_CorrectTotalAmount_WithFixedDiscountExVatAndIncVat_WithDifferentVatRatesPresent() {
+        $order = \WebPay::createOrder();
+        $order
+            ->addOrderRow(\WebPayItem::orderRow()
+                ->setAmountExVat(100.00)
+                ->setVatPercent(25)
+                ->setQuantity(2)
+            )
+            ->addOrderRow(\WebPayItem::orderRow()
+                ->setAmountExVat(100.00)
+                ->setVatPercent(6)
+                ->setQuantity(1)
+            )
+            ->addDiscount(\WebPayItem::fixedDiscount()
+                ->setAmountExVat(80.00)
+                ->setAmountIncVat(100.00)
+            );
+
+        // follows HostedPayment calculateRequestValues() outline:
+        $formatter = new HostedRowFormatter();
+        $request = array();
+        
+        $request['rows'] = $formatter->formatRows($order);
+        $request['amount'] = $formatter->formatTotalAmount($request['rows']);
+        $request['totalVat'] = $formatter->formatTotalVat( $request['rows']);
+        
+        $this->assertEquals(25600, $request['amount']);    // 35600    - 10000 discount
+        $this->assertEquals(3600, $request['totalVat']);   //  5600    -  2000 discount
+    }     
 
     // calculated relative discount vat rate, single vat rate in order
     public function testCalculateRequestValues_CorrectTotalAmountFromMultipleItems_WithRelativeDiscount_WithDifferentVatRatesPresent() {
@@ -254,7 +314,7 @@ class HostedPaymentTest extends \PHPUnit_Framework_TestCase {
         $request['totalVat'] = $formatter->formatTotalVat( $request['rows']);
         
         $this->assertEquals(196846, $request['amount']);    // 262462,5 rounded half-to-even    - 65616 discount (25%)
-        $this->assertEquals(39369, $request['totalVat']);   // 52492,5 rounded half-to-even     -  13123 discount (25%)
+        $this->assertEquals(39369, $request['totalVat']);   // 52492,5 rounded half-to-even     - 13123 discount (25%)
     }  
 
     // calculated relative discount vat rate, multiple vat rate in order
