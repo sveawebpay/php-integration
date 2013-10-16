@@ -212,7 +212,7 @@ class HostedRowFormatter {
              
             } else {
                 $rawAmount = $row->amount;
-                $rawVat = ($row->amount - $row->amountExVat);
+                $rawVat = ( $row->amount - $row->amountExVat);
                 $tempRow->setAmount( - round($rawAmount,2)*100 );
                 $tempRow->setVat( - round($rawVat,2) *100);
             }
