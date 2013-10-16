@@ -116,4 +116,178 @@ class HostedPaymentTest extends \PHPUnit_Framework_TestCase {
     // TODO 
 //    public function testCalculateRequestValues_CorrectTotalAmountFromMultipleItems_ItemsDefinedWithIncVatAndVatPercent() {}
 //    public function testCalculateRequestValues_CorrectTotalAmountFromMultipleItems_ItemsDefinedWithIncVatAndExVat() {}
+    
+    // calculated fixed discount vat rate, single vat rate in order
+    public function testCalculateRequestValues_CorrectTotalAmountFromMultipleItems_WithFixedDiscountIncVatOnly() {
+        $order = new createOrderBuilder(new SveaConfigurationProvider(SveaConfig::getDefaultConfig()));
+        $order
+            ->addOrderRow(\WebPayItem::orderRow()
+                ->setAmountExVat(69.99)
+                ->setVatPercent(25)
+                ->setQuantity(30)
+            )
+            ->addDiscount(\WebPayItem::fixedDiscount()
+                ->setAmountIncVat(10.00)
+            );
+     
+        // follows HostedPayment calculateRequestValues() outline:
+        $formatter = new HostedRowFormatter();
+        $request = array();
+        
+        $request['rows'] = $formatter->formatRows($order);
+        $request['amount'] = $formatter->formatTotalAmount($request['rows']);
+        $request['totalVat'] = $formatter->formatTotalVat( $request['rows']);
+        
+        $this->assertEquals(261462, $request['amount']);    // 262462,5 rounded half-to-even    - 1000 discount
+        $this->assertEquals(52472, $request['totalVat']);   // 52492,5 rounded half-to-even     - 20 discount (= 10/2624,62*524,92)
+    }  
+    
+    // explicit fixed discount vat rate, , single vat rate in order 
+    public function testCalculateRequestValues_CorrectTotalAmountFromMultipleItems_WithFixedDiscountIncVatAndVatPercent() {
+        $order = new createOrderBuilder(new SveaConfigurationProvider(SveaConfig::getDefaultConfig()));
+        $order
+            ->addOrderRow(\WebPayItem::orderRow()
+                ->setAmountExVat(69.99)
+                ->setVatPercent(25)
+                ->setQuantity(30)
+            )
+            ->addDiscount(\WebPayItem::fixedDiscount()
+                ->setAmountIncVat(12.50)
+                ->setVatPercent(25)
+            );
+     
+        // follows HostedPayment calculateRequestValues() outline:
+        $formatter = new HostedRowFormatter();
+        $request = array();
+        
+        $request['rows'] = $formatter->formatRows($order);
+        $request['amount'] = $formatter->formatTotalAmount($request['rows']);
+        $request['totalVat'] = $formatter->formatTotalVat( $request['rows']);
+        
+        $this->assertEquals(261212, $request['amount']);    // 262462,5 rounded half-to-even    - 1250 discount
+        $this->assertEquals(52242, $request['totalVat']);   // 52492,5 rounded half-to-even     - 250 discount 
+    }
+    
+    // calculated fixed discount vat rate, multiple vat rate in order
+    public function testCalculateRequestValues_CorrectTotalAmount_WithRelativeDiscountIncVatOnly_WithDifferentVatRatesPresent() {
+        $order = \WebPay::createOrder();
+        $order
+            ->addOrderRow(\WebPayItem::orderRow()
+                ->setAmountExVat(100.00)
+                ->setVatPercent(25)
+                ->setQuantity(2)
+            )
+            ->addOrderRow(\WebPayItem::orderRow()
+                ->setAmountExVat(100.00)
+                ->setVatPercent(6)
+                ->setQuantity(1)
+            )
+            ->addDiscount(\WebPayItem::fixedDiscount()
+                ->setAmountIncVat(100.00)
+            );
+
+        // follows HostedPayment calculateRequestValues() outline:
+        $formatter = new HostedRowFormatter();
+        $request = array();
+        
+        $request['rows'] = $formatter->formatRows($order);
+        $request['amount'] = $formatter->formatTotalAmount($request['rows']);
+        $request['totalVat'] = $formatter->formatTotalVat( $request['rows']);
+        
+        // 100*250/356 = 70.22 incl. 25% vat => 14.04 vat as amount 
+        // 100*106/356 = 29.78 incl. 6% vat => 1.69 vat as amount 
+        // matches 15,73 discount (= 100/356 *56) discount
+        $this->assertEquals(25600, $request['amount']);    // 35600    - 10000 discount
+        $this->assertEquals(4027, $request['totalVat']);   //  5600    -  1573 discount (= 10000/35600 *5600) discount
+    }
+    
+    // explicit fixed discount vat rate, multiple vat rate in order
+    public function testCalculateRequestValues_CorrectTotalAmount_WithRelativeDiscountExVatAndVatPercent_WithDifferentVatRatesPresent() {
+        $order = \WebPay::createOrder();
+        $order
+            ->addOrderRow(\WebPayItem::orderRow()
+                ->setAmountExVat(100.00)
+                ->setVatPercent(25)
+                ->setQuantity(2)
+            )
+            ->addOrderRow(\WebPayItem::orderRow()
+                ->setAmountExVat(100.00)
+                ->setVatPercent(6)
+                ->setQuantity(1)
+            )
+            ->addDiscount(\WebPayItem::fixedDiscount()
+                ->setAmountExVat(100.00)
+                ->setVatPercent(0)
+            );
+
+        // follows HostedPayment calculateRequestValues() outline:
+        $formatter = new HostedRowFormatter();
+        $request = array();
+        
+        $request['rows'] = $formatter->formatRows($order);
+        $request['amount'] = $formatter->formatTotalAmount($request['rows']);
+        $request['totalVat'] = $formatter->formatTotalVat( $request['rows']);
+        
+        $this->assertEquals(25600, $request['amount']);    // 35600    - 10000 discount
+        $this->assertEquals(5600, $request['totalVat']);   //  5600    -     0 discount
+    }     
+
+    // calculated relative discount vat rate, single vat rate in order
+    public function testCalculateRequestValues_CorrectTotalAmountFromMultipleItems_WithRelativeDiscount_WithDifferentVatRatesPresent() {
+        $order = new createOrderBuilder(new SveaConfigurationProvider(SveaConfig::getDefaultConfig()));
+        $order
+            ->addOrderRow(\WebPayItem::orderRow()
+                ->setAmountExVat(69.99)
+                ->setVatPercent(25)
+                ->setQuantity(30)
+            )
+            ->addDiscount(\WebPayItem::relativeDiscount()
+                ->setDiscountPercent(25.00)
+            );
+     
+        // follows HostedPayment calculateRequestValues() outline:
+        $formatter = new HostedRowFormatter();
+        $request = array();
+        
+        $request['rows'] = $formatter->formatRows($order);
+        $request['amount'] = $formatter->formatTotalAmount($request['rows']);
+        $request['totalVat'] = $formatter->formatTotalVat( $request['rows']);
+        
+        $this->assertEquals(196846, $request['amount']);    // 262462,5 rounded half-to-even    - 65616 discount (25%)
+        $this->assertEquals(39369, $request['totalVat']);   // 52492,5 rounded half-to-even     -  13123 discount (25%)
+    }  
+
+    // calculated relative discount vat rate, multiple vat rate in order
+    public function testCalculateRequestValues_CorrectTotalAmount_WithRelativeDiscount_WithDifferentVatRatesPresent() {
+        $order = \WebPay::createOrder();
+        $order
+            ->addOrderRow(\WebPayItem::orderRow()
+                ->setAmountExVat(100.00)
+                ->setVatPercent(25)
+                ->setQuantity(2)
+            )
+            ->addOrderRow(\WebPayItem::orderRow()
+                ->setAmountExVat(100.00)
+                ->setVatPercent(6)
+                ->setQuantity(1)
+            )
+            ->addDiscount(\WebPayItem::relativeDiscount()
+                ->setDiscountPercent(25)
+            );
+
+        // follows HostedPayment calculateRequestValues() outline:
+        $formatter = new HostedRowFormatter();
+        $request = array();
+        
+        $request['rows'] = $formatter->formatRows($order);
+        $request['amount'] = $formatter->formatTotalAmount($request['rows']);
+        $request['totalVat'] = $formatter->formatTotalVat( $request['rows']);
+        
+        // 5000*.25 = 1250
+        // 600*.25 = 150  
+        // matches 1400 discount
+        $this->assertEquals(26700, $request['amount']);    // 35600    - 8900 discount
+        $this->assertEquals(4200, $request['totalVat']);   //  5600    - 1400 discount (= 10000/35600 *5600) discount
+    }
+
 }
