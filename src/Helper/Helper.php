@@ -13,7 +13,7 @@ class Helper {
      * licensed under the bsd license
      */
     
-    function bround($dVal,$iDec=0) {
+    static function bround($dVal,$iDec=0) {
         // banker's style rounding or round-half-even
         // (round down when even number is left of 5, otherwise round up)
         // $dVal is value to round
