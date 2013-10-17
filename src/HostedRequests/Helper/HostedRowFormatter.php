@@ -259,7 +259,7 @@ class HostedRowFormatter {
                 $tempRow->setUnit($row->unit);
             }
 
-            $rawAmount = $this->totalAmount/100 * $row->discountPercent/100;    
+            $rawAmount = $this->rawAmount/100 * $row->discountPercent/100;    
             $rawVat = $this->rawVat/100 * $row->discountPercent/100;                
             
             $tempRow->setAmount( - Helper::bround($rawAmount,2)*100 );    

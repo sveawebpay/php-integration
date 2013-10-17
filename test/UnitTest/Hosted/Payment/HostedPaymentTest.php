@@ -342,7 +342,7 @@ class HostedPaymentTest extends \PHPUnit_Framework_TestCase {
     }     
 
     // calculated relative discount vat rate, single vat rate in order
-    public function t___estCalculateRequestValues_CorrectTotalAmountFromMultipleItems_WithRelativeDiscount_WithDifferentVatRatesPresent() {
+    public function testCalculateRequestValues_CorrectTotalAmountFromMultipleItems_WithRelativeDiscount_WithDifferentVatRatesPresent() {
         $order = new createOrderBuilder(new SveaConfigurationProvider(SveaConfig::getDefaultConfig()));
         $order
             ->addOrderRow(\WebPayItem::orderRow()
@@ -362,8 +362,8 @@ class HostedPaymentTest extends \PHPUnit_Framework_TestCase {
         $request['amount'] = $formatter->formatTotalAmount($request['rows']);
         $request['totalVat'] = $formatter->formatTotalVat( $request['rows']);
         
-        $this->assertEquals(196846, $request['amount']);    // 262462,5 rounded half-to-even    - 65616 (65615|6) discount (25%) unrounded
-        $this->assertEquals(39369, $request['totalVat']);   // 52492,5 rounded half-to-even     - 13123 discount (25%) unrounded
+        $this->assertEquals(196846, $request['amount']);    // 262462,5 rounded half-to-even    - 65615,625 discount (25%) unrounded
+        $this->assertEquals(39369, $request['totalVat']);   //  52492,5 rounded half-to-even    - 13123,125 discount (25%) unrounded
     }
     
     // calculated relative discount vat rate, single vat rate in order
