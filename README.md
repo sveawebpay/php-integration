@@ -49,6 +49,9 @@ $foo = $foo->...
 
 ## Changes in release 1.2.1
 
+We recommend using php 4.4 on package servers, for namespace compatibility 
+(reported compatibility issue with Debian Squeeze instalations).
+
 ### Namespace
 From release 1.2.0 on the package makes use of a namespace, Svea. We have made
 efforts to avoid impacting existing integrations, so the classes WebPay and Item
@@ -264,7 +267,13 @@ $orderRows[] = WebPayItem::orderRow()->...;
 #### 1.2.1 OrderRow
 All products and other items. It´s required to have a minimum of one orderrow.
 Precisely two of these values must be set in the WebPayItem object, in order to specify the item tax rate:
-AmountExVat, AmountIncVat or VatPercent for Orderrow.
+AmountExVat, AmountIncVat or VatPercent for Orderrow. 
+
+If you specify AmountIncVat, note that this may introduce a cumulative rounding error when ordering large
+quantities of an item, as the package bases the total order sum on a calculated price ex. vat.
+
+We recommend specifying AmountExVat and VatPercentage. If not, make sure not retain as much precision as
+possible when specifying prices, i.e. no premature rounding (87.4875 is a "better" PriceIncVat than 87.49).
 
 ```php
 ->addOrderRow(

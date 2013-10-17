@@ -113,8 +113,57 @@ class HostedPaymentTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals(52492, $request['totalVat']);   // 52492,5 rounded half-to-even
     }  
 
-    // TODO 
-//    public function testCalculateRequestValues_CorrectTotalAmountFromMultipleItems_ItemsDefinedWithIncVatAndVatPercent() {}
+    public function testCalculateRequestValues_CorrectTotalAmountFromMultipleItems_ItemsDefinedWithIncVatAndVatPercent() {
+        $order = new createOrderBuilder(new SveaConfigurationProvider(SveaConfig::getDefaultConfig()));
+        $order->
+            addOrderRow(\WebPayItem::orderRow()
+                ->setArticleNumber("0")
+                ->setName("testCalculateRequestValues_CorrectTotalAmountFromMultipleItems")
+                ->setDescription("testCalculateRequestValues_CorrectTotalAmountFromMultipleItems")
+                ->setAmountIncVat(87.4875)    // if low precision here, i.e. 87.49, we'll get a cumulative rounding error
+                ->setVatPercent(25)
+                ->setQuantity(30)
+                ->setUnit("st")
+            );
+     
+        // follows HostedPayment calculateRequestValues() outline:
+        $formatter = new HostedRowFormatter();
+        $request = array();
+        
+        $request['rows'] = $formatter->formatRows($order);
+        $request['amount'] = $formatter->formatTotalAmount($request['rows']);
+        $request['totalVat'] = $formatter->formatTotalVat( $request['rows']);
+        
+        $this->assertEquals(262462, $request['amount']);    // 262462,5 rounded half-to-even
+        $this->assertEquals(52492, $request['totalVat']);   // 52492,5 rounded half-to-even
+    } 
+
+    public function testCalculateRequestValues_CorrectTotalAmountFromMultipleItems_ItemsDefinedWithExVatAndIncVat() {
+        $order = new createOrderBuilder(new SveaConfigurationProvider(SveaConfig::getDefaultConfig()));
+        $order->
+            addOrderRow(\WebPayItem::orderRow()
+                ->setArticleNumber("0")
+                ->setName("testCalculateRequestValues_CorrectTotalAmountFromMultipleItems")
+                ->setDescription("testCalculateRequestValues_CorrectTotalAmountFromMultipleItems")
+                ->setAmountExVat(69.99)
+                ->setAmountIncVat(87.4875)   // if low precision here, i.e. 87.49, we'll get a cumulative rounding error
+                ->setQuantity(30)
+                ->setUnit("st")
+            );
+     
+        // follows HostedPayment calculateRequestValues() outline:
+        $formatter = new HostedRowFormatter();
+        $request = array();
+        
+        $request['rows'] = $formatter->formatRows($order);
+        $request['amount'] = $formatter->formatTotalAmount($request['rows']);
+        $request['totalVat'] = $formatter->formatTotalVat( $request['rows']);
+        
+        $this->assertEquals(262462, $request['amount']);    // 262462,5 rounded half-to-even
+        $this->assertEquals(52492, $request['totalVat']);   // 52492,5 rounded half-to-even
+    }  
+    
+    
 //    public function testCalculateRequestValues_CorrectTotalAmountFromMultipleItems_ItemsDefinedWithIncVatAndExVat() {}
     
     // calculated fixed discount vat rate, single vat rate in order

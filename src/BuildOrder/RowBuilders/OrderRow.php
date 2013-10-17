@@ -64,6 +64,14 @@ class OrderRow {
      * Precisely two of these values must be set in the WebPayItem object:  AmountExVat, AmountIncVat or VatPercent for Orderrow. 
      * Use functions setAmountExVat(), setAmountIncVat() or setVatPercent().
      * 
+     * If you specify AmountIncVat, note that this may introduce a cumulative rounding error when ordering large
+     * quantities of an item, as the package bases the total order sum on a calculated price ex. vat.
+     * 
+     * We recommend specifying AmountExVat and VatPercentage. If not, make sure not retain as much precision as
+     * possible when specifying prices, i.e. no premature rounding (87.4875 is a "better" PriceIncVat than 87.49).
+     * 
+     * See HostedPaymentTest for an example.
+     * 
      * @param float $AmountAsFloat
      * @return Svea\OrderRow
      */
