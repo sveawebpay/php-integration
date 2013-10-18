@@ -25,6 +25,33 @@ class TestUtil {
             ->setVatPercent(25)
             ->setDiscountPercent(0);
     }
+    
+    public static function createIndividualCustomer( $country="SE" ) {
+        switch( strtoupper($country) ) {
+
+        case( "NL" ):
+            return WebPayItem::individualCustomer()
+                ->setBirthDate(1955, 03, 07)
+                ->setName("Sneider", "Boasman")
+                ->setStreetAddress("Gate", 42)
+                ->setCoAddress(138)
+                ->setLocality("BARENDRECHT")
+                ->setZipCode("1102 HG")
+                ->setInitials("SB");
+            break;
+
+        case( "SE" ):
+            return WebPayItem::individualCustomer()
+                ->setBirthDate(1946, 05, 09)
+                ->setName("Tess T", "Persson")
+                ->setStreetAddress("Testgatan", 1)
+                ->setCoAddress("c/o Eriksson, Erik")
+                ->setLocality("Stan")
+                ->setZipCode("99999")
+                ->setInitials("TP");
+            break;
+        }
+    }            
 
     /**
      * Creates an OrderRow object using a given tax rate
