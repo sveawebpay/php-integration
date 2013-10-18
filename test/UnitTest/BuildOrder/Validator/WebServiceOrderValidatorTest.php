@@ -329,15 +329,15 @@ class WebServiceOrderValidatorTest extends \PHPUnit_Framework_TestCase {
     
     /**
      * @expectedException Svea\ValidationException
-     * @expectedExceptionMessage -incorrect datatype : quantity is not of type int.
+     * @expectedExceptionMessage -incorrect datatype : quantity is not numeric, set as integer or float.
     */
-    public function testFailOnQuantityNotInt() {
+    public function testFailOnQuantityNotNumeric() {
         $builder = \WebPay::createOrder();
         $order = $builder
                 ->addOrderRow(\WebPayItem::orderRow()
                     ->setAmountExVat(100.00)
                     ->setVatPercent(20)
-                    ->setQuantity(1.0)
+                    ->setQuantity("1,25")    // note that i.e. "1,25" is numeric 1, so exclude strings for safety
                 )
                 ->setCountryCode("SE")
                 ->setOrderDate("Mon, 15 Aug 05 15:52:01 +0000")

@@ -75,8 +75,7 @@ class CreateOrderBuilder {
 
     public $conf;
     /**
-     *
-     * @var CustomerIdentity values
+     * @type instance of IndividualCustomer or CompanyCustomer
      */
     public $customerIdentity;
 

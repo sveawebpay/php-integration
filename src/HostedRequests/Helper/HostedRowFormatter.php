@@ -104,8 +104,7 @@ class HostedRowFormatter {
             $this->totalAmount += ($tempRow->amount * $row->quantity);
             $this->totalVat +=  ($tempRow->vat * $row->quantity);            
             $this->rawAmount += Helper::bround( ($rawAmount * $row->quantity) ,2) *100;
-            $this->rawVat +=  Helper::bround( ($rawVat * $row->quantity) ,2) *100;
-            
+            $this->rawVat +=  Helper::bround( ($rawVat * $row->quantity) ,2) *100;           
         }
     }
 

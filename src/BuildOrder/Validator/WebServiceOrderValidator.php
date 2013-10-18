@@ -17,26 +17,31 @@ class WebServiceOrderValidator extends OrderValidator {
     }
 
     /**
-     * @param type $order
+     * validate($order) ensures that attributes in $order are of the right type
+     * and format before creating the xmlMessage or soap calls 
+     * 
+     * @param instance of CreateOrderBuilder $order
      */
     public function validate($order) {
        if (isset($order->orgNumber) || isset($order->companyVatNumber) || isset($order->companyName)) {
             $this->isCompany = TRUE;
         }
         
-        if (isset($order->customerIdentity->orgNumber) || isset($order->customerIdentity->companyVatNumber) || isset($order->customerIdentity->companyName)) {
+        if (isset($order->customerIdentity->orgNumber) || 
+            isset($order->customerIdentity->companyVatNumber) || 
+            isset($order->customerIdentity->companyName)) {
+            
             $this->isCompany = TRUE;
         }
         
         $identityValidator = new IdentityValidator($this->isCompany);
-        //$this->errors = $identityValidator->validateThatCustomerIdentityExists($order,  $this->errors); //use countries validators instead
 
         if ($order->orderType == "PaymentPlan" && $this->isCompany == TRUE) {
             $this->errors["Wrong customer type"] = "PaymentPlanPayment not allowed for Company customer.";
         }
         
         if (isset($order->countryCode)) {
-            if ($order->countryCode == "SE"
+            if( $order->countryCode == "SE"
                     || $order->countryCode == "NO"
                     || $order->countryCode == "DK"
                     || $order->countryCode == "FI") {

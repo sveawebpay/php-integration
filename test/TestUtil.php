@@ -42,19 +42,19 @@ class TestUtil {
 
         case( "SE" ):
             return WebPayItem::individualCustomer()
+                ->setNationalIdNumber("194605092222")
                 ->setBirthDate(1946, 05, 09)
                 ->setName("Tess T", "Persson")
                 ->setStreetAddress("Testgatan", 1)
                 ->setCoAddress("c/o Eriksson, Erik")
                 ->setLocality("Stan")
-                ->setZipCode("99999")
-                ->setInitials("TP");
+                ->setZipCode("99999");
             break;
         }
     }            
 
     /**
-     * Creates an OrderRow object using a given tax rate
+     * Creates an OrderRow object with amount 100 and a given tax rate
      * 
      * @param int vatPercent the tax rate for this order row (defaults to 25 if omitted)
      * @return Svea\OrderRow object

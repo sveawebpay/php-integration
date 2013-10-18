@@ -83,72 +83,71 @@ class InvoicePaymentIntegrationTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(true, $request->accepted);
     }
     
+    public function testAcceptsFractionalQuantities() {
+        $request = WebPay::createOrder()
+                ->addOrderRow( WebPayItem::orderRow()
+                    ->setAmountExVat(80.00)
+                    ->setVatPercent(25)
+                    ->setQuantity(1.25)
+                )
+                ->addCustomerDetails( TestUtil::createIndividualCustomer("SE") )                        
+                ->setCountryCode("SE")
+                ->setCustomerReference("33")
+                ->setOrderDate("2012-12-12")
+                ->setCurrency("EUR")
+                ->useInvoicePayment()
+                ->doRequest();
+            
+        $this->assertEquals(1, $request->accepted);
+        $this->assertEquals(0, $request->resultcode);
+        $this->assertEquals('Invoice', $request->orderType);
+        $this->assertEquals(1, $request->sveaWillBuyOrder);
+        $this->assertEquals(125, $request->amount);
+    }
+    
+    public function testAcceptsIntegerQuantities() {
+        $request = WebPay::createOrder()
+                ->addOrderRow( WebPayItem::orderRow()
+                    ->setAmountExVat(80.00)
+                    ->setVatPercent(25)
+                    ->setQuantity(1)
+                )
+                ->addCustomerDetails( TestUtil::createIndividualCustomer("SE") )                        
+                ->setCountryCode("SE")
+                ->setCustomerReference("33")
+                ->setOrderDate("2012-12-12")
+                ->setCurrency("EUR")
+                ->useInvoicePayment()
+                ->doRequest();
+            
+        $this->assertEquals(1, $request->accepted);
+        $this->assertEquals(0, $request->resultcode);
+        $this->assertEquals('Invoice', $request->orderType);
+        $this->assertEquals(1, $request->sveaWillBuyOrder);
+        $this->assertEquals(100, $request->amount);
+    }
+    
+    // TODO make corresponding tests for other country tax rates
     /**
-     * 
+     * NL vat rates are 6%, 21% (as of 131018, see http://www.government.nl/issues/taxation/vat-and-excise-duty)
      */
-//    public function testChargedAmountForOrderRowsSpecifiedWithAmountExVatAndVatPercent() {
-//        $request = WebPay::createOrder()
-//                ->addOrderRow( WebPayItem::orderRow()
-//                    ->setAmountExVat(69.99)
-//                    ->setVatPercent(25)
-//                    ->setQuantity(30)
-//                );
-//                ->addCustomerDetails(WebPayItem::individualCustomer()
-//                        ->setBirthDate(1955, 03, 07)
-//                        ->setName("Sneider", "Boasman")
-//                        ->setStreetAddress("Gate", 42)
-//                        ->setLocality("BARENDRECHT")
-//                        ->setZipCode("1102 HG")
-//                        ->setInitials("SB")
-//                        ->setCoAddress(138)
-//                )
-//                ->setCountryCode("SE")
-//                ->setCustomerReference("33")
-//                ->setOrderDate("2012-12-12")
-//                ->setCurrency("EUR")
-//                ->useInvoicePayment()
-//                //->setPasswordBasedAuthorization("hollandtest", "hollandtest", 85997)
-//                ->doRequest();
-//            
-//        $this->assertEquals(1, $request->accepted);
-//        $this->assertEquals(0, $request->resultcode);
-//        $this->assertEquals('Invoice', $request->orderType);
-//        //$this->assertEquals(54086, $request->sveaOrderId);
-//        $this->assertEquals(1, $request->sveaWillBuyOrder);
-//        $this->assertEquals(106, $request->amount);                    // 1x100 @ 6% vat
-//        //$this->assertEquals(date(), $request->expirationDate);
-//        $this->assertEquals('', $request->customerIdentity->email);
-//        $this->assertEquals('', $request->customerIdentity->ipAddress);
-//        $this->assertEquals('NL', $request->customerIdentity->countryCode);
-//        $this->assertEquals(23, $request->customerIdentity->houseNumber);
-//        $this->assertEquals('Individual', $request->customerIdentity->customerType);
-//        $this->assertEquals('', $request->customerIdentity->phoneNumber);
-//        $this->assertEquals('Sneider Boasman', $request->customerIdentity->fullName);
-//        $this->assertEquals('Gate 42', $request->customerIdentity->street);
-//        $this->assertEquals(138, $request->customerIdentity->coAddress);
-//        $this->assertEquals('1102 HG', $request->customerIdentity->zipCode);
-//        $this->assertEquals('BARENDRECHT', $request->customerIdentity->locality);
-//    }
-//    
-       public function testResultForInvoicePaymentNL() {
+    public function t___estNLInvoicePaymentAcceptsVatRates() {
         $request = WebPay::createOrder()
                 ->addOrderRow( TestUtil::createOrderRowWithVat( 6 ) )
+                ->addOrderRow( TestUtil::createOrderRowWithVat( 21 ) )
                 ->addCustomerDetails( TestUtil::createIndividualCustomer("NL") )
                 ->setCountryCode("NL")
                 ->setCustomerReference("33")
                 ->setOrderDate("2012-12-12")
                 ->setCurrency("EUR")
                 ->useInvoicePayment()
-                //->setPasswordBasedAuthorization("hollandtest", "hollandtest", 85997)
                 ->doRequest();
-            
+
         $this->assertEquals(1, $request->accepted);
         $this->assertEquals(0, $request->resultcode);
         $this->assertEquals('Invoice', $request->orderType);
-        //$this->assertEquals(54086, $request->sveaOrderId);
         $this->assertEquals(1, $request->sveaWillBuyOrder);
-        $this->assertEquals(106, $request->amount);                    // 1x100 @ 6% vat
-        //$this->assertEquals(date(), $request->expirationDate);
+        $this->assertEquals(106 + 121, $request->amount);           // 1x100 @ 6% vat + 1x100 @ 21%
         $this->assertEquals('', $request->customerIdentity->email);
         $this->assertEquals('', $request->customerIdentity->ipAddress);
         $this->assertEquals('NL', $request->customerIdentity->countryCode);
@@ -159,6 +158,6 @@ class InvoicePaymentIntegrationTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals('Gate 42', $request->customerIdentity->street);
         $this->assertEquals(138, $request->customerIdentity->coAddress);
         $this->assertEquals('1102 HG', $request->customerIdentity->zipCode);
-        $this->assertEquals('BARENDRECHT', $request->customerIdentity->locality);
+        $this->assertEquals('BARENDRECHT', $request->customerIdentity->locality);   
     }
 }
