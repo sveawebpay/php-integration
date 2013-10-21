@@ -12,15 +12,15 @@ require_once SVEA_REQUEST_DIR . '/Includes.php';
 class CreateOrderBuilder {
 
     /**
-     * @var Array Rows containing Product rows
+     * @var array<OrderRow> Array Rows containing Product rows
      */
     public $orderRows = array();
     /**
-     * @var Array ShippingFeeRows containing shippingFee rows
+     * @var array<ShippingFee> Array ShippingFeeRows containing shippingFee rows
      */
     public $shippingFeeRows = array();
     /**
-     * @var  Array InvoiceFeeRows containing invoiceFee rows
+     * @var array<InvoiceFee> Array InvoiceFeeRows containing invoiceFee rows
      */
     public $invoiceFeeRows = array();
     /**
@@ -28,11 +28,11 @@ class CreateOrderBuilder {
      */
     public $testmode = false;
     /**
-     * @var type Array of FixedDiscountRows from class FixedDiscountBuilder
+     * @var array<FixedDiscount> Array of FixedDiscountRows from class FixedDiscount
      */
     public $fixedDiscountRows = array();
     /**
-     * @var type Array of RelativeDiscountRows from class RelativeDiscountBuilder
+     * @var array<RelativeDiscount> Array of RelativeDiscountRows from class RelativeDiscountBuilder
      */
     public $relativeDiscountRows = array();
     /**
@@ -75,8 +75,7 @@ class CreateOrderBuilder {
 
     public $conf;
     /**
-     *
-     * @var CustomerIdentity values
+     * @type instance of IndividualCustomer or CompanyCustomer
      */
     public $customerIdentity;
 
@@ -106,8 +105,7 @@ class CreateOrderBuilder {
     }
     
     /**
-     * New!
-     * @param type $orderRow
+     * @param OrderRow $orderRow
      * @return \CreateOrderBuilder
      */
     public function addOrderRow($itemOrderRowObject) {
@@ -122,7 +120,6 @@ class CreateOrderBuilder {
     }
 
     /**
-     * New!
      * @param type $itemFeeObject
      * @return \CreateOrderBuilder
      */
@@ -149,7 +146,6 @@ class CreateOrderBuilder {
     }
     
     /**
-     * New!
      * @param type $itemDiscounObject
      * @return \CreateOrderBuilder
      */

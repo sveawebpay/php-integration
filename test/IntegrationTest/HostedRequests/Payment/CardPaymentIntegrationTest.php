@@ -9,7 +9,7 @@ require_once $root . '/../../../TestUtil.php';
  * @author Anneli Halld'n, Daniel Brolund for Svea Webpay
  */
 class CardPaymentIntegrationTest extends \PHPUnit_Framework_TestCase {
-    
+
     public function testDoCardPaymentRequest() {
         $rowFactory = new TestUtil();
         $form = WebPay::createOrder()
@@ -29,9 +29,8 @@ class CardPaymentIntegrationTest extends \PHPUnit_Framework_TestCase {
                 ->usePayPage() // PayPageObject
                 ->setReturnUrl("http://myurl.se")
                 ->getPaymentForm();
-        
         $url = "https://test.sveaekonomi.se/webpay/payment";
-        
+
         /** CURL  **/
         $fields = array('merchantid' => urlencode($form->merchantid), 'message' => urlencode($form->xmlMessageBase64), 'mac' => urlencode($form->mac));
         $fieldsString = "";
@@ -39,7 +38,7 @@ class CardPaymentIntegrationTest extends \PHPUnit_Framework_TestCase {
             $fieldsString .= $key.'='.$value.'&';
         }
         rtrim($fieldsString, '&');
-        
+
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_POST, count($fields));
@@ -49,26 +48,26 @@ class CardPaymentIntegrationTest extends \PHPUnit_Framework_TestCase {
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
         //returns a html page with redirecting to bank...
         curl_exec($ch);
-        
+
         // Check if any error occurred
         if (!curl_errno($ch)) {
             $info = curl_getinfo($ch);
             $payPage = "";
             $response = $info['http_code'];
-            
+
             if (isset($info['redirect_url'])) {
                 $payPage = $info['redirect_url'];
             }
         }
         curl_close($ch);
-        
+
         if ($response) {
             $status = $response;
             $redirect = substr($payPage, 41, 7);
         } else {
             $status = 'No answer';
         }
-        
+
         $this->assertEquals(302, $status); //Curl response code "Found"
         $this->assertEquals("payPage", $redirect);
     }

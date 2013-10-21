@@ -49,3 +49,6 @@ foreach (glob(SVEA_REQUEST_DIR . "/Config/*.php") as $config)
     include_once($config);
 foreach (glob(SVEA_REQUEST_DIR . "/Constant/*.php") as $config)
     include_once($config);
+
+foreach (glob(SVEA_REQUEST_DIR . "/Helper/*.php") as $config)
+    include_once($config);

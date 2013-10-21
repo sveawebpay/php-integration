@@ -329,15 +329,15 @@ class WebServiceOrderValidatorTest extends \PHPUnit_Framework_TestCase {
     
     /**
      * @expectedException Svea\ValidationException
-     * @expectedExceptionMessage -incorrect datatype : quantity is not of type int.
+     * @expectedExceptionMessage -incorrect datatype : quantity is not numeric, set as integer or float.
     */
-    public function testFailOnQuantityNotInt() {
+    public function testFailOnQuantityNotNumeric() {
         $builder = \WebPay::createOrder();
         $order = $builder
                 ->addOrderRow(\WebPayItem::orderRow()
                     ->setAmountExVat(100.00)
                     ->setVatPercent(20)
-                    ->setQuantity(1.0)
+                    ->setQuantity("1,25")    // note that i.e. "1,25" is numeric 1, so exclude strings for safety
                 )
                 ->setCountryCode("SE")
                 ->setOrderDate("Mon, 15 Aug 05 15:52:01 +0000")
@@ -466,10 +466,6 @@ class WebServiceOrderValidatorTest extends \PHPUnit_Framework_TestCase {
  
     // public function testFailOnVatDiscountNotInt() {} This attribute has no setter in OrderRow, so not tested
     
-    // TODO look for? -- example of how localised string prices may also fail with floatval: floatval("100,23") => 100.00
-    
-    // TODO add forced throw to validation, and use that to clean up tests et al (print out error array to see failing validations from tests)
-
     /**
      * @expectedException Svea\ValidationException
      * @expectedExceptionMessage -incorrect datatype : amountExVat is not of type float

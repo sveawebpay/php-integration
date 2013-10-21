@@ -25,10 +25,10 @@ class NewOrderBuilderTest extends \PHPUnit_Framework_TestCase {
             ->setCountryCode("SE")
             ->setCompany(4608142222)
             ->doRequest();
-        
+
         return $request->customerIdentity[0]->addressSelector;
     }
-    
+
     public function testNewInvoiceOrderCompanyAddresselector() {
         $addresselector = $this->getAddressForTesting();
         $request = \WebPay::createOrder();
@@ -44,7 +44,7 @@ class NewOrderBuilderTest extends \PHPUnit_Framework_TestCase {
                     ->prepareRequest();
             $this->assertEquals($addresselector, $request->request->CreateOrderInformation->AddressSelector);
     }
-    
+
     public function testNewInvoiceOrderWithOrderRow() {
         $request = \WebPay::createOrder();
         $request = $request
@@ -57,7 +57,7 @@ class NewOrderBuilderTest extends \PHPUnit_Framework_TestCase {
                 ->setCurrency("SEK")
                 ->useInvoicePayment()// returnerar InvoiceOrder object
                     ->prepareRequest();
-        
+
         $this->assertEquals(194605092222, $request->request->CreateOrderInformation->CustomerIdentity->NationalIdNumber); //Check all in identity
         $this->assertEquals(1, $request->request->CreateOrderInformation->OrderRows['OrderRow'][0]->ArticleNumber);
         $this->assertEquals(2, $request->request->CreateOrderInformation->OrderRows['OrderRow'][0]->NumberOfUnits);
@@ -67,10 +67,10 @@ class NewOrderBuilderTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals(25, $request->request->CreateOrderInformation->OrderRows['OrderRow'][0]->VatPercent);
         $this->assertEquals(0, $request->request->CreateOrderInformation->OrderRows['OrderRow'][0]->DiscountPercent);
     }
-    
+
     public function testNewInvoiceOrderWithArray() {
         $orderRows[] = \TestUtil::createOrderRow();
-        $orderRows[] = \WebPayItem::orderrow()                      
+        $orderRows[] = \WebPayItem::orderrow()
                     ->setArticleNumber("2")
                     ->setQuantity(2)
                     ->setAmountExVat(110.00)
@@ -79,7 +79,7 @@ class NewOrderBuilderTest extends \PHPUnit_Framework_TestCase {
                     ->setUnit("st")
                     ->setVatPercent(25)
                     ->setDiscountPercent(0);
-        
+
         $request = \WebPay::createOrder()
             ->addOrderRow($orderRows)
             ->addCustomerDetails(\WebPayItem::individualCustomer()->setNationalIdNumber(194605092222))
@@ -89,10 +89,10 @@ class NewOrderBuilderTest extends \PHPUnit_Framework_TestCase {
             ->setCurrency("SEK")
             ->useInvoicePayment()
             ->prepareRequest();
-        
+
         $this->assertEquals(194605092222, $request->request->CreateOrderInformation->CustomerIdentity->NationalIdNumber); //Check all in identity
     }
-    
+
     public function testOrderWithShippingFee() {
         $request = \WebPay::createOrder();
         $request = $request
@@ -123,7 +123,7 @@ class NewOrderBuilderTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals(25, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->VatPercent);
         $this->assertEquals(0, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->DiscountPercent);
     }
-    
+
     public function testOrderWithInvoiceFee() {
         $request = \WebPay::createOrder();
         $request = $request
@@ -144,7 +144,7 @@ class NewOrderBuilderTest extends \PHPUnit_Framework_TestCase {
             ->setCurrency("SEK")
             ->useInvoicePayment()// returnerar InvoiceOrder object
                 ->prepareRequest();
-        
+
         $this->assertEquals("", $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->ArticleNumber);
         $this->assertEquals(1, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->NumberOfUnits);
         $this->assertEquals(50.00, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->PricePerUnit);
@@ -153,7 +153,7 @@ class NewOrderBuilderTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals(25, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->VatPercent);
         $this->assertEquals(0, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->DiscountPercent);
     }
-    
+
     public function testOrderWithFixedDiscount() {
         $request = \WebPay::createOrder();
         $request = $request
@@ -173,7 +173,7 @@ class NewOrderBuilderTest extends \PHPUnit_Framework_TestCase {
             ->setCurrency("SEK")
             ->useInvoicePayment()// returnerar InvoiceOrder object
                 ->prepareRequest();
-          
+
         $this->assertEquals("1", $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->ArticleNumber);
         $this->assertEquals(1, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->NumberOfUnits);
         $this->assertEquals(-80.00, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->PricePerUnit);
@@ -182,7 +182,7 @@ class NewOrderBuilderTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals(25, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->VatPercent);
         $this->assertEquals(0, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->DiscountPercent);
     }
-       
+
     public function testOrderWithRelativeDiscount() {
         $request = \WebPay::createOrder();
         $request = $request
@@ -212,7 +212,7 @@ class NewOrderBuilderTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals(25, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->VatPercent);
         $this->assertEquals(0, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->DiscountPercent);
     }
-    
+
     public function testBuildOrderWithIndividualCustomer() {
         $request = \WebPay::createOrder();
             $request = $request
@@ -268,11 +268,11 @@ class NewOrderBuilderTest extends \PHPUnit_Framework_TestCase {
             ->setCurrency("SEK")
             ->useInvoicePayment()// returnerar InvoiceOrder object
                 ->prepareRequest();
-        
+
         $this->assertEquals(666666, $request->request->CreateOrderInformation->CustomerIdentity->NationalIdNumber);
         $this->assertEquals("Company", $request->request->CreateOrderInformation->CustomerIdentity->CustomerType);
     }
-    
+
     public function testBuildOrderWithCompanyCustomerDE() {
         $request = \WebPay::createOrder();
         $request = $request
@@ -300,6 +300,78 @@ class NewOrderBuilderTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals("Company", $request->request->CreateOrderInformation->CustomerIdentity->CustomerType);
         $this->assertEquals("MyCompany", $request->request->CreateOrderInformation->CustomerIdentity->FullName);
     }
+
+    public function testAmountsZero() {
+        $request = \WebPay::createOrder();
+        $request = $request
+            ->addOrderRow(
+            \WebPayItem::orderRow()
+                    ->setArticleNumber("1")
+                    ->setQuantity(1)
+                    ->setAmountExVat(0.00)
+                    ->setAmountIncVat(0.00)
+                    )
+            ->addCustomerDetails(\WebPayItem::individualCustomer()->setNationalIdNumber(194605092222))
+            ->setCountryCode("SE")
+            ->setCustomerReference("33")
+            ->setOrderDate("2012-12-12")
+            ->setCurrency("SEK")
+            ->useInvoicePayment()// returnerar InvoiceOrder object
+                ->prepareRequest();
+
+        $this->assertEquals("1", $request->request->CreateOrderInformation->OrderRows['OrderRow'][0]->ArticleNumber);
+        $this->assertEquals(1, $request->request->CreateOrderInformation->OrderRows['OrderRow'][0]->NumberOfUnits);
+        $this->assertEquals(0, $request->request->CreateOrderInformation->OrderRows['OrderRow'][0]->PricePerUnit);
+        $this->assertEquals(0, $request->request->CreateOrderInformation->OrderRows['OrderRow'][0]->VatPercent);
+    }
+    public function testAmountIncVatZero() {
+        $request = \WebPay::createOrder();
+        $request = $request
+            ->addOrderRow(
+            \WebPayItem::orderRow()
+                    ->setArticleNumber("1")
+                    ->setQuantity(1)
+                    ->setVatPercent(25)
+                    ->setAmountIncVat(0.00)
+                    )
+            ->addCustomerDetails(\WebPayItem::individualCustomer()->setNationalIdNumber(194605092222))
+            ->setCountryCode("SE")
+            ->setCustomerReference("33")
+            ->setOrderDate("2012-12-12")
+            ->setCurrency("SEK")
+            ->useInvoicePayment()// returnerar InvoiceOrder object
+                ->prepareRequest();
+
+        $this->assertEquals("1", $request->request->CreateOrderInformation->OrderRows['OrderRow'][0]->ArticleNumber);
+        $this->assertEquals(1, $request->request->CreateOrderInformation->OrderRows['OrderRow'][0]->NumberOfUnits);
+        $this->assertEquals(0, $request->request->CreateOrderInformation->OrderRows['OrderRow'][0]->PricePerUnit);
+        $this->assertEquals(25, $request->request->CreateOrderInformation->OrderRows['OrderRow'][0]->VatPercent);
+    }
+    public function testAmountExVatZero() {
+        $request = \WebPay::createOrder();
+        $request = $request
+            ->addOrderRow(
+            \WebPayItem::orderRow()
+                    ->setArticleNumber("1")
+                    ->setQuantity(1)
+                    ->setAmountExVat(0.00)
+                    ->setVatPercent(25)
+                    )
+            ->addCustomerDetails(\WebPayItem::individualCustomer()->setNationalIdNumber(194605092222))
+            ->setCountryCode("SE")
+            ->setCustomerReference("33")
+            ->setOrderDate("2012-12-12")
+            ->setCurrency("SEK")
+            ->useInvoicePayment()// returnerar InvoiceOrder object
+                ->prepareRequest();
+
+        $this->assertEquals("1", $request->request->CreateOrderInformation->OrderRows['OrderRow'][0]->ArticleNumber);
+        $this->assertEquals(1, $request->request->CreateOrderInformation->OrderRows['OrderRow'][0]->NumberOfUnits);
+        $this->assertEquals(0, $request->request->CreateOrderInformation->OrderRows['OrderRow'][0]->PricePerUnit);
+        $this->assertEquals(25.0, $request->request->CreateOrderInformation->OrderRows['OrderRow'][0]->VatPercent);
+    }
+
+
 
         /** example how to integrate with array_map
         function testOrderRowsUsingMap() {

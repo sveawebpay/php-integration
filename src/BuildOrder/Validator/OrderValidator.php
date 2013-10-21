@@ -57,8 +57,8 @@ abstract class OrderValidator {
                 if( isset($row->articleNumber) &&!is_string( $row->articleNumber ) )
                     $errors['incorrect datatype'] = 'articleNumber is not of type string.';      
                 
-                if( isset($row->quantity) && !is_int($row->quantity) )
-                    $errors['incorrect datatype'] = "quantity is not of type int.";
+                if( isset($row->quantity) && ! (is_int($row->quantity) || is_float($row->quantity)) )
+                    $errors['incorrect datatype'] = "quantity is not numeric, set as integer or float.";
 
                 if( isset($row->unit) && ! is_string( $row->unit ) )
                     $errors['incorrect datatype'] = 'unit is not of type string.';

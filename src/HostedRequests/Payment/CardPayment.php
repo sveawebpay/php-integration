@@ -51,6 +51,17 @@ class CardPayment extends HostedPayment {
     }
 
     /**
+     * Set callback Url which contacts the store in case the return success URL
+     * wasn't reached
+     * @param type $callbackUrlAsString
+     * @return \HostedPayment
+     */
+    public function setCallbackUrl($callbackUrlAsString) {
+        $this->callbackUrl = $callbackUrlAsString;
+        return $this;
+    }
+
+    /**
      * Set return Url when hitting cancel on PayPage
      * @param type $cancelUrlAsString
      * @return \HostedPayment
