@@ -1,5 +1,5 @@
 # PHP Integration Package API for SveaWebPay
-## Version 1.5.0
+## Version 1.5.1
 
 | Branch                            | Build status                               |
 |---------------------------------- |------------------------------------------- |
@@ -49,7 +49,7 @@ $foo = $foo->...
 
 ## Changes in release 1.2.1
 
-We recommend using php 4.4 on package servers, for namespace compatibility 
+We recommend using php 4.4 on package servers, for namespace compatibility
 (reported compatibility issue with Debian Squeeze instalations).
 
 ### Namespace
@@ -267,7 +267,7 @@ $orderRows[] = WebPayItem::orderRow()->...;
 #### 1.2.1 OrderRow
 All products and other items. It´s required to have a minimum of one orderrow.
 Precisely two of these values must be set in the WebPayItem object, in order to specify the item tax rate:
-AmountExVat, AmountIncVat or VatPercent for Orderrow. 
+AmountExVat, AmountIncVat or VatPercent for Orderrow.
 
 If you specify AmountIncVat, note that this may introduce a cumulative rounding error when ordering large
 quantities of an item, as the package bases the total order sum on a calculated price ex. vat.
