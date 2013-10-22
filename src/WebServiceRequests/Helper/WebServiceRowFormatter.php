@@ -269,7 +269,7 @@ class WebServiceRowFormatter {
 
                     $this->newRows[] = $orderRow;
             }
-            // only amountIncVat (i.e. amount) and vatPercent is set, so we use that vatPercent:
+
             if( !isset($row->amount) && isset($row->vatPercent) && isset($row->amountExVat) ) {
 
                     $orderRow = new SveaOrderRow();

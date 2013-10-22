@@ -8,7 +8,7 @@ class FixedDiscount {
     /**
      * Optional
      * @param string $IdAsString
-     * @return \FixedDiscount
+     * @return Svea\FixedDiscount
      */
     public function setDiscountId($IdAsString) {
         $this->discountId = $IdAsString;
@@ -68,7 +68,7 @@ class FixedDiscount {
      * Optional
      * 
      * Required to use at least two of the functions setAmountExVat(), setAmountIncVat(), setVatPercent().
-     * If two of these three attributes are specified, we respect the amount indicated and include a discount with the appropriate tax rate.
+     * If two of these three attributes are specified, we respect the amount indicated and include a discount with the specified tax rate.
      * 
      * @param float $amountAsFloat
      * @return \FixedDiscount
@@ -81,6 +81,7 @@ class FixedDiscount {
     /**
      * Optional
      * Required to use at least two of the functions setAmountExVat(), setAmountIncVat(), setVatPercent()
+     * If two of these three attributes are specified, we respect the amount indicated and include a discount with the specified tax rate.
      * @param int $vatPercentAsInt
      * @return \FixedDiscount
      */

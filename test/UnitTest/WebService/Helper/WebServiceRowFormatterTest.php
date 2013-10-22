@@ -349,7 +349,7 @@ class WebServiceRowFormatterTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(1, $newRow->NumberOfUnits);
         $this->assertEquals("st", $newRow->Unit);
     }   
-    
+       
     // amountExVat and vatPercent => add as one row with specified vat rate only
     public function testFormatFixedDiscountRows_amountExVatAndVatPercent_WithDifferentVatRatesPresent() {
         $order = WebPay::createOrder();
@@ -365,7 +365,7 @@ class WebServiceRowFormatterTest extends PHPUnit_Framework_TestCase {
                 )
                 ->addDiscount(WebPayItem::fixedDiscount()
                     ->setDiscountId("42")
-                    ->setName("->setAmountIncVat(100)")
+                    ->setName("->setAmountExVat(100)")
                     ->setDescription("testFormatFixedDiscountRowsWithDifferentVatRatesPresent")
                     ->setAmountExVat(111)
                     ->setVatPercent(25)
@@ -378,7 +378,7 @@ class WebServiceRowFormatterTest extends PHPUnit_Framework_TestCase {
         // 100 @25% vat = -80 excl. vat
         $newRow = $newRows[2];
         $this->assertEquals("42", $newRow->ArticleNumber);
-        $this->assertEquals("->setAmountIncVat(100): testFormatFixedDiscountRowsWithDifferentVatRatesPresent", $newRow->Description);
+        $this->assertEquals("->setAmountExVat(100): testFormatFixedDiscountRowsWithDifferentVatRatesPresent", $newRow->Description);
         $this->assertEquals(-111.00, $newRow->PricePerUnit);
         $this->assertEquals(25, $newRow->VatPercent);
         $this->assertEquals(0, $newRow->DiscountPercent);
@@ -386,6 +386,45 @@ class WebServiceRowFormatterTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals("st", $newRow->Unit);
    }  
 
+   // amountExVat and vatPercent => add as one row with specified vat rate only
+    public function testFormatFixedDiscountRows_amountExVatAndVatPercent_WithDifferentVatRatesPresent2() {
+        $order = WebPay::createOrder();
+        $order->addOrderRow(WebPayItem::orderRow()
+                ->setAmountExVat(100.00)
+                ->setVatPercent(25)
+                ->setQuantity(2)
+                )
+                ->addOrderRow(WebPayItem::orderRow()
+                ->setAmountExVat(100.00)
+                ->setVatPercent(6)
+                ->setQuantity(1)
+                )
+                ->addDiscount(WebPayItem::fixedDiscount()
+                    ->setName("->setAmountExVat(100)")
+                    ->setDescription("testFormatFixedDiscountRowsWithDifferentVatRatesPresent2 (25%)")
+                    ->setAmountExVat(66.67)
+                    ->setVatPercent(25)
+                )
+                ->addDiscount(WebPayItem::fixedDiscount()
+                    ->setName("->setAmountExVat(100)")
+                    ->setDescription("testFormatFixedDiscountRowsWithDifferentVatRatesPresent2 (6%)")
+                    ->setAmountExVat(33.33)
+                    ->setVatPercent(6)
+                );
+                
+        $formatter = new Svea\WebServiceRowFormatter($order);
+        $newRows = $formatter->formatRows();
+        
+        $newRow = $newRows[2];
+        $this->assertEquals("->setAmountExVat(100): testFormatFixedDiscountRowsWithDifferentVatRatesPresent2 (25%)", $newRow->Description);
+        $this->assertEquals(-66.67, $newRow->PricePerUnit);
+        $this->assertEquals(25, $newRow->VatPercent);
+
+        $newRow = $newRows[3];
+        $this->assertEquals("->setAmountExVat(100): testFormatFixedDiscountRowsWithDifferentVatRatesPresent2 (6%)", $newRow->Description);
+        $this->assertEquals(-33.33, $newRow->PricePerUnit);
+        $this->assertEquals(6, $newRow->VatPercent);
+    }  
        
     public function testFormatRelativeDiscountRows() {
         $order = WebPay::createOrder();
@@ -485,6 +524,5 @@ class WebServiceRowFormatterTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(1, $newRow->NumberOfUnits);     // 1 "discount unit"
         $this->assertEquals("st", $newRow->Unit);
    }
-    
-    
+       
 }
