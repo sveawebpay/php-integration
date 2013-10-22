@@ -77,7 +77,8 @@ class WebServiceRowFormatter {
                 $this->totalVatAsAmount += ($product->amountIncVat - $product->amountExVat) * $product->quantity;
 
                 // add to or create cumulative amount for this tax rate
-                $vatRate = round((($product->amountIncVat / $product->amountExVat)-1) * 100);
+                $vatRate = $this->calculateVatPercentFromPriceExVatAndPriceIncVat($product->amountIncVat, $product->amountExVat);
+                //$vatRate = round((($product->amountIncVat / $product->amountExVat)-1) * 100);
                 if( isset($this->totalAmountPerVatRateIncVat[$vatRate]) ) {
                     $this->totalAmountPerVatRateIncVat[$vatRate] += ($product->amountExVat * $product->quantity * (1+$vatRate/100));
                 } else {
