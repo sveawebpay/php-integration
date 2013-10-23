@@ -45,34 +45,53 @@ class Helper {
         
         $fixedDiscounts = array();
  
-        // m = $discountMeanVat
-        // r0 = allowedTaxRates[0]; r1 = allowedTaxRates[1]
-        // m = a r0 + b r1 => m = a r0 + (1-a) r1 => m = (r0-r1) a + r1 => a = (m-r1)/(r0-r1)
-        // d = $discountAmountExVat;  
-        // d = d (a+b) => 1 = a+b => b = 1-a       
-        
-        $a = ($discountMeanVat - $allowedTaxRates[1]) / ( $allowedTaxRates[0] - $allowedTaxRates[1] );
-        $b = 1 - $a;
-        
-        $discountA = \WebPayItem::fixedDiscount()
-                        ->setAmountExVat( Helper::bround(($discountAmountExVat * $a),2) )
-                        ->setVatPercent( $allowedTaxRates[0] )
-                        ->setName( isset( $discountName) ? $discountName : "" )
-                        ->setDescription( (isset( $discountDescription) ? $discountDescription : "") . ' (' .$allowedTaxRates[0]. '%)' )
-        ;
-        
-        $discountB = \WebPayItem::fixedDiscount()
-                        ->setAmountExVat( Helper::bround(($discountAmountExVat * $b),2) )
-                        ->setVatPercent(  $allowedTaxRates[1] )
-                        ->setName( isset( $discountName) ? $discountName : "" )
-                        ->setDescription( (isset( $discountDescription) ? $discountDescription : "") . ' (' .$allowedTaxRates[1]. '%)' )
-        ;
+        if( sizeof( $allowedTaxRates ) > 1 ) {
 
-        $fixedDiscounts[] = $discountA;
-        $fixedDiscounts[] = $discountB;
-        
+            // m = $discountMeanVat
+            // r0 = allowedTaxRates[0]; r1 = allowedTaxRates[1]
+            // m = a r0 + b r1 => m = a r0 + (1-a) r1 => m = (r0-r1) a + r1 => a = (m-r1)/(r0-r1)
+            // d = $discountAmountExVat;  
+            // d = d (a+b) => 1 = a+b => b = 1-a       
+
+            $a = ($discountMeanVat - $allowedTaxRates[1]) / ( $allowedTaxRates[0] - $allowedTaxRates[1] );
+            $b = 1 - $a;
+
+            $discountA = \WebPayItem::fixedDiscount()
+                            ->setAmountExVat( Helper::bround(($discountAmountExVat * $a),2) )
+                            ->setVatPercent( $allowedTaxRates[0] )
+                            ->setName( isset( $discountName) ? $discountName : "" )
+                            ->setDescription( (isset( $discountDescription) ? $discountDescription : "") . ' (' .$allowedTaxRates[0]. '%)' )
+            ;
+
+            $discountB = \WebPayItem::fixedDiscount()
+                            ->setAmountExVat( Helper::bround(($discountAmountExVat * $b),2) )
+                            ->setVatPercent(  $allowedTaxRates[1] )
+                            ->setName( isset( $discountName) ? $discountName : "" )
+                            ->setDescription( (isset( $discountDescription) ? $discountDescription : "") . ' (' .$allowedTaxRates[1]. '%)' )
+            ;
+
+            $fixedDiscounts[] = $discountA;
+            $fixedDiscounts[] = $discountB;
+
+        }
+        // single tax rate, so use shop supplied mean as vat rate
+        else {
+            $discountA = \WebPayItem::fixedDiscount()
+                ->setAmountExVat( Helper::bround(($discountAmountExVat),2) )
+                ->setVatPercent( $allowedTaxRates[0] )
+                ->setName( isset( $discountName) ? $discountName : "" )
+                ->setDescription( (isset( $discountDescription) ? $discountDescription : "") )
+            ;
+            $fixedDiscounts[] = $discountA;
+        }
         return $fixedDiscounts;
-    }   
+    }  
+    
+    
+    
+    
+    
+    
     /**
      * Takes a createOrderBuilder object, iterates over its orderRows, and
      * returns an array containing the distinct taxrates present in the order
