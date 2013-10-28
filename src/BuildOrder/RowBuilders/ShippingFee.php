@@ -7,6 +7,14 @@ namespace Svea;
 class ShippingFee {
     
     /**
+     * in constructor, we set quantity to 1, as this attribute is used by 
+     * WebServiceRowFormatter() and all shipping rows are for one (1) unit
+     */
+    function __construct() {
+        $this->quantity = 1;
+    }
+    
+    /**
      * Optional
      * @param string $idAsString
      * @return \ShippingFee
