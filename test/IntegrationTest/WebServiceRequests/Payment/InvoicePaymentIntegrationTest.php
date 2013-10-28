@@ -160,4 +160,305 @@ class InvoicePaymentIntegrationTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals('1102 HG', $request->customerIdentity->zipCode);
         $this->assertEquals('BARENDRECHT', $request->customerIdentity->locality);   
     }
+    
+    /**
+     * make sure opencart bug w/corporate invoice payments for one 25% vat product with free shipping (0% vat) 
+     * resulting in request with illegal vat rows of 24% not originating in integration package
+     */
+    
+    // TODO move some of these variant test cases to unit tests instead to keep down test suite overhead?
+    public function test_InvoiceFee_ExVatAndVatPercent() {
+        
+        $order = WebPay::createOrder();
+        $order->addOrderRow(WebPayItem::orderRow()
+                ->setAmountExVat(100.00)
+                ->setVatPercent(25)
+                ->setQuantity(1)
+                )
+                ->addOrderRow(WebPayItem::shippingFee()
+                ->setAmountExVat(0.00)
+                ->setVatPercent(0)
+                )
+                ->addOrderRow(WebPayItem::invoiceFee()
+                ->setAmountExVat(23.20)
+                ->setVatPercent(25)
+                )
+            
+                ->addCustomerDetails( TestUtil::createCompanyCustomer("SE") )
+                ->setCountryCode("SE")
+                ->setOrderDate("2013-10-28")
+                ->setCurrency("SEK");
+        
+        // asserts on request
+        $request = $order->useInvoicePayment()->prepareRequest();
+   
+        $newRows = $request->request->CreateOrderInformation->OrderRows['OrderRow'];
+        
+        $newRow = $newRows[0];
+        $this->assertEquals(100, $newRow->PricePerUnit);
+        $this->assertEquals(25, $newRow->VatPercent);
+
+        $newRow = $newRows[1];
+        $this->assertEquals(0, $newRow->PricePerUnit);
+        $this->assertEquals(0, $newRow->VatPercent);
+
+        $newRow = $newRows[2];
+        $this->assertEquals(23.20, $newRow->PricePerUnit);
+        $this->assertEquals(25, $newRow->VatPercent);
+        
+        // asserts on result
+        $result = $order->useInvoicePayment()->doRequest();
+
+        $this->assertEquals(1, $result->accepted);
+        $this->assertEquals(0, $result->resultcode);
+        $this->assertEquals('Invoice', $result->orderType);
+        $this->assertEquals(1, $result->sveaWillBuyOrder);
+        $this->assertEquals(154, $result->amount);         
+    }
+
+    public function test_InvoiceFee_IncVatAndVatPercent() {
+        
+        $order = WebPay::createOrder();
+        $order->addOrderRow(WebPayItem::orderRow()
+                ->setAmountExVat(100.00)
+                ->setVatPercent(25)
+                ->setQuantity(1)
+                )
+                ->addOrderRow(WebPayItem::shippingFee()
+                ->setAmountIncVat(0.00)
+                ->setVatPercent(0)
+                )
+                ->addOrderRow(WebPayItem::invoiceFee()
+                ->setAmountIncVat(29.00)
+                ->setVatPercent(25)
+                )
+            
+                ->addCustomerDetails( TestUtil::createCompanyCustomer("SE") )
+                ->setCountryCode("SE")
+                ->setOrderDate("2013-10-28")
+                ->setCurrency("SEK");
+        
+        // asserts on request
+        $request = $order->useInvoicePayment()->prepareRequest();
+   
+        $newRows = $request->request->CreateOrderInformation->OrderRows['OrderRow'];
+        
+        $newRow = $newRows[0];
+        $this->assertEquals(100, $newRow->PricePerUnit);
+        $this->assertEquals(25, $newRow->VatPercent);
+
+        $newRow = $newRows[1];
+        $this->assertEquals(0, $newRow->PricePerUnit);
+        $this->assertEquals(0, $newRow->VatPercent);
+
+        $newRow = $newRows[2];
+        $this->assertEquals(23.20, $newRow->PricePerUnit);
+        $this->assertEquals(25, $newRow->VatPercent);
+        
+        // asserts on result
+        $result = $order->useInvoicePayment()->doRequest();
+
+        $this->assertEquals(1, $result->accepted);
+        $this->assertEquals(0, $result->resultcode);
+        $this->assertEquals('Invoice', $result->orderType);
+        $this->assertEquals(1, $result->sveaWillBuyOrder);
+        $this->assertEquals(154, $result->amount);         
+    }
+    
+    public function test_InvoiceFee_IncVatAndExVat() {
+        
+        $order = WebPay::createOrder();
+        $order->addOrderRow(WebPayItem::orderRow()
+                ->setAmountExVat(100.00)
+                ->setVatPercent(25)
+                ->setQuantity(1)
+                )
+                ->addOrderRow(WebPayItem::shippingFee()
+                ->setAmountIncVat(0.00)
+                ->setVatPercent(0)
+                )
+                ->addOrderRow(WebPayItem::invoiceFee()
+                ->setAmountIncVat(29.00)
+                ->setAmountExVat(23.20)
+                )
+            
+                ->addCustomerDetails( TestUtil::createCompanyCustomer("SE") )
+                ->setCountryCode("SE")
+                ->setOrderDate("2013-10-28")
+                ->setCurrency("SEK");
+        
+        // asserts on request
+        $request = $order->useInvoicePayment()->prepareRequest();
+   
+        $newRows = $request->request->CreateOrderInformation->OrderRows['OrderRow'];
+        
+        $newRow = $newRows[0];
+        $this->assertEquals(100, $newRow->PricePerUnit);
+        $this->assertEquals(25, $newRow->VatPercent);
+
+        $newRow = $newRows[1];
+        $this->assertEquals(0, $newRow->PricePerUnit);
+        $this->assertEquals(0, $newRow->VatPercent);
+
+        $newRow = $newRows[2];
+        $this->assertEquals(23.20, $newRow->PricePerUnit);
+        $this->assertEquals(25, $newRow->VatPercent);
+        
+        // asserts on result
+        $result = $order->useInvoicePayment()->doRequest();
+
+        $this->assertEquals(1, $result->accepted);
+        $this->assertEquals(0, $result->resultcode);
+        $this->assertEquals('Invoice', $result->orderType);
+        $this->assertEquals(1, $result->sveaWillBuyOrder);
+        $this->assertEquals(154, $result->amount);         
+    }
+    
+    public function test_ShippingFee_ExVatAndVatPercent() {
+        
+        $order = WebPay::createOrder();
+        $order->addOrderRow(WebPayItem::orderRow()
+                ->setAmountExVat(100.00)
+                ->setVatPercent(25)
+                ->setQuantity(1)
+                )
+                ->addOrderRow(WebPayItem::shippingFee()
+                ->setAmountExVat(20.00)
+                ->setVatPercent(6)
+                )
+                ->addOrderRow(WebPayItem::invoiceFee()
+                ->setAmountExVat(23.20)
+                ->setVatPercent(25)
+                )
+            
+                ->addCustomerDetails( TestUtil::createCompanyCustomer("SE") )
+                ->setCountryCode("SE")
+                ->setOrderDate("2013-10-28")
+                ->setCurrency("SEK");
+        
+        // asserts on request
+        $request = $order->useInvoicePayment()->prepareRequest();
+   
+        $newRows = $request->request->CreateOrderInformation->OrderRows['OrderRow'];
+        
+        $newRow = $newRows[0];
+        $this->assertEquals(100, $newRow->PricePerUnit);
+        $this->assertEquals(25, $newRow->VatPercent);
+
+        $newRow = $newRows[1];
+        $this->assertEquals(20.00, $newRow->PricePerUnit);
+        $this->assertEquals(6, $newRow->VatPercent);
+
+        $newRow = $newRows[2];
+        $this->assertEquals(23.20, $newRow->PricePerUnit);
+        $this->assertEquals(25, $newRow->VatPercent);
+        
+        // asserts on result
+        $result = $order->useInvoicePayment()->doRequest();
+
+        $this->assertEquals(1, $result->accepted);
+        $this->assertEquals(0, $result->resultcode);
+        $this->assertEquals('Invoice', $result->orderType);
+        $this->assertEquals(1, $result->sveaWillBuyOrder);
+        $this->assertEquals(175.2, $result->amount);         
+    }
+
+    public function test_ShippingFee_IncVatAndVatPercent() {
+        
+        $order = WebPay::createOrder();
+        $order->addOrderRow(WebPayItem::orderRow()
+                ->setAmountExVat(100.00)
+                ->setVatPercent(25)
+                ->setQuantity(1)
+                )
+                ->addOrderRow(WebPayItem::shippingFee()
+                ->setAmountIncVat(21.20)
+                ->setVatPercent(6)
+                )
+                ->addOrderRow(WebPayItem::invoiceFee()
+                ->setAmountExVat(23.20)
+                ->setVatPercent(25)
+                )
+            
+                ->addCustomerDetails( TestUtil::createCompanyCustomer("SE") )
+                ->setCountryCode("SE")
+                ->setOrderDate("2013-10-28")
+                ->setCurrency("SEK");
+        
+        // asserts on request
+        $request = $order->useInvoicePayment()->prepareRequest();
+   
+        $newRows = $request->request->CreateOrderInformation->OrderRows['OrderRow'];
+        
+        $newRow = $newRows[0];
+        $this->assertEquals(100, $newRow->PricePerUnit);
+        $this->assertEquals(25, $newRow->VatPercent);
+
+        $newRow = $newRows[1];
+        $this->assertEquals(20.00, $newRow->PricePerUnit);
+        $this->assertEquals(6, $newRow->VatPercent);
+
+        $newRow = $newRows[2];
+        $this->assertEquals(23.20, $newRow->PricePerUnit);
+        $this->assertEquals(25, $newRow->VatPercent);
+        
+        // asserts on result
+        $result = $order->useInvoicePayment()->doRequest();
+
+        $this->assertEquals(1, $result->accepted);
+        $this->assertEquals(0, $result->resultcode);
+        $this->assertEquals('Invoice', $result->orderType);
+        $this->assertEquals(1, $result->sveaWillBuyOrder);
+        $this->assertEquals(175.2, $result->amount);         
+    }
+
+    public function test_ShippingFee_IncVatAndExVat() {
+        
+        $order = WebPay::createOrder();
+        $order->addOrderRow(WebPayItem::orderRow()
+                ->setAmountExVat(100.00)
+                ->setVatPercent(25)
+                ->setQuantity(1)
+                )
+                ->addOrderRow(WebPayItem::shippingFee()
+                ->setAmountExVat(20.00)
+                ->setAmountIncVat(21.20)
+                )
+                ->addOrderRow(WebPayItem::invoiceFee()
+                ->setAmountExVat(23.20)
+                ->setVatPercent(25)
+                )
+            
+                ->addCustomerDetails( TestUtil::createCompanyCustomer("SE") )
+                ->setCountryCode("SE")
+                ->setOrderDate("2013-10-28")
+                ->setCurrency("SEK");
+        
+        // asserts on request
+        $request = $order->useInvoicePayment()->prepareRequest();
+   
+        $newRows = $request->request->CreateOrderInformation->OrderRows['OrderRow'];
+        
+        $newRow = $newRows[0];
+        $this->assertEquals(100, $newRow->PricePerUnit);
+        $this->assertEquals(25, $newRow->VatPercent);
+
+        $newRow = $newRows[1];
+        $this->assertEquals(20.00, $newRow->PricePerUnit);
+        $this->assertEquals(6, $newRow->VatPercent);
+
+        $newRow = $newRows[2];
+        $this->assertEquals(23.20, $newRow->PricePerUnit);
+        $this->assertEquals(25, $newRow->VatPercent);
+        
+        // asserts on result
+        $result = $order->useInvoicePayment()->doRequest();
+
+        $this->assertEquals(1, $result->accepted);
+        $this->assertEquals(0, $result->resultcode);
+        $this->assertEquals('Invoice', $result->orderType);
+        $this->assertEquals(1, $result->sveaWillBuyOrder);
+        $this->assertEquals(175.2, $result->amount);         
+    }
+    
 }

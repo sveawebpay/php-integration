@@ -524,5 +524,42 @@ class WebServiceRowFormatterTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(1, $newRow->NumberOfUnits);     // 1 "discount unit"
         $this->assertEquals("st", $newRow->Unit);
    }
-       
+   
+    /**
+     * make sure opencart bug w/corporate invoice payments for one 25% vat product with free shipping (0% vat) 
+     * resulting in request with illegal vat rows of 24% not originating in integration package, also see 
+     * InvoicePaymentIntegrationTest
+     */
+    public function test_InvoiceWithFreeShippingAndCorporateCustomer_begetsWeirdVATInRequestInOpenCart() {
+        
+        $order = WebPay::createOrder();
+        $order->addOrderRow(WebPayItem::orderRow()
+                ->setAmountExVat(100.00)
+                ->setVatPercent(25)
+                ->setQuantity(1)
+                )
+                ->addOrderRow(WebPayItem::shippingFee()
+                ->setAmountExVat(0.00)
+                ->setVatPercent(0)
+                )
+                ->addOrderRow(WebPayItem::invoiceFee()
+                ->setAmountExVat(23.20)
+                ->setVatPercent(25)
+                );
+        
+        $formatter = new Svea\WebServiceRowFormatter($order);
+        $newRows = $formatter->formatRows();
+        
+        $newRow = $newRows[0];
+        $this->assertEquals(100, $newRow->PricePerUnit);
+        $this->assertEquals(25, $newRow->VatPercent);
+
+        $newRow = $newRows[1];
+        $this->assertEquals(0, $newRow->PricePerUnit);
+        $this->assertEquals(0, $newRow->VatPercent);
+        
+        $newRow = $newRows[2];
+        $this->assertEquals(23.20, $newRow->PricePerUnit);
+        $this->assertEquals(25, $newRow->VatPercent);
+    }     
 }

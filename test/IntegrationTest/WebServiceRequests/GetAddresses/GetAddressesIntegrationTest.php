@@ -30,6 +30,8 @@ class GetAddressesIntegrationTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(1, $request->accepted);
     }
     
+    // TODO add integrationtests for getAddresses() in all supported countries
+    
     public function testResultGetAddresses() {
         $addressRequest = WebPay::getAddresses();
         $request = $addressRequest
