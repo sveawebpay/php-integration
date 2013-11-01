@@ -166,12 +166,11 @@ class InvoicePaymentIntegrationTest extends PHPUnit_Framework_TestCase {
      * resulting in request with illegal vat rows of 24% not originating in integration package
      */
     
-    // TODO move some of these variant test cases to unit tests instead to keep down test suite overhead?
-    public function test_InvoiceFee_ExVatAndVatPercent() {
+        public function test_InvoiceFee_ExVatAndVatPercent() {
         
         $order = WebPay::createOrder();
         $order->addOrderRow(WebPayItem::orderRow()
-                ->setAmountExVat(100.00)
+                ->setAmountExVat(2032.80)
                 ->setVatPercent(25)
                 ->setQuantity(1)
                 )
@@ -180,7 +179,7 @@ class InvoicePaymentIntegrationTest extends PHPUnit_Framework_TestCase {
                 ->setVatPercent(0)
                 )
                 ->addOrderRow(WebPayItem::invoiceFee()
-                ->setAmountExVat(23.20)
+                ->setAmountExVat(29.00)
                 ->setVatPercent(25)
                 )
             
@@ -195,7 +194,7 @@ class InvoicePaymentIntegrationTest extends PHPUnit_Framework_TestCase {
         $newRows = $request->request->CreateOrderInformation->OrderRows['OrderRow'];
         
         $newRow = $newRows[0];
-        $this->assertEquals(100, $newRow->PricePerUnit);
+        $this->assertEquals(2032.80, $newRow->PricePerUnit);
         $this->assertEquals(25, $newRow->VatPercent);
 
         $newRow = $newRows[1];
@@ -203,7 +202,7 @@ class InvoicePaymentIntegrationTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(0, $newRow->VatPercent);
 
         $newRow = $newRows[2];
-        $this->assertEquals(23.20, $newRow->PricePerUnit);
+        $this->assertEquals(29.00, $newRow->PricePerUnit);
         $this->assertEquals(25, $newRow->VatPercent);
         
         // asserts on result
@@ -213,9 +212,10 @@ class InvoicePaymentIntegrationTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(0, $result->resultcode);
         $this->assertEquals('Invoice', $result->orderType);
         $this->assertEquals(1, $result->sveaWillBuyOrder);
-        $this->assertEquals(154, $result->amount);         
-    }
+        $this->assertEquals(2577.25, $result->amount);         
 
+    }
+    
     public function test_InvoiceFee_IncVatAndVatPercent() {
         
         $order = WebPay::createOrder();

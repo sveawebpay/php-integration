@@ -28,7 +28,10 @@ class HelperTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals( 0, Helper::bround(0) ); 
         $this->assertEquals( 0, Helper::bround(0.5) );
                 
-        $this->assertEquals( 262462, Helper::bround(262462.5) );             
+        $this->assertEquals( 262462, Helper::bround(262462.5) );      
+        
+        $this->assertEquals( 0.479, Helper::bround(0.4785375,3) );  // i.e. greater than 0.4585, so round up
+        $this->assertEquals( 0.478, Helper::bround(0.4780000,3) );  // i.e. exactly 0.4585, so round to even
     }
       
     //--------------------------------------------------------------------------    
