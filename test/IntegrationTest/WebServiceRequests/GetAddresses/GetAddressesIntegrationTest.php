@@ -5,39 +5,58 @@ $root = realpath(dirname(__FILE__));
 require_once $root . '/../../../../src/Includes.php';
 
 /**
- * @author Jonas Lith
+ * @author Jonas Lith, Kristian Grossman-Madsen
  */
 class GetAddressesIntegrationTest extends PHPUnit_Framework_TestCase {
-    
-    public function testGetAddressesResultForPrivate() {
+   
+    // private, company
+    public function testGetAddressesResult_Private() {
         $addressRequest = WebPay::getAddresses();
         $request = $addressRequest
             ->setOrderTypeInvoice()
             ->setCountryCode("SE")
-            ->setIndividual(194605092222)
+            ->setIndividual("194605092222")
             ->doRequest();
         $this->assertEquals(1, $request->accepted);
     }
      
-    public function testGetAddressesResultForCompany() {
+    public function testGetAddressesResult_Company() {
         $addressRequest = WebPay::getAddresses();
         $request = $addressRequest
             ->setOrderTypeInvoice()
             ->setCountryCode("SE")
-            ->setCompany(4608142222)
+            ->setCompany("4608142222")
             ->doRequest();
-
         $this->assertEquals(1, $request->accepted);
     }
     
-    // TODO add integrationtests for getAddresses() in all supported countries
+    public function testGetAddressesResult_PaymentPlan() {
+        $addressRequest = WebPay::getAddresses();
+        $request = $addressRequest
+            ->setOrderTypePaymentPlan()
+            ->setCountryCode("SE")
+            ->setCompany("4608142222")
+            ->doRequest();
+        $this->assertEquals(1, $request->accepted);
+    }
     
-    public function testResultGetAddresses() {
+    public function testGetAddressesResult_Invoice() {
+        $addressRequest = WebPay::getAddresses();
+        $request = $addressRequest
+            ->setOrderTypeInvoice()
+            ->setCountryCode("SE")
+            ->setCompany("4608142222")
+            ->doRequest();
+        $this->assertEquals(1, $request->accepted);
+    }
+    
+    // TODO add integrationtests for getAddresses() in all supported countries  
+    public function test_GetAddresses_CredentialsForPrivate_areCorrect() {
         $addressRequest = WebPay::getAddresses();
         $request = $addressRequest
                 ->setOrderTypeInvoice()
                 ->setCountryCode("SE")
-                ->setIndividual(194605092222)
+                ->setIndividual("194605092222")
                 ->doRequest();
         
         $this->assertEquals(1, $request->accepted);
@@ -53,5 +72,107 @@ class GetAddressesIntegrationTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(99999, $request->customerIdentity[0]->zipCode);
         $this->assertEquals('Stan', $request->customerIdentity[0]->locality);
         $this->assertEquals(4605092222, $request->customerIdentity[0]->nationalIdNumber);
+    }
+    
+    // getAddresses is supported for the following countries and customer types
+    // SE/private
+    public function test_GetAddresses_Sweden_Private_isDisabled() {
+        $addressRequest = WebPay::getAddresses();
+        $request = $addressRequest
+                ->setOrderTypeInvoice()
+                ->setCountryCode("SE")
+                ->setIndividual("194605092222")
+                ->doRequest();
+        
+        $this->assertEquals(1, $request->accepted);
+        $this->assertEquals('Accepted', $request->resultcode);
+    }
+    // DK/private
+    public function test_GetAddresses_Denmark_Private_isDisabled() {
+        $addressRequest = WebPay::getAddresses();
+        $request = $addressRequest
+                ->setOrderTypeInvoice()
+                ->setCountryCode("DK")
+                ->setIndividual("2603692503")
+                ->doRequest();
+        
+        $this->assertEquals(1, $request->accepted);
+        $this->assertEquals('Accepted', $request->resultcode);
+    }
+    // SE/company
+    public function test_GetAddresses_Sweden_Company_isDisabled() {
+        $addressRequest = WebPay::getAddresses();
+        $request = $addressRequest
+                ->setOrderTypeInvoice()
+                ->setCountryCode("SE")
+                ->setCompany("4608142222")
+                ->doRequest();
+        
+        $this->assertEquals(1, $request->accepted);
+        $this->assertEquals('Accepted', $request->resultcode);
+    }
+    // DK/company
+    public function test_GetAddresses_Denmark_Company_isDisabled() {
+        $addressRequest = WebPay::getAddresses();
+        $request = $addressRequest
+                ->setOrderTypeInvoice()
+                ->setCountryCode("DK")
+                ->setCompany("99999993")
+                ->doRequest();
+        
+        $this->assertEquals(1, $request->accepted);
+        $this->assertEquals('Accepted', $request->resultcode);
+    }
+    // NO/company
+    public function test_GetAddresses_Norway_Company_isEnabled() {
+        $addressRequest = WebPay::getAddresses();
+        $request = $addressRequest
+                ->setOrderTypeInvoice()
+                ->setCountryCode("NO")
+                ->setCompany("923313850")
+                ->doRequest();
+        
+        $this->assertEquals(1, $request->accepted);
+        $this->assertEquals('Accepted', $request->resultcode);
+    }
+    
+    // NO/private
+    public function test_GetAddresses_Norway_Private_isDisabled() {
+        $addressRequest = WebPay::getAddresses();
+        $request = $addressRequest
+                ->setOrderTypeInvoice()
+                ->setCountryCode("NO")
+                ->setCompany("17054512066")
+                ->doRequest();
+        
+        //disabled oct-13
+        $this->assertEquals(0, $request->accepted);               
+        $this->assertEquals('Error', $request->resultcode);
+    }
+    
+    // DE
+    public function test_GetAddresses_Germany_Private_isNotImplemented() {
+        $addressRequest = WebPay::getAddresses();
+        $request = $addressRequest
+                ->setOrderTypeInvoice()
+                ->setCountryCode("DE")
+                ->setCompany("19680403")
+                ->doRequest();
+        
+        $this->assertEquals(0, $request->accepted);               
+        $this->assertEquals('Error', $request->resultcode);
+    }
+    
+    // NL
+    public function test_GetAddresses_Netherlands_Private_isNotImplemented() {
+        $addressRequest = WebPay::getAddresses();
+        $request = $addressRequest
+                ->setOrderTypeInvoice()
+                ->setCountryCode("NL")
+                ->setCompany("19550307")
+                ->doRequest();
+        
+        $this->assertEquals(0, $request->accepted);               
+        $this->assertEquals('Error', $request->resultcode);
     }
 }
