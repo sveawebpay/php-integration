@@ -815,7 +815,7 @@ $paymentPlanParamsResonseObject->values[0..n] (for n campaignCodes), where value
 
 ## 3. getAddresses
 Returns *getAddressesResponse* object with an *AddressSelector* for the associated addresses for a specific security number.
-Can be used when creating an order. Only applicable for SE, NO and DK.
+Can be used when creating an order. Only applicable for SE, NO and DK. In Norway, only getAddresses of companies is supported.
 
 [<< To top](https://github.com/sveawebpay/php-integration#php-integration-package-api-for-sveawebpay)
 
@@ -839,10 +839,29 @@ or
 ```php
     $response = WebPay::getAddresses()
         ->setOrderTypeInvoice()                                              //See 3.1
-        ->setCountryCode("SE")                                               //Required
+        ->setCountryCode("SE")                                               //Required, accepts SE, DK and NO
         ->setIndividual("194605092222")                                      //See 3.2
         ->doRequest();
 ```
+
+WebPay::getAddresses->...->doRequest() Returns a GetAddressesResponse object:
+```php
+    $response->accepted                 // boolean, true iff Svea accepted request
+    $response->resultcode               // may contain an error code
+    $response->customerIdentity         // if accepted, may define a GetAddressIdentity object:
+        ->customerType;       // not guaranteed to be defined
+        ->nationalIdNumber;   // not guaranteed to be defined
+        ->phoneNumber;        // not guaranteed to be defined
+        ->firstName;          // not guaranteed to be defined
+        ->lastName;           // not guaranteed to be defined
+        ->fullName;           // not guaranteed to be defined
+        ->street;             // not guaranteed to be defined
+        ->coAddress;          // not guaranteed to be defined
+        ->zipCode;            // not guaranteed to be defined
+        ->locality;           // not guaranteed to be defined
+
+```
+
 [<< To top](https://github.com/sveawebpay/php-integration#php-integration-package-api-for-sveawebpay)
 
 ## 4. deliverOrder
