@@ -46,6 +46,8 @@ class FixedDiscount {
     }
 
     /**
+     * Required to use at least one of the functions setAmountExVat() or setAmountIncVat(), and optionally also setVatPercent().
+     * 
      * If only AmountIncVat is given, for Invoice and Payment plan payment methods we calculate the discount split across the tax (vat) rates present 
      * in the order. This will ensure that the correct discount vat is applied to the order. This means that the discount will show up split across 
      * multiple rows on the invoice, one for each tax rate present in the order.
@@ -67,8 +69,8 @@ class FixedDiscount {
     /**
      * Optional
      * 
-     * Required to use at least two of the functions setAmountExVat(), setAmountIncVat(), setVatPercent().
-     * If two of these three attributes are specified, we respect the amount indicated and include a discount with the specified tax rate.
+     * Required to use at least one of the functions setAmountExVat() or setAmountIncVat(), and optionally also setVatPercent().
+     * If vatPecent is specified, we respect the amount indicated and include a discount with the specified tax rate.
      * 
      * @param float $amountAsFloat
      * @return \FixedDiscount
@@ -80,8 +82,10 @@ class FixedDiscount {
     
     /**
      * Optional
-     * Required to use at least two of the functions setAmountExVat(), setAmountIncVat(), setVatPercent()
-     * If two of these three attributes are specified, we respect the amount indicated and include a discount with the specified tax rate.
+     * 
+     * If vatPercent is specified along with either one of setAmountExVat() or setAmountIncVat(), 
+     * we respect the rate and amount indicated and include a discount with the specified tax rate.
+     *
      * @param int $vatPercentAsInt
      * @return \FixedDiscount
      */
