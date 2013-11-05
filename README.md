@@ -214,8 +214,8 @@ $response = WebPay::createOrder()
 //Company customer values
     ->addCustomerDetails(WebPayItem::companyCustomer()...)
 //Other values
-    ->setCountryCode("SE")
-    ->setOrderDate("2012-12-12")    // or ISO801 date produced by i.e. date('c')
+    ->setCountryCode("SE")          // customer country, we recommend basing this on the customer billing address
+    ->setOrderDate("2012-12-12")    // or use an ISO801 date produced by i.e. date('c')
     ->setCustomerReference("33")
     ->setClientOrderNumber("nr26")
     ->setCurrency("SEK")
