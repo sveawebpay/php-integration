@@ -6,6 +6,19 @@ require_once $root . '/../../../../src/Includes.php';
 
 class WebServiceRowFormatterTest extends PHPUnit_Framework_TestCase {
 
+    public function test_convertIncVatToExVat() {
+        
+        $this->assertEquals( 8.00, Svea\WebServiceRowFormatter::convertIncVatToExVat( 10.00, 25 ) );
+        $this->assertEquals( 69.99, Svea\WebServiceRowFormatter::convertIncVatToExVat( 69.99*1.25, 25 ) );
+
+        $this->assertEquals( 0, Svea\WebServiceRowFormatter::convertIncVatToExVat( 0, 0 ) );
+        $this->assertEquals( 1, Svea\WebServiceRowFormatter::convertIncVatToExVat( 1, 0 ) );
+        $this->assertEquals( 0, Svea\WebServiceRowFormatter::convertIncVatToExVat( 0*1.25, 25 ) );
+        
+        $this->assertEquals( 100.00, Svea\WebServiceRowFormatter::convertIncVatToExVat( 100.00*1.06, 6 ) );
+        $this->assertEquals( 100.00, Svea\WebServiceRowFormatter::convertIncVatToExVat( 100.00*1.0825, 8.25 ) );
+    }
+    
     public function test_FormatOrderRows_includes_all_attributes_in_formatted_rows() {
         $order = WebPay::createOrder();
         $order->addOrderRow(\WebPayItem::orderRow()
@@ -139,7 +152,7 @@ class WebServiceRowFormatterTest extends PHPUnit_Framework_TestCase {
     }
 
     // FixedDiscountRow specified using only amountExVat
-    public function t___est_FixedDiscount_specified_using_amountExVat_in_order_with_single_vat_rate() {
+    public function test_FixedDiscount_specified_using_amountExVat_in_order_with_single_vat_rate() {
         $order = WebPay::createOrder();
         $order->addOrderRow(WebPayItem::orderRow()
                 ->setAmountExVat(4.0)
@@ -151,7 +164,7 @@ class WebServiceRowFormatterTest extends PHPUnit_Framework_TestCase {
                     ->setName("couponName")
                     ->setDescription("couponDesc")
                     ->setAmountExVat(1.0)
-                    ->setUnit("kr")
+                    ->setUnit("st")
                 );
 
         $formatter = new Svea\WebServiceRowFormatter($order);
@@ -159,7 +172,7 @@ class WebServiceRowFormatterTest extends PHPUnit_Framework_TestCase {
         $testedRow = $resultRows[1];
         $this->assertEquals("f1e", $testedRow->ArticleNumber);
         $this->assertEquals("couponName: couponDesc", $testedRow->Description);
-        $this->assertEquals(-0.8, $testedRow->PricePerUnit);
+        $this->assertEquals(-1.0, $testedRow->PricePerUnit);
         $this->assertEquals(25, $testedRow->VatPercent);
         $this->assertEquals(0, $testedRow->DiscountPercent);
         $this->assertEquals(1, $testedRow->NumberOfUnits);
@@ -167,7 +180,7 @@ class WebServiceRowFormatterTest extends PHPUnit_Framework_TestCase {
     }
 
     // FixedDiscountRow specified using only amountExVat => split discount excl. vat over the diffrent tax rates present in order
-    public function t___est_FixedDiscount_specified_using_amountExVat_in_order_with_multiple_vat_rates() {
+    public function test_FixedDiscount_specified_using_amountExVat_in_order_with_multiple_vat_rates() {
         $order = WebPay::createOrder();
         $order->addOrderRow(WebPayItem::orderRow()
                 ->setName("product with price 100 @25% = 125")
@@ -185,7 +198,7 @@ class WebServiceRowFormatterTest extends PHPUnit_Framework_TestCase {
                     ->setDiscountId("f100e")
                     ->setName("couponName")
                     ->setDescription("couponDesc")
-                    ->setAmountExVat(100)
+                    ->setAmountExVat(100.00)
                 );
 
         $formatter = new Svea\WebServiceRowFormatter($order);
@@ -195,7 +208,7 @@ class WebServiceRowFormatterTest extends PHPUnit_Framework_TestCase {
         $testedRow = $resultRows[2];
         $this->assertEquals("f100e", $testedRow->ArticleNumber);
         $this->assertEquals("couponName: couponDesc (25%)", $testedRow->Description);
-        $this->assertEquals(-66.66, $testedRow->PricePerUnit);
+        $this->assertEquals(-66.67, $testedRow->PricePerUnit);
         $this->assertEquals(25, $testedRow->VatPercent);
 
         // 100*100/300 = 33.33 ex. 6% vat => 35.33 vat as amount 
