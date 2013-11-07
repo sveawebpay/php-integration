@@ -52,8 +52,7 @@ class WebServiceRowFormatter {
     public static function convertExVatToIncVat( $amountExVat, $vatPercent) {
         return Helper::bround( ($amountExVat * (1+$vatPercent/100)) ,2);
     }
-    
-    
+      
     public function formatRows() {
         $this->newRows = array();
 
@@ -68,6 +67,15 @@ class WebServiceRowFormatter {
         return $this->newRows;
     }
 
+    // used to create/increase the totalAmountPerVatRateIncVat and totalAmountPerVatRateExVat arrays in calculateTotals();  
+    private function increaseCumulativeVatRateAmounts( &$array, $key, $value ) {
+        if( isset($array[$key]) ) {
+            $array[$key] += $value;                 
+        } else {
+            $array[$key] = $value;   
+        } 
+    }
+    
     private function calculateTotals() {
         $this->totalAmountExVat = 0;
         $this->totalVatAsAmount = 0;
@@ -79,16 +87,10 @@ class WebServiceRowFormatter {
                 $this->totalAmountExVat += $product->amountExVat * $product->quantity;
                 $this->totalVatAsAmount += ($product->vatPercent/100 * $product->amountExVat) * $product->quantity;
 
-                // add to or create cummulative amount for this tax rate
-                if( isset($this->totalAmountPerVatRateIncVat[$product->vatPercent]) ) {
-                    $this->totalAmountPerVatRateIncVat[$product->vatPercent] += 
-                            WebServiceRowFormatter::convertExVatToIncVat($product->amountExVat,$product->vatPercent) * $product->quantity;
-                    $this->totalAmountPerVatRateExVat[$product->vatPercent] += ($product->amountExVat * $product->quantity);                   
-                } else {
-                    $this->totalAmountPerVatRateIncVat[$product->vatPercent] = 
-                            WebServiceRowFormatter::convertExVatToIncVat($product->amountExVat,$product->vatPercent) * $product->quantity;
-                    $this->totalAmountPerVatRateExVat[$product->vatPercent] = ($product->amountExVat * $product->quantity);
-                }
+                $this->increaseCumulativeVatRateAmounts($this->totalAmountPerVatRateIncVat, $product->vatPercent, 
+                        WebServiceRowFormatter::convertExVatToIncVat($product->amountExVat,$product->vatPercent) * $product->quantity );
+                $this->increaseCumulativeVatRateAmounts($this->totalAmountPerVatRateExVat, $product->vatPercent, 
+                        $product->amountExVat * $product->quantity );               
             } 
             // amountIncVat & vatPercent used to specify product price
             elseif (isset($product->vatPercent) && isset($product->amountIncVat)) {
@@ -96,35 +98,22 @@ class WebServiceRowFormatter {
                 $this->totalAmountExVat += $amountExVat * $product->quantity;
                 $this->totalVatAsAmount += ($product->vatPercent/100 * $amountExVat) * $product->quantity;
 
-                // add to or create cumulative amount for this tax rate
-                if( isset($this->totalAmountPerVatRateIncVat[$product->vatPercent]) ) {
-                    $this->totalAmountPerVatRateIncVat[$product->vatPercent] += $product->amountIncVat * $product->quantity;
-                    $this->totalAmountPerVatRateExVat[$product->vatPercent] +=  
-                            WebServiceRowFormatter::convertIncVatToExVat($product->amountIncVat,$product->vatPercent) * $product->quantity;
-                } else {
-                    $this->totalAmountPerVatRateIncVat[$product->vatPercent] = $product->amountIncVat * $product->quantity;
-                    $this->totalAmountPerVatRateExVat[$product->vatPercent] =  
-                            WebServiceRowFormatter::convertIncVatToExVat($product->amountIncVat,$product->vatPercent) * $product->quantity;
-                }
+                $this->increaseCumulativeVatRateAmounts($this->totalAmountPerVatRateIncVat, $product->vatPercent, 
+                        $product->amountIncVat * $product->quantity );
+                $this->increaseCumulativeVatRateAmounts($this->totalAmountPerVatRateExVat, $product->vatPercent, 
+                        WebServiceRowFormatter::convertIncVatToExVat($product->amountIncVat,$product->vatPercent) * $product->quantity );                
             } 
             // no vatPercent given
             else {
                 $this->totalAmountExVat += $product->amountExVat * $product->quantity;
                 $this->totalVatAsAmount += ($product->amountIncVat - $product->amountExVat) * $product->quantity;
 
-                // add to or create cumulative amount for this tax rate
                 $vatRate = $this->calculateVatPercentFromPriceExVatAndPriceIncVat($product->amountIncVat, $product->amountExVat);
                 
-                if( isset($this->totalAmountPerVatRateIncVat[$vatRate]) ) {
-                    $this->totalAmountPerVatRateIncVat[$vatRate] += $product->amountIncVat * $product->quantity;
-                } else {
-                    $this->totalAmountPerVatRateIncVat[$vatRate] = $product->amountIncVat * $product->quantity;
-                }
-                if( isset($this->totalAmountPerVatRateExVat[$vatRate]) ) {
-                    $this->totalAmountPerVatRateExVat[$vatRate] += $product->amountExVat * $product->quantity;
-                } else {
-                    $this->totalAmountPerVatRateExVat[$vatRate] = $product->amountExVat * $product->quantity;
-                }
+                $this->increaseCumulativeVatRateAmounts($this->totalAmountPerVatRateIncVat, $vatRate, 
+                        $product->amountIncVat * $product->quantity );
+                $this->increaseCumulativeVatRateAmounts($this->totalAmountPerVatRateExVat, $vatRate, 
+                        $product->amountExVat * $product->quantity );      
             }
         }
         $this->totalAmountIncVat = $this->totalAmountExVat + $this->totalVatAsAmount;
@@ -366,7 +355,7 @@ class WebServiceRowFormatter {
                 $this->newRows = array_merge( $this->newRows, $this->formatFixedDiscountSpecifiedAsAmountExVatOnly( $row ) );
             }
                        
-            // only amountIncVat (i.e. amount) and vatPercent is set, so we use that vatPercent:
+            // amountIncVat (i.e. amount) and vatPercent is set, so we use that vatPercent:
             if( isset($row->amount) && isset($row->vatPercent) && !isset($row->amountExVat) ) {
 
                     $orderRow = new SveaOrderRow();
@@ -397,7 +386,8 @@ class WebServiceRowFormatter {
 
                     $this->newRows[] = $orderRow;
             }
-
+            
+            // amountExVat (i.e. amount) and vatPercent is set, so we use that vatPercent:
             if( !isset($row->amount) && isset($row->vatPercent) && isset($row->amountExVat) ) {
 
                     $orderRow = new SveaOrderRow();
