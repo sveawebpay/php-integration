@@ -56,7 +56,7 @@ class InvoicePaymentIntegrationTest extends PHPUnit_Framework_TestCase {
     }
     
     //Turned off?
-    public function tes_tInvoiceIndividualForDk() {
+    public function testInvoiceIndividualForDk() {
         $request = WebPay::createOrder()
                 ->addOrderRow(TestUtil::createOrderRow())
                 ->addCustomerDetails(WebPayItem::individualCustomer()->setNationalIdNumber(2603692503))
