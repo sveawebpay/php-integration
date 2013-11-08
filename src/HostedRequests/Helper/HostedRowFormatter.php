@@ -34,6 +34,7 @@ class HostedRowFormatter {
     public function formatRows($order) {
         $this->formatOrderRows($order);
         $this->formatShippingFeeRows($order);
+        // TODO check and document why we don't process InvoiceFee Rows here
         $this->formatFixedDiscountRows($order);
         $this->formatRelativeDiscountRows($order);
 
@@ -51,7 +52,6 @@ class HostedRowFormatter {
      * When calculating the amounts, all rounding takes place last, in order to avoid cumulative
      * rounding errors. (See HostedPaymentTest for an example.)
      *
-     * TODO implement bankers rounding
      */
     private function formatOrderRows($order) {
         foreach ($order->orderRows as $row ) {
@@ -185,7 +185,7 @@ class HostedRowFormatter {
             // switch on which were used of setAmountIncVat ($this->amount), setAmountExVat (->amountExVat), setVatPercent (->vatPercent)
             $rawAmount = 0.0;
             $rawVat = 0.0;
-            // use old method of calculating discounts from single amount inc. vat
+            // use old method of calculating discounts from single discount amount inc. vat, i.e. the amount specified includes vat.
             if (isset($row->amount) && !isset($row->amountExVat) && !isset($row->vatPercent)) {
                 $discountInPercent = ($row->amount * 100) / $this->totalAmount;   // discount as fraction of total order sum
 
@@ -194,6 +194,22 @@ class HostedRowFormatter {
                 $tempRow->setAmount( - Helper::bround($rawAmount,2)*100 );
                 $tempRow->setVat( - Helper::bround($rawVat,2)*100 );
             }
+            
+            // if specified amount ex vat, split the discount across vat rates according to relative amounts taken ex vat. as we apply the discount before tax,
+            // the total discount sum must include the vat on the discounted amount.
+            elseif (!isset($row->amount) && isset($row->amountExVat) && !isset($row->vatPercent)) {
+                $discountInPercent = ($row->amountExVat * 100) / ($this->totalAmount - $this->totalVat);
+                
+                echo "amountExVat: \n"; echo($row->amountExVat); echo " \n";
+                echo "totalAmount: \n"; echo($this->totalAmount); echo " \n";
+                echo "totalVat: \n"; echo($this->totalVat); echo " \n";
+                
+                $rawAmount = $row->amountExVat;
+                $rawVat = $this->totalVat/100 * $discountInPercent;     // divide by 100 so that our "round and multiply" works in setVat below
+                $tempRow->setAmount( - Helper::bround($rawAmount + $rawVat,2)*100);
+                $tempRow->setVat( - Helper::bround($rawVat,2)*100 );
+            }
+                        
             // calculate amount, vat from two out of three given by customer, see unit tests in HostedPaymentTest
             elseif (isset($row->amountExVat) && isset($row->vatPercent)) {
                 $rawAmount = $row->amountExVat *($row->vatPercent/100+1);
