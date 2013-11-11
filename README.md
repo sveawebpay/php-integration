@@ -42,7 +42,7 @@ Call class *WebPay* and the suitable static function for your action.
 ```php
 require_once 'Includes.php';
 
-$foo = WebPay::createOrder();
+$foo = WebPay::createOrder($config);
 $foo = $foo->...
         ->..;
 ```
@@ -87,7 +87,7 @@ There are two ways to configure Svea authorization. Choose one of the following:
     * In this case no parameter is neccesary when calling a function in WebPay.
     */
 
-   $foo = WebPay::createOrder();
+   $foo = WebPay::createOrder($config);
 ```
 
 ```php
@@ -198,7 +198,7 @@ For every new payment type implementation, you follow the steps from the beginni
 Build order -> choose payment type -> doRequest/getPaymentForm
 
 ```php
-$response = WebPay::createOrder()
+$response = WebPay::createOrder($config)
 //For all products and other items
    ->addOrderRow(WebPayItem::orderRow()...)
 //If shipping fee
@@ -463,7 +463,7 @@ The request gives an instant response.
 Perform an invoice payment. This payment form will perform a synchronous payment and return a response.
 Returns *CreateOrderResponse* object.
 ```php
-    $response = WebPay::createOrder()
+    $response = WebPay::createOrder($config)
       ->addOrderRow(
     WebPayItem::orderRow()
         ->setArticleNumber("1")
@@ -485,10 +485,10 @@ Returns *CreateOrderResponse* object.
 #### 1.5.5 PaymentPlanPayment
 Only individual customers can use this payment type.
 Perform *PaymentPlanPayment*. This payment form will perform a synchronous payment and return a response.
-Returns a *CreateOrderResponse* object. Preceded by WebPay::getPaymentPlanParams().
+Returns a *CreateOrderResponse* object. Preceded by WebPay::getPaymentPlanParams($config).
 Param: Campaign code recieved from getPaymentPlanParams().
 ```php
-$response = WebPay::createOrder()
+$response = WebPay::createOrder($config)
 ->addOrderRow(
     WebPayItem::orderRow()
         ->setArticleNumber("1")
@@ -530,7 +530,7 @@ to format the response.
 
 ##### 1.5.1.1 Request
 ```php
-$form = WebPay::createOrder()
+$form = WebPay::createOrder($config)
 ->addOrderRow(
     WebPayItem::orderRow()
         ->setArticleNumber("1")
@@ -581,7 +581,7 @@ echo $form->completeHtmlFormWithSubmitButton; //Will render a hidden form with s
 
 ##### 1.5.2.1 Request
 ```php
-$form = WebPay::createOrder()
+$form = WebPay::createOrder($config)
 ->addOrderRow(
     WebPayItem::orderRow()
         ->setArticleNumber("1")
@@ -630,7 +630,7 @@ setPaymentMethod, includePaymentMethods, excludeCardPaymentMethods or excludeDir
 
 ##### 1.5.3.1 Request
 ```php
-$form = WebPay::createOrder()
+$form = WebPay::createOrder($config)
     ->addOrderRow(
         WebPayItem::orderRow()
             ->setArticleNumber("1")
@@ -714,7 +714,7 @@ Go direct to specified payment method without the step *PayPage*.
 
 ##### 1.5.1.1 Request
 ```php
-$form = WebPay::createOrder()
+$form = WebPay::createOrder($config)
   ->addOrderRow(
     WebPayItem::orderRow()
         ->setArticleNumber("1")
@@ -765,7 +765,7 @@ echo $form->completeHtmlFormWithSubmitButton; //Will render a hidden form with s
 Use this function to retrieve campaign codes for possible payment plan options. Use prior to create payment plan payment.
 
 ```php
-    $response = WebPay::getPaymentPlanParams()
+    $response = WebPay::getPaymentPlanParams($config)
                 ->setCountryCode("SE")
                 ->doRequest();
 ```
@@ -837,7 +837,7 @@ or
 
 ### 3.3 Do request
 ```php
-    $response = WebPay::getAddresses()
+    $response = WebPay::getAddresses($config)
         ->setOrderTypeInvoice()                                              //See 3.1
         ->setCountryCode("SE")                                               //Required, accepts SE, DK and NO
         ->setIndividual("194605092222")                                      //See 3.2
@@ -1039,7 +1039,7 @@ or
 ```
 
 ```php
-    $request =  WebPay::closeOrder()
+    $request =  WebPay::closeOrder($config)
         ->setOrderId($orderId)                                                  //Required, received when creating an order.
         ->closeInvoiceOrder()
              ->doRequest();

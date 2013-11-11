@@ -10,7 +10,8 @@ require_once $root . '/../../../../src/WebServiceRequests/svea_soap/SveaSoapConf
 class PaymentPlanParamsTest extends PHPUnit_Framework_TestCase {
 
     public function testBuildRequest() {
-        $addressRequest = WebPay::getPaymentPlanParams();
+        $config = Svea\SveaConfig::getDefaultConfig();
+        $addressRequest = WebPay::getPaymentPlanParams($config);
         $request = $addressRequest
                 ->setCountryCode("SE")
                 ->prepareRequest();

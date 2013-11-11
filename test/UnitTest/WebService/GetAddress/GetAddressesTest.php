@@ -11,7 +11,8 @@ require_once $root . '/../../../../src/WebServiceRequests/svea_soap/SveaSoapConf
 class GetAddressesTest extends PHPUnit_Framework_TestCase {
 
     public function testBuildRequest() {
-        $addressRequest = WebPay::getAddresses();
+        $config = Svea\SveaConfig::getDefaultConfig();
+        $addressRequest = WebPay::getAddresses($config);
         $addressRequest
                 ->setCountryCode("SE")
                 ->setCompany("SE460509");
@@ -20,7 +21,8 @@ class GetAddressesTest extends PHPUnit_Framework_TestCase {
     }
 
     public function testPrepareRequestPrivate() {
-        $addressRequest = WebPay::getAddresses();
+        $config = Svea\SveaConfig::getDefaultConfig();
+        $addressRequest = WebPay::getAddresses($config);
         $request = $addressRequest
                 ->setOrderTypeInvoice()
                 ->setCountryCode("SE")
@@ -36,7 +38,8 @@ class GetAddressesTest extends PHPUnit_Framework_TestCase {
     }
 
     public function testPrepareRequestCompany() {
-        $addressRequest = WebPay::getAddresses();
+        $config = Svea\SveaConfig::getDefaultConfig();
+        $addressRequest = WebPay::getAddresses($config);
         $request = $addressRequest
                 ->setOrderTypeInvoice()
                 ->setCountryCode("SE")

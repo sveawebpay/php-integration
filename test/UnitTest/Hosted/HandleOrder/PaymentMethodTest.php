@@ -10,10 +10,11 @@ require_once $root . '/../../../../src/WebServiceRequests/svea_soap/SveaSoapConf
 class PaymentMethodTest extends PHPUnit_Framework_TestCase {
 
     function testGetAllPaymentMethods(){
-        $request = WebPay::getPaymentMethods()
+        $config = Svea\SveaConfig::getDefaultConfig();
+        $request = WebPay::getPaymentMethods($config)
                 ->setContryCode("SE")
                 ->prepareRequest();
-        
+
         $this->assertEquals(1130, $request['merchantid']);
         $this->assertNotEmpty($request['message']);
         $this->assertNotEmpty($request['mac']);

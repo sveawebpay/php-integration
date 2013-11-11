@@ -16,7 +16,8 @@ class OrderHandlerValidatorTest extends PHPUnit_Framework_TestCase {
      * @expectedExceptionMessage -missing value : OrderId is required. Use function setOrderId() with the id recieved when creating an order.
      */
     public function testFailOnMissingOrderIdOnPaymentPlanDeliver() {
-        $builder = WebPay::deliverOrder();
+        $config = Svea\SveaConfig::getDefaultConfig();
+        $builder = WebPay::deliverOrder($config);
         $object = $builder;
 
         $object->deliverPaymentPlanOrder()
@@ -28,7 +29,8 @@ class OrderHandlerValidatorTest extends PHPUnit_Framework_TestCase {
      * @expectedExceptionMessage -missing value : InvoiceDistributionType is requred for deliverInvoiceOrder. Use function setInvoiceDistributionType().
      */
     public function testFailOnMissingInvoiceDetailsOnInvoiceDeliver() {
-        $builder = WebPay::deliverOrder();
+        $config = Svea\SveaConfig::getDefaultConfig();
+        $builder = WebPay::deliverOrder($config);
         $object = $builder
             ->addOrderRow(TestUtil::createOrderRow())
                 ->addFee(WebPayItem::shippingFee()
@@ -50,7 +52,8 @@ class OrderHandlerValidatorTest extends PHPUnit_Framework_TestCase {
      * @expectedExceptionMessage No rows has been included. Use function beginOrderRow(), beginShippingfee() or beginInvoiceFee().
      */
     public function testFailOnMissingOrderRowsOnInvoiceDeliver() {
-        $builder = WebPay::deliverOrder();
+        $config = Svea\SveaConfig::getDefaultConfig();
+        $builder = WebPay::deliverOrder($config);
         $object = $builder
                 ->setOrderId('id')
                 ->setInvoiceDistributionType('Post')

@@ -13,8 +13,9 @@ require_once $root . '/../../../TestUtil.php';
 class PayPagePaymentTest extends \PHPUnit_Framework_TestCase {
 
     public function testBuildPayPagePaymentWithExcludepaymentMethods() {
+        $config = SveaConfig::getDefaultConfig();
         $rowFactory = new \TestUtil();
-        $form = \WebPay::createOrder()
+        $form = \WebPay::createOrder($config)
             ->addOrderRow(\TestUtil::createOrderRow())
             ->run($rowFactory->buildShippingFee())
             ->addDiscount(\WebPayItem::relativeDiscount()
@@ -47,8 +48,9 @@ class PayPagePaymentTest extends \PHPUnit_Framework_TestCase {
     }
 
     public function testpayPagePaymentExcludeCardPayments() {
+        $config = SveaConfig::getDefaultConfig();
         $rowFactory = new \TestUtil();
-        $form = \WebPay::createOrder()
+        $form = \WebPay::createOrder($config)
             //->setTestmode()()
             ->addOrderRow(\TestUtil::createOrderRow())
             ->run($rowFactory->buildShippingFee())
@@ -74,8 +76,9 @@ class PayPagePaymentTest extends \PHPUnit_Framework_TestCase {
     }
 
     public function testExcludeDirectPaymentMethods() {
+        $config = SveaConfig::getDefaultConfig();
         $rowFactory = new \TestUtil();
-        $form = \WebPay::createOrder()
+        $form = \WebPay::createOrder($config)
             ->addOrderRow(\TestUtil::createOrderRow())
             ->run($rowFactory->buildShippingFee())
             ->addDiscount(\WebPayItem::relativeDiscount()
@@ -100,8 +103,9 @@ class PayPagePaymentTest extends \PHPUnit_Framework_TestCase {
     }
 
     public function testpayPagePaymentIncludePaymentMethods() {
+        $config = SveaConfig::getDefaultConfig();
         $rowFactory = new \TestUtil();
-        $form = \WebPay::createOrder()
+        $form = \WebPay::createOrder($config)
             ->addOrderRow(\TestUtil::createOrderRow())
             ->run($rowFactory->buildShippingFee())
             ->addDiscount(\WebPayItem::relativeDiscount()
@@ -127,8 +131,9 @@ class PayPagePaymentTest extends \PHPUnit_Framework_TestCase {
     }
 
     public function testBuildPayPagePaymentVatIsCero() {
-         $rowFactory = new \TestUtil();
-         $form = \WebPay::createOrder()
+        $config = SveaConfig::getDefaultConfig();
+        $rowFactory = new \TestUtil();
+         $form = \WebPay::createOrder($config)
                 ->addOrderRow(\WebPayItem::orderRow()
                     ->setQuantity(2)
                     ->setAmountExVat(100.00)
@@ -148,8 +153,9 @@ class PayPagePaymentTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals('SEK', $xmlMessage->currency);
     }
     public function testBuildPayPagePaymentCallBackUrl() {
-         $rowFactory = new \TestUtil();
-         $form = \WebPay::createOrder()
+        $config = SveaConfig::getDefaultConfig();
+        $rowFactory = new \TestUtil();
+         $form = \WebPay::createOrder($config)
                 ->addOrderRow(\WebPayItem::orderRow()
                     ->setQuantity(2)
                     ->setAmountExVat(100.00)

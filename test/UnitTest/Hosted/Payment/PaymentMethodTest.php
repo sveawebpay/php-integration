@@ -13,8 +13,9 @@ require_once $root . '/../../../TestUtil.php';
 class PaymentMethodTest extends \PHPUnit_Framework_TestCase{
 
      public function testPayPagePaymentWithSetPaymentMethod() {
-        $rowFactory = new \TestUtil();
-        $form = \WebPay::createOrder()
+        $config = SveaConfig::getDefaultConfig();
+         $rowFactory = new \TestUtil();
+        $form = \WebPay::createOrder($config)
             ->addOrderRow(\TestUtil::createOrderRow())
             ->run($rowFactory->buildShippingFee())
             ->addDiscount(\WebPayItem::relativeDiscount()
@@ -38,8 +39,9 @@ class PaymentMethodTest extends \PHPUnit_Framework_TestCase{
     }
 
     public function testPayPagePaymentWithSetPaymentMethodInvoice() {
+        $config = SveaConfig::getDefaultConfig();
         $rowFactory = new \TestUtil();
-        $form = \WebPay::createOrder()
+        $form = \WebPay::createOrder($config)
             ->addOrderRow(\TestUtil::createOrderRow())
             ->run($rowFactory->buildShippingFee())
             ->addDiscount(\WebPayItem::relativeDiscount()
@@ -65,7 +67,8 @@ class PaymentMethodTest extends \PHPUnit_Framework_TestCase{
     }
 
     public function testPaymentMethodInvoiceNL() {
-        $form = \WebPay::createOrder()
+        $config = SveaConfig::getDefaultConfig();
+        $form = \WebPay::createOrder($config)
             ->addOrderRow(\TestUtil::createOrderRow())
             ->addCustomerDetails(\WebPayItem::individualCustomer()
                     ->setInitials("SB")
@@ -92,7 +95,8 @@ class PaymentMethodTest extends \PHPUnit_Framework_TestCase{
         $this->assertEquals("Sneider", $xmlMessage->customer->firstname);
     }
     public function testPaymentMethodInvoiceNLCallbackUrl() {
-        $form = \WebPay::createOrder()
+        $config = SveaConfig::getDefaultConfig();
+        $form = \WebPay::createOrder($config)
             ->addOrderRow(\TestUtil::createOrderRow())
             ->addCustomerDetails(\WebPayItem::individualCustomer()
                     ->setInitials("SB")

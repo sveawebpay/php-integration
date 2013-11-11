@@ -12,7 +12,8 @@ require_once $root . '/../../../TestUtil.php';
 class CloseOrderTest extends PHPUnit_Framework_TestCase {
 
     public function testCloseInvoiceOrder() {
-        $orderBuilder = WebPay::closeOrder();
+        $config = Svea\SveaConfig::getDefaultConfig();
+        $orderBuilder = WebPay::closeOrder($config);
         $request = $orderBuilder
                 ->setOrderId("id")
                 ->setCountryCode("SE")
@@ -23,7 +24,8 @@ class CloseOrderTest extends PHPUnit_Framework_TestCase {
     }
 
     public function testClosePaymentPlanOrder() {
-        $orderBuilder = WebPay::closeOrder();
+        $config = Svea\SveaConfig::getDefaultConfig();
+        $orderBuilder = WebPay::closeOrder($config);
         $request = $orderBuilder
                 ->setCountryCode("SE")
                 ->setOrderId("id")

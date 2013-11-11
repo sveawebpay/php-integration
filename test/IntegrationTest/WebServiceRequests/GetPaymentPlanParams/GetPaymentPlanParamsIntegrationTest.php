@@ -10,20 +10,22 @@ require_once $root . '/../../../../src/Includes.php';
 class GetPaymentPlanParamsIntegrationTest extends PHPUnit_Framework_TestCase {
 
     public function testPaymentPlanParamsResult() {
-        $paymentPlanRequest = WebPay::getPaymentPlanParams();
+        $config = Svea\SveaConfig::getDefaultConfig();
+        $paymentPlanRequest = WebPay::getPaymentPlanParams($config);
         $request = $paymentPlanRequest
                 ->setCountryCode("SE")
                 ->doRequest();
 
         $this->assertEquals(1, $request->accepted);
     }
-    
+
     public function testResultGetPaymentPlanParams() {
-        $paymentPlanRequest = WebPay::getPaymentPlanParams();
+        $config = Svea\SveaConfig::getDefaultConfig();
+        $paymentPlanRequest = WebPay::getPaymentPlanParams($config);
         $request = $paymentPlanRequest
                 ->setCountryCode("SE")
                 ->doRequest();
-        
+
         $this->assertEquals(1, $request->accepted);
         $this->assertEquals(0, $request->resultcode);
         $this->assertEquals(213060, $request->campaignCodes[0]->campaignCode);

@@ -8,22 +8,24 @@ require_once $root . '/../../../../src/Includes.php';
  * @author Anneli Halld'n, Daniel Brolund for Svea Webpay
  */
 class PaymentPlanPaymentIntegrationTest extends PHPUnit_Framework_TestCase {
-    
+
     /**
      * Use to get paymentPlanParams to be able to test PaymentPlanRequest
      * @return type
      */
     private function getGetPaymentPlanParamsForTesting() {
-        $addressRequest = WebPay::getPaymentPlanParams();
+        $config = Svea\SveaConfig::getDefaultConfig();
+        $addressRequest = WebPay::getPaymentPlanParams($config);
         $response = $addressRequest
                 ->setCountryCode("SE")
                 ->doRequest();
          return $response->campaignCodes[0]->campaignCode;
     }
-    
+
     public function testPaymentPlanRequestReturnsAcceptedResult() {
+        $config = Svea\SveaConfig::getDefaultConfig();
         $campaigncode = $this->getGetPaymentPlanParamsForTesting();
-        $request = WebPay::createOrder()
+        $request = WebPay::createOrder($config)
                 ->addOrderRow(WebPayItem::orderRow()
                         ->setArticleNumber("1")
                         ->setQuantity(2)
@@ -54,7 +56,7 @@ class PaymentPlanPaymentIntegrationTest extends PHPUnit_Framework_TestCase {
                 ->setCurrency("SEK")
                 ->usePaymentPlanPayment($campaigncode)// returnerar InvoiceOrder object
                 ->doRequest();
-        
+
         $this->assertEquals(1, $request->accepted);
     }
 }

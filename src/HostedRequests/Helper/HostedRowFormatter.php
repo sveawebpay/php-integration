@@ -74,13 +74,13 @@ class HostedRowFormatter {
 
                 $tempRow->setAmount( Helper::bround($rawAmount,2) *100 );
                 $tempRow->setVat( Helper::bround($rawVat,2) *100 );
-                
+
             } elseif (isset($row->amountIncVat) && isset($row->vatPercent)) {
                 $rawAmount = $row->amountIncVat;
                 $rawVat = $row->amountIncVat - ($row->amountIncVat/($row->vatPercent/100+1));
                 $tempRow->setAmount( Helper::bround($rawAmount,2) *100 );
                 $tempRow->setVat( Helper::bround($rawVat,2) *100 );
-             
+
             } else {
                 $rawAmount = $row->amountIncVat;
                 $rawVat = ($row->amountIncVat - $row->amountExVat);
@@ -102,9 +102,9 @@ class HostedRowFormatter {
 
             $this->newRows[] = $tempRow;
             $this->totalAmount += ($tempRow->amount * $row->quantity);
-            $this->totalVat +=  ($tempRow->vat * $row->quantity);            
+            $this->totalVat +=  ($tempRow->vat * $row->quantity);
             $this->rawAmount += Helper::bround( ($rawAmount * $row->quantity) ,2) *100;
-            $this->rawVat +=  Helper::bround( ($rawVat * $row->quantity) ,2) *100;           
+            $this->rawVat +=  Helper::bround( ($rawVat * $row->quantity) ,2) *100;
         }
     }
 
@@ -136,13 +136,13 @@ class HostedRowFormatter {
                 $rawVat = floatval($row->amountExVat) *($row->vatPercent/100);
                 $tempRow->setAmount( Helper::bround($rawAmount,2) *100 );
                 $tempRow->setVat( Helper::bround($rawVat,2) *100 );
-                
+
             } elseif (isset($row->amountIncVat) && isset($row->vatPercent)) {
                 $rawAmount = $row->amountIncVat;
                 $rawVat = $row->amountIncVat - ($row->amountIncVat/($row->vatPercent/100+1));
                 $tempRow->setAmount( Helper::bround($rawAmount,2) *100 );
                 $tempRow->setVat( Helper::bround($rawVat,2) *100 );
-             
+
             } else {
                 $rawAmount = $row->amountIncVat;
                 $rawVat = ($row->amountIncVat - $row->amountExVat);
@@ -194,35 +194,30 @@ class HostedRowFormatter {
                 $tempRow->setAmount( - Helper::bround($rawAmount,2)*100 );
                 $tempRow->setVat( - Helper::bround($rawVat,2)*100 );
             }
-            
+
             // if specified amount ex vat, split the discount across vat rates according to relative amounts taken ex vat. as we apply the discount before tax,
             // the total discount sum must include the vat on the discounted amount.
             elseif (!isset($row->amount) && isset($row->amountExVat) && !isset($row->vatPercent)) {
                 $discountInPercent = ($row->amountExVat * 100) / ($this->totalAmount - $this->totalVat);
-                
-                echo "amountExVat: \n"; echo($row->amountExVat); echo " \n";
-                echo "totalAmount: \n"; echo($this->totalAmount); echo " \n";
-                echo "totalVat: \n"; echo($this->totalVat); echo " \n";
-                
                 $rawAmount = $row->amountExVat;
                 $rawVat = $this->totalVat/100 * $discountInPercent;     // divide by 100 so that our "round and multiply" works in setVat below
                 $tempRow->setAmount( - Helper::bround($rawAmount + $rawVat,2)*100);
                 $tempRow->setVat( - Helper::bround($rawVat,2)*100 );
             }
-                        
+
             // calculate amount, vat from two out of three given by customer, see unit tests in HostedPaymentTest
             elseif (isset($row->amountExVat) && isset($row->vatPercent)) {
                 $rawAmount = $row->amountExVat *($row->vatPercent/100+1);
                 $rawVat = $row->amountExVat *($row->vatPercent/100);
                 $tempRow->setAmount( - Helper::bround($rawAmount,2) *100 );
                 $tempRow->setVat( - Helper::bround($rawVat,2) *100 );
-                
+
             } elseif (isset($row->amount) && isset($row->vatPercent)) {
                 $rawAmount = $row->amount;
                 $rawVat = $row->amount - ($row->amount/($row->vatPercent/100+1));
                 $tempRow->setAmount( - Helper::bround($rawAmount,2) *100 );
                 $tempRow->setVat( - Helper::bround($rawVat,2) *100 );
-             
+
             } else {
                 $rawAmount = $row->amount;
                 $rawVat = ( $row->amount - $row->amountExVat);
@@ -274,14 +269,14 @@ class HostedRowFormatter {
                 $tempRow->setUnit($row->unit);
             }
 
-            $rawAmount = $this->rawAmount/100 * $row->discountPercent/100;    
-            $rawVat = $this->rawVat/100 * $row->discountPercent/100;                
-            
-            $tempRow->setAmount( - Helper::bround($rawAmount,2)*100 );    
+            $rawAmount = $this->rawAmount/100 * $row->discountPercent/100;
+            $rawVat = $this->rawVat/100 * $row->discountPercent/100;
+
+            $tempRow->setAmount( - Helper::bround($rawAmount,2)*100 );
             $tempRow->setVat( - Helper::bround($rawVat,2)*100 );
 
             $tempRow->setQuantity(1);
-            
+
             $this->totalAmount += $tempRow->amount;
             $this->totalVat += $tempRow->vat;
             $this->newRows[] = $tempRow;
@@ -292,10 +287,10 @@ class HostedRowFormatter {
     }
 
     /**
-     * formatTotalAmount() is used by i.e. HostedPayment calculateRequestValues to 
+     * formatTotalAmount() is used by i.e. HostedPayment calculateRequestValues to
      * get the total vat sum of the order.
-     * 
-     * @deprecated @param array $rows $rows is no longer used, instead we return 
+     *
+     * @deprecated @param array $rows $rows is no longer used, instead we return
      * the object rawAmount value, modified by shippinga and discounts
      * @return integer total order amount, including vat
      */
@@ -304,12 +299,12 @@ class HostedRowFormatter {
     }
 
     /**
-     * formatTotalVat() is used by i.e. HostedPayment calculateRequestValues to 
+     * formatTotalVat() is used by i.e. HostedPayment calculateRequestValues to
      * get the total vat sum of the order.
-     * 
-     * @deprecated @param array $rows $rows is no longer used, instead we return 
+     *
+     * @deprecated @param array $rows $rows is no longer used, instead we return
      * the object rawAmount value, modified by shippinga and discounts
-     * @return integer total amount of vat due in order 
+     * @return integer total amount of vat due in order
      */
     public function formatTotalVat($rows) {
         return $this->rawVat + $this->shippingVat + $this->discountVat;

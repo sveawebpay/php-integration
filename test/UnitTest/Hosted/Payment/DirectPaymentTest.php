@@ -17,8 +17,9 @@ class DirectPaymentTest extends \PHPUnit_Framework_TestCase {
      * @expectedExceptionMessage Invalid or missing Country code
      */
     public function testFailOnWrongCountryCodeInConfig() {
+        $config = SveaConfig::getDefaultConfig();
         $rowFactory = new \TestUtil();
-        $form = \WebPay::createOrder()
+        $form = \WebPay::createOrder($config)
                 ->addOrderRow(\TestUtil::createOrderRow())
             ->run($rowFactory->buildShippingFee())
             ->addCustomerDetails(\WebPayItem::individualCustomer()
@@ -43,8 +44,9 @@ class DirectPaymentTest extends \PHPUnit_Framework_TestCase {
     }
 
     public function testConfigureExcludedPaymentMethods() {
+        $config = SveaConfig::getDefaultConfig();
         $rowFactory = new \TestUtil();
-        $form = \WebPay::createOrder()
+        $form = \WebPay::createOrder($config)
                 ->addOrderRow(\TestUtil::createOrderRow())
             ->run($rowFactory->buildShippingFee())
             ->addCustomerDetails(\WebPayItem::individualCustomer()
@@ -67,8 +69,9 @@ class DirectPaymentTest extends \PHPUnit_Framework_TestCase {
     }
 
     public function testBuildDirectBankPayment() {
+        $config = SveaConfig::getDefaultConfig();
         $rowFactory = new \TestUtil();
-        $form = \WebPay::createOrder()
+        $form = \WebPay::createOrder($config)
                 ->addOrderRow(\TestUtil::createOrderRow())
                 ->addFee(\WebPayItem::shippingFee()
                     ->setShippingId('33')
@@ -105,8 +108,9 @@ class DirectPaymentTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals('-12500', $xmlMessage->orderrows->row[2]->amount);
     }
     public function testBuildDirectBankPaymentCallBackUrl() {
+        $config = SveaConfig::getDefaultConfig();
         $rowFactory = new \TestUtil();
-        $form = \WebPay::createOrder()
+        $form = \WebPay::createOrder($config)
                 ->addOrderRow(\TestUtil::createOrderRow())
                 ->addCustomerDetails(\WebPayItem::individualCustomer()->setNationalIdNumber(194605092222))
                 ->setCountryCode("SE")

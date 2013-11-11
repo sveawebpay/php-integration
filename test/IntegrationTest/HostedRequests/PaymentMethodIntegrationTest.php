@@ -11,7 +11,8 @@ require_once $root . '/../../TestUtil.php';
 class PaymentMethodIntegrationTest extends \PHPUnit_Framework_TestCase {
 
     function testGetAllPaymentMethods(){
-        $response = WebPay::getPaymentMethods()
+        $config = Svea\SveaConfig::getDefaultConfig();
+        $response = WebPay::getPaymentMethods($config)
                 ->setContryCode("SE")
                 ->doRequest();
         $this->assertEquals(PaymentMethod::NORDEA_SE, $response[0]);
