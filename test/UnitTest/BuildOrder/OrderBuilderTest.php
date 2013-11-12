@@ -18,7 +18,8 @@ class OrderBuilderTest extends \PHPUnit_Framework_TestCase {
     //Set up orderobject
 
     protected function setUp() {
-        $this->orderBuilder = \WebPay::createOrder();
+        $config = SveaConfig::getDefaultConfig();
+        $this->orderBuilder = \WebPay::createOrder($config);
         $this->orderBuilder->validator = new VoidValidator();
     }
 
@@ -40,8 +41,9 @@ class OrderBuilderTest extends \PHPUnit_Framework_TestCase {
 
     public function testBuildOrderWithShippingFee() {
         $rowFactory = new \TestUtil();
+        $config = SveaConfig::getDefaultConfig();
         $sveaRequest =
-                \WebPay::createOrder()
+                \WebPay::createOrder($config)
                 ->run($rowFactory->buildShippingFee());
 
         $this->assertEquals("Specification", $sveaRequest->shippingFeeRows[0]->description);
@@ -51,7 +53,8 @@ class OrderBuilderTest extends \PHPUnit_Framework_TestCase {
 
     public function testBuildOrderWithInvoicefee() {
         $rowFactory = new \TestUtil();
-        $sveaRequest = \WebPay::createOrder()
+        $config = SveaConfig::getDefaultConfig();
+        $sveaRequest = \WebPay::createOrder($config)
                 ->addOrderRow(\TestUtil::createOrderRow())
                 ->run($rowFactory->buildInvoiceFee());
 
@@ -64,7 +67,8 @@ class OrderBuilderTest extends \PHPUnit_Framework_TestCase {
     }
 
     public function testBuildOrderWithFixedDiscount() {
-        $sveaRequest = \WebPay::createOrder()
+        $config = SveaConfig::getDefaultConfig();
+        $sveaRequest = \WebPay::createOrder($config)
                 ->addDiscount(\WebPayItem::fixedDiscount()
                     ->setDiscountId("1")
                     ->setAmountIncVat(100.00)
@@ -81,8 +85,9 @@ class OrderBuilderTest extends \PHPUnit_Framework_TestCase {
     }
 
     public function testBuildOrderWithRelativeDiscount() {
+        $config = SveaConfig::getDefaultConfig();
         $sveaRequest =
-                \WebPay::createOrder()
+                \WebPay::createOrder($config)
                 ->addDiscount(\WebPayItem::relativeDiscount()
                     ->setDiscountId("1")
                     ->setDiscountPercent(50)
@@ -99,7 +104,8 @@ class OrderBuilderTest extends \PHPUnit_Framework_TestCase {
     }
 
     public function testBuildOrderWithCustomer() {
-        $sveaRequest = \WebPay::createOrder()
+        $config = SveaConfig::getDefaultConfig();
+        $sveaRequest = \WebPay::createOrder($config)
                 ->addCustomerDetails(\WebPayItem::individualCustomer()
                         ->setNationalIdNumber(194605092222)
                         ->setInitials("SB")
@@ -130,8 +136,9 @@ class OrderBuilderTest extends \PHPUnit_Framework_TestCase {
     }
 
     public function testBuildOrderWithAllCustomerTypes() {
+        $config = SveaConfig::getDefaultConfig();
         $company = TRUE;
-        $sveaRequest = \WebPay::createOrder();
+        $sveaRequest = \WebPay::createOrder($config);
         if ($company == TRUE) {
                $item = \WebPayItem::companyCustomer();
                $item = $item->setNationalIdNumber(194605092222)
@@ -162,7 +169,8 @@ class OrderBuilderTest extends \PHPUnit_Framework_TestCase {
     }
 
     public function testBuildOrderWithCompanyDetails() {
-        $sveaRequest = \WebPay::createOrder()
+        $config = SveaConfig::getDefaultConfig();
+        $sveaRequest = \WebPay::createOrder($config)
                     ->addCustomerDetails(\WebPayItem::companyCustomer()
                         ->setNationalIdNumber("2345234")
                         ->setCompanyName("TestCompagniet")
@@ -173,44 +181,49 @@ class OrderBuilderTest extends \PHPUnit_Framework_TestCase {
     }
 
     public function testBuildOrderWithShortOrderDate() {
-        $sveaRequest = \WebPay::createOrder()
+        $config = SveaConfig::getDefaultConfig();
+        $sveaRequest = \WebPay::createOrder($config)
                 ->setOrderDate("2012-12-12");
 
         $this->assertEquals("2012-12-12", $sveaRequest->orderDate);
     }
 
     public function testBuildOrderWithFullISO8601OrderDate() {
-        $iso8601date = date('c');        
-        
-        $sveaRequest = \WebPay::createOrder()
+        $iso8601date = date('c');
+        $config = SveaConfig::getDefaultConfig();
+        $sveaRequest = \WebPay::createOrder($config)
                 ->setOrderDate($iso8601date);
 
         $this->assertEquals($iso8601date, $sveaRequest->orderDate);
     }
-    
+
     public function testBuildOrderWithCountryCode() {
-        $sveaRequest = \WebPay::createOrder()
+        $config = SveaConfig::getDefaultConfig();
+        $sveaRequest = \WebPay::createOrder($config)
                 ->setCountryCode("SE");
 
         $this->assertEquals("SE", $sveaRequest->countryCode);
     }
 
     public function testBuildOrderWithCurrency() {
-        $sveaRequest = \WebPay::createOrder()
+        $config = SveaConfig::getDefaultConfig();
+        $sveaRequest = \WebPay::createOrder($config)
                 ->setCurrency("SEK");
 
         $this->assertEquals("SEK", $sveaRequest->currency);
     }
 
     public function testBuildOrderWithCustomerRefNumber() {
-        $sveaRequest = \WebPay::createOrder()
+        $config = SveaConfig::getDefaultConfig();
+        $sveaRequest = \WebPay::createOrder($config)
                 ->setCustomerReference("33");
 
         $this->assertEquals("33", $sveaRequest->customerReference);
     }
 
     public function testBuildOrderWithClientOrderNumber() {
-        $sveaRequest = \WebPay::createOrder()
+        $config = SveaConfig::getDefaultConfig();
+        $sveaRequest = \WebPay::createOrder($config)
                 ->setClientOrderNumber("33");
 
         $this->assertEquals("33", $sveaRequest->clientOrderNumber);

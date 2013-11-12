@@ -12,7 +12,8 @@ require_once $root . '/../../../TestUtil.php';
 class InvoicePaymentTest extends PHPUnit_Framework_TestCase {
 
      public function testInvoiceRequestObjectForCustomerIdentityIndividualFromSE() {
-           $request = WebPay::createOrder()
+         $config = Svea\SveaConfig::getDefaultConfig();
+         $request = WebPay::createOrder($config)
             ->addOrderRow(TestUtil::createOrderRow())
             ->addCustomerDetails(WebPayItem::individualCustomer()->setNationalIdNumber(194605092222))
                 ->setCountryCode("SE")
@@ -28,7 +29,8 @@ class InvoicePaymentTest extends PHPUnit_Framework_TestCase {
     }
 
     public function testInvoiceRequestOnProductVatCero() {
-           $request = WebPay::createOrder()
+        $config = Svea\SveaConfig::getDefaultConfig();
+        $request = WebPay::createOrder($config)
             ->addOrderRow(WebPayItem::orderRow()
                 ->setArticleNumber("1")
                 ->setQuantity(2)
@@ -52,7 +54,8 @@ class InvoicePaymentTest extends PHPUnit_Framework_TestCase {
     }
 
     public function testSetAuth() {
-        $request = WebPay::createOrder()
+        $config = Svea\SveaConfig::getDefaultConfig();
+        $request = WebPay::createOrder($config)
                 ->addOrderRow(TestUtil::createOrderRow())
                 ->addCustomerDetails(WebPayItem::individualCustomer()->setNationalIdNumber(194605092222))
                 ->setCountryCode("SE")
@@ -69,7 +72,8 @@ class InvoicePaymentTest extends PHPUnit_Framework_TestCase {
     }
 
     public function testInvoiceRequestObjectForCustomerIdentityIndividualFromNL() {
-        $request = WebPay::createOrder()
+        $config = Svea\SveaConfig::getDefaultConfig();
+        $request = WebPay::createOrder($config)
                 ->addOrderRow(TestUtil::createOrderRow())
                 ->addCustomerDetails(WebPayItem::individualCustomer()
                         ->setInitials("SB")
@@ -108,7 +112,8 @@ class InvoicePaymentTest extends PHPUnit_Framework_TestCase {
     }
 
     public function testInvoiceRequestObjectForCustomerIdentityIndividualFromDE() {
-        $request = WebPay::createOrder()
+        $config = Svea\SveaConfig::getDefaultConfig();
+        $request = WebPay::createOrder($config)
             ->addOrderRow(TestUtil::createOrderRow())
             ->addCustomerDetails(WebPayItem::individualCustomer()
                     ->setBirthDate(1923, 12, 12)
@@ -145,7 +150,8 @@ class InvoicePaymentTest extends PHPUnit_Framework_TestCase {
     }
 
     public function testInvoiceRequestObjectForCustomerIdentityCompanyFromNL() {
-        $request = WebPay::createOrder()
+        $config = Svea\SveaConfig::getDefaultConfig();
+        $request = WebPay::createOrder($config)
             ->addOrderRow(TestUtil::createOrderRow())
             ->addCustomerDetails(WebPayItem::individualCustomer()
                  ->setInitials("SB")
@@ -180,7 +186,8 @@ class InvoicePaymentTest extends PHPUnit_Framework_TestCase {
     }
 
     public function testInvoiceRequestObjectForCustomerIdentityCompanyFromSE() {
-        $request = WebPay::createOrder()
+        $config = Svea\SveaConfig::getDefaultConfig();
+        $request = WebPay::createOrder($config)
                 ->addOrderRow(TestUtil::createOrderRow())
                 ->addCustomerDetails(WebPayItem::companyCustomer()->setNationalIdNumber("vat234"))
                 ->setCountryCode("SE")
@@ -196,8 +203,9 @@ class InvoicePaymentTest extends PHPUnit_Framework_TestCase {
     }
 
     public function testInvoiceRequestObjectForSEorderOnOneProductRow() {
+        $config = Svea\SveaConfig::getDefaultConfig();
         $rowFactory = new TestUtil();
-        $request = WebPay::createOrder()
+        $request = WebPay::createOrder($config)
              ->addOrderRow(TestUtil::createOrderRow())
                 ->run($rowFactory->buildShippingFee())
                 ->run($rowFactory->buildInvoiceFee())
@@ -236,8 +244,9 @@ class InvoicePaymentTest extends PHPUnit_Framework_TestCase {
     }
 
     public function testInvoiceRequestUsingAmountIncVatWithVatPercent() {
+        $config = Svea\SveaConfig::getDefaultConfig();
         $rowFactory = new TestUtil();
-        $request = WebPay::createOrder()
+        $request = WebPay::createOrder($config)
             ->addOrderRow(WebPayItem::orderRow()
                     ->setArticleNumber("1")
                     ->setQuantity(2)
@@ -300,8 +309,9 @@ class InvoicePaymentTest extends PHPUnit_Framework_TestCase {
     }
 
     public function testInvoiceRequestUsingAmountIncVatWithAmountExVat() {
+        $config = Svea\SveaConfig::getDefaultConfig();
         $rowFactory = new TestUtil();
-        $request = WebPay::createOrder()
+        $request = WebPay::createOrder($config)
             ->addOrderRow(WebPayItem::orderRow()
                     ->setArticleNumber("1")
                     ->setQuantity(2)
@@ -364,7 +374,8 @@ class InvoicePaymentTest extends PHPUnit_Framework_TestCase {
     }
 
     public function testInvoiceRequestObjectWithRelativeDiscountOnDifferentProductVat() {
-        $request = WebPay::createOrder()
+        $config = Svea\SveaConfig::getDefaultConfig();
+        $request = WebPay::createOrder($config)
                 ->addOrderRow(WebPayItem::orderRow()
                     ->setArticleNumber("1")
                     ->setQuantity(1)
@@ -414,7 +425,8 @@ class InvoicePaymentTest extends PHPUnit_Framework_TestCase {
     }
 
     public function t_estInvoiceRequestObjectWithFixedDiscountOnDifferentProductVat() {
-        $request = WebPay::createOrder()
+        $config = Svea\SveaConfig::getDefaultConfig();
+        $request = WebPay::createOrder($config)
                 ->addOrderRow(WebPayItem::orderRow()
                     ->setArticleNumber("1")
                     ->setQuantity(1)
@@ -453,7 +465,8 @@ class InvoicePaymentTest extends PHPUnit_Framework_TestCase {
     }
 
     public function testInvoiceWithFixedDiscountWithUneavenAmount() {
-        $request = WebPay::createOrder()
+        $config = Svea\SveaConfig::getDefaultConfig();
+        $request = WebPay::createOrder($config)
                 ->addOrderRow(WebPayItem::orderRow()
                     ->setArticleNumber("1")
                     ->setQuantity(1)
@@ -484,8 +497,9 @@ class InvoicePaymentTest extends PHPUnit_Framework_TestCase {
     }
 
      public function testInvoiceRequestObjectWithCreateOrderInformation() {
-        $rowFactory = new TestUtil();
-           $request = WebPay::createOrder()
+        $config = Svea\SveaConfig::getDefaultConfig();
+         $rowFactory = new TestUtil();
+           $request = WebPay::createOrder($config)
             ->addOrderRow(TestUtil::createOrderRow())
                 ->run($rowFactory->buildShippingFee())
             ->addCustomerDetails(WebPayItem::companyCustomer()->setNationalIdNumber(194605092222)->setAddressSelector("ad33"))
@@ -508,8 +522,9 @@ class InvoicePaymentTest extends PHPUnit_Framework_TestCase {
      }
 
     public function testInvoiceRequestObjectWithAuth() {
+        $config = Svea\SveaConfig::getDefaultConfig();
         $rowFactory = new TestUtil();
-            $request = WebPay::createOrder()
+            $request = WebPay::createOrder($config)
             ->addOrderRow(TestUtil::createOrderRow())
             ->run($rowFactory->buildShippingFee())
             ->addCustomerDetails(WebPayItem::companyCustomer()->setNationalIdNumber(194605092222)->setAddressSelector("ad33"))

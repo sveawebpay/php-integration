@@ -16,7 +16,8 @@ class PaymentPlanTest extends PHPUnit_Framework_TestCase {
      * @return type
      */
     public function getGetPaymentPlanParamsForTesting() {
-        $addressRequest = WebPay::getPaymentPlanParams();
+        $config = Svea\SveaConfig::getDefaultConfig();
+        $addressRequest = WebPay::getPaymentPlanParams($config);
         $response = $addressRequest
                 ->setCountryCode("SE")
                 ->doRequest();
@@ -24,8 +25,9 @@ class PaymentPlanTest extends PHPUnit_Framework_TestCase {
     }
 
     public function testPaymentPlanRequestObjectSpecifics() {
+        $config = Svea\SveaConfig::getDefaultConfig();
         $rowFactory = new TestUtil();
-        $request = WebPay::createOrder()
+        $request = WebPay::createOrder($config)
                 ->addOrderRow(TestUtil::createOrderRow())
                 ->run($rowFactory->buildShippingFee())
                 ->addCustomerDetails(WebPayItem::individualCustomer()->setNationalIdNumber(194605092222))
@@ -42,7 +44,8 @@ class PaymentPlanTest extends PHPUnit_Framework_TestCase {
     }
 
     public function testInvoiceRequestObjectWithRelativeDiscountOnTwoProducts() {
-        $request = WebPay::createOrder()
+        $config = Svea\SveaConfig::getDefaultConfig();
+        $request = WebPay::createOrder($config)
                 ->addOrderRow(WebPayItem::orderRow()
                     ->setArticleNumber("1")
                     ->setQuantity(2)
@@ -73,8 +76,9 @@ class PaymentPlanTest extends PHPUnit_Framework_TestCase {
     }
 
     public function testPaymentPlanWithPriceAsDecimal() {
+        $config = Svea\SveaConfig::getDefaultConfig();
         $campaign = $this->getGetPaymentPlanParamsForTesting();
-        $request = WebPay::createOrder()
+        $request = WebPay::createOrder($config)
                 ->addOrderRow(WebPayItem::orderRow()
                     ->setArticleNumber("1")
                     ->setQuantity(2)

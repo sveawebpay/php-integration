@@ -8,6 +8,6 @@ require_once 'CustomerIdentityResponse.php';
  */
 class GetAddressIdentity extends CustomerIdentityResponse {
 
-    public $addressSelector;
+    public $addressSelector;    // not guaranteed to be defined
 
 }

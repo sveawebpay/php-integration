@@ -31,7 +31,7 @@ class GetAddressesResponse extends WebServiceResponse{
         foreach ($loopValue as $customer) {
             $temp = new GetAddressIdentity();
             $temp->customerType = $customer->BusinessType;
-            $temp->nationalIdNumber = $customer->SecurityNumber;
+            $temp->nationalIdNumber = isset($customer->SecurityNumber) ? $customer->SecurityNumber : "";
             $temp->phoneNumber = isset($customer->PhoneNumber) ? $customer->PhoneNumber : "";
             $temp->firstName = isset($customer->FirstName) ? $customer->FirstName : "";
             $temp->lastName = isset($customer->LastName) ? $customer->LastName : "";

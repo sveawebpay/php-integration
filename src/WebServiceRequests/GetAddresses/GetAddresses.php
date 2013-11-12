@@ -112,7 +112,7 @@ class GetAddresses {
 
     /**
      * Prepares and Sends request
-     * @return GetCustomerAddressesResponse
+     * @return @GetAddressesResponse object
      */
     public function doRequest() {
         $object = $this->prepareRequest();

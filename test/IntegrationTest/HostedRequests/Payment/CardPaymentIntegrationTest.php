@@ -11,8 +11,9 @@ require_once $root . '/../../../TestUtil.php';
 class CardPaymentIntegrationTest extends \PHPUnit_Framework_TestCase {
 
     public function testDoCardPaymentRequest() {
+        $config = Svea\SveaConfig::getDefaultConfig();
         $rowFactory = new TestUtil();
-        $form = WebPay::createOrder()
+        $form = WebPay::createOrder($config)
                 ->addOrderRow(TestUtil::createOrderRow())
                 ->run($rowFactory->buildShippingFee())
                 ->addDiscount(WebPayItem::relativeDiscount()

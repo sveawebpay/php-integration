@@ -58,7 +58,7 @@ class SveaResponse {
     }
     
     /**
-     * @returns an instance of WebServiceResponse or HostedResponse, depending
+     * @returns an instance of the corresponding Response class (see constructor above) contained in the ->response attribute
      */
     public function getResponse() {
         return $this->response;

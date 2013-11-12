@@ -1,5 +1,5 @@
 # PHP Integration Package API for SveaWebPay
-## Version 1.5.1
+## Version 1.6.0
 
 | Branch                            | Build status                               |
 |---------------------------------- |------------------------------------------- |
@@ -42,7 +42,7 @@ Call class *WebPay* and the suitable static function for your action.
 ```php
 require_once 'Includes.php';
 
-$foo = WebPay::createOrder();
+$foo = WebPay::createOrder($config);
 $foo = $foo->...
         ->..;
 ```
@@ -87,7 +87,7 @@ There are two ways to configure Svea authorization. Choose one of the following:
     * In this case no parameter is neccesary when calling a function in WebPay.
     */
 
-   $foo = WebPay::createOrder();
+   $foo = WebPay::createOrder($config);
 ```
 
 ```php
@@ -198,7 +198,7 @@ For every new payment type implementation, you follow the steps from the beginni
 Build order -> choose payment type -> doRequest/getPaymentForm
 
 ```php
-$response = WebPay::createOrder()
+$response = WebPay::createOrder($config)
 //For all products and other items
    ->addOrderRow(WebPayItem::orderRow()...)
 //If shipping fee
@@ -214,8 +214,8 @@ $response = WebPay::createOrder()
 //Company customer values
     ->addCustomerDetails(WebPayItem::companyCustomer()...)
 //Other values
-    ->setCountryCode("SE")
-    ->setOrderDate("2012-12-12")    // or ISO801 date produced by i.e. date('c')
+    ->setCountryCode("SE")          // customer country, we recommend basing this on the customer billing address
+    ->setOrderDate("2012-12-12")    // or use an ISO801 date produced by i.e. date('c')
     ->setCustomerReference("33")
     ->setClientOrderNumber("nr26")
     ->setCurrency("SEK")
@@ -463,7 +463,7 @@ The request gives an instant response.
 Perform an invoice payment. This payment form will perform a synchronous payment and return a response.
 Returns *CreateOrderResponse* object.
 ```php
-    $response = WebPay::createOrder()
+    $response = WebPay::createOrder($config)
       ->addOrderRow(
     WebPayItem::orderRow()
         ->setArticleNumber("1")
@@ -485,10 +485,10 @@ Returns *CreateOrderResponse* object.
 #### 1.5.5 PaymentPlanPayment
 Only individual customers can use this payment type.
 Perform *PaymentPlanPayment*. This payment form will perform a synchronous payment and return a response.
-Returns a *CreateOrderResponse* object. Preceded by WebPay::getPaymentPlanParams().
+Returns a *CreateOrderResponse* object. Preceded by WebPay::getPaymentPlanParams($config).
 Param: Campaign code recieved from getPaymentPlanParams().
 ```php
-$response = WebPay::createOrder()
+$response = WebPay::createOrder($config)
 ->addOrderRow(
     WebPayItem::orderRow()
         ->setArticleNumber("1")
@@ -530,7 +530,7 @@ to format the response.
 
 ##### 1.5.1.1 Request
 ```php
-$form = WebPay::createOrder()
+$form = WebPay::createOrder($config)
 ->addOrderRow(
     WebPayItem::orderRow()
         ->setArticleNumber("1")
@@ -581,7 +581,7 @@ echo $form->completeHtmlFormWithSubmitButton; //Will render a hidden form with s
 
 ##### 1.5.2.1 Request
 ```php
-$form = WebPay::createOrder()
+$form = WebPay::createOrder($config)
 ->addOrderRow(
     WebPayItem::orderRow()
         ->setArticleNumber("1")
@@ -630,7 +630,7 @@ setPaymentMethod, includePaymentMethods, excludeCardPaymentMethods or excludeDir
 
 ##### 1.5.3.1 Request
 ```php
-$form = WebPay::createOrder()
+$form = WebPay::createOrder($config)
     ->addOrderRow(
         WebPayItem::orderRow()
             ->setArticleNumber("1")
@@ -714,7 +714,7 @@ Go direct to specified payment method without the step *PayPage*.
 
 ##### 1.5.1.1 Request
 ```php
-$form = WebPay::createOrder()
+$form = WebPay::createOrder($config)
   ->addOrderRow(
     WebPayItem::orderRow()
         ->setArticleNumber("1")
@@ -765,7 +765,7 @@ echo $form->completeHtmlFormWithSubmitButton; //Will render a hidden form with s
 Use this function to retrieve campaign codes for possible payment plan options. Use prior to create payment plan payment.
 
 ```php
-    $response = WebPay::getPaymentPlanParams()
+    $response = WebPay::getPaymentPlanParams($config)
                 ->setCountryCode("SE")
                 ->doRequest();
 ```
@@ -815,7 +815,7 @@ $paymentPlanParamsResonseObject->values[0..n] (for n campaignCodes), where value
 
 ## 3. getAddresses
 Returns *getAddressesResponse* object with an *AddressSelector* for the associated addresses for a specific security number.
-Can be used when creating an order. Only applicable for SE, NO and DK.
+Can be used when creating an order. Only applicable for SE, NO and DK. In Norway, only getAddresses of companies is supported.
 
 [<< To top](https://github.com/sveawebpay/php-integration#php-integration-package-api-for-sveawebpay)
 
@@ -837,12 +837,31 @@ or
 
 ### 3.3 Do request
 ```php
-    $response = WebPay::getAddresses()
+    $response = WebPay::getAddresses($config)
         ->setOrderTypeInvoice()                                              //See 3.1
-        ->setCountryCode("SE")                                               //Required
+        ->setCountryCode("SE")                                               //Required, accepts SE, DK and NO
         ->setIndividual("194605092222")                                      //See 3.2
         ->doRequest();
 ```
+
+WebPay::getAddresses->...->doRequest() Returns a GetAddressesResponse object:
+```php
+    $response->accepted                 // boolean, true iff Svea accepted request
+    $response->resultcode               // may contain an error code
+    $response->customerIdentity         // if accepted, may define a GetAddressIdentity object:
+        ->customerType;       // not guaranteed to be defined
+        ->nationalIdNumber;   // not guaranteed to be defined
+        ->phoneNumber;        // not guaranteed to be defined
+        ->firstName;          // not guaranteed to be defined
+        ->lastName;           // not guaranteed to be defined
+        ->fullName;           // not guaranteed to be defined
+        ->street;             // not guaranteed to be defined
+        ->coAddress;          // not guaranteed to be defined
+        ->zipCode;            // not guaranteed to be defined
+        ->locality;           // not guaranteed to be defined
+
+```
+
 [<< To top](https://github.com/sveawebpay/php-integration#php-integration-package-api-for-sveawebpay)
 
 ## 4. deliverOrder
@@ -1020,7 +1039,7 @@ or
 ```
 
 ```php
-    $request =  WebPay::closeOrder()
+    $request =  WebPay::closeOrder($config)
         ->setOrderId($orderId)                                                  //Required, received when creating an order.
         ->closeInvoiceOrder()
              ->doRequest();

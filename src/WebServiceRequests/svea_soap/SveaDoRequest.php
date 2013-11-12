@@ -37,7 +37,7 @@ class SveaDoRequest {
     /**
      * Use to get Addresses based on NationalIdNumber or orgnr. Only in SE, NO, DK.
      * @param type $request Object containing SveaAuth, IsCompany, CountryCode, SecurityNumber
-     * @return GetCustomerAddressesResponse Object.
+     * @return GetAddressesResponse Object.
      */
     public function GetAddresses($request) {
         $builder = new SveaSoapArrayBuilder();

@@ -36,7 +36,7 @@ class CreateOrderBuilder {
      */
     public $relativeDiscountRows = array();
     /**
-    * String recievd by using Webpay::GetAddresses() function
+    * String recievd by using WebPay::getAddresses($config) function
     * @var type String
     */
     // public $addressSelector;

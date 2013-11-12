@@ -12,7 +12,8 @@ require_once $root . '/../../../TestUtil.php';
 class DeliverOrderTest extends PHPUnit_Framework_TestCase {
 
     public function testBuildRequest() {
-        $handler = WebPay::deliverOrder();
+        $config = Svea\SveaConfig::getDefaultConfig();
+        $handler = WebPay::deliverOrder($config);
         $request = $handler
                 ->setOrderId("id");
 
@@ -20,7 +21,8 @@ class DeliverOrderTest extends PHPUnit_Framework_TestCase {
     }
 
     public function testDeliverInvoiceDistributionType() {
-        $orderBuilder = WebPay::deliverOrder();
+        $config = Svea\SveaConfig::getDefaultConfig();
+        $orderBuilder = WebPay::deliverOrder($config);
         $request = $orderBuilder
             ->addOrderRow(TestUtil::createOrderRow())
                 ->setOrderId("id")
@@ -35,7 +37,8 @@ class DeliverOrderTest extends PHPUnit_Framework_TestCase {
     }
 
     public function testDeliverInvoiceOrder() {
-        $orderBuilder = WebPay::deliverOrder();
+        $config = Svea\SveaConfig::getDefaultConfig();
+        $orderBuilder = WebPay::deliverOrder($config);
         $request = $orderBuilder
                 ->addOrderRow(TestUtil::createOrderRow())
                 ->addDiscount(WebPayItem::fixedDiscount()->setAmountIncVat(10))
@@ -85,7 +88,8 @@ class DeliverOrderTest extends PHPUnit_Framework_TestCase {
     }
 
     public function testDeliverPaymentPlanOrder() {
-        $orderBuilder = WebPay::deliverOrder();
+        $config = Svea\SveaConfig::getDefaultConfig();
+        $orderBuilder = WebPay::deliverOrder($config);
 
         $request = $orderBuilder
                 ->setCountryCode("SE")
@@ -97,7 +101,8 @@ class DeliverOrderTest extends PHPUnit_Framework_TestCase {
     }
 
     public function testNewDeliverInvoiceOrderRow() {
-        $request = WebPay::deliverOrder();
+        $config = Svea\SveaConfig::getDefaultConfig();
+        $request = WebPay::deliverOrder($config);
         $request = $request
             ->addOrderRow(TestUtil::createOrderRow());
             $request = $request ->setOrderId("id")
@@ -118,7 +123,8 @@ class DeliverOrderTest extends PHPUnit_Framework_TestCase {
     }
 
     public function testDeliverOrderWithInvoiceFeeAndFixedDiscount() {
-        $request = WebPay::deliverOrder();
+        $config = Svea\SveaConfig::getDefaultConfig();
+        $request = WebPay::deliverOrder($config);
         $request = $request
             ->addOrderRow(TestUtil::createOrderRow())
                 ->addFee(WebPayItem::invoiceFee()
@@ -170,7 +176,8 @@ class DeliverOrderTest extends PHPUnit_Framework_TestCase {
     }
 
     public function testDeliverOrderWithShippingFeeAndRelativeDiscount() {
-        $request = WebPay::deliverOrder();
+        $config = Svea\SveaConfig::getDefaultConfig();
+        $request = WebPay::deliverOrder($config);
         $request = $request
                 ->addOrderRow(TestUtil::createOrderRow())
                 ->addFee(WebPayItem::shippingFee()

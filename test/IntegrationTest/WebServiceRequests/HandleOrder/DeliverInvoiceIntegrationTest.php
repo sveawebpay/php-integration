@@ -17,7 +17,8 @@ class DeliverInvoiceIntegrationTest extends PHPUnit_Framework_TestCase {
      * @return SveaOrderId
      */
     private function getInvoiceOrderId() {
-        $request = WebPay::createOrder()
+        $config = Svea\SveaConfig::getDefaultConfig();
+        $request = WebPay::createOrder($config)
                 ->addOrderRow(TestUtil::createOrderRow())
                 ->addCustomerDetails(WebPayItem::individualCustomer()->setNationalIdNumber(194605092222))
                 ->setCountryCode("SE")
@@ -32,8 +33,9 @@ class DeliverInvoiceIntegrationTest extends PHPUnit_Framework_TestCase {
     }
 
     public function testDeliverInvoiceOrder() {
+        $config = Svea\SveaConfig::getDefaultConfig();
         $orderId = $this->getInvoiceOrderId();
-        $orderBuilder = WebPay::deliverOrder();
+        $orderBuilder = WebPay::deliverOrder($config);
         $request = $orderBuilder
                 ->addOrderRow(TestUtil::createOrderRow())
                 ->setOrderId($orderId)
