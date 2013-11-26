@@ -11,7 +11,7 @@ class WebServiceResponse {
     public $accepted;
     public $resultcode;
     public $paymentmethod;
-    public $merchantId;
+    //public $merchantId; should not be here. Not included in the webservice response. Removed 2013-11-26 by Anneli
 
     function __construct($message) {
         $this->formatObject($message);
