@@ -38,18 +38,27 @@ class IdentityValidator {
     }
 
     /**
-     *  NationalIdNumber or companyVanNumber required for SE, NO, DK, FI
-     * @param type $order
-     * @param type $errors
-     * @return string
+     * Validates that either NationalIdNumber (individual customers) or companyVatNumber (company customers) is set to a non-empty string.
+     * (NationalIdNumber or companyVatNumber required for SE, NO, DK, FI orders)
+     * @param Svea\createOrderBuilder $order
+     * @param array of string $errors  -- validator errors array
+     * @return array of string $errors -- updated validator errors array
      */
     public function validateNordicIdentity($order, $errors) {
-        if ($this->isCompany == FALSE && isset($order->customerIdentity->ssn) == false) {
-            $errors['missing value'] = "NationalIdNumber is required for individual customers when countrycode is SE, NO, DK or FI. Use function setNationalIdNumber().";
-        } elseif ( $this->isCompany && isset($order->customerIdentity->orgNumber) == false) {
-            $errors['missing value'] =  "OrgNumber is required for company customers when countrycode is SE, NO, DK or FI. Use function setNationalIdNumber().";
+        if($this->isCompany == FALSE )
+        {
+            if( !isset($order->customerIdentity->ssn) || empty($order->customerIdentity->ssn) )
+            {
+                $errors['missing value'] = "NationalIdNumber is required for individual customers when countrycode is SE, NO, DK or FI. Use function setNationalIdNumber().";
+            } 
         }
-
+        else    // is company customer
+        {
+            if( !isset($order->customerIdentity->orgNumber) || empty($order->customerIdentity->orgNumber) ) 
+            {
+                $errors['missing value'] =  "OrgNumber is required for company customers when countrycode is SE, NO, DK or FI. Use function setNationalIdNumber().";
+            }
+        }
         return $errors;
     }
 
