@@ -23,7 +23,7 @@
 * [5. CreditInvoice](https://github.com/sveawebpay/php-integration#5-creditInvoice)
 * [6. CloseOrder](https://github.com/sveawebpay/php-integration#6-closeorder)
 * [7. Response handler](https://github.com/sveawebpay/php-integration#7-response-handler)
-* [8. GetPaymentMethods](https://github.com/sveawebpay/php-integration#8-GetPaymentMethods)
+* [8. GetPaymentMethods](https://github.com/sveawebpay/php-integration#8-getpaymentmethods)
 * [APPENDIX](https://github.com/sveawebpay/php-integration#appendix)
 
 
@@ -424,9 +424,9 @@ Invoice and payment plan will perform a synchronous payment and return a respons
 
 Other hosted payments (card payments, direct bank payments and other methods via the *PayPage*) on the other hand are asynchronous. They will return an html form with formatted message to send from your store.
 
-The response is then returned to the return url you have specified with setReturnUrl(). The response may also be sent to the url specified with setCallbackUrl() in case the customer doesn't return to the store after the transaction has concluded at the bank/card payment page. 
+The response is then returned to the return url you have specified with setReturnUrl(). The response may also be sent to the url specified with setCallbackUrl() in case the customer doesn't return to the store after the transaction has concluded at the bank/card payment page.
 
-If you pass the xml response to an instance of *SveaResponse*, you will receive a formatted response object as well. 
+If you pass the xml response to an instance of *SveaResponse*, you will receive a formatted response object as well.
 
 ##### Which payment method should I choose for different scenarios?
 I am using invoice and/or payment plan payments.
@@ -436,18 +436,23 @@ I am using invoice and/or payment plan payments.
 >These payments are synchronous and will give you an instant response.
 
 I am using card and/or direct bank payments.
-
 >You can go by *PayPage* by using [`->usePayPageCardOnly()`] (https://github.com/sveawebpay/php-integration#151-paypage-with-card-payment-options)
 >and [`->usePayPageDirectBankOnly()`] (https://github.com/sveawebpay/php-integration#152-paypage-with-direct-bank-payment-options).
 >
->If you for example only have one specific bank payment, you can go direct to that specific bank payment by using
->[`->usePaymentMethod(PaymentMethod)`] (https://github.com/sveawebpay/php-integration#154-paymentmethod-specified)
+>The best way if you know what specific payment you want to use, is to go direct to that specific payment, without landing on the PayPage, by using
+>[`->usePaymentMethod(PaymentMethod)`] (https://github.com/sveawebpay/php-integration#154-paymentmethod-specified).
+>To know your optional PaymentMethods configured on your account, you can use [getPaymentMethods($config)](https://github.com/sveawebpay/php-integration#8-getpaymentmethods)
+>
 
 I am using all payments.
 
 >The most effective way is to use [`->useInvoicePayment()`](https://github.com/sveawebpay/php-integration#154-invoicepayment)
 >and [`->usePaymentPlanPayment()`](https://github.com/sveawebpay/php-integration#154-paymentplanpayment)
->for the synchronous payments, and use the *PayPage* for the asynchronous requests by using [`->usePayPageCardOnly()`] (https://github.com/sveawebpay/php-integration#151-paypage-with-card-payment-options)
+>for the synchronous payments, and use the [`->usePaymentMethod(PaymentMethod)`] (https://github.com/sveawebpay/php-integration#154-paymentmethod-specified)
+>for the asynchronous requests. The method is preceded by [getPaymentMethods($config)](https://github.com/sveawebpay/php-integration#8-getpaymentmethods)
+>to get the Payment methods configured on you account.
+>
+>Alternatively use the *PayPage* for the asynchronous requests by using [`->usePayPageCardOnly()`] (https://github.com/sveawebpay/php-integration#151-paypage-with-card-payment-options)
 >and [`->usePayPageDirectBankOnly()`] (https://github.com/sveawebpay/php-integration#152-paypage-with-direct-bank-payment-options).
 
 I am using more than one payment and want them gathered on on place.
@@ -512,13 +517,13 @@ $response = WebPay::createOrder($config)
 [<< To top](https://github.com/sveawebpay/php-integration#php-integration-package-api-for-sveawebpay)
 
 ### Asynchronous payments - Hosted solutions
-Build the order object. Then select the payment method and specifying the various attributes using the methods applicable to hosted payments (see below). Recieve the *PaymentForm* object using getPaymentForm(), specifying *merchantid*, *xmlMessageBase64* and *mac*. 
+Build the order object. Then select the payment method and specifying the various attributes using the methods applicable to hosted payments (see below). Recieve the *PaymentForm* object using getPaymentForm(), specifying *merchantid*, *xmlMessageBase64* and *mac*.
 
 The form is then sent by POST to SveaConfig::SWP_TEST_URL or SveaConfig::SWP_PROD_URL. The *PaymentForm* object also contains a complete html form as string
-and the html form element as array. 
+and the html form element as array.
 
 The response is returned as XML, use the Svea [response handler](https://github.com/sveawebpay/php-integration#6-response-handler)
-to format the response 
+to format the response
 
 ```html
     <form name='paymentForm' id='paymentForm' method='post' action='SveaConfig::SWP_TEST_URL'>
@@ -530,8 +535,8 @@ to format the response
 ```
 
 ->setReturnUrl()
-When a hosted payment transaction completes (regardless of outcome, i.e. accepted or denied), 
-the payment service will answer with a response xml message sent to the return url specified. 
+When a hosted payment transaction completes (regardless of outcome, i.e. accepted or denied),
+the payment service will answer with a response xml message sent to the return url specified.
 
 ->setCallbackUrl()
 In case the hosted payment transaction completes, but the service is unable to return a response to the return url,
@@ -539,8 +544,8 @@ the payment service will retry several times using the callback url as a fallbac
 i.e. the user closes the browser before the payment service redirects back to the shop.
 
 ->setCancelUrl()
-In case the hosted payment service is cancelled by the user, the payment service will redirect back to the cancel url. 
-Unless a return url is specified, no cancel button will be presented at the payment service. 
+In case the hosted payment service is cancelled by the user, the payment service will redirect back to the cancel url.
+Unless a return url is specified, no cancel button will be presented at the payment service.
 
 See also class HostedPayment.
 
