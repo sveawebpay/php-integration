@@ -127,6 +127,68 @@ $config = SveaConfig::getDefaultConfig();
         $this->assertEquals(25, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->VatPercent);
         $this->assertEquals(0, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->DiscountPercent);
     }
+    public function testOrderWithShippingFeeZero() {
+        $config = SveaConfig::getDefaultConfig();
+        $request = \WebPay::createOrder($config);
+        $request = $request
+            ->addOrderRow(\TestUtil::createOrderRow())
+                ->addFee(\WebPayItem::shippingFee()
+                        ->setShippingId(1)
+                        ->setName('shipping')
+                        ->setDescription("Specification")
+                        ->setAmountExVat(0)
+                        ->setUnit("st")
+                        ->setVatPercent(25)
+                        ->setDiscountPercent(0)
+                        );
+            $request = $request
+            ->addCustomerDetails(\WebPayItem::individualCustomer()->setNationalIdNumber(194605092222))
+            ->setCountryCode("SE")
+            ->setCustomerReference("33")
+            ->setOrderDate("2012-12-12")
+            ->setCurrency("SEK")
+            ->useInvoicePayment()// returnerar InvoiceOrder object
+                ->prepareRequest();
+
+        $this->assertEquals(1, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->ArticleNumber);
+        $this->assertEquals(1, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->NumberOfUnits);
+        $this->assertEquals(0.00, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->PricePerUnit);
+        $this->assertEquals("shipping: Specification", $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->Description);
+        $this->assertEquals("st", $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->Unit);
+        $this->assertEquals(25, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->VatPercent);
+        $this->assertEquals(0, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->DiscountPercent);
+    }
+    public function testOrderWithShippingFeeZeroVat() {
+        $config = SveaConfig::getDefaultConfig();
+        $request = \WebPay::createOrder($config);
+        $request = $request
+            ->addOrderRow(\TestUtil::createOrderRow())
+                ->addFee(\WebPayItem::shippingFee()
+                        ->setShippingId(1)
+                        ->setName('shipping')
+                        ->setDescription("Specification")
+                        ->setAmountExVat(50)
+                        ->setUnit("st")
+                        ->setVatPercent(0)
+                        ->setDiscountPercent(0)
+                        );
+            $request = $request
+            ->addCustomerDetails(\WebPayItem::individualCustomer()->setNationalIdNumber(194605092222))
+            ->setCountryCode("SE")
+            ->setCustomerReference("33")
+            ->setOrderDate("2012-12-12")
+            ->setCurrency("SEK")
+            ->useInvoicePayment()// returnerar InvoiceOrder object
+                ->prepareRequest();
+
+        $this->assertEquals(1, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->ArticleNumber);
+        $this->assertEquals(1, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->NumberOfUnits);
+        $this->assertEquals(50.00, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->PricePerUnit);
+        $this->assertEquals("shipping: Specification", $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->Description);
+        $this->assertEquals("st", $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->Unit);
+        $this->assertEquals(0, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->VatPercent);
+        $this->assertEquals(0, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->DiscountPercent);
+    }
 
     public function testOrderWithInvoiceFee() {
         $config = SveaConfig::getDefaultConfig();
