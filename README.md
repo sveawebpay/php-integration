@@ -840,7 +840,7 @@ $paymentPlanParamsResonseObject->values[0..n] (for n campaignCodes), where value
 
 ## 3. getAddresses
 Returns *getAddressesResponse* object with an *AddressSelector* for the associated addresses for a specific security number.
-Can be used when creating an order. Only applicable for SE, NO and DK. In Norway, only getAddresses of companies is supported.
+Can be used when creating an order for Company customers to set what billing address to use. Only applicable for SE, NO and DK. In Norway, only getAddresses of companies is supported.
 
 [<< To top](https://github.com/sveawebpay/php-integration#php-integration-package-api-for-sveawebpay)
 
