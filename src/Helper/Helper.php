@@ -115,11 +115,26 @@ class Helper {
         return array_keys($taxRates);   //we want the keys
     }
 
+    /**
+     * Takes a streetaddress string and splits the streetname and the housenumber, returning them in an array
+     * Handles many different street address formats, see test suite SplitAddressTest.php test cases for examples.
+     * 
+     * If no match found, will return input streetaddress in position 0 and empty string in streetname and housenumber positions.
+     * 
+     * @param string $address --
+     * @return string -- array with the entire streetaddress in position 0, the streetname in position 1 and housenumber in position 2 
+     */
     static function splitStreetAddress($address){
-            //Seperates the street from the housenumber according to testcases
-        $pattern = "/^(?:\s)*([0-9]*[A-ZÄÅÆÖØÜßäåæöøüa-z]*\s*[A-ZÄÅÆÖØÜßäåæöøüa-z]+)(?:\s*)([0-9]*\s*[A-ZÄÅÆÖØÜßäåæöøüa-z]*(?:\s*[0-9]*)?[^\s])?(?:\s)*$/";
+        //Seperates the street from the housenumber according to testcases
+//        $pattern = "/^(?:\s)*([0-9]*[A-ZÄÅÆÖØÜßäåæöøüa-z]*\s*[A-ZÄÅÆÖØÜßäåæöøüa-z]+)(?:\s*)([0-9]*\s*[A-ZÄÅÆÖØÜßäåæöøüa-z]*(?:\s*[0-9]*)?[^\s])?(?:\s)*$/";
+        $pattern = "/^(?:\s)*([0-9]*[A-ZÄÅÆÖØÜßäåæöøüa-z]*\s*[A-ZÄÅÆÖØÜßäåæöøüa-z]+)(?:[\s,]*)([0-9]*\s*[A-ZÄÅÆÖØÜßäåæöøüa-z]*(?:\s*[0-9]*)?[^\s])?(?:\s)*$/";       
+        
         preg_match($pattern, $address, $addressArr);
-        if( !array_key_exists( 2, $addressArr ) ) { $addressArr[2] = ""; } //fix for addresses w/o housenumber
+        
+        // fallback if no match w/regexp
+        if( !array_key_exists( 2, $addressArr ) ) { $addressArr[2] = ""; }  //fix for addresses w/o housenumber
+        if( !array_key_exists( 1, $addressArr ) ) { $addressArr[1] = ""; }          //fixes for no streetnumber match
+        if( !array_key_exists( 0, $addressArr ) ) { $addressArr[0] = $address; }    //fixes for no match at all, return input
 
         return $addressArr;
     }

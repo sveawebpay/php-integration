@@ -6,7 +6,6 @@ require_once $root . '/../../../src/Includes.php';
 
 class SplitAddressTest extends \PHPUnit_Framework_TestCase {
 
-         //--------------------------------------------------------------------------
     // SplitStreetAddress
     function testStreet(){
         $address = Helper::splitStreetAddress("Street");
@@ -75,16 +74,38 @@ class SplitAddressTest extends \PHPUnit_Framework_TestCase {
             //print_r($address);
     }
 
-    //Svea testperson
-    function testGate_42_23(){
-        $address = Helper::splitStreetAddress("Gate 42 23");
-        //$this->assertEquals( "Gate 42", $address[1]);
-        //$this->assertEquals( "23", $address[2]);
+    // decided not to implement this case, as it looks like a corner case w/"street 42" and housenumber 23 after    
+//    //Svea testperson
+//    function testGate_42_23(){
+//        $address = Helper::splitStreetAddress("Gate 42 23");
+//        $this->assertEquals( "Gate 42", $address[1]);
+//        $this->assertEquals( "23", $address[2]);
+//            //print_r($address);
+//    }
+    
+    //Interpuncation in streetaddress
+    function testStreetcomma_10(){
+        $address = Helper::splitStreetAddress("Street, 10");
+          $this->assertEquals( "Street", $address[1]);
+          $this->assertEquals( "10", $address[2]);
             //print_r($address);
     }
+//    function testGate_42comma_23(){
+//        $address = Helper::splitStreetAddress("Gate 4, 23");
+//        $this->assertEquals( "Gate 42", $address[1]);
+//        $this->assertEquals( "23", $address[2]);
+//            //print_r($address);
+//    }
+//    function testSankt_Larsgatan_1comma_Lgh_1003(){
+//        $address = Helper::splitStreetAddress("Sankt Larsgatan 1, Lgh 1003");
+//        $this->assertEquals( "Sankt Larsgatan", $address[1]);
+//        $this->assertEquals( "1 Lgh 1003", $address[2]);
+//            //print_r($address);
+//    }
+
+
 
     //Examples given by getzenned.nl
-
     function testSingelstraat_10(){
         $address = Helper::splitStreetAddress("Singelstraat 10");
         $this->assertEquals( "Singelstraat", $address[1]);
@@ -103,8 +124,8 @@ class SplitAddressTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals( "12bis", $address[2]);
             //print_r($address);
     }
-        //International characters
-
+    
+    //International characters
     function testÖnskevägen_10(){
         $address = Helper::splitStreetAddress("Önskevägen 10");
         $this->assertEquals( "Önskevägen", $address[1]);
