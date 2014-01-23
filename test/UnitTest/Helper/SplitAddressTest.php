@@ -6,7 +6,6 @@ require_once $root . '/../../../src/Includes.php';
 
 class SplitAddressTest extends \PHPUnit_Framework_TestCase {
 
-         //--------------------------------------------------------------------------
     // SplitStreetAddress
     function testStreet(){
         $address = Helper::splitStreetAddress("Street");
@@ -78,13 +77,12 @@ class SplitAddressTest extends \PHPUnit_Framework_TestCase {
     //Svea testperson
     function testGate_42_23(){
         $address = Helper::splitStreetAddress("Gate 42 23");
-        //$this->assertEquals( "Gate 42", $address[1]);
-        //$this->assertEquals( "23", $address[2]);
+        $this->assertEquals( "Gate 42", $address[1]);
+        $this->assertEquals( "23", $address[2]);
             //print_r($address);
     }
 
     //Examples given by getzenned.nl
-
     function testSingelstraat_10(){
         $address = Helper::splitStreetAddress("Singelstraat 10");
         $this->assertEquals( "Singelstraat", $address[1]);
@@ -103,8 +101,8 @@ class SplitAddressTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals( "12bis", $address[2]);
             //print_r($address);
     }
-        //International characters
-
+    
+    //International characters
     function testÖnskevägen_10(){
         $address = Helper::splitStreetAddress("Önskevägen 10");
         $this->assertEquals( "Önskevägen", $address[1]);
