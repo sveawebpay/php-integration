@@ -83,7 +83,13 @@ class SplitAddressTest extends \PHPUnit_Framework_TestCase {
 //            //print_r($address);
 //    }
     
-//    //Interpuncation in streetaddress
+    //Interpuncation in streetaddress
+    function testStreetcomma_10(){
+        $address = Helper::splitStreetAddress("Street, 10");
+          $this->assertEquals( "Street", $address[1]);
+          $this->assertEquals( "10", $address[2]);
+            //print_r($address);
+    }
 //    function testGate_42comma_23(){
 //        $address = Helper::splitStreetAddress("Gate 4, 23");
 //        $this->assertEquals( "Gate 42", $address[1]);
@@ -96,12 +102,7 @@ class SplitAddressTest extends \PHPUnit_Framework_TestCase {
 //        $this->assertEquals( "1 Lgh 1003", $address[2]);
 //            //print_r($address);
 //    }
-//    function testStreetcomma_10(){
-//        $address = Helper::splitStreetAddress("Street, 10");
-//          $this->assertEquals( "Street", $address[1]);
-//          $this->assertEquals( "10", $address[2]);
-//            //print_r($address);
-//    }
+
 
 
     //Examples given by getzenned.nl
