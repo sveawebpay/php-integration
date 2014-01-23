@@ -74,6 +74,14 @@ class SplitAddressTest extends \PHPUnit_Framework_TestCase {
             //print_r($address);
     }
 
+    //    //Svea testperson
+    function testGate_42_23(){
+        $address = Helper::splitStreetAddress("Gate 42 23");
+        $this->assertEquals( "Gate", $address[1]);
+        $this->assertEquals( "42 23", $address[2]); // ok, see testInvoiceRequestNLAcceptedWithDoubleHousenumber
+            //print_r($address);
+    }
+    
     // decided not to implement this case, as it looks like a corner case w/"street 42" and housenumber 23 after    
 //    //Svea testperson
 //    function testGate_42_23(){

@@ -87,6 +87,8 @@ class IndividualCustomer {
     
     /**
      * Required in NL and DE
+     * For other countries, you may ommit this, or let either of street and/or housenumber be empty
+     * 
      * @param type $streetAsString
      * @param type $houseNumberAsInt
      * @return \IndividualCustomer

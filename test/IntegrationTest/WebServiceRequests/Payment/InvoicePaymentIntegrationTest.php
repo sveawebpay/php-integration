@@ -15,17 +15,44 @@ class InvoicePaymentIntegrationTest extends PHPUnit_Framework_TestCase {
     public function testInvoiceRequestAccepted() {
         $config = Svea\SveaConfig::getDefaultConfig();
         $request = WebPay::createOrder($config)
-                ->addOrderRow(TestUtil::createOrderRow())
-                ->addCustomerDetails(WebPayItem::individualCustomer()->setNationalIdNumber(4605092222))
-                ->setCountryCode("SE")
-                ->setCustomerReference("33")
-                ->setOrderDate("2012-12-12")
-                ->setCurrency("SEK")
-                ->useInvoicePayment()
-                ->doRequest();
+                    ->addOrderRow(TestUtil::createOrderRow())
+                    ->addCustomerDetails(WebPayItem::individualCustomer()
+                        ->setNationalIdNumber(4605092222)
+                    )
+                    ->setCountryCode("SE")
+                    ->setCustomerReference("33")
+                    ->setOrderDate("2012-12-12")
+                    ->setCurrency("SEK")
+                    ->useInvoicePayment()
+                        ->doRequest();
 
         $this->assertEquals(1, $request->accepted);
     }
+    
+    
+    public function testInvoiceRequestNLAcceptedWithDoubleHousenumber() {
+        $config = Svea\SveaConfig::getDefaultConfig();
+        $request = WebPay::createOrder($config)
+                    ->addOrderRow(TestUtil::createOrderRow())
+                    ->addCustomerDetails(WebPayItem::individualCustomer()
+                        ->setBirthDate(1955, 03, 07)
+                        ->setName("Sneider", "Boasman")
+                        ->setStreetAddress("Gate", "42 23")     // result of splitStreetAddress w/Svea testperson
+                        ->setCoAddress(138)
+                        ->setLocality("BARENDRECHT")
+                        ->setZipCode("1102 HG")
+                        ->setInitials("SB")
+                    )
+                    ->setCountryCode("NL")
+                    ->setCustomerReference("33")
+                    ->setOrderDate("2012-12-12")
+                    ->setCurrency("SEK")
+                    ->useInvoicePayment()
+                        ->doRequest();
+
+        $this->assertEquals(1, $request->accepted);
+    }
+    
 
     public function testInvoiceRequestUsingISO8601dateAccepted() {
         $config = Svea\SveaConfig::getDefaultConfig();
