@@ -1,5 +1,5 @@
 # PHP Integration Package API for SveaWebPay
-## Version 1.6.0
+## Version 1.6.1
 
 | Branch                            | Build status                               |
 |---------------------------------- |------------------------------------------- |
@@ -23,7 +23,8 @@
 * [5. CreditInvoice](https://github.com/sveawebpay/php-integration#5-creditInvoice)
 * [6. CloseOrder](https://github.com/sveawebpay/php-integration#6-closeorder)
 * [7. Response handler](https://github.com/sveawebpay/php-integration#7-response-handler)
-* [8. GetPaymentMethods](https://github.com/sveawebpay/php-integration#8-GetPaymentMethods)
+* [8. GetPaymentMethods](https://github.com/sveawebpay/php-integration#8-getpaymentmethods)
+* [9. AdditionalDeveloperResources](https://github.com/sveawebpay/php-integration#9-additional-developer-resources)
 * [APPENDIX](https://github.com/sveawebpay/php-integration#appendix)
 
 
@@ -242,7 +243,7 @@ $response = WebPay::createOrder($config)
     ->usePayPage()
         ...
         ->getPaymentForm();
-    //Go direct to specified paymentmethod, whithout stopping on the PayPage, with asynchronous response
+    //Go direct to specified paymentmethod, without stopping on the PayPage, with asynchronous response
     ->usePaymentMethod (PaymentMethod::SEB_SE) //see APPENDIX for Constants
         ...
         ->getPaymentForm();
@@ -253,7 +254,7 @@ $response = WebPay::createOrder($config)
 
 ### 1.2 Specify order
 Continue by adding values for products and other. You can add OrderRow, Fee and Discount. Chose the right WebPayItem object as parameter.
-You can use the *add-* functions with an WebPayItem object or an array of WebPayItem objects as parameters.
+You can use the add-functions with an WebPayItem object or an array of WebPayItem objects as parameters.
 
 ```php
 ->addOrderRow(WebPayItem::orderRow()->...)
@@ -340,11 +341,11 @@ If two of these three attributes are specified, we respect the amount indicated 
     )
 ```
 #### 1.2.5 Relative Discount
-When discount or coupon is a percentage on total product amount.
+When discount or coupon is a percentage on total product amount. It may be given as an integer or a real value.
 ```php
 ->addDiscount(
     WebPayItem::relativeDiscount()
-        ->setDiscountPercent(50)                //Required
+        ->setDiscountPercent(50.5)              //Required
         ->setDiscountId("1")                    //Optional
         ->setUnit("st")                         //Optional
         ->setName('Relative')                   //Optional
@@ -392,7 +393,7 @@ if (*condition*) {
 ```php
 ->addCustomerDetails(
     WebPayItem::companyCustomer()
-    ->setNationalIdNumber(2345234)       //Required in SE, NO, DK, FI
+    ->setNationalIdNumber(2345234)      //Required in SE, NO, DK, FI
     ->setVatNumber("NL2345234")         //Required in NL and DE
     ->setCompanyName("TestCompagniet")  //Required in NL and DE
     ->setStreetAddress("Gatan", 23)     //Required in NL and DE
@@ -420,15 +421,15 @@ if (*condition*) {
 ### 1.5 Choose payment
 End process by choosing the payment method you desire.
 
-Invoice and payment plan will perform a synchronous payment and return an object as response.
+Invoice and payment plan will perform a synchronous payment and return a response object.
 
-Other hosted payments(card, direct bank and other payments from the *PayPage*)
-on the other hand are asynchronous. They will return an html form with formatted message to send from your store.
-The response is then returned to the return url you have specified in function setReturnUrl(). If you
-use class *Response* with the xml response as parameter, you will receive a
-formatted object as well.
+Other hosted payments (card payments, direct bank payments and other methods via the *PayPage*) on the other hand are asynchronous. They will return an html form with formatted message to send from your store.
 
-###### Which payment method should I choose?
+The response is then returned to the return url you have specified with setReturnUrl(). The response may also be sent to the url specified with setCallbackUrl() in case the customer doesn't return to the store after the transaction has concluded at the bank/card payment page.
+
+If you pass the xml response to an instance of *SveaResponse*, you will receive a formatted response object as well.
+
+##### Which payment method should I choose for different scenarios?
 I am using invoice and/or payment plan payments.
 
 >The best way is to use [`->useInvoicePayment()`] (https://github.com/sveawebpay/php-integration#154-invoicepayment) and
@@ -436,18 +437,23 @@ I am using invoice and/or payment plan payments.
 >These payments are synchronous and will give you an instant response.
 
 I am using card and/or direct bank payments.
-
 >You can go by *PayPage* by using [`->usePayPageCardOnly()`] (https://github.com/sveawebpay/php-integration#151-paypage-with-card-payment-options)
 >and [`->usePayPageDirectBankOnly()`] (https://github.com/sveawebpay/php-integration#152-paypage-with-direct-bank-payment-options).
 >
->If you for example only have one specific bank payment, you can go direct to that specific bank payment by using
->[`->usePaymentMethod(PaymentMethod)`] (https://github.com/sveawebpay/php-integration#154-paymentmethod-specified)
+>The best way if you know what specific payment you want to use, is to go direct to that specific payment, without landing on the PayPage, by using
+>[`->usePaymentMethod(PaymentMethod)`] (https://github.com/sveawebpay/php-integration#154-paymentmethod-specified).
+>To know your optional PaymentMethods configured on your account, you can use [getPaymentMethods($config)](https://github.com/sveawebpay/php-integration#8-getpaymentmethods)
+>
 
 I am using all payments.
 
 >The most effective way is to use [`->useInvoicePayment()`](https://github.com/sveawebpay/php-integration#154-invoicepayment)
 >and [`->usePaymentPlanPayment()`](https://github.com/sveawebpay/php-integration#154-paymentplanpayment)
->for the synchronous payments, and use the *PayPage* for the asynchronous requests by using [`->usePayPageCardOnly()`] (https://github.com/sveawebpay/php-integration#151-paypage-with-card-payment-options)
+>for the synchronous payments, and use the [`->usePaymentMethod(PaymentMethod)`] (https://github.com/sveawebpay/php-integration#154-paymentmethod-specified)
+>for the asynchronous requests. The method is preceded by [getPaymentMethods($config)](https://github.com/sveawebpay/php-integration#8-getpaymentmethods)
+>to get the Payment methods configured on you account.
+>
+>Alternatively use the *PayPage* for the asynchronous requests by using [`->usePayPageCardOnly()`] (https://github.com/sveawebpay/php-integration#151-paypage-with-card-payment-options)
 >and [`->usePayPageDirectBankOnly()`] (https://github.com/sveawebpay/php-integration#152-paypage-with-direct-bank-payment-options).
 
 I am using more than one payment and want them gathered on on place.
@@ -456,10 +462,10 @@ I am using more than one payment and want them gathered on on place.
 
 Note that Invoice and Payment plan payments will return an asynchronous response from here.
 
-#### Synchronous payments - Invoice and PaymentPlan
+### Synchronous payments - Invoice and PaymentPlan
 The request gives an instant response.
 
-#### 1.5.4 InvoicePayment
+#### 1.5.1 InvoicePayment
 Perform an invoice payment. This payment form will perform a synchronous payment and return a response.
 Returns *CreateOrderResponse* object.
 ```php
@@ -482,11 +488,13 @@ Returns *CreateOrderResponse* object.
              ->useInvoicePayment()
                 ->doRequest();
 ```
-#### 1.5.5 PaymentPlanPayment
-Only individual customers can use this payment type.
+#### 1.5.2 PaymentPlanPayment
+Payment plan payments is limited to individual customers, it can't be used by legal entities as companies or organisations.
+
 Perform *PaymentPlanPayment*. This payment form will perform a synchronous payment and return a response.
 Returns a *CreateOrderResponse* object. Preceded by WebPay::getPaymentPlanParams($config).
 Param: Campaign code recieved from getPaymentPlanParams().
+
 ```php
 $response = WebPay::createOrder($config)
 ->addOrderRow(
@@ -509,11 +517,14 @@ $response = WebPay::createOrder($config)
 ```
 [<< To top](https://github.com/sveawebpay/php-integration#php-integration-package-api-for-sveawebpay)
 
-#### Asynchronous payments - Hosted solutions
-Build order and recieve a *PaymentForm* object. Send the *PaymentForm* parameters: *merchantid*, *xmlMessageBase64* and *mac* by POST to
-SveaConfig::SWP_TEST_URL or SveaConfig::SWP_PROD_URL. The *PaymentForm* object also contains a complete html form as string
-and the html form element as array. The response is returned as XML, but you can use our [response handler](https://github.com/sveawebpay/php-integration#6-response-handler)
-to format the response.
+### Asynchronous payments - Hosted solutions
+Build the order object. Then select the payment method and specifying the various attributes using the methods applicable to hosted payments (see below). Recieve the *PaymentForm* object using getPaymentForm(), specifying *merchantid*, *xmlMessageBase64* and *mac*.
+
+The form is then sent by POST to SveaConfig::SWP_TEST_URL or SveaConfig::SWP_PROD_URL. The *PaymentForm* object also contains a complete html form as string
+and the html form element as array.
+
+The response is returned as XML, use the Svea [response handler](https://github.com/sveawebpay/php-integration#6-response-handler)
+to format the response
 
 ```html
     <form name='paymentForm' id='paymentForm' method='post' action='SveaConfig::SWP_TEST_URL'>
@@ -524,11 +535,25 @@ to format the response.
     </form>
 ```
 
+->setReturnUrl()
+When a hosted payment transaction completes (regardless of outcome, i.e. accepted or denied),
+the payment service will answer with a response xml message sent to the return url specified.
 
-#### 1.5.1 PayPage with card payment options
-*PayPage* with availible card payments only.
+->setCallbackUrl()
+In case the hosted payment transaction completes, but the service is unable to return a response to the return url,
+the payment service will retry several times using the callback url as a fallback, if specified. This may happen if
+i.e. the user closes the browser before the payment service redirects back to the shop.
 
-##### 1.5.1.1 Request
+->setCancelUrl()
+In case the hosted payment service is cancelled by the user, the payment service will redirect back to the cancel url.
+Unless a return url is specified, no cancel button will be presented at the payment service.
+
+See also class HostedPayment.
+
+#### 1.5.3 PayPage with card payment options
+*PayPage* with available card payments only.
+
+##### 1.5.3.1 Request
 ```php
 $form = WebPay::createOrder($config)
 ->addOrderRow(
@@ -549,12 +574,13 @@ $form = WebPay::createOrder($config)
         ->usePayPageCardOnly()
             ->setPayPageLanguage("sv")                          //Optional, default english
             ->setReturnUrl("http://myurl.se")                   //Required
+            ->setCallbackUrl("http://myurl.se")                 //Optional
             ->setCancelUrl("http://myurl.se")                   //Optional
-            ->setCall("http://myurl.se")                   //Optional
+            ->setCall("http://myurl.se")                        //Optional
                 ->getPaymentForm();
 
 ```
-##### 1.5.1.2 Return
+##### 1.5.3.2 Return
 The values of *xmlMessageBase64*, *merchantid* and *mac* are to be sent as xml to SveaWebPay.
 Function getPaymentForm() returns object type *PaymentForm* with accessible members:
 
@@ -576,10 +602,10 @@ $form = ...
 echo $form->completeHtmlFormWithSubmitButton; //Will render a hidden form with submit button in browser
 ```
 
-#### 1.5.2 PayPage with direct bank payment options
+#### 1.5.4 PayPage with direct bank payment options
 *PayPage* with available direct bank payments only.
 
-##### 1.5.2.1 Request
+##### 1.5.4.1 Request
 ```php
 $form = WebPay::createOrder($config)
 ->addOrderRow(
@@ -603,7 +629,7 @@ $form = WebPay::createOrder($config)
             ->setCancelUrl("http://myurl.se")                   //Optional
             ->getPaymentForm();
 ```
-##### 1.5.2.2 Return
+##### 1.5.4.2 Return
 Returns object type PaymentForm:
 
 | Member                            | Description                               |
@@ -624,11 +650,11 @@ $form = ...
 echo $form->completeHtmlFormWithSubmitButton; //Will render a hidden form with submit button in browser
 ```
 
-#### 1.5.3 PayPagePayment
+#### 1.5.5 PayPagePayment
 *PayPage* with all available payments. You can also custom the *PayPage* by using one of the methods for *PayPagePayments*:
 setPaymentMethod, includePaymentMethods, excludeCardPaymentMethods or excludeDirectPaymentMethods.
 
-##### 1.5.3.1 Request
+##### 1.5.5.1 Request
 ```php
 $form = WebPay::createOrder($config)
     ->addOrderRow(
@@ -653,7 +679,7 @@ $form = WebPay::createOrder($config)
                 ->getPaymentForm();
 ```
 
-###### 1.5.3.1.1 Exclude specific payment methods
+###### 1.5.5.1.1 Exclude specific payment methods
 Optional if you want to include specific payment methods for *PayPage*.
 ```php
     ->usePayPage()
@@ -662,7 +688,7 @@ Optional if you want to include specific payment methods for *PayPage*.
         ->excludePaymentMethods(PaymentMethod::SEB_SE,PaymentMethod::INVOICE)   //Optional
         ->getPaymentForm();
 ```
-###### 1.5.3.1.2 Include specific payment methods
+###### 1.5.5.1.2 Include specific payment methods
 Optional if you want to include specific payment methods for *PayPage*.
 ```php
     ->usePayPage()
@@ -671,7 +697,7 @@ Optional if you want to include specific payment methods for *PayPage*.
         ->getPaymentForm();
 ```
 
-###### 1.5.3.1.3 Exclude Card payments
+###### 1.5.5.1.3 Exclude Card payments
 Optional if you want to exclude all cardpayment methods from *PayPage*.
 ```php
    ->usePayPage()
@@ -680,7 +706,7 @@ Optional if you want to exclude all cardpayment methods from *PayPage*.
         ->getPaymentForm();
 ```
 
-###### 1.5.3.1.4 Exclude Direct payments
+###### 1.5.5.1.4 Exclude Direct payments
 Optional if you want to exclude all direct bank payments methods from *PayPage*.
 ```php
 ->usePayPage()
@@ -688,7 +714,7 @@ Optional if you want to exclude all direct bank payments methods from *PayPage*.
     ->excludeDirectPaymentMethods()                         //Optional
     ->getPaymentForm();
 ```
-##### 1.5.3.6 Return
+##### 1.5.5.2 Return
 Returns object type *PaymentForm*:
 
 | Member                            | Description                               |
@@ -709,10 +735,10 @@ $form = ...
 echo $form->completeHtmlFormWithSubmitButton; //Will render a hidden form with submit button in browser
 ```
 
-#### 1.5.4 PaymentMethod specified
+#### 1.5.6 PaymentMethod specified
 Go direct to specified payment method without the step *PayPage*.
 
-##### 1.5.1.1 Request
+##### 1.5.6.1 Request
 ```php
 $form = WebPay::createOrder($config)
   ->addOrderRow(
@@ -737,7 +763,7 @@ $form = WebPay::createOrder($config)
             ->getPaymentForm();
 
 ```
-##### 1.5.1.2 Return
+##### 1.5.6.2 Return
 The values of *xmlMessageBase64*, *merchantid* and *mac* are to be sent as xml to SveaWebPay.
 Function getPaymentForm() returns Object type PaymentForm with accessible members:
 
@@ -815,7 +841,7 @@ $paymentPlanParamsResonseObject->values[0..n] (for n campaignCodes), where value
 
 ## 3. getAddresses
 Returns *getAddressesResponse* object with an *AddressSelector* for the associated addresses for a specific security number.
-Can be used when creating an order. Only applicable for SE, NO and DK. In Norway, only getAddresses of companies is supported.
+Can be used when creating an order for Company customers to set what billing address to use. Only applicable for SE, NO and DK. In Norway, only getAddresses of companies is supported.
 
 [<< To top](https://github.com/sveawebpay/php-integration#php-integration-package-api-for-sveawebpay)
 
@@ -910,7 +936,7 @@ Any left out items should not be delivered physically, as they will not be invoi
             ->setDiscountPercent(0)
         )
         ->setOrderId("id") //Recieved from CreateOrder request
-        ->setInvoiceDistributionType('Post')
+        ->setInvoiceDistributionType(DistributionType::POST)
         ->deliverInvoiceOrder()
             ->doRequest();
 ```
@@ -978,7 +1004,7 @@ If invoice order is credit invoice use setCreditInvoice($invoiceId) and setNumbe
 ```php
     ->setOrderId($orderId)                  //Required. Received when creating order.
     ->setNumberOfCreditDays(1)              //Use for Invoice orders.
-    ->setInvoiceDistributionType('Post')    //Use for Invoice orders. "Post" or "Email"
+    ->setInvoiceDistributionType(DistributionType::POST)    //Use for Invoice orders. DistributionType::POST or DistributionType::EMAIL
     ->setNumberOfCreditDays(1)              //Use for invoice orders.
 
 ```
@@ -1016,7 +1042,7 @@ you will recieve an *InvoiceId* in the Response. To credit the invoice you follo
             ->setDiscountPercent(0)
         )
         ->setOrderId("id")
-        ->setInvoiceDistributionType('Post')
+        ->setInvoiceDistributionType(DistributionType::POST)
         //Credit invoice flag. Note that you first must deliver the order and recieve an InvoiceId, then do the deliver request again but with this call:
           ->setCreditInvoice($InvoiceId) //Use for invoice orders, if this should be a credit invoice. Params: InvoiceId recieved from when doing DeliverOrder
         ->deliverInvoiceOrder()
@@ -1079,6 +1105,15 @@ See file PaymentMethodIntegrationTest.php for usage.
                     ->setContryCode("SE")           // optional, if no country given, will use default country "SE"
                     ->doRequest();
 ```
+
+## 9. Additional Developer Resources
+In the Helper class we make available helper functions for i.e. bankers rounding, splitting a sum with an arbitrary tax rate over two fixed tax rates, as well as splitting street addresses into streetname and housenumber. See the Helper class definition for further information.
+
+During module development or debugging, the WebServicePayment prepareRequest() and validateOrder() methods may be of use as an alternative to doRequest() as the final step in the createOrder process.
+
+prepareRequest() will do everything doRequest does, but does not send the SOAP request to Svea. The prepared request object may then be inspected for errors.
+
+validateOrder() validates that all required attributes are present in an order object, give the specific combination of country and payment method. It returns an array containing any discovered errors.
 
 ## APPENDIX
 

@@ -158,5 +158,7 @@ class HelperTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals( 25, $taxRates[0] );
         $this->assertEquals( 6, $taxRates[1] );
     }
+
+
 }
 ?>

@@ -131,6 +131,22 @@ class WebServiceOrderValidatorTest extends \PHPUnit_Framework_TestCase {
 
     /**
      * @expectedException Svea\ValidationException
+     * @expectedExceptionMessage -missing value : NationalIdNumber is required for individual customers when countrycode is SE, NO, DK or FI. Use function setNationalIdNumber().
+     */
+    public function testFailOnNationalIdNumberIsEmptyString() {
+        $config = SveaConfig::getDefaultConfig();
+        $builder = \WebPay::createOrder($config);
+        $order = $builder
+                ->setCountryCode("SE")
+                ->setOrderDate(date('c'))
+                ->addCustomerDetails(\WebPayItem::individualCustomer()->setNationalIdNumber("") )
+                ->useInvoicePayment();
+
+        $order->prepareRequest();
+    }
+    
+    /**
+     * @expectedException Svea\ValidationException
      * @expectedExceptionMessage -missing value : OrgNumber is required for company customers when countrycode is SE, NO, DK or FI. Use function setNationalIdNumber().
      */
     public function testFailOnMissingOrgNumberForCompanyOrderSe() {

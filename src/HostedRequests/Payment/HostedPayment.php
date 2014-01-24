@@ -8,7 +8,7 @@ require_once SVEA_REQUEST_DIR . '/Includes.php';
  * Prepares $order and creates a paymentform to integrate on webpage
  * Uses SveaXmlBuilder to turn formatted $order into xml
  * @author Anneli Halld'n, Daniel Brolund for Svea Webpay
- *  * @package HostedRequests/Payment
+ * @package HostedRequests/Payment
  */
 class HostedPayment {
 

@@ -9,7 +9,7 @@ require_once 'WebServicePayment.php';
 */
 class InvoicePayment extends WebServicePayment {
 
-    public $orderType = 'Invoice';
+    public $orderType = "Invoice";
 
     public function __construct($order) {
         parent::__construct($order);

@@ -6,16 +6,16 @@ require_once SVEA_REQUEST_DIR . '/Config/SveaConfig.php';
 
 /**
  * Applicable for SE, NO & DK.
- * 
+ *
  * If customer has multiple addresses, or you just want to show the customer
  * the address which the invoice or product is to be delivered to, you can use
- * this class. It returns an array with all the associated addresses for a 
+ * this class. It returns an array with all the associated addresses for a
  * specific SecurityNumber.
- * 
- * Each address gets an AddressSelector-hash that identifies the address. This 
+ *
+ * Each address gets an AddressSelector-hash that identifies the address. This
  * can be used when creating orders to have the invoice be sent to the specified
  * address.
- * 
+ *
  * @author Anneli Halld'n, Daniel Brolund for Svea Webpay
  * @package WebServiceRequests/GetAddresses
  */

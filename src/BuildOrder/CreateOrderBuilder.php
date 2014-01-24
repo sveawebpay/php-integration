@@ -103,7 +103,7 @@ class CreateOrderBuilder {
         $this->customerIdentity = $itemCustomerObject;
         return $this;
     }
-    
+
     /**
      * @param OrderRow $orderRow
      * @return \CreateOrderBuilder
@@ -128,7 +128,7 @@ class CreateOrderBuilder {
             foreach ($itemFeeObject as $row) {
                 if (get_class($row) == "Svea\ShippingFee") {
                      array_push($this->shippingFeeRows, $row);
-                } 
+                }
                 if (get_class($row) == "Svea\InvoiceFee") {
                      array_push($this->invoiceFeeRows, $row);
                 }
@@ -144,7 +144,7 @@ class CreateOrderBuilder {
 
         return $this;
     }
-    
+
     /**
      * @param type $itemDiscounObject
      * @return \CreateOrderBuilder
@@ -154,13 +154,13 @@ class CreateOrderBuilder {
             foreach ($itemDiscounObject as $row) {
                 if (get_class($row) == "Svea\FixedDiscount") {
                     array_push($this->fixedDiscountRows, $row);
-                } 
+                }
                 if (get_class($row) == "Svea\RelativeDiscount") {
                     array_push($this->relativeDiscountRows, $row);
                 }
 
             }
-        } 
+        }
         else {
             if (get_class($itemDiscounObject) == "Svea\FixedDiscount") {
                 array_push($this->fixedDiscountRows, $itemDiscounObject);
@@ -169,7 +169,7 @@ class CreateOrderBuilder {
                 array_push($this->relativeDiscountRows, $itemDiscounObject);
             }
        }
-       
+
        return $this;
     }
 
@@ -253,12 +253,12 @@ class CreateOrderBuilder {
         $paypagepayment = new PayPagePayment($this);
         return $paypagepayment;
     }
-    
+
     /**
      * Start creating payment with a specific paymentmethod. This function will go directly to the paymentmethod specified.
      * Paymentmethods are found in appendix in our documentation.
      * Returns Paymentform to integrate in shop.
-     * @param type PaymentMethod $paymentMethodAsConst, ex. PaymentMethod::DBSEBSE
+     * @param type PaymentMethod $paymentMethodAsConst, ex. PaymentMethod::SEB_SE
      * @return \PaymentMethodPayment
      */
     public function usePaymentMethod($paymentMethodAsConst) {

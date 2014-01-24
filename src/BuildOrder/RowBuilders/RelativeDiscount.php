@@ -18,12 +18,16 @@ class RelativeDiscount {
 
     /**
      * Required
-     * The percentage of the discount
-     * @param int $discountPercentOnTotalAmountAsInt
+     * The percentage of the discount, either a float or a real number
+     * 
+     * Unittest/OrderBuilderTest, InvoicePaymentTest, 
+     * Integrationtest/CardPaymentIntegrationTest
+     * 
+     * @param number $discountPercentOnTotalAmountAsNumber
      * @return \RelativeDiscount
      */
-    public function setDiscountPercent($discountPercentOnTotalAmountAsInt) {
-        $this->discountPercent = $discountPercentOnTotalAmountAsInt;
+    public function setDiscountPercent($discountPercentOnTotalAmountAsNumber) {
+        $this->discountPercent = $discountPercentOnTotalAmountAsNumber;
         return $this;
     }
 
