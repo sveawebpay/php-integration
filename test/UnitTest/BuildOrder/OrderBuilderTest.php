@@ -84,7 +84,7 @@ class OrderBuilderTest extends \PHPUnit_Framework_TestCase {
         $this->assertInternalType("float", $sveaRequest->fixedDiscountRows[0]->amount);
     }
 
-    public function testBuildOrderWithRelativeDiscount() {
+    public function testBuildOrderWithRelativeDiscountAsInt() {
         $config = SveaConfig::getDefaultConfig();
         $sveaRequest =
                 \WebPay::createOrder($config)
@@ -101,6 +101,25 @@ class OrderBuilderTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals("RelativeDiscount", $sveaRequest->relativeDiscountRows[0]->description);
         //test type
         $this->assertInternalType("int", $sveaRequest->relativeDiscountRows[0]->discountPercent);
+    }
+    
+    public function testBuildOrderWithRelativeDiscountAsFloat() {
+        $config = SveaConfig::getDefaultConfig();
+        $sveaRequest =
+                \WebPay::createOrder($config)
+                ->addDiscount(\WebPayItem::relativeDiscount()
+                    ->setDiscountId("1")
+                    ->setDiscountPercent(12.75)
+                    ->setUnit("st")
+                    ->setName('Relative')
+                    ->setDescription("RelativeDiscount")
+                    );
+
+        $this->assertEquals("1", $sveaRequest->relativeDiscountRows[0]->discountId);
+        $this->assertEquals(12.75, $sveaRequest->relativeDiscountRows[0]->discountPercent);
+        $this->assertEquals("RelativeDiscount", $sveaRequest->relativeDiscountRows[0]->description);
+        //test type
+        $this->assertInternalType("float", $sveaRequest->relativeDiscountRows[0]->discountPercent);
     }
 
     public function testBuildOrderWithCustomer() {

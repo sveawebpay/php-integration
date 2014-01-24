@@ -424,6 +424,81 @@ class InvoicePaymentTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(0, $request->request->CreateOrderInformation->OrderRows['OrderRow'][3]->DiscountPercent);
     }
 
+        public function test_RelativeDiscountAsInt() {
+        $config = Svea\SveaConfig::getDefaultConfig();
+        $request = WebPay::createOrder($config)
+                ->addOrderRow(WebPayItem::orderRow()
+                    ->setArticleNumber("1")
+                    ->setQuantity(1)
+                    ->setAmountExVat(240.00)
+                    //->setAmountIncVat(300.00)
+                    ->setDescription("CD")
+                    ->setVatPercent(25)
+                    )
+                ->addOrderRow(WebPayItem::orderRow()
+                    ->setArticleNumber("1")
+                    ->setQuantity(1)
+                    ->setAmountExVat(188.68)
+                    //->setAmountIncVat(200.00)
+                    ->setDescription("Bok")
+                    ->setVatPercent(6)
+                    )
+                ->addDiscount(WebPayItem::relativeDiscount()
+                    ->setDiscountId("1")
+                     ->setDiscountPercent(21)
+                     ->setDescription("RelativeDiscount")
+                    )
+                ->addCustomerDetails(WebPayItem::individualCustomer()->setNationalIdNumber(194605092222))
+                ->setCountryCode("SE")
+                ->setCustomerReference("33")
+                ->setOrderDate("2012-12-12")
+                ->setCurrency("SEK")
+                    ->useInvoicePayment()
+                        ->prepareRequest();
+
+        //couponrows
+        $this->assertEquals(-50.40, $request->request->CreateOrderInformation->OrderRows['OrderRow'][2]->PricePerUnit);
+        $this->assertEquals(-39.62, $request->request->CreateOrderInformation->OrderRows['OrderRow'][3]->PricePerUnit);
+
+    }
+
+        public function test_RelativeDiscountAsFloat() {
+        $config = Svea\SveaConfig::getDefaultConfig();
+        $request = WebPay::createOrder($config)
+                ->addOrderRow(WebPayItem::orderRow()
+                    ->setArticleNumber("1")
+                    ->setQuantity(1)
+                    ->setAmountExVat(240.00)
+                    //->setAmountIncVat(300.00)
+                    ->setDescription("CD")
+                    ->setVatPercent(25)
+                    )
+                ->addOrderRow(WebPayItem::orderRow()
+                    ->setArticleNumber("1")
+                    ->setQuantity(1)
+                    ->setAmountExVat(188.68)
+                    //->setAmountIncVat(200.00)
+                    ->setDescription("Bok")
+                    ->setVatPercent(6)
+                    )
+                ->addDiscount(WebPayItem::relativeDiscount()
+                    ->setDiscountId("1")
+                     ->setDiscountPercent(20.5)                         // 
+                     ->setDescription("RelativeDiscount")
+                    )
+                ->addCustomerDetails(WebPayItem::individualCustomer()->setNationalIdNumber(194605092222))
+                ->setCountryCode("SE")
+                ->setCustomerReference("33")
+                ->setOrderDate("2012-12-12")
+                ->setCurrency("SEK")
+                    ->useInvoicePayment()
+                        ->prepareRequest();
+
+        //couponrows
+        $this->assertEquals(-49.20, $request->request->CreateOrderInformation->OrderRows['OrderRow'][2]->PricePerUnit);
+        $this->assertEquals(-38.68, $request->request->CreateOrderInformation->OrderRows['OrderRow'][3]->PricePerUnit);
+    }
+    
     public function t_estInvoiceRequestObjectWithFixedDiscountOnDifferentProductVat() {
         $config = Svea\SveaConfig::getDefaultConfig();
         $request = WebPay::createOrder($config)
