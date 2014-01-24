@@ -1,5 +1,5 @@
 # PHP Integration Package API for SveaWebPay
-## Version 1.6.0
+## Version 1.6.1
 
 | Branch                            | Build status                               |
 |---------------------------------- |------------------------------------------- |
@@ -24,6 +24,7 @@
 * [6. CloseOrder](https://github.com/sveawebpay/php-integration#6-closeorder)
 * [7. Response handler](https://github.com/sveawebpay/php-integration#7-response-handler)
 * [8. GetPaymentMethods](https://github.com/sveawebpay/php-integration#8-getpaymentmethods)
+* [9. AdditionalDeveloperResources](https://github.com/sveawebpay/php-integration#9-additional-developer-resources)
 * [APPENDIX](https://github.com/sveawebpay/php-integration#appendix)
 
 
@@ -253,7 +254,7 @@ $response = WebPay::createOrder($config)
 
 ### 1.2 Specify order
 Continue by adding values for products and other. You can add OrderRow, Fee and Discount. Chose the right WebPayItem object as parameter.
-You can use the *add-* functions with an WebPayItem object or an array of WebPayItem objects as parameters.
+You can use the add-functions with an WebPayItem object or an array of WebPayItem objects as parameters.
 
 ```php
 ->addOrderRow(WebPayItem::orderRow()->...)
@@ -340,11 +341,11 @@ If two of these three attributes are specified, we respect the amount indicated 
     )
 ```
 #### 1.2.5 Relative Discount
-When discount or coupon is a percentage on total product amount.
+When discount or coupon is a percentage on total product amount. It may be given as an integer or a real value.
 ```php
 ->addDiscount(
     WebPayItem::relativeDiscount()
-        ->setDiscountPercent(50)                //Required
+        ->setDiscountPercent(50.5)              //Required
         ->setDiscountId("1")                    //Optional
         ->setUnit("st")                         //Optional
         ->setName('Relative')                   //Optional
@@ -392,7 +393,7 @@ if (*condition*) {
 ```php
 ->addCustomerDetails(
     WebPayItem::companyCustomer()
-    ->setNationalIdNumber(2345234)       //Required in SE, NO, DK, FI
+    ->setNationalIdNumber(2345234)      //Required in SE, NO, DK, FI
     ->setVatNumber("NL2345234")         //Required in NL and DE
     ->setCompanyName("TestCompagniet")  //Required in NL and DE
     ->setStreetAddress("Gatan", 23)     //Required in NL and DE
@@ -935,7 +936,7 @@ Any left out items should not be delivered physically, as they will not be invoi
             ->setDiscountPercent(0)
         )
         ->setOrderId("id") //Recieved from CreateOrder request
-        ->setInvoiceDistributionType('Post')
+        ->setInvoiceDistributionType(DistributionType::POST)
         ->deliverInvoiceOrder()
             ->doRequest();
 ```
@@ -1003,7 +1004,7 @@ If invoice order is credit invoice use setCreditInvoice($invoiceId) and setNumbe
 ```php
     ->setOrderId($orderId)                  //Required. Received when creating order.
     ->setNumberOfCreditDays(1)              //Use for Invoice orders.
-    ->setInvoiceDistributionType('Post')    //Use for Invoice orders. "Post" or "Email"
+    ->setInvoiceDistributionType(DistributionType::POST)    //Use for Invoice orders. DistributionType::POST or DistributionType::EMAIL
     ->setNumberOfCreditDays(1)              //Use for invoice orders.
 
 ```
@@ -1041,7 +1042,7 @@ you will recieve an *InvoiceId* in the Response. To credit the invoice you follo
             ->setDiscountPercent(0)
         )
         ->setOrderId("id")
-        ->setInvoiceDistributionType('Post')
+        ->setInvoiceDistributionType(DistributionType::POST)
         //Credit invoice flag. Note that you first must deliver the order and recieve an InvoiceId, then do the deliver request again but with this call:
           ->setCreditInvoice($InvoiceId) //Use for invoice orders, if this should be a credit invoice. Params: InvoiceId recieved from when doing DeliverOrder
         ->deliverInvoiceOrder()
@@ -1104,6 +1105,15 @@ See file PaymentMethodIntegrationTest.php for usage.
                     ->setContryCode("SE")           // optional, if no country given, will use default country "SE"
                     ->doRequest();
 ```
+
+## 9. Additional Developer Resources
+In the Helper class we make available helper functions for i.e. bankers rounding, splitting a sum with an arbitrary tax rate over two fixed tax rates, as well as splitting street addresses into streetname and housenumber. See the Helper class definition for further information.
+
+During module development or debugging, the WebServicePayment prepareRequest() and validateOrder() methods may be of use as an alternative to doRequest() as the final step in the createOrder process.
+
+prepareRequest() will do everything doRequest does, but does not send the SOAP request to Svea. The prepared request object may then be inspected for errors.
+
+validateOrder() validates that all required attributes are present in an order object, give the specific combination of country and payment method. It returns an array containing any discovered errors.
 
 ## APPENDIX
 

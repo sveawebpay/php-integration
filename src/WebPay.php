@@ -9,7 +9,7 @@ include_once SVEA_REQUEST_DIR . "/Includes.php";
  * Class WebPay is external to Svea namespace along with class WebPayItem.
  * This is so that existing integrations don't need to worry about
  * prefixing their existing calls to WebPay:: and orderrow item functions.
- * @version 1.6.0
+ * @version 1.6.1
  * @author Anneli Halld'n, Daniel Brolund, Kristian Grossman-Madsen for Svea WebPay
  * @package WebPay
  */
