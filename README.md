@@ -30,13 +30,14 @@
 
 ## Introduction
 This integration package is built for developers to simplify the integration of Svea WebPay services.
-Using this package will make your implementation sustainable and unaffected for changes
+Using this package will make your implementation sustainable and unaffected by changes
 in our payment system. Just make sure to update the package regularly.
 
 The API is built as a *Fluent API* so you can use *method chaining* when implementing it in your code.
 Make sure to open your implementation as a project in your IDE to make the code completion work properly.
-Package is developed and tested in NetBeans IDE 7.2.
+The integration package is developed and tested using NetBeans IDE 7.3.1.
 
+### Usage
 Include the file *Includes.php* from the php integration package in your file.
 Call class *WebPay* and the suitable static function for your action.
 
@@ -47,11 +48,6 @@ $foo = WebPay::createOrder($config);
 $foo = $foo->...
         ->..;
 ```
-
-## Changes in release 1.2.1
-
-We recommend using php 4.4 on package servers, for namespace compatibility
-(reported compatibility issue with Debian Squeeze instalations).
 
 ### Namespace
 From release 1.2.0 on the package makes use of a namespace, Svea. We have made

@@ -19,7 +19,11 @@ class GetPaymentMethods {
         $this->config = $config;
     }
 
-    public function setContryCode($countryCodeAsString){
+    public function setContryCode($countryCodeAsString){    // oops!
+        return $this->setCountryCode($countryCodeAsString);
+    }    
+
+    public function setCountryCode($countryCodeAsString){
         $this->countryCode = $countryCodeAsString;
         return $this;
     }
