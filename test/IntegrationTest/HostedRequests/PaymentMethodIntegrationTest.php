@@ -13,7 +13,7 @@ class PaymentMethodIntegrationTest extends \PHPUnit_Framework_TestCase {
     function testGetAllPaymentMethods(){
         $config = Svea\SveaConfig::getDefaultConfig();
         $response = WebPay::getPaymentMethods($config)
-                ->setContryCode("SE")
+                ->setCountryCode("SE")
                 ->doRequest();
         $this->assertEquals(PaymentMethod::NORDEA_SE, $response[0]);
         $this->assertEquals(PaymentMethod::SEB_SE, $response[1]);

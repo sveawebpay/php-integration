@@ -2,7 +2,8 @@
 // PaymentMethod is excluded from the Svea namespace
 
 /**
- * PaymentMethod
+ * PaymentMethod is a container for the various payment method constant strings
+ * 
  */
 abstract class PaymentMethod {
 
