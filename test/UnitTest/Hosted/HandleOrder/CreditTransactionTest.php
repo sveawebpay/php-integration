@@ -16,6 +16,19 @@ class CreditTransactionTest extends PHPUnit_Framework_TestCase {
         
         $this->assertInstanceOf( "Svea\CreditTransaction", $creditObject);      
     }
+    
+    function test_setTransactionId(){
+        $config = Svea\SveaConfig::getDefaultConfig();
+
+        $creditObject = WebPay::creditTransaction($config);
+
+        $transactionId = 987654;
+        
+        $creditObject->setTransactionId( $transactionId );
+        
+        //$this->assertEquals( $transactionId, $creditObject->transactionId );    //oops, transactionId is private.
+        $this->assertEquals( $transactionId, PHPUnit_Framework_Assert::readAttribute($creditObject, 'transactionId') );
+    }
 }
 
 ?>

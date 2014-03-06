@@ -11,10 +11,17 @@ require_once SVEA_REQUEST_DIR . '/Includes.php';
 class CreditTransaction {
 
     private $config;
+    private $transactionId;
 
     function __construct($config) {
         $this->config = $config;
     }
+    
+    function setTransactionId( $transactionId ) {
+        $this->transactionId = $transactionId;
+    }
+    
+    
 
 //    public function prepareRequest(){
 //
