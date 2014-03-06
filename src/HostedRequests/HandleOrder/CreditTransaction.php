@@ -12,6 +12,7 @@ class CreditTransaction {
 
     private $config;
     private $transactionId;
+    private $creditAmount;
 
     function __construct($config) {
         $this->config = $config;
@@ -21,6 +22,9 @@ class CreditTransaction {
         $this->transactionId = $transactionId;
     }
     
+    function setCreditAmount( $creditAmount ) {
+        $this->creditAmount = $creditAmount;
+    }
     
 
 //    public function prepareRequest(){
