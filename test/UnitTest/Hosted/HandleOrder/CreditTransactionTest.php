@@ -8,38 +8,35 @@ require_once $root . '/../../../../src/WebServiceRequests/svea_soap/SveaSoapConf
  * @author Kristian Grossman-Madsen for Svea Webpay
  */
 class CreditTransactionTest extends PHPUnit_Framework_TestCase {
-
-    function test_class_exists(){
-        $config = Svea\SveaConfig::getDefaultConfig();
-
-        $creditObject = WebPay::creditTransaction($config);
         
-        $this->assertInstanceOf( "Svea\CreditTransaction", $creditObject);      
+    protected $configObject;
+
+    // fixture, run once before each test method
+    protected function setUp() {
+        $this->creditObject = WebPay::creditTransaction( Svea\SveaConfig::getDefaultConfig() );
+    }
+
+    // test methods
+    function test_class_exists(){
+        
+        $this->assertInstanceOf( "Svea\CreditTransaction", $this->creditObject);      
     }
     
     function test_setTransactionId( ){
-        $config = Svea\SveaConfig::getDefaultConfig();
-
-        $creditObject = WebPay::creditTransaction($config);
-
-        $transactionId = 987654;
         
-        $creditObject->setTransactionId( $transactionId );
+        $transactionId = 987654;       
+        $this->creditObject->setTransactionId( $transactionId );
         
         //$this->assertEquals( $transactionId, $creditObject->transactionId );    //oops, transactionId is private.
-        $this->assertEquals( $transactionId, PHPUnit_Framework_Assert::readAttribute($creditObject, 'transactionId') );
+        $this->assertEquals( $transactionId, PHPUnit_Framework_Assert::readAttribute($this->creditObject, 'transactionId') );
     }
     
     function test_setCreditAmount() {
-        $config = Svea\SveaConfig::getDefaultConfig();
-
-        $creditObject = WebPay::creditTransaction($config);
-
+        
         $creditAmount = 100;
+        $this->creditObject->setCreditAmount( $creditAmount );
         
-        $creditObject->setCreditAmount( $creditAmount );
-        
-        $this->assertEquals( $creditAmount, PHPUnit_Framework_Assert::readAttribute($creditObject, 'creditAmount') );
+        $this->assertEquals( $creditAmount, PHPUnit_Framework_Assert::readAttribute($this->creditObject, 'creditAmount') );
     }
 }
 
