@@ -1001,7 +1001,6 @@ If invoice order is credit invoice use setCreditInvoice($invoiceId) and setNumbe
     ->setOrderId($orderId)                  //Required. Received when creating order.
     ->setNumberOfCreditDays(1)              //Use for Invoice orders.
     ->setInvoiceDistributionType(DistributionType::POST)    //Use for Invoice orders. DistributionType::POST or DistributionType::EMAIL
-    ->setNumberOfCreditDays(1)              //Use for invoice orders.
 
 ```
 
