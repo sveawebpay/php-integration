@@ -214,6 +214,17 @@ class HostedXmlBuilder {
      * 
      */
     public function getCreditTransactionXML( $elements ){
+        $this->setBaseXML();
+        $this->XMLWriter->startElement("credit");
+        
+        foreach( $elements as $element => $value ) {
+            $this->XMLWriter->writeElement($element,$value);
+        }        
+
+        $this->XMLWriter->endElement();
+        $this->XMLWriter->endDocument();
+        
+        return $this->XMLWriter->flush();
     }
     
     /*
