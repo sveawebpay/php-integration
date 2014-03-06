@@ -14,7 +14,7 @@ class CreditTransactionTest extends PHPUnit_Framework_TestCase {
 
         $creditObject = WebPay::creditTransaction($config);
         
-        assertInstanceOf( Svea\CreditTransaction, $creditObject);      
+        $this->assertInstanceOf( "Svea\CreditTransaction", $creditObject);      
     }
 }
 
