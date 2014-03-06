@@ -135,4 +135,17 @@ class WebPay {
        }
         return new Svea\GetPaymentMethods($config);
     }
+    
+    /**
+     * Credit an existing Card or Bank transaction.
+     */
+    public static function creditTransaction( $config = NULL ) {
+        if( $config == NULL ) {
+           throw new Exception('-missing parameter:
+                               This method requires an ConfigurationProvider object as parameter. Create a class that implements class ConfigurationProvider. Set returnvalues to configuration values. Create an object from that class. Alternative use static function from class SveaConfig e.g. SveaConfig::getDefaultConfig(). You can replace the default config values to return your own config values in the method.'
+                                );
+        }
+        
+        return new Svea\CreditTransaction($config);
+    }
 }
