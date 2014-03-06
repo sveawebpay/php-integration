@@ -6,12 +6,16 @@ namespace Svea;
  */
 class HostedXmlBuilder {
 
-    /**
-     * @var XMLWriter
-     */
     private $XMLWriter;
     private $isCompany = "FALSE";
 
+    private function setBaseXML(){
+        $this->XMLWriter = new \XMLWriter();
+        $this->XMLWriter->openMemory();
+        $this->XMLWriter->setIndent(true);
+        $this->XMLWriter->startDocument("1.0", "UTF-8");
+    }    
+    
     /**
      * @param  $order
      * This method expect UTF-8 input
@@ -202,14 +206,19 @@ class HostedXmlBuilder {
             $this->XMLWriter->endElement();
         }
     }
-
-    private function setBaseXML(){
-        $this->XMLWriter = new \XMLWriter();
-        $this->XMLWriter->openMemory();
-        $this->XMLWriter->setIndent(true);
-        $this->XMLWriter->startDocument("1.0", "UTF-8");
+    
+    /*
+     * write xml for webservice "credit" call, used by WebPay::CreditTransaction
+     *
+     * @param elements -- associative array of element names and values
+     * 
+     */
+    public function getCreditTransactionXML( $elements ){
     }
-
+    
+    /*
+     * write xml for webservice getpaymentmethods
+     */
     public function getPaymentMethodsXML($merchantId){
         $this->setBaseXML();
         $this->XMLWriter->startElement("getpaymentmethods");

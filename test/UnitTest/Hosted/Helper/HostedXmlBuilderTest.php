@@ -137,4 +137,19 @@ class HostedXmlBuilderTest extends \PHPUnit_Framework_TestCase {
         
         $this->assertEquals(1, substr_count($xml, "http://www.cancel.com"));
     }
+    
+    public function test_getCreditTransactionXML() {
+        $elements = array( 
+            "transactionid" => 521527,
+            "amounttocredit" => 100
+        );
+        
+        $xmlBuilder = new HostedXmlBuilder();
+        $requestXML = $xmlBuilder->getCreditTransactionXML( $elements );
+
+        $this->assureEqual( 
+            '<?xml version="1.0" encoding="UTF-8"?>\n<credit>\n<transactionid>521527</transactionid\n<amounttocredit>100</amounttocredit>\n</credit>',
+            $requestXML
+        );        
+    }  
 }

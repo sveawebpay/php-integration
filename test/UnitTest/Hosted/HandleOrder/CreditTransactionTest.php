@@ -38,6 +38,19 @@ class CreditTransactionTest extends PHPUnit_Framework_TestCase {
         
         $this->assertEquals( $creditAmount, PHPUnit_Framework_Assert::readAttribute($this->creditObject, 'creditAmount') );
     }
+    
+//    function test_prepareRequest() {
+//
+//        $transactionId = 987654;       
+//        $this->creditObject->setTransactionId( $transactionId );
+//
+//        $creditAmount = 100;
+//        $this->creditObject->setCreditAmount( $creditAmount );
+//        
+//        $xml = $this->prepareRequest();
+//        
+//    }
+    
 }
 
 ?>
