@@ -6,32 +6,54 @@ require_once $root . '/../../../../src/Includes.php';
 require_once $root . '/../../../TestUtil.php';
 
 /**
- * CreditTransactionIntegrationTest creates an order using card payment, receives a transaction
- * 
- * used as acceptance criteria/smoke test for credit transaction feature (card)
+ * CreditTransactionIntegrationTest 
  * 
  * @author Kristian Grossman-Madsen for Svea WebPay
  */
 class CreditTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
 
-    function test_Card_CreditTransaction() {
+    /**
+     * test_card_creditTransaction_success creates an order using card payment, 
+     * pays using card & receives a transaction id, then credits the transaction
+     * 
+     * used as acceptance criteria/smoke test for credit transaction feature
+     */
+    function _test_card_creditTransaction_success() { 
+      
+        // not yet implemented, requires webdriver support
+                
+        // also, needs to have SUCCESS status set on transaction
 
-        $config = Svea\SveaConfig::getDefaultConfig();
-        
-        // set up order (from testUtil?)
-        
-        // pay with card, receive transactionId
-        
-        // credit transcation with above transactionId
-        
-        $response = WebPay::creditTransaction($config)
-            ->setTransactionId("SE")
-            ->doRequest();
-
-        // asserts return from function
-        $this->assertEquals(PaymentMethod::NORDEA_SE, $response[0]);
-
-        // ? check that the credit transaction has gone through to Svea -- available to integration test?
+//        // set up order (from testUtil?)
+//        $order = TestUtil::createOrder();
+//        
+//        // pay with card, receive transactionId
+//        $form = $order
+//            ->UsePaymentMethod( PaymentMethod::KORTCERT )
+//            ->setReturnUrl("http://myurl.se")
+//            //->setCancelUrl()
+//            //->setCardPageLanguage("SE")
+//            ->getPaymentForm();
+//        
+//        $url = "https://test.sveaekonomi.se/webpay/payment";
+//
+//        // do request modeled on CardPymentIntegrationTest.php
+//                
+//        // make sure the transaction has status SUCCESS at Svea
+//        
+//        // credit transcation using above the transaction transactionId
+//        
+//        // assert response from creditTransaction equals success
+//
+    }
+    
+    
+    /**
+     * test_webservice_found 
+     * 
+     * used as initial acceptance criteria for credit transaction feature
+     */  
+    function test_webservice_found() {
         
     }
 }
