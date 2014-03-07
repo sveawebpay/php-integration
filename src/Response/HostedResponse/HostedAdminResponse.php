@@ -47,8 +47,11 @@ class HostedAdminResponse extends HostedResponse{
 
         }
 
+        //creditTransaction
+        if(property_exists($xmlElement,"customerrefno")){ // TODO possibly non-unique string to select upon -- rewrite hos HostedAdminResponseWorks
+            $this->customerrefno = $xmlElement->credit->customerrefno;
 
-
+        }
     }
 
 }
