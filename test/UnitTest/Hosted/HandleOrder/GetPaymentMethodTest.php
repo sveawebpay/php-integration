@@ -7,7 +7,7 @@ require_once $root . '/../../../../src/WebServiceRequests/svea_soap/SveaSoapConf
 /**
  * @author Anneli Halld'n, Daniel Brolund for Svea Webpay
  */
-class PaymentMethodTest extends PHPUnit_Framework_TestCase {
+class GetPaymentMethodTest extends PHPUnit_Framework_TestCase {
 
     function testGetAllPaymentMethods(){
         $config = Svea\SveaConfig::getDefaultConfig();

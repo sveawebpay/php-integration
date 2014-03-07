@@ -1044,6 +1044,10 @@ you will recieve an *InvoiceId* in the Response. To credit the invoice you follo
             ->doRequest();
 
 ```
+
+TODO add info on CreditTransaction here
+
+
 [<< To top](https://github.com/sveawebpay/php-integration#php-integration-package-api-for-sveawebpay)
 
 ## 6. closeOrder

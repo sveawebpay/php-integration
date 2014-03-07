@@ -2,13 +2,13 @@
 // Integration tests should not need to use the namespace
 
 $root = realpath(dirname(__FILE__));
-require_once $root . '/../../../src/Includes.php';
-require_once $root . '/../../TestUtil.php';
+require_once $root . '/../../../../src/Includes.php';
+require_once $root . '/../../../TestUtil.php';
 
 /**
  * @author Anneli Halld'n, Daniel Brolund for Svea Webpay
  */
-class PaymentMethodIntegrationTest extends \PHPUnit_Framework_TestCase {
+class GetPaymentMethodIntegrationTest extends \PHPUnit_Framework_TestCase {
 
     function testGetAllPaymentMethods(){
         $config = Svea\SveaConfig::getDefaultConfig();

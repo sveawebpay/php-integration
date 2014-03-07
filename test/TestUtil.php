@@ -10,6 +10,29 @@ require_once $root . '/../src/Includes.php';
 class TestUtil {
 
     /**
+     * creates a populated order object for use in tests
+     * 
+     * @return Svea\createOrderBuilder object
+     * 
+     */
+    public static function createOrder() {
+        
+        $config = Svea\SveaConfig::getDefaultConfig();
+        
+        $orderObject = WebPay::createOrder($config)
+                ->addOrderRow( TestUtil::createOrderRow() )
+                ->addCustomerDetails( TestUtil::createIndividualCustomer("SE") )
+                ->setCountryCode("SE")
+                ->setCurrency("SEK")
+                ->setCustomerReference("created by TestUtil::createOrder()")
+                ->setClientOrderNumber(rand(0, 1000))
+                ->setOrderDate( date('c') )
+        ;
+        
+        return $orderObject;
+    }
+
+    /**
      * Creates an OrderRow object for use in populating order objects.
      * 
      * @return Svea\OrderRow object
@@ -27,6 +50,16 @@ class TestUtil {
     }
     
     
+    /**
+     * Returns an individual customer object.
+     * The object is populated using test customer data for the given country.
+     * 
+     * Defaults to a SE customer in good credit standing with Svea, i.e. any
+     * transaction using this customer should be accepted by Svea services.
+     * 
+     * @param country -- accepts SE (default) and NL
+     * @return Svea\IndividualCustomer
+     */
     public static function createIndividualCustomer( $country="SE" ) {
         switch( strtoupper($country) ) {
 
