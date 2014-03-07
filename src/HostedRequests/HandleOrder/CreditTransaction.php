@@ -11,32 +11,60 @@ require_once SVEA_REQUEST_DIR . '/Includes.php';
 class CreditTransaction {
 
     private $config;
+    private $countryCode;
+
     private $transactionId;
     private $creditAmount;
-
+    
     function __construct($config) {
         $this->config = $config;
     }
     
+    function setCountryCode( $countryCode ) {
+        $this->countryCode = $countryCode;
+        return $this;
+    }
+    
     function setTransactionId( $transactionId ) {
         $this->transactionId = $transactionId;
+        return $this;
     }
     
     function setCreditAmount( $creditAmount ) {
         $this->creditAmount = $creditAmount;
+        return $this;
     }
     
+    /**
+     * prepares the elements used in the request to svea
+     * 
+     * @return array $request -- encoded merchantId, message and calculated mac 
+     */
+    public function prepareRequest() {
 
-//    public function prepareRequest(){
-//
-//        $xmlBuilder = new HostedXmlBuilder();
-//        $requestXML = $xmlBuilder->getPaymentMethodsXML($this->config->getMerchantId("HOSTED",  $this->countryCode));
-//        $request = array(   'merchantid' => urlencode($this->config->getMerchantId("HOSTED",  $this->countryCode)),
-//                            'message' => urlencode(base64_encode($requestXML)),
-//                            'mac' => urlencode(hash("sha512", base64_encode($requestXML) . $this->config->getSecret("HOSTED",  $this->countryCode)))
-//                        );
-//        return $request;
-//    }
+        $xmlBuilder = new HostedXmlBuilder();
+        
+        // get our merchantid & secret
+        $merchantId = $this->config->getMerchantId( \ConfigurationProvider::HOSTED_TYPE,  $this->countryCode);
+        $secret = $this->config->getSecret( \ConfigurationProvider::HOSTED_TYPE, $this->countryCode);
+        
+        // message contains the credit request
+        $messageContents = array(
+            "transactionid" => $this->transactionId,
+            "amounttocredit" => $this->creditAmount
+        ); 
+        $message = $xmlBuilder->getCreditTransactionXML( $messageContents );        
+
+        // calculate mac
+        $mac = hash("sha512", base64_encode($message) . $secret);
+        
+        // encode the request elements
+        $request = array(   'merchantid' => urlencode($merchantId),
+                            'message' => urlencode(base64_encode($message)),
+                            'mac' => urlencode($mac)
+                        );
+        return $request;
+    }
 //    /**
 //     * Do request using cURL
 //     * @return array
