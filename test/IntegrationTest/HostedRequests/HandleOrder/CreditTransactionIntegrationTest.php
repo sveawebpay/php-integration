@@ -24,7 +24,7 @@ class CreditTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
 
         // Stop here and mark this test as incomplete.
         $this->markTestIncomplete(
-          'not yet implemented, requires webdriver support'
+          'not yet implemented, requires webdriver support' // TODO
         );
         
         // also, needs to have SUCCESS status set on transaction
@@ -65,14 +65,14 @@ class CreditTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
         $response = WebPay::creditTransaction( Svea\SveaConfig::getDefaultConfig() )
             ->setTransactionId( $transactionId )
             ->setAmountToCredit( $amount )
+            ->setCountryCode( "SE" )
             ->doRequest();
        
         // if we receive an error from the service, the integration test passes
-        assertInstanceOf( "Svea\SveaResponse", $response );
-
-        // TODO check these
-        assert( $response->accepted == 0 );
-        assert( $response->resultcode == 128 ); // NO_SUCH_TRANS ??
+        $this->assertInstanceOf( "Svea\SveaResponse", $response );
+        
+        $this->assertEquals( 0, $response->accepted );
+        //$this->assertEquals( $response->resultcode == 128 ); // NO_SUCH_TRANS ??  // TODO check error code received
         
     }
 }
