@@ -4,18 +4,22 @@ namespace Svea;
 require_once 'WebServiceResponse.php';
 
 /**
- * @author anne-hal
+ * Handles the Svea Webservice CloseOrder request response.
+ * 
+ * @attrib $resultcode -- response specific result code
+ * 
+ * @author anne-hal, Kristian Grossman-Madsen
  */
-class CloseOrderResult extends WebServiceResponse{
+class CloseOrderResult extends WebServiceResponse {
 
-    function __construct($message) {
-        parent::__construct($message);
-         if (isset($message->CloseOrderEuResult->ErrorMessage))
-        $this->errormessage = $message->CloseOrderEuResult->ErrorMessage;
-    }
+    public $resultcode;
 
     protected function formatObject($message) {
+        // was request accepted?
         $this->accepted = $message->CloseOrderEuResult->Accepted;
+        $this->errormessage = isset($message->CloseOrderEuResult->ErrorMessage) ? $message->CloseOrderEuResult->ErrorMessage : "";        
+
+        // set response resultcode
         $this->resultcode = $message->CloseOrderEuResult->ResultCode;
     }
 }
