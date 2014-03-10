@@ -4,32 +4,65 @@ namespace Svea;
 require_once 'WebServiceResponse.php';
 
 /**
- * @author anne-hal
+ * Handles the Svea Webservice GetAddresses request response.
+ * 
+ * For attribute descriptions, see formatObject() method documentation
+ * Possible resultcodes are {Error, Accepted, NoSuchEntity}
+ * 
+ * @attrib $resultcode -- response specific result code
+ * @attrib $customerIdentity -- array of GetAddressIdentity
+ * 
+ * @author anne-hal, Kristian Grossman-Madsen
  */
 class GetAddressesResponse extends WebServiceResponse{
 
-    function __construct($message) {
-        if (isset($message->GetAddressesResult->ErrorMessage)) {
-            $this->errormessage = $message->GetAddressesResult->ErrorMessage;
-        }
-        parent::__construct($message);
-    }
-
+    public $resultcode;
+    public $customerIdentity = array();  // array of GetAddressIdentity
+    
+    /**
+     *  formatObject sets the following attributes:
+     * 
+     *  $response->accepted                 // true iff request was accepted by the service 
+     *  $response->errormessage             // may be set iff accepted above is false
+     *
+     *  $response->resultcode               // one of {Error, Accepted, NoSuchEntity}
+     * 
+     *   $response->$customerIdentity[0..n] // array of GetAddressIdentity
+     *      ->customerType 
+     *      ->nationalIdNumber
+     *      ->phoneNumber 
+     *      ->firstName
+     *      ->lastName
+     *      ->fullName
+     *      ->street
+     *      ->coAddress
+     *      ->zipCode 
+     *      ->locality
+     *      ->addressSelector 
+     */
+    
     protected function formatObject($message) {
-        //Required
+        
+        // was request accepted?
         $this->accepted = $message->GetAddressesResult->Accepted;
-        $this->resultcode = $message->GetAddressesResult->RejectionCode; //Whet update comes
+        $this->errormessage = isset($message->GetAddressesResult->ErrorMessage) ? $message->GetAddressesResult->ErrorMessage : "";        
 
+        // set response resultcode
+        $this->resultcode = $message->GetAddressesResult->RejectionCode;
+
+        // set response attributes
         if (property_exists($message->GetAddressesResult, "Addresses") && $this->accepted == 1) {
             $this->formatCustomerIdentity($message->GetAddressesResult->Addresses);
         }
     }
 
     public function formatCustomerIdentity($customers) {
-        $this->customerIdentity = array();
+
         is_array($customers->CustomerAddress) ? $loopValue = $customers->CustomerAddress : $loopValue = $customers;
+
         foreach ($loopValue as $customer) {
             $temp = new GetAddressIdentity();
+            
             $temp->customerType = $customer->BusinessType;
             $temp->nationalIdNumber = isset($customer->SecurityNumber) ? $customer->SecurityNumber : "";
             $temp->phoneNumber = isset($customer->PhoneNumber) ? $customer->PhoneNumber : "";

@@ -4,7 +4,11 @@ namespace Svea;
 require_once 'CustomerIdentityResponse.php';
 
 /**
- * @author anne-hal
+ *  GetAddressIdentity structure
+ *
+ *  @attrib     $addressSelector    // not guaranteed to be defined
+ *
+ *  @author anne-hal, Kristian Grossman-Madsen
  */
 class GetAddressIdentity extends CustomerIdentityResponse {
 
