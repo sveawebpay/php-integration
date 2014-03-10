@@ -3,8 +3,6 @@
 
 $root = realpath(dirname(__FILE__));
 require_once $root . '/../../../../src/Includes.php';
-
-$root = realpath(dirname(__FILE__));
 require_once $root . '/../../../TestUtil.php';
 
 /**
@@ -496,4 +494,61 @@ class InvoicePaymentIntegrationTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(175.2, $result->amount);
     }
 
+    public function testInvoiceRequest_optional_clientOrderNumber_present_in_response_if_sent() {
+        $config = Svea\SveaConfig::getDefaultConfig();
+        $request = WebPay::createOrder($config)
+                    ->addOrderRow(TestUtil::createOrderRow())
+                    ->addCustomerDetails(WebPayItem::individualCustomer()
+                        ->setNationalIdNumber(4605092222)
+                    )
+                    ->setCountryCode("SE")
+                    ->setCustomerReference("33")
+                    ->setOrderDate("2012-12-12")
+                    ->setCurrency("SEK")
+                    ->setClientOrderNumber("I_exist!")
+                    ->useInvoicePayment()
+                        ->doRequest();
+
+        $this->assertEquals(1, $request->accepted);        
+        $this->assertEquals(true, isset($request->clientOrderNumber) );  
+        $this->assertEquals("I_exist!", $request->clientOrderNumber);
+    }
+    
+    public function testInvoiceRequest_optional_clientOrderNumber_not_present_in_response_if_not_sent() {
+        $config = Svea\SveaConfig::getDefaultConfig();
+        $request = WebPay::createOrder($config)
+                    ->addOrderRow(TestUtil::createOrderRow())
+                    ->addCustomerDetails(WebPayItem::individualCustomer()
+                        ->setNationalIdNumber(4605092222)
+                    )
+                    ->setCountryCode("SE")
+                    ->setCustomerReference("33")
+                    ->setOrderDate("2012-12-12")
+                    ->setCurrency("SEK")
+                    ->useInvoicePayment()
+                        ->doRequest();
+
+        $this->assertEquals(1, $request->accepted);
+        $this->assertEquals(false, isset($request->clientOrderNumber) );  
+    }
+    
+    public function testInvoiceRequest_OrderType_set_in_response_if_useInvoicePayment_set() {
+        $config = Svea\SveaConfig::getDefaultConfig();
+        $request = WebPay::createOrder($config)
+                    ->addOrderRow(TestUtil::createOrderRow())
+                    ->addCustomerDetails(WebPayItem::individualCustomer()
+                        ->setNationalIdNumber(4605092222)
+                    )
+                    ->setCountryCode("SE")
+                    ->setCustomerReference("33")
+                    ->setOrderDate("2012-12-12")
+                    ->setCurrency("SEK")
+                    ->setClientOrderNumber("myCON")
+                    ->useInvoicePayment()
+                        ->doRequest();
+
+        $this->assertEquals(1, $request->accepted);
+        $this->assertEquals("Invoice", $request->orderType);        
+    }
+    
 }
