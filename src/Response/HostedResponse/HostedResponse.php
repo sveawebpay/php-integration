@@ -368,9 +368,17 @@ class HostedResponse {
         }
     }
 
+    /**
+     * Validates that the received mac can be reconstructed from the message and
+     * the shared secret.
+     * 
+     * @param string $messageEncoded
+     * @param string $mac
+     * @param string $secret
+     * @return boolean -- true iff the mac can be validated
+     */
     public function validateMac($messageEncoded,$mac,$secret) {
 
-        $messageDecoded = base64_decode($messageEncoded);
         $macKey = hash("sha512", $messageEncoded.$secret);
 
         if ($mac == $macKey) {
