@@ -53,8 +53,32 @@ class GetAddressesIntegrationTest extends PHPUnit_Framework_TestCase {
             ->doRequest();
         $this->assertEquals(1, $request->accepted);
     }
+    
+    public function test_GetAddressesResult_Invoice_NoSuchEntity() {
+        $config = Svea\SveaConfig::getDefaultConfig();
+        $addressRequest = WebPay::getAddresses($config);
+        $request = $addressRequest
+            ->setOrderTypeInvoice()
+            ->setCountryCode("SE")
+            ->setIndividual("4608142222")   // setIndividual w/Company SSN
+            ->doRequest();
+        $this->assertEquals(0, $request->accepted);
+        $this->assertEquals("NoSuchEntity", $request->resultcode);
+    }
+        
+    public function test_GetAddressesResult_Invoice_Errormessage() {
+        $config = Svea\SveaConfig::getDefaultConfig();
+        $addressRequest = WebPay::getAddresses($config);
+        $request = $addressRequest
+            ->setOrderTypeInvoice()
+            ->setCountryCode("SE")
+            ->setIndividual("4608142222")   // setIndividual w/Company SSN
+            ->doRequest();
+        $this->assertEquals(0, $request->accepted);
+        $this->assertEquals("NoSuchEntity", $request->resultcode);
+        $this->assertEquals("No customer address was found", $request->errormessage);
+    }        
 
-    // TODO add integrationtests for getAddresses() in all supported countries
     public function test_GetAddresses_CredentialsForPrivate_areCorrect() {
         $config = Svea\SveaConfig::getDefaultConfig();
         $addressRequest = WebPay::getAddresses($config);
@@ -81,7 +105,7 @@ class GetAddressesIntegrationTest extends PHPUnit_Framework_TestCase {
 
     // getAddresses is supported for the following countries and customer types
     // SE/private
-    public function test_GetAddresses_Sweden_Private_isDisabled() {
+    public function test_GetAddresses_Sweden_Private_isAccepted() {
         $config = Svea\SveaConfig::getDefaultConfig();
         $addressRequest = WebPay::getAddresses($config);
         $request = $addressRequest
@@ -94,7 +118,7 @@ class GetAddressesIntegrationTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals('Accepted', $request->resultcode);
     }
     // DK/private
-    public function test_GetAddresses_Denmark_Private_isDisabled() {
+    public function test_GetAddresses_Denmark_Private_isAccepted() {
         $config = Svea\SveaConfig::getDefaultConfig();
         $addressRequest = WebPay::getAddresses($config);
         $request = $addressRequest
@@ -107,7 +131,7 @@ class GetAddressesIntegrationTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals('Accepted', $request->resultcode);
     }
     // SE/company
-    public function test_GetAddresses_Sweden_Company_isDisabled() {
+    public function test_GetAddresses_Sweden_Company_isAccepted() {
         $config = Svea\SveaConfig::getDefaultConfig();
         $addressRequest = WebPay::getAddresses($config);
         $request = $addressRequest
@@ -120,7 +144,7 @@ class GetAddressesIntegrationTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals('Accepted', $request->resultcode);
     }
     // DK/company
-    public function test_GetAddresses_Denmark_Company_isDisabled() {
+    public function test_GetAddresses_Denmark_Company_isAccepted() {
         $config = Svea\SveaConfig::getDefaultConfig();
         $addressRequest = WebPay::getAddresses($config);
         $request = $addressRequest
@@ -133,7 +157,7 @@ class GetAddressesIntegrationTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals('Accepted', $request->resultcode);
     }
     // NO/company
-    public function test_GetAddresses_Norway_Company_isEnabled() {
+    public function test_GetAddresses_Norway_Company_isAccepted() {
         $config = Svea\SveaConfig::getDefaultConfig();
         $addressRequest = WebPay::getAddresses($config);
         $request = $addressRequest
@@ -162,7 +186,7 @@ class GetAddressesIntegrationTest extends PHPUnit_Framework_TestCase {
     }
 
     // DE
-    public function test_GetAddresses_Germany_Private_isNotImplemented() {
+    public function test_GetAddresses_Germany_Company_isNotImplemented() {
         $config = Svea\SveaConfig::getDefaultConfig();
         $addressRequest = WebPay::getAddresses($config);
         $request = $addressRequest
@@ -176,7 +200,7 @@ class GetAddressesIntegrationTest extends PHPUnit_Framework_TestCase {
     }
 
     // NL
-    public function test_GetAddresses_Netherlands_Private_isNotImplemented() {
+    public function test_GetAddresses_Netherlands_Company_isNotImplemented() {
         $config = Svea\SveaConfig::getDefaultConfig();
         $addressRequest = WebPay::getAddresses($config);
         $request = $addressRequest
