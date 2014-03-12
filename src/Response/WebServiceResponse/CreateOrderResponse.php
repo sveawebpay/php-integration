@@ -14,39 +14,31 @@ require_once 'WebServiceResponse.php';
  *
  * $resultcode -- response specific result code
  *
- * @property integer    sveaOrderId -- Unique Id for the created order. Used for any further webservice requests.
- * @property boolean    sveaWillBuyOrder
- * @property decimal    amount
- * @property datetime   expirationDate -- Order expiration date. If the order isn’t delivered before this date the order is automatically closed.
+ * @attrib type sveaOrderId -- Unique Id for the created order. Used for any further webservice requests.
+ * @attrib type sveaWillBuyOrder
+ * @attrib type amount
+ * @attrib type expirationDate -- Order expiration date. If the order isn’t delivered before this date the order is automatically closed.
  *
  * The following properties are only present if sent with the order request
- * @property String     orderType -- One of {Invoice, Paymentplan}
- * @property String     clientOrderNumber -- Your reference to the current order.
- * @property CreateOrderIdentity    customerIdentity -- invoice address
- * 
- * @property customerIdentity->nationalIdNumber
- * @property customerIdentity->email 
- * @property customerIdentity->ipAddress 
- * @property customerIdentity->phoneNumber
- * @property customerIdentity->fullName 
- * @property customerIdentity->street 
- * @property customerIdentity->coAddress 
- * @property customerIdentity->zipCode 
- * @property customerIdentity->houseNumber 
- * @property customerIdentity->locality 
- * @property customerIdentity->countryCode 
- * @property customerIdentity->customerType 
+ * @property String  clientOrderNumber -- Your reference to the current order.
+ * @property String  orderType -- One of {Invoice, Paymentplan}
+ * @property CreateOrderIdentity customerIdentity -- invoice address
  * 
  * @author anne-hal, Kristian Grossman-Madsen
  */
 class CreateOrderResponse extends WebServiceResponse {
 
+    // always present
     public $sveaOrderId;
     public $sveaWillBuyOrder;
     public $amount;
     public $expirationDate;
-    public $customerIdentity;
 
+    // may be present -- injected iff set in response from Svea
+    //public $clientOrderNumber;
+    //public $orderType;
+    //public $customerIdentity;
+    
     protected function formatObject($message) {
 
         // was request accepted?
@@ -66,37 +58,15 @@ class CreateOrderResponse extends WebServiceResponse {
             $this->expirationDate = $message->CreateOrderEuResult->CreateOrderResult->ExpirationDate;
             
             // presence not guaranteed
-            if (isset($message->CreateOrderEuResult->CreateOrderResult->OrderType)) {
-                $this->orderType = $message->CreateOrderEuResult->CreateOrderResult->OrderType;
-            }
             if (isset($message->CreateOrderEuResult->CreateOrderResult->ClientOrderNumber)) {
                 $this->clientOrderNumber = $message->CreateOrderEuResult->CreateOrderResult->ClientOrderNumber;
             }
+            if (isset($message->CreateOrderEuResult->CreateOrderResult->OrderType)) {
+                $this->orderType = $message->CreateOrderEuResult->CreateOrderResult->OrderType;
+            }
             if (isset($message->CreateOrderEuResult->CreateOrderResult->CustomerIdentity)) {
-                $this->formatCustomerIdentity($message->CreateOrderEuResult->CreateOrderResult->CustomerIdentity);
+                $this->customerIdentity = new CreateOrderIdentity($message->CreateOrderEuResult->CreateOrderResult->CustomerIdentity);                             
             }
         }
-    }
-
-    public function formatCustomerIdentity($customer) {
-        $this->customerIdentity = new CreateOrderIdentity();
-
-        //required
-        $this->customerIdentity->customerType = $customer->CustomerType;
-        //optional
-        if (property_exists($customer, "NationalIdNumber") && $customer->NationalIdNumber != "") {
-            $this->customerIdentity->nationalIdNumber = $customer->NationalIdNumber;
-        }
-        $this->customerIdentity->email = isset($customer->Email) ? $customer->Email : "";
-        $this->customerIdentity->ipAddress = isset($customer->IpAddress) ? $customer->IpAddress : "";
-        $this->customerIdentity->phoneNumber = isset($customer->PhoneNumber) ? $customer->PhoneNumber : "";
-        $this->customerIdentity->fullName = isset($customer->FullName) ? $customer->FullName : "";
-        $this->customerIdentity->street = isset($customer->Street) ? $customer->Street : "";
-        $this->customerIdentity->coAddress = isset($customer->CoAddress) ? $customer->CoAddress : "";
-        $this->customerIdentity->zipCode = isset($customer->ZipCode) ? $customer->ZipCode : "";
-        $this->customerIdentity->houseNumber = isset($customer->HouseNumber) ? $customer->HouseNumber : "";
-        $this->customerIdentity->locality = isset($customer->Locality) ? $customer->Locality : "";
-        $this->customerIdentity->countryCode = isset($customer->CountryCode) ? $customer->CountryCode : "";
-        $this->customerIdentity->customerType = isset($customer->CustomerType) ? $customer->CustomerType : "";
     }
 }

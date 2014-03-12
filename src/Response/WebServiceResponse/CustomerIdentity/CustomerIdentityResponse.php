@@ -4,29 +4,53 @@ namespace Svea;
 /**
  *  CustomerIdentityResponse structure
  * 
- *  @attrib $customerType;       // not guaranteed to be defined
- *  @attrib $nationalIdNumber;   // not guaranteed to be defined
- *  @attrib $phoneNumber;        // not guaranteed to be defined
- *  @attrib $firstName;          // not guaranteed to be defined
- *  @attrib $lastName;           // not guaranteed to be defined
- *  @attrib $fullName;           // not guaranteed to be defined
- *  @attrib $street;             // not guaranteed to be defined
- *  @attrib $coAddress;          // not guaranteed to be defined
- *  @attrib $zipCode;            // not guaranteed to be defined
- *  @attrib $locality;           // not guaranteed to be defined
+ *  @attrib $customerType;       
+ *  @attrib $nationalIdNumber;   
+ *  @attrib $phoneNumber;        
+ *  @attrib $fullName;           
+ *  @attrib $street;             
+ *  @attrib $coAddress;          
+ *  @attrib $zipCode;            
+ *  @attrib $locality;           
  *
  *  @author Anneli Halld'n, Daniel Brolund, Kristian Grossman-Madsen for Svea Webpay
  */  
 class CustomerIdentityResponse {
 
-    public $customerType;       // not guaranteed to be defined
-    public $nationalIdNumber;   // not guaranteed to be defined
-    public $phoneNumber;        // not guaranteed to be defined
-    public $firstName;          // not guaranteed to be defined
-    public $lastName;           // not guaranteed to be defined
-    public $fullName;           // not guaranteed to be defined
-    public $street;             // not guaranteed to be defined
-    public $coAddress;          // not guaranteed to be defined
-    public $zipCode;            // not guaranteed to be defined
-    public $locality;           // not guaranteed to be defined
+    public $customerType;       
+    public $nationalIdNumber;   
+    public $phoneNumber;        
+    public $fullName;           
+    public $street;             
+    public $coAddress;          
+    public $zipCode;            
+    public $locality;      
+    
+    // TODO handles $customer from GetAddress
+    function __construct( $customer ) {        
+        
+        if( isset($customer->BusinessType) ) { // GetAddressesResponse (Legacy webservice)
+        
+            $this->customerType = $customer->BusinessType;
+            $this->nationalIdNumber = isset($customer->SecurityNumber) ? $customer->SecurityNumber : "";
+            $this->phoneNumber = isset($customer->PhoneNumber) ? $customer->PhoneNumber : "";
+            $this->firstName = isset($customer->FirstName) ? $customer->FirstName : "";
+            $this->lastName = isset($customer->LastName) ? $customer->LastName : "";
+            $this->fullName = isset($customer->LegalName) ? $customer->LegalName : "";
+            $this->street = isset($customer->AddressLine2) ? $customer->AddressLine2 : "";
+            $this->coAddress = isset($customer->AddressLine1) ? $customer->AddressLine1 : "";
+            $this->zipCode = isset($customer->Postcode) ? $customer->Postcode : "";
+            $this->locality = isset($customer->Postarea) ? $customer->Postarea : "";
+        }
+        else { // CreateOrderResponse (EU webservice)
+            $this->customerType = isset($customer->CustomerType) ? $customer->CustomerType : "";
+            $this->nationalIdNumber = isset($customer->NationalIdNumber) ? $customer->NationalIdNumber : "";
+            $this->phoneNumber = isset($customer->PhoneNumber) ? $customer->PhoneNumber : "";
+            $this->fullName = isset($customer->FullName) ? $customer->FullName : "";
+            $this->street = isset($customer->Street) ? $customer->Street : "";
+            $this->coAddress = isset($customer->CoAddress) ? $customer->CoAddress : "";
+            $this->zipCode = isset($customer->ZipCode) ? $customer->ZipCode : "";
+            $this->locality = isset($customer->Locality) ? $customer->Locality : "";
+        }
+    }
 }
