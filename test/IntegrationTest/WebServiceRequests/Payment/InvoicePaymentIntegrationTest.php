@@ -536,14 +536,9 @@ class InvoicePaymentIntegrationTest extends PHPUnit_Framework_TestCase {
         $config = Svea\SveaConfig::getDefaultConfig();
         $request = WebPay::createOrder($config)
                     ->addOrderRow(TestUtil::createOrderRow())
-                    ->addCustomerDetails(WebPayItem::individualCustomer()
-                        ->setNationalIdNumber(4605092222)
-                    )
+                    ->addCustomerDetails(TestUtil::createIndividualCustomer("SE"))
                     ->setCountryCode("SE")
-                    ->setCustomerReference("33")
                     ->setOrderDate("2012-12-12")
-                    ->setCurrency("SEK")
-                    ->setClientOrderNumber("myCON")
                     ->useInvoicePayment()
                         ->doRequest();
 
@@ -551,4 +546,38 @@ class InvoicePaymentIntegrationTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals("Invoice", $request->orderType);        
     }
     
+        public function testInvoiceRequest_IndividualIdentity_not_set_for_customer_in_SE() {
+        $config = Svea\SveaConfig::getDefaultConfig();
+        $response = WebPay::createOrder($config)
+                    ->addOrderRow(TestUtil::createOrderRow())
+                    ->addCustomerDetails(TestUtil::createIndividualCustomer("SE"))
+                    ->setCountryCode("SE")
+                    ->setOrderDate("2014-03-12")
+                    ->useInvoicePayment()
+                        ->doRequest();
+
+        $this->assertEquals(1, $response->accepted);       
+        // have we injected IndividualIdentity in customerIdentity? 
+        $this->assertFalse( isset( $response->customerIdentity->IndividualIdentity) );
+    }
+    
+    public function testInvoiceRequest_IndividualIdentity_set_for_customer_in_NL() {
+        $config = Svea\SveaConfig::getDefaultConfig();
+        $response = WebPay::createOrder($config)
+                    ->addOrderRow(TestUtil::createOrderRow())
+                    ->addCustomerDetails(TestUtil::createIndividualCustomer("NL"))
+                    ->setCountryCode("NL")
+                    ->setOrderDate("2014-03-12")
+                    ->useInvoicePayment()
+                        ->doRequest();
+
+        $this->assertEquals(1, $response->accepted);
+        $this->assertEquals("Sneider Boasman", $response->customerIdentity->fullName);                
+        // have we injected IndividualIdentity in customerIdentity? 
+        $this->assertTrue( isset( $response->customerIdentity->IndividualIdentity) );
+        $this->assertEquals("Sneider", $response->customerIdentity->IndividualIdentity->firstName);       
+        $this->assertEquals("Boasman", $response->customerIdentity->IndividualIdentity->firstName);     
+        $this->assertEquals("42", $response->customerIdentity->IndividualIdentity->houseNumber);     
+        $this->assertEquals("19550307", $response->customerIdentity->IndividualIdentity->birthDate);                             
+    }   
 }
