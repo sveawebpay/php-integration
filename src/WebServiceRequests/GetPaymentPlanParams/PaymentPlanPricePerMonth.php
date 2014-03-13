@@ -18,7 +18,6 @@ require_once SVEA_REQUEST_DIR . '/Config/SveaConfig.php';
  * values['campaignCode' => campaignCode, 'pricePerMonth' => pricePerMonth, 'description' => description]
  * 
  * @author Anneli Halld'n, Daniel Brolund for Svea Webpay
- * @package WebServiceRequests/GetPaymentPlanParams
  */
 class PaymentPlanPricePerMonth {
 

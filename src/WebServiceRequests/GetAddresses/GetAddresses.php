@@ -17,7 +17,6 @@ require_once SVEA_REQUEST_DIR . '/Config/SveaConfig.php';
  * address.
  *
  * @author Anneli Halld'n, Daniel Brolund for Svea Webpay
- * @package WebServiceRequests/GetAddresses
  */
 class GetAddresses {
 

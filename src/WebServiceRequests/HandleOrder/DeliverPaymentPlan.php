@@ -4,7 +4,6 @@ namespace Svea;
 /**
  * Update Created PaymentPlanorder with additional information and prepare it for delivery.
  * @author Anneli Halld'n, Daniel Brolund for Svea Webpay
- * @package WebServiceRequests/HandleOrder
  */
 class DeliverPaymentPlan extends HandleOrder {
 

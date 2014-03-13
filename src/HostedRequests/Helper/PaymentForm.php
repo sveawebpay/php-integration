@@ -12,7 +12,6 @@ require_once SVEA_REQUEST_DIR . '/Config/SveaConfig.php';
  * Array of formfields in raw format: $xmlMessage
  * Raw fields: $xmlMessageBase64, $message, $merchantId, $secretWord, $mac
  * @author Anneli Halld'n, Daniel Brolund for Svea Webpay
- * @package HostedRequests/Helper
  */
 class PaymentForm {
 

@@ -9,7 +9,6 @@ require_once SVEA_REQUEST_DIR . '/Config/SveaConfig.php';
  * Prepares and sends $order with php SOAP
  * Uses svea_soap package to build object formatted for SveaWebPay Europe Web service API
  * Object is sent with SveaDoPayment class in svea_soap package by PHP SoapClient
- * @package WebServideRequests/Payment
  * @author Anneli Halld'n, Daniel Brolund for Svea Webpay
  *
  */

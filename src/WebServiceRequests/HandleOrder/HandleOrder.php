@@ -7,7 +7,6 @@ require_once SVEA_REQUEST_DIR . '/Config/SveaConfig.php';
 /**
  * Parent of CloseOrder, DeliverInvoice, DeliverPaymentPlan
  * @author Anneli Halld'n, Daniel Brolund for Svea Webpay
- * @package WebServiceRequests/HandleOrder
  */
 class HandleOrder {
 

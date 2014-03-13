@@ -29,16 +29,6 @@ class closeOrderBuilder {
     }
 
     /**
-     * When function is called it turns into testmode
-     * @return \closeOrder
-
-    public function setTestmode() {
-        $this->testmode = TRUE;
-        return $this;
-    }
-     */
-
-    /**
      * Required
      * @param type $orderIdAsString
      * @return \closeOrder
