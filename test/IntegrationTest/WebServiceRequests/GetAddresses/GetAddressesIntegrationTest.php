@@ -90,7 +90,7 @@ class GetAddressesIntegrationTest extends PHPUnit_Framework_TestCase {
 
         $this->assertEquals(1, $request->accepted);
         $this->assertEquals('Accepted', $request->resultcode);
-        //$this->assertEquals('5F445B19E8C87954904FB7531A51AEE57C5E9413', $request->customerIdentity[0]->addressSelector);
+        $this->assertEquals('5F445B19E8C87954904FB7531A51AEE57C5E9413', $request->customerIdentity[0]->addressSelector);
         $this->assertEquals('Person', $request->customerIdentity[0]->customerType);
         $this->assertEquals('08 - 111 111 11', $request->customerIdentity[0]->phoneNumber);
         $this->assertEquals('Persson, Tess T', $request->customerIdentity[0]->fullName);
@@ -103,6 +103,42 @@ class GetAddressesIntegrationTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(4605092222, $request->customerIdentity[0]->nationalIdNumber);
     }
 
+    public function test_GetAddresses_CredentialsForCompany_areCorrect() {
+        $config = Svea\SveaConfig::getDefaultConfig();
+        $addressRequest = WebPay::getAddresses($config);
+        $request = $addressRequest
+                ->setOrderTypeInvoice()
+                ->setCountryCode("SE")
+                ->setCompany("164608142222")    // 12 digit orgnr should start with 16 or be 10 digits.
+                ->doRequest();
+
+        $this->assertEquals(1, $request->accepted);
+        $this->assertEquals('Accepted', $request->resultcode);
+        $this->assertEquals('5F445B19E8C87954904FB7531A51AEE57C5E9413', $request->customerIdentity[0]->addressSelector);
+        $this->assertEquals('Business', $request->customerIdentity[0]->customerType);
+        $this->assertEquals('08 - 111 111 11', $request->customerIdentity[0]->phoneNumber);
+        $this->assertEquals('Persson, Tess T', $request->customerIdentity[0]->fullName);     
+        $this->assertEquals('Tess T', $request->customerIdentity[0]->firstName);
+        $this->assertEquals('Persson', $request->customerIdentity[0]->lastName);
+        $this->assertEquals('Testgatan 1', $request->customerIdentity[0]->street);
+        $this->assertEquals('c/o Eriksson, Erik', $request->customerIdentity[0]->coAddress);
+        $this->assertEquals(99999, $request->customerIdentity[0]->zipCode);
+        $this->assertEquals('Stan', $request->customerIdentity[0]->locality);
+        $this->assertEquals(4608142222, $request->customerIdentity[0]->nationalIdNumber);
+
+        $this->assertEquals('F09E3CC5AFB627CACBE22A7BC371DE0047222F7F', $request->customerIdentity[1]->addressSelector);
+        $this->assertEquals('Business', $request->customerIdentity[1]->customerType);
+        $this->assertEquals('08 - 111 111 11', $request->customerIdentity[1]->phoneNumber);
+        $this->assertEquals('Persson, Tess T', $request->customerIdentity[1]->fullName);
+        $this->assertEquals('Tess T', $request->customerIdentity[1]->firstName);
+        $this->assertEquals('Persson', $request->customerIdentity[1]->lastName);
+        $this->assertEquals('Testgatan 1, 2', $request->customerIdentity[1]->street);
+        $this->assertEquals('c/o Eriksson, Erik', $request->customerIdentity[1]->coAddress);
+        $this->assertEquals(99999, $request->customerIdentity[1]->zipCode);
+        $this->assertEquals('Stan', $request->customerIdentity[1]->locality);
+        $this->assertEquals(4608142222, $request->customerIdentity[1]->nationalIdNumber);
+    }
+    
     // getAddresses is supported for the following countries and customer types
     // SE/private
     public function test_GetAddresses_Sweden_Private_isAccepted() {

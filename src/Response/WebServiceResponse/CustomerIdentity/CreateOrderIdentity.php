@@ -13,4 +13,14 @@ class CreateOrderIdentity extends CustomerIdentityResponse {
     public $ipAddress;
     public $countryCode;
     public $houseNumber;
+    
+    function __construct($customer) {
+        
+        $this->email = isset($customer->Email) ? $customer->Email : "";
+        $this->ipAddress = isset($customer->IpAddress) ? $customer->IpAddress : "";
+        $this->countryCode = isset($customer->CountryCode) ? $customer->CountryCode : "";
+        $this->houseNumber = isset($customer->HouseNumber) ? $customer->HouseNumber : "";
+        
+        parent::__construct($customer);
+    }
 }
