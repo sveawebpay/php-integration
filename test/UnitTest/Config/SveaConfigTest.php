@@ -26,29 +26,6 @@ class SveaConfigTest extends \PHPUnit_Framework_TestCase {
         $this->assertNotEquals($obj1->password, $obj2->password);
     }
 
-    public function t_estSetTestmode() {
-        $conf = SveaConfig::setConfig()
-                ->setMerchantId()
-                ->setSecretProd()
-                ->setSecretTest()
-                ->setPassword()
-                ->setUsername()
-                ->setClientNumberInvoice()
-                ->setClientNumberPaymentPlan()
-                ->setAlternativeUrl(); //overwrite all urls
-
-        $request = \WebPay::createOrder($conf)
-            ->addOrderRow(\TestUtil::createOrderRow())
-            ->addCustomerDetails(\WebPayItem::individualCustomer()->setNationalIdNumber(194605092222))
-                    ->setCountryCode("SE")
-                    ->setCustomerReference("33")
-                    ->setOrderDate("2012-12-12")
-                    ->setCurrency("SEK")
-                    ->useInvoicePayment()// returnerar InvoiceOrder object
-                       // ->setPasswordBasedAuthorization("sverigetest", "sverigetest", 79021)
-                        ->prepareRequest();
-    }
-
     public function testOrderWithSEConfigFromFunction() {
            $request = \WebPay::createOrder(SveaConfig::getTestConfig())
             ->addOrderRow(\TestUtil::createOrderRow())

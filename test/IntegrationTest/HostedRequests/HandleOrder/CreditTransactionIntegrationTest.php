@@ -70,8 +70,6 @@ class CreditTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
 
         // TODO remove -- make sure we get a SveaResponse object back
         $this->assertInstanceOf( "Svea\HostedAdminResponse", $response );
-
-        print_r( $response );
         
         // if we receive an error from the service, the integration test passes
         $this->assertEquals( 0, $response->accepted );
