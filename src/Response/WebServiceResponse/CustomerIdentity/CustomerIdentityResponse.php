@@ -26,7 +26,11 @@ class CustomerIdentityResponse {
     public $zipCode;            
     public $locality;      
     
-    // TODO handles $customer from GetAddress
+    /**
+     * populates the CustomerIdentityResponse object
+     * 
+     * @param object $customer -- response from either legacy GetAddresses or CreateOrderEU
+     */
     function __construct( $customer ) {        
         
         if( isset($customer->BusinessType) ) { // GetAddressesResponse (Legacy webservice)
@@ -50,7 +54,7 @@ class CustomerIdentityResponse {
             $this->street = isset($customer->Street) ? $customer->Street : "";
             $this->coAddress = isset($customer->CoAddress) ? $customer->CoAddress : "";
             $this->zipCode = isset($customer->ZipCode) ? $customer->ZipCode : "";
-            $this->locality = isset($customer->Locality) ? $customer->Locality : "";
+            $this->locality = isset($customer->Locality) ? $customer->Locality : "";          
         }
     }
 }
