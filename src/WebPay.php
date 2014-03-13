@@ -12,40 +12,36 @@ include_once SVEA_REQUEST_DIR . "/Includes.php";
  * @version 1.6.1
  * @author Anneli Halld'n, Daniel Brolund, Kristian Grossman-Madsen for Svea WebPay
  * @package WebPay
+ * @api 
  */
 class WebPay {
 
     /**
-     * Start Building Order Request to create order for all Payments
+     * Entry point for order creation process.
      *
-     * See CreateOrderBuilder class for more info on order contents
-     *
-     * @return \CreateOrderBuilder object
-     * @param instance of implementation class of ConfigurationProvider Interface
+     * See CreateOrderBuilder class for more info on specifying order contents 
+     * and chosing payment type, followed by sending the request to Svea and 
+     * parsing the response.
+     * 
+     * @return Svea\CreateOrderBuilder
+     * @param ConfigurationProvider $config  instance implementing ConfigurationProvider
      * @throws Exception if $config == NULL
-     * If left blank, default settings from SveaConfig will be used
+     *
      */
     public static function createOrder($config = NULL) {
-       if ($config == NULL) {
-           throw new Exception('-missing parameter:
-                               This method requires an ConfigurationProvider object as parameter. Create a class that implements class ConfigurationProvider. Set returnvalues to configuration values. Create an object from that class. Alternative use static function from class SveaConfig e.g. SveaConfig::getDefaultConfig(). You can replace the default config values to return your own config values in the method.'
-                                );
-       }
+        if( $config == NULL ) { WebPay::throwMissingConfigException(); }
+
         return new Svea\CreateOrderBuilder($config);
     }
 
     /**
      * Get Payment Plan Params to present to Customer before doing PaymentPlan Payment
-     * @return \GetPaymentPlanParams object
-     * @param instance of implementation class of ConfigurationProvider Interface
-     * If left blank, default settings from SveaConfig will be used
+     * @return Svea\GetPaymentPlanParams instance
+     * @param ConfigurationProvider $config  instance implementing ConfigurationProvider
      */
     public static function getPaymentPlanParams($config = NULL) {
-       if ($config == NULL) {
-           throw new Exception('-missing parameter:
-                                This method requires an ConfigurationProvider object as parameter. Create a class that implements class ConfigurationProvider. Set returnvalues to configuration values. Create an object from that class. Alternative use static function from class SveaConfig e.g. SveaConfig::getDefaultConfig(). You can replace the default config values to return your own config values in the method.'
-                                );
-       }
+        if( $config == NULL ) { WebPay::throwMissingConfigException(); }
+
         return new Svea\GetPaymentPlanParams($config);
     }
 
@@ -75,53 +71,38 @@ class WebPay {
      * Start Building Request Deliver Orders.
      * @return \deliverOrderBuilder object
      * @param instance of implementation class of ConfigurationProvider Interface
-     * If left blank, default settings from SveaConfig will be used
      */
     public static function deliverOrder($config = NULL) {
-         if ($config == NULL) {
-           throw new Exception('-missing parameter:
-                               This method requires an ConfigurationProvider object as parameter. Create a class that implements class ConfigurationProvider. Set returnvalues to configuration values. Create an object from that class. Alternative use static function from class SveaConfig e.g. SveaConfig::getDefaultConfig(). You can replace the default config values to return your own config values in the method.'
-                                );
-       }
+        if( $config == NULL ) { WebPay::throwMissingConfigException(); }
+
         return new Svea\deliverOrderBuilder($config);
-       // return new OrderBuilder();
     }
 
     /**
      * Start building Request to close orders.
      * @return \closeOrderBuilder object
-     * @param instance of implementation class of ConfigurationProvider Interface
-     * If left blank, default settings from SveaConfig will be used
+     * @param ConfigurationProvider $config  instance implementing ConfigurationProvider
      */
     public static function closeOrder($config = NULL) {
-         if ($config == NULL) {
-           throw new Exception('-missing parameter:
-                              This method requires an ConfigurationProvider object as parameter. Create a class that implements class ConfigurationProvider. Set returnvalues to configuration values. Create an object from that class. Alternative use static function from class SveaConfig e.g. SveaConfig::getDefaultConfig(). You can replace the default config values to return your own config values in the method.'
-                                );
-       }
+        if( $config == NULL ) { WebPay::throwMissingConfigException(); }
+
         return new Svea\closeOrderBuilder($config);
-       // return new OrderBuilder();
     }
 
     /**
      * Start building Request for getting Address
      * @return \GetAddresses object
-     * @param instance of implementation class of ConfigurationProvider Interface
-     * If left blank, default settings from SveaConfig will be used
+     * @param ConfigurationProvider $config  instance implementing ConfigurationProvider
      */
     public static function getAddresses($config = NULL) {
-        if ($config == NULL) {
-           throw new Exception('-missing parameter:
-                               This method requires an ConfigurationProvider object as parameter. Create a class that implements class ConfigurationProvider. Set returnvalues to configuration values. Create an object from that class. Alternative use static function from class SveaConfig e.g. SveaConfig::getDefaultConfig(). You can replace the default config values to return your own config values in the method.'
-                                );
-       }
+        if( $config == NULL ) { WebPay::throwMissingConfigException(); }
+
         return new Svea\GetAddresses($config);
     }
 
     /**
      * Get all paymentmethods connected to your account
-     * @param instance of implementation class of ConfigurationProvider Interface
-     * If left blank, default settings from SveaConfig will be used
+     * @param ConfigurationProvider $config  instance implementing ConfigurationProvider
      * @return \Svea\GetPaymentMethods Array of Paymentmethods
      */
     public static function getPaymentMethods($config = NULL) {
@@ -138,14 +119,15 @@ class WebPay {
     
     /**
      * Credit an existing Card or Bank transaction.
+     * @param ConfigurationProvider $config  instance implementing ConfigurationProvider
      */
     public static function creditTransaction( $config = NULL ) {
-        if( $config == NULL ) {
-           throw new Exception('-missing parameter:
-                               This method requires an ConfigurationProvider object as parameter. Create a class that implements class ConfigurationProvider. Set returnvalues to configuration values. Create an object from that class. Alternative use static function from class SveaConfig e.g. SveaConfig::getDefaultConfig(). You can replace the default config values to return your own config values in the method.'
-                                );
-        }
+        if( $config == NULL ) { WebPay::throwMissingConfigException(); }
         
         return new Svea\CreditTransaction($config);
+    }
+    
+    private static function throwMissingConfigException() {
+        throw new Exception('-missing parameter: This method requires an ConfigurationProvider object as parameter. Create a class that implements class ConfigurationProvider. Set returnvalues to configuration values. Create an object from that class. Alternative use static function from class SveaConfig e.g. SveaConfig::getDefaultConfig(). You can replace the default config values to return your own config values in the method.');   
     }
 }
