@@ -137,16 +137,6 @@ class deliverOrderBuilder {
        return $this;
     }
 
-    /**
-     * When function is called it turns into testmode
-     * @return \deliverOrder
-
-    public function setTestmode() {
-        $this->testmode = TRUE;
-        return $this;
-    }
-     */
-
     public function setCountryCode($countryCodeAsString) {
         $this->countryCode = $countryCodeAsString;
         return $this;

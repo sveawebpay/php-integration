@@ -4,35 +4,41 @@ namespace Svea;
 require_once SVEA_REQUEST_DIR . '/Includes.php';
 
 /**
- * Continue OrderBuilder by using Create Order functions.
- * End by choosing paymenttype.
+ * CreateOrderBuilder collects and prepares order data to be sent to Svea.
+ * 
+ * Set all required order attributes in CreateOrderBuilder instance by using the 
+ * instance setXXX() methods. Instance methods can be chained together, as they 
+ * return the instance itself.
+ * 
+ * Finish setting order attributes by chosing a payment method with the useXXX() 
+ * paymenttype.
+ * 
+ * @param $config 
  * @author Anneli Halld'n, Daniel Brolund, Kristian Grossman-Madsen for Svea Webpay
- * @package BuildOrder/CreateOrder
-*/
+ */
 class CreateOrderBuilder {
-
     /**
      * @var array<OrderRow> Array Rows containing Product rows
      */
     public $orderRows = array();
     /**
-     * @var array<ShippingFee> Array ShippingFeeRows containing shippingFee rows
+     * @attrib array<ShippingFee> Array ShippingFeeRows containing shippingFee rows
      */
     public $shippingFeeRows = array();
     /**
-     * @var array<InvoiceFee> Array InvoiceFeeRows containing invoiceFee rows
+     * @attrib array<InvoiceFee> Array InvoiceFeeRows containing invoiceFee rows
      */
     public $invoiceFeeRows = array();
     /**
-     * @var testmode. False means in production mode
+     * @attrib testmode. False means in production mode
      */
     public $testmode = false;
     /**
-     * @var array<FixedDiscount> Array of FixedDiscountRows from class FixedDiscount
+     * @attrib array<FixedDiscount> Array of FixedDiscountRows from class FixedDiscount
      */
     public $fixedDiscountRows = array();
     /**
-     * @var array<RelativeDiscount> Array of RelativeDiscountRows from class RelativeDiscountBuilder
+     * @attrib array<RelativeDiscount> Array of RelativeDiscountRows from class RelativeDiscountBuilder
      */
     public $relativeDiscountRows = array();
     /**
@@ -40,8 +46,9 @@ class CreateOrderBuilder {
     * @var type String
     */
     // public $addressSelector;
+   
     /**
-     * @var Unique order number from client side
+     * @attrib order number given by client side, should uniquely identify order at client
      */
     public $clientOrderNumber;
 
@@ -54,28 +61,28 @@ class CreateOrderBuilder {
 
     /**
      * ISO 8601 date, as produced by php date('c'): 2004-02-12T15:19:21+00:00, also accepts date in format "2004-02-12"
-     * @var string time, ISO 8601 date
+     * @attrib string time, ISO 8601 date
      */
     public $orderDate;
 
     /**
      * Ex: "SEK", "EUR"
-     * @var type String
+     * @attrib type String
      */
     public $currency;
 
     /**
-     * @var Your customer Reference number
+     * @attrib Your customer Reference number
      */
     public $customerReference;
 
     /**
-     * @var Instance of class SveaConfig
+     * @attrib Instance of class SveaConfig
      */
 
     public $conf;
     /**
-     * @type instance of IndividualCustomer or CompanyCustomer
+     * @attrib mixed -- instance of IndividualCustomer or CompanyCustomer
      */
     public $customerIdentity;
 
@@ -87,13 +94,6 @@ class CreateOrderBuilder {
     }
 
     /**
-     * When function is called it turns into testmode
-     * @return \createOrder
-
-    public function setTestmode() {
-        $this->testmode = TRUE;
-        return $this;
-    }
      *
      * @param type $itemCustomerObject
      * @return \createOrder|\CreateOrderBuilder
@@ -230,7 +230,7 @@ class CreateOrderBuilder {
      */
     /**
      * Start creating cardpayment via PayPage. Returns Paymentform to integrate in shop.
-     * @return \HostedPayment
+     * @return Svea\HostedPayment
      */
     public function usePayPageCardOnly() {
         return new CardPayment($this);
@@ -238,7 +238,7 @@ class CreateOrderBuilder {
 
     /**
      * Start creating direct bank payment via PayPage. Returns Paymentform to integrate in shop.
-     * @return \HostedPayment
+     * @return Svea\HostedPayment
      */
     public function usePayPageDirectBankOnly() {
         return new DirectPayment($this);
@@ -247,7 +247,7 @@ class CreateOrderBuilder {
     /**
      * Start creating payment thru paypage. You will be able to customize the PayPage.
      * Returns Paymentform to integrate in shop.
-     * @return \PayPagePayment
+     * @return Svea\PayPagePayment
      */
     public function usePayPage() {
         $paypagepayment = new PayPagePayment($this);
@@ -259,7 +259,7 @@ class CreateOrderBuilder {
      * Paymentmethods are found in appendix in our documentation.
      * Returns Paymentform to integrate in shop.
      * @param type PaymentMethod $paymentMethodAsConst, ex. PaymentMethod::SEB_SE
-     * @return \PaymentMethodPayment
+     * @return Svea\PaymentMethodPayment
      */
     public function usePaymentMethod($paymentMethodAsConst) {
         return new PaymentMethodPayment($this, $paymentMethodAsConst);
@@ -267,7 +267,7 @@ class CreateOrderBuilder {
 
     /**
      * Start Creating invoicePayment.
-     * @return \InvoicePayment
+     * @return Svea\InvoicePayment
      */
     public function useInvoicePayment() {
         return new InvoicePayment($this);
@@ -277,7 +277,7 @@ class CreateOrderBuilder {
      * Start Creating paymentplan payment
      * @param type $campaignCodeAsString
      * @param type $sendAutomaticGiroPaymentFormAsBool optional
-     * @return \PaymentPlanPayment
+     * @return Svea\PaymentPlanPayment
      */
     public function usePaymentPlanPayment($campaignCodeAsString, $sendAutomaticGiroPaymentFormAsBool = 0) {
         $this->campaignCode = $campaignCodeAsString;

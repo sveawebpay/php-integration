@@ -9,8 +9,10 @@ require_once SVEA_REQUEST_DIR . '/Config/SveaConfig.php';
  * current Client. Use this information to display information about the possible
  * payment plan options to customers. The returned CampaignCode is used when
  * creating a PaymentPlan order.
+ * 
+ * TODO document attributes
+ * 
  * @author Anneli Halld'n, Daniel Brolund for Svea Webpay
- * @package WebServiceRequests/GetPaymentPlanParams
  */
 class GetPaymentPlanParams {
 

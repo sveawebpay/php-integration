@@ -51,7 +51,6 @@ class PayPagePaymentTest extends \PHPUnit_Framework_TestCase {
         $config = SveaConfig::getDefaultConfig();
         $rowFactory = new \TestUtil();
         $form = \WebPay::createOrder($config)
-            //->setTestmode()()
             ->addOrderRow(\TestUtil::createOrderRow())
             ->run($rowFactory->buildShippingFee())
             ->addDiscount(\WebPayItem::relativeDiscount()

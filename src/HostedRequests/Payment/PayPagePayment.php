@@ -8,7 +8,6 @@ require_once  SVEA_REQUEST_DIR.'/Constant/PaymentMethod.php';
  * Goes to PayPage
  * Possibilitys to customize what payment methods to be shown on paypage
  * @author Anneli Halld'n, Daniel Brolund for Svea Webpay
- * @package HostedRequests/Payment
  */
 class PayPagePayment extends HostedPayment {
 

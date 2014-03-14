@@ -6,7 +6,6 @@ require_once 'HandleOrder.php';
 /**
  * Cancel undelivered Invoice or PaymentPlan orders.
  * @author Anneli Halld'n, Daniel Brolund for Svea Webpay
- * @package WebserviceRequests/HandleOrder
  */
 class CloseOrder extends HandleOrder {
 

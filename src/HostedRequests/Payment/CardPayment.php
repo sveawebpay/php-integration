@@ -8,7 +8,6 @@ require_once  SVEA_REQUEST_DIR.'/Constant/PaymentMethod.php';
  * Extends HostedPayment
  * Goes to PayPage and excludes all methods that are not cardpayments
  * @author Anneli Halld'n, Daniel Brolund for Svea Webpay
- * @package HostedRequests/Payment
  */
 class CardPayment extends HostedPayment {
 

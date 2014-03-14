@@ -5,7 +5,6 @@ namespace Svea;
  * Options:
  * 1. File can manually be changed an will be used by integration package
  * 2. Use methods in php-integration package api to set values
- * @package Config
  */
 class SveaConfig {
 

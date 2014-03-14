@@ -7,6 +7,7 @@ include_once SVEA_REQUEST_DIR . "/Includes.php";
  * Supercedes class Item, while providing the same functionality.
  * WebPayItem is external to Svea namespace along with class WebPay.
  *  
+ * @api
  * @author Kristian Grossman-Madsen
  */
 class WebPayItem {
@@ -15,6 +16,10 @@ class WebPayItem {
          return new Svea\OrderRow();
     }
 
+    /**
+     * Sets shipping fee
+     * @return \Svea\ShippingFee
+     */
     public static function shippingFee() {
         return new Svea\ShippingFee();
     }

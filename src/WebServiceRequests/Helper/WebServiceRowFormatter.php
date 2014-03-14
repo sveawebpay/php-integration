@@ -5,7 +5,6 @@ namespace Svea;
  * Helper class for formatting orderrows in the right format for WebService soap-calls
  *
  * @author Anneli Halld'n, Daniel Brolund, Kristian Grossman-Madsen for Svea Webpay
- * @package WebServiceRequests/Helper
  */
 class WebServiceRowFormatter {
 
