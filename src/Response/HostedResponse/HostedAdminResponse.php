@@ -3,21 +3,34 @@ namespace Svea;
 
 require_once 'HostedResponse.php';
 
-
 /**
- * @author anne-hal
+ * Handles diverse administrative function responses from the webservice and
+ * wrapped legacy services through the webservice.
+ * 
+ * @property string $customerrefno contains customer provided order reference
+ * @property array<string> $paymentMethods set iff getPaymentMethod response
+ * 
+ * @author anne-hal, Kristian Grossman-Madsen for Svea WebPay
  */
 class HostedAdminResponse extends HostedResponse{
 
-    public $paymentMethods;
+    /**
+     * 
+     * 
+     * @param SimpleXMLElement $message
+     * @param string $countryCode
+     * @param SveaConfigurationProvider $config
+     */
+    function __construct($message,$countryCode,$config) {
 
-    function __construct($response,$countryCode,$config) {
-        if (is_object($response)) {
+        // TODO extract response sanity checks to parent HostedResponse class
+        if (is_object($message)) {
 
-            if (property_exists($response,"mac") && property_exists($response,"message")) {
-                $decodedXml = base64_decode($response->message);
+            if (property_exists($message,"mac") && property_exists($message,"message")) {
+                $decodedXml = base64_decode($message->message);
                 $secret = $config->getSecret(\ConfigurationProvider::HOSTED_TYPE,$countryCode);
-                if ($this->validateMac($response->message,$response->mac,$secret)) {
+
+                if ($this->validateMac($message->message,$message->mac,$secret)) {
                     $this->formatXml($decodedXml);
                 } else {
                     $this->accepted = 0;
@@ -35,23 +48,24 @@ class HostedAdminResponse extends HostedResponse{
 
     protected function formatXml($xml) {
         $xmlElement = new \SimpleXMLElement($xml);
-        if ((string)$xmlElement->statuscode == 0) {
+        
+        if ((string)$xmlElement->statuscode == '0') {
             $this->accepted = 1;
+            $this->resultcode = '0';
         } else {
             $this->accepted = 0;
-            $this->setErrorParams($xmlElement->statuscode);
+            $this->setErrorParams( (string)$xmlElement->statuscode ); 
         }
+        
         //getPaymentMethods
         if(property_exists($xmlElement,"paymentmethods")){
-            $this->paymentMethods = $xmlElement->paymentmethods->paymentmethod;
-
+            $this->paymentMethods = (array)$xmlElement->paymentmethods->paymentmethod;
         }
-
+        
         //creditTransaction
-        if(property_exists($xmlElement,"customerrefno")){ // TODO possibly non-unique string to select upon -- rewrite hos HostedAdminResponseWorks
-            $this->customerrefno = $xmlElement->credit->customerrefno;
-
-        }
+        if(property_exists($xmlElement->transaction,"customerrefno")){
+            $this->customerrefno = (string)$xmlElement->transaction->customerrefno;
+        }    
     }
 
 }
