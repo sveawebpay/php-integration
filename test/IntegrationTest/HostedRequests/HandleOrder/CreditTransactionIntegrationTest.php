@@ -11,8 +11,8 @@ require_once $root . '/../../../TestUtil.php';
  * @author Kristian Grossman-Madsen for Svea WebPay
  */
 class CreditTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
-
-    /**
+ 
+   /**
      * test_card_creditTransaction_success creates an order using card payment, 
      * pays using card & receives a transaction id, then credits the transaction
      * 
@@ -70,12 +70,37 @@ class CreditTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
 
         // TODO remove -- make sure we get a SveaResponse object back
         $this->assertInstanceOf( "Svea\HostedAdminResponse", $response );
-
-        print_r( $response );
         
         // if we receive an error from the service, the integration test passes
         $this->assertEquals( 0, $response->accepted );
-        $this->assertEquals( "128 (NO_SUCH_TRANS)", $response->resultcode ); // NO_SUCH_TRANS ??  // TODO check error code received        
+        $this->assertEquals( "128 (NO_SUCH_TRANS)", $response->resultcode );    
     }
+    
+    /**
+     * test_manual_card_credit 
+     * 
+     * run this manually after you've performed a card transaction and have set
+     * the transaction status to success using the tools in the logg admin.
+     */  
+    function NOTRUN___test_manual_card_credit() {
+//
+//        // Set the below to match the transaction, then run the test.
+//        $customerrefno = 312;
+//        $transactionId = 579893;
+//        $amount = 100;
+//                
+//        $request = WebPay::creditTransaction( Svea\SveaConfig::getDefaultConfig() )
+//            ->setTransactionId( $transactionId )
+//            ->setCreditAmount( $amount )
+//            ->setCountryCode( "SE" );
+//    
+//        $response = $request->doRequest();        
+//        
+//        $this->assertInstanceOf( "Svea\HostedAdminResponse", $response );
+//        
+//        // if we receive an error from the service, the integration test passes
+//        $this->assertEquals( 1, $response->accepted );        
+//        $this->assertEquals( $customerrefno, $response->customerrefno );  
+    }    
 }
 ?>
