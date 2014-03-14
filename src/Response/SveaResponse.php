@@ -23,10 +23,14 @@ class SveaResponse {
     public $response;
 
     /**
+     * Returns an instance of the response class corresponding to the request 
+     * sent to Svea, i.e. instances of subclasses to HostedResponse and 
+     * WebServiceResponse, respectively.
      * 
      * @param SimpleXMLElement $message
      * @param string $countryCode
      * @param SveaConfigurationProvider $config
+     * @return mixed instance of a subclass to HostedResponse or WebServiceResponse, respectively
      */
     public function __construct($message, $countryCode, $config = NULL) {
          
@@ -61,7 +65,10 @@ class SveaResponse {
     }
     
     /**
-     * @returns an instance of the corresponding Response class (see constructor above) contained in the ->response attribute
+     * Returns an instance of the corresponding response object class 
+     * (see constructor above)
+     *
+     * @return mixed 
      */
     public function getResponse() {
         return $this->response;
