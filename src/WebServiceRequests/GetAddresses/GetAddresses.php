@@ -89,8 +89,8 @@ class GetAddresses {
     }
 
     /**
-     * Returns prepared request object, which can then be inspected to see the
-     * actual attributes to be sent to Svea 
+     * Sets and returns prepared request object attribute, which can then be 
+     * inspected to see the contents of the request be sent to Svea 
      * @return SveaRequest
      */
     public function prepareRequest() {
@@ -106,12 +106,9 @@ class GetAddresses {
             (isset($this->companyId) ? $this->companyId : $this->ssn) 
         );
 
-        // TODO refactor SveaRequest
-        $object = new SveaRequest();
-        $object->request = $address;
-        $this->object = $object;
+        $this->request = new SveaRequest( $address );
 
-        return $this->object;
+        return $this->request;
     }
 
     /**
@@ -119,10 +116,12 @@ class GetAddresses {
      * @return GetAddressesResponse object
      */
     public function doRequest() {
-        $object = $this->prepareRequest();
+        $this->request = $this->prepareRequest();
+        
         $url = $this->conf->getEndPoint($this->orderType);
         $request = new SveaDoRequest($url);
-        $svea_req = $request->GetAddresses($object);
+
+        $svea_req = $request->GetAddresses($this->request);
 
         $response = new \SveaResponse($svea_req,"");
         return $response->response;
