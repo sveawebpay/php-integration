@@ -16,7 +16,9 @@ require_once SVEA_REQUEST_DIR . '/Config/SveaConfig.php';
  * can be used when creating orders to have the invoice be sent to the specified
  * address.
  *
- * @author Anneli Halld'n, Daniel Brolund for Svea Webpay
+ * TODO document attributes
+ * 
+ * @author Anneli Halld'n, Daniel Brolund, Kristian Grossman-Madsen for Svea Webpay
  */
 class GetAddresses {
 
@@ -33,7 +35,7 @@ class GetAddresses {
 
     /**
      * Required for Invoice type
-     * @return \GetAddresses
+     * @return $this
      */
     public function setOrderTypeInvoice() {
         $this->orderType = "Invoice";
@@ -42,7 +44,7 @@ class GetAddresses {
 
     /**
      * Required for PaymentPlan type
-     * @return \GetAddresses
+     * @return $this
      */
     public function setOrderTypePaymentPlan() {
         $this->orderType = "PaymentPlan";
@@ -52,7 +54,7 @@ class GetAddresses {
     /**
      * Required
      * @param string $countryCodeAsString
-     * @return \GetAddresses
+     * @return $this
      */
     public function setCountryCode($countryCodeAsString) {
         $this->countryCode = $countryCodeAsString;
@@ -65,7 +67,7 @@ class GetAddresses {
      * Sweden: Organisationsnummer,
      * Norway: Vat number,
      * Denmark: CVR
-     * @return \GetAddresses
+     * @return $this
      */
     public function setCompany($companyIdAsString) {
         $this->companyId = $companyIdAsString;
@@ -78,7 +80,7 @@ class GetAddresses {
      * Sweden: Personnummer,
      * Norway: Personalnumber,
      * Denmark: CPR
-     * @return \GetAddresses
+     * @return $this
      */
     public function setIndividual($NationalIdNumberAsString) {
 
@@ -87,8 +89,9 @@ class GetAddresses {
     }
 
     /**
-     * Returns prepared request
-     * @return type
+     * Returns prepared request object, which can then be inspected to see the
+     * actual attributes to be sent to Svea 
+     * @return SveaRequest
      */
     public function prepareRequest() {
         $auth = new SveaAuth();
@@ -96,12 +99,14 @@ class GetAddresses {
         $auth->Password = $this->conf->getPassword($this->orderType,  $this->countryCode);
         $auth->ClientNumber = $this->conf->getClientNumber($this->orderType,  $this->countryCode);
 
+        // TODO refactor SveaAddress
         $address = new SveaAddress();
         $address->Auth = $auth;
         $address->IsCompany = isset($this->companyId) ? true : false;
         $address->CountryCode = $this->countryCode;
         $address->SecurityNumber = isset($this->companyId) ? $this->companyId : $this->ssn;
 
+        // TODO refactor SveaRequest
         $object = new SveaRequest();
         $object->request = $address;
         $this->object = $object;
@@ -111,7 +116,7 @@ class GetAddresses {
 
     /**
      * Prepares and Sends request
-     * @return @GetAddressesResponse object
+     * @return GetAddressesResponse object
      */
     public function doRequest() {
         $object = $this->prepareRequest();
