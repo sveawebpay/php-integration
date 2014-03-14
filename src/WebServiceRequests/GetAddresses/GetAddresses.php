@@ -99,12 +99,12 @@ class GetAddresses {
         $auth->Password = $this->conf->getPassword($this->orderType,  $this->countryCode);
         $auth->ClientNumber = $this->conf->getClientNumber($this->orderType,  $this->countryCode);
 
-        // TODO refactor SveaAddress
-        $address = new SveaAddress();
-        $address->Auth = $auth;
-        $address->IsCompany = isset($this->companyId) ? true : false;
-        $address->CountryCode = $this->countryCode;
-        $address->SecurityNumber = isset($this->companyId) ? $this->companyId : $this->ssn;
+        $address = new SveaAddress( 
+            $auth, 
+            (isset($this->companyId) ? true : false), 
+            $this->countryCode, 
+            (isset($this->companyId) ? $this->companyId : $this->ssn) 
+        );
 
         // TODO refactor SveaRequest
         $object = new SveaRequest();
