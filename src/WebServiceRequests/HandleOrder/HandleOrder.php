@@ -20,7 +20,7 @@ class HandleOrder {
     }
 
     protected function getStoreAuthorization() {
-        $auth = new SveaAuth();
+        $auth = new SveaAuth();           //TODO update these to use SveaAuth constructors
          $auth->Username = $this->handler->conf->getUsername($this->handler->orderType,  $this->handler->countryCode);
         $auth->Password = $this->handler->conf->getPassword($this->handler->orderType,  $this->handler->countryCode);
         $auth->ClientNumber = $this->handler->conf->getClientNumber($this->handler->orderType,  $this->handler->countryCode);

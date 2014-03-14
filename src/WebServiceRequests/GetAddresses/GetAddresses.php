@@ -89,29 +89,27 @@ class GetAddresses {
     }
 
     /**
-     * Returns prepared request object, which can then be inspected to see the
-     * actual attributes to be sent to Svea 
+     * Sets and returns prepared request object attribute, which can then be 
+     * inspected to see the contents of the request be sent to Svea 
      * @return SveaRequest
      */
     public function prepareRequest() {
-        $auth = new SveaAuth();
-        $auth->Username = $this->conf->getUsername($this->orderType,  $this->countryCode);
-        $auth->Password = $this->conf->getPassword($this->orderType,  $this->countryCode);
-        $auth->ClientNumber = $this->conf->getClientNumber($this->orderType,  $this->countryCode);
+        $auth = new SveaAuth(
+            $this->conf->getUsername($this->orderType,  $this->countryCode),
+            $this->conf->getPassword($this->orderType,  $this->countryCode),
+            $this->conf->getClientNumber($this->orderType,  $this->countryCode)                
+        );
 
-        // TODO refactor SveaAddress
-        $address = new SveaAddress();
-        $address->Auth = $auth;
-        $address->IsCompany = isset($this->companyId) ? true : false;
-        $address->CountryCode = $this->countryCode;
-        $address->SecurityNumber = isset($this->companyId) ? $this->companyId : $this->ssn;
+        $address = new SveaAddress( 
+            $auth, 
+            (isset($this->companyId) ? true : false), 
+            $this->countryCode, 
+            (isset($this->companyId) ? $this->companyId : $this->ssn) 
+        );
 
-        // TODO refactor SveaRequest
-        $object = new SveaRequest();
-        $object->request = $address;
-        $this->object = $object;
+        $this->request = new SveaRequest( $address );
 
-        return $this->object;
+        return $this->request;
     }
 
     /**
@@ -119,10 +117,12 @@ class GetAddresses {
      * @return GetAddressesResponse object
      */
     public function doRequest() {
-        $object = $this->prepareRequest();
+        $this->request = $this->prepareRequest();
+        
         $url = $this->conf->getEndPoint($this->orderType);
         $request = new SveaDoRequest($url);
-        $svea_req = $request->GetAddresses($object);
+
+        $svea_req = $request->GetAddresses($this->request);
 
         $response = new \SveaResponse($svea_req,"");
         return $response->response;
