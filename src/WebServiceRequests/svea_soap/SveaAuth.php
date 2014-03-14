@@ -3,12 +3,24 @@ namespace Svea;
 
 /**
  * Auth object, holder of
- * Username, Password, ClientNumber
+ * Username
+ * Password
+ * ClientNumber
  */
 class SveaAuth {
 
     public $Username;
     public $Password;
     public $ClientNumber;
-
+    
+    /**
+     * @param string $Username
+     * @param string $Password
+     * @param string $ClientNumber
+     */
+    function __construct( $Username = NULL, $Password = NULL, $ClientNumber = NULL ) {   // TODO remove default, and update test suite                   
+        if( $Username ) $this->Username = $Username;
+        if( $Password ) $this->Password = $Password;
+        if( $ClientNumber ) $this->ClientNumber = $ClientNumber; 
+    }
 }

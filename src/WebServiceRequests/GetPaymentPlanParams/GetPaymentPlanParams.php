@@ -37,7 +37,7 @@ class GetPaymentPlanParams {
     /**
      * @return Prepared Request
      */
-    public function prepareRequest() {
+    public function prepareRequest() {      //TODO update these to use SveaAuth, SveaRequest constructors
         $auth = new SveaAuth();
         $auth->Username = $this->conf->getUsername("PAYMENTPLAN",  $this->countryCode);
         $auth->Password = $this->conf->getPassword("PAYMENTPLAN",  $this->countryCode);

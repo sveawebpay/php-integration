@@ -94,10 +94,11 @@ class GetAddresses {
      * @return SveaRequest
      */
     public function prepareRequest() {
-        $auth = new SveaAuth();
-        $auth->Username = $this->conf->getUsername($this->orderType,  $this->countryCode);
-        $auth->Password = $this->conf->getPassword($this->orderType,  $this->countryCode);
-        $auth->ClientNumber = $this->conf->getClientNumber($this->orderType,  $this->countryCode);
+        $auth = new SveaAuth(
+            $this->conf->getUsername($this->orderType,  $this->countryCode),
+            $this->conf->getPassword($this->orderType,  $this->countryCode),
+            $this->conf->getClientNumber($this->orderType,  $this->countryCode)                
+        );
 
         $address = new SveaAddress( 
             $auth, 
