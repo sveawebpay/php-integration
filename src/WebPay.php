@@ -119,12 +119,26 @@ class WebPay {
     
     /**
      * Credit an existing Card or Bank transaction.
-     * @param ConfigurationProvider $config  instance implementing ConfigurationProvider
+     * The transaction must have reached Svea status SUCCESS.
+     * @param ConfigurationProvider $config instance implementing ConfigurationProvider
      */
     public static function creditTransaction( $config = NULL ) {
         if( $config == NULL ) { WebPay::throwMissingConfigException(); }
         
         return new Svea\CreditTransaction($config);
+    }
+    
+    /**
+     * Annul an existing Card transaction.
+     * The transaction must have Svea status AUTHORIZED or CONFIRMED.
+     * Note that this only supports Card transactions.
+     * 
+     * @param ConfigurationProvider $config instance implementing ConfigurationProvider
+     */
+    public static function annulTransaction( $config = NULL ) {
+        if( $config == NULL ) { WebPay::throwMissingConfigException(); }
+        
+        return new Svea\AnnulTransaction($config);
     }
     
     private static function throwMissingConfigException() {
