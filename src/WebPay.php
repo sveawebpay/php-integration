@@ -141,6 +141,19 @@ class WebPay {
         return new Svea\AnnulTransaction($config);
     }
     
+    /**
+     * Confirm an existing Card transaction.
+     * The transaction must have Svea status AUTHORIZED.
+     * Note that this only supports Card transactions.
+     * 
+     * @param ConfigurationProvider $config instance implementing ConfigurationProvider
+     */
+    public static function confirmTransaction( $config = NULL ) {
+        if( $config == NULL ) { WebPay::throwMissingConfigException(); }
+        
+        return new Svea\ConfirmTransaction($config);
+    }
+    
     private static function throwMissingConfigException() {
         throw new Exception('-missing parameter: This method requires an ConfigurationProvider object as parameter. Create a class that implements class ConfigurationProvider. Set returnvalues to configuration values. Create an object from that class. Alternative use static function from class SveaConfig e.g. SveaConfig::getDefaultConfig(). You can replace the default config values to return your own config values in the method.');   
     }
