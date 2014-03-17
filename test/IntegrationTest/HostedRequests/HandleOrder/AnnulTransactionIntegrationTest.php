@@ -6,11 +6,11 @@ require_once $root . '/../../../../src/Includes.php';
 require_once $root . '/../../../TestUtil.php';
 
 /**
- * CreditTransactionIntegrationTest 
+ * AnnulTransactionIntegrationTest 
  * 
  * @author Kristian Grossman-Madsen for Svea WebPay
  */
-class CreditTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
+class AnnulTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
  
    /**
      * test_card_creditTransaction_success creates an order using card payment, 
@@ -18,13 +18,13 @@ class CreditTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
      * 
      * used as acceptance criteria/smoke test for credit transaction feature
      */
-    function _test_creditTransaction_card_success() { 
+    function _test_annulTransaction_card_success() {
       
         // not yet implemented, requires webdriver support
 
         // Stop here and mark this test as incomplete.
         $this->markTestIncomplete(
-          'not yet implemented, requires webdriver support' // TODO
+          'not yet implemented, requires webdriver support'
         );
         
         // also, needs to have SUCCESS status set on transaction
@@ -48,23 +48,23 @@ class CreditTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
         
         // credit transcation using above the transaction transactionId
         
-        // assert response from creditTransaction equals success
+        // assert response from annulTransaction equals success
     }
     
     
     /**
-     * test_credit_card_transaction_not_found 
+     * test_annul_card_transaction_not_found 
      * 
-     * used as initial acceptance criteria for credit transaction feature
+     * used as initial acceptance criteria for annul transaction feature
      */  
-    function test_credit_card_transaction_not_found() {
+    function test_annul_card_transaction_not_found() {
              
         $transactionId = 987654;
-        $amount = 100;
+        $amount = 1;                // amount in currency  
                 
-        $response = WebPay::creditTransaction( Svea\SveaConfig::getDefaultConfig() )
+        $response = WebPay::annulTransaction( Svea\SveaConfig::getDefaultConfig() )
             ->setTransactionId( $transactionId )
-            ->setCreditAmount( $amount )
+            ->setCreditAmount( $amount *100)
             ->setCountryCode( "SE" )
             ->doRequest();
 
@@ -77,16 +77,16 @@ class CreditTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
     }
     
     /**
-     * test_manual_credit_card 
+     * test_manual_card_credit 
      * 
      * run this manually after you've performed a card transaction and have set
      * the transaction status to success using the tools in the logg admin.
      */  
-    function test_manual_credit_card() {
-        
+    function test_manual_annul_card() {
+
         // Stop here and mark this test as incomplete.
         $this->markTestIncomplete(
-          'skeleton for manual test of credit card transaction'
+          'skeleton for manual test of annul card transaction' // TODO
         );
         
         // Set the below to match the transaction, then run the test.
@@ -94,7 +94,7 @@ class CreditTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
         $transactionId = 579893;
         $amount = 100;
                 
-        $request = WebPay::creditTransaction( Svea\SveaConfig::getDefaultConfig() )
+        $request = WebPay::annulTransaction( Svea\SveaConfig::getDefaultConfig() )
             ->setTransactionId( $transactionId )
             ->setCreditAmount( $amount )
             ->setCountryCode( "SE" );
