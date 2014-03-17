@@ -83,21 +83,21 @@ class AnnulTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
     function test_manual_annul_card() {
 
         // Stop here and mark this test as incomplete.
-        $this->markTestIncomplete(
-            'skeleton for manual test of annul card transaction' // TODO
-        );
+//        $this->markTestIncomplete(
+//            'skeleton for manual test of annul card transaction' // TODO
+//        );
         
         // Set the below to match the transaction, then run the test.
-        $customerrefno = 312;
-        $transactionId = 579893;
+        $customerrefno = 313;
+        $transactionId = 579929;
 
         $request = WebPay::annulTransaction( Svea\SveaConfig::getDefaultConfig() )
             ->setTransactionId( $transactionId )
             ->setCountryCode( "SE" );
     
         $response = $request->doRequest();        
-        
-        $this->assertInstanceOf( "Svea\HostedAdminResponse", $response );
+         
+       $this->assertInstanceOf( "Svea\HostedAdminResponse", $response );
         
         // if we receive an error from the service, the integration test passes
         $this->assertEquals( 1, $response->accepted );        

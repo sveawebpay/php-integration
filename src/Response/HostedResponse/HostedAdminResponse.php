@@ -62,7 +62,7 @@ class HostedAdminResponse extends HostedResponse{
             $this->paymentMethods = (array)$xmlElement->paymentmethods->paymentmethod;
         }
         
-        //creditTransaction
+        //creditTransaction or annulTransaction        
         if(property_exists($xmlElement->transaction,"customerrefno")){
             $this->customerrefno = (string)$xmlElement->transaction->customerrefno;
         }    
