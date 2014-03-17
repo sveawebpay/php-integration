@@ -44,9 +44,9 @@ class AnnulTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
 
         // do request modeled on CardPymentIntegrationTest.php
                 
-        // make sure the transaction has status SUCCESS at Svea
+        // make sure the transaction has status AUTHORIZED or CONFIRMED at Svea
         
-        // credit transcation using above the transaction transactionId
+        // annul transcation with the above transactionId
         
         // assert response from annulTransaction equals success
     }
@@ -60,11 +60,9 @@ class AnnulTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
     function test_annul_card_transaction_not_found() {
              
         $transactionId = 987654;
-        $amount = 1;                // amount in currency  
                 
         $response = WebPay::annulTransaction( Svea\SveaConfig::getDefaultConfig() )
             ->setTransactionId( $transactionId )
-            ->setCreditAmount( $amount *100)
             ->setCountryCode( "SE" )
             ->doRequest();
 
@@ -86,17 +84,15 @@ class AnnulTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
 
         // Stop here and mark this test as incomplete.
         $this->markTestIncomplete(
-          'skeleton for manual test of annul card transaction' // TODO
+            'skeleton for manual test of annul card transaction' // TODO
         );
         
         // Set the below to match the transaction, then run the test.
         $customerrefno = 312;
         $transactionId = 579893;
-        $amount = 100;
-                
+
         $request = WebPay::annulTransaction( Svea\SveaConfig::getDefaultConfig() )
             ->setTransactionId( $transactionId )
-            ->setCreditAmount( $amount )
             ->setCountryCode( "SE" );
     
         $response = $request->doRequest();        
