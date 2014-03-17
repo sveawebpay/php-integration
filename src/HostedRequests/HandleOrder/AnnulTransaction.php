@@ -15,15 +15,15 @@ class AnnulTransaction {
 
     private $transactionId;
     
-//    function __construct($config) {
-//        $this->config = $config;
-//    }
+    function __construct($config) {
+        $this->config = $config;
+    }
 
-//    function setCountryCode( $countryCode ) {
-//        $this->countryCode = $countryCode;
-//        return $this;
-//    }
-//    
+    function setCountryCode( $countryCode ) {
+        $this->countryCode = $countryCode;
+        return $this;
+    }
+    
     function setTransactionId( $transactionId ) {
         $this->transactionId = $transactionId;
         return $this;
@@ -35,12 +35,12 @@ class AnnulTransaction {
      * @return HostedAdminResponse 
      */
     public function prepareRequest() {
-//
-//        $xmlBuilder = new HostedXmlBuilder();
-//        
-//        // get our merchantid & secret
-//        $merchantId = $this->config->getMerchantId( \ConfigurationProvider::HOSTED_TYPE,  $this->countryCode);
-//        $secret = $this->config->getSecret( \ConfigurationProvider::HOSTED_TYPE, $this->countryCode);
+
+        $xmlBuilder = new HostedXmlBuilder();
+        
+        // get our merchantid & secret
+        $merchantId = $this->config->getMerchantId( \ConfigurationProvider::HOSTED_TYPE,  $this->countryCode);
+        $secret = $this->config->getSecret( \ConfigurationProvider::HOSTED_TYPE, $this->countryCode);
 //        
 //        // message contains the credit request
 //        $messageContents = array(

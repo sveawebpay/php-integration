@@ -24,15 +24,14 @@ class AnnulTransactionTest extends PHPUnit_Framework_TestCase {
         $this->assertInstanceOf( "Svea\AnnulTransaction", $this->annulObject);      
     }
     
-//    function test_setCountryCode(){
-//        
-//        $countryCode = "SE";       
-//        $this->annulObject->setCountryCode( $countryCode );
-//        
-//        //$this->assertEquals( $transactionId, $annulObject->transactionId );    //oops, transactionId is private.
-//        $this->assertEquals( $countryCode, PHPUnit_Framework_Assert::readAttribute($this->annulObject, 'countryCode') );
-//    }
-//    
+    function test_setCountryCode(){
+        
+        $countryCode = "SE";       
+        $this->annulObject->setCountryCode( $countryCode );
+        
+        $this->assertEquals( $countryCode, PHPUnit_Framework_Assert::readAttribute($this->annulObject, 'countryCode') );
+    }
+    
     function test_setTransactionId( ){
         
         $transactionId = 987654;       
@@ -47,9 +46,9 @@ class AnnulTransactionTest extends PHPUnit_Framework_TestCase {
         $transactionId = 987654;       
         $this->annulObject->setTransactionId( $transactionId );
 
-//        $countryCode = "SE";
-//        $this->annulObject->setCountryCode($countryCode);
-//                
+        $countryCode = "SE";
+        $this->annulObject->setCountryCode($countryCode);
+                
         $form = $this->annulObject->prepareRequest();
 
         // prepared request is message (base64 encoded), merchantid, mac
