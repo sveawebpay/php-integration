@@ -69,38 +69,37 @@ class ConfirmTransactionTest extends PHPUnit_Framework_TestCase {
         $this->assertTrue( isset($form['mac']) );
         $this->assertTrue( isset($form['message']) );
     }
-//    
-//    function test_prepareRequest_has_correct_merchantid_mac_and_confirm_request_message_contents() {
-//
-//        // set up confirmTransaction object & get request form
-//        $transactionId = 987654;       
-//        $this->confirmObject->setTransactionId( $transactionId );
-//
-//        $confirmAmount = 100;
-//        $this->confirmObject->setConfirmAmount( $confirmAmount );
-//        
-//        $countryCode = "SE";
-//        $this->confirmObject->setCountryCode($countryCode);
-//                
-//        $form = $this->confirmObject->prepareRequest();
-//        
-//        // get our merchantid & secret
-//        $merchantid = $this->configObject->getMerchantId( ConfigurationProvider::HOSTED_TYPE, $countryCode);
-//        $secret = $this->configObject->getSecret( ConfigurationProvider::HOSTED_TYPE, $countryCode);
-//         
-//        // check mechantid
-//        $this->assertEquals( $merchantid, urldecode($form['merchantid']) );
-//
-//        // check valid mac
-//        $this->assertEquals( hash("sha512", urldecode($form['message']). $secret), urldecode($form['mac']) );
-//        
-//        // check confirm request message contents
-//        $xmlMessage = new SimpleXMLElement( base64_decode(urldecode($form['message'])) );
-//
-//        $this->assertEquals( "confirm", $xmlMessage->getName() );   // root node        
-//        $this->assertEquals((string)$transactionId, $xmlMessage->transactionid);
-//        $this->assertEquals((string)$confirmAmount, $xmlMessage->amounttoconfirm);
-//        
-//    }
+    
+    function test_prepareRequest_has_correct_merchantid_mac_and_confirm_request_message_contents() {
+
+        // set up confirmTransaction object & get request form
+        $transactionId = 987654;       
+        $this->confirmObject->setTransactionId( $transactionId );
+
+        $captureDate = "2014-03-21";
+        $this->confirmObject->setCaptureDate( $captureDate );
+        
+        $countryCode = "SE";
+        $this->confirmObject->setCountryCode($countryCode);
+                
+        $form = $this->confirmObject->prepareRequest();
+        
+        // get our merchantid & secret
+        $merchantid = $this->configObject->getMerchantId( ConfigurationProvider::HOSTED_TYPE, $countryCode);
+        $secret = $this->configObject->getSecret( ConfigurationProvider::HOSTED_TYPE, $countryCode);
+         
+        // check mechantid
+        $this->assertEquals( $merchantid, urldecode($form['merchantid']) );
+
+        // check valid mac
+        $this->assertEquals( hash("sha512", urldecode($form['message']). $secret), urldecode($form['mac']) );
+        
+        // check confirm request message contents
+        $xmlMessage = new SimpleXMLElement( base64_decode(urldecode($form['message'])) );
+
+        $this->assertEquals( "confirm", $xmlMessage->getName() );   // root node        
+        $this->assertEquals((string)$transactionId, $xmlMessage->transactionid);
+        $this->assertEquals((string)$captureDate, $xmlMessage->capturedate);     
+    }
 }
 ?>

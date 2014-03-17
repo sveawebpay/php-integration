@@ -41,38 +41,36 @@ class ConfirmTransaction {
         $this->captureDate = $captureDate;
         return $this;
     }
-//    
-//    /**
-//     * prepares the elements used in the request to svea
-//     * 
-//     * @return HostedAdminResponse 
-//     */
-//    public function prepareRequest() {
-//
-//        $xmlBuilder = new HostedXmlBuilder();
-//        
-//        // get our merchantid & secret
-//        $merchantId = $this->config->getMerchantId( \ConfigurationProvider::HOSTED_TYPE,  $this->countryCode);
-//        $secret = $this->config->getSecret( \ConfigurationProvider::HOSTED_TYPE, $this->countryCode);
-//        
-//        // message contains the credit request
-//        $messageContents = array(
-//            "transactionid" => $this->transactionId,
-//            "amounttocredit" => $this->creditAmount
-//        ); 
-//        $message = $xmlBuilder->getCreditTransactionXML( $messageContents );        
-//
-//        // calculate mac
-//        $mac = hash("sha512", base64_encode($message) . $secret);
-//        
-//        // encode the request elements
-//        $request_fields = array( 
-//            'merchantid' => urlencode($merchantId),
-//            'message' => urlencode(base64_encode($message)),
-//            'mac' => urlencode($mac)
-//        );
-//        return $request_fields;
-//    }
+    
+    /**
+     * prepares the elements used in the request to svea
+     */
+    public function prepareRequest() {
+
+        $xmlBuilder = new HostedXmlBuilder();
+        
+        // get our merchantid & secret
+        $merchantId = $this->config->getMerchantId( \ConfigurationProvider::HOSTED_TYPE,  $this->countryCode);
+        $secret = $this->config->getSecret( \ConfigurationProvider::HOSTED_TYPE, $this->countryCode);
+        
+        // message contains the credit request
+        $messageContents = array(
+            "transactionid" => $this->transactionId,
+            "capturedate" => $this->captureDate
+        ); 
+        $message = $xmlBuilder->getCreditTransactionXML( $messageContents );        
+
+        // calculate mac
+        $mac = hash("sha512", base64_encode($message) . $secret);
+        
+        // encode the request elements
+        $request_fields = array( 
+            'merchantid' => urlencode($merchantId),
+            'message' => urlencode(base64_encode($message)),
+            'mac' => urlencode($mac)
+        );
+        return $request_fields;
+    }
 //    /**
 //     * Do request using cURL
 //     * @return HostedAdminResponse
