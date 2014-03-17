@@ -59,6 +59,9 @@ class SveaResponse {
             }
 
         } 
+        elseif ($message != NULL) {
+            $this->response = new Svea\HostedPaymentResponse($message,$countryCode,$config);
+        } 
         else {
             $this->response = "Response is not recognized.";
         }
