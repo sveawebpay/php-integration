@@ -9,32 +9,32 @@ require_once SVEA_REQUEST_DIR . '/Includes.php';
  * @author Kristian Grossman-Madsen
  */
 class AnnulTransaction {
-//
-//    private $config;
-//    private $countryCode;
-//
-//    private $transactionId;
-//    
+
+    private $config;
+    private $countryCode;
+
+    private $transactionId;
+    
 //    function __construct($config) {
 //        $this->config = $config;
 //    }
-//    
+
 //    function setCountryCode( $countryCode ) {
 //        $this->countryCode = $countryCode;
 //        return $this;
 //    }
 //    
-//    function setTransactionId( $transactionId ) {
-//        $this->transactionId = $transactionId;
-//        return $this;
-//    }
-//    
-//    /**
-//     * prepares the elements used in the request to svea
-//     * 
-//     * @return HostedAdminResponse 
-//     */
-//    public function prepareRequest() {
+    function setTransactionId( $transactionId ) {
+        $this->transactionId = $transactionId;
+        return $this;
+    }
+    
+    /**
+     * prepares the elements used in the request to svea
+     * 
+     * @return HostedAdminResponse 
+     */
+    public function prepareRequest() {
 //
 //        $xmlBuilder = new HostedXmlBuilder();
 //        
@@ -59,7 +59,8 @@ class AnnulTransaction {
 //            'mac' => urlencode($mac)
 //        );
 //        return $request_fields;
-//    }
+    }
+        
 //    /**
 //     * Do request using cURL
 //     * @return HostedAdminResponse
