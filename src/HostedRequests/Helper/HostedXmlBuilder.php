@@ -228,7 +228,7 @@ class HostedXmlBuilder {
     }
 
     /*
-     * write xml for webservice "credit" call, used by WebPay::CreditTransaction
+     * write xml for webservice "annul" call, used by WebPay::AnnulTransaction
      *
      * @param elements -- associative array of element names and values
      * 
@@ -236,6 +236,26 @@ class HostedXmlBuilder {
     public function getAnnulTransactionXML( $elements ){
         $this->setBaseXML();
         $this->XMLWriter->startElement("annul");
+   
+        foreach( $elements as $element => $value ) {
+            $this->XMLWriter->writeElement($element,$value);
+        }
+
+        $this->XMLWriter->endElement();
+        $this->XMLWriter->endDocument();
+        
+        return $this->XMLWriter->flush();
+    }
+    
+    /*
+     * write xml for webservice "confirm" call, used by WebPay::ConfirmTransaction
+     *
+     * @param elements -- associative array of element names and values
+     * 
+     */
+    public function getConfirmTransactionXML( $elements ){
+        $this->setBaseXML();
+        $this->XMLWriter->startElement("confirm");
    
         foreach( $elements as $element => $value ) {
             $this->XMLWriter->writeElement($element,$value);

@@ -60,10 +60,11 @@ class ConfirmTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
     function test_confirm_card_transaction_not_found() {
              
         $transactionId = 987654;
+        $captureDate = "2014-03-21";
                 
-        $response = WebPay::creditTransaction( Svea\SveaConfig::getDefaultConfig() )
+        $response = WebPay::confirmTransaction( Svea\SveaConfig::getDefaultConfig() )
             ->setTransactionId( $transactionId )
-            ->setConfirmDate( $date )
+            ->setCaptureDate( $captureDate )
             ->setCountryCode( "SE" )
             ->doRequest();
 
