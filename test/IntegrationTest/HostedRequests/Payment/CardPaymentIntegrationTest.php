@@ -10,7 +10,7 @@ require_once $root . '/../../../TestUtil.php';
  */
 class CardPaymentIntegrationTest extends \PHPUnit_Framework_TestCase {
 
-    public function testDoCardPaymentRequest() {
+    public function test_doRequest_to_paypage_get_status_302_found() {
         $config = Svea\SveaConfig::getDefaultConfig();
         $rowFactory = new TestUtil();
         $form = WebPay::createOrder($config)
@@ -73,7 +73,7 @@ class CardPaymentIntegrationTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals("payPage", $redirect);
     }
     
-        public function test_CardPayment_RelativeDiscountAsFloat() {
+        public function test_accepts_relativeDiscount_as_float() {
         $config = Svea\SveaConfig::getDefaultConfig();
         $rowFactory = new TestUtil();
         $form = WebPay::createOrder($config)

@@ -83,9 +83,9 @@ class AnnulTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
     function test_manual_annul_card() {
 
         // Stop here and mark this test as incomplete.
-//        $this->markTestIncomplete(
-//            'skeleton for manual test of annul card transaction' // TODO
-//        );
+        $this->markTestIncomplete(
+            'skeleton for manual test of annul card transaction' // TODO
+        );
         
         // Set the below to match the transaction, then run the test.
         $customerrefno = 313;
