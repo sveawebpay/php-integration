@@ -31,8 +31,6 @@ class AnnulTransaction {
     
     /**
      * prepares the elements used in the request to svea
-     * 
-     * @return HostedAdminResponse 
      */
     public function prepareRequest() {
 
