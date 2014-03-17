@@ -42,13 +42,11 @@ class AnnulTransaction {
         $merchantId = $this->config->getMerchantId( \ConfigurationProvider::HOSTED_TYPE,  $this->countryCode);
         $secret = $this->config->getSecret( \ConfigurationProvider::HOSTED_TYPE, $this->countryCode);
         
-//        // message contains the credit request
-//        $messageContents = array(
-//            "transactionid" => $this->transactionId,
-//            "amounttocredit" => $this->creditAmount
-//        ); 
-//        $message = $xmlBuilder->getCreditTransactionXML( $messageContents );        
-        $message = "mocked";
+        // message contains the credit request
+        $messageContents = array(
+            "transactionid" => $this->transactionId
+        ); 
+        $message = $xmlBuilder->getAnnulTransactionXML( $messageContents );        
         
         // calculate mac
         $mac = hash("sha512", base64_encode($message) . $secret);
