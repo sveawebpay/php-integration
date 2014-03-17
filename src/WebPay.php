@@ -143,7 +143,8 @@ class WebPay {
     
     /**
      * Confirm an existing Card transaction.
-     * The transaction must have Svea status AUTHORIZED.
+     * The transaction must have Svea status AUTHORIZED. After a successful request
+     * the transaction will get status CONFIRMED.
      * Note that this only supports Card transactions.
      * 
      * @param ConfigurationProvider $config instance implementing ConfigurationProvider

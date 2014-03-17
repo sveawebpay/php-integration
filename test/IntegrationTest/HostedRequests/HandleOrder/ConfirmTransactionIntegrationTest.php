@@ -81,29 +81,36 @@ class ConfirmTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
      * run this manually after you've performed a card transaction and have set
      * the transaction status to success using the tools in the logg admin.
      */  
-//    function test_manual_credit_card() {
-//        
-//        // Stop here and mark this test as incomplete.
-//        $this->markTestIncomplete(
-//          'skeleton for manual test of credit card transaction'
-//        );
-//        
-//        // Set the below to match the transaction, then run the test.
-//        $customerrefno = 312;
-//        $transactionId = 579893;
-//                
-//        $request = WebPay::creditTransaction( Svea\SveaConfig::getDefaultConfig() )
-//            ->setTransactionId( $transactionId )
-//            ->setConfirmDate( $date )
-//            ->setCountryCode( "SE" );
-//    
-//        $response = $request->doRequest();        
-//        
-//        $this->assertInstanceOf( "Svea\HostedAdminResponse", $response );
-//        
-//        // if we receive an error from the service, the integration test passes
-//        $this->assertEquals( 1, $response->accepted );        
-//        $this->assertEquals( $customerrefno, $response->customerrefno );  
-//    }    
+    function test_manual_confirm_card() {
+        
+        // Stop here and mark this test as incomplete.
+        $this->markTestIncomplete(
+          'skeleton for manual test of confirm card transaction'
+        );
+        
+        // Set the below to match the transaction, then run the test.
+        $customerrefno = 314;
+        $transactionId = 579967;
+        $captureDate = "2014-03-21";
+
+                
+        $request = WebPay::confirmTransaction( Svea\SveaConfig::getDefaultConfig() )
+            ->setTransactionId( $transactionId )
+            ->setCaptureDate( $captureDate )
+            ->setCountryCode( "SE" );
+    
+        $response = $request->doRequest();        
+        
+        $this->assertInstanceOf( "Svea\HostedAdminResponse", $response );
+
+//        print_r( $response );
+        
+        // if we receive an error from the service, the integration test passes
+        $this->assertEquals( 1, $response->accepted );        
+        $this->assertEquals( $customerrefno, $response->customerrefno );  
+        
+
+        
+    }    
 }
 ?>

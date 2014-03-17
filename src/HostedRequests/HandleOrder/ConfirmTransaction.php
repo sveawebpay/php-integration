@@ -4,7 +4,7 @@ namespace Svea;
 require_once SVEA_REQUEST_DIR . '/Includes.php';
 
 /**
- * Confirms a Card transaction
+ * Confirms a Card transaction. 
  * 
  * @author Kristian Grossman-Madsen
  */
@@ -31,8 +31,7 @@ class ConfirmTransaction {
     }
     
     /**
-     * Use setCaptureDate to tell when to capture the transaction, i.e. the date
-     * when the Svea transaction status cahnges from AUTHORIZED to CONFIRMED.
+     * Use setCaptureDate to tell when to capture the transaction.
      * 
      * @param string $captureDate ISO-8601 extended date format (YYYY-MM-DD)
      * @return \Svea\ConfirmTransaction
