@@ -15,7 +15,14 @@ require_once 'HostedResponse.php';
 class HostedAdminResponse extends HostedResponse{
 
     /**
+     * Create an new HostedAdminResponse which handles the webservice response
+     * from the following methods:
+     * creditTransaction(),
+     * annulTransaction(),
+     * getPaymentMethods()
      * 
+     * Will set response attribute accepted to 0 if the mac is invalid or the
+     * response is malformed.
      * 
      * @param SimpleXMLElement $message
      * @param string $countryCode
@@ -46,25 +53,36 @@ class HostedAdminResponse extends HostedResponse{
         }
     }
 
-    protected function formatXml($xml) {
-        $xmlElement = new \SimpleXMLElement($xml);
+    /**
+     * formatXml() parses the hosted admin response xml into an object, and
+     * then sets the response attributes accordingly.
+     * 
+     * Handles responses from the following method requests:
+     * getPaymentMethods()
+     * creditTransaction()
+     * annulTransaction()
+     * 
+     * @param type $hostedAdminResponseXML
+     */
+    protected function formatXml($hostedAdminResponseXML) {
+        $hostedAdminResponse = new \SimpleXMLElement($hostedAdminResponseXML);
         
-        if ((string)$xmlElement->statuscode == '0') {
+        if ((string)$hostedAdminResponse->statuscode == '0') {
             $this->accepted = 1;
             $this->resultcode = '0';
         } else {
             $this->accepted = 0;
-            $this->setErrorParams( (string)$xmlElement->statuscode ); 
+            $this->setErrorParams( (string)$hostedAdminResponse->statuscode ); 
         }
         
         //getPaymentMethods
-        if(property_exists($xmlElement,"paymentmethods")){
-            $this->paymentMethods = (array)$xmlElement->paymentmethods->paymentmethod;
+        if(property_exists($hostedAdminResponse,"paymentmethods")){
+            $this->paymentMethods = (array)$hostedAdminResponse->paymentmethods->paymentmethod;
         }
         
         //creditTransaction or annulTransaction        
-        if(property_exists($xmlElement->transaction,"customerrefno")){
-            $this->customerrefno = (string)$xmlElement->transaction->customerrefno;
+        if(property_exists($hostedAdminResponse->transaction,"customerrefno")){
+            $this->customerrefno = (string)$hostedAdminResponse->transaction->customerrefno;
         }    
     }
 
