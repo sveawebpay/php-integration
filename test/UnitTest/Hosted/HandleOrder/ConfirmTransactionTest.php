@@ -23,52 +23,52 @@ class ConfirmTransactionTest extends PHPUnit_Framework_TestCase {
         
         $this->assertInstanceOf( "Svea\ConfirmTransaction", $this->confirmObject);      
     }
-//    
-//    function test_setCountryCode(){
-//        
-//        $countryCode = "SE";       
-//        $this->confirmObject->setCountryCode( $countryCode );
-//        
-//        //$this->assertEquals( $transactionId, $confirmObject->transactionId );    //oops, transactionId is private.
-//        $this->assertEquals( $countryCode, PHPUnit_Framework_Assert::readAttribute($this->confirmObject, 'countryCode') );
-//    }
-//    
-//    function test_setTransactionId( ){
-//        
-//        $transactionId = 987654;       
-//        $this->confirmObject->setTransactionId( $transactionId );
-//        
-//        //$this->assertEquals( $transactionId, $confirmObject->transactionId );    //oops, transactionId is private.
-//        $this->assertEquals( $transactionId, PHPUnit_Framework_Assert::readAttribute($this->confirmObject, 'transactionId') );
-//    }
-//    
-//    function test_setConfirmAmount() {
-//        
-//        $confirmAmount = 100;
-//        $this->confirmObject->setConfirmAmount( $confirmAmount );
-//        
-//        $this->assertEquals( $confirmAmount, PHPUnit_Framework_Assert::readAttribute($this->confirmObject, 'confirmAmount') );
-//    }
-//              
-//    function test_prepareRequest_array_contains_mac_merchantid_message() {
-//
-//        // set up confirmTransaction object & get request form
-//        $transactionId = 987654;       
-//        $this->confirmObject->setTransactionId( $transactionId );
-//
-//        $confirmAmount = 100;
-//        $this->confirmObject->setConfirmAmount( $confirmAmount );
-//        
-//        $countryCode = "SE";
-//        $this->confirmObject->setCountryCode($countryCode);
-//                
-//        $form = $this->confirmObject->prepareRequest();
-//
-//        // prepared request is message (base64 encoded), merchantid, mac
-//        $this->assertTrue( isset($form['merchantid']) );
-//        $this->assertTrue( isset($form['mac']) );
-//        $this->assertTrue( isset($form['message']) );
-//    }
+    
+    function test_setCountryCode(){
+        
+        $countryCode = "SE";       
+        $this->confirmObject->setCountryCode( $countryCode );
+        
+        //$this->assertEquals( $transactionId, $confirmObject->transactionId );    //oops, transactionId is private.
+        $this->assertEquals( $countryCode, PHPUnit_Framework_Assert::readAttribute($this->confirmObject, 'countryCode') );
+    }
+    
+    function test_setTransactionId( ){
+        
+        $transactionId = 987654;       
+        $this->confirmObject->setTransactionId( $transactionId );
+        
+        //$this->assertEquals( $transactionId, $confirmObject->transactionId );    //oops, transactionId is private.
+        $this->assertEquals( $transactionId, PHPUnit_Framework_Assert::readAttribute($this->confirmObject, 'transactionId') );
+    }
+    
+    function test_setCaptureDate( ) {
+        
+        $captureDate = "2014-03-21";
+        $this->confirmObject->setCaptureDate( $captureDate );
+        
+        $this->assertEquals( $captureDate, PHPUnit_Framework_Assert::readAttribute($this->confirmObject, 'captureDate') );
+    }
+              
+    function test_prepareRequest_array_contains_mac_merchantid_message() {
+
+        // set up confirmTransaction object & get request form
+        $transactionId = 987654;       
+        $this->confirmObject->setTransactionId( $transactionId );
+
+        $captureDate = "2014-03-21";
+        $this->confirmObject->setCaptureDate( $captureDate );
+        
+        $countryCode = "SE";
+        $this->confirmObject->setCountryCode($countryCode);
+                
+        $form = $this->confirmObject->prepareRequest();
+
+        // prepared request is message (base64 encoded), merchantid, mac
+        $this->assertTrue( isset($form['merchantid']) );
+        $this->assertTrue( isset($form['mac']) );
+        $this->assertTrue( isset($form['message']) );
+    }
 //    
 //    function test_prepareRequest_has_correct_merchantid_mac_and_confirm_request_message_contents() {
 //

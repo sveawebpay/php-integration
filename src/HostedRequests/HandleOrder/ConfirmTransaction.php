@@ -11,29 +11,36 @@ require_once SVEA_REQUEST_DIR . '/Includes.php';
 class ConfirmTransaction {
 
     private $config;
-//    private $countryCode;
-//
-//    private $transactionId;
+    private $countryCode;
+
+    private $transactionId;
 //    private $captureDate;
     
     function __construct($config) {
         $this->config = $config;
     }
     
-//    function setCountryCode( $countryCode ) {
-//        $this->countryCode = $countryCode;
-//        return $this;
-//    }
-//    
-//    function setTransactionId( $transactionId ) {
-//        $this->transactionId = $transactionId;
-//        return $this;
-//    }
-//    
-//    function setCaptureDate( $captureDate ) {
-//        $this->captureDate = $captureDate;
-//        return $this;
-//    }
+    function setCountryCode( $countryCode ) {
+        $this->countryCode = $countryCode;
+        return $this;
+    }
+    
+    function setTransactionId( $transactionId ) {
+        $this->transactionId = $transactionId;
+        return $this;
+    }
+    
+    /**
+     * Use setCaptureDate to tell when to capture the transaction, i.e. the date
+     * when the Svea transaction status cahnges from AUTHORIZED to CONFIRMED.
+     * 
+     * @param string $captureDate ISO-8601 extended date format (YYYY-MM-DD)
+     * @return \Svea\ConfirmTransaction
+     */
+    function setCaptureDate( $captureDate ) {
+        $this->captureDate = $captureDate;
+        return $this;
+    }
 //    
 //    /**
 //     * prepares the elements used in the request to svea
