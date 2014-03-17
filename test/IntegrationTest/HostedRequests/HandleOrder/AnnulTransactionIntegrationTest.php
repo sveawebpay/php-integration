@@ -66,7 +66,6 @@ class AnnulTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
             ->setCountryCode( "SE" )
             ->doRequest();
 
-        // TODO remove -- make sure we get a SveaResponse object back
         $this->assertInstanceOf( "Svea\HostedAdminResponse", $response );
         
         // if we receive an error from the service, the integration test passes

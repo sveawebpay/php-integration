@@ -4,21 +4,22 @@ namespace Svea;
 require_once SVEA_REQUEST_DIR . '/Includes.php';
 
 /**
- * Annul a Card transaction
+ * Confirms a Card transaction. 
  * 
  * @author Kristian Grossman-Madsen
  */
-class AnnulTransaction {
+class ConfirmTransaction {
 
     private $config;
     private $countryCode;
 
     private $transactionId;
+//    private $captureDate;
     
     function __construct($config) {
         $this->config = $config;
     }
-
+    
     function setCountryCode( $countryCode ) {
         $this->countryCode = $countryCode;
         return $this;
@@ -26,6 +27,17 @@ class AnnulTransaction {
     
     function setTransactionId( $transactionId ) {
         $this->transactionId = $transactionId;
+        return $this;
+    }
+    
+    /**
+     * Use setCaptureDate to tell when to capture the transaction.
+     * 
+     * @param string $captureDate ISO-8601 extended date format (YYYY-MM-DD)
+     * @return \Svea\ConfirmTransaction
+     */
+    function setCaptureDate( $captureDate ) {
+        $this->captureDate = $captureDate;
         return $this;
     }
     
@@ -40,12 +52,13 @@ class AnnulTransaction {
         $merchantId = $this->config->getMerchantId( \ConfigurationProvider::HOSTED_TYPE,  $this->countryCode);
         $secret = $this->config->getSecret( \ConfigurationProvider::HOSTED_TYPE, $this->countryCode);
         
-        // message contains the credit request
+        // message contains the confirm request
         $messageContents = array(
-            "transactionid" => $this->transactionId
+            "transactionid" => $this->transactionId,
+            "capturedate" => $this->captureDate
         ); 
-        $message = $xmlBuilder->getAnnulTransactionXML( $messageContents );        
-        
+        $message = $xmlBuilder->getConfirmTransactionXML( $messageContents );        
+
         // calculate mac
         $mac = hash("sha512", base64_encode($message) . $secret);
         
@@ -57,7 +70,6 @@ class AnnulTransaction {
         );
         return $request_fields;
     }
-        
     /**
      * Do request using cURL
      * @return HostedAdminResponse
@@ -72,7 +84,7 @@ class AnnulTransaction {
         rtrim($fieldsString, '&');
 
         $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $this->config->getEndpoint(SveaConfigurationProvider::HOSTED_ADMIN_TYPE). "annul");
+        curl_setopt($ch, CURLOPT_URL, $this->config->getEndpoint(SveaConfigurationProvider::HOSTED_ADMIN_TYPE). "confirm");
         curl_setopt($ch, CURLOPT_POST, count($fields));
         curl_setopt($ch, CURLOPT_POSTFIELDS, $fieldsString);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
@@ -82,7 +94,7 @@ class AnnulTransaction {
         $responseXML = curl_exec($ch);
         curl_close($ch);
         
-        // create SveaResponse to handle annul response
+        // create SveaResponse to handle confirm response
         $responseObj = new \SimpleXMLElement($responseXML);        
         $sveaResponse = new \SveaResponse($responseObj, $this->countryCode, $this->config);
 
