@@ -4,17 +4,17 @@ namespace Svea;
 require_once SVEA_REQUEST_DIR . '/Includes.php';
 
 /**
- * Confirms a Card transaction. 
+ * Lowers the amount of a Card transaction. 
  * 
  * @author Kristian Grossman-Madsen
  */
-class ConfirmTransaction {
+class LowerTransaction {
 
     private $config;
     private $countryCode;
 
     private $transactionId;
-    private $captureDate;
+    private $amountToLower;
     
     function __construct($config) {
         $this->config = $config;
@@ -24,20 +24,14 @@ class ConfirmTransaction {
         $this->countryCode = $countryCode;
         return $this;
     }
-    
+
     function setTransactionId( $transactionId ) {
         $this->transactionId = $transactionId;
         return $this;
     }
     
-    /**
-     * Use setCaptureDate to tell when to capture the transaction.
-     * 
-     * @param string $captureDate ISO-8601 extended date format (YYYY-MM-DD)
-     * @return \Svea\ConfirmTransaction
-     */
-    function setCaptureDate( $captureDate ) {
-        $this->captureDate = $captureDate;
+    function setAmountToLower( $transactionId ) {
+        $this->amountToLower = $transactionId;
         return $this;
     }
     
@@ -55,9 +49,9 @@ class ConfirmTransaction {
         // message contains the confirm request
         $messageContents = array(
             "transactionid" => $this->transactionId,
-            "capturedate" => $this->captureDate
+            "amounttolower" => $this->amountToLower
         ); 
-        $message = $xmlBuilder->getConfirmTransactionXML( $messageContents );        
+        $message = $xmlBuilder->getLowerTransactionXML( $messageContents );     // TODO inject method into HostedXMLBuilder instead
 
         // calculate mac
         $mac = hash("sha512", base64_encode($message) . $secret);
@@ -70,8 +64,12 @@ class ConfirmTransaction {
         );
         return $request_fields;
     }
+
     /**
      * Do request using cURL
+     * 
+     * tested via LowerTransactionIntegrationTest
+     * 
      * @return HostedAdminResponse
      */
     public function doRequest(){
@@ -84,7 +82,7 @@ class ConfirmTransaction {
         rtrim($fieldsString, '&');
 
         $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $this->config->getEndpoint(SveaConfigurationProvider::HOSTED_ADMIN_TYPE). "confirm");
+        curl_setopt($ch, CURLOPT_URL, $this->config->getEndpoint(SveaConfigurationProvider::HOSTED_ADMIN_TYPE). "loweramount");
         curl_setopt($ch, CURLOPT_POST, count($fields));
         curl_setopt($ch, CURLOPT_POSTFIELDS, $fieldsString);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);

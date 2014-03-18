@@ -13,12 +13,12 @@ require_once $root . '/../../../TestUtil.php';
 class AnnulTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
  
    /**
-     * test_card_creditTransaction_success creates an order using card payment, 
+     * test_annulTransaction_card_success creates an order using card payment, 
      * pays using card & receives a transaction id, then credits the transaction
      * 
      * used as acceptance criteria/smoke test for credit transaction feature
      */
-    function _test_annulTransaction_card_success() {
+    function test_annulTransaction_card_success() {
       
         // not yet implemented, requires webdriver support
 
@@ -74,7 +74,7 @@ class AnnulTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
     }
     
     /**
-     * test_manual_card_credit 
+     * test_manual_annul_card 
      * 
      * run this manually after you've performed a card transaction and have set
      * the transaction status to success using the tools in the logg admin.

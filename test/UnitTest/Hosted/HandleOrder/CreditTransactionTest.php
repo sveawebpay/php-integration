@@ -29,7 +29,6 @@ class CreditTransactionTest extends PHPUnit_Framework_TestCase {
         $countryCode = "SE";       
         $this->creditObject->setCountryCode( $countryCode );
         
-        //$this->assertEquals( $transactionId, $creditObject->transactionId );    //oops, transactionId is private.
         $this->assertEquals( $countryCode, PHPUnit_Framework_Assert::readAttribute($this->creditObject, 'countryCode') );
     }
     
@@ -38,7 +37,6 @@ class CreditTransactionTest extends PHPUnit_Framework_TestCase {
         $transactionId = 987654;       
         $this->creditObject->setTransactionId( $transactionId );
         
-        //$this->assertEquals( $transactionId, $creditObject->transactionId );    //oops, transactionId is private.
         $this->assertEquals( $transactionId, PHPUnit_Framework_Assert::readAttribute($this->creditObject, 'transactionId') );
     }
     
@@ -70,7 +68,7 @@ class CreditTransactionTest extends PHPUnit_Framework_TestCase {
         $this->assertTrue( isset($form['message']) );
     }
     
-    function test_prepareRequest_has_correct_merchantid_mac_and_credit_request_message_contents() {
+    function test_prepareRequest_has_correct_merchantid_mac_and_creditTransaction_request_message_contents() {
 
         // set up creditTransaction object & get request form
         $transactionId = 987654;       
