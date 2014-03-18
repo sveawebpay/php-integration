@@ -13,12 +13,12 @@ require_once $root . '/../../../TestUtil.php';
 class CreditTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
  
    /**
-     * test_card_creditTransaction_success creates an order using card payment, 
+     * test_creditTransaction_card_success creates an order using card payment, 
      * pays using card & receives a transaction id, then credits the transaction
      * 
      * used as acceptance criteria/smoke test for credit transaction feature
      */
-    function _test_creditTransaction_card_success() { 
+    function test_creditTransaction_card_success() { 
       
         // not yet implemented, requires webdriver support
 

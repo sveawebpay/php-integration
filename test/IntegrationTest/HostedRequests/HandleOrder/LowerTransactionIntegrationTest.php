@@ -6,19 +6,19 @@ require_once $root . '/../../../../src/Includes.php';
 require_once $root . '/../../../TestUtil.php';
 
 /**
- * ConfirmTransactionIntegrationTest 
+ * CreditTransactionIntegrationTest 
  * 
  * @author Kristian Grossman-Madsen for Svea WebPay
  */
-class ConfirmTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
+class CreditTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
  
    /**
-     * test_confirmTransaction_card_success creates an order using card payment, 
-     * pays using card & receives a transaction id, then confirms the transaction
+     * test_card_creditTransaction_success creates an order using card payment, 
+     * pays using card & receives a transaction id, then credits the transaction
      * 
      * used as acceptance criteria/smoke test for credit transaction feature
      */
-    function test_confirmTransaction_card_success() { 
+    function _test_creditTransaction_card_success() { 
       
         // not yet implemented, requires webdriver support
 
@@ -44,27 +44,27 @@ class ConfirmTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
 
         // do request modeled on CardPymentIntegrationTest.php
                 
-        // make sure the transaction has status AUTHORIZED at Svea
+        // make sure the transaction has status SUCCESS at Svea
         
-        // confirm transcation using above the transaction transactionId
+        // credit transcation using above the transaction transactionId
         
-        // assert response from confirmTransaction equals success
+        // assert response from creditTransaction equals success
     }
     
     
     /**
-     * test_confirm_card_transaction_not_found 
+     * test_credit_card_transaction_not_found 
      * 
      * used as initial acceptance criteria for credit transaction feature
      */  
-    function test_confirm_card_transaction_not_found() {
+    function test_credit_card_transaction_not_found() {
              
         $transactionId = 987654;
-        $captureDate = "2014-03-21";
+        $amount = 100;
                 
-        $response = WebPay::confirmTransaction( Svea\SveaConfig::getDefaultConfig() )
+        $response = WebPay::creditTransaction( Svea\SveaConfig::getDefaultConfig() )
             ->setTransactionId( $transactionId )
-            ->setCaptureDate( $captureDate )
+            ->setCreditAmount( $amount )
             ->setCountryCode( "SE" )
             ->doRequest();
 
@@ -81,36 +81,30 @@ class ConfirmTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
      * run this manually after you've performed a card transaction and have set
      * the transaction status to success using the tools in the logg admin.
      */  
-    function test_manual_confirm_card() {
+    function test_manual_credit_card() {
         
         // Stop here and mark this test as incomplete.
         $this->markTestIncomplete(
-          'skeleton for manual test of confirm card transaction'
+          'skeleton for manual test of credit card transaction'
         );
         
         // Set the below to match the transaction, then run the test.
-        $customerrefno = 314;
-        $transactionId = 579967;
-        $captureDate = "2014-03-21";
-
+        $customerrefno = 312;
+        $transactionId = 579893;
+        $amount = 100;
                 
-        $request = WebPay::confirmTransaction( Svea\SveaConfig::getDefaultConfig() )
+        $request = WebPay::creditTransaction( Svea\SveaConfig::getDefaultConfig() )
             ->setTransactionId( $transactionId )
-            ->setCaptureDate( $captureDate )
+            ->setCreditAmount( $amount )
             ->setCountryCode( "SE" );
     
         $response = $request->doRequest();        
         
         $this->assertInstanceOf( "Svea\HostedAdminResponse", $response );
-
-//        print_r( $response );
         
         // if we receive an error from the service, the integration test passes
         $this->assertEquals( 1, $response->accepted );        
         $this->assertEquals( $customerrefno, $response->customerrefno );  
-        
-
-        
     }    
 }
 ?>
