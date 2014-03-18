@@ -78,33 +78,46 @@ class LowerTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
     /**
      * test_manual_lower_transaction_amount 
      * 
-     * run this manually after you've performed a card transaction and have set
-     * the transaction status to success using the tools in the logg admin.
+     * run this test manually after you've performed a card transaction and have
+     * gotten the the transaction details needed
      */  
-//    function test_manual_lower_transaction_amount() {
-//        
-//        // Stop here and mark this test as incomplete.
-//        $this->markTestIncomplete(
-//          'skeleton for manual test of lower transaction amount'
-//        );
-//        
-//        // Set the below to match the transaction, then run the test.
-//        $customerrefno = 312;
-//        $transactionId = 579893;
-//        $amount = 100;
-//                
-//        $request = WebPay::lowerTransaction( Svea\SveaConfig::getDefaultConfig() )
-//            ->setTransactionId( $transactionId )
-//            ->setAmountToLower( $amountToLower )
-//            ->setCountryCode( "SE" );
-//    
-//        $response = $request->doRequest();        
-//        
-//        $this->assertInstanceOf( "Svea\HostedAdminResponse", $response );
-//        
-//        // if we receive an error from the service, the integration test passes
-//        $this->assertEquals( 1, $response->accepted );        
-//        $this->assertEquals( $customerrefno, $response->customerrefno );  
-//    }    
+    function test_manual_lower_transaction_amount() {
+        
+        // Stop here and mark this test as incomplete.
+        $this->markTestIncomplete(
+          'skeleton for manual test of lower transaction amount'
+        );
+        
+        // Set the below to match the transaction, then run the test.
+        $customerrefno = 317;
+        $transactionId = 580012;
+        $amountToLower = 3000;   // also check that status if lower by entire amount == ANNULLED
+                
+        // i.e. order of 117 kr => 11700 at Svea, Svea status AUTHORIZED
+        // - 100 => success, 11600 at Svea, Svea status AUTHORIZED
+        // - 11600 => success, Svea status ANNULLED
+        // - 1 => failure, accepted = 0, resultcode = "105 (ILLEGAL_TRANSACTIONSTATUS)", errormessage = "Invalid transaction status."
+        // 
+        // new order of 130 kr => 13000 at Svea
+        // - 13001 => failure, accepted = 0, resultcode = "305 (BAD_AMOUNT), errormessage = "Invalid value for amount."
+        // - 10000 => success, success, 3000 at Svea, Svea status AUTHORIZED
+        // - 3001 => failure, accepted = 0, resultcode = "305 (BAD_AMOUNT), errormessage = "Invalid value for amount."
+        // - 3000 => success, Svea status ANNULLED
+        
+        $request = WebPay::lowerTransaction( Svea\SveaConfig::getDefaultConfig() )
+            ->setTransactionId( $transactionId )
+            ->setAmountToLower( $amountToLower )
+            ->setCountryCode( "SE" );
+    
+        $response = $request->doRequest();        
+        
+        print_r($response);        
+        
+        $this->assertInstanceOf( "Svea\HostedAdminResponse", $response );
+        
+        // if we receive an error from the service, the integration test passes
+        $this->assertEquals( 1, $response->accepted );        
+        $this->assertEquals( $customerrefno, $response->customerrefno );  
+    }    
 }
 ?>
