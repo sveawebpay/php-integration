@@ -45,6 +45,9 @@ class GetPaymentMethods {
     public function doRequest(){
         $fields = $this->prepareRequest();
                $fieldsString = "";
+               
+print_r( "\ngetPaymentMethods::doRequest: " ); print_r( $fields );               
+               
         foreach ($fields as $key => $value) {
             $fieldsString .= $key.'='.$value.'&';
         }
@@ -62,8 +65,12 @@ class GetPaymentMethods {
 
         $responseObj = new \SimpleXMLElement($responseXML);
 
+print_r( "\ngetPaymentMethods::doRequest responseObj: " ); print_r( $responseObj );             
 
         $sveaResponse = new \SveaResponse($responseObj, $this->countryCode, $this->config);
+        
+print_r( "\ngetPaymentMethods::doRequest sveaResponse: " ); print_r( $sveaResponse );     
+
         $paymentmethods = array();
         foreach ($sveaResponse->response->paymentMethods as $method) {
             $paymentmethods[] = (string)$method;

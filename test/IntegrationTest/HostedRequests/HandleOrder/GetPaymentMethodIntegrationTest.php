@@ -11,10 +11,16 @@ require_once $root . '/../../../TestUtil.php';
 class GetPaymentMethodIntegrationTest extends \PHPUnit_Framework_TestCase {
 
     function testGetAllPaymentMethods(){
+        
+print_r("\ntestGetAllPaymentMethods: " . date('c') . "\n " );
+        
         $config = Svea\SveaConfig::getDefaultConfig();
         $response = WebPay::getPaymentMethods($config)
                 ->setCountryCode("SE")
                 ->doRequest();
+        
+        print_r( "\ntestGetAllPaymentMethods: " ); print_r( $response );
+        
         $this->assertEquals(PaymentMethod::NORDEA_SE, $response[0]);
         $this->assertEquals(PaymentMethod::SEB_SE, $response[1]);
         $this->assertEquals(PaymentMethod::KORTCERT, $response[2]);
