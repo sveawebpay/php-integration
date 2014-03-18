@@ -77,7 +77,16 @@ class HostedAdminResponse extends HostedResponse{
         
         //getPaymentMethods
         if(property_exists($hostedAdminResponse,"paymentmethods")){
-            $this->paymentMethods = (array)$hostedAdminResponse->paymentmethods->paymentmethod;
+
+//print_r("\nHAR: \n"); print_r($hostedAdminResponse->paymentmethods);
+
+//            $this->paymentMethods = (array)$hostedAdminResponse->paymentmethods->paymentmethod;     // seems to break under php 5.3            
+            foreach( $hostedAdminResponse->paymentmethods->paymentmethod as $paymentmethod) {       // compatibility w/php 5.3
+                $this->paymentMethods[] = (string)$paymentmethod;
+            }
+//
+//print_r("\nHAR2: \n"); print_r($this->paymentMethods);
+            
         }
         
         //creditTransaction or annulTransaction        
