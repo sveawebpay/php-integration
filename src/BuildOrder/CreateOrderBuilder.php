@@ -96,7 +96,7 @@ class CreateOrderBuilder {
     /**
      *
      * @param type $itemCustomerObject
-     * @return \createOrder|\CreateOrderBuilder
+     * @return $this
      */
 
      public function addCustomerDetails($itemCustomerObject) {
@@ -106,7 +106,7 @@ class CreateOrderBuilder {
 
     /**
      * @param OrderRow $orderRow
-     * @return \CreateOrderBuilder
+     * @return $this
      */
     public function addOrderRow($itemOrderRowObject) {
         if (is_array($itemOrderRowObject)) {
@@ -121,7 +121,7 @@ class CreateOrderBuilder {
 
     /**
      * @param type $itemFeeObject
-     * @return \CreateOrderBuilder
+     * @return $this
      */
     public function addFee($itemFeeObject) {
          if (is_array($itemFeeObject)) {
@@ -146,26 +146,25 @@ class CreateOrderBuilder {
     }
 
     /**
-     * @param type $itemDiscounObject
-     * @return \CreateOrderBuilder
+     * @param mixed $itemDiscountObject instance of either Svea\FixedDiscount or Svea\RelativeDiscount
+     * @return $this
      */
-    public function addDiscount($itemDiscounObject) {
-        if (is_array($itemDiscounObject)) {
-            foreach ($itemDiscounObject as $row) {
+    public function addDiscount($itemDiscountObject) {
+        if (is_array($itemDiscountObject)) {
+            foreach ($itemDiscountObject as $row) {
                 if (get_class($row) == "Svea\FixedDiscount") {
                     array_push($this->fixedDiscountRows, $row);
                 }
                 if (get_class($row) == "Svea\RelativeDiscount") {
                     array_push($this->relativeDiscountRows, $row);
                 }
-
             }
         }
         else {
-            if (get_class($itemDiscounObject) == "Svea\FixedDiscount") {
+            if (get_class($itemDiscountObject) == "Svea\FixedDiscount") {
                 array_push($this->fixedDiscountRows, $itemDiscounObject);
             }
-            if (get_class($itemDiscounObject) == "Svea\RelativeDiscount") {
+            if (get_class($itemDiscountObject) == "Svea\RelativeDiscount") {
                 array_push($this->relativeDiscountRows, $itemDiscounObject);
             }
        }
@@ -175,7 +174,7 @@ class CreateOrderBuilder {
 
     /**
      * @param type $countryCodeAsString ex. "SE"
-     * @return \createOrder
+     * @return $this
      */
     public function setCountryCode($countryCodeAsString) {
         $this->countryCode = $countryCodeAsString;
@@ -183,8 +182,8 @@ class CreateOrderBuilder {
     }
 
     /**
-     * @param type $currencyAsString ex. "SEK"
-     * @return \createOrder
+     * @param string $currencyAsString ex. "SEK"
+     * @return $this
      */
     public function setCurrency($currencyAsString) {
         $currency = strtoupper( trim($currencyAsString) );
@@ -193,8 +192,8 @@ class CreateOrderBuilder {
     }
 
     /**
-     * @param type $customerReferenceAsString ex. "test".rand(0 9999)
-     * @return \createOrder
+     * @param string $customerReferenceAsString ex. "test".rand(0 9999)
+     * @return $this
      */
     public function setCustomerReference($customerReferenceAsString) {
         $this->customerReference = $customerReferenceAsString;
@@ -202,8 +201,8 @@ class CreateOrderBuilder {
     }
 
     /**
-     * @param type $clientOrderNumberAsString
-     * @return \createOrder
+     * @param string $clientOrderNumberAsString
+     * @return $this
      */
     public function setClientOrderNumber($clientOrderNumberAsString) {
         $this->clientOrderNumber = $clientOrderNumberAsString;
@@ -211,23 +210,14 @@ class CreateOrderBuilder {
     }
 
     /**
-     * @param type $orderDateAsString ex date('c') eg. 'Y-m-d\TH:i:s\Z'
-     * @return \createOrder
+     * @param string $orderDateAsString ex date('c') eg. 'Y-m-d\TH:i:s\Z'
+     * @return $this
      */
     public function setOrderDate($orderDateAsString) {
         $this->orderDate = $orderDateAsString;
         return $this;
     }
 
-    /** Recieve string from getAddresses
-     * @param type $addressSelectorAsString
-     * @return \createOrder
-
-    public function setAddressSelector($addressSelectorAsString) {
-        $this->addressSelector = $addressSelectorAsString;
-        return $this;
-    }
-     */
     /**
      * Start creating cardpayment via PayPage. Returns Paymentform to integrate in shop.
      * @return Svea\HostedPayment
@@ -258,7 +248,7 @@ class CreateOrderBuilder {
      * Start creating payment with a specific paymentmethod. This function will go directly to the paymentmethod specified.
      * Paymentmethods are found in appendix in our documentation.
      * Returns Paymentform to integrate in shop.
-     * @param type PaymentMethod $paymentMethodAsConst, ex. PaymentMethod::SEB_SE
+     * @param string PaymentMethod $paymentMethodAsConst, ex. PaymentMethod::SEB_SE
      * @return Svea\PaymentMethodPayment
      */
     public function usePaymentMethod($paymentMethodAsConst) {
@@ -275,8 +265,8 @@ class CreateOrderBuilder {
 
     /**
      * Start Creating paymentplan payment
-     * @param type $campaignCodeAsString
-     * @param type $sendAutomaticGiroPaymentFormAsBool optional
+     * @param string $campaignCodeAsString
+     * @param boolean $sendAutomaticGiroPaymentFormAsBool optional
      * @return Svea\PaymentPlanPayment
      */
     public function usePaymentPlanPayment($campaignCodeAsString, $sendAutomaticGiroPaymentFormAsBool = 0) {
@@ -288,7 +278,7 @@ class CreateOrderBuilder {
    /**
      * For testfunctions
      * @param type $func
-     * @return \createOrder
+     * @return $this
      */
     public function run($func) {
         $func($this);
