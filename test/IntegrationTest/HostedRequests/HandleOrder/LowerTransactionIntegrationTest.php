@@ -60,7 +60,7 @@ class LowerTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
     function test_lower_transaction_transaction_not_found() {
              
         $transactionId = 987654;
-        $amount = 100;
+        $amountToLower = 100;
                 
         $response = WebPay::lowerTransaction( Svea\SveaConfig::getDefaultConfig() )
             ->setTransactionId( $transactionId )

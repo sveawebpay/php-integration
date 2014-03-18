@@ -14,7 +14,7 @@ class ConfirmTransaction {
     private $countryCode;
 
     private $transactionId;
-//    private $captureDate;
+    private $captureDate;
     
     function __construct($config) {
         $this->config = $config;

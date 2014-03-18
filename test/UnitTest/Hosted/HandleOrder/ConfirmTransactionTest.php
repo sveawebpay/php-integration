@@ -29,7 +29,6 @@ class ConfirmTransactionTest extends PHPUnit_Framework_TestCase {
         $countryCode = "SE";       
         $this->confirmObject->setCountryCode( $countryCode );
         
-        //$this->assertEquals( $transactionId, $confirmObject->transactionId );    //oops, transactionId is private.
         $this->assertEquals( $countryCode, PHPUnit_Framework_Assert::readAttribute($this->confirmObject, 'countryCode') );
     }
     
@@ -38,7 +37,6 @@ class ConfirmTransactionTest extends PHPUnit_Framework_TestCase {
         $transactionId = 987654;       
         $this->confirmObject->setTransactionId( $transactionId );
         
-        //$this->assertEquals( $transactionId, $confirmObject->transactionId );    //oops, transactionId is private.
         $this->assertEquals( $transactionId, PHPUnit_Framework_Assert::readAttribute($this->confirmObject, 'transactionId') );
     }
     
@@ -70,7 +68,7 @@ class ConfirmTransactionTest extends PHPUnit_Framework_TestCase {
         $this->assertTrue( isset($form['message']) );
     }
     
-    function test_prepareRequest_has_correct_merchantid_mac_and_confirm_request_message_contents() {
+    function test_prepareRequest_has_correct_merchantid_mac_and_confirmTransaction_request_message_contents() {
 
         // set up confirmTransaction object & get request form
         $transactionId = 987654;       

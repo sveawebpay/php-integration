@@ -57,7 +57,7 @@ class AnnulTransactionTest extends PHPUnit_Framework_TestCase {
         $this->assertTrue( isset($form['message']) );
     }
     
-        function test_prepareRequest_request_has_correct_merchantid_mac_and_annul_request_message_contents() {
+        function test_prepareRequest_request_has_correct_merchantid_mac_and_annulTransaction_request_message_contents() {
 
         // set up creditTransaction object & get request form
         $transactionId = 987654;       
