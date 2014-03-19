@@ -17,84 +17,61 @@ require_once SVEA_REQUEST_DIR . '/Includes.php';
  * @author Anneli Halld'n, Daniel Brolund, Kristian Grossman-Madsen for Svea Webpay
  */
 class CreateOrderBuilder {
-    /**
-     * @var array<OrderRow> Array Rows containing Product rows
-     */
+    /** @var OrderRow[] */
     public $orderRows = array();
-    /**
-     * @attrib array<ShippingFee> Array ShippingFeeRows containing shippingFee rows
-     */
+    
+    /** @var ShippingFee[] */
     public $shippingFeeRows = array();
-    /**
-     * @attrib array<InvoiceFee> Array InvoiceFeeRows containing invoiceFee rows
-     */
+    
+    /** @var InvoiceFee[] */
     public $invoiceFeeRows = array();
-    /**
-     * @attrib testmode. False means in production mode
-     */
+    
+    /** @var boolean False means in production mode */
     public $testmode = false;
-    /**
-     * @attrib array<FixedDiscount> Array of FixedDiscountRows from class FixedDiscount
-     */
+    
+    /** @var FixedDiscount[] */
     public $fixedDiscountRows = array();
-    /**
-     * @attrib array<RelativeDiscount> Array of RelativeDiscountRows from class RelativeDiscountBuilder
-     */
+
+    /** @var RelativeDiscount[] */
     public $relativeDiscountRows = array();
-    /**
-    * String recievd by using WebPay::getAddresses($config) function
-    * @var type String
-    */
-    // public $addressSelector;
    
-    /**
-     * @attrib order number given by client side, should uniquely identify order at client
-     */
+    /** @var string order number given by client side, should uniquely identify order at client */
     public $clientOrderNumber;
 
     /**
-     * Country code as described by Iso 3166-1 (alpha-2), see http://www.iso.org/iso/country_code for a list.
-     * Ex: "SE", "NO", "DK", "FI","DE", "NL"
-     * @var type String.
+     * Country code as described by Iso 3166-1: "SE", "NO", "DK", "FI","DE", "NL", see http://www.iso.org/iso/country_code for a list.
+     * @var string
      */
     public $countryCode;
 
     /**
-     * ISO 8601 date, as produced by php date('c'): 2004-02-12T15:19:21+00:00, also accepts date in format "2004-02-12"
-     * @attrib string time, ISO 8601 date
+     * ISO 8601 date, as produced by php date('c'): "2004-02-12T15:19:21+00:00", also accepts dates like "2004-02-12"
+     * @var string
      */
     public $orderDate;
 
     /**
-     * Ex: "SEK", "EUR"
-     * @attrib type String
+     * Currency in three-letter format Ex: "SEK", "EUR"        
+     * @todo TODO lookup ISO currency 
+     * @var string
      */
     public $currency;
 
-    /**
-     * @attrib Your customer Reference number
-     */
+    /** @var string your customer Reference number */
     public $customerReference;
 
-    /**
-     * @attrib Instance of class SveaConfig
-     */
-
+    /** @var type */
     public $conf;
-    /**
-     * @attrib mixed -- instance of IndividualCustomer or CompanyCustomer
-     */
+
+    /** @var IndividualCustomer|CompanyCustomer */
     public $customerIdentity;
 
-    /**
-     * @param type $orderrows
-     */
+    /** @param type $orderrows */
     public function __construct($config) {
         $this->conf = $config;
     }
 
     /**
-     *
      * @param type $itemCustomerObject
      * @return $this
      */
@@ -120,7 +97,8 @@ class CreateOrderBuilder {
     }
 
     /**
-     * @param type $itemFeeObject
+     * Adds a shipping fee or invoice fee to the order
+     * @param InvoiceFee|ShippingFee
      * @return $this
      */
     public function addFee($itemFeeObject) {
@@ -146,7 +124,8 @@ class CreateOrderBuilder {
     }
 
     /**
-     * @param mixed $itemDiscountObject instance of either Svea\FixedDiscount or Svea\RelativeDiscount
+     * Adds a fixed amount discount or an order total percent discount to the order
+     * @param FixedDiscount|RelativeDiscount
      * @return $this
      */
     public function addDiscount($itemDiscountObject) {
@@ -173,7 +152,7 @@ class CreateOrderBuilder {
     }
 
     /**
-     * @param type $countryCodeAsString ex. "SE"
+     * @param string Country code as described by Iso 3166-1: "SE", "NO", "DK", "FI", "DE", "NL"
      * @return $this
      */
     public function setCountryCode($countryCodeAsString) {
@@ -183,6 +162,7 @@ class CreateOrderBuilder {
 
     /**
      * @param string $currencyAsString ex. "SEK"
+     * @TODO TODO look up ISO standard of currency
      * @return $this
      */
     public function setCurrency($currencyAsString) {
@@ -192,7 +172,7 @@ class CreateOrderBuilder {
     }
 
     /**
-     * @param string $customerReferenceAsString ex. "test".rand(0 9999)
+     * @param string $customerReferenceAsString, needs to be unique to the order
      * @return $this
      */
     public function setCustomerReference($customerReferenceAsString) {
@@ -210,7 +190,7 @@ class CreateOrderBuilder {
     }
 
     /**
-     * @param string $orderDateAsString ex date('c') eg. 'Y-m-d\TH:i:s\Z'
+     * @param string $orderDateAsString  ISO 8601 date, as produced by php date('c'): "2004-02-12T15:19:21+00:00", also accepts dates like "2004-02-12"
      * @return $this
      */
     public function setOrderDate($orderDateAsString) {
@@ -219,25 +199,30 @@ class CreateOrderBuilder {
     }
 
     /**
-     * Start creating cardpayment via PayPage. Returns Paymentform to integrate in shop.
-     * @return Svea\HostedPayment
+     * Use usePayPageCardOnly to initate a card payment via PayPage. 
+     * 
+     * Set additional attributes using CardPayment methods.
+     * @return CardPayment
      */
     public function usePayPageCardOnly() {
         return new CardPayment($this);
     }
 
     /**
-     * Start creating direct bank payment via PayPage. Returns Paymentform to integrate in shop.
-     * @return Svea\HostedPayment
+     * Use usePayPageDirectBankOnly to initate a direct bank payment via PayPage. 
+     * 
+     * Set additional attributes using DirectPayment methods.
+     * @return DirectPayment
      */
     public function usePayPageDirectBankOnly() {
         return new DirectPayment($this);
     }
 
     /**
-     * Start creating payment thru paypage. You will be able to customize the PayPage.
-     * Returns Paymentform to integrate in shop.
-     * @return Svea\PayPagePayment
+     * Use usePayPage to initate a payment via PayPage. 
+     * 
+     * Set additional attributes using PayPagePayment methods.
+     * @return PayPagePayment
      */
     public function usePayPage() {
         $paypagepayment = new PayPagePayment($this);
@@ -245,29 +230,31 @@ class CreateOrderBuilder {
     }
 
     /**
-     * Start creating payment with a specific paymentmethod. This function will go directly to the paymentmethod specified.
-     * Paymentmethods are found in appendix in our documentation.
-     * Returns Paymentform to integrate in shop.
-     * @param string PaymentMethod $paymentMethodAsConst, ex. PaymentMethod::SEB_SE
-     * @return Svea\PaymentMethodPayment
+     * Use usePayPage to initate a payment via PayPage, going straight to the payment method specified. 
+     * 
+     * Set additional attributes using PayPagePayment methods.
+     * Paymentmethods are found in appendix in our documentation and are available in the PaymentMethod class.
+     * @see PaymentMethod class
+     * @param string $paymentMethodAsConst  i.e. PaymentMethod::SEB_SE et al
+     * @return PaymentMethodPayment
      */
     public function usePaymentMethod($paymentMethodAsConst) {
         return new PaymentMethodPayment($this, $paymentMethodAsConst);
     }
 
     /**
-     * Start Creating invoicePayment.
-     * @return Svea\InvoicePayment
+     * Use useInvoicePayment to initate an invoice payment. Set additional attributes using InvoicePayment methods.
+     * @return InvoicePayment
      */
     public function useInvoicePayment() {
         return new InvoicePayment($this);
     }
 
     /**
-     * Start Creating paymentplan payment
+     * Use usePaymentPlanPayment to initate an invoice payment. Set additional attributes using PaymentPlanPayment methods.
      * @param string $campaignCodeAsString
-     * @param boolean $sendAutomaticGiroPaymentFormAsBool optional
-     * @return Svea\PaymentPlanPayment
+     * @param boolean $sendAutomaticGiroPaymentFormAsBool (optional)
+     * @return PaymentPlanPayment
      */
     public function usePaymentPlanPayment($campaignCodeAsString, $sendAutomaticGiroPaymentFormAsBool = 0) {
         $this->campaignCode = $campaignCodeAsString;
@@ -276,7 +263,7 @@ class CreateOrderBuilder {
     }
 
    /**
-     * For testfunctions
+     * @internal for testfunctions
      * @param type $func
      * @return $this
      */

@@ -14,14 +14,14 @@ class HostedOrderValidator extends OrderValidator {
 
     /**
      * @param type $order
-     * @return type $errors
+     * @return array $errors            // TODO check, array of arrays or flattened array, see **
      */
     public function validate($order) {
         if (isset($order->orgNumber) || isset($order->companyVatNumber) || isset($order->companyName)) {
             $this->isCompany = TRUE;
         }
         
-        $this->errors = $this->validateClientOrderNumber($order,$this->errors);
+        $this->errors = $this->validateClientOrderNumber($order,$this->errors);     // TODO ** does this flatten the returned array?
         $this->errors = $this->validateCurrency($order,$this->errors);
         $this->errors = $this->validateCountryCode($order, $this->errors);
         $this->errors = $this->validateRequiredFieldsForOrder($order,$this->errors);

@@ -57,10 +57,6 @@ class HostedXmlBuilder {
             $this->XMLWriter->writeElement("paymentmethod", $request['paymentMethod']);
         }
 
-        /*
-          $this->serializeMap($order->params);
-         */
-
         $this->XMLWriter->endElement();
         $this->XMLWriter->endDocument();
 

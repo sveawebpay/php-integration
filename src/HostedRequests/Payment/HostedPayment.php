@@ -4,37 +4,50 @@ namespace Svea;
 require_once SVEA_REQUEST_DIR . '/Includes.php';
 
 /**
- * Parent to CardPayment, DirectPayment and PayPagePayment class
+ * Parent to various hosted payment classes.
  * Prepares $order and creates a paymentform to integrate on webpage
- * Uses SveaXmlBuilder to turn formatted $order into xml
- * @author Anneli Halld'n, Daniel Brolund for Svea Webpay
+ * Uses HostedXmlBuilder to turn formatted $order into xml
+ * @author Anneli Halld'n, Daniel Brolund, Kristian Grossman-Madsen for Svea Webpay
  */
 class HostedPayment {
 
+    /** @var CreateOrderBuilder $order  holds the order information */
     public $order;
+    
+    /** @var string $xmlMessage  holds the generated message XML used in request */
     public $xmlMessage;
+    
+    /** @var string $xmlMessageBase64  holds the Base64-encoded $xmlMessage */
     public $xmlMessageBase64;
+    
+    /** @var string $returnUrl  holds the return URL used in request */    
     public $returnUrl;
+    
+    /** @var string $callbackUrl  holds the callback URL used in request */    
     public $callbackUrl;
+    
+    /** @var string $cancelUrl  holds the cancel URL used in request */    
     public $cancelUrl;
+    
+    /** @var string $langCode  holds the language code used in request */   // TODO check this
     public $langCode;
 
     /**
-     * @param type $order
+     * @param CreateOrderBuilder $order
      */
     public function __construct($order) {
         $this->order = $order;
     }
 
     /**
-     *
-     * @return type $errors
+     * @return array $errors
      */
     public function validateOrder() {
         $validator = new HostedOrderValidator();
         $errors = $validator->validate($this->order);
         if (($this->order->countryCode == "NL" || $this->order->countryCode == "DE") && isset($this->paymentMethod)) {
-            if (isset($this->paymentMethod) && ($this->paymentMethod == \PaymentMethod::INVOICE || $this->paymentMethod ==  \PaymentMethod::PAYMENTPLAN)) {
+            if( isset($this->paymentMethod) && 
+                ($this->paymentMethod == \PaymentMethod::INVOICE || $this->paymentMethod == \PaymentMethod::PAYMENTPLAN)) {
                 $errors = $validator->validateEuroCustomer($this->order, $errors);
             }
         }
@@ -65,9 +78,8 @@ class HostedPayment {
         $formObject->xmlMessage = $this->xmlMessage;
         $formObject->xmlMessageBase64 = $this->xmlMessageBase64;
         $formObject->endPointUrl = $this->order->conf->getEndPoint(\ConfigurationProvider::HOSTED_TYPE);
-        $formObject->merchantid = $this->order->conf->getMerchantId(\ConfigurationProvider::HOSTED_TYPE,  $this->order->countryCode);//$conf->getMerchantIdBasedAuthorization()[0];
-        $formObject->secretWord = $this->order->conf->getSecret(\ConfigurationProvider::HOSTED_TYPE,  $this->order->countryCode);//$conf->getMerchantIdBasedAuthorization()[1];
-        //$formObject->setSubmitMessage($this->order->countryCode);
+        $formObject->merchantid = $this->order->conf->getMerchantId(\ConfigurationProvider::HOSTED_TYPE,  $this->order->countryCode);
+        $formObject->secretWord = $this->order->conf->getSecret(\ConfigurationProvider::HOSTED_TYPE,  $this->order->countryCode);
         $formObject->setForm();
         $formObject->setHtmlFields();
         $formObject->setRawFields();

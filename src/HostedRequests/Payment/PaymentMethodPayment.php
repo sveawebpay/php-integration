@@ -8,8 +8,10 @@ class PaymentMethodPayment extends HostedPayment{
 
     public $paymentMethod;
     public $langCode = "en";
+    
     /**
-     * @param type $order, $paymentmethod
+     * @param CreateOrderBuilder $order, 
+     * @param string $paymentmethod -- one of constants defined in PaymentMethod class
      */
     public function __construct($order, $paymentmethod) {
         parent::__construct($order);
