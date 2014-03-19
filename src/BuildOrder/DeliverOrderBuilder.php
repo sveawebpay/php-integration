@@ -112,12 +112,12 @@ class deliverOrderBuilder {
 
     /**
      * New!
-     * @param type $itemDiscounObject
+     * @param type $itemDiscountObject
      * @return \deliverOrderBuilder
      */
-    public function addDiscount($itemDiscounObject) {
-        if (is_array($itemDiscounObject)) {
-            foreach ($itemDiscounObject as $row) {
+    public function addDiscount($itemDiscountObject) {
+        if (is_array($itemDiscountObject)) {
+            foreach ($itemDiscountObject as $row) {
                 if (get_class($row) == "Svea\FixedDiscount") {
                     array_push($this->fixedDiscountRows, $row);
                 }
@@ -126,11 +126,11 @@ class deliverOrderBuilder {
                 }
             }
         } else {
-            if (get_class($itemDiscounObject) == "Svea\FixedDiscount") {
-                array_push($this->fixedDiscountRows, $itemDiscounObject);
+            if (get_class($itemDiscountObject) == "Svea\FixedDiscount") {
+                array_push($this->fixedDiscountRows, $itemDiscountObject);
             }
-            if (get_class($itemDiscounObject) == "Svea\RelativeDiscount") {
-                array_push($this->relativeDiscountRows, $itemDiscounObject);
+            if (get_class($itemDiscountObject) == "Svea\RelativeDiscount") {
+                array_push($this->relativeDiscountRows, $itemDiscountObject);
             }
         }
         

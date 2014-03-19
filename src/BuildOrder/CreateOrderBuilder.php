@@ -162,10 +162,10 @@ class CreateOrderBuilder {
         }
         else {
             if (get_class($itemDiscountObject) == "Svea\FixedDiscount") {
-                array_push($this->fixedDiscountRows, $itemDiscounObject);
+                array_push($this->fixedDiscountRows, $itemDiscountObject);
             }
             if (get_class($itemDiscountObject) == "Svea\RelativeDiscount") {
-                array_push($this->relativeDiscountRows, $itemDiscounObject);
+                array_push($this->relativeDiscountRows, $itemDiscountObject);
             }
        }
 
