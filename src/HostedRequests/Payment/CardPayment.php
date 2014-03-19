@@ -5,22 +5,29 @@ require_once 'HostedPayment.php';
 require_once  SVEA_REQUEST_DIR.'/Constant/PaymentMethod.php';
 
 /**
- * Extends HostedPayment
- * Goes to PayPage and excludes all methods that are not cardpayments
- * @author Anneli Halld'n, Daniel Brolund for Svea Webpay
+ * Goes to PayPage and excludes all methods that are not card payments
+ * @author Anneli Halld'n, Daniel Brolund, Kristian Grossman-Madsen for Svea WebPay
  */
 class CardPayment extends HostedPayment {
 
-    public $langCode = 'en';
-
     /**
-     *
-     * @param type $order
+     * Creates a new CardPayment containing a given order.
+     * @param CreateOrderBuilder $order
      */
     public function __construct($order) {
         parent::__construct($order);
     }
 
+    /**
+     * configureExcludedPaymentMethods injects the 'excludePaymentMethods' attribute
+     * in the passed request array.
+     * 
+     * The methods excluded are 1) listed in the method, and 2) fetched from the
+     * ExcludePayments() class (for various country invoice and paymentplan methods)
+     * 
+     * @param array  $request
+     * @return array  the passed $request, incl. an 'excludePaymentMethods' attribute
+     */
     protected function configureExcludedPaymentMethods($request) {
         //directbanks
         $methods[] = SystemPaymentMethod::BANKAXESS;
@@ -31,7 +38,7 @@ class CardPayment extends HostedPayment {
         $methods[] = SystemPaymentMethod::DBSWEDBANKSE;
         //other
         $methods[] = SystemPaymentMethod::PAYPAL;
-
+        //get invoice and payment plan methods for all countries
         $exclude = new ExcludePayments();
         $methods = array_merge((array)$methods, (array)$exclude->excludeInvoicesAndPaymentPlan($this->order->countryCode));
 
@@ -39,92 +46,4 @@ class CardPayment extends HostedPayment {
         return $request;
     }
 
-    /**
-     * Required.
-     * 
-     * When a hosted payment transaction completes (regardless of outcome, i.e. accepted or denied), 
-     * the payment service will answer with a response xml message sent to the return url specified.
-     * 
-     * Use setReturnUrl to set the return url.
-     * 
-     * @param string $returnUrlAsString
-     * @return Svea\HostedPayment
-     */
-    public function setReturnUrl($returnUrlAsString) {
-        $this->returnUrl = $returnUrlAsString;
-        return $this;
-    }
-
-    /**
-     * Optional.
-     * 
-     * In case the hosted payment transaction completes, but the service is unable to return a response to the return url,
-     * the payment service will retry several times using the callback url as a fallback, if specified. This may happen if
-     * i.e. the user closes the browser before the payment service redirects back to the shop.
-     * 
-     * Use setCallbackUrl to set the callback url.
-     * 
-     * @param string $callbackUrlAsString
-     * @return Svea\HostedPayment
-     */
-    public function setCallbackUrl($callbackUrlAsString) {
-        $this->callbackUrl = $callbackUrlAsString;
-        return $this;
-    }
-
-    /**
-     * Optional.
-     * 
-     * In case the hosted payment service is cancelled by the user, the payment service will redirect back to the cancel url. 
-     * Unless a return url is specified, no cancel button will be presented at the payment service. 
-     * 
-     * Use setReturnUrl to set the return url and include a cancel button in the payment service.
-     * 
-     * @param string $cancelUrlAsString
-     * @return \HostedPayment
-     */
-    public function setCancelUrl($cancelUrlAsString) {
-        $this->cancelUrl = $cancelUrlAsString;
-        return $this;
-    }
-
-    public function setPayPageLanguage($languageCodeAsISO639) {
-        switch ($languageCodeAsISO639) {
-            case "sv":
-                $this->langCode = $languageCodeAsISO639;
-                break;
-            case "en":
-                $this->langCode = $languageCodeAsISO639;
-                break;
-            case "da":
-                $this->langCode = $languageCodeAsISO639;
-                break;
-            case "fi":
-                $this->langCode = $languageCodeAsISO639;
-                break;
-            case "no":
-                $this->langCode = $languageCodeAsISO639;
-                break;
-            case "de":
-                $this->langCode = $languageCodeAsISO639;
-                break;
-            case "es":
-                $this->langCode = $languageCodeAsISO639;
-                break;
-            case "fr":
-                $this->langCode = $languageCodeAsISO639;
-                break;
-            case "it":
-                $this->langCode = $languageCodeAsISO639;
-                break;
-            case "nl":
-                $this->langCode = $languageCodeAsISO639;
-                break;
-            default:
-                $this->langCode = "en";
-                break;
-        }
-
-        return $this;
-    }
 }

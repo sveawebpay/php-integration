@@ -7,14 +7,15 @@ require_once SVEA_REQUEST_DIR . '/Includes.php';
  * CreateOrderBuilder collects and prepares order data to be sent to Svea.
  * 
  * Set all required order attributes in CreateOrderBuilder instance by using the 
- * instance setXXX() methods. Instance methods can be chained together, as they 
- * return the instance itself.
+ * instance setAttribute() methods. Instance methods can be chained together, as 
+ * they return the instance itself in a fluent fashion.
  * 
- * Finish setting order attributes by chosing a payment method with the useXXX() 
- * paymenttype.
+ * Finish setting order attributes by chosing a payment method using one of the
+ * usePaymentMethod() methods below. You can then go on specifying any payment 
+ * method specific settings, see methods provided by the returned payment class.
  * 
  * @param $config 
- * @author Anneli Halld'n, Daniel Brolund, Kristian Grossman-Madsen for Svea Webpay
+ * @author Kristian Grossman-Madsen, Anneli Halld'n, Daniel Brolund for Svea Webpay
  */
 class CreateOrderBuilder {
     /** @var OrderRow[] */
@@ -251,7 +252,7 @@ class CreateOrderBuilder {
     }
 
     /**
-     * Use usePaymentPlanPayment to initate an invoice payment. Set additional attributes using PaymentPlanPayment methods.
+     * Use usePaymentPlanPayment to initate a payment plan payment. Set additional attributes using PaymentPlanPayment methods.
      * @param string $campaignCodeAsString
      * @param boolean $sendAutomaticGiroPaymentFormAsBool (optional)
      * @return PaymentPlanPayment

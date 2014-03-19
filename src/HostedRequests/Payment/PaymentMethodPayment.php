@@ -2,15 +2,15 @@
 namespace Svea;
 
 /**
- * @author anne-hal
+ * @author anne-hal, Kristian Grossman-Madsen
  */
 class PaymentMethodPayment extends HostedPayment{
 
     public $paymentMethod;
-    public $langCode = "en";
     
     /**
-     * @param CreateOrderBuilder $order, 
+     * Creates a new PaymentMethodPayment containing a given order and using the given payment method.
+     * @param CreateOrderBuilder $order
      * @param string $paymentmethod -- one of constants defined in PaymentMethod class
      */
     public function __construct($order, $paymentmethod) {
@@ -28,81 +28,18 @@ class PaymentMethodPayment extends HostedPayment{
                 $request['paymentMethod'] = $this->paymentMethod;
             }
         }
-
         return $request;
     }
 
-    /**
-     * Set return Url for redirect when payment is completed
-     * @param type $returnUrlAsString
-     * @return \HostedPayment
-     */
-    public function setReturnUrl($returnUrlAsString) {
-        $this->returnUrl = $returnUrlAsString;
-        return $this;
-    }
-
-    /**
-     * Set callback Url which contacts the store in case the return success URL
-     * wasn't reached
-     * @param type $callbackUrlAsString
-     * @return \HostedPayment
-     */
-    public function setCallbackUrl($callbackUrlAsString) {
-        $this->callbackUrl = $callbackUrlAsString;
-        return $this;
-    }
-
-    /**
-     *
-     * @param type $cancelUrlAsString
-     * @return \HostedPayment
-     */
-    public function setCancelUrl($cancelUrlAsString) {
-        $this->cancelUrl = $cancelUrlAsString;
-        return $this;
-    }
     /*
-     * @param type $languageCodeAsISO639
+     * Semantic wrapper for setPayPageLanguage
+     * @see setPayPageLanguage
+     * @param string $languageCodeAsISO639
      * @return \HostedPayment
      */
     public function setCardPageLanguage($languageCodeAsISO639){
-        switch ($languageCodeAsISO639) {
-            case "sv":
-                $this->langCode = $languageCodeAsISO639;
-                break;
-            case "en":
-                $this->langCode = $languageCodeAsISO639;
-                break;
-            case "da":
-                $this->langCode = $languageCodeAsISO639;
-                break;
-            case "fi":
-                $this->langCode = $languageCodeAsISO639;
-                break;
-            case "no":
-                $this->langCode = $languageCodeAsISO639;
-                break;
-            case "de":
-                $this->langCode = $languageCodeAsISO639;
-                break;
-            case "es":
-                $this->langCode = $languageCodeAsISO639;
-                break;
-            case "fr":
-                $this->langCode = $languageCodeAsISO639;
-                break;
-            case "it":
-                $this->langCode = $languageCodeAsISO639;
-                break;
-            case "nl":
-                $this->langCode = $languageCodeAsISO639;
-                break;
-            default:
-                $this->langCode = "en";
-                break;
-        }
-
-        return $this;
+        return $this->setPayPageLanguage($languageCodeAsISO639);
     }
+    
+
 }
