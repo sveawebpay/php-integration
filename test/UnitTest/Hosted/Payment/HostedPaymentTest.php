@@ -3,85 +3,64 @@ namespace Svea;
 
 require_once 'FakeHostedPayment.php';
 
+$root = realpath(dirname(__FILE__));
+require_once $root . '/../../../../test/UnitTest/BuildOrder/OrderBuilderTest.php';
+require_once $root . '/../../../TestUtil.php';
+require_once $root . '/TestConf.php';
+
+
 class HostedPaymentTest extends \PHPUnit_Framework_TestCase {
 
-    public function testexcludeInvoicesAndPaymentPlanSe() {
-        $exclude = new ExcludePayments();
-        $excludedPaymentMethods = $exclude->excludeInvoicesAndPaymentPlan("SE");
-        $this->assertEquals(14, count((array)$excludedPaymentMethods));
-        $this->assertTrue(in_array(SystemPaymentMethod::INVOICESE, $excludedPaymentMethods));
-        $this->assertTrue(in_array(SystemPaymentMethod::PAYMENTPLANSE, $excludedPaymentMethods));
-        $this->assertTrue(in_array(SystemPaymentMethod::INVOICE_SE, $excludedPaymentMethods));
-        $this->assertTrue(in_array(SystemPaymentMethod::PAYMENTPLAN_SE, $excludedPaymentMethods));
+    // TODO move tests of setXXX from subclasses of HostedPayment here
+    
+    public function test_setXXXUrl() {
+        
+        $returnUrlAsString = "http://foo.bar.com/1";
+        $cancelUrlAsString = "http://foo.bar.com/2";
+        $callbackUrlAsString = "http://foo.bar.com/3";
+        
+        $order = \TestUtil::createOrder();
+        $payment = $order->usePaymentMethod(\PaymentMethod::KORTCERT)
+            ->setReturnUrl($returnUrlAsString)
+            ->setCancelUrl($cancelUrlAsString)
+            ->setCallbackUrl($callbackUrlAsString);
 
-         $this->assertTrue(in_array(SystemPaymentMethod::INVOICE_DE, $excludedPaymentMethods));
-        $this->assertTrue(in_array(SystemPaymentMethod::PAYMENTPLAN_DE, $excludedPaymentMethods));
-
-         $this->assertTrue(in_array(SystemPaymentMethod::INVOICE_DK, $excludedPaymentMethods));
-        $this->assertTrue(in_array(SystemPaymentMethod::PAYMENTPLAN_DK, $excludedPaymentMethods));
-
-         $this->assertTrue(in_array(SystemPaymentMethod::INVOICE_FI, $excludedPaymentMethods));
-        $this->assertTrue(in_array(SystemPaymentMethod::PAYMENTPLAN_FI, $excludedPaymentMethods));
-
-         $this->assertTrue(in_array(SystemPaymentMethod::INVOICE_NL, $excludedPaymentMethods));
-        $this->assertTrue(in_array(SystemPaymentMethod::PAYMENTPLAN_NL, $excludedPaymentMethods));
-
-        $this->assertTrue(in_array(SystemPaymentMethod::INVOICE_NO, $excludedPaymentMethods));
-        $this->assertTrue(in_array(SystemPaymentMethod::PAYMENTPLAN_NO, $excludedPaymentMethods));
+        $this->assertEquals($returnUrlAsString, $payment->returnUrl );
+        $this->assertEquals($cancelUrlAsString, $payment->cancelUrl );
+        $this->assertEquals($callbackUrlAsString, $payment->callbackUrl );
     }
+    
+    public function test_payPageLanguage_defaults_to_english() {      
+        $order = \TestUtil::createOrder();
+        $payment = $order->usePaymentMethod(\PaymentMethod::KORTCERT);
 
-    public function te_stexcludeInvoicesAndPaymentPlanDe() {
-        $exclude = new ExcludePayments();
-        $excludedPaymentMethods = $exclude->excludeInvoicesAndPaymentPlan("DE");
-
-        $this->assertEquals(2, count((array)$excludedPaymentMethods));
-        $this->assertTrue(in_array(\PaymentMethod::INVOICE_DE, $excludedPaymentMethods));
-        $this->assertTrue(in_array(\PaymentMethod::PAYMENTPLAN_DE, $excludedPaymentMethods));
+        $this->assertEquals("en", $payment->langCode );
     }
+    
+    public function test_setPayPageLanguage_with_unrecognised_language() {
+        $newLanguage = "unrecognised_language";     
+        
+        $order = \TestUtil::createOrder();
+        $payment = $order->usePaymentMethod(\PaymentMethod::KORTCERT)
+            ->setPayPageLanguage( $newLanguage );
 
-    public function te_stexcludeInvoicesAndPaymentPlanDk() {
-        $exclude = new ExcludePayments();
-        $excludedPaymentMethods = $exclude->excludeInvoicesAndPaymentPlan("DK");
+        $this->assertEquals("en", $payment->langCode );
+    }   
 
-        $this->assertEquals(2, count((array)$excludedPaymentMethods));
-        $this->assertTrue(in_array(\PaymentMethod::INVOICE_DK, $excludedPaymentMethods));
-        $this->assertTrue(in_array(\PaymentMethod::PAYMENTPLAN_DK, $excludedPaymentMethods));
-    }
+    public function test_setPayPageLanguage_with_recognised_language() {
+        $newLanguage = "sv";     
+        
+        $order = \TestUtil::createOrder();
+        $payment = $order->usePaymentMethod(\PaymentMethod::KORTCERT)
+            ->setPayPageLanguage( $newLanguage );
 
-    public function te_stexcludeInvoicesAndPaymentPlanFi() {
-        $exclude = new ExcludePayments();
-        $excludedPaymentMethods = $exclude->excludeInvoicesAndPaymentPlan("FI");
+        $this->assertEquals($newLanguage, $payment->langCode );
+    }       
+    
+    // TODO tests for getPaymentForm and validatè order    
 
-        $this->assertEquals(2, count((array)$excludedPaymentMethods));
-        $this->assertTrue(in_array(\PaymentMethod::INVOICE_FI, $excludedPaymentMethods));
-        $this->assertTrue(in_array(\PaymentMethod::PAYMENTPLAN_FI, $excludedPaymentMethods));
-    }
-
-    public function te_stexcludeInvoicesAndPaymentPlanNl() {
-        $exclude = new ExcludePayments();
-        $excludedPaymentMethods = $exclude->excludeInvoicesAndPaymentPlan("NL");
-
-        $this->assertEquals(2, count((array)$excludedPaymentMethods));
-        $this->assertTrue(in_array(\PaymentMethod::INVOICE_NL, $excludedPaymentMethods));
-        $this->assertTrue(in_array(\PaymentMethod::PAYMENTPLAN_NL, $excludedPaymentMethods));
-    }
-
-    public function t_estexcludeInvoicesAndPaymentPlanNo() {
-        $exclude = new ExcludePayments();
-        $excludedPaymentMethods = $exclude->excludeInvoicesAndPaymentPlan("NO");
-
-        $this->assertEquals(2, count((array)$excludedPaymentMethods));
-        $this->assertTrue(in_array(\PaymentMethod::INVOICE_NO, $excludedPaymentMethods));
-        $this->assertTrue(in_array(\PaymentMethod::PAYMENTPLAN_NO, $excludedPaymentMethods));
-    }
-
-    public function te_stexcludeInvoicesAndPaymentPlanNull() {
-        $exclude = new ExcludePayments();
-        $excludedPaymentMethods = $exclude->excludeInvoicesAndPaymentPlan(null);
-
-        $this->assertEquals(0, count((array)$excludedPaymentMethods));
-    }
-
+//    TODO move the below to HostedRowFormatterTest???
+    
     /**
      * 30*69.99*1.25 = 2624.625 => 2624.62 w/Bankers rounding (half-to-even)
      *

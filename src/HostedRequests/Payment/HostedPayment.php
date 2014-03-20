@@ -18,6 +18,13 @@ require_once SVEA_REQUEST_DIR . '/Includes.php';
  * Uses HostedXmlBuilder to turn formatted $order into xml
  * @author Anneli Halld'n, Daniel Brolund, Kristian Grossman-Madsen for Svea Webpay
  */
+
+// TODO implement this
+// * Alternatively, you can use the getPaymentAddress() to get a response with
+// * an URL that the customer can visit later to complete the payment at a later
+// * time.
+// * 
+
 class HostedPayment {
 
     /** @var CreateOrderBuilder $order  holds the order information */
@@ -97,33 +104,15 @@ class HostedPayment {
     public function setPayPageLanguage($languageCodeAsISO639){
         switch ($languageCodeAsISO639) {
             case "sv":
-                $this->langCode = $languageCodeAsISO639;
-                break;
             case "en":
-                $this->langCode = $languageCodeAsISO639;
-                break;
             case "da":
-                $this->langCode = $languageCodeAsISO639;
-                break;
-            case "fi":
-                $this->langCode = $languageCodeAsISO639;
-                break;
             case "no":
-                $this->langCode = $languageCodeAsISO639;
-                break;
-            case "de":
-                $this->langCode = $languageCodeAsISO639;
-                break;
+            case "fi":
             case "es":
-                $this->langCode = $languageCodeAsISO639;
-                break;
-            case "fr":
-                $this->langCode = $languageCodeAsISO639;
-                break;
-            case "it":
-                $this->langCode = $languageCodeAsISO639;
-                break;
             case "nl":
+            case "fr":
+            case "de":
+            case "it":
                 $this->langCode = $languageCodeAsISO639;
                 break;
             default:
