@@ -28,6 +28,12 @@ class PreparedPaymentIntegrationTest extends \PHPUnit_Framework_TestCase {
                 
         $this->assertInstanceOf( "Svea\HostedAdminResponse", $response );
         
+        // Stop here and mark this test as incomplete.
+        $this->markTestIncomplete(
+          'not yet complete' // TODO KGM
+        );
+        
+        
         // if we receive an error from the service, the integration test passes
         $this->assertEquals( 1, $response->accepted );
 //        $this->assertEquals( "128 (NO_SUCH_TRANS)", $response->resultcode );    

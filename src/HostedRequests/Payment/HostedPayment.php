@@ -121,7 +121,7 @@ class HostedPayment {
     }
     
     /**
-     * getPaymentForm
+     * getPaymentForm 
      * @return PaymentForm
      * @throws ValidationException
      */

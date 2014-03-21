@@ -24,23 +24,34 @@ class GetPaymentAddressTest extends PHPUnit_Framework_TestCase {
         $this->assertInstanceOf( "Svea\GetPaymentAddress", $this->getPaymentAddressObject );      
     }
 
-//    function test_setCountryCode(){
-//        
-//        $countryCode = "SE";       
-//        $this->confirmObject->setCountryCode( $countryCode );
-//        
-//        $this->assertEquals( $countryCode, PHPUnit_Framework_Assert::readAttribute($this->confirmObject, 'countryCode') );
-//    }
-//    
-//    function test_setTransactionId( ){
-//        
-//        $transactionId = 987654;       
-//        $this->confirmObject->setTransactionId( $transactionId );
-//        
-//        $this->assertEquals( $transactionId, PHPUnit_Framework_Assert::readAttribute($this->confirmObject, 'transactionId') );
-//    }
-//    
-//              
+    function test_setCountryCode(){
+        
+        $countryCode = "SE";       
+        $this->getPaymentAddressObject->setCountryCode( $countryCode );
+        
+        $this->assertEquals( $countryCode, PHPUnit_Framework_Assert::readAttribute($this->getPaymentAddressObject, 'countryCode') );
+    }
+    
+    function test_setIpAddress( ){
+        
+        $ipAddress = "10.10.10.10";       
+        $this->getPaymentAddressObject->setIpAddress( $ipAddress );
+        
+        $this->assertEquals( $ipAddress, PHPUnit_Framework_Assert::readAttribute($this->getPaymentAddressObject, 'ipAddress') );
+    }
+
+    function test_setPaymentMethod() {
+        $paymentMethod = "KORTCERT";
+        
+        $this->getPaymentAddressObject->setPaymentMethod( $paymentMethod );
+
+        $this->assertEquals( $paymentMethod, PHPUnit_Framework_Assert::readAttribute($this->getPaymentAddressObject, 'paymentMethod') );
+    }
+    
+    // TODO write tests for other attribute setters here
+    
+    // TODO KGM use HostedPayment formater methods to set up attributes for call
+    
 //    function test_prepareRequest_array_contains_mac_merchantid_message() {
 //
 //        // set up confirmTransaction object & get request form

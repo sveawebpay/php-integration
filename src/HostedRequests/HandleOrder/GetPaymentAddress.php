@@ -11,25 +11,53 @@ require_once SVEA_REQUEST_DIR . '/Includes.php';
  */
 class GetPaymentAddress {
 
-//    private $config;
-//    private $countryCode;
-//
-//    private $transactionId;
-//    private $captureDate;
-//    
-//    function __construct($config) {
-//        $this->config = $config;
-//    }
-//    
-//    function setCountryCode( $countryCode ) {
-//        $this->countryCode = $countryCode;
-//        return $this;
-//    }
-//    
-//    function setIpAddress( $ipAddress ) {
-//        $this->ipAddress = $ipAddress;
-//        return $this;
-//    }
+    /** @var ConfigurationProvider */
+    private $config;
+    
+    //preparepayment
+    /** @var string  */
+    private $countryCode;
+    /** @var string */
+    private $ipAddress;
+    
+    //payment
+    private $paymentMethod;
+//    private $lang;
+//    private $currency;
+//    private $amount;
+//    private $vat;
+//    private $customerrefno;
+//    private $returnurl;
+//    private $cancelurl;
+//    private $callbackurl;
+//    private $subscriptiontype;
+//    private $simulatorcode;
+//    private $excludepaymentmethods;
+//    private $orderrows;
+    
+    
+    /* 
+     * @param ConfigurationProvider $config  instance implementing ConfigurationProvider
+     */
+    function __construct( $config ) {
+        $this->config = $config;
+    }
+
+    function setCountryCode( $countryCode ) {
+        $this->countryCode = $countryCode;
+        return $this;
+    }
+    
+    function setIpAddress( $ipAddress ) {
+        $this->ipAddress = $ipAddress;
+        return $this;
+    }
+    
+    function setPaymentMethod( $paymentMethod ) {
+        $this->paymentMethod = $paymentMethod;
+        return $this;
+    }
+    
 //        
 //    /**
 //     * prepares the elements used in the request to svea
