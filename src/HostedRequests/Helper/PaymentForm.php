@@ -26,12 +26,30 @@ class PaymentForm {
     private $submitMessage;
     private $noScriptMessage;
 
-    function __construct() {
+    /** 
+     * populates the payment form object from the given parameters and generates
+     * the $completeHtmlFormWithSubmitButton & $htmlFormFieldsAsArray attributes
+     * 
+     * @param type $xmlMessage
+     * @param ConfigurationProvider $config
+     * @param string $countryCode
+     */
+    function __construct( $xmlMessage, $config, $countryCode  ) {
+        $this->xmlMessage = $xmlMessage;
+        $this->xmlMessageBase64 = base64_encode($xmlMessage);
+        $this->endPointUrl = $config->getEndPoint(\ConfigurationProvider::HOSTED_TYPE);
+        $this->merchantid = $config->getMerchantId(\ConfigurationProvider::HOSTED_TYPE, $countryCode);
+        $this->secretWord = $config->getSecret(\ConfigurationProvider::HOSTED_TYPE, $countryCode);
+        $this->mac = hash("sha512", $this->xmlMessageBase64 . $this->secretWord);
+        
+        $this->setForm();
+        $this->setHtmlFields();
+        $this->setRawFields();        
+        
         $this->setSubmitMessage();
     }
 
     public function setRawFields() {
-        $this->mac = hash("sha512", $this->xmlMessageBase64 . $this->secretWord);
         $this->rawFields['merchantid'] = $this->merchantid;
         $this->rawFields['message'] = $this->xmlMessageBase64;
         $this->rawFields['mac'] = $this->mac;
@@ -56,17 +74,14 @@ class PaymentForm {
      * Set complete html-form as string
      */
     public function setForm() {
-        $this->mac = hash("sha512", $this->xmlMessageBase64. $this->secretWord);
-
-        $formString = "<form name='paymentForm' id='paymentForm' method='post' action='";
-        $formString .= $this->endPointUrl;
-        $formString .= "'>";
+        $formString = "<form name='paymentForm' id='paymentForm' method='post' action='".$this->endPointUrl."'>";
         $formString .= "<input type='hidden' name='merchantid' value='{$this->merchantid}' />";
         $formString .= "<input type='hidden' name='message' value='{$this->xmlMessageBase64}' />";
         $formString .= "<input type='hidden' name='mac' value='{$this->mac}' />";
         $formString .= "<noscript><p>".$this->noScriptMessage."</p></noscript>";
         $formString .= "<input type='submit' name='submit' value='".$this->submitMessage."' />";
         $formString .= "</form>";
+        
         $this->completeHtmlFormWithSubmitButton = $formString;
     }
 
@@ -74,9 +89,7 @@ class PaymentForm {
      * Set form elements as Array
      */
     public function setHtmlFields() {
-        $this->mac =hash("sha512", $this->xmlMessageBase64 . $this->secretWord);
-        $this->htmlFormFieldsAsArray['form_start_tag'] = "<form name='paymentForm' id='paymentForm' method='post' action='"
-                . $this->endPointUrl."'>";
+        $this->htmlFormFieldsAsArray['form_start_tag'] = "<form name='paymentForm' id='paymentForm' method='post' action='".$this->endPointUrl."'>";
         $this->htmlFormFieldsAsArray['input_merchantId'] = "<input type='hidden' name='merchantid' value='{$this->merchantid}' />";
         $this->htmlFormFieldsAsArray['input_message'] = "<input type='hidden' name='message' value='{$this->xmlMessageBase64}' />";
         $this->htmlFormFieldsAsArray['input_mac'] = "<input type='hidden' name='mac' value='{$this->mac}' />";

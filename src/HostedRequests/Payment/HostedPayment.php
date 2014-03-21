@@ -15,16 +15,13 @@ require_once SVEA_REQUEST_DIR . '/Includes.php';
  * hosted payment request, a response xml message is returned to the specified
  * return url, where it can be parsed using i.e. the SveaResponse class.
  * 
-// TODO implement this
-// * Alternatively, you can use the getPaymentAddress() to get a response with
-// * an URL that the customer can visit later to complete the payment at a later
-// * time.
-// * 
- *  * Uses HostedXmlBuilder to turn formatted $order into xml
+ * Alternatively, you can use the getPaymentAddress() to get a response with
+ * an URL that the customer can visit later to complete the payment at a later
+ * time.
+ * 
+ * Uses HostedXmlBuilder to turn formatted $order into xml
  * @author Anneli Halld'n, Daniel Brolund, Kristian Grossman-Madsen for Svea Webpay
  */
-
-
 
 class HostedPayment {
 
@@ -147,15 +144,8 @@ class HostedPayment {
         $xmlBuilder = new HostedXmlBuilder();
         $this->xmlMessage = $xmlBuilder->getOrderXML($this->calculateRequestValues(),$this->order);
         $this->xmlMessageBase64 = base64_encode($this->xmlMessage);
-        $formObject = new PaymentForm();
-        $formObject->xmlMessage = $this->xmlMessage;
-        $formObject->xmlMessageBase64 = $this->xmlMessageBase64;
-        $formObject->endPointUrl = $this->order->conf->getEndPoint(\ConfigurationProvider::HOSTED_TYPE);
-        $formObject->merchantid = $this->order->conf->getMerchantId(\ConfigurationProvider::HOSTED_TYPE,  $this->order->countryCode);
-        $formObject->secretWord = $this->order->conf->getSecret(\ConfigurationProvider::HOSTED_TYPE,  $this->order->countryCode);
-        $formObject->setForm();
-        $formObject->setHtmlFields();
-        $formObject->setRawFields();
+        
+        $formObject = new PaymentForm( $this->xmlMessage, $this->order->conf, $this->order->countryCode );
         return $formObject;
     }
 
