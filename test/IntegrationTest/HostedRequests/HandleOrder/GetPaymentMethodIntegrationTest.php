@@ -11,9 +11,7 @@ require_once $root . '/../../../TestUtil.php';
 class GetPaymentMethodIntegrationTest extends \PHPUnit_Framework_TestCase {
 
     function testGetAllPaymentMethods(){
-        
-print_r("\ntestGetAllPaymentMethods: " . date('c') . "\n " );
-        
+                
         $config = Svea\SveaConfig::getDefaultConfig();
         $response = WebPay::getPaymentMethods($config)
                 ->setCountryCode("SE")

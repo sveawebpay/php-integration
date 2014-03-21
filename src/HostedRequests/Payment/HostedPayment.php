@@ -15,15 +15,16 @@ require_once SVEA_REQUEST_DIR . '/Includes.php';
  * hosted payment request, a response xml message is returned to the specified
  * return url, where it can be parsed using i.e. the SveaResponse class.
  * 
- * Uses HostedXmlBuilder to turn formatted $order into xml
- * @author Anneli Halld'n, Daniel Brolund, Kristian Grossman-Madsen for Svea Webpay
- */
-
 // TODO implement this
 // * Alternatively, you can use the getPaymentAddress() to get a response with
 // * an URL that the customer can visit later to complete the payment at a later
 // * time.
 // * 
+ *  * Uses HostedXmlBuilder to turn formatted $order into xml
+ * @author Anneli Halld'n, Daniel Brolund, Kristian Grossman-Madsen for Svea Webpay
+ */
+
+
 
 class HostedPayment {
 
@@ -157,6 +158,20 @@ class HostedPayment {
         $formObject->setRawFields();
         return $formObject;
     }
+
+    /**
+     * getPaymentAddress implements the webservice preparedpayment request
+     * 
+     * @return HostedAdminResponse
+     * @throws ValidationException
+     */
+    public function getPaymentAddress() {
+        
+        $message = "nothing here";
+        
+        return new HostedAdminResponse($message, $this->order->countryCode, $this->order->conf);
+        
+    }    
     
     /**
      * @return string[] $errors an array containing the validation errors found
