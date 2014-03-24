@@ -40,39 +40,37 @@ class HostedXmlBuilder {
         $this->setBaseXML();
         $this->XMLWriter->startElement("payment");
         
-        $this->XMLWriter->writeElement("customerrefno", $order->clientOrderNumber);
+        if (isset($request['paymentMethod'])) {
+            $this->XMLWriter->writeElement("paymentmethod", $request['paymentMethod']); // paymentmethod -- if not set, goes to paypage
+        }
+        $this->XMLWriter->writeElement("lang", $request['langCode']);
         $this->XMLWriter->writeElement("currency", $request['currency']);
         $this->XMLWriter->writeElement("amount", round($request['amount']));            //TODO check round() here
 
         if ($request['totalVat'] != null) {
             $this->XMLWriter->writeElement("vat", round($request['totalVat']));         //TODO check round() here
         }
-
-        $this->XMLWriter->writeElement("addinvoicefee", "FALSE");
-        $this->XMLWriter->writeElement("lang", $request['langCode']);
+        $this->XMLWriter->writeElement("customerrefno", $order->clientOrderNumber);
         $this->XMLWriter->writeElement("returnurl", $request['returnUrl']);
         $this->XMLWriter->writeElement("cancelurl", $request['cancelUrl']);
         if($request['callbackUrl'] != null){
             $this->XMLWriter->writeElement("callbackurl", $request['callbackUrl']);
         }
-
-        $this->serializeCustomer($order,$request);
-
+        // subscriptiontype
+        // simulatorcode
+        if (isset($request['excludePaymentMethods'])) {
+            $this->serializeExcludePayments($request['excludePaymentMethods']); // excludepaymentmethods   
+        }
+        $this->serializeOrderRows($request['rows']); // orderrows
+        
         if (isset($order->ipAddress)) {
              $this->XMLWriter->writeElement("ipaddress", $order->ipAddress);
         }
 
-        $this->XMLWriter->writeElement("iscompany", $this->isCompany);
-
-        $this->serializeOrderRows($request['rows']);
-
-        if (isset($request['excludePaymentMethods'])) {
-            $this->serializeExcludePayments($request['excludePaymentMethods']);
-        }
-
-        if (isset($request['paymentMethod'])) {
-            $this->XMLWriter->writeElement("paymentmethod", $request['paymentMethod']);
-        }
+        $this->serializeCustomer($order,$request); // customer          // -- used by Invoice payment
+        $this->XMLWriter->writeElement("iscompany", $this->isCompany);  // -- used by invoice payment
+        $this->XMLWriter->writeElement("addinvoicefee", "FALSE");       // -- used by invoice payment
+        // addressid                                                    // -- used by invoice payment
 
         $this->XMLWriter->endElement();
         $this->XMLWriter->endDocument();
@@ -92,40 +90,8 @@ class HostedXmlBuilder {
         $this->setBaseXML();
         $this->XMLWriter->startElement("preparepayment");
 
-        $this->XMLWriter->writeElement("customerrefno", $order->clientOrderNumber);
-        $this->XMLWriter->writeElement("currency", $request['currency']);
-        $this->XMLWriter->writeElement("amount", round($request['amount']));            //TODO check round() here
-
-        if ($request['totalVat'] != null) {
-            $this->XMLWriter->writeElement("vat", round($request['totalVat']));         //TODO check round() here
-        }
-
-        $this->XMLWriter->writeElement("addinvoicefee", "FALSE");
-        $this->XMLWriter->writeElement("lang", $request['langCode']);
-        $this->XMLWriter->writeElement("returnurl", $request['returnUrl']);
-        $this->XMLWriter->writeElement("cancelurl", $request['cancelUrl']);
-        if($request['callbackUrl'] != null){
-            $this->XMLWriter->writeElement("callbackurl", $request['callbackUrl']);
-        }
-
-        $this->serializeCustomer($order,$request);
-
-        if (isset($order->ipAddress)) {
-             $this->XMLWriter->writeElement("ipaddress", $order->ipAddress);
-        }
-
-        $this->XMLWriter->writeElement("iscompany", $this->isCompany);
-
-        $this->serializeOrderRows($request['rows']);
-
-        if (isset($request['excludePaymentMethods'])) {
-            $this->serializeExcludePayments($request['excludePaymentMethods']);
-        }
-
-        if (isset($request['paymentMethod'])) {
-            $this->XMLWriter->writeElement("paymentmethod", $request['paymentMethod']);
-        }
-
+        $this->XMLWriter->writeElement("mocked", "mock data");
+        
         $this->XMLWriter->endElement();
         $this->XMLWriter->endDocument();
 
@@ -155,25 +121,17 @@ class HostedXmlBuilder {
         if (isset($order->customerIdentity->initials)) {
              $this->XMLWriter->writeElement("initials", $order->customerIdentity->initials);
         }
-
-        if (isset($order->customerIdentity->phonenumber)) {
-             $this->XMLWriter->writeElement("phone", $order->customerIdentity->phonenumber);
-        }
-
-        if (isset($order->customerIdentity->email)) {
-             $this->XMLWriter->writeElement("email", $order->customerIdentity->email);
-        }
-
+        
         if (isset($order->customerIdentity->street)) {
             $this->XMLWriter->writeElement("address", $order->customerIdentity->street);
+        }
+        
+        if (isset($order->customerIdentity->coAddress)) {
+            $this->XMLWriter->writeElement("address2", $order->customerIdentity->coAddress);
         }
 
         if (isset($order->customerIdentity->housenumber)) {
             $this->XMLWriter->writeElement("housenumber", $order->customerIdentity->housenumber);
-        }
-
-        if (isset($order->customerIdentity->coAddress)) {
-            $this->XMLWriter->writeElement("address2", $order->customerIdentity->coAddress);
         }
 
         if (isset($order->customerIdentity->zipCode)) {
@@ -188,12 +146,24 @@ class HostedXmlBuilder {
             $this->XMLWriter->writeElement("country", $order->countryCode);
         }
 
+        if (isset($order->customerIdentity->phonenumber)) {
+             $this->XMLWriter->writeElement("phone", $order->customerIdentity->phonenumber);
+        }
+
+        if (isset($order->customerIdentity->email)) {
+             $this->XMLWriter->writeElement("email", $order->customerIdentity->email);
+        }
+ 
+        // TODO used by Invoice payment
         if (isset($order->customerIdentity->orgNumber)|| isset($order->customerIdentity->companyVatNumber)) {
             if (isset($order->customerIdentity->orgNumber)) {
                  $this->XMLWriter->writeElement("ssn", $order->customerIdentity->orgNumber);
             } else {
-                  $this->XMLWriter->writeElement("vatnumber", $order->customerIdentity->companyVatNumber);
+                  $this->XMLWriter->writeElement("vatnumber", $order->customerIdentity->companyVatNumber); // -- used by Invoice payment
             }
+            
+            // companyname      // -- used by Invoice payment
+            // companyid        // -- used by Invoice payment
 
             $this->isCompany = "TRUE";
         }
@@ -201,7 +171,7 @@ class HostedXmlBuilder {
         $this->XMLWriter->endElement();
 
         if (isset($order->customerIdentity->addressSelector)) {
-             $this->XMLWriter->writeElement("addressid", $order->customerIdentity->addressSelector);
+             $this->XMLWriter->writeElement("addressid", $order->customerIdentity->addressSelector);    // -- used by Invoice payment
         }
     }
 
