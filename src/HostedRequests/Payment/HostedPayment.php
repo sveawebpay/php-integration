@@ -120,13 +120,15 @@ class HostedPayment {
         return $this;
     }
     
+    // TODO refactor getPaymentForm, getPaymentAddress to move validation, xml building details to HostedRequest subclasses + add tests
+    
     /**
-     * getPaymentForm 
+     * getPaymentForm returns a form object containing a webservice payment request
      * @return PaymentForm
      * @throws ValidationException
      */
     public function getPaymentForm() {
-        //validate input
+        //validate the order
         $errors = $this->validateOrder();
         $exceptionString = "";
         if (count($errors) > 0 || (isset($this->returnUrl) == FALSE && isset($this->paymentMethod) == FALSE)) {
@@ -142,7 +144,7 @@ class HostedPayment {
         }
 
         $xmlBuilder = new HostedXmlBuilder();
-        $this->xmlMessage = $xmlBuilder->getOrderXML($this->calculateRequestValues(),$this->order);
+        $this->xmlMessage = $xmlBuilder->getPaymentXML($this->calculateRequestValues(),$this->order);
         $this->xmlMessageBase64 = base64_encode($this->xmlMessage);
         
         $formObject = new PaymentForm( $this->xmlMessage, $this->order->conf, $this->order->countryCode );
@@ -157,9 +159,43 @@ class HostedPayment {
      */
     public function getPaymentAddress() {
         
-        $message = "nothing here";
+        // validate the order
+        $errors = $this->validateOrder();
+        $exceptionString = "";
+        if (
+            // payment req's
+            count($errors) > 0 || 
+            (isset($this->returnUrl) == FALSE && isset($this->paymentMethod) == FALSE) ||
+            // preparedpayment req's
+            (isset($this->langCode) == FALSE || isset($this->ipAddress) == FALSE)
+        ) {
+            if (isset($this->returnUrl) == FALSE) {
+                $exceptionString .="-missing value : ReturnUrl is required. Use function setReturnUrl().\n";
+            }
+            // TODO add these
+//            if (isset($this->langCode) == FALSE) {
+//                $exceptionString .="-missing value : langCode is required. Use function setPayPageLanguage().\n";
+//            }
+//            if (isset($this->ipAddress) == FALSE) {
+//                $exceptionString .="-missing value : ipAddress is required. Use function setIpAddress().\n";
+//            }
+                        
+            foreach ($errors as $key => $value) {
+                $exceptionString .="-". $key. " : ".$value."\n";
+            }
+
+            throw new ValidationException($exceptionString);
+        }
+
+        // build the payment xml
+        $xmlBuilder = new HostedXmlBuilder();
+        $this->xmlMessage = $xmlBuilder->getPreparePaymentXML($this->calculateRequestValues(),$this->order);
         
-        return new HostedAdminResponse($message, $this->order->countryCode, $this->order->conf);
+        //curl and get response from service
+  
+        return $message;
+        
+//        return new HostedAdminResponse($message, $this->order->countryCode, $this->order->conf);
         
     }    
     

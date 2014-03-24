@@ -36,23 +36,24 @@ class GetPaymentAddress {
 //    private $orderrows;
     
     
-    /* 
-     * @param ConfigurationProvider $config  instance implementing ConfigurationProvider
-     */
+    /** @param ConfigurationProvider $config  instance implementing ConfigurationProvider */
     function __construct( $config ) {
         $this->config = $config;
     }
 
+    /** @param string $countryCode */ 
     function setCountryCode( $countryCode ) {
         $this->countryCode = $countryCode;
         return $this;
     }
     
+    /** @param string $ipAddress */ 
     function setIpAddress( $ipAddress ) {
         $this->ipAddress = $ipAddress;
         return $this;
     }
     
+    /** @param string $paymentMethod */ 
     function setPaymentMethod( $paymentMethod ) {
         $this->paymentMethod = $paymentMethod;
         return $this;
