@@ -150,54 +150,6 @@ class HostedPayment {
         $formObject = new PaymentForm( $this->xmlMessage, $this->order->conf, $this->order->countryCode );
         return $formObject;
     }
-
-    /**
-     * getPaymentAddress implements the webservice preparedpayment request
-     * 
-     * @return HostedAdminResponse
-     * @throws ValidationException
-     */
-    public function getPaymentAddress() {
-        
-        // validate the order
-        $errors = $this->validateOrder();
-        $exceptionString = "";
-        if (
-            // payment req's
-            count($errors) > 0 || 
-            (isset($this->returnUrl) == FALSE && isset($this->paymentMethod) == FALSE) ||
-            // preparedpayment req's
-            (isset($this->langCode) == FALSE || isset($this->ipAddress) == FALSE)
-        ) {
-            if (isset($this->returnUrl) == FALSE) {
-                $exceptionString .="-missing value : ReturnUrl is required. Use function setReturnUrl().\n";
-            }
-            // TODO add these
-//            if (isset($this->langCode) == FALSE) {
-//                $exceptionString .="-missing value : langCode is required. Use function setPayPageLanguage().\n";
-//            }
-//            if (isset($this->ipAddress) == FALSE) {
-//                $exceptionString .="-missing value : ipAddress is required. Use function setIpAddress().\n";
-//            }
-                        
-            foreach ($errors as $key => $value) {
-                $exceptionString .="-". $key. " : ".$value."\n";
-            }
-
-            throw new ValidationException($exceptionString);
-        }
-
-        // build the payment xml
-        $xmlBuilder = new HostedXmlBuilder();
-        $this->xmlMessage = $xmlBuilder->getPreparePaymentXML($this->calculateRequestValues(),$this->order);
-        
-        //curl and get response from service
-  
-        return $message;
-        
-//        return new HostedAdminResponse($message, $this->order->countryCode, $this->order->conf);
-        
-    }    
     
     /**
      * @return string[] $errors an array containing the validation errors found
