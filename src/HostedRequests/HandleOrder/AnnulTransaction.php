@@ -1,22 +1,22 @@
 <?php
 namespace Svea;
 
-require_once SVEA_REQUEST_DIR . '/Includes.php';
+require_once 'HostedRequest.php';
+require_once  SVEA_REQUEST_DIR.'/Constant/PaymentMethod.php';
 
 /**
  * Annul a Card transaction
  * 
  * @author Kristian Grossman-Madsen
  */
-class AnnulTransaction {
+class AnnulTransaction extends HostedRequest {
 
-    private $config;
-    private $countryCode;
-
-    private $transactionId;
+    protected $countryCode;
+    protected $transactionId;
     
     function __construct($config) {
-        $this->config = $config;
+        $this->method = "annul";
+        parent::__construct($config);
     }
 
     function setCountryCode( $countryCode ) {
@@ -56,36 +56,5 @@ class AnnulTransaction {
             'mac' => urlencode($mac)
         );
         return $request_fields;
-    }
-        
-    /**
-     * Do request using cURL
-     * @return HostedAdminResponse
-     */
-    public function doRequest(){
-        $fields = $this->prepareRequest();
-        
-        $fieldsString = "";
-        foreach ($fields as $key => $value) {
-            $fieldsString .= $key.'='.$value.'&';
-        }
-        rtrim($fieldsString, '&');
-
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $this->config->getEndpoint(SveaConfigurationProvider::HOSTED_ADMIN_TYPE). "annul");
-        curl_setopt($ch, CURLOPT_POST, count($fields));
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $fieldsString);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        //force curl to trust https
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-        //returns a html page with redirecting to bank...
-        $responseXML = curl_exec($ch);
-        curl_close($ch);
-        
-        // create SveaResponse to handle annul response
-        $responseObj = new \SimpleXMLElement($responseXML);        
-        $sveaResponse = new \SveaResponse($responseObj, $this->countryCode, $this->config);
-
-        return $sveaResponse->response; 
     }
 }
