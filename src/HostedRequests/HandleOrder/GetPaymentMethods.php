@@ -9,7 +9,7 @@ require_once SVEA_REQUEST_DIR . '/Includes.php';
  *
  * @author anne-hal
  */
-class GetPaymentMethods {
+class GetPaymentMethods {       // TODO inherit from HostedRequest
 
     private $method = "getpaymentmethods";
     private $config;

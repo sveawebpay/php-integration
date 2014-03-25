@@ -1,6 +1,7 @@
 <?php
 namespace Svea;
 
+require_once 'HostedRequest.php';
 require_once SVEA_REQUEST_DIR . '/Includes.php';
 
 /**
@@ -8,33 +9,28 @@ require_once SVEA_REQUEST_DIR . '/Includes.php';
  * 
  * @author Kristian Grossman-Madsen
  */
-class ConfirmTransaction {
+class ConfirmTransaction extends HostedRequest {
 
-    private $config;
-    private $countryCode;
-
-    private $transactionId;
-    private $captureDate;
+    protected $transactionId;
+    protected $captureDate;
     
     function __construct($config) {
-        $this->config = $config;
+        $this->method = "confirm";
+        parent::__construct($config);
     }
     
-    function setCountryCode( $countryCode ) {
-        $this->countryCode = $countryCode;
-        return $this;
-    }
-    
+    /**
+     * @param string $transactionId  the transaction to capture
+     * @return $this
+     */
     function setTransactionId( $transactionId ) {
         $this->transactionId = $transactionId;
         return $this;
     }
     
     /**
-     * Use setCaptureDate to tell when to capture the transaction.
-     * 
-     * @param string $captureDate ISO-8601 extended date format (YYYY-MM-DD)
-     * @return \Svea\ConfirmTransaction
+     * @param string $captureDate  ISO-8601 extended date format (YYYY-MM-DD)
+     * @return $this
      */
     function setCaptureDate( $captureDate ) {
         $this->captureDate = $captureDate;
@@ -69,35 +65,5 @@ class ConfirmTransaction {
             'mac' => urlencode($mac)
         );
         return $request_fields;
-    }
-    /**
-     * Do request using cURL
-     * @return HostedAdminResponse
-     */
-    public function doRequest(){
-        $fields = $this->prepareRequest();
-        
-        $fieldsString = "";
-        foreach ($fields as $key => $value) {
-            $fieldsString .= $key.'='.$value.'&';
-        }
-        rtrim($fieldsString, '&');
-
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $this->config->getEndpoint(SveaConfigurationProvider::HOSTED_ADMIN_TYPE). "confirm");
-        curl_setopt($ch, CURLOPT_POST, count($fields));
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $fieldsString);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        //force curl to trust https
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-        //returns a html page with redirecting to bank...
-        $responseXML = curl_exec($ch);
-        curl_close($ch);
-        
-        // create SveaResponse to handle confirm response
-        $responseObj = new \SimpleXMLElement($responseXML);        
-        $sveaResponse = new \SveaResponse($responseObj, $this->countryCode, $this->config);
-
-        return $sveaResponse->response; 
     }
 }
