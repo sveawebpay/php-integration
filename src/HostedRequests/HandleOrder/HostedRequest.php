@@ -12,12 +12,27 @@ class HostedRequest {
 
     /** @var ConfigurationProvider $config */
     protected $config;
-    
-    /** $var string $method  set by the subclass, defines what webservice is called (including payment) */
+
+    /** @var string $method  set by the subclass, defines what webservice is called (including payment) */
     protected $method;
-         
+
+    /** @var string $countryCode */
+    protected $countryCode; 
+        
+    /** 
+     * @param ConfigurationProvider $config
+     */
     function __construct($config) {
         $this->config = $config;
+    }
+    
+    /**
+     * @param string $countryCode
+     * @return $this
+     */
+    function setCountryCode( $countryCode ) {
+        $this->countryCode = $countryCode;
+        return $this;
     }
     
     /**

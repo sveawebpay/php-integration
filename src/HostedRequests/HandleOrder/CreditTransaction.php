@@ -1,6 +1,7 @@
 <?php
 namespace Svea;
 
+require_once 'HostedRequest.php';
 require_once SVEA_REQUEST_DIR . '/Includes.php';
 
 /**
@@ -8,28 +9,29 @@ require_once SVEA_REQUEST_DIR . '/Includes.php';
  * 
  * @author Kristian Grossman-Madsen
  */
-class CreditTransaction {
+class CreditTransaction extends HostedRequest {
 
-    private $config;
-    private $countryCode;
-
-    private $transactionId;
-    private $creditAmount;
+    protected $transactionId;
+    protected $creditAmount;
     
     function __construct($config) {
-        $this->config = $config;
+        $this->method = "credit";
+        parent::__construct($config);
     }
-    
-    function setCountryCode( $countryCode ) {
-        $this->countryCode = $countryCode;
-        return $this;
-    }
-    
+
+    /**
+     * @param string $transactionId  the transaction to credit
+     * @return $this
+     */
     function setTransactionId( $transactionId ) {
         $this->transactionId = $transactionId;
         return $this;
     }
     
+    /**
+     * @param type $creditAmount  amount to credit, in minor currency (i.e. 1 SEK => 100 in minor currency)
+     * @return $this
+     */
     function setCreditAmount( $creditAmount ) {
         $this->creditAmount = $creditAmount;
         return $this;
@@ -63,35 +65,5 @@ class CreditTransaction {
             'mac' => urlencode($mac)
         );
         return $request_fields;
-    }
-    /**
-     * Do request using cURL
-     * @return HostedAdminResponse
-     */
-    public function doRequest(){
-        $fields = $this->prepareRequest();
-        
-        $fieldsString = "";
-        foreach ($fields as $key => $value) {
-            $fieldsString .= $key.'='.$value.'&';
-        }
-        rtrim($fieldsString, '&');
-
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $this->config->getEndpoint(SveaConfigurationProvider::HOSTED_ADMIN_TYPE). "credit");
-        curl_setopt($ch, CURLOPT_POST, count($fields));
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $fieldsString);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        //force curl to trust https
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-        //returns a html page with redirecting to bank...
-        $responseXML = curl_exec($ch);
-        curl_close($ch);
-        
-        // create SveaResponse to handle credit response
-        $responseObj = new \SimpleXMLElement($responseXML);        
-        $sveaResponse = new \SveaResponse($responseObj, $this->countryCode, $this->config);
-
-        return $sveaResponse->response; 
     }
 }

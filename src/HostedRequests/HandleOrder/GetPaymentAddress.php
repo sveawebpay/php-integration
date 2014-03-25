@@ -1,6 +1,7 @@
 <?php
 namespace Svea;
 
+require_once 'HostedRequest.php';
 require_once SVEA_REQUEST_DIR . '/Includes.php';
 
 /**
@@ -9,36 +10,35 @@ require_once SVEA_REQUEST_DIR . '/Includes.php';
  * 
  * @author Kristian Grossman-Madsen
  */
-class GetPaymentAddress {
+class GetPaymentAddress extends HostedRequest {
 
-    /** @var ConfigurationProvider */
-    private $config;
-    
     //preparepayment
     /** @var string  */
-    private $countryCode;
+    protected $countryCode;
+
     /** @var string */
-    private $ipAddress;
+    protected $ipAddress;
     
     //payment
-    private $paymentMethod;
-//    private $lang;
-//    private $currency;
-//    private $amount;
-//    private $vat;
-//    private $customerrefno;
-//    private $returnurl;
-//    private $cancelurl;
-//    private $callbackurl;
-//    private $subscriptiontype;
-//    private $simulatorcode;
-//    private $excludepaymentmethods;
-//    private $orderrows;
+    protected $paymentMethod;
+//    protected $lang;
+//    protected $currency;
+//    protected $amount;
+//    protected $vat;
+//    protected $customerrefno;
+//    protected $returnurl;
+//    protected $cancelurl;
+//    protected $callbackurl;
+//    protected $subscriptiontype;
+//    protected $simulatorcode;
+//    protected $excludepaymentmethods;
+//    protected $orderrows;
     
     
     /** @param ConfigurationProvider $config  instance implementing ConfigurationProvider */
     function __construct( $config ) {
-        $this->config = $config;
+        $this->method = "preparepayment";
+        parent::__construct($config);
     }
 
     /** @param string $countryCode */ 
@@ -71,7 +71,7 @@ class GetPaymentAddress {
         if( !isset( $this->amount ) ) throw new \InvalidArgumentException("amount not set for preparepayment request");
         if( !isset( $this->returnurl ) ) throw new \InvalidArgumentException("returnurl not set for preparepayment request");        
         // TODO doesn't validate contents of orderrows row elements
-        
+    }
 //        
 //    /**
 //     * prepares the elements used in the request to svea
@@ -102,34 +102,4 @@ class GetPaymentAddress {
 //        );
 //        return $request_fields;
 //    }
-//    /**
-//     * Do request using cURL
-//     * @return HostedAdminResponse
-//     */
-//    public function doRequest(){
-//        $fields = $this->prepareRequest();
-//        
-//        $fieldsString = "";
-//        foreach ($fields as $key => $value) {
-//            $fieldsString .= $key.'='.$value.'&';
-//        }
-//        rtrim($fieldsString, '&');
-//
-//        $ch = curl_init();
-//        curl_setopt($ch, CURLOPT_URL, $this->config->getEndpoint(SveaConfigurationProvider::HOSTED_ADMIN_TYPE). "confirm");
-//        curl_setopt($ch, CURLOPT_POST, count($fields));
-//        curl_setopt($ch, CURLOPT_POSTFIELDS, $fieldsString);
-//        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-//        //force curl to trust https
-//        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-//        //returns a html page with redirecting to bank...
-//        $responseXML = curl_exec($ch);
-//        curl_close($ch);
-//        
-//        // create SveaResponse to handle confirm response
-//        $responseObj = new \SimpleXMLElement($responseXML);        
-//        $sveaResponse = new \SveaResponse($responseObj, $this->countryCode, $this->config);
-//
-//        return $sveaResponse->response; 
-    }
 }

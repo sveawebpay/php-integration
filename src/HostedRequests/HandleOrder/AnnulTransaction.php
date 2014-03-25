@@ -19,11 +19,10 @@ class AnnulTransaction extends HostedRequest {
         parent::__construct($config);
     }
 
-    function setCountryCode( $countryCode ) {
-        $this->countryCode = $countryCode;
-        return $this;
-    }
-    
+    /**
+     * @param string $transactionId
+     * @return $this
+     */
     function setTransactionId( $transactionId ) {
         $this->transactionId = $transactionId;
         return $this;
