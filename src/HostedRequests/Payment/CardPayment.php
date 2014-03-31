@@ -19,16 +19,13 @@ class CardPayment extends HostedPayment {
     }
 
     /**
-     * configureExcludedPaymentMethods injects the 'excludePaymentMethods' attribute
-     * in the passed request array.
-     * 
-     * The methods excluded are 1) listed in the method, and 2) fetched from the
-     * ExcludePayments() class (for various country invoice and paymentplan methods)
-     * 
-     * @param array  $request
-     * @return array  the passed $request, incl. an 'excludePaymentMethods' attribute
+     * configureExcludedPaymentMethods returns a list of payment methods not to present on the paypage for this payment method method class.
+     * @return string[] the list of excluded payment methods, @see SystemPaymentMethod
      */
-    protected function configureExcludedPaymentMethods($request) {
+    protected function configureExcludedPaymentMethods() {       
+        // first, exclude all invoice/paymentplan payment methods
+        $methods = ExcludePayments::excludeInvoicesAndPaymentPlan();
+
         //directbanks
         $methods[] = SystemPaymentMethod::BANKAXESS;
         $methods[] = SystemPaymentMethod::DBNORDEASE;
@@ -38,12 +35,8 @@ class CardPayment extends HostedPayment {
         $methods[] = SystemPaymentMethod::DBSWEDBANKSE;
         //other
         $methods[] = SystemPaymentMethod::PAYPAL;
-        //get invoice and payment plan methods for all countries
-        $exclude = new ExcludePayments();
-        $methods = array_merge((array)$methods, (array)$exclude->excludeInvoicesAndPaymentPlan($this->order->countryCode));
 
-        $request['excludePaymentMethods'] = $methods;
-        return $request;
+        return $methods;
     }
 
 }

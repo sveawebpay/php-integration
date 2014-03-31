@@ -18,18 +18,21 @@ class DirectPayment extends HostedPayment {
         parent::__construct($order);      
     }
 
-    protected function configureExcludedPaymentMethods($request) {
+    /**
+     * configureExcludedPaymentMethods returns a list of payment methods not to present on the paypage for this payment method method class.
+     * @return string[] the list of excluded payment methods, @see SystemPaymentMethod
+     */
+    protected function configureExcludedPaymentMethods() {
+        // first, exclude all invoice/paymentplan payment methods
+        $methods = ExcludePayments::excludeInvoicesAndPaymentPlan();
+        
         //card
         $methods[] = SystemPaymentMethod::KORTCERT;
         $methods[] = SystemPaymentMethod::SKRILL;
         //other
         $methods[] = SystemPaymentMethod::PAYPAL;
 
-        $exclude = new ExcludePayments();
-        $methods = array_merge((array)$methods, (array)$exclude->excludeInvoicesAndPaymentPlan($this->order->countryCode));
-
-        $request['excludePaymentMethods'] = $methods;
-        return $request;
+        return $methods;
     }
 
 }
