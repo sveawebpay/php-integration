@@ -4,6 +4,10 @@ require_once SVEA_REQUEST_DIR . '/Includes.php';
 /**
  * SveaResponse creates a uniform response object from a call to Svea services.
  * 
+ * SveaResponse returns an instance of the response class corresponding to 
+ * the request sent to Svea, i.e. instances of subclasses to HostedResponse 
+ * and WebServiceResponse, respectively.
+ * 
  * For asynchronous services, create an instance of SveaResponse, pass it the 
  * resulting xml response as part of the $_REQUEST response along with 
  * countryCode and config, then receive your HostedResponse instance by calling 
@@ -23,11 +27,16 @@ class SveaResponse {
     public $response;
 
     /**
-     * Returns an instance of the response class corresponding to the request 
-     * sent to Svea, i.e. instances of subclasses to HostedResponse and 
-     * WebServiceResponse, respectively.
+     * The constructor checks the parameter $message to see if the service response
+     * has come in as a SimpleXMLElement object or as a raw xml string. Then it
+     * creates the appropriate Response object which parses the response and does
+     * error handling et al.
      * 
-     * @param SimpleXMLElement $message
+     * The resulting parsed response attributes are available for inspection 
+     * through the getResponse() method. Inspect the individual response using
+     * i.e. $myInstanceOfSveaResponse->getResponse()->serviceResponseAttribute
+     * 
+     * @param SimpleXMLElement|string  $message contains the Svea service response, either as an object or as raw xml (for hosted payments)
      * @param string $countryCode
      * @param SveaConfigurationProvider $config
      * @return mixed instance of a subclass to HostedResponse or WebServiceResponse, respectively
