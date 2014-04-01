@@ -166,9 +166,13 @@ class HostedPayment {
         return $errors;
     }
     
+    /** 
+     * returns a list of request attributes-value pairs 
+     */
     public function calculateRequestValues() {
+        $this->request = array();        
         $formatter = new HostedRowFormatter();
-        $request = array();
+
         $request['rows'] = $formatter->formatRows($this->order);
         $request['amount'] = $formatter->formatTotalAmount($request['rows']);
         $request['totalVat'] = $formatter->formatTotalVat( $request['rows']);
@@ -180,7 +184,9 @@ class HostedPayment {
         $currency = strtoupper($currency);
         $request['currency'] = $currency;
 
-        return $this->configureExcludedPaymentMethods($request); //Method in child class
+        // add excluded payment methods to request array
+        $request['excludePaymentMethods'] = $this->configureExcludedPaymentMethods(); //Method in child class
+        return $request;
     }
 
     
