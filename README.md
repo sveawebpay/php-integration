@@ -1,5 +1,5 @@
 # PHP Integration Package API for SveaWebPay
-## Version 1.6.1
+## Version 1.6.2
 
 | Branch                            | Build status                               |
 |---------------------------------- |------------------------------------------- |
@@ -47,11 +47,6 @@ $foo = WebPay::createOrder($config);
 $foo = $foo->...
         ->..;
 ```
-
-## Changes in release 1.2.1
-
-We recommend using php 4.4 on package servers, for namespace compatibility
-(reported compatibility issue with Debian Squeeze instalations).
 
 ### Namespace
 From release 1.2.0 on the package makes use of a namespace, Svea. We have made

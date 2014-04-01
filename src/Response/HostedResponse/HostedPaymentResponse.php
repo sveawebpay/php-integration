@@ -5,6 +5,7 @@ require_once 'HostedResponse.php';
 
 /**
  * @author anne-hal
+ * @todo document HostedResponse (and others, SveaResponse) error handling/checking in main api/end user documentation.
  */
 class HostedPaymentResponse extends HostedResponse{
 
