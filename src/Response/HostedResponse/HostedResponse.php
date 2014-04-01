@@ -3,12 +3,16 @@ namespace Svea;
 require_once SVEA_REQUEST_DIR . '/Includes.php';
 
 /**
- * @author anne-hal
+ * @author anne-hal, Kristian Grossman-Madsen for Svea WebPay
  */
 class HostedResponse {
-
+    
+    /** @var int $accepted  Has value of 1 iff transaction was accepted by Svea. A value of 0 may that the request was declined, check $resultcode. */
     public $accepted;
+    /** @var string $resultcode  A value >0 indicates that the service request failed at Svea, see $errormessage. 0 is an invalid response message. */
     public $resultcode;
+    
+    /** @param string $errormessage  Human readable version of the service resultcode */
 
     protected function setErrorParams($resultcode) {
         switch ($resultcode) {
