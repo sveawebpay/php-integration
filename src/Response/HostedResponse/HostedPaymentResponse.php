@@ -17,13 +17,30 @@ class HostedPaymentResponse extends HostedResponse{
     public $currency;
 
 
+    /**
+     * HostedPaymentResponse validates the hosted payment response.
+     * 
+     * For successful payment requests it sets the accepted attribute to 1 and
+     * other response attributes accordingly.
+     * 
+     * In case of a response error, it sets the the accepted attribute to 0 and
+     * the resultcode to 0. For responses indicating that something went wrong
+     * at the service, it sets accepted to 0 and responsecode with corresponding
+     * errormessage accordingly.
+     * 
+     * @param string $response  hosted request response xml message
+     * @param string $countryCode  two-letter country code
+     * @param ConfigurationProveder  $config
+     * 
+     * $todo move validation of service response message to HostedResponse
+     */
     function __construct($response,$countryCode,$config) {
         if (is_array($response)) {
             if (array_key_exists("mac",$response) && array_key_exists("response",$response)) {
                 $decodedXml = base64_decode($response["response"]);
                 $secret = $config->getSecret(\ConfigurationProvider::HOSTED_TYPE,$countryCode);
                 if ($this->validateMac($response["response"],$response['mac'],$secret)) {
-                    $this->formatXml($decodedXml); // sets ->accepted, but not ->resultcode
+                    $this->formatXml($decodedXml);
                 } else {
                     $this->accepted = 0;
                     $this->resultcode = '0';

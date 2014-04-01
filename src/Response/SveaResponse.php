@@ -22,6 +22,26 @@ class SveaResponse {
      */
     public $response;
 
+
+    /**
+     * Returns an instance of the response class corresponding to the request 
+     * sent to Svea, i.e. instances of subclasses to HostedResponse and 
+     * WebServiceResponse, respectively.
+     *
+     * SveaResponse checks the parameter $message to see if the service response
+     * has come in as a SimpleXMLElement object or as a raw xml string. Then it
+     * creates the appropriate Response object which parses the response and does
+     * error handling et al.
+     * 
+     * The resulting parsed response attributes are available for inspection 
+     * through the getResponse() method. Inspect the individual response using
+     * i.e. $myInstanceOfSveaResponse->getResponse()->serviceResponseAttribute
+     * 
+     * @param SimpleXMLElement|string  $message contains the Svea service response, either as an object or as raw xml (for hosted payments)
+     * @param string $countryCode
+     * @param SveaConfigurationProvider $config
+     * @return mixed instance of a subclass to HostedResponse or WebServiceResponse, respectively
+     */
     public function __construct($message, $countryCode, $config = NULL) {
          
         $config = $config == null ? Svea\SveaConfig::getDefaultConfig() : $config;
