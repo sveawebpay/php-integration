@@ -8,7 +8,7 @@ $root = realpath(dirname(__FILE__));
 require_once $root . '/../../../TestUtil.php';
 
 /**
- * @author anne-hal
+ * @author anne-hal, Kristian Grossman-Madsen for Svea WebPay
  */
 class PaymentMethodTest extends \PHPUnit_Framework_TestCase{
 
@@ -57,10 +57,10 @@ class PaymentMethodTest extends \PHPUnit_Framework_TestCase{
             ->setOrderDate("2012-12-12")
             ->setCurrency("SEK")
             ->usePaymentMethod(\PaymentMethod::INVOICE)
-            ->setReturnUrl("http://myurl.se")
-            ->getPaymentForm();
+                ->setReturnUrl("http://myurl.se")
+                ->getPaymentForm();
 
-        $xmlMessage = new \SimpleXMLElement($form->xmlMessage);
+        $xmlMessage = new \SimpleXMLElement($form->xmlMessage); 
         $this->assertEquals(SystemPaymentMethod::INVOICE_SE, $xmlMessage->paymentmethod[0]);
         $this->assertEquals("TRUE", $xmlMessage->iscompany);
         $this->assertEquals("4608142222", $xmlMessage->customer->ssn);
@@ -87,10 +87,10 @@ class PaymentMethodTest extends \PHPUnit_Framework_TestCase{
             ->setOrderDate("2012-12-12")
             ->setCurrency("SEK")
             ->usePaymentMethod(\PaymentMethod::INVOICE)
-            ->setReturnUrl("http://myurl.se")
-            ->getPaymentForm();
-        $xmlMessage = new \SimpleXMLElement($form->xmlMessage);
+                ->setReturnUrl("http://myurl.se")
+                ->getPaymentForm();
 
+        $xmlMessage = new \SimpleXMLElement($form->xmlMessage);
         $this->assertEquals("FALSE", $xmlMessage->iscompany);
         $this->assertEquals("Sneider", $xmlMessage->customer->firstname);
     }

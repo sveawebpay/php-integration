@@ -53,8 +53,8 @@ class CardPaymentTest extends \PHPUnit_Framework_TestCase {
                 ->setOrderDate("2012-12-12")
                 ->setCurrency("SEK")
                 ->usePayPageCardOnly() // PayPageObject
-                ->setReturnUrl("http://myurl.se")
-                ->getPaymentForm();
+                    ->setReturnUrl("http://myurl.se")
+                    ->getPaymentForm();
 
         $xmlMessage = new \SimpleXMLElement($form->xmlMessage);
         $payment = base64_decode($form->xmlMessageBase64);

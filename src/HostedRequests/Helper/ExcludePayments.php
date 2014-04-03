@@ -6,7 +6,12 @@ namespace Svea;
  */
 class ExcludePayments {
 
-    public function excludeInvoicesAndPaymentPlan($countryCode) {
+    /**
+     * Fetch an array of all paymentmethods representing a payment plan or invoice payment.
+     * @ignore @param type $countryCode -- ignored
+     * @return string[] 
+     */
+    public static function excludeInvoicesAndPaymentPlan() {
         $methods = array();
 
         $methods[] = SystemPaymentMethod::INVOICESE;

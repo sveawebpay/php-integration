@@ -46,6 +46,9 @@ class HostedPayment {
     /** @var string $langCode  holds the language code used in request */
     public $langCode;
 
+    /** @var string[] $request placeholder for the request parameter key/value pair array */
+    public $request;
+
     /**
      * Creates a HostedPayment, sets default language to english
      * @param CreateOrderBuilder $order
@@ -53,6 +56,7 @@ class HostedPayment {
     public function __construct($order) {
         $this->langCode = "en";
         $this->order = $order;
+        $this->request = array();   
     }
 
     /**
@@ -131,7 +135,7 @@ class HostedPayment {
         //validate the order
         $errors = $this->validateOrder();
         $exceptionString = "";
-        if (count($errors) > 0 || (isset($this->returnUrl) == FALSE && isset($this->paymentMethod) == FALSE)) {
+        if (count($errors) > 0 || (isset($this->returnUrl) == FALSE && isset($this->paymentMethod) == FALSE)) { // todo check if this works as expected
             if (isset($this->returnUrl) == FALSE) {
              $exceptionString .="-missing value : ReturnUrl is required. Use function setReturnUrl().\n";
             }
@@ -166,22 +170,31 @@ class HostedPayment {
         return $errors;
     }
     
+    /** 
+     * returns a list of request attributes-value pairs 
+     */
     public function calculateRequestValues() {
+        // format order data
         $formatter = new HostedRowFormatter();
-        $request = array();
-        $request['rows'] = $formatter->formatRows($this->order);
-        $request['amount'] = $formatter->formatTotalAmount($request['rows']);
-        $request['totalVat'] = $formatter->formatTotalVat( $request['rows']);
-        $request['returnUrl'] = $this->returnUrl;
-        $request['callbackUrl'] = $this->callbackUrl;
-        $request['cancelUrl'] = $this->cancelUrl;
-        $request['langCode'] = $this->langCode;
-        $currency = trim($this->order->currency);
-        $currency = strtoupper($currency);
-        $request['currency'] = $currency;
+        $this->request['rows'] = $formatter->formatRows($this->order);
+        $this->request['amount'] = $formatter->formatTotalAmount($this->request['rows']);
+        $this->request['totalVat'] = $formatter->formatTotalVat( $this->request['rows']);        
 
-        return $this->configureExcludedPaymentMethods($request); //Method in child class
+        $this->request['clientOrderNumber'] = $this->order->clientOrderNumber; /// used by payment
+
+        if (isset($order->ipAddress)) {
+             $this->request['ipAddress'] = $this->order->ipAddress; /// used by payment (optional)
+        }        
+        
+        $this->request['langCode'] = $this->langCode;
+        
+        $this->request['returnUrl'] = $this->returnUrl;
+        $this->request['callbackUrl'] = $this->callbackUrl;
+        $this->request['cancelUrl'] = $this->cancelUrl;
+
+        $this->request['currency'] = strtoupper(trim($this->order->currency));
+               
+        return $this->request;
     }
-
-    
+        
 }

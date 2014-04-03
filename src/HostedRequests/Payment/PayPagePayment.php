@@ -19,23 +19,24 @@ class PayPagePayment extends HostedPayment {
         parent::__construct($order);    
     }
 
-    protected function configureExcludedPaymentMethods($request) {
+    /**
+     * @todo validate here if not set?
+     */
+    public function calculateRequestValues() {
         if (isset($this->paymentMethod)) {
-            $request['paymentMethod'] = $this->paymentMethod;
+            $this->request['paymentMethod'] = $this->paymentMethod;
         }
-
         if (isset($this->excludedPaymentMethods)) {
-            $request['excludePaymentMethods'] = $this->excludedPaymentMethods;
+            $this->request['excludePaymentMethods'] = $this->excludedPaymentMethods;
         }
-
-        return $request;
+        return parent::calculateRequestValues();
     }
 
     /**
-     * Exclude specific payment methods.
-     * @params type Paymentmethod $paymentMethod ex. PaymentMethod::DBSEBSE,Paymentmethod::SVEAINVOICE_SE
+     * Exclude specific payment methods from being shown of the PayPage.
+     * @params string $paymentMethod  use the constants listed in PaymentMethod 
      * Flexible number of params
-     * @return \PayPagePayment
+     * @return $this
      */
     public function excludePaymentMethods() {
         $excludes = func_get_args();
@@ -54,8 +55,10 @@ class PayPagePayment extends HostedPayment {
     }
 
     /**
-     *
-     * @return \PayPagePayment
+     * Include specific payment methods to show on the PayPage.
+     * @params string $paymentMethod  use the constants listed in SystemPaymentMethod
+     * Flexible number of params
+     * @return $this
      */
     public function includePaymentMethods() {
         //get parameters sent no matter how many
@@ -101,8 +104,8 @@ class PayPagePayment extends HostedPayment {
     }
 
     /**
-     * Exclude all cardpayments
-     * @return \PayPagePayment
+     * Exclude all cardpayments from being shown on the PayPage.
+     * @return $this
      */
     public function excludeCardPaymentMethods() {
         $this->excludedPaymentMethods[] = SystemPaymentMethod::KORTCERT;
@@ -112,8 +115,8 @@ class PayPagePayment extends HostedPayment {
     }
 
     /**
-     * Exclude all direct bank payments
-     * @return \PayPagePayment
+     * Exclude all direct bank payments from being shown on the PayPage.
+     * @return $this
      *
      */
     public function excludeDirectPaymentMethods() {
