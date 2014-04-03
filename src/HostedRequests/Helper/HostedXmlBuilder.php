@@ -231,7 +231,7 @@ class HostedXmlBuilder {
         $this->XMLWriter->endElement();
     }
 
-    private function serializeExcludePayments($payMethods) {
+    private function serializeExcludePayments($payMethods) {      
         if (count($payMethods) > 0) {
             $this->XMLWriter->startElement("excludepaymentmethods");
 

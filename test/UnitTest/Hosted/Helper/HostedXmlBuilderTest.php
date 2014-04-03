@@ -129,9 +129,8 @@ class HostedXmlBuilderTest extends \PHPUnit_Framework_TestCase {
     public function testXmlWithCancelUrl() {
         $order = new CreateOrderBuilder(new SveaConfigurationProvider(SveaConfig::getDefaultConfig()));
         $payment = new FakeHostedPayment($order);
-        $payment->order = $order;
         $payment->setCancelUrl("http://www.cancel.com");
-        
+             
         $xmlBuilder = new HostedXmlBuilder();
         $xml = $xmlBuilder->getOrderXML($payment->calculateRequestValues(), $order);
         

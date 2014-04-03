@@ -19,16 +19,28 @@ class PayPagePayment extends HostedPayment {
         parent::__construct($order);    
     }
 
-    protected function configureExcludedPaymentMethods($request) {
-        if (isset($this->paymentMethod)) {
-            $request['paymentMethod'] = $this->paymentMethod;
-        }
+    
+    /**
+     * calls configurePaymentMethod
+     */
+    protected function configureExcludedPaymentMethods() {
+        $this->configurePaymentMethod();
 
         if (isset($this->excludedPaymentMethods)) {
-            $request['excludePaymentMethods'] = $this->excludedPaymentMethods;
+            return $this->excludedPaymentMethods;
         }
+        else {
+            return array();
+        }
+    }
 
-        return $request;
+    /**
+     * @todo move setting all $request
+     */
+    protected function configurePaymentMethod() {
+        if (isset($this->paymentMethod)) {
+            $this->request['paymentMethod'] = $this->paymentMethod;
+        }
     }
 
     /**

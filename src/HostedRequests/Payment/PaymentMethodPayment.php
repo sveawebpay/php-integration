@@ -18,19 +18,27 @@ class PaymentMethodPayment extends HostedPayment{
         $this->paymentMethod = $paymentmethod;
     }
 
-     protected function configureExcludedPaymentMethods($request) {
-        if (isset($this->paymentMethod)) {
-            if ($this->paymentMethod == \PaymentMethod::INVOICE) {
-                $request['paymentMethod'] = "SVEAINVOICEEU_".$this->order->countryCode;
-            } elseif ($this->paymentMethod == \PaymentMethod::PAYMENTPLAN) {
-                $request['paymentMethod'] = "PAYMENTPLAN_".$this->order->countryCode;
-            } else {
-                $request['paymentMethod'] = $this->paymentMethod;
-            }
-        }
-        return $request;
+    /**
+     * calls configurePaymentMethod
+     */
+    protected function configureExcludedPaymentMethods() {
+        $this->configurePaymentMethod();
     }
 
+    /**
+     * @todo move setting all $request
+     */
+    protected function configurePaymentMethod() {
+        if (isset($this->paymentMethod)) {
+            if ($this->paymentMethod == \PaymentMethod::INVOICE) {
+                $this->request['paymentMethod'] = "SVEAINVOICEEU_".$this->order->countryCode;
+            } elseif ($this->paymentMethod == \PaymentMethod::PAYMENTPLAN) {
+                $this->request['paymentMethod'] = "PAYMENTPLAN_".$this->order->countryCode;
+            } else {
+                $this->request['paymentMethod'] = $this->paymentMethod;
+            }
+        }
+    }
     /*
      * Semantic wrapper for setPayPageLanguage
      * @see setPayPageLanguage
