@@ -135,7 +135,7 @@ class HostedPayment {
         //validate the order
         $errors = $this->validateOrder();
         $exceptionString = "";
-        if (count($errors) > 0 || (isset($this->returnUrl) == FALSE && isset($this->paymentMethod) == FALSE)) {
+        if (count($errors) > 0 || (isset($this->returnUrl) == FALSE && isset($this->paymentMethod) == FALSE)) { // todo check if this works as expected
             if (isset($this->returnUrl) == FALSE) {
              $exceptionString .="-missing value : ReturnUrl is required. Use function setReturnUrl().\n";
             }
@@ -173,22 +173,29 @@ class HostedPayment {
     /** 
      * returns a list of request attributes-value pairs 
      */
-    public function calculateRequestValues() {    
+    public function calculateRequestValues() {
+        // format order data
         $formatter = new HostedRowFormatter();
-
         $this->request['rows'] = $formatter->formatRows($this->order);
         $this->request['amount'] = $formatter->formatTotalAmount($this->request['rows']);
-        $this->request['totalVat'] = $formatter->formatTotalVat( $this->request['rows']);
+        $this->request['totalVat'] = $formatter->formatTotalVat( $this->request['rows']);        
+
+        $this->request['clientOrderNumber'] = $this->order->clientOrderNumber; /// used by payment
+
+        if (isset($order->ipAddress)) {
+             $this->request['ipAddress'] = $this->order->ipAddress; /// used by payment (optional)
+        }        
+        
+        $this->request['langCode'] = $this->langCode;
+        
         $this->request['returnUrl'] = $this->returnUrl;
         $this->request['callbackUrl'] = $this->callbackUrl;
         $this->request['cancelUrl'] = $this->cancelUrl;
-        $this->request['langCode'] = $this->langCode;
-        $currency = trim($this->order->currency);
-        $currency = strtoupper($currency);
-        $this->request['currency'] = $currency;
+
+        $this->request['currency'] = strtoupper(trim($this->order->currency));
 
         // add excluded payment methods to request array
-        $this->request['excludePaymentMethods'] = $this->configureExcludedPaymentMethods(); //Method in child class
+        $this->request['excludePaymentMethods'] = $this->configureExcludedPaymentMethods(); //Method in child class     
         return $this->request;
     }
         
