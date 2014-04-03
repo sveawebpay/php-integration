@@ -19,7 +19,8 @@ class CardPayment extends HostedPayment {
     }
 
     /**
-     * configureExcludedPaymentMethods returns a list of payment methods not to present on the paypage for this payment method method class.
+     * configureExcludedPaymentMethods returns a list of payment methods not to 
+     * present on the paypage for this payment method method class.
      * @return string[] the list of excluded payment methods, @see SystemPaymentMethod
      */
     protected function configureExcludedPaymentMethods() {       
@@ -39,4 +40,12 @@ class CardPayment extends HostedPayment {
         return $methods;
     }
 
+    /**
+     * calculateRequestValues adds the payment methods not to present on the 
+     * paypage to the request array
+     */
+    public function calculateRequestValues() {               
+        $this->request['excludePaymentMethods'] = $this->configureExcludedPaymentMethods();        
+        return parent::calculateRequestValues();       
+    }
 }

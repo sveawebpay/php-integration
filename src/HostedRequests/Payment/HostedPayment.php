@@ -193,9 +193,7 @@ class HostedPayment {
         $this->request['cancelUrl'] = $this->cancelUrl;
 
         $this->request['currency'] = strtoupper(trim($this->order->currency));
-
-        // add excluded payment methods to request array
-        $this->request['excludePaymentMethods'] = $this->configureExcludedPaymentMethods(); //Method in child class     
+               
         return $this->request;
     }
         

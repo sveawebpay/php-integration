@@ -25,7 +25,6 @@ class DirectPayment extends HostedPayment {
     protected function configureExcludedPaymentMethods() {
         // first, exclude all invoice/paymentplan payment methods
         $methods = ExcludePayments::excludeInvoicesAndPaymentPlan();
-        
         //card
         $methods[] = SystemPaymentMethod::KORTCERT;
         $methods[] = SystemPaymentMethod::SKRILL;
@@ -35,4 +34,13 @@ class DirectPayment extends HostedPayment {
         return $methods;
     }
 
+    /**
+     * calculateRequestValues adds the payment methods not to present on the 
+     * paypage to the request array
+     */
+    public function calculateRequestValues() {               
+        $this->request['excludePaymentMethods'] = $this->configureExcludedPaymentMethods();        
+        return parent::calculateRequestValues();       
+    }    
+    
 }
