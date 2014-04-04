@@ -1,5 +1,6 @@
 <?php
 namespace Svea;
+require_once $root . '/../../../../src/Includes.php';
 
 /**
  * @author Jonas Lith

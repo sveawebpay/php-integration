@@ -2,13 +2,12 @@
 namespace Svea;
 
 $root = realpath(dirname(__FILE__));
-require_once $root . '/../../../../test/UnitTest/BuildOrder/OrderBuilderTest.php';
-
-$root = realpath(dirname(__FILE__));
 require_once $root . '/../../../TestUtil.php';
 
 $root = realpath(dirname(__FILE__));
 require_once $root . '/TestConf.php';
+
+require_once $root . '/../../../../src/Includes.php';
 
 /**
  * @author Anneli Halld'n, Daniel Brolund for Svea Webpay

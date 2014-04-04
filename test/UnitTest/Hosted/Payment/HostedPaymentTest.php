@@ -4,10 +4,12 @@ namespace Svea;
 require_once 'FakeHostedPayment.php';
 
 $root = realpath(dirname(__FILE__));
-require_once $root . '/../../../../test/UnitTest/BuildOrder/OrderBuilderTest.php';
 require_once $root . '/../../../TestUtil.php';
+
+$root = realpath(dirname(__FILE__));
 require_once $root . '/TestConf.php';
 
+require_once $root . '/../../../../src/Includes.php';
 
 class HostedPaymentTest extends \PHPUnit_Framework_TestCase {
 
