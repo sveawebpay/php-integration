@@ -197,19 +197,24 @@ class HostedPayment {
         // curl away the request to Svea, and pick up the answer.
 
         // get our merchantid & secret
+        
+        // get the config, countryCode from the order object, $message from $this->xmlMessage;
+        $this->config = $this->order->conf; 
+        $this->countryCode = $this->order->countryCode;
+        $message = $this->xmlMessage;
+        
         $merchantId = $this->config->getMerchantId( \ConfigurationProvider::HOSTED_TYPE,  $this->countryCode);
         $secret = $this->config->getSecret( \ConfigurationProvider::HOSTED_TYPE, $this->countryCode);
-        
+             
         // calculate mac
-        $mac = hash("sha512", base64_encode($this->xmlMessage) . $secret);
+        $mac = hash("sha512", base64_encode($message) . $secret);
         
         // encode the request elements
         $fields = array( 
             'merchantid' => urlencode($merchantId),
             'message' => urlencode(base64_encode($message)),
             'mac' => urlencode($mac)
-        );
-        return $request_fields;        
+        );       
 
         // below taken from HostedRequest doRequest
         $fieldsString = "";
@@ -219,7 +224,7 @@ class HostedPayment {
         rtrim($fieldsString, '&');
 
         $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $this->config->getEndpoint(SveaConfigurationProvider::HOSTED_ADMIN_TYPE). $this->method);
+        curl_setopt($ch, CURLOPT_URL, $this->config->getEndpoint(SveaConfigurationProvider::HOSTED_ADMIN_TYPE). "preparepayment");
         curl_setopt($ch, CURLOPT_POST, count($fields));
         curl_setopt($ch, CURLOPT_POSTFIELDS, $fieldsString);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
@@ -253,6 +258,7 @@ class HostedPayment {
     
     /** 
      * returns a list of request attributes-value pairs 
+     * @todo make sure orderValidator validates $this->request contents, not the base object properties, or bypass $request when building xml
      */
     public function calculateRequestValues() {
         // format order data
@@ -263,8 +269,8 @@ class HostedPayment {
 
         $this->request['clientOrderNumber'] = $this->order->clientOrderNumber; /// used by payment
 
-        if (isset($order->ipAddress)) {
-             $this->request['ipAddress'] = $this->order->customer->ipAddress; /// used by payment (optional)
+        if (isset($this->order->customerIdentity->ipAddress)) {
+             $this->request['ipAddress'] = $this->order->customerIdentity->ipAddress; /// used by payment (optional), preparepayment (required)
         }        
         
         $this->request['langCode'] = $this->langCode;

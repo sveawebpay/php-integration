@@ -84,10 +84,22 @@ class HostedAdminResponse extends HostedResponse{
             }            
         }
         
-        //creditTransaction or annulTransaction        
+        //creditTransaction/credit request or annulTransaction/annul request       // note: query request also returns response w/transaction...
         if(property_exists($hostedAdminResponse->transaction,"customerrefno")){
             $this->customerrefno = (string)$hostedAdminResponse->transaction->customerrefno;
         }    
+        
+        // getPaymentURL/preparepayment request
+        if( property_exists($hostedAdminResponse,"preparedpayment")) {
+            $url = "https://webpay.sveaekonomi.se/webpay/preparedpayment/";
+            $testurl = "https://test.sveaekonomi.se/webpay/preparedpayment/";
+            
+            $this->id = (string)$hostedAdminResponse->preparedpayment->id;
+            $this->created = (string)$hostedAdminResponse->preparedpayment->created;
+            
+            $this->url = $url.$this->id;            // in integration package only
+            $this->testurl = $testurl.$this->id;    // in integration packge only
+        }
     }
 
 }
