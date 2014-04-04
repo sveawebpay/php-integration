@@ -102,51 +102,53 @@ class HostedXmlBuilder {
 
     /**
      * Returns the webservice preparepayment request message xml
+     * uses the same code as getPaymentXML above, with the addition of the lang and ipaddress fields 
+     * @todo refactor to use same code as getPaymentXML
      * 
      * @param type $request
      * @param CreateOrderBuilder $order
      * @return type
      * This method expect UTF-8 input
      */
-//    public function getPreparePaymentXML($request, $order) {
-//        $this->setBaseXML();
-//        $this->XMLWriter->startElement("preparepayment");
-//
-//        if (isset($request['paymentMethod'])) {
-//            $this->XMLWriter->writeElement("paymentmethod", $request['paymentMethod']); // paymentmethod -- if not set, goes to paypage
-//        }
-//        $this->XMLWriter->writeElement("lang", $request['langCode']);                   // required in preparepayment 
-//        $this->XMLWriter->writeElement("currency", $request['currency']);
-//        $this->XMLWriter->writeElement("amount", round($request['amount']));            //TODO check round() here
-//
-//        if ($request['totalVat'] != null) {
-//            $this->XMLWriter->writeElement("vat", round($request['totalVat']));         //TODO check round() here
-//        }
-//        $this->XMLWriter->writeElement("customerrefno", $request['clientOrderNumber']);
-//        $this->XMLWriter->writeElement("returnurl", $request['returnUrl']);
-//        $this->XMLWriter->writeElement("cancelurl", $request['cancelUrl']);
-//        if($request['callbackUrl'] != null){
-//            $this->XMLWriter->writeElement("callbackurl", $request['callbackUrl']);
-//        }
+    public function getPreparePaymentXML($request, $order) {
+        $this->setBaseXML();
+        $this->XMLWriter->startElement("payment");
+
+        if (isset($request['paymentMethod'])) {
+            $this->XMLWriter->writeElement("paymentmethod", $request['paymentMethod']); // paymentmethod -- if not set, goes to paypage
+        }
+        $this->XMLWriter->writeElement("lang", $request['langCode']);                   // required in preparepayment 
+        $this->XMLWriter->writeElement("currency", $request['currency']);
+        $this->XMLWriter->writeElement("amount", round($request['amount']));            //TODO check round() here
+
+        if ($request['totalVat'] != null) {
+            $this->XMLWriter->writeElement("vat", round($request['totalVat']));         //TODO check round() here
+        }
+        $this->XMLWriter->writeElement("customerrefno", $request['clientOrderNumber']);
+        $this->XMLWriter->writeElement("returnurl", $request['returnUrl']);
+        $this->XMLWriter->writeElement("cancelurl", $request['cancelUrl']);
+        if($request['callbackUrl'] != null){
+            $this->XMLWriter->writeElement("callbackurl", $request['callbackUrl']);
+        }
         // subscriptiontype
         // simulatorcode
-//        if (isset($request['excludePaymentMethods'])) {
-//            $this->serializeExcludePayments($request['excludePaymentMethods']); // excludepaymentmethods   
-//        }
-//        $this->serializeOrderRows($request['rows']); // orderrows
-//
-//        $this->XMLWriter->writeElement("ipaddress", $request['ipAddress']);     // required in preparepayment
-//                
-//        $this->serializeCustomer($order); // customer          // -- used by Invoice payment
-//        $this->XMLWriter->writeElement("iscompany", $this->isCompany);  // -- used by invoice payment
-//        $this->XMLWriter->writeElement("addinvoicefee", "FALSE");       // -- used by invoice payment
-//        // addressid                                                    // -- used by invoice payment
-//            
-//        $this->XMLWriter->endElement();
-//        $this->XMLWriter->endDocument();
-//
-//        return $this->XMLWriter->flush();
-//    }
+        if (isset($request['excludePaymentMethods'])) {
+            $this->serializeExcludePayments($request['excludePaymentMethods']); // excludepaymentmethods   
+        }
+        $this->serializeOrderRows($request['rows']); // orderrows
+
+        $this->XMLWriter->writeElement("ipaddress", $request['ipAddress']);     // required in preparepayment
+                
+        $this->serializeCustomer($order); // customer          // -- used by Invoice payment
+        $this->XMLWriter->writeElement("iscompany", $this->isCompany);  // -- used by invoice payment
+        $this->XMLWriter->writeElement("addinvoicefee", "FALSE");       // -- used by invoice payment
+        // addressid                                                    // -- used by invoice payment
+            
+        $this->XMLWriter->endElement();
+        $this->XMLWriter->endDocument();
+
+        return $this->XMLWriter->flush();
+    }
     
     
     private function serializeCustomer($order) {

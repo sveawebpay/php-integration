@@ -7,45 +7,45 @@ require_once $root . '/../../../../src/WebServiceRequests/svea_soap/SveaSoapConf
 /**
  * @author Kristian Grossman-Madsen for Svea WebPay
  */
-class GetPaymentAddressTest extends PHPUnit_Framework_TestCase {
+class getPaymentURLTest extends PHPUnit_Framework_TestCase {
         
     protected $configObject;
-    protected $getPaymentAddressObject;
+    protected $getPaymentURLObject;
 
     // fixture, run once before each test method
     protected function setUp() {
         $this->configObject = Svea\SveaConfig::getDefaultConfig();
-        $this->getPaymentAddressObject = new \Svea\GetPaymentAddress( $this->configObject );
+        $this->getPaymentURLObject = new \Svea\getPaymentURL( $this->configObject );
     }
 
     // test methods
     function test_class_exists(){
         
-        $this->assertInstanceOf( "Svea\GetPaymentAddress", $this->getPaymentAddressObject );      
+        $this->assertInstanceOf( "Svea\getPaymentURL", $this->getPaymentURLObject );      
     }
 
     function test_setCountryCode(){
         
         $countryCode = "SE";       
-        $this->getPaymentAddressObject->setCountryCode( $countryCode );
+        $this->getPaymentURLObject->setCountryCode( $countryCode );
         
-        $this->assertEquals( $countryCode, PHPUnit_Framework_Assert::readAttribute($this->getPaymentAddressObject, 'countryCode') );
+        $this->assertEquals( $countryCode, PHPUnit_Framework_Assert::readAttribute($this->getPaymentURLObject, 'countryCode') );
     }
     
     function test_setIpAddress( ){
         
         $ipAddress = "10.10.10.10";       
-        $this->getPaymentAddressObject->setIpAddress( $ipAddress );
+        $this->getPaymentURLObject->setIpAddress( $ipAddress );
         
-        $this->assertEquals( $ipAddress, PHPUnit_Framework_Assert::readAttribute($this->getPaymentAddressObject, 'ipAddress') );
+        $this->assertEquals( $ipAddress, PHPUnit_Framework_Assert::readAttribute($this->getPaymentURLObject, 'ipAddress') );
     }
 
     function test_setPaymentMethod() {
         $paymentMethod = "KORTCERT";
         
-        $this->getPaymentAddressObject->setPaymentMethod( $paymentMethod );
+        $this->getPaymentURLObject->setPaymentMethod( $paymentMethod );
 
-        $this->assertEquals( $paymentMethod, PHPUnit_Framework_Assert::readAttribute($this->getPaymentAddressObject, 'paymentMethod') );
+        $this->assertEquals( $paymentMethod, PHPUnit_Framework_Assert::readAttribute($this->getPaymentURLObject, 'paymentMethod') );
     }
     
     // TODO write tests for other attribute setters here

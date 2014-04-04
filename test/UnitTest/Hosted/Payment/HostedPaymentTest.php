@@ -4,10 +4,12 @@ namespace Svea;
 require_once 'FakeHostedPayment.php';
 
 $root = realpath(dirname(__FILE__));
-require_once $root . '/../../../../test/UnitTest/BuildOrder/OrderBuilderTest.php';
 require_once $root . '/../../../TestUtil.php';
+
+$root = realpath(dirname(__FILE__));
 require_once $root . '/TestConf.php';
 
+require_once $root . '/../../../../src/Includes.php';
 
 class HostedPaymentTest extends \PHPUnit_Framework_TestCase {
 
@@ -31,10 +33,12 @@ class HostedPaymentTest extends \PHPUnit_Framework_TestCase {
     }
     
     public function test_payPageLanguage_defaults_to_english() {      
+        $defaultLanguage = "en";    
+        
         $order = \TestUtil::createOrder();
         $payment = $order->usePaymentMethod(\PaymentMethod::KORTCERT);
 
-        $this->assertEquals("en", $payment->langCode );
+        $this->assertEquals($defaultLanguage, $payment->langCode );
     }
     
     public function test_setPayPageLanguage_with_unrecognised_language() {
@@ -48,18 +52,18 @@ class HostedPaymentTest extends \PHPUnit_Framework_TestCase {
     }   
 
     public function test_setPayPageLanguage_with_recognised_language() {
-        $newLanguage = "sv";     
+        $orderLanguage = "sv";     
         
         $order = \TestUtil::createOrder();
         $payment = $order->usePaymentMethod(\PaymentMethod::KORTCERT)
-            ->setPayPageLanguage( $newLanguage );
+            ->setPayPageLanguage( $orderLanguage );
 
-        $this->assertEquals($newLanguage, $payment->langCode );
+        $this->assertEquals($orderLanguage, $payment->langCode );
     }       
     
     // TODO tests for getPaymentForm and validatè order    
 
-//    TODO move the below to HostedRowFormatterTest???
+    //    TODO move the below to HostedRowFormatterTest???
     
     /**
      * 30*69.99*1.25 = 2624.625 => 2624.62 w/Bankers rounding (half-to-even)
