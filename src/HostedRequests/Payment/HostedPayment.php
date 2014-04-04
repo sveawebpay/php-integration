@@ -171,8 +171,8 @@ class HostedPayment {
         $errors = $this->validateOrder();
         
         //additional validation for PreparedPayment request
-        if( !isset( $this->order->ipAddress ) ) {
-            $errors['missing value'] = "ipAddress is required. Use function setIpAddress() when building the order."; 
+        if( !isset( $this->order->customerIdentity->ipAddress ) ) {
+            $errors['missing value'] = "ipAddress is required. Use function setIpAddress() on the order customer."; 
         }
         if( !isset( $this->langCode) ) {
             $errors['missing value'] = "langCode is required. Use function setPayPageLanguage()."; 
@@ -264,7 +264,7 @@ class HostedPayment {
         $this->request['clientOrderNumber'] = $this->order->clientOrderNumber; /// used by payment
 
         if (isset($order->ipAddress)) {
-             $this->request['ipAddress'] = $this->order->ipAddress; /// used by payment (optional)
+             $this->request['ipAddress'] = $this->order->customer->ipAddress; /// used by payment (optional)
         }        
         
         $this->request['langCode'] = $this->langCode;
