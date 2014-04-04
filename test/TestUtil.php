@@ -30,7 +30,7 @@ class TestUtil {
                 ->setCountryCode("SE")
                 ->setCurrency("SEK")
                 ->setCustomerReference("created by TestUtil::createOrder()")
-                ->setClientOrderNumber(rand(0, 1000))
+                ->setClientOrderNumber( "clientOrderNumber:".date('c'))
                 ->setOrderDate( date('c') )
         ;
         
