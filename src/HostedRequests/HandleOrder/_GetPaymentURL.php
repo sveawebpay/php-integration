@@ -66,10 +66,7 @@ class getPaymentURL extends HostedRequest {
      * note that isset() requires that an element is not only defined, but also
      * that it has been assigned a value.
      */
-    function validateRequest() {
-        if( !isset( $this->currency ) ) throw new \InvalidArgumentException("currency not set for preparepayment request");
-        if( !isset( $this->amount ) ) throw new \InvalidArgumentException("amount not set for preparepayment request");
-        if( !isset( $this->returnurl ) ) throw new \InvalidArgumentException("returnurl not set for preparepayment request");        
+    function validateRequest() {       
         // TODO doesn't validate contents of orderrows row elements
     }
 //        
