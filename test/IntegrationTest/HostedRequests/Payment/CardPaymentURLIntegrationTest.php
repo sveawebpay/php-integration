@@ -29,7 +29,7 @@ class PreparedPaymentIntegrationTest extends \PHPUnit_Framework_TestCase {
         $order = TestUtil::createOrder();
         $hostedPayment = $order->usePaymentMethod(PaymentMethod::KORTCERT);        
         $response = $hostedPayment
-            ->getPaymentAddress();
+            ->getPaymentURL();
                 
         $this->assertInstanceOf( "Svea\HostedAdminResponse", $response );
                    

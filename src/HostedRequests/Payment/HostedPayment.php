@@ -15,7 +15,7 @@ require_once SVEA_REQUEST_DIR . '/Includes.php';
  * hosted payment request, a response xml message is returned to the specified
  * return url, where it can be parsed using i.e. the SveaResponse class.
  * 
- * Alternatively, you can use the getPaymentAddress() to get a response with
+ * Alternatively, you can use the getPaymentURL() to get a response with
  * an URL that the customer can visit later to complete the payment at a later
  * time.
  * 
@@ -124,7 +124,7 @@ class HostedPayment {
         return $this;
     }
     
-    // TODO refactor getPaymentForm, getPaymentAddress to move validation, xml building details to HostedRequest subclasses + add tests
+    // TODO refactor getPaymentForm, getPaymentURL to move validation, xml building details to HostedRequest subclasses + add tests
     
     /**
      * getPaymentForm returns a form object containing a webservice payment request
@@ -153,6 +153,87 @@ class HostedPayment {
         
         $formObject = new PaymentForm( $this->xmlMessage, $this->order->conf, $this->order->countryCode );
         return $formObject;
+    }
+    
+    /**
+     * getPaymentURL returns an URL to a prepared hosted payment, use this to
+     * to get a link which the customer can use to confirm a payment at a later
+     * time after having received the url via i.e. an email message.
+     * 
+     * @return type
+     * @throws ValidationException
+     */
+    public function getPaymentURL() {
+        
+        // follow the procedure set out in getPaymentForm, then 
+        // 
+        //validate the order
+        $errors = $this->validateOrder();
+        
+        //additional validation for PreparedPayment request
+        if( !isset( $this->order->ipAddress ) ) {
+            $errors['missing value'] = "ipAddress is required. Use function setIpAddress() when building the order."; 
+        }
+        if( !isset( $this->langCode) ) {
+            $errors['missing value'] = "langCode is required. Use function setPayPageLanguage()."; 
+        }
+        
+        $exceptionString = "";
+        if (count($errors) > 0 || (isset($this->returnUrl) == FALSE && isset($this->paymentMethod) == FALSE)) { // todo check if this works as expected
+            if (isset($this->returnUrl) == FALSE) {
+             $exceptionString .="-missing value : ReturnUrl is required. Use function setReturnUrl().\n";
+            }
+
+            foreach ($errors as $key => $value) {
+                $exceptionString .="-". $key. " : ".$value."\n";
+            }
+
+            throw new ValidationException($exceptionString);
+        }
+                
+        $xmlBuilder = new HostedXmlBuilder();
+        $this->xmlMessage = $xmlBuilder->getPreparePaymentXML($this->calculateRequestValues(),$this->order);
+
+        // curl away the request to Svea, and pick up the answer.
+
+        // get our merchantid & secret
+        $merchantId = $this->config->getMerchantId( \ConfigurationProvider::HOSTED_TYPE,  $this->countryCode);
+        $secret = $this->config->getSecret( \ConfigurationProvider::HOSTED_TYPE, $this->countryCode);
+        
+        // calculate mac
+        $mac = hash("sha512", base64_encode($this->xmlMessage) . $secret);
+        
+        // encode the request elements
+        $fields = array( 
+            'merchantid' => urlencode($merchantId),
+            'message' => urlencode(base64_encode($message)),
+            'mac' => urlencode($mac)
+        );
+        return $request_fields;        
+
+        // below taken from HostedRequest doRequest
+        $fieldsString = "";
+        foreach ($fields as $key => $value) {
+            $fieldsString .= $key.'='.$value.'&';
+        }
+        rtrim($fieldsString, '&');
+
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $this->config->getEndpoint(SveaConfigurationProvider::HOSTED_ADMIN_TYPE). $this->method);
+        curl_setopt($ch, CURLOPT_POST, count($fields));
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $fieldsString);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        //force curl to trust https
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        //returns a html page with redirecting to bank...
+        $responseXML = curl_exec($ch);
+        curl_close($ch);
+        
+        // create SveaResponse to handle annul response
+        $responseObj = new \SimpleXMLElement($responseXML);        
+        $sveaResponse = new \SveaResponse($responseObj, $this->countryCode, $this->config);
+
+        return $sveaResponse->response;   
     }
     
     /**

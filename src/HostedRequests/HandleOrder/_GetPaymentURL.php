@@ -10,7 +10,7 @@ require_once SVEA_REQUEST_DIR . '/Includes.php';
  * 
  * @author Kristian Grossman-Madsen
  */
-class GetPaymentAddress extends HostedRequest {
+class getPaymentURL extends HostedRequest {
 
     //preparepayment
     /** @var string  */
