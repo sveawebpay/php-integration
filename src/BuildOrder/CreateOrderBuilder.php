@@ -14,7 +14,6 @@ require_once SVEA_REQUEST_DIR . '/Includes.php';
  * usePaymentMethod() methods below. You can then go on specifying any payment 
  * method specific settings, see methods provided by the returned payment class.
  * 
- * @param $config 
  * @author Kristian Grossman-Madsen, Anneli Halld'n, Daniel Brolund for Svea Webpay
  */
 class CreateOrderBuilder {
@@ -66,8 +65,8 @@ class CreateOrderBuilder {
 
     /** @var IndividualCustomer|CompanyCustomer */
     public $customerIdentity;
-
-    /** @param type $orderrows */
+    
+    /**  @param ConfigurationProvider $config */
     public function __construct($config) {
         $this->conf = $config;
     }
