@@ -174,6 +174,17 @@ class WebPay {
         return new Svea\LowerTransaction($config);
     }
     
+    /**
+     * Cancel an undelivered/unconfirmed order.
+     * @return Svea\CancelOrderBuilder object
+     * @param ConfigurationProvider $config  instance implementing ConfigurationProvider
+     * @throws Exception
+     */
+    public static function cancelOrder($config = NULL) {
+        if( $config == NULL ) { WebPay::throwMissingConfigException(); }
+        return new Svea\CancelOrderBuilder($config);
+    }
+ 
     private static function throwMissingConfigException() {
         throw new Exception('-missing parameter: This method requires an ConfigurationProvider object as parameter. Create a class that implements class ConfigurationProvider. Set returnvalues to configuration values. Create an object from that class. Alternative use static function from class SveaConfig e.g. SveaConfig::getDefaultConfig(). You can replace the default config values to return your own config values in the method.');   
     }
