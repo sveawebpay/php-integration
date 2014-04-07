@@ -12,33 +12,52 @@ require_once $root . '/../../../TestUtil.php';
  */
 class CancelOrderTest extends \PHPUnit_Framework_TestCase {
 
+    protected $cancelOrderObject;
+    
+    function setUp() {
+        $this->cancelOrderObject = \WebPay::cancelOrder(SveaConfig::getDefaultConfig());  
+    }
+    
     public function test_CancelOrderBuilder_class_exists() {
         $config = SveaConfig::getDefaultConfig();
-        $cancelOrderObject = \WebPay::cancelOrder($config);        
+        $this->cancelOrderObject = \WebPay::cancelOrder($config);        
         
-        $this->assertInstanceOf("Svea\CancelOrderBuilder", $cancelOrderObject);
+        $this->assertInstanceOf("Svea\CancelOrderBuilder", $this->cancelOrderObject);
     }
     
     public function test_CancelOrderBuilder_setOrderId() {
         $orderId = "123456";
         
-        $config = SveaConfig::getDefaultConfig();
-        $cancelOrderObject = \WebPay::cancelOrder($config)
-            ->setOrderId($orderId);
+        $this->cancelOrderObject->setOrderId($orderId);
         
-        $this->assertEquals($orderId, $cancelOrderObject->orderId);        
+        $this->assertEquals($orderId, $this->cancelOrderObject->orderId);        
     }
     
-    public function test_CancelOrderBuilder_setPaymentMethod_returns_CloseOrder() {
+    public function test_CancelOrderBuilder_setPaymentMethod_INVOICE_returns_CloseOrder() {
         $orderId = "123456";
         $paymentMethod = \PaymentMethod::INVOICE;
         
-        $config = SveaConfig::getDefaultConfig();
-        $cancelOrderObject = \WebPay::cancelOrder($config)
-            ->setOrderId($orderId)
-            ->usePaymentMethod($paymentMethod);
+        $closeOrderObject = $this->cancelOrderObject->setOrderId($orderId)->usePaymentMethod($paymentMethod);
         
-        $this->assertInstanceOf("Svea\CloseOrder", $cancelOrderObject);
+        $this->assertInstanceOf("Svea\CloseOrder", $closeOrderObject);
+    }
+    
+    public function test_CancelOrderBuilder_setPaymentMethod_PAYMENTPLAN_returns_CloseOrder() {
+        $orderId = "123456";
+        $paymentMethod = \PaymentMethod::PAYMENTPLAN;
+        
+        $closeOrderObject = $this->cancelOrderObject->setOrderId($orderId)->usePaymentMethod($paymentMethod);
+        
+        $this->assertInstanceOf("Svea\CloseOrder", $closeOrderObject);
+    }
+    
+    public function test_CancelOrderBuilder_setPaymentMethod_KORTCERT_returns_CloseOrder() {
+        $orderId = "123456";
+        $paymentMethod = \PaymentMethod::KORTCERT;
+        
+        $creditTransactionObject = $this->cancelOrderObject->setOrderId($orderId)->usePaymentMethod($paymentMethod);
+        
+        $this->assertInstanceOf("Svea\CreditTransaction", $creditTransactionObject);
     }
     
 }
