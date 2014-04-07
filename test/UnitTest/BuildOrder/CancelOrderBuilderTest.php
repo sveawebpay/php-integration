@@ -2,15 +2,15 @@
 namespace Svea;
 
 $root = realpath(dirname(__FILE__));
-require_once $root . '/../../../../src/Includes.php';
+require_once $root . '/../../../src/Includes.php';
 
 $root = realpath(dirname(__FILE__));
-require_once $root . '/../../../TestUtil.php';
+require_once $root . '/../../TestUtil.php';
 
 /**
  * @author Kristian Grossman-Madsen for Svea Webpay
  */
-class CancelOrderTest extends \PHPUnit_Framework_TestCase {
+class CancelOrderBuilderTest extends \PHPUnit_Framework_TestCase {
 
     protected $cancelOrderObject;
     

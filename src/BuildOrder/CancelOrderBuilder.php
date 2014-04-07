@@ -56,8 +56,9 @@ class CancelOrderBuilder {
                 return new CloseOrder($this);
             break;
             
-//            case \PaymentMethod::KORTCERT:
-//            break;
+            case \PaymentMethod::KORTCERT:
+                return new CreditTransaction($this->conf);
+            break;
         
             default:
             break;
