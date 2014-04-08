@@ -10,26 +10,32 @@ require_once SVEA_REQUEST_DIR . '/Config/SveaConfig.php';
  */
 class HandleOrder {
 
-    public $handler;
+    /** CloseOrderBuilder|DeliverOrderBuilder $handler  object containing the settings for the HandleOrder request */
+    public $orderBuilder;
 
     /**
-     * @param type $handler
+     * @param CloseOrderBuilder|DeliverOrderBuilder $handleOrderBuilder
      */
-    public function __construct($handler) {
-        $this->handler = $handler;
+    public function __construct($handleOrderBuilder) {
+        $this->orderBuilder = $handleOrderBuilder;
     }
 
+    /** 
+     * creates a SveaAuth object using the passed orderBuilder configuration
+     * @return \Svea\SveaAuth
+     */
     protected function getStoreAuthorization() {
-        $auth = new SveaAuth();           //TODO update these to use SveaAuth constructors
-         $auth->Username = $this->handler->conf->getUsername($this->handler->orderType,  $this->handler->countryCode);
-        $auth->Password = $this->handler->conf->getPassword($this->handler->orderType,  $this->handler->countryCode);
-        $auth->ClientNumber = $this->handler->conf->getClientNumber($this->handler->orderType,  $this->handler->countryCode);
-        return $auth;
+        return new SveaAuth( 
+                    $this->orderBuilder->conf->getUsername($this->orderBuilder->orderType,  $this->orderBuilder->countryCode),
+                    $this->orderBuilder->conf->getPassword($this->orderBuilder->orderType,  $this->orderBuilder->countryCode),
+                    $this->orderBuilder->conf->getClientNumber($this->orderBuilder->orderType,  $this->orderBuilder->countryCode)
+                )
+        ;
     }
 
     public function validateRequest() {
         $validator = new HandleOrderValidator();
-         $errors = $validator->validate($this->handler);
+         $errors = $validator->validate($this->orderBuilder);
          return $errors;
     }
 
@@ -49,19 +55,19 @@ class HandleOrder {
         }
         $sveaDeliverOrder = new SveaDeliverOrder;
         $sveaDeliverOrder->Auth = $this->getStoreAuthorization();
-        $orderInformation = new SveaDeliverOrderInformation($this->handler->orderType);
-        $orderInformation->SveaOrderId = $this->handler->orderId;
-        $orderInformation->OrderType = $this->handler->orderType;
+        $orderInformation = new SveaDeliverOrderInformation($this->orderBuilder->orderType);
+        $orderInformation->SveaOrderId = $this->orderBuilder->orderId;
+        $orderInformation->OrderType = $this->orderBuilder->orderType;
 
-        if ($this->handler->orderType == "Invoice") {
+        if ($this->orderBuilder->orderType == "Invoice") {
             $invoiceDetails = new SveaDeliverInvoiceDetails();
-            $invoiceDetails->InvoiceDistributionType = $this->handler->distributionType;
-            $invoiceDetails->IsCreditInvoice = isset($this->handler->invoiceIdToCredit) ? TRUE : FALSE;
-            if (isset($this->handler->invoiceIdToCredit)) {
-                $invoiceDetails->InvoiceIdToCredit = $this->handler->invoiceIdToCredit;
+            $invoiceDetails->InvoiceDistributionType = $this->orderBuilder->distributionType;
+            $invoiceDetails->IsCreditInvoice = isset($this->orderBuilder->invoiceIdToCredit) ? TRUE : FALSE;
+            if (isset($this->orderBuilder->invoiceIdToCredit)) {
+                $invoiceDetails->InvoiceIdToCredit = $this->orderBuilder->invoiceIdToCredit;
             }
-            $invoiceDetails->NumberOfCreditDays = isset($this->handler->numberOfCreditDays) ? $this->handler->numberOfCreditDays : 0;
-            $formatter = new WebServiceRowFormatter($this->handler);
+            $invoiceDetails->NumberOfCreditDays = isset($this->orderBuilder->numberOfCreditDays) ? $this->orderBuilder->numberOfCreditDays : 0;
+            $formatter = new WebServiceRowFormatter($this->orderBuilder);
             $orderRow['OrderRow'] = $formatter->formatRows();
             $invoiceDetails->OrderRows = $orderRow;
             $orderInformation->DeliverInvoiceDetails = $invoiceDetails;
@@ -79,7 +85,7 @@ class HandleOrder {
      */
     public function doRequest() {
         $object = $this->prepareRequest();
-        $url = $this->handler->conf->getEndPoint($this->handler->orderType);
+        $url = $this->orderBuilder->conf->getEndPoint($this->orderBuilder->orderType);
         $request = new SveaDoRequest($url);
         $svea_req = $request->DeliverOrderEu($object);
 

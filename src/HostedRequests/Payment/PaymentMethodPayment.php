@@ -11,7 +11,7 @@ class PaymentMethodPayment extends HostedPayment{
     /**
      * Creates a new PaymentMethodPayment containing a given order and using the given payment method.
      * @param CreateOrderBuilder $order
-     * @param string $paymentmethod -- one of the constants defined in PaymentMethod class
+     * @param string $paymentmethod -- one of the constants defined in PaymentMethod class @see PaymentMethod
      */
     public function __construct($order, $paymentmethod) {
         parent::__construct($order);

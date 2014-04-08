@@ -31,7 +31,7 @@ class closeOrderBuilder {
     /**
      * Required
      * @param type $orderIdAsString
-     * @return \closeOrder
+     * @return $this
      */
     public function setOrderId($orderIdAsString) {
         $this->orderId = $orderIdAsString;
@@ -44,12 +44,12 @@ class closeOrderBuilder {
     }
 
     public function closeInvoiceOrder() {
-        $this->orderType = "Invoice";
+        $this->orderType = \ConfigurationProvider::INVOICE_TYPE;
         return new CloseOrder($this);
     }
 
     public function closePaymentPlanOrder() {
-        $this->orderType = "PaymentPlan";
+        $this->orderType = \ConfigurationProvider::PAYMENTPLAN_TYPE;
         return new CloseOrder($this);
     }
 }

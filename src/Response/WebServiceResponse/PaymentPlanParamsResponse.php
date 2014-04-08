@@ -9,15 +9,14 @@ require_once 'WebServiceResponse.php';
  * For attribute descriptions, see formatObject() method documentation
  * For possible resultcodes (27xxx), see svea webpay_eu_webservice documentation
  * 
- * @attrib $resultcode -- response specific result code
- * @attrib $campaignCodes -- array of CampaignCode
- * 
  * @author anne-hal, Kristian Grossman-Madsen
  */
 class PaymentPlanParamsResponse extends WebServiceResponse{
     
+    /** int $resultcode  response specific result code */
     public $resultcode;    
-    public $campaignCodes = array();    // array of CampaignCode
+    /** CampaignCode[] $campaignCodes  array of CampaignCode */
+    public $campaignCodes = array();
 
     /**
      *  formatObject sets the following PaymentPlanParamsResponse atrributes:

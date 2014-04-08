@@ -5,7 +5,7 @@ $root = realpath(dirname(__FILE__));
 require_once $root . '/../src/Includes.php';
 
 /**
- * @author Jonas Lith, Kristian Grossman-Madsen
+ * @author Jonas Lith, Kristian Grossman-Madsen, Anneli Halld'n for Svea WebPay
  */
 class TestUtil {
 
@@ -300,4 +300,15 @@ class TestUtil {
       }
      */
 
+    /**
+     * Use to get a campaign code to i.e. use as argument to usePaymentPlanPayment()
+     * @return string  the first available campaignCode 
+     */
+    public static function getGetPaymentPlanParamsForTesting( $country = "SE" ) {
+        $addressRequest = WebPay::getPaymentPlanParams(Svea\SveaConfig::getDefaultConfig());
+        $response = $addressRequest
+                ->setCountryCode($country)
+                ->doRequest();
+         return $response->campaignCodes[0]->campaignCode;
+    }       
 }

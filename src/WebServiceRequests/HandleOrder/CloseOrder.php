@@ -9,25 +9,22 @@ require_once 'HandleOrder.php';
  */
 class CloseOrder extends HandleOrder {
 
-    public $orderType;
-
     /**
-     * @param type $order
+     * @param CloseOrderBuilder $closeOrderBuilder
      */
-    public function __construct($order) {
-        parent::__construct($order);
+    public function __construct($closeOrderBuilder) {
+        parent::__construct($closeOrderBuilder);
     }
 
     /**
-     * Returns prepared request
+     * Returns prepared closeOrder request
      * @return \SveaRequest
      */
     public function prepareRequest() {
-        $this->orderType = $this->handler->orderType;
         $sveaCloseOrder = new SveaCloseOrder;
         $sveaCloseOrder->Auth = $this->getStoreAuthorization();
         $orderInfo = new SveaCloseOrderInformation();
-        $orderInfo->SveaOrderId = $this->handler->orderId;
+        $orderInfo->SveaOrderId = $this->orderBuilder->orderId;
         $sveaCloseOrder->CloseOrderInformation = $orderInfo;
 
         $object = new SveaRequest();
@@ -41,12 +38,11 @@ class CloseOrder extends HandleOrder {
      * @return type CloseOrderEuResponse
      */
     public function doRequest() {
-        $object = $this->prepareRequest();
-        $url = $this->handler->conf->getEndPoint($this->orderType); //$this->handler->testmode ? SveaConfig::SWP_TEST_WS_URL : SveaConfig::SWP_PROD_WS_URL;
+        $requestObject = $this->prepareRequest();
+        $url = $this->orderBuilder->conf->getEndPoint($this->orderBuilder->orderType);
         $request = new SveaDoRequest($url);
-        $svea_req = $request->CloseOrderEu($object);
-
-        $response = new \SveaResponse($svea_req,"");
-        return $response->response;
+        $response = $request->CloseOrderEu($requestObject);
+        $responseObject = new \SveaResponse($response,"");
+        return $responseObject->response;
     }
 }
