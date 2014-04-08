@@ -44,23 +44,29 @@ class CancelOrderBuilder {
     }
     
     /**
-     * Required
-     * The payment method used when placing the createOrder request
+     * Required. The payment method used when placing the createOrder request.
      * @param string $orderIdAsString
      * @return $this
      */
     public function usePaymentMethod( $paymentMethod ) {
         switch( $paymentMethod ) {
             case \PaymentMethod::INVOICE:
+                $this->orderType = \ConfigurationProvider::INVOICE_TYPE;
+                return new CloseOrder($this);
+            break;
+            
             case \PaymentMethod::PAYMENTPLAN:
+                $this->orderType = \ConfigurationProvider::PAYMENTPLAN_TYPE;
                 return new CloseOrder($this);
             break;
             
             case \PaymentMethod::KORTCERT:
-                return new CreditTransaction($this->conf);
+                $this->orderType = \ConfigurationProvider::HOSTED_ADMIN_TYPE;
+                return new AnnulTransaction($this->conf);
             break;
         
             default:
+                // TODO error handling here + tests
             break;
                 
         }
@@ -68,13 +74,4 @@ class CancelOrderBuilder {
         return $this;
     }
 
-    public function closeInvoiceOrder() {
-        $this->orderType = "Invoice";
-        return new CloseOrder($this);
-    }
-
-    public function closePaymentPlanOrder() {
-        $this->orderType = "PaymentPlan";
-        return new CloseOrder($this);
-    }
 }

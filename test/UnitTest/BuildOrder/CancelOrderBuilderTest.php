@@ -33,31 +33,34 @@ class CancelOrderBuilderTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals($orderId, $this->cancelOrderObject->orderId);        
     }
     
-    public function test_CancelOrderBuilder_setPaymentMethod_INVOICE_returns_CloseOrder() {
+    public function test_CancelOrderBuilder_setPaymentMethod_INVOICE_returns_CloseOrder_with_correct_orderType() {
         $orderId = "123456";
         $paymentMethod = \PaymentMethod::INVOICE;
         
         $closeOrderObject = $this->cancelOrderObject->setOrderId($orderId)->usePaymentMethod($paymentMethod);
         
         $this->assertInstanceOf("Svea\CloseOrder", $closeOrderObject);
+        $this->assertEquals(\ConfigurationProvider::INVOICE_TYPE, $closeOrderObject->orderBuilder->orderType);
+
     }
     
-    public function test_CancelOrderBuilder_setPaymentMethod_PAYMENTPLAN_returns_CloseOrder() {
+    public function test_CancelOrderBuilder_setPaymentMethod_PAYMENTPLAN_returns_CloseOrder_with_correct_orderType() {
         $orderId = "123456";
         $paymentMethod = \PaymentMethod::PAYMENTPLAN;
         
         $closeOrderObject = $this->cancelOrderObject->setOrderId($orderId)->usePaymentMethod($paymentMethod);
         
         $this->assertInstanceOf("Svea\CloseOrder", $closeOrderObject);
+        $this->assertEquals(\ConfigurationProvider::PAYMENTPLAN_TYPE, $closeOrderObject->orderBuilder->orderType);
     }
     
     public function test_CancelOrderBuilder_setPaymentMethod_KORTCERT_returns_CloseOrder() {
         $orderId = "123456";
         $paymentMethod = \PaymentMethod::KORTCERT;
         
-        $creditTransactionObject = $this->cancelOrderObject->setOrderId($orderId)->usePaymentMethod($paymentMethod);
+        $annulTransactionObject = $this->cancelOrderObject->setOrderId($orderId)->usePaymentMethod($paymentMethod);
         
-        $this->assertInstanceOf("Svea\CreditTransaction", $creditTransactionObject);
+        $this->assertInstanceOf("Svea\AnnulTransaction", $annulTransactionObject);
     }
     
 }

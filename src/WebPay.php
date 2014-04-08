@@ -79,14 +79,42 @@ class WebPay {
     }
 
     /**
-     * Start building Request to close orders.
+     * Cancel an undelivered/unconfirmed order.
+     * @return Svea\CancelOrderBuilder object
+     * @param ConfigurationProvider $config  instance implementing ConfigurationProvider
+     * @throws Exception
+     */
+    public static function cancelOrder($config = NULL) {
+        if( $config == NULL ) { WebPay::throwMissingConfigException(); }
+        return new Svea\CancelOrderBuilder($config);
+    }
+    
+    /**
+     * Start building Request to close orders. Only supports Invoice or Payment plan orders.
      * @return \closeOrderBuilder object
      * @param ConfigurationProvider $config  instance implementing ConfigurationProvider
+     * @deprecated 2.0.0 -- use cancelOrder instead, which supports both synchronous and asynchronous orders
      */
     public static function closeOrder($config = NULL) {
         if( $config == NULL ) { WebPay::throwMissingConfigException(); }
 
         return new Svea\closeOrderBuilder($config);
+    }
+    
+    /**
+     * Annul an existing Card transaction.
+     * The transaction must have Svea status AUTHORIZED or CONFIRMED. After a 
+     * successful request the transaction will get the status ANNULLED.
+     * 
+     * Note that this only supports Card transactions.
+     * 
+     * @param ConfigurationProvider $config instance implementing ConfigurationProvider
+     * @deprecated 2.0.0 -- use cancelOrder instead, which supports both synchronous and asynchronous orders
+     */
+    public static function annulTransaction( $config = NULL ) {
+        if( $config == NULL ) { WebPay::throwMissingConfigException(); }
+        
+        return new Svea\AnnulTransaction($config);
     }
 
     /**
@@ -127,22 +155,7 @@ class WebPay {
         
         return new Svea\CreditTransaction($config);
     }
-    
-    /**
-     * Annul an existing Card transaction.
-     * The transaction must have Svea status AUTHORIZED or CONFIRMED. After a 
-     * successful request the transaction will get the status ANNULLED.
-     * 
-     * Note that this only supports Card transactions.
-     * 
-     * @param ConfigurationProvider $config instance implementing ConfigurationProvider
-     */
-    public static function annulTransaction( $config = NULL ) {
-        if( $config == NULL ) { WebPay::throwMissingConfigException(); }
         
-        return new Svea\AnnulTransaction($config);
-    }
-    
     /**
      * Confirm an existing Card transaction.
      * The transaction must have Svea status AUTHORIZED. After a successful request
@@ -174,16 +187,6 @@ class WebPay {
         return new Svea\LowerTransaction($config);
     }
     
-    /**
-     * Cancel an undelivered/unconfirmed order.
-     * @return Svea\CancelOrderBuilder object
-     * @param ConfigurationProvider $config  instance implementing ConfigurationProvider
-     * @throws Exception
-     */
-    public static function cancelOrder($config = NULL) {
-        if( $config == NULL ) { WebPay::throwMissingConfigException(); }
-        return new Svea\CancelOrderBuilder($config);
-    }
  
     private static function throwMissingConfigException() {
         throw new Exception('-missing parameter: This method requires an ConfigurationProvider object as parameter. Create a class that implements class ConfigurationProvider. Set returnvalues to configuration values. Create an object from that class. Alternative use static function from class SveaConfig e.g. SveaConfig::getDefaultConfig(). You can replace the default config values to return your own config values in the method.');   
