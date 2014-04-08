@@ -3,28 +3,16 @@
 
 $root = realpath(dirname(__FILE__));
 require_once $root . '/../../../../src/Includes.php';
+require_once $root . '/../../../TestUtil.php';
 
 /**
  * @author Anneli Halld'n, Daniel Brolund for Svea Webpay
  */
 class PaymentPlanPaymentIntegrationTest extends PHPUnit_Framework_TestCase {
 
-    /**
-     * Use to get paymentPlanParams to be able to test PaymentPlanRequest
-     * @return type
-     */
-    private function getGetPaymentPlanParamsForTesting() {
-        $config = Svea\SveaConfig::getDefaultConfig();
-        $addressRequest = WebPay::getPaymentPlanParams($config);
-        $response = $addressRequest
-                ->setCountryCode("SE")
-                ->doRequest();
-         return $response->campaignCodes[0]->campaignCode;
-    }
-
     public function testPaymentPlanRequestReturnsAcceptedResult() {
         $config = Svea\SveaConfig::getDefaultConfig();
-        $campaigncode = $this->getGetPaymentPlanParamsForTesting();
+        $campaigncode = TestUtil::getGetPaymentPlanParamsForTesting();
         $request = WebPay::createOrder($config)
                 ->addOrderRow(WebPayItem::orderRow()
                         ->setArticleNumber("1")
