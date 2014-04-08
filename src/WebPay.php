@@ -79,9 +79,18 @@ class WebPay {
     }
 
     /**
-     * Cancel an undelivered/unconfirmed order.
-     * @return Svea\CancelOrderBuilder object
+     * Cancel an undelivered/unconfirmed order. Supports Invoice, PaymentPlan and Card orders.
+     * Use the following methods: 
+     * ->setOrderId( sveaOrderId or transactionId from createOrder request response)
+     * ->setCountryCode()
+     * ->usePaymentMethod( PaymentMethod::INVOICE|PARTPAYMENT|KORTCERT )
+     *   ->doRequest() 
+     * The request response is one of the following (depending on PaymentMethod):
+     * @see HostedAdminResponse (KORTCERT) or
+     * @see CloseOrderResult (INVOICE|PARTPAYMENT) 
+     * 
      * @param ConfigurationProvider $config  instance implementing ConfigurationProvider
+     * @return Svea\CancelOrderBuilder object
      * @throws Exception
      */
     public static function cancelOrder($config = NULL) {
