@@ -26,40 +26,41 @@ class GetPaymentPlanParams {
     }
 
     /*
-     * @param type $countryCodeAsString
+     * @param string $countryCodeAsString
+     * @return $this
      */
-
     public function setCountryCode($countryCodeAsString) {
         $this->countryCode = $countryCodeAsString;
         return $this;
     }
 
     /**
-     * @return Prepared Request
+     * @return SveaRequest
      */
-    public function prepareRequest() {      //TODO update these to use SveaAuth, SveaRequest constructors
-        $auth = new SveaAuth();
-        $auth->Username = $this->conf->getUsername("PAYMENTPLAN",  $this->countryCode);
-        $auth->Password = $this->conf->getPassword("PAYMENTPLAN",  $this->countryCode);
-        $auth->ClientNumber = $this->conf->getClientNumber("PAYMENTPLAN",  $this->countryCode);
+    public function prepareRequest() {
+        $auth = new SveaAuth( 
+            $this->conf->getUsername(\ConfigurationProvider::PAYMENTPLAN_TYPE,  $this->countryCode),
+            $this->conf->getPassword(\ConfigurationProvider::PAYMENTPLAN_TYPE,  $this->countryCode),   
+            $this->conf->getClientNumber(\ConfigurationProvider::PAYMENTPLAN_TYPE,  $this->countryCode)   
+        );
+
         $object = new SveaRequest();
         $object->request = (object) array("Auth" => $auth);
-        $this->object = $object;
 
-        return $this->object;
+        return $object;
     }
-
+    
     /**
      * Prepares and sends request
-     * @return type GetPaymentPlanParamsEuResponse
+     * @return PaymentPlanParamsResponse
      */
     public function doRequest() {
-        $object = $this->prepareRequest();
-        $url = $this->conf->getEndPoint("PAYMENTPLAN");
+        $requestObject = $this->prepareRequest();
+        $url = $this->conf->getEndPoint(\ConfigurationProvider::PAYMENTPLAN_TYPE);
         $request = new SveaDoRequest($url);
-        $svea_req = $request->GetPaymentPlanParamsEu($object);
+        $response = $request->GetPaymentPlanParamsEu($requestObject);
 
-        $response = new \SveaResponse($svea_req,"");
-        return $response->response;
-    }
+        $responseObject = new \SveaResponse($response,"");
+        return $responseObject->response;
+    }  
 }
