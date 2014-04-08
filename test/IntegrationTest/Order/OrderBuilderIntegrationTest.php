@@ -11,7 +11,7 @@ require_once $root . '/../../TestUtil.php';
 class OrderBuilderIntegrationTest extends PHPUnit_Framework_TestCase {
 
     // CreateOrderBuilder synchronous payment methods
-    public function _test_CreateOrderBuilder_Invoice_Accepted() {
+    public function test_CreateOrderBuilder_Invoice_Accepted() {
         $country = "SE";
         $order = TestUtil::createOrder( TestUtil::createIndividualCustomer($country) );
         $response = $order->useInvoicePayment()->doRequest();
@@ -37,7 +37,7 @@ class OrderBuilderIntegrationTest extends PHPUnit_Framework_TestCase {
 
     
     // CancelOrderBuilder synchronous payment methods
-    public function _test_CancelOrderBuilder_Invoice_success() {
+    public function test_CancelOrderBuilder_Invoice_success() {
         $country = "SE";
         $order = TestUtil::createOrder( TestUtil::createIndividualCustomer($country) );
         $orderResponse = $order->useInvoicePayment()->doRequest();
@@ -53,7 +53,7 @@ class OrderBuilderIntegrationTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(1, $cancelResponse->accepted);
     }
     
-    public function _test_CancelOrderBuilder_PaymentPlan_success() {
+    public function test_CancelOrderBuilder_PaymentPlan_success() {
         $country = "SE";
         $order = TestUtil::createOrder( TestUtil::createIndividualCustomer($country) )
             ->addOrderRow( WebPayItem::orderRow()
@@ -99,4 +99,37 @@ class OrderBuilderIntegrationTest extends PHPUnit_Framework_TestCase {
     }
     
     // CancelOrderBuilder asynchronous payment methods   //TODO
+    
+    /**
+     * test_manual_annul_card 
+     * 
+     * run this manually after you've performed a card transaction and have set
+     * the transaction status to success using the tools in the logg admin.
+     */  
+    function test_manual_CancelOrderBuilder_Card_success() {
+
+        // Stop here and mark this test as incomplete.
+//        $this->markTestIncomplete(
+//            'skeleton for manual test of cancelOrder for a card order' // TODO
+//        );
+        
+        // Set the below to match the transaction, then run the test.
+        $customerrefno = "test_1396964349955";
+        $transactionId = 580658;
+
+        $request = WebPay::cancelOrder( Svea\SveaConfig::getDefaultConfig() )
+            ->setOrderId( $transactionId )
+            ->setCountryCode( "SE" )
+            ->usePaymentMethod(PaymentMethod::KORTCERT);
+    
+        $response = $request->doRequest();        
+         
+        $this->assertInstanceOf( "Svea\HostedAdminResponse", $response );
+        
+        print_r($response );
+        $this->assertEquals( 1, $response->accepted );        
+        $this->assertEquals( $customerrefno, $response->customerrefno );  
+    }   
+    
+    
 }

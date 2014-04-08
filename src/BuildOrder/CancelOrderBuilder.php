@@ -73,7 +73,8 @@ class CancelOrderBuilder {
             
             case \PaymentMethod::KORTCERT:
                 $this->orderType = \ConfigurationProvider::HOSTED_ADMIN_TYPE;
-                return new AnnulTransaction($this->conf);
+                 $annulTransaction = new AnnulTransaction($this->conf);
+                 return $annulTransaction->setTransactionId($this->orderId)->setCountryCode($this->countryCode);
             break;
         
             default:
