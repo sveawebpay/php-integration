@@ -9,8 +9,6 @@ require_once 'HandleOrder.php';
  */
 class CloseOrder extends HandleOrder {
 
-    public $orderType;
-
     /**
      * @param CloseOrderBuilder $closeOrderBuilder
      */
@@ -19,11 +17,10 @@ class CloseOrder extends HandleOrder {
     }
 
     /**
-     * Returns prepared request
+     * Returns prepared closeOrder request
      * @return \SveaRequest
      */
     public function prepareRequest() {
-        $this->orderType = $this->orderBuilder->orderType;
         $sveaCloseOrder = new SveaCloseOrder;
         $sveaCloseOrder->Auth = $this->getStoreAuthorization();
         $orderInfo = new SveaCloseOrderInformation();
@@ -41,12 +38,11 @@ class CloseOrder extends HandleOrder {
      * @return type CloseOrderEuResponse
      */
     public function doRequest() {
-        $object = $this->prepareRequest();
-        $url = $this->orderBuilder->conf->getEndPoint($this->orderType);
+        $requestObject = $this->prepareRequest();
+        $url = $this->orderBuilder->conf->getEndPoint($this->orderBuilder->orderType);
         $request = new SveaDoRequest($url);
-        $svea_req = $request->CloseOrderEu($object);
-
-        $response = new \SveaResponse($svea_req,"");
-        return $response->response;
+        $response = $request->CloseOrderEu($requestObject);
+        $responseObject = new \SveaResponse($response,"");
+        return $responseObject->response;
     }
 }
