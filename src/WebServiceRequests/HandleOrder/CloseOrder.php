@@ -23,11 +23,11 @@ class CloseOrder extends HandleOrder {
      * @return \SveaRequest
      */
     public function prepareRequest() {
-        $this->orderType = $this->handler->orderType;
+        $this->orderType = $this->orderBuilder->orderType;
         $sveaCloseOrder = new SveaCloseOrder;
         $sveaCloseOrder->Auth = $this->getStoreAuthorization();
         $orderInfo = new SveaCloseOrderInformation();
-        $orderInfo->SveaOrderId = $this->handler->orderId;
+        $orderInfo->SveaOrderId = $this->orderBuilder->orderId;
         $sveaCloseOrder->CloseOrderInformation = $orderInfo;
 
         $object = new SveaRequest();
@@ -42,7 +42,7 @@ class CloseOrder extends HandleOrder {
      */
     public function doRequest() {
         $object = $this->prepareRequest();
-        $url = $this->handler->conf->getEndPoint($this->orderType);
+        $url = $this->orderBuilder->conf->getEndPoint($this->orderType);
         $request = new SveaDoRequest($url);
         $svea_req = $request->CloseOrderEu($object);
 
