@@ -12,10 +12,10 @@ class CloseOrder extends HandleOrder {
     public $orderType;
 
     /**
-     * @param type $order
+     * @param CloseOrderBuilder $closeOrderBuilder
      */
-    public function __construct($order) {
-        parent::__construct($order);
+    public function __construct($closeOrderBuilder) {
+        parent::__construct($closeOrderBuilder);
     }
 
     /**

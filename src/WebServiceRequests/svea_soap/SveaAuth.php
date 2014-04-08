@@ -14,6 +14,8 @@ class SveaAuth {
     public $ClientNumber;
     
     /**
+     * creates a SveaAuth instance w/the given username, password & clientnumber  
+     * 
      * @param string $Username
      * @param string $Password
      * @param string $ClientNumber

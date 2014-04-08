@@ -10,21 +10,27 @@ require_once SVEA_REQUEST_DIR . '/Config/SveaConfig.php';
  */
 class HandleOrder {
 
+    /** CloseOrderBuilder|DeliverOrderBuilder $handler  object containing the settings for the HandleOrder request */
     public $handler;
 
     /**
-     * @param type $handler
+     * @param CloseOrderBuilder|DeliverOrderBuilder $handleOrderBuilder
      */
-    public function __construct($handler) {
-        $this->handler = $handler;
+    public function __construct($handleOrderBuilder) {
+        $this->handler = $handleOrderBuilder;
     }
 
+    /** 
+     * creates a SveaAuth object using the passed orderBuilder configuration
+     * @return \Svea\SveaAuth
+     */
     protected function getStoreAuthorization() {
-        $auth = new SveaAuth();           //TODO update these to use SveaAuth constructors
-         $auth->Username = $this->handler->conf->getUsername($this->handler->orderType,  $this->handler->countryCode);
-        $auth->Password = $this->handler->conf->getPassword($this->handler->orderType,  $this->handler->countryCode);
-        $auth->ClientNumber = $this->handler->conf->getClientNumber($this->handler->orderType,  $this->handler->countryCode);
-        return $auth;
+        return new SveaAuth( 
+                    $this->handler->conf->getUsername($this->handler->orderType,  $this->handler->countryCode),
+                    $this->handler->conf->getPassword($this->handler->orderType,  $this->handler->countryCode),
+                    $this->handler->conf->getClientNumber($this->handler->orderType,  $this->handler->countryCode)
+                )
+        ;
     }
 
     public function validateRequest() {
