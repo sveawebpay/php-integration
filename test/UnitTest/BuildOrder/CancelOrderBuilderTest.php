@@ -18,19 +18,20 @@ class CancelOrderBuilderTest extends \PHPUnit_Framework_TestCase {
         $this->cancelOrderObject = \WebPay::cancelOrder(SveaConfig::getDefaultConfig());  
     }
     
-    public function test_CancelOrderBuilder_class_exists() {
-        $config = SveaConfig::getDefaultConfig();
-        $this->cancelOrderObject = \WebPay::cancelOrder($config);        
-        
+    public function test_CancelOrderBuilder_class_exists() {     
         $this->assertInstanceOf("Svea\CancelOrderBuilder", $this->cancelOrderObject);
     }
     
     public function test_CancelOrderBuilder_setOrderId() {
         $orderId = "123456";
-        
         $this->cancelOrderObject->setOrderId($orderId);
-        
         $this->assertEquals($orderId, $this->cancelOrderObject->orderId);        
+    }
+    
+    public function test_CancelOrderBuilder_setCountryCode() {
+        $country = "SE";
+        $this->cancelOrderObject->setCountryCode($country);
+        $this->assertEquals($country, $this->cancelOrderObject->countryCode);        
     }
     
     public function test_CancelOrderBuilder_setPaymentMethod_INVOICE_returns_CloseOrder_with_correct_orderType() {

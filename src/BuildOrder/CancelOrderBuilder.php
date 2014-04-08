@@ -21,11 +21,12 @@ require_once SVEA_REQUEST_DIR . '/Includes.php';
  */
 class CancelOrderBuilder {
 
-    /** ConfigurationProvider conf  */
+    /** ConfigurationProvider $conf  */
     public $conf;
+    /** string $countryCode */
+    public $countryCode;
 
-    /** string orderId  Svea order id to cancel, as returned in the createOrder
-     * request response, either a transactionId or a SveaOrderId */
+    /** string $orderId  Svea order id to cancel, as returned in the createOrder request response, either a transactionId or a SveaOrderId */
     public $orderId;
 
     public function __construct($config) {
@@ -33,13 +34,23 @@ class CancelOrderBuilder {
     }
 
     /**
-     * Required
-     * The id of the order to cancel.
+     * Required. The id of the order to cancel.
      * @param string $orderIdAsString
      * @return $this
      */
     public function setOrderId($orderIdAsString) {
         $this->orderId = $orderIdAsString;
+        return $this;
+    }
+    
+    /**
+     * Required. The countryCode of the order to cancel. 
+     * @todo check why this is needed, and see if can be done away with?
+     * @param string $countryAsString
+     * @return $this
+     */
+    public function setCountryCode($countryAsString) {
+        $this->countryCode = $countryAsString;
         return $this;
     }
     
