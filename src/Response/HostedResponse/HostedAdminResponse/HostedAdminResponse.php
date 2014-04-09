@@ -1,7 +1,7 @@
 <?php
 namespace Svea;
 
-require_once 'HostedResponse.php';
+require_once SVEA_REQUEST_DIR . '/Includes.php';
 
 /**
  * Handles diverse administrative function responses from the webservice and

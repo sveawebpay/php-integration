@@ -48,7 +48,10 @@ foreach (glob(SVEA_REQUEST_DIR . "/Response/WebServiceResponse/CampaignCode/*.ph
 
 foreach (glob(SVEA_REQUEST_DIR . "/Response/HostedResponse/*.php") as $config)
     include_once($config);
-
+foreach (glob(SVEA_REQUEST_DIR . "/Response/HostedResponse/HostedAdminResponse/*.php") as $config)
+    include_once($config);
+foreach (glob(SVEA_REQUEST_DIR . "/Response/HostedResponse/HostedPaymentResponse/*.php") as $config)
+    include_once($config);
 foreach (glob(SVEA_REQUEST_DIR . "/Config/*.php") as $config)
     include_once($config);
 foreach (glob(SVEA_REQUEST_DIR . "/Constant/*.php") as $config)
