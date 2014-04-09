@@ -19,26 +19,22 @@ class QueryTransactionTest extends PHPUnit_Framework_TestCase {
     }
 
     // test methods
-    function test_class_exists(){
-        
-        $this->assertInstanceOf( "Svea\QueryTransaction", $this->queryObject);      
+    function test_class_exists(){        
+        $this->assertInstanceOf( "Svea\QueryTransaction", $this->queryObject);
+        $this->assertEquals( "query", PHPUnit_Framework_Assert::readAttribute($this->queryObject, 'method') );        
     }
     
-//    function test_setCountryCode(){
-//        
-//        $countryCode = "SE";       
-//        $this->queryObject->setCountryCode( $countryCode );
-//        
-//        $this->assertEquals( $countryCode, PHPUnit_Framework_Assert::readAttribute($this->queryObject, 'countryCode') );
-//    }
-//    
-//    function test_setTransactionId( ){
-//        
-//        $transactionId = 987654;       
-//        $this->queryObject->setTransactionId( $transactionId );
-//        
-//        $this->assertEquals( $transactionId, PHPUnit_Framework_Assert::readAttribute($this->queryObject, 'transactionId') );
-//    }
+    function test_setCountryCode(){
+        $countryCode = "SE";       
+        $this->queryObject->setCountryCode( $countryCode ); 
+        $this->assertEquals( $countryCode, PHPUnit_Framework_Assert::readAttribute($this->queryObject, 'countryCode') );
+    }
+    
+    function test_setTransactionId( ){
+        $transactionId = 987654;       
+        $this->queryObject->setTransactionId( $transactionId );
+        $this->assertEquals( $transactionId, PHPUnit_Framework_Assert::readAttribute($this->queryObject, 'transactionId') );
+    }
 //              
 //    function test_prepareRequest_array_contains_mac_merchantid_message() {
 //

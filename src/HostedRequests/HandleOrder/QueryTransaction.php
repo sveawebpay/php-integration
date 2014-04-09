@@ -11,22 +11,21 @@ require_once  SVEA_REQUEST_DIR.'/Constant/PaymentMethod.php';
  */
 class QueryTransaction extends HostedRequest {
 
-    protected $countryCode;
     protected $transactionId;
     
     function __construct($config) {
-        $this->method = "annul";
+        $this->method = "query";
         parent::__construct($config);
     }
 
-//    /**
-//     * @param string $transactionId
-//     * @return $this
-//     */
-//    function setTransactionId( $transactionId ) {
-//        $this->transactionId = $transactionId;
-//        return $this;
-//    }
+    /**
+     * @param string $transactionId
+     * @return $this
+     */
+    function setTransactionId( $transactionId ) {
+        $this->transactionId = $transactionId;
+        return $this;
+    }
 //    
 //    /**
 //     * prepares the elements used in the request to svea
