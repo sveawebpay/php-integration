@@ -1,8 +1,7 @@
 <?php
 namespace Svea;
 
-require_once 'HostedRequest.php';
-require_once  SVEA_REQUEST_DIR.'/Constant/PaymentMethod.php';
+require_once SVEA_REQUEST_DIR . '/Includes.php';
 
 /**
  * Annul a Card transaction
