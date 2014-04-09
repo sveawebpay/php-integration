@@ -296,7 +296,7 @@ class HostedXmlBuilder {
     }
     
     /*
-     * write xml for webservice "credit" call, used by WebPay::creditTransaction
+     * write xml for webservice "credit" call, used by CreditTransaction
      *
      * @param elements -- associative array of element names and values
      * 
@@ -316,7 +316,7 @@ class HostedXmlBuilder {
     }
 
     /*
-     * write xml for webservice "annul" call, used by WebPay::annulTransaction
+     * write xml for webservice "querytransactionid" call, used by QueryTransaction
      *
      * @param elements -- associative array of element names and values
      * 
@@ -333,10 +333,30 @@ class HostedXmlBuilder {
         $this->XMLWriter->endDocument();
         
         return $this->XMLWriter->flush();
+    }    
+    
+    /*
+     * write xml for webservice "annul" call, used by AnnulTransaction
+     *
+     * @param elements -- associative array of element names and values
+     * 
+     */
+    public function getQueryTransactionXML( $elements ){
+        $this->setBaseXML();
+        $this->XMLWriter->startElement("query");
+   
+        foreach( $elements as $element => $value ) {
+            $this->XMLWriter->writeElement($element,$value);
+        }
+
+        $this->XMLWriter->endElement();
+        $this->XMLWriter->endDocument();
+        
+        return $this->XMLWriter->flush();
     }
     
     /*
-     * write xml for webservice "confirm" call, used by WebPay::confirmTransaction
+     * write xml for webservice "confirm" call, used by ConfirmTransaction
      *
      * @param elements -- associative array of element names and values
      * 
@@ -356,7 +376,7 @@ class HostedXmlBuilder {
     }
 
     /*
-     * write xml for webservice "loweramount" call, used by WebPay::lowerTransaction
+     * write xml for webservice "loweramount" call, used by LowerTransaction
      *
      * @param elements -- associative array of element names and values
      * 

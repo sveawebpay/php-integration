@@ -21,7 +21,7 @@ class QueryTransactionTest extends PHPUnit_Framework_TestCase {
     // test methods
     function test_class_exists(){        
         $this->assertInstanceOf( "Svea\QueryTransaction", $this->queryObject);
-        $this->assertEquals( "query", PHPUnit_Framework_Assert::readAttribute($this->queryObject, 'method') );        
+        $this->assertEquals( "querytransactionid", PHPUnit_Framework_Assert::readAttribute($this->queryObject, 'method') );        
     }
     
     function test_setCountryCode(){
@@ -35,24 +35,24 @@ class QueryTransactionTest extends PHPUnit_Framework_TestCase {
         $this->queryObject->setTransactionId( $transactionId );
         $this->assertEquals( $transactionId, PHPUnit_Framework_Assert::readAttribute($this->queryObject, 'transactionId') );
     }
-//              
-//    function test_prepareRequest_array_contains_mac_merchantid_message() {
-//
-//        // set up cannulTransaction object & get request form
-//        $transactionId = 987654;       
-//        $this->queryObject->setTransactionId( $transactionId );
-//
-//        $countryCode = "SE";
-//        $this->queryObject->setCountryCode($countryCode);
-//                
-//        $form = $this->queryObject->prepareRequest();
-//
-//        // prepared request is message (base64 encoded), merchantid, mac
-//        $this->assertTrue( isset($form['merchantid']) );
-//        $this->assertTrue( isset($form['mac']) );
-//        $this->assertTrue( isset($form['message']) );
-//    }
-//    
+              
+    function test_prepareRequest_array_contains_mac_merchantid_message() {
+
+        // set up annulTransaction object & get request form
+        $transactionId = 987654;       
+        $this->queryObject->setTransactionId( $transactionId );
+
+        $countryCode = "SE";
+        $this->queryObject->setCountryCode($countryCode);
+                
+        $form = $this->queryObject->prepareRequest();
+
+        // prepared request is message (base64 encoded), merchantid, mac
+        $this->assertTrue( isset($form['merchantid']) );
+        $this->assertTrue( isset($form['mac']) );
+        $this->assertTrue( isset($form['message']) );
+    }
+    
 //        function test_prepareRequest_request_has_correct_merchantid_mac_and_annulTransaction_request_message_contents() {
 //
 //        // set up creditTransaction object & get request form
