@@ -20,29 +20,25 @@ class AnnulTransactionTest extends PHPUnit_Framework_TestCase {
 
     // test methods
     function test_class_exists(){
-        
         $this->assertInstanceOf( "Svea\AnnulTransaction", $this->annulObject);      
+        $this->assertEquals( "annul", PHPUnit_Framework_Assert::readAttribute($this->annulObject, 'method') );        
     }
     
     function test_setCountryCode(){
-        
         $countryCode = "SE";       
         $this->annulObject->setCountryCode( $countryCode );
-        
         $this->assertEquals( $countryCode, PHPUnit_Framework_Assert::readAttribute($this->annulObject, 'countryCode') );
     }
     
-    function test_setTransactionId( ){
-        
+    function test_setTransactionId( ){ 
         $transactionId = 987654;       
         $this->annulObject->setTransactionId( $transactionId );
-        
         $this->assertEquals( $transactionId, PHPUnit_Framework_Assert::readAttribute($this->annulObject, 'transactionId') );
     }
               
     function test_prepareRequest_array_contains_mac_merchantid_message() {
 
-        // set up cannulTransaction object & get request form
+        // set up annulTransaction object & get request form
         $transactionId = 987654;       
         $this->annulObject->setTransactionId( $transactionId );
 
