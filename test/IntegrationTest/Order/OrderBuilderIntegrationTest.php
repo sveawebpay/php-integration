@@ -109,9 +109,9 @@ class OrderBuilderIntegrationTest extends PHPUnit_Framework_TestCase {
     function test_manual_CancelOrderBuilder_Card_success() {
 
         // Stop here and mark this test as incomplete.
-//        $this->markTestIncomplete(
-//            'skeleton for manual test of cancelOrder for a card order' // TODO
-//        );
+        $this->markTestIncomplete(
+            'skeleton for manual test of cancelOrder for a card order' // TODO
+        );
         
         // Set the below to match the transaction, then run the test.
         $customerrefno = "test_1396964349955";

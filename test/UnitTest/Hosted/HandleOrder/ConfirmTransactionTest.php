@@ -20,31 +20,25 @@ class ConfirmTransactionTest extends PHPUnit_Framework_TestCase {
 
     // test methods
     function test_class_exists(){
-        
-        $this->assertInstanceOf( "Svea\ConfirmTransaction", $this->confirmObject);      
+        $this->assertInstanceOf( "Svea\ConfirmTransaction", $this->confirmObject);
+        $this->assertEquals( "confirm", PHPUnit_Framework_Assert::readAttribute($this->confirmObject, 'method') );                
     }
     
     function test_setCountryCode(){
-        
         $countryCode = "SE";       
         $this->confirmObject->setCountryCode( $countryCode );
-        
         $this->assertEquals( $countryCode, PHPUnit_Framework_Assert::readAttribute($this->confirmObject, 'countryCode') );
     }
     
     function test_setTransactionId( ){
-        
         $transactionId = 987654;       
         $this->confirmObject->setTransactionId( $transactionId );
-        
         $this->assertEquals( $transactionId, PHPUnit_Framework_Assert::readAttribute($this->confirmObject, 'transactionId') );
     }
     
     function test_setCaptureDate( ) {
-        
         $captureDate = "2014-03-21";
         $this->confirmObject->setCaptureDate( $captureDate );
-        
         $this->assertEquals( $captureDate, PHPUnit_Framework_Assert::readAttribute($this->confirmObject, 'captureDate') );
     }
               

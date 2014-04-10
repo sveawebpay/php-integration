@@ -20,31 +20,25 @@ class CreditTransactionTest extends PHPUnit_Framework_TestCase {
 
     // test methods
     function test_class_exists(){
-        
         $this->assertInstanceOf( "Svea\CreditTransaction", $this->creditObject);      
+        $this->assertEquals( "credit", PHPUnit_Framework_Assert::readAttribute($this->creditObject, 'method') );        
     }
     
     function test_setCountryCode(){
-        
         $countryCode = "SE";       
         $this->creditObject->setCountryCode( $countryCode );
-        
         $this->assertEquals( $countryCode, PHPUnit_Framework_Assert::readAttribute($this->creditObject, 'countryCode') );
     }
     
     function test_setTransactionId( ){
-        
         $transactionId = 987654;       
         $this->creditObject->setTransactionId( $transactionId );
-        
         $this->assertEquals( $transactionId, PHPUnit_Framework_Assert::readAttribute($this->creditObject, 'transactionId') );
     }
     
     function test_setCreditAmount() {
-        
         $creditAmount = 100;
         $this->creditObject->setCreditAmount( $creditAmount );
-        
         $this->assertEquals( $creditAmount, PHPUnit_Framework_Assert::readAttribute($this->creditObject, 'creditAmount') );
     }
               

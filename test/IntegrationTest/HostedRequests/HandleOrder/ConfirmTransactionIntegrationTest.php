@@ -61,14 +61,15 @@ class ConfirmTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
              
         $transactionId = 987654;
         $captureDate = "2014-03-21";
-                
-        $response = WebPay::confirmTransaction( Svea\SveaConfig::getDefaultConfig() )
+
+        $request = new Svea\ConfirmTransaction( Svea\SveaConfig::getDefaultConfig() );
+        $response = $request
             ->setTransactionId( $transactionId )
             ->setCaptureDate( $captureDate )
             ->setCountryCode( "SE" )
             ->doRequest();
 
-        $this->assertInstanceOf( "Svea\HostedAdminResponse", $response );
+        $this->assertInstanceOf( "Svea\ConfirmTransactionResponse", $response );
         
         // if we receive an error from the service, the integration test passes
         $this->assertEquals( 0, $response->accepted );
@@ -94,14 +95,14 @@ class ConfirmTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
         $captureDate = "2014-03-21";
 
                 
-        $request = WebPay::confirmTransaction( Svea\SveaConfig::getDefaultConfig() )
+        $request = new Svea\ConfirmTransaction( Svea\SveaConfig::getDefaultConfig() );
+        $response = $request
             ->setTransactionId( $transactionId )
             ->setCaptureDate( $captureDate )
-            ->setCountryCode( "SE" );
-    
-        $response = $request->doRequest();        
+            ->setCountryCode( "SE" )
+            ->doRequest();        
         
-        $this->assertInstanceOf( "Svea\HostedAdminResponse", $response );
+        $this->assertInstanceOf( "Svea\ConfirmTransactionResponse", $response );
 
 //        print_r( $response );
         

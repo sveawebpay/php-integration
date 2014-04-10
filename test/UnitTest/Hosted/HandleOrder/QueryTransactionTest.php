@@ -7,45 +7,45 @@ require_once $root . '/../../../../src/WebServiceRequests/svea_soap/SveaSoapConf
 /**
  * @author Kristian Grossman-Madsen for Svea Webpay
  */
-class AnnulTransactionTest extends PHPUnit_Framework_TestCase {
+class QueryTransactionTest extends PHPUnit_Framework_TestCase {
         
     protected $configObject;
-    protected $annulObject;
+    protected $queryObject;
 
     // fixture, run once before each test method
     protected function setUp() {
         $this->configObject = Svea\SveaConfig::getDefaultConfig();
-        $this->annulObject = WebPay::annulTransaction( $this->configObject );
+        $this->queryObject = new Svea\QueryTransaction( $this->configObject );
     }
 
     // test methods
-    function test_class_exists(){
-        $this->assertInstanceOf( "Svea\AnnulTransaction", $this->annulObject);      
-        $this->assertEquals( "annul", PHPUnit_Framework_Assert::readAttribute($this->annulObject, 'method') );        
+    function test_class_exists(){        
+        $this->assertInstanceOf( "Svea\QueryTransaction", $this->queryObject);
+        $this->assertEquals( "querytransactionid", PHPUnit_Framework_Assert::readAttribute($this->queryObject, 'method') );        
     }
     
     function test_setCountryCode(){
         $countryCode = "SE";       
-        $this->annulObject->setCountryCode( $countryCode );
-        $this->assertEquals( $countryCode, PHPUnit_Framework_Assert::readAttribute($this->annulObject, 'countryCode') );
+        $this->queryObject->setCountryCode( $countryCode ); 
+        $this->assertEquals( $countryCode, PHPUnit_Framework_Assert::readAttribute($this->queryObject, 'countryCode') );
     }
     
-    function test_setTransactionId( ){ 
+    function test_setTransactionId( ){
         $transactionId = 987654;       
-        $this->annulObject->setTransactionId( $transactionId );
-        $this->assertEquals( $transactionId, PHPUnit_Framework_Assert::readAttribute($this->annulObject, 'transactionId') );
+        $this->queryObject->setTransactionId( $transactionId );
+        $this->assertEquals( $transactionId, PHPUnit_Framework_Assert::readAttribute($this->queryObject, 'transactionId') );
     }
               
     function test_prepareRequest_array_contains_mac_merchantid_message() {
 
         // set up annulTransaction object & get request form
         $transactionId = 987654;       
-        $this->annulObject->setTransactionId( $transactionId );
+        $this->queryObject->setTransactionId( $transactionId );
 
         $countryCode = "SE";
-        $this->annulObject->setCountryCode($countryCode);
+        $this->queryObject->setCountryCode($countryCode);
                 
-        $form = $this->annulObject->prepareRequest();
+        $form = $this->queryObject->prepareRequest();
 
         // prepared request is message (base64 encoded), merchantid, mac
         $this->assertTrue( isset($form['merchantid']) );
@@ -53,16 +53,16 @@ class AnnulTransactionTest extends PHPUnit_Framework_TestCase {
         $this->assertTrue( isset($form['message']) );
     }
     
-        function test_prepareRequest_request_has_correct_merchantid_mac_and_annulTransaction_request_message_contents() {
+        function test_prepareRequest_request_has_correct_merchantid_mac_and_querytransactionid_request_message_contents() {
 
         // set up creditTransaction object & get request form
         $transactionId = 987654;       
-        $this->annulObject->setTransactionId( $transactionId );
+        $this->queryObject->setTransactionId( $transactionId );
 
         $countryCode = "SE";
-        $this->annulObject->setCountryCode($countryCode);
+        $this->queryObject->setCountryCode($countryCode);
                 
-        $form = $this->annulObject->prepareRequest();
+        $form = $this->queryObject->prepareRequest();
         
         // get our merchantid & secret
         $merchantid = $this->configObject->getMerchantId( ConfigurationProvider::HOSTED_TYPE, $countryCode);
@@ -77,10 +77,8 @@ class AnnulTransactionTest extends PHPUnit_Framework_TestCase {
         // check annul request message contents
         $xmlMessage = new SimpleXMLElement( base64_decode(urldecode($form['message'])) );
 
-        $this->assertEquals( "annul", $xmlMessage->getName() );   // root node        
-        $this->assertEquals((string)$transactionId, $xmlMessage->transactionid);
-        
+        $this->assertEquals( "query", $xmlMessage->getName() );   // root node        
+        $this->assertEquals((string)$transactionId, $xmlMessage->transactionid); 
     }
-
 }
 ?>

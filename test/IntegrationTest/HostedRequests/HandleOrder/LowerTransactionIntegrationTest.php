@@ -62,13 +62,14 @@ class LowerTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
         $transactionId = 987654;
         $amountToLower = 100;
                 
-        $response = WebPay::lowerTransaction( Svea\SveaConfig::getDefaultConfig() )
+        $request = new Svea\LowerTransaction( Svea\SveaConfig::getDefaultConfig() );
+        $response = $request  
             ->setTransactionId( $transactionId )
             ->setAmountToLower( $amountToLower )
             ->setCountryCode( "SE" )
             ->doRequest();
 
-        $this->assertInstanceOf( "Svea\HostedAdminResponse", $response );
+        $this->assertInstanceOf( "Svea\LowerTransactionResponse", $response );
         
         // if we receive an error from the service, the integration test passes
         $this->assertEquals( 0, $response->accepted );
@@ -104,18 +105,16 @@ class LowerTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
         // - 3001 => failure, accepted = 0, resultcode = "305 (BAD_AMOUNT), errormessage = "Invalid value for amount."
         // - 3000 => success, Svea status ANNULLED
         
-        $request = WebPay::lowerTransaction( Svea\SveaConfig::getDefaultConfig() )
+        $request = new Svea\LowerTransaction( Svea\SveaConfig::getDefaultConfig() );
+        $response = $request                
             ->setTransactionId( $transactionId )
             ->setAmountToLower( $amountToLower )
-            ->setCountryCode( "SE" );
-    
-        $response = $request->doRequest();        
+            ->setCountryCode( "SE" )
+            ->doRequest();        
         
-        print_r($response);        
+        $this->assertInstanceOf( "Svea\LowerTransactionResponse", $response );
         
-        $this->assertInstanceOf( "Svea\HostedAdminResponse", $response );
-        
-        // if we receive an error from the service, the integration test passes
+        print_r($response);                
         $this->assertEquals( 1, $response->accepted );        
         $this->assertEquals( $customerrefno, $response->customerrefno );  
     }    

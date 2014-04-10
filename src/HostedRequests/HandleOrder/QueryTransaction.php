@@ -4,35 +4,25 @@ namespace Svea;
 require_once SVEA_REQUEST_DIR . '/Includes.php';
 
 /**
- * Confirms a Card transaction. 
+ * Query a Card or Directbank transaction. Only supports querytransactionid request
  * 
  * @author Kristian Grossman-Madsen
  */
-class ConfirmTransaction extends HostedRequest {
+class QueryTransaction extends HostedRequest {
 
     protected $transactionId;
-    protected $captureDate;
     
     function __construct($config) {
-        $this->method = "confirm";
+        $this->method = "querytransactionid";
         parent::__construct($config);
     }
-    
+
     /**
-     * @param string $transactionId  the transaction to capture
+     * @param string $transactionId
      * @return $this
      */
     function setTransactionId( $transactionId ) {
         $this->transactionId = $transactionId;
-        return $this;
-    }
-    
-    /**
-     * @param string $captureDate  ISO-8601 extended date format (YYYY-MM-DD)
-     * @return $this
-     */
-    function setCaptureDate( $captureDate ) {
-        $this->captureDate = $captureDate;
         return $this;
     }
     
@@ -44,16 +34,15 @@ class ConfirmTransaction extends HostedRequest {
         $xmlBuilder = new HostedXmlBuilder();
         
         // get our merchantid & secret
-        $merchantId = $this->config->getMerchantId( \ConfigurationProvider::HOSTED_TYPE,  $this->countryCode);
+        $merchantId = $this->config->getMerchantId( \ConfigurationProvider::HOSTED_TYPE,  $this->countryCode);      // TODO HOSTED_ADMIN_TYPE?!
         $secret = $this->config->getSecret( \ConfigurationProvider::HOSTED_TYPE, $this->countryCode);
         
-        // message contains the confirm request
+        // message contains the credit request
         $messageContents = array(
-            "transactionid" => $this->transactionId,
-            "capturedate" => $this->captureDate
+            "transactionid" => $this->transactionId
         ); 
-        $message = $xmlBuilder->getConfirmTransactionXML( $messageContents );        
-
+        $message = $xmlBuilder->getQueryTransactionXML( $messageContents );        
+        
         // calculate mac
         $mac = hash("sha512", base64_encode($message) . $secret);
         

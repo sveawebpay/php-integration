@@ -1,14 +1,11 @@
 <?php
 namespace Svea;
 
-require_once 'HostedResponse.php';
+require_once SVEA_REQUEST_DIR . '/Includes.php';
 
 /**
  * Handles diverse administrative function responses from the webservice and
  * wrapped legacy services through the webservice.
- * 
- * @property string $customerrefno contains customer provided order reference
- * @property array<string> $paymentMethods set iff getPaymentMethod response
  * 
  * @author anne-hal, Kristian Grossman-Madsen for Svea WebPay
  */
@@ -16,10 +13,6 @@ class HostedAdminResponse extends HostedResponse{
 
     /**
      * Create an new HostedAdminResponse which handles the webservice response
-     * from the following methods:
-     * creditTransaction(),
-     * annulTransaction(),
-     * getPaymentMethods()
      * 
      * Will set response attribute accepted to 0 if the mac is invalid or the
      * response is malformed.
@@ -57,11 +50,6 @@ class HostedAdminResponse extends HostedResponse{
      * formatXml() parses the hosted admin response xml into an object, and
      * then sets the response attributes accordingly.
      * 
-     * Handles responses from the following method requests:
-     * getPaymentMethods()
-     * creditTransaction()
-     * annulTransaction()
-     * 
      * @param type $hostedAdminResponseXML
      */
     protected function formatXml($hostedAdminResponseXML) {
@@ -74,21 +62,7 @@ class HostedAdminResponse extends HostedResponse{
             $this->accepted = 0;
             $this->setErrorParams( (string)$hostedAdminResponse->statuscode ); 
         }
-        
-        //getPaymentMethods
-        if(property_exists($hostedAdminResponse,"paymentmethods")){
-
-            //$this->paymentMethods = (array)$hostedAdminResponse->paymentmethods->paymentmethod;     // seems to break under php 5.3            
-            foreach( $hostedAdminResponse->paymentmethods->paymentmethod as $paymentmethod) {       // compatibility w/php 5.3
-                $this->paymentMethods[] = (string)$paymentmethod;
-            }            
-        }
-        
-        //creditTransaction/credit request or annulTransaction/annul request       // note: query request also returns response w/transaction...
-        if(property_exists($hostedAdminResponse->transaction,"customerrefno")){
-            $this->customerrefno = (string)$hostedAdminResponse->transaction->customerrefno;
-        }    
-        
+          
         // getPaymentURL/preparepayment request
         if( property_exists($hostedAdminResponse,"preparedpayment")) {
             $url = "https://webpay.sveaekonomi.se/webpay/preparedpayment/";

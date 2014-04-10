@@ -20,31 +20,25 @@ class LowerTransactionTest extends PHPUnit_Framework_TestCase {
 
     // test methods
     function test_class_exists(){
-        
         $this->assertInstanceOf( "Svea\LowerTransaction", $this->lowerTransactionObject);      
+        $this->assertEquals( "loweramount", PHPUnit_Framework_Assert::readAttribute($this->lowerTransactionObject, 'method') );        
     }
     
     function test_setCountryCode(){
-        
         $countryCode = "SE";       
-        $this->lowerTransactionObject->setCountryCode( $countryCode );
-        
+        $this->lowerTransactionObject->setCountryCode( $countryCode ); 
         $this->assertEquals( $countryCode, PHPUnit_Framework_Assert::readAttribute($this->lowerTransactionObject, 'countryCode') );
     }
     
     function test_setTransactionId( ){
-        
         $transactionId = 987654;       
         $this->lowerTransactionObject->setTransactionId( $transactionId );
-        
         $this->assertEquals( $transactionId, PHPUnit_Framework_Assert::readAttribute($this->lowerTransactionObject, 'transactionId') );
     }
     
     function test_setAmountToLower() {
-        
         $amountToLower = 100;
         $this->lowerTransactionObject->setAmountToLower( $amountToLower );
-        
         $this->assertEquals( $amountToLower, PHPUnit_Framework_Assert::readAttribute($this->lowerTransactionObject, 'amountToLower') );
     }
               
