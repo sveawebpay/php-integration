@@ -155,19 +155,26 @@ class WebPay {
     }
 
     /**
+     * Get all paymentmethods connected to the given ConfigurationProvider and country.
+     * Use the following methods: 
+     * ->setCountryCode()
+     * ->doRequest() 
+     * @param ConfigurationProvider $config  instance implementing ConfigurationProvider
+     * @return ListPaymentMethodsResponse
+     */
+    public static function listPaymentMethods($config = NULL) {
+        if( $config == NULL ) { WebPay::throwMissingConfigException(); }
+        return new Svea\ListPaymentMethods($config);
+    }
+    
+    /**
      * Get all paymentmethods connected to your account
      * @param ConfigurationProvider $config  instance implementing ConfigurationProvider
-     * @return \Svea\GetPaymentMethods Array of Paymentmethods
+     * @return string[] array of avaoilable paymentmethods for this ConfigurationProvider
+     * @deprecated 2.0.0 use listPaymentMethods instead, which returns a HostedResponse object instead of an array
      */
     public static function getPaymentMethods($config = NULL) {
-        if ($config == NULL) {
-           throw new Exception('-missing parameter:
-                                This method requires an ConfigurationProvider object as parameter.
-                                Create a class that implements class ConfigurationProvider. Set returnvalues to configuration values. Create an object from that class.
-                                Alternative create an instance from SveaConfigurationProvider that will return Svea default testvalues.
-                                There you can replace the default config values to return your own config values in the method.'
-                                );
-       }
+        if( $config == NULL ) { WebPay::throwMissingConfigException(); }
         return new Svea\GetPaymentMethods($config);
     }
     
@@ -213,7 +220,6 @@ class WebPay {
         return new Svea\LowerTransaction($config);
     }
     
- 
     private static function throwMissingConfigException() {
         throw new Exception('-missing parameter: This method requires an ConfigurationProvider object as parameter. Create a class that implements class ConfigurationProvider. Set returnvalues to configuration values. Create an object from that class. Alternative use static function from class SveaConfig e.g. SveaConfig::getDefaultConfig(). You can replace the default config values to return your own config values in the method.');   
     }

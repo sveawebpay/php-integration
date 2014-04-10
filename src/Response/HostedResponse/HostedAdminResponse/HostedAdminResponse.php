@@ -62,16 +62,7 @@ class HostedAdminResponse extends HostedResponse{
             $this->accepted = 0;
             $this->setErrorParams( (string)$hostedAdminResponse->statuscode ); 
         }
-        
-        //getPaymentMethods
-        if(property_exists($hostedAdminResponse,"paymentmethods")){
-
-            //$this->paymentMethods = (array)$hostedAdminResponse->paymentmethods->paymentmethod;     // seems to break under php 5.3            
-            foreach( $hostedAdminResponse->paymentmethods->paymentmethod as $paymentmethod) {       // compatibility w/php 5.3
-                $this->paymentMethods[] = (string)$paymentmethod;
-            }            
-        }
-   
+          
         // getPaymentURL/preparepayment request
         if( property_exists($hostedAdminResponse,"preparedpayment")) {
             $url = "https://webpay.sveaekonomi.se/webpay/preparedpayment/";

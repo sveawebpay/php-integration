@@ -10,21 +10,17 @@ require_once SVEA_REQUEST_DIR . '/Includes.php';
  */
 class QueryTransactionResponse extends HostedAdminResponse{
 
-    /**
-     * Calls HostedAdminResponse
-     * 
-     * @param SimpleXMLElement $message
-     * @param string $countryCode
-     * @param SveaConfigurationProvider $config
-     */
+
+    /** string $customerrefno */
+    public $customerrefno;
+    
     function __construct($message,$countryCode,$config) {
         parent::__construct($message,$countryCode,$config);
     }
 
     /**
-     * formatXml() parses the query transaction response xml into an object, and
+     * formatXml() parses the annul transaction response xml into an object, and
      * then sets the response attributes accordingly.
-     * 
      * 
      * @param string $hostedAdminResponseXML  hostedAdminResponse as xml
      */
@@ -39,7 +35,7 @@ class QueryTransactionResponse extends HostedAdminResponse{
             $this->accepted = 0;
             $this->setErrorParams( (string)$hostedAdminResponse->statuscode ); 
         }
-        
+    
         // queryTransaction
         if(property_exists($hostedAdminResponse->transaction,"customerrefno") && property_exists($hostedAdminResponse->transaction,"merchantid")){
             

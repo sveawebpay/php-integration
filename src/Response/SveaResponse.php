@@ -91,8 +91,8 @@ class SveaResponse {
                         break;
                 }
             }                        
-            // legacy fallback -- webservice from hosted_admin
-            elseif (property_exists($message, "message"))   {
+            // legacy fallback -- webservice from hosted_admin -- used by preparedpayment 
+            elseif (property_exists($message, "message"))   {                
                  $this->response = new Svea\HostedAdminResponse($message,$countryCode,$config);
             }
         } 
