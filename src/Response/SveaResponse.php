@@ -39,6 +39,7 @@ class SveaResponse {
      * @param SimpleXMLElement|string  $message contains the Svea service response, either as an object or as raw xml (for hosted payments)
      * @param string $countryCode
      * @param SveaConfigurationProvider $config
+     * @param string $method  set for HostedAdminRequests, indicates the request method used  
      * @return mixed instance of a subclass to HostedResponse or WebServiceResponse, respectively
      */
     public function __construct($message, $countryCode, $config = NULL, $method = NULL) {
@@ -63,7 +64,7 @@ class SveaResponse {
                 $this->response = new Svea\CloseOrderResult($message);
             }
             
-            // if $method was set, response of HostedAdminRequest
+            // @param string $method  set for HostedAdminRequests, indicates the request method used  
             elseif( isset($method) ) {
                 switch( $method ) {
                     case "querytransactionid":
@@ -80,7 +81,11 @@ class SveaResponse {
                         break;   
                     case "loweramount":
                         $this->response = new Svea\LowerTransactionResponse($message, $countryCode, $config);
-                        break;                       
+                        break;    
+                    case "getpaymentmethods":
+                        $this->response = new Svea\ListPaymentMethodsResponse($message, $countryCode, $config);
+                        break;
+                    
                     default:
                         print_r( "unknown method: " ); print_r( $method ); die(); // TODO throw exception instead, fix before release
                         break;

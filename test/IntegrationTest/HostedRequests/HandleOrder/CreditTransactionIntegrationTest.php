@@ -12,46 +12,6 @@ require_once $root . '/../../../TestUtil.php';
  */
 class CreditTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
  
-   /**
-     * test_creditTransaction_card_success creates an order using card payment, 
-     * pays using card & receives a transaction id, then credits the transaction
-     * 
-     * used as acceptance criteria/smoke test for credit transaction feature
-     */
-    function test_creditTransaction_card_success() { 
-      
-        // not yet implemented, requires webdriver support
-
-        // Stop here and mark this test as incomplete.
-        $this->markTestIncomplete(
-          'not yet implemented, requires webdriver support' // TODO
-        );
-        
-        // also, needs to have SUCCESS status set on transaction
-
-        // set up order (from testUtil?)
-        $order = TestUtil::createOrder();
-        
-        // pay with card, receive transactionId
-        $form = $order
-            ->UsePaymentMethod( PaymentMethod::KORTCERT )
-            ->setReturnUrl("http://myurl.se")
-            //->setCancelUrl()
-            //->setCardPageLanguage("SE")
-            ->getPaymentForm();
-        
-        $url = "https://test.sveaekonomi.se/webpay/payment";
-
-        // do request modeled on CardPymentIntegrationTest.php
-                
-        // make sure the transaction has status SUCCESS at Svea
-        
-        // credit transcation using above the transaction transactionId
-        
-        // assert response from creditTransaction equals success
-    }
-    
-    
     /**
      * test_credit_card_transaction_not_found 
      * 
