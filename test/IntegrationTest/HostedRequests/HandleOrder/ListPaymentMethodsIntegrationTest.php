@@ -24,7 +24,16 @@ class ListPaymentMethodsIntegrationTest extends \PHPUnit_Framework_TestCase {
         //print_r( $response );
         $this->assertEquals( 1, $response->accepted );
         $this->assertInternalType( "array", $response->paymentmethods );
-        $this->assertEquals( Svea\SystemPaymentMethod::DBNORDEASE, $response->paymentmethods[0]);
+        // from getpaymentmethods call, tied to merchantid
+        $this->assertEquals( PaymentMethod::NORDEA_SE, $response->paymentmethods[0]);
+        $this->assertEquals( PaymentMethod::SEB_SE, $response->paymentmethods[1]);        
+        $this->assertEquals( PaymentMethod::KORTCERT, $response->paymentmethods[2]); 
+        $this->assertEquals( \Svea\SystemPaymentMethod::INVOICE_SE, $response->paymentmethods[3]);
+        $this->assertEquals( \Svea\SystemPaymentMethod::PAYMENTPLAN_SE, $response->paymentmethods[4]);
+        // from ListPaymentMethods implementation, tied to clientid
+        $this->assertEquals( PaymentMethod::INVOICE, $response->paymentmethods[5]);
+        $this->assertEquals( PaymentMethod::PAYMENTPLAN, $response->paymentmethods[6]);                       
+
     }
 }
 ?>

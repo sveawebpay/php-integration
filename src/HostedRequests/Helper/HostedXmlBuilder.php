@@ -396,6 +396,26 @@ class HostedXmlBuilder {
     }
     
     /*
+     * write xml for webservice "loweramount" call, used by LowerTransaction
+     *
+     * @param elements -- associative array of element names and values
+     * 
+     */
+    public function getListPaymentMethodsXML( $elements ){
+        $this->setBaseXML();
+        $this->XMLWriter->startElement("getpaymentmethods");
+   
+        foreach( $elements as $element => $value ) {
+            $this->XMLWriter->writeElement($element,$value);
+        }
+
+        $this->XMLWriter->endElement();
+        $this->XMLWriter->endDocument();
+        
+        return $this->XMLWriter->flush();
+    }    
+    
+    /*
      * write xml for webservice getpaymentmethods
      */
     public function getPaymentMethodsXML($merchantId){
