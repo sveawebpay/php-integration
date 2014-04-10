@@ -82,9 +82,9 @@ class QueryTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
     function test_manual_query_card() {
 
         // Stop here and mark this test as incomplete.
-        $this->markTestIncomplete(
-            'skeleton for manual test of query card transaction' // TODO
-        );
+//        $this->markTestIncomplete(
+//            'skeleton for manual test of query card transaction' // TODO
+//        );
         
         // Set the below to match the transaction, then run the test.
         $customerrefno = 313;
@@ -99,7 +99,10 @@ class QueryTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
         $this->assertInstanceOf( "Svea\QueryTransactionResponse", $response );
         
         print_r($response);
-        $this->assertEquals( 1, $response->accepted );        
+        $this->assertEquals( 1, $response->accepted );    
+        
+        $this->assertEquals( $transactionId, $response->transactionId );     
+        // TODO rest of attributes from query, when decided upon...
     }    
 }
 ?>

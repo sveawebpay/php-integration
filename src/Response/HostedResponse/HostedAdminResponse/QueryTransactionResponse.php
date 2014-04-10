@@ -14,6 +14,20 @@ class QueryTransactionResponse extends HostedAdminResponse{
     /** string $customerrefno */
     public $customerrefno;
     
+    public $merchantid;
+    public $status;
+    public $amount;
+    public $currency;
+    public $vat ;
+    public $capturedamount;
+    public $authorizedamount;
+    public $created;
+    public $creditstatus;
+    public $creditedamount;
+    public $merchantresponsecode;
+    public $paymentmethod;
+    public $orderrows;
+    
     function __construct($message,$countryCode,$config) {
         parent::__construct($message,$countryCode,$config);
     }
@@ -41,24 +55,24 @@ class QueryTransactionResponse extends HostedAdminResponse{
             
             print_r($hostedAdminResponse->transaction);
             
-            $this->transactionId = $hostedAdminResponse->transaction->id;
+            $this->transactionId = (string)$hostedAdminResponse->transaction['id'];
             
             // todo set attributes to return according to spec?
             
-//            $this->customerrefno = (string)$hostedAdminResponse->transaction->customerrefno;
-//            $this->merchantid = (string)$hostedAdminResponse->transaction->merchantid;
-//            $this->status = (string)$hostedAdminResponse->transaction->status;
-//            $this->amount = (string)$hostedAdminResponse->transaction->merchantid;
-//            $this->currency = (string)$hostedAdminResponse->transaction->merchantid;
-//            $this->vat = (string)$hostedAdminResponse->transaction->merchantid;
-//            $this->capturedamount = (string)$hostedAdminResponse->transaction->merchantid;
-//            $this->authorizedamount = (string)$hostedAdminResponse->transaction->merchantid;
-//            $this->created = (string)$hostedAdminResponse->transaction->merchantid;
-//            $this->creditstatus = (string)$hostedAdminResponse->transaction->merchantid;
-//            $this->creditedamount = (string)$hostedAdminResponse->transaction->merchantid;
-//            $this->merchantresponsecode = (string)$hostedAdminResponse->transaction->merchantid;
-//            $this->paymentmethod = (string)$hostedAdminResponse->transaction->merchantid;
-//            $this->orderrows = (string)$hostedAdminResponse->transaction->merchantid;               //todo
+            $this->customerrefno = (string)$hostedAdminResponse->transaction->customerrefno;
+            $this->merchantid = (string)$hostedAdminResponse->transaction->merchantid;
+            $this->status = (string)$hostedAdminResponse->transaction->status;
+            $this->amount = (string)$hostedAdminResponse->transaction->amount;
+            $this->currency = (string)$hostedAdminResponse->transaction->currency;
+            $this->vat = (string)$hostedAdminResponse->transaction->vat;
+            $this->capturedamount = (string)$hostedAdminResponse->transaction->capturedamount;
+            $this->authorizedamount = (string)$hostedAdminResponse->transaction->authorizedamount;
+            $this->created = (string)$hostedAdminResponse->transaction->created;
+            $this->creditstatus = (string)$hostedAdminResponse->transaction->creditstatus;
+            $this->creditedamount = (string)$hostedAdminResponse->transaction->creditedamount;
+            $this->merchantresponsecode = (string)$hostedAdminResponse->transaction->merchantresponsecode;
+            $this->paymentmethod = (string)$hostedAdminResponse->transaction->paymentmethod;
+           // $this->orderrows = (string)$hostedAdminResponse->transaction->orderrows;               //todo
 //           
 //SimpleXMLElement Object
 //(
