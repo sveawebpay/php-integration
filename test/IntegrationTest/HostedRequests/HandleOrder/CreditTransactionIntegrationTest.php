@@ -62,13 +62,14 @@ class CreditTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
         $transactionId = 987654;
         $amount = 100;
                 
-        $response = WebPay::creditTransaction( Svea\SveaConfig::getDefaultConfig() )
+        $request = new Svea\CreditTransaction( Svea\SveaConfig::getDefaultConfig() );
+        $response = $request
             ->setTransactionId( $transactionId )
             ->setCreditAmount( $amount )
             ->setCountryCode( "SE" )
             ->doRequest();
 
-        $this->assertInstanceOf( "Svea\HostedAdminResponse", $response );
+        $this->assertInstanceOf( "Svea\CreditTransactionResponse", $response );
         
         // if we receive an error from the service, the integration test passes
         $this->assertEquals( 0, $response->accepted );
@@ -93,14 +94,14 @@ class CreditTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
         $transactionId = 579893;
         $amount = 100;
                 
-        $request = WebPay::creditTransaction( Svea\SveaConfig::getDefaultConfig() )
+        $request = new Svea\CreditTransaction( Svea\SveaConfig::getDefaultConfig() );
+        $response = $request
             ->setTransactionId( $transactionId )
             ->setCreditAmount( $amount )
-            ->setCountryCode( "SE" );
-    
-        $response = $request->doRequest();        
+            ->setCountryCode( "SE" )
+            ->doRequest();        
         
-        $this->assertInstanceOf( "Svea\HostedAdminResponse", $response );
+        $this->assertInstanceOf( "Svea\CreditTransactionResponse", $response );
         
         // if we receive an error from the service, the integration test passes
         $this->assertEquals( 1, $response->accepted );        

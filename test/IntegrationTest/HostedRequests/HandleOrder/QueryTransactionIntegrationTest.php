@@ -46,17 +46,17 @@ class QueryTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
                 
         // make sure the transaction has status AUTHORIZED or CONFIRMED at Svea
         
-        // annul transcation with the above transactionId
+        // query transcation with the above transactionId
         
-        // assert response from annulTransaction equals success
+        // assert response from queryTransaction equals success
     }    
     
     /**
      * test_query_card_transaction_not_found 
      * 
-     * used as initial acceptance criteria for annul transaction feature
+     * used as initial acceptance criteria for query transaction feature
      */  
-    function test_annul_card_transaction_not_found() {
+    function test_query_card_transaction_not_found() {
              
         $transactionId = 987654;
                 
@@ -66,7 +66,7 @@ class QueryTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
             ->setCountryCode( "SE" )
             ->doRequest();
 
-        $this->assertInstanceOf( "Svea\HostedAdminResponse", $response );
+        $this->assertInstanceOf( "Svea\QueryTransactionResponse", $response );
         
         // if we receive an error from the service, the integration test passes
         $this->assertEquals( 0, $response->accepted );
@@ -74,7 +74,7 @@ class QueryTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
     }
     
     /**
-     * test_manual_annul_card 
+     * test_manual_query_card 
      * 
      * run this manually after you've performed a card transaction and have set
      * the transaction status to success using the tools in the logg admin.
@@ -82,9 +82,9 @@ class QueryTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
     function test_manual_query_card() {
 
         // Stop here and mark this test as incomplete.
-//        $this->markTestIncomplete(
-//            'skeleton for manual test of annul card transaction' // TODO
-//        );
+        $this->markTestIncomplete(
+            'skeleton for manual test of query card transaction' // TODO
+        );
         
         // Set the below to match the transaction, then run the test.
         $customerrefno = 313;
@@ -96,15 +96,10 @@ class QueryTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
             ->setCountryCode( "SE" )
             ->doRequest();        
          
-       $this->assertInstanceOf( "Svea\QueryTransactionResponse", $response );
+        $this->assertInstanceOf( "Svea\QueryTransactionResponse", $response );
         
-        // if we receive an error from the service, the integration test passes
+        print_r($response);
         $this->assertEquals( 1, $response->accepted );        
-
-        
-        
-        
-        
     }    
 }
 ?>

@@ -8,7 +8,7 @@ require_once SVEA_REQUEST_DIR . '/Includes.php';
  * wrapped legacy services through the webservice.
  * 
  * @property string $customerrefno contains customer provided order reference
- * @property array<string> $paymentMethods set iff getPaymentMethod response
+ * @property string[] $paymentMethods set iff getPaymentMethod response
  * 
  * @author anne-hal, Kristian Grossman-Madsen for Svea WebPay
  */
@@ -83,15 +83,6 @@ class HostedAdminResponse extends HostedResponse{
                 $this->paymentMethods[] = (string)$paymentmethod;
             }            
         }
-        
-        // queryTransaction
-        if(property_exists($hostedAdminResponse->transaction,"customerrefno") && property_exists($hostedAdminResponse->transaction,"merchantid")){
-            $this->customerrefno = (string)$hostedAdminResponse->transaction->customerrefno;
-        }  
-        //creditTransaction/credit request or annulTransaction/annul request
-        elseif(property_exists($hostedAdminResponse->transaction,"customerrefno")){
-            $this->customerrefno = (string)$hostedAdminResponse->transaction->customerrefno;
-        }    
    
         // getPaymentURL/preparepayment request
         if( property_exists($hostedAdminResponse,"preparedpayment")) {

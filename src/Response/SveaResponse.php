@@ -70,16 +70,16 @@ class SveaResponse {
                         $this->response = new Svea\QueryTransactionResponse($message, $countryCode, $config);
                         break;
                     case "annul":
-                        $this->response = new Svea\HostedAdminResponse($message, $countryCode, $config);
+                        $this->response = new Svea\AnnulTransactionResponse($message, $countryCode, $config);
                         break;                     
                     case "credit":
-                        $this->response = new Svea\HostedAdminResponse($message, $countryCode, $config);
+                        $this->response = new Svea\CreditTransactionResponse($message, $countryCode, $config);
                         break;                       
                     case "confirm":
-                        $this->response = new Svea\HostedAdminResponse($message, $countryCode, $config);
+                        $this->response = new Svea\ConfirmTransactionResponse($message, $countryCode, $config);
                         break;   
                     case "loweramount":
-                        $this->response = new Svea\HostedAdminResponse($message, $countryCode, $config);
+                        $this->response = new Svea\LowerTransactionResponse($message, $countryCode, $config);
                         break;                       
                     default:
                         print_r( "unknown method: " ); print_r( $method ); die(); // TODO throw exception instead, fix before release
@@ -90,10 +90,8 @@ class SveaResponse {
             elseif (property_exists($message, "message"))   {
                  $this->response = new Svea\HostedAdminResponse($message,$countryCode,$config);
             }
-
         } 
         elseif ($message != NULL) {
-print_r( "in hostedPaymentResponse" );    // TODO remove 
             $this->response = new Svea\HostedPaymentResponse($message,$countryCode,$config);
         } 
         else {

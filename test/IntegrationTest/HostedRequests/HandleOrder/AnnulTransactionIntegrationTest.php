@@ -60,13 +60,14 @@ class AnnulTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
     function test_annul_card_transaction_not_found() {
              
         $transactionId = 987654;
-                
-        $response = WebPay::annulTransaction( Svea\SveaConfig::getDefaultConfig() )
+
+        $request = new Svea\AnnulTransaction( Svea\SveaConfig::getDefaultConfig() );
+        $response = $request
             ->setTransactionId( $transactionId )
             ->setCountryCode( "SE" )
             ->doRequest();
 
-        $this->assertInstanceOf( "Svea\HostedAdminResponse", $response );
+        $this->assertInstanceOf( "Svea\AnnulTransactionResponse", $response );
         
         // if we receive an error from the service, the integration test passes
         $this->assertEquals( 0, $response->accepted );
@@ -90,15 +91,16 @@ class AnnulTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
         $customerrefno = 313;
         $transactionId = 579929;
 
-        $request = WebPay::annulTransaction( Svea\SveaConfig::getDefaultConfig() )
+        $request = new Svea\AnnulTransaction( Svea\SveaConfig::getDefaultConfig() );
+        $response = $request
             ->setTransactionId( $transactionId )
             ->setCountryCode( "SE" );
     
         $response = $request->doRequest();        
          
-       $this->assertInstanceOf( "Svea\HostedAdminResponse", $response );
+        $this->assertInstanceOf( "Svea\AnnulTransactionResponse", $response );
         
-        // if we receive an error from the service, the integration test passes
+        print_r( $response); 
         $this->assertEquals( 1, $response->accepted );        
         $this->assertEquals( $customerrefno, $response->customerrefno );  
     }    
