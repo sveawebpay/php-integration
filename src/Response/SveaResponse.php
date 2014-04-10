@@ -41,7 +41,7 @@ class SveaResponse {
      * @param SveaConfigurationProvider $config
      * @return mixed instance of a subclass to HostedResponse or WebServiceResponse, respectively
      */
-    public function __construct($message, $countryCode, $config = NULL) {
+    public function __construct($message, $countryCode, $config = NULL, $method = NULL) {
          
         $config = $config == null ? Svea\SveaConfig::getDefaultConfig() : $config;
         
@@ -62,13 +62,38 @@ class SveaResponse {
             elseif (property_exists($message, "CloseOrderEuResult")) {
                 $this->response = new Svea\CloseOrderResult($message);
             }
-            //webservice from hosted_admin
+            
+            // if $method was set, response of HostedAdminRequest
+            elseif( isset($method) ) {
+                switch( $method ) {
+                    case "querytransactionid":
+                        $this->response = new Svea\QueryTransactionResponse($message, $countryCode, $config);
+                        break;
+                    case "annul":
+                        $this->response = new Svea\HostedAdminResponse($message, $countryCode, $config);
+                        break;                     
+                    case "credit":
+                        $this->response = new Svea\HostedAdminResponse($message, $countryCode, $config);
+                        break;                       
+                    case "confirm":
+                        $this->response = new Svea\HostedAdminResponse($message, $countryCode, $config);
+                        break;   
+                    case "loweramount":
+                        $this->response = new Svea\HostedAdminResponse($message, $countryCode, $config);
+                        break;                       
+                    default:
+                        print_r( "unknown method: " ); print_r( $method ); die(); // TODO throw exception instead, fix before release
+                        break;
+                }
+            }                        
+            // legacy fallback -- webservice from hosted_admin
             elseif (property_exists($message, "message"))   {
                  $this->response = new Svea\HostedAdminResponse($message,$countryCode,$config);
             }
 
         } 
         elseif ($message != NULL) {
+print_r( "in hostedPaymentResponse" );    // TODO remove 
             $this->response = new Svea\HostedPaymentResponse($message,$countryCode,$config);
         } 
         else {

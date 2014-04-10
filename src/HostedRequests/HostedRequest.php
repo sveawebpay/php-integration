@@ -63,7 +63,7 @@ class HostedRequest {
         
         // create SveaResponse to handle annul response
         $responseObj = new \SimpleXMLElement($responseXML);        
-        $sveaResponse = new \SveaResponse($responseObj, $this->countryCode, $this->config);
+        $sveaResponse = new \SveaResponse($responseObj, $this->countryCode, $this->config, $this->method);
 
         return $sveaResponse->response; 
     }
