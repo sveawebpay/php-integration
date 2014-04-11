@@ -8,43 +8,51 @@ class FixedDiscount {
     /**
      * Optional
      * @param string $IdAsString
-     * @return Svea\FixedDiscount
+     * @return $this
      */
     public function setDiscountId($IdAsString) {
         $this->discountId = $IdAsString;
         return $this;
     }
-
+    /**@var string */
+    public $discountId;
+    
     /**
      * Optional
      * @param string $unitDescriptionAsString
-     * @return \FixedDiscount
+     * @return $this
      */
     public function setUnit($unitDescriptionAsString) {
         $this->unit = $unitDescriptionAsString;
         return $this;
     }
-
+    /**@var string */
+    public $unit;
+    
     /**
      * Optional
      * @param string $nameAsString
-     * @return \FixedDiscount
+     * @return $this
      */
     public function setName($nameAsString) {
         $this->name = $nameAsString;
         return $this;
     }
-
+    /** @var string $name */
+    public $name;
+    
     /**
      * Optional
      * @param string $descriptionAsString
-     * @return \FixedDiscount
+     * @return $this
      */
     public function setDescription($descriptionAsString) {
         $this->description = $descriptionAsString;
         return $this;
     }
-
+    /** @var string $description */
+    public $description;
+    
     /**
      * Required to use at least one of the functions setAmountExVat() or setAmountIncVat(), and optionally also setVatPercent().
      * 
@@ -62,12 +70,14 @@ class FixedDiscount {
      * See WebServiceRowFormaterTest, test_FixedDiscount_specified_using_amountIncVat_in_order_with_multiple_vat_rates() for an example.
      * 
      * @param float $amountIncVatAsFloat
-     * @return \FixedDiscount
+     * @return $this
      */
     public function setAmountIncVat($amountIncVatAsFloat) {
         $this->amount = $amountIncVatAsFloat;
         return $this;
     }
+    /** @var float $amountIncVat */
+    public $amountIncVat;
     
     /**
      * Required to use at least one of the functions setAmountExVat() or setAmountIncVat(), and optionally also setVatPercent().
@@ -86,23 +96,26 @@ class FixedDiscount {
      * See WebServiceRowFormaterTest, test_FixedDiscount_specified_using_amountExVat_in_order_with_multiple_vat_rates() for an example.
      * 
      * @param float $amountAsFloat
-     * @return \FixedDiscount
+     * @return $this
      */
     public function setAmountExVat($amountExVatAsFloat) {
         $this->amountExVat = $amountExVatAsFloat;
         return $this;
     }
+    /** @var float $amountExVat */
+    public $amountExVat;
     
     /**
      * Optional. If vatPercent is specified along with either one of setAmountExVat() or setAmountIncVat(), 
      * we respect the specified rate and amount and enter the discount using the specified tax rate.
      *
      * @param int $vatPercentAsInt
-     * @return \FixedDiscount
+     * @return $this
      */
     public function setVatPercent($vatPercentAsInt) {
         $this->vatPercent = $vatPercentAsInt;
         return $this;
     }
-
+    /** @var int $vatPercent */
+    public $vatPercent;
 }

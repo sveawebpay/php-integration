@@ -13,77 +13,94 @@ class InvoiceFee {
     function __construct() {
         $this->quantity = 1;
     }
-    
+    /** @var float $quantity  quantity is always 1 */
+    public $quantity;
+       
     /**
      * Optional
      * @param string $nameAsString
-     * @return \InvoiceFee
+     * @return $this
      */
     public function setName($nameAsString) {
         $this->name = $nameAsString;
         return $this;
     }
-
+    /** @var string $name */
+    public $name;
+    
     /**
      * Optional
      * @param string $descriptionAsString
-     * @return \InvoiceFee
+     * @return $this
      */
     public function setDescription($descriptionAsString) {
         $this->description = $descriptionAsString;
         return $this;
     }
-
-    /**
-     * Optional
-     * Required to use at least two of the functions setAmountExVat(), setAmountIncVat(), setVatPercent()
-     * @param float $amountAsFloat
-     * @return \InvoiceFee
-     */
-    public function setAmountExVat($amountAsFloat) {
-        $this->amountExVat = $amountAsFloat;
-        return $this;
-    }
+    /** @var string $description */
+    public $description;
     
     /**
      * Optional
      * Required to use at least two of the functions setAmountExVat(), setAmountIncVat(), setVatPercent()
      * @param float $amountAsFloat
-     * @return \InvoiceFee
+     * @return $this
+     */
+    public function setAmountExVat($amountAsFloat) {
+        $this->amountExVat = $amountAsFloat;
+        return $this;
+    }
+    /** @var float $amountExVat */
+    public $amountExVat;
+    
+    /**
+     * Optional
+     * Required to use at least two of the functions setAmountExVat(), setAmountIncVat(), setVatPercent()
+     * @param float $amountAsFloat
+     * @return $this
      */
     public function setAmountIncVat($amountAsFloat) {
         $this->amountIncVat = $amountAsFloat;
         return $this;
     }
-
+    /** @var float $amountIncVat */
+    public $amountIncVat;
+    
     /**
      * Optional
      * @param string $unitDescriptionAsString
-     * @return \InvoiceFee
+     * @return $this
      */
     public function setUnit($unitDescriptionAsString) {
         $this->unit = $unitDescriptionAsString;
         return $this;
     }
-
+    /**@var string */
+    public $unit;
+    
     /**
      * Optional
      * Required to use at least two of the functions setAmountExVat(), setAmountIncVat(), setVatPercent()
      * @param int $vatPercentAsInt
-     * @return \InvoiceFee
+     * @return $this
      */
     public function setVatPercent($vatPercentAsInt) {
         $this->vatPercent = $vatPercentAsInt;
         return $this;
     }
-
+    /** @var int $vatPercent */
+    public $vatPercent;
+    
     /**
      * Optional
      * @param int $discountPercentAsInt
-     * @return \InvoiceFee
+     * @return $this
      */
     public function setDiscountPercent($discountPercentAsInt) {
         $this->discountPercent = $discountPercentAsInt;
         return $this;
     }
+    /** @var int $discountPercent */
+    public $discountPercent;  
+
 }

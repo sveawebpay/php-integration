@@ -17,70 +17,29 @@ require_once SVEA_REQUEST_DIR . '/Includes.php';
  * @author Kristian Grossman-Madsen, Anneli Halld'n, Daniel Brolund for Svea Webpay
  */
 class CreateOrderBuilder {
-    /** @var OrderRow[] */
-    public $orderRows = array();
-    
-    /** @var ShippingFee[] */
-    public $shippingFeeRows = array();
-    
-    /** @var InvoiceFee[] */
-    public $invoiceFeeRows = array();
-    
-    /** @var boolean False means in production mode */
+    /** @var boolean  true indicates test mode, false indicates production mode */
     public $testmode = false;
     
-    /** @var FixedDiscount[] */
-    public $fixedDiscountRows = array();
-
-    /** @var RelativeDiscount[] */
-    public $relativeDiscountRows = array();
-   
-    /** @var string order number given by client side, should uniquely identify order at client */
-    public $clientOrderNumber;
-
-    /**
-     * Country code as described by Iso 3166-1: "SE", "NO", "DK", "FI","DE", "NL", see http://www.iso.org/iso/country_code for a list.
-     * @var string
+    /**  
+     * @param ConfigurationProvider $config 
      */
-    public $countryCode;
-
-    /**
-     * ISO 8601 date, as produced by php date('c'): "2004-02-12T15:19:21+00:00", also accepts dates like "2004-02-12"
-     * @var string
-     */
-    public $orderDate;
-
-    /**
-     * Currency in three-letter format Ex: "SEK", "EUR"        
-     * @todo TODO lookup ISO currency 
-     * @var string
-     */
-    public $currency;
-
-    /** @var string your customer Reference number */
-    public $customerReference;
-
-    /** @var type */
-    public $conf;
-
-    /** @var IndividualCustomer|CompanyCustomer */
-    public $customerIdentity;
-    
-    /**  @param ConfigurationProvider $config */
     public function __construct($config) {
         $this->conf = $config;
     }
+    /** @var type */
+    public $conf;
 
     /**
-     * @param type $itemCustomerObject
+     * @param mixed $itemCustomerObject  accepts IndividualIdentity or CompanyIdentity object
      * @return $this
      */
-
      public function addCustomerDetails($itemCustomerObject) {
         $this->customerIdentity = $itemCustomerObject;
         return $this;
     }
-
+    /** @var IndividualCustomer|CompanyCustomer */
+    public $customerIdentity;
+    
     /**
      * @param OrderRow $orderRow
      * @return $this
@@ -95,10 +54,13 @@ class CreateOrderBuilder {
         }
        return $this;
     }
+    /** @var OrderRow[]  array of OrderRow */
+    public $orderRows = array();
+    
 
     /**
      * Adds a shipping fee or invoice fee to the order
-     * @param InvoiceFee|ShippingFee
+     * @param mixed $itemFeeObject  accepts InvoiceFee or ShippingFee object
      * @return $this
      */
     public function addFee($itemFeeObject) {
@@ -119,10 +81,14 @@ class CreateOrderBuilder {
                  array_push($this->invoiceFeeRows, $itemFeeObject);
             }
         }
-
         return $this;
     }
-
+    /** @var ShippingFee[]  array of ShippingFee */
+    public $shippingFeeRows = array();
+    
+    /** @var InvoiceFee[]  array of InvoiceFee */
+    public $invoiceFeeRows = array();
+    
     /**
      * Adds a fixed amount discount or an order total percent discount to the order
      * @param FixedDiscount|RelativeDiscount
@@ -147,10 +113,14 @@ class CreateOrderBuilder {
                 array_push($this->relativeDiscountRows, $itemDiscountObject);
             }
        }
-
        return $this;
     }
+    /** @var FixedDiscount[]  array of FixedDiscount*/
+    public $fixedDiscountRows = array();
 
+    /** @var RelativeDiscount[]  array of RelativeDiscount */
+    public $relativeDiscountRows = array();
+   
     /**
      * @param string Country code as described by Iso 3166-1: "SE", "NO", "DK", "FI", "DE", "NL"
      * @return $this
@@ -159,6 +129,11 @@ class CreateOrderBuilder {
         $this->countryCode = $countryCodeAsString;
         return $this;
     }
+    /**
+     * Country code as described by Iso 3166-1: "SE", "NO", "DK", "FI","DE", "NL", see http://www.iso.org/iso/country_code for a list.
+     * @var string
+     */
+    public $countryCode;
 
     /**
      * @param string $currencyAsString ex. "SEK"
@@ -170,6 +145,12 @@ class CreateOrderBuilder {
         $this->currency = $currency;
         return $this;
     }
+    /**
+     * Currency in three-letter format Ex: "SEK", "EUR" @todo TODO lookup ISO currency 
+     * @var string
+     */
+    public $currency;
+
 
     /**
      * @param string $customerReferenceAsString, needs to be unique to the order
@@ -179,6 +160,8 @@ class CreateOrderBuilder {
         $this->customerReference = $customerReferenceAsString;
         return $this;
     }
+    /** @var string your customer Reference number */
+    public $customerReference;
 
     /**
      * @param string $clientOrderNumberAsString
@@ -188,6 +171,8 @@ class CreateOrderBuilder {
         $this->clientOrderNumber = $clientOrderNumberAsString;
         return $this;
     }
+    /** @var string  order number given by client side, should uniquely identify order at client */
+    public $clientOrderNumber;
 
     /**
      * @param string $orderDateAsString  ISO 8601 date, as produced by php date('c'): "2004-02-12T15:19:21+00:00", also accepts dates like "2004-02-12"
@@ -197,6 +182,11 @@ class CreateOrderBuilder {
         $this->orderDate = $orderDateAsString;
         return $this;
     }
+    /**
+     * ISO 8601 date, as produced by php date('c'): "2004-02-12T15:19:21+00:00", also accepts dates like "2004-02-12"
+     * @var string
+     */
+    public $orderDate;
 
     /**
      * Use usePayPageCardOnly to initate a card payment via PayPage. 
