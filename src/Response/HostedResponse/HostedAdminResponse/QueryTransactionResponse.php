@@ -10,31 +10,44 @@ require_once SVEA_REQUEST_DIR . '/Includes.php';
  */
 class QueryTransactionResponse extends HostedAdminResponse{
 
-
-    /** string $customerrefno */
+    /** @var string $transactionId  the queried transactionId */
+    public $transactionId;
+    /** @var string $customerrefno */
     public $customerrefno;
-    
+    /** @var string $merchantid */
     public $merchantid;
+    /** @var string $status */
     public $status;
+    /** @var string $amount  amount inc. vat in minor currency*/
     public $amount;
+    /** @var string $currency */
     public $currency;
+    /** @var string $vat  vat amount in minor currency */
     public $vat ;
+    /** @var string $capturedamount */
     public $capturedamount;
+    /** @var string $authorizedamount */
     public $authorizedamount;
+    /** @var string $created */
     public $created;
+    /** @var string $creditstatus */
     public $creditstatus;
+    /** @var string $creditedamount */
     public $creditedamount;
+    /** @var string $merchantresponsecode */
     public $merchantresponsecode;
+    /** @var string $paymentmethod */
     public $paymentmethod;
+    /** @var OrderRow[] $orderrows  array of OrderRows w/set Name, Description, ArticleNumber, AmountExVat, VatPercent, Quantity and Unit */
     public $orderrows;
-    
+      
     function __construct($message,$countryCode,$config) {
         parent::__construct($message,$countryCode,$config);
     }
 
     /**
-     * formatXml() parses the annul transaction response xml into an object, and
-     * then sets the response attributes accordingly.
+     * formatXml() parses the query transaction response xml and sets the
+     * response attributes accordingly.
      * 
      * @param string $hostedAdminResponseXML  hostedAdminResponse as xml
      */
@@ -49,15 +62,95 @@ class QueryTransactionResponse extends HostedAdminResponse{
             $this->accepted = 0;
             $this->setErrorParams( (string)$hostedAdminResponse->statuscode ); 
         }
-    
+       
+        print_r($hostedAdminResponse->transaction);
+        //        //SimpleXMLElement Object
+        //(
+        //    [@attributes] => Array
+        //        (
+        //            [id] => 579929
+        //        )
+        //    [customerrefno] => 313
+        //    [merchantid] => 1130
+        //    [status] => ANNULLED
+        //    [amount] => 13000
+        //    [currency] => SEK
+        //    [vat] => 2600
+        //    [capturedamount] => SimpleXMLElement Object
+        //    [authorizedamount] => SimpleXMLElement Object
+        //    [created] => 2014-03-17 13:08:00.897
+        //    [creditstatus] => CREDNONE
+        //    [creditedamount] => 0
+        //    [merchantresponsecode] => 0
+        //    [paymentmethod] => KORTCERT
+        //    [callbackurl] => SimpleXMLElement Object
+        //    [capturedate] => SimpleXMLElement Object
+        //    [subscriptionid] => SimpleXMLElement Object
+        //    [subscriptiontype] => SimpleXMLElement Object
+        //    [customer] => SimpleXMLElement Object
+        //        (
+        //            [@attributes] => Array
+        //                (
+        //                    [id] => 8011
+        //                )
+        //            [firstname] => SimpleXMLElement Object
+        //            [lastname] => SimpleXMLElement Object
+        //            [initials] => SimpleXMLElement Object
+        //            [email] => SimpleXMLElement Object
+        //            [ssn] => SimpleXMLElement Object
+        //            [address] => SimpleXMLElement Object
+        //            [address2] => SimpleXMLElement Object
+        //            [city] => SimpleXMLElement Object
+        //            [country] => SE
+        //            [zip] => SimpleXMLElement Object
+        //            [phone] => SimpleXMLElement Object
+        //            [vatnumber] => SimpleXMLElement Object
+        //            [housenumber] => SimpleXMLElement Object
+        //            [companyname] => SimpleXMLElement Object
+        //            [fullname] => SimpleXMLElement Object
+        //        )
+        //    [cardtype] => VISA
+        //    [maskedcardno] => 444433xxxxxx1100
+        //    [eci] => SimpleXMLElement Object
+        //    [mdstatus] => SimpleXMLElement Object
+        //    [expiryyear] => 16
+        //    [expirymonth] => 02
+        //    [chname] => SimpleXMLElement Object
+        //    [authcode] => 340112
+        //    [orderrows] => SimpleXMLElement Object
+        //        (
+        //            [row] => Array
+        //                (
+        //                    [0] => SimpleXMLElement Object
+        //                        (
+        //                            [id] => 43233
+        //                            [name] => SimpleXMLElement Object
+        //                            [amount] => 12500
+        //                            [vat] => 2500
+        //                            [description] => Testprodukt 25%
+        //                            [quantity] => 1.0
+        //                            [sku] => SimpleXMLElement Object
+        //                            [unit] => SimpleXMLElement Object
+        //
+        //                        )
+        //                    [1] => SimpleXMLElement Object
+        //                        (
+        //                            [id] => 43234
+        //                            [name] => SimpleXMLElement Object
+        //                            [amount] => 500
+        //                            [vat] => 100
+        //                            [description] => Fastpris (Fast fraktpris)
+        //                            [quantity] => 1.0
+        //                            [sku] => SimpleXMLElement Object
+        //                            [unit] => SimpleXMLElement Object
+        //                )
+        //        )
+        //)
+            
         // queryTransaction
         if(property_exists($hostedAdminResponse->transaction,"customerrefno") && property_exists($hostedAdminResponse->transaction,"merchantid")){
-            
-            print_r($hostedAdminResponse->transaction);
-            
+                
             $this->transactionId = (string)$hostedAdminResponse->transaction['id'];
-            
-            // todo set attributes to return according to spec?
             
             $this->customerrefno = (string)$hostedAdminResponse->transaction->customerrefno;
             $this->merchantid = (string)$hostedAdminResponse->transaction->merchantid;
@@ -72,185 +165,44 @@ class QueryTransactionResponse extends HostedAdminResponse{
             $this->creditedamount = (string)$hostedAdminResponse->transaction->creditedamount;
             $this->merchantresponsecode = (string)$hostedAdminResponse->transaction->merchantresponsecode;
             $this->paymentmethod = (string)$hostedAdminResponse->transaction->paymentmethod;
-           // $this->orderrows = (string)$hostedAdminResponse->transaction->orderrows;               //todo
-//           
-//SimpleXMLElement Object
-//(
-//    [@attributes] => Array
-//        (
-//            [id] => 579929
-//        )
-//
-//    [customerrefno] => 313
-//    [merchantid] => 1130
-//    [status] => ANNULLED
-//    [amount] => 13000
-//    [currency] => SEK
-//    [vat] => 2600
-//    [capturedamount] => SimpleXMLElement Object
-//        (
-//        )
-//
-//    [authorizedamount] => SimpleXMLElement Object
-//        (
-//        )
-//
-//    [created] => 2014-03-17 13:08:00.897
-//    [creditstatus] => CREDNONE
-//    [creditedamount] => 0
-//    [merchantresponsecode] => 0
-//    [paymentmethod] => KORTCERT
-//    [callbackurl] => SimpleXMLElement Object
-//        (
-//        )
-//
-//    [capturedate] => SimpleXMLElement Object
-//        (
-//        )
-//
-//    [subscriptionid] => SimpleXMLElement Object
-//        (
-//        )
-//
-//    [subscriptiontype] => SimpleXMLElement Object
-//        (
-//        )
-//
-//    [customer] => SimpleXMLElement Object
-//        (
-//            [@attributes] => Array
-//                (
-//                    [id] => 8011
-//                )
-//
-//            [firstname] => SimpleXMLElement Object
-//                (
-//                )
-//
-//            [lastname] => SimpleXMLElement Object
-//                (
-//                )
-//
-//            [initials] => SimpleXMLElement Object
-//                (
-//                )
-//
-//            [email] => SimpleXMLElement Object
-//                (
-//                )
-//
-//            [ssn] => SimpleXMLElement Object
-//                (
-//                )
-//
-//            [address] => SimpleXMLElement Object
-//                (
-//                )
-//
-//            [address2] => SimpleXMLElement Object
-//                (
-//                )
-//
-//            [city] => SimpleXMLElement Object
-//                (
-//                )
-//
-//            [country] => SE
-//            [zip] => SimpleXMLElement Object
-//                (
-//                )
-//
-//            [phone] => SimpleXMLElement Object
-//                (
-//                )
-//
-//            [vatnumber] => SimpleXMLElement Object
-//                (
-//                )
-//
-//            [housenumber] => SimpleXMLElement Object
-//                (
-//                )
-//
-//            [companyname] => SimpleXMLElement Object
-//                (
-//                )
-//
-//            [fullname] => SimpleXMLElement Object
-//                (
-//                )
-//
-//        )
-//
-//    [cardtype] => VISA
-//    [maskedcardno] => 444433xxxxxx1100
-//    [eci] => SimpleXMLElement Object
-//        (
-//        )
-//
-//    [mdstatus] => SimpleXMLElement Object
-//        (
-//        )
-//
-//    [expiryyear] => 16
-//    [expirymonth] => 02
-//    [chname] => SimpleXMLElement Object
-//        (
-//        )
-//
-//    [authcode] => 340112
-//    [orderrows] => SimpleXMLElement Object
-//        (
-//            [row] => Array
-//                (
-//                    [0] => SimpleXMLElement Object
-//                        (
-//                            [id] => 43233
-//                            [name] => SimpleXMLElement Object
-//                                (
-//                                )
-//
-//                            [amount] => 12500
-//                            [vat] => 2500
-//                            [description] => Testprodukt 25%
-//                            [quantity] => 1.0
-//                            [sku] => SimpleXMLElement Object
-//                                (
-//                                )
-//
-//                            [unit] => SimpleXMLElement Object
-//                                (
-//                                )
-//
-//                        )
-//
-//                    [1] => SimpleXMLElement Object
-//                        (
-//                            [id] => 43234
-//                            [name] => SimpleXMLElement Object
-//                                (
-//                                )
-//
-//                            [amount] => 500
-//                            [vat] => 100
-//                            [description] => Fastpris (Fast fraktpris)
-//                            [quantity] => 1.0
-//                            [sku] => SimpleXMLElement Object
-//                                (
-//                                )
-//
-//                            [unit] => SimpleXMLElement Object
-//                                (
-//                                )
-//
-//                        )
-//
-//                )
-//
-//        )
-//
-//)
 
+            foreach( $hostedAdminResponse->transaction->orderrows->row as $orderrow ) {
+
+                $orderrow = (array)$orderrow;
+                //queried orderrow:
+                // [name]
+                // [amount]
+                // [vat]
+                // [description]
+                // [quantity]
+                // [sku]
+                // [unit]
+                
+                $newrow = new OrderRow(); // webpay orderrow
+                //WebPayItem OrderRow:          
+                // $articleNumber
+                // $quantity
+                // $unit
+                // $amountExVat
+                // $amountIncVat
+                // $vatPercent
+                // $name
+                // $description
+                // $discountPercent
+                // $vatDiscount
+                
+                $newrow
+                    ->setName( (string)$orderrow['name'] )
+                    ->setAmountExVat( floatval( ($orderrow['amount']-$orderrow['vat']) )/100 )
+                    ->setDescription( (string)$orderrow['description'] )
+                    ->setQuantity( floatval((string)$orderrow['quantity']) )
+                    ->setArticleNumber( (string)$orderrow['sku'] )     
+                    ->setUnit( (string)$orderrow['unit'] )
+                    ->setVatPercent( ( $orderrow['vat']/($orderrow['amount']-$orderrow['vat'])*100 ) )
+                ;
+                
+                $this->orderrows[] = $newrow;
+            }
         }  
     }
 }

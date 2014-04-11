@@ -82,13 +82,22 @@ class QueryTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
     function test_manual_query_card() {
 
         // Stop here and mark this test as incomplete.
-//        $this->markTestIncomplete(
-//            'skeleton for manual test of query card transaction' // TODO
-//        );
+        $this->markTestIncomplete(
+            'skeleton for manual test of query card transaction' // TODO
+        );
+
+        // 1. go to test.sveaekonomi.se/webpay/admin/start.xhtml 
+        // 2. go to verktyg -> betalning
+        // 3. enter our test merchantid: 1130
+        // 4. use the following xml, making sure to update to a unique customerrefno:
+        // <paymentmethod>KORTCERT</paymentmethod><currency>SEK</currency><amount>25500</amount><vat>600</vat><customerrefno>test_manual_query_card_2</customerrefno><returnurl>https://test.sveaekonomi.se/webpay/admin/merchantresponsetest.xhtml</returnurl><orderrows><row><name>Orderrow1</name><amount>500</amount><vat>100</vat><description>Orderrow description</description><quantity>1</quantity><sku>123</sku><unit>st</unit></row><row><name>Orderrow2</name><amount>12500</amount><vat>2500</vat><description>Orderrow2 description</description><quantity>2</quantity><sku>124</sku><unit>m2</unit></row></orderrows>
+        // 5. the result should be:
+        // <response><transaction id="580964"><paymentmethod>KORTCERT</paymentmethod><merchantid>1130</merchantid><customerrefno>test_manual_query_card_3</customerrefno><amount>25500</amount><currency>SEK</currency><cardtype>VISA</cardtype><maskedcardno>444433xxxxxx1100</maskedcardno><expirymonth>02</expirymonth><expiryyear>15</expiryyear><authcode>898924</authcode></transaction><statuscode>0</statuscode></response>
+
+        // 6. enter the received transaction id below and run the test
         
         // Set the below to match the transaction, then run the test.
-        $customerrefno = 313;
-        $transactionId = 579929;
+        $transactionId = 580964;
 
         $request = new Svea\QueryTransaction( Svea\SveaConfig::getDefaultConfig() );
         $response = $request
@@ -100,9 +109,73 @@ class QueryTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
         
         print_r($response);
         $this->assertEquals( 1, $response->accepted );    
+        $this->assertEquals( 0, $response->resultcode );
         
-        $this->assertEquals( $transactionId, $response->transactionId );     
-        // TODO rest of attributes from query, when decided upon...
+        $this->assertEquals( $transactionId, $response->transactionId );
+        $this->assertEquals( "test_manual_query_card_3", $response->customerrefno );
+        $this->assertEquals( "1130", $response->merchantid );
+        $this->assertEquals( "AUTHORIZED", $response->status );
+        $this->assertEquals( "25500", $response->amount );
+        $this->assertEquals( "SEK", $response->currency );
+        $this->assertEquals( "600", $response->vat );
+        $this->assertEquals( "", $response->capturedamount );
+        $this->assertEquals( "25500", $response->authorizedamount );
+        //$this->assertEquals( "", $response->created );
+        $this->assertEquals( "CREDNONE", $response->creditstatus );
+        $this->assertEquals( "0", $response->creditedamount );
+        $this->assertEquals( "0", $response->merchantresponsecode );
+        $this->assertEquals( "KORTCERT", $response->paymentmethod );
+        
+        $this->assertInstanceOf( "Svea\OrderRow", $response->orderrows[0] );
+        $this->assertEquals( "123", $response->orderrows[0]->articleNumber );
+        $this->assertEquals( "1", $response->orderrows[0]->quantity );
+        $this->assertEquals( "st", $response->orderrows[0]->unit );
+        $this->assertEquals( 4, $response->orderrows[0]->amountExVat );
+        $this->assertEquals( 25, $response->orderrows[0]->vatPercent );
+        $this->assertEquals( "Orderrow1", $response->orderrows[0]->name );
+        $this->assertEquals( "Orderrow description", $response->orderrows[0]->description );
+        $this->assertEquals( 0, $response->orderrows[0]->vatDiscount );
+                        
+        $this->assertInstanceOf( "Svea\OrderRow", $response->orderrows[1] );
+         $this->assertEquals( "124", $response->orderrows[1]->articleNumber );
+        $this->assertEquals( "2", $response->orderrows[1]->quantity );
+        $this->assertEquals( "m2", $response->orderrows[1]->unit );
+        $this->assertEquals( 100, $response->orderrows[1]->amountExVat );
+        $this->assertEquals( 25, $response->orderrows[1]->vatPercent );
+        $this->assertEquals( "Orderrow2", $response->orderrows[1]->name );
+        $this->assertEquals( "Orderrow2 description", $response->orderrows[1]->description );
+        $this->assertEquals( 0, $response->orderrows[1]->vatDiscount );
+                                                           
+        
+//            [0] => Svea\OrderRow Object
+//                (
+//                    [articleNumber] => 123
+//                    [quantity] => 1
+//                    [unit] => st
+//                    [amountExVat] => 4
+//                    [amountIncVat] => 
+//                    [vatPercent] => 25
+//                    [name] => Orderrow1
+//                    [description] => Orderrow description
+//                    [discountPercent] => 
+//                    [vatDiscount] => 0
+//                )
+//
+//            [1] => Svea\OrderRow Object
+//                (
+//                    [articleNumber] => 124
+//                    [quantity] => 2
+//                    [unit] => m2
+//                    [amountExVat] => 122.5
+//                    [amountIncVat] => 
+//                    [vatPercent] => 2.0408163265306
+//                    [name] => Orderrow2
+//                    [description] => Orderrow2 description
+//                    [discountPercent] => 
+//                    [vatDiscount] => 0
+//                )
+        
+        
     }    
 }
 ?>
