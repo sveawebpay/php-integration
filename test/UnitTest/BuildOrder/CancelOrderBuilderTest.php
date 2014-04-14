@@ -38,7 +38,7 @@ class CancelOrderBuilderTest extends \PHPUnit_Framework_TestCase {
         $orderId = "123456";
         $paymentMethod = \PaymentMethod::INVOICE;
         
-        $closeOrderObject = $this->cancelOrderObject->setOrderId($orderId)->usePaymentMethod($paymentMethod);
+        $closeOrderObject = $this->cancelOrderObject->setOrderId($orderId)->cancelInvoiceOrder();
         
         $this->assertInstanceOf("Svea\CloseOrder", $closeOrderObject);
         $this->assertEquals(\ConfigurationProvider::INVOICE_TYPE, $closeOrderObject->orderBuilder->orderType);
@@ -49,7 +49,7 @@ class CancelOrderBuilderTest extends \PHPUnit_Framework_TestCase {
         $orderId = "123456";
         $paymentMethod = \PaymentMethod::PAYMENTPLAN;
         
-        $closeOrderObject = $this->cancelOrderObject->setOrderId($orderId)->usePaymentMethod($paymentMethod);
+        $closeOrderObject = $this->cancelOrderObject->setOrderId($orderId)->cancelPaymentPlanOrder();
         
         $this->assertInstanceOf("Svea\CloseOrder", $closeOrderObject);
         $this->assertEquals(\ConfigurationProvider::PAYMENTPLAN_TYPE, $closeOrderObject->orderBuilder->orderType);
@@ -59,7 +59,7 @@ class CancelOrderBuilderTest extends \PHPUnit_Framework_TestCase {
         $orderId = "123456";
         $paymentMethod = \PaymentMethod::KORTCERT;
         
-        $annulTransactionObject = $this->cancelOrderObject->setOrderId($orderId)->usePaymentMethod($paymentMethod);
+        $annulTransactionObject = $this->cancelOrderObject->setOrderId($orderId)->cancelCardOrder();
         
         $this->assertInstanceOf("Svea\AnnulTransaction", $annulTransactionObject);
     }
