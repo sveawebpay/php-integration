@@ -15,7 +15,7 @@ class AnnulTransactionTest extends PHPUnit_Framework_TestCase {
     // fixture, run once before each test method
     protected function setUp() {
         $this->configObject = Svea\SveaConfig::getDefaultConfig();
-        $this->annulObject = WebPay::annulTransaction( $this->configObject );
+        $this->annulObject = new Svea\AnnulTransaction( $this->configObject );
     }
 
     // test methods

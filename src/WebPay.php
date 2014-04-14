@@ -9,7 +9,7 @@ include_once SVEA_REQUEST_DIR . "/Includes.php";
  * Class WebPay is external to Svea namespace along with class WebPayItem.
  * This is so that existing integrations don't need to worry about
  * prefixing their existing calls to WebPay:: and orderrow item functions.
- * @version 1.6.1
+ * @version 2.0.0
  * @author Anneli Halld'n, Daniel Brolund, Kristian Grossman-Madsen for Svea WebPay
  * @package WebPay
  * @api 
@@ -97,14 +97,18 @@ class WebPay {
     
     /**
      * Cancel an undelivered/unconfirmed order. Supports Invoice, PaymentPlan and Card orders.
-     * Use the following methods: 
+     * Use the following methods to set the order attributes needed in the request: 
      * ->setOrderId( sveaOrderId or transactionId from createOrder request response)
      * ->setCountryCode()
-     * ->usePaymentMethod( PaymentMethod::INVOICE|PARTPAYMENT|KORTCERT )
-     *   ->doRequest() 
-     * The request response is one of the following (depending on PaymentMethod):
-     * @see HostedAdminResponse (KORTCERT) or
-     * @see CloseOrderResult (INVOICE|PARTPAYMENT) 
+     * 
+     * Then select the correct ordertype and perform the request:
+     * ->cancelInvoiceOrder() | cancelPartPaymentOrder() | cancelCardOrder()
+     *   ->doRequest
+     * 
+     * The final doRequest() response is of one of the following types and may 
+     * contain different attributes depending on type:
+     * @see HostedAdminResponse (Card orders) or
+     * @see CloseOrderResult (Invoice or PartPayment orders). 
      * 
      * @param ConfigurationProvider $config  instance implementing ConfigurationProvider
      * @return Svea\CancelOrderBuilder object
@@ -117,7 +121,7 @@ class WebPay {
     
     /**
      * Start building Request to close orders. Only supports Invoice or Payment plan orders.
-     * @return \closeOrderBuilder object
+     * @return Svea\closeOrderBuilder object
      * @param ConfigurationProvider $config  instance implementing ConfigurationProvider
      * @deprecated 2.0.0 -- use cancelOrder instead, which supports both synchronous and asynchronous orders
      */
@@ -128,24 +132,8 @@ class WebPay {
     }
     
     /**
-     * Annul an existing Card transaction.
-     * The transaction must have Svea status AUTHORIZED or CONFIRMED. After a 
-     * successful request the transaction will get the status ANNULLED.
-     * 
-     * Note that this only supports Card transactions.
-     * 
-     * @param ConfigurationProvider $config instance implementing ConfigurationProvider
-     * @deprecated 2.0.0 -- use cancelOrder instead, which supports both synchronous and asynchronous orders
-     */
-    public static function annulTransaction( $config = NULL ) {
-        if( $config == NULL ) { WebPay::throwMissingConfigException(); }
-        
-        return new Svea\AnnulTransaction($config);
-    }
-
-    /**
      * Start building Request for getting Address
-     * @return \GetAddresses object
+     * @return Svea\GetAddresses object
      * @param ConfigurationProvider $config  instance implementing ConfigurationProvider
      */
     public static function getAddresses($config = NULL) {
@@ -170,7 +158,7 @@ class WebPay {
     /**
      * Get all paymentmethods connected to your account
      * @param ConfigurationProvider $config  instance implementing ConfigurationProvider
-     * @return string[] array of avaoilable paymentmethods for this ConfigurationProvider
+     * @return string[] array of available paymentmethods for this ConfigurationProvider
      * @deprecated 2.0.0 use listPaymentMethods instead, which returns a HostedResponse object instead of an array
      */
     public static function getPaymentMethods($config = NULL) {
