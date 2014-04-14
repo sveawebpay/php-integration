@@ -45,4 +45,18 @@ class CloseOrderIntegrationTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(1, $request->accepted);
         $this->assertEquals(0, $request->resultcode);
     }
+  
+    /**
+     * @expectedException Svea\ValidationException
+     */ 
+    public function testCloseInvoiceOrder_missing_setOrderId_throws_ValidationException() {
+        $config = Svea\SveaConfig::getDefaultConfig();
+        $orderId = $this->getInvoiceOrderId();
+        $orderBuilder = WebPay::closeOrder($config);
+        $request = $orderBuilder
+//                ->setOrderId($orderId)
+                ->setCountryCode("SE")
+                ->closeInvoiceOrder()
+                    ->doRequest();
+    }
 }

@@ -73,7 +73,7 @@ class DeliverInvoice extends HandleOrder {
 
     private function validateOrderId($order, $errors) {
         if (isset($order->orderId) == FALSE) {
-            $errors['missing value'] = "OrderId is required. Use function setOrderId() with the id recieved when creating an order.";
+            $errors['missing value'] = "OrderId is required. Use function setOrderId() with the SveaOrderIdd fromn the createOrder response.";
         }
         return $errors;
     }

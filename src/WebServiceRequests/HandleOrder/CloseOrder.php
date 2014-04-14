@@ -21,6 +21,8 @@ class CloseOrder extends HandleOrder {
      * @return \SveaRequest
      */
     public function prepareRequest() {
+        $this->validateRequest();
+                
         $sveaCloseOrder = new SveaCloseOrder;
         $sveaCloseOrder->Auth = $this->getStoreAuthorization();
         $orderInfo = new SveaCloseOrderInformation();
@@ -45,4 +47,17 @@ class CloseOrder extends HandleOrder {
         $responseObject = new \SveaResponse($response,"");
         return $responseObject->response;
     }
+    
+    public function validate($order) {
+        $errors = array();
+        $errors = $this->validateOrderId($order, $errors);
+        return $errors;
+    }
+
+    private function validateOrderId($order, $errors) {
+        if (isset($order->orderId) == FALSE) {
+            $errors['missing value'] = "OrderId is required. Use function setOrderId() with the SveaOrderIdd fromn the createOrder response.";
+        }
+        return $errors;
+    }  
 }
