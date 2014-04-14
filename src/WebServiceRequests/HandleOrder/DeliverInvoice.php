@@ -56,4 +56,16 @@ class DeliverInvoice extends HandleOrder {
         return $object;
     }    
     
+    /**
+     * Prepare and sends request
+     * @return type CloseOrderEuResponse
+     */
+    public function doRequest() {
+        $requestObject = $this->prepareRequest();
+        $url = $this->orderBuilder->conf->getEndPoint($this->orderBuilder->orderType);
+        $request = new SveaDoRequest($url);
+        $response = $request->DeliverOrderEu($requestObject);
+        $responseObject = new \SveaResponse($response,"");
+        return $responseObject->response;
+    }    
 }

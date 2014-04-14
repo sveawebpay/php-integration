@@ -38,19 +38,4 @@ class HandleOrder {
         $errors = $validator->validate($this->orderBuilder);
         return $errors;
     }
-
-
-    /**
-     * Prepare and sends request
-     * @return type CloseOrderEuResponse
-     */
-    public function doRequest() {
-        $object = $this->prepareRequest();
-        $url = $this->orderBuilder->conf->getEndPoint($this->orderBuilder->orderType);
-        $request = new SveaDoRequest($url);
-        $svea_req = $request->DeliverOrderEu($object);
-
-        $response = new \SveaResponse($svea_req,"");
-        return $response->response;
-    }
 }
