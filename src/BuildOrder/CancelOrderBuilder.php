@@ -55,35 +55,34 @@ class CancelOrderBuilder {
     }
     
     /**
-     * Required. The payment method used when placing the createOrder request.
-     * @param string $orderIdAsString
-     * @return $this
+     * Use closeInvoiceOrder() to close an Invoice order.
+     * @return CloseOrder
      */
-    public function usePaymentMethod( $paymentMethod ) {
-        switch( $paymentMethod ) {
-            case \PaymentMethod::INVOICE:
-                $this->orderType = \ConfigurationProvider::INVOICE_TYPE;
-                return new CloseOrder($this);
-            break;
-            
-            case \PaymentMethod::PAYMENTPLAN:
-                $this->orderType = \ConfigurationProvider::PAYMENTPLAN_TYPE;
-                return new CloseOrder($this);
-            break;
-            
-            case \PaymentMethod::KORTCERT:
-                $this->orderType = \ConfigurationProvider::HOSTED_ADMIN_TYPE;
-                 $annulTransaction = new AnnulTransaction($this->conf);
-                 return $annulTransaction->setTransactionId($this->orderId)->setCountryCode($this->countryCode);
-            break;
-        
-            default:
-                // TODO error handling here + tests
-            break;
-                
-        }
-        
-        return $this;
+    public function cancelInvoiceOrder() {
+        $this->orderType = \ConfigurationProvider::INVOICE_TYPE;
+        return new CloseOrder($this);
     }
-
+    
+    /**
+     * Use closeInvoiceOrder() to close an Invoice order.
+     * @return CloseOrder
+     */
+    public function cancelPaymentPlanOrder() {
+        $this->orderType = \ConfigurationProvider::PAYMENTPLAN_TYPE;
+        return new CloseOrder($this);
+    }
+    
+    /**
+     * Use closePaymentPlanOrder() to close a PaymentPlan order.
+     * @return CloseOrder
+     */
+    public function cancelCardOrder() {
+        $this->orderType = \ConfigurationProvider::HOSTED_ADMIN_TYPE;
+        $annulTransaction = new AnnulTransaction($this->conf);
+        return $annulTransaction->setTransactionId($this->orderId)->setCountryCode($this->countryCode);
+    }
+    
+    /** @var string "Invoice" or "PaymentPlan" */
+    public $orderType;    
+    
 }
