@@ -18,7 +18,6 @@ class deliverOrderBuilder extends OrderBuilder {
     
 
     public function __construct($config) {
-        $this->handleValidator = new HandleOrderValidator();
         parent::__construct($config);
     }
 
@@ -91,7 +90,6 @@ class deliverOrderBuilder extends OrderBuilder {
      */
     public function deliverInvoiceOrder() {
         $this->orderType = "Invoice";
-        $this->handleValidator->validate($this);
         return new DeliverInvoice($this);
     }
 
@@ -101,7 +99,6 @@ class deliverOrderBuilder extends OrderBuilder {
      */
     public function deliverPaymentPlanOrder() {
         $this->orderType = "PaymentPlan";
-        $this->handleValidator->validate($this);
         return new DeliverPaymentPlan($this);
     }
     /** @var string orderType  one of "Invoice" or "PaymentPlan" @todo check if there is an orderType constant?? */

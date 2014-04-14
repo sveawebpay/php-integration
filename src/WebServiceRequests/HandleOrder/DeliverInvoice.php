@@ -22,14 +22,7 @@ class DeliverInvoice extends HandleOrder {
      */
     public function prepareRequest() {
         $errors = $this->validateRequest();
-        if (count($errors) > 0) {
-            $exceptionString = "";
-            foreach ($errors as $key => $value) {
-                $exceptionString .="-". $key. " : ".$value."\n";
-            }
 
-            throw new ValidationException($exceptionString);
-        }
         $sveaDeliverOrder = new SveaDeliverOrder;
         $sveaDeliverOrder->Auth = $this->getStoreAuthorization();
         $orderInformation = new SveaDeliverOrderInformation($this->orderBuilder->orderType);
@@ -68,4 +61,36 @@ class DeliverInvoice extends HandleOrder {
         $responseObject = new \SveaResponse($response,"");
         return $responseObject->response;
     }    
+
+
+    public function validate($order) {
+        $errors = array();
+        $errors = $this->validateOrderId($order, $errors);
+        $errors = $this->validateInvoiceDetails($order, $errors);
+        $errors = $this->validateOrderRows($order, $errors);
+        return $errors;
+    }
+
+    private function validateOrderId($order, $errors) {
+        if (isset($order->orderId) == FALSE) {
+            $errors['missing value'] = "OrderId is required. Use function setOrderId() with the id recieved when creating an order.";
+        }
+        return $errors;
+    }
+
+    private function validateInvoiceDetails($order, $errors) {
+        if (isset($order->orderId) && $order->orderType == "Invoice" && isset($order->distributionType) == FALSE) {
+            $errors['missing value'] = "InvoiceDistributionType is requred for deliverInvoiceOrder. Use function setInvoiceDistributionType().";
+        }
+        return $errors;
+    }
+
+    private function validateOrderRows($order, $errors) {
+        if ($order->orderType == "Invoice" && empty($order->orderRows) && empty($order->shippingFee) && empty($order->invoiceFee)) {
+            $errors['missing values'] = "No rows has been included. Use function beginOrderRow(), beginShippingfee() or beginInvoiceFee().";
+        }
+        return $errors;
+    }    
+    
+    
 }
