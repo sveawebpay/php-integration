@@ -13,7 +13,7 @@ class OrderHandlerValidatorTest extends PHPUnit_Framework_TestCase {
 
     /**
      * @expectedException Svea\ValidationException
-     * @expectedExceptionMessage -missing value : OrderId is required. Use function setOrderId() with the id recieved when creating an order.
+     * @expectedExceptionMessage -missing value : OrderId is required. Use function setOrderId() with the SveaOrderId from the createOrder response.
      */
     public function testFailOnMissingOrderIdOnPaymentPlanDeliver() {
         $config = Svea\SveaConfig::getDefaultConfig();

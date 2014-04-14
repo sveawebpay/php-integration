@@ -931,10 +931,10 @@ Any left out items should not be delivered physically, as they will not be invoi
             ->setVatPercent(25)
             ->setDiscountPercent(0)
         )
-        ->setOrderId("id") //Recieved from CreateOrder request
-        ->setInvoiceDistributionType(DistributionType::POST)
-        ->deliverInvoiceOrder()
-            ->doRequest();
+    ->setOrderId("id") //Recieved from CreateOrder request
+    ->setInvoiceDistributionType(DistributionType::POST)
+    ->deliverInvoiceOrder()
+        ->doRequest();
 ```
 
 You can add OrderRow, Fee and Discount. Choose the right WebPayItem object as parameter.
@@ -1036,16 +1036,16 @@ you will recieve an *InvoiceId* in the Response. To credit the invoice you follo
             ->setVatPercent(25)
             ->setDiscountPercent(0)
         )
-        ->setOrderId("id")
-        ->setInvoiceDistributionType(DistributionType::POST)
-        //Credit invoice flag. Note that you first must deliver the order and recieve an InvoiceId, then do the deliver request again but with this call:
-          ->setCreditInvoice($InvoiceId) //Use for invoice orders, if this should be a credit invoice. Params: InvoiceId recieved from when doing DeliverOrder
-        ->deliverInvoiceOrder()
-            ->doRequest();
+    ->setOrderId("id")
+    ->setInvoiceDistributionType(DistributionType::POST)
+    //Credit invoice flag. Note that you first must deliver the order and recieve an InvoiceId, then do the deliver request again but with this call:
+    ->setCreditInvoice($InvoiceId) //Use for invoice orders, if this should be a credit invoice. Params: InvoiceId recieved from when doing DeliverOrder
+    ->deliverInvoiceOrder()
+        ->doRequest();
 
 ```
 
-TODO add info on CreditTransaction here
+TODO add info on CreditTransaction et al here
 
 
 [<< To top](https://github.com/sveawebpay/php-integration#php-integration-package-api-for-sveawebpay)

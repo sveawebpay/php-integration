@@ -39,20 +39,22 @@ class TestUtil {
     
     /**
      * Creates an OrderRow object for use in populating order objects.
+     * @param float $amount, defaults to 100
+     * @param int $amount, defaults to 2
      * 
      * @return Svea\OrderRow object
      */
-    public static function createOrderRow() {
+    public static function createOrderRow( $amount = 100.00, $quantity = 2 ) {
         return WebPayItem::orderRow()
             ->setArticleNumber("1")
-            ->setQuantity(2)
-            ->setAmountExVat(100.00)
+            ->setQuantity( $quantity )
+            ->setAmountExVat( $amount )
             ->setDescription("Specification")
             ->setName('Prod')
             ->setUnit("st")
             ->setVatPercent(25)
             ->setDiscountPercent(0);
-    }
+    }    
     
     
     /**

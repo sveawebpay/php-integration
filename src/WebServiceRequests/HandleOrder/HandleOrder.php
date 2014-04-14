@@ -8,7 +8,7 @@ require_once SVEA_REQUEST_DIR . '/Config/SveaConfig.php';
  * Parent of CloseOrder, DeliverInvoice, DeliverPaymentPlan
  * @author Anneli Halld'n, Daniel Brolund for Svea Webpay
  */
-class HandleOrder {
+abstract class HandleOrder {
 
     /** CloseOrderBuilder|DeliverOrderBuilder $handler  object containing the settings for the HandleOrder request */
     public $orderBuilder;
@@ -22,7 +22,7 @@ class HandleOrder {
 
     /** 
      * creates a SveaAuth object using the passed orderBuilder configuration
-     * @return \Svea\SveaAuth
+     * @return SveaAuth
      */
     protected function getStoreAuthorization() {
         return new SveaAuth( 
@@ -33,18 +33,17 @@ class HandleOrder {
         ;
     }
 
-    public function validateRequest() {
-        $validator = new HandleOrderValidator();
-         $errors = $validator->validate($this->orderBuilder);
-         return $errors;
-    }
-
+    public $errors = array();
+    
     /**
-     * Returns prepared request
-     * @return \SveaRequest
+     * Validates the orderBuilder object to make sure that all required settings
+     * are present. If not, throws an exception. Actual validation is delegated
+     * to subclass validate() implementations.
+     *
+     * @throws ValidationException
      */
-    public function prepareRequest() {
-        $errors = $this->validateRequest();
+    public function validateRequest() {
+        $errors = $this->validate($this->orderBuilder);             
         if (count($errors) > 0) {
             $exceptionString = "";
             foreach ($errors as $key => $value) {
@@ -52,44 +51,8 @@ class HandleOrder {
             }
 
             throw new ValidationException($exceptionString);
-        }
-        $sveaDeliverOrder = new SveaDeliverOrder;
-        $sveaDeliverOrder->Auth = $this->getStoreAuthorization();
-        $orderInformation = new SveaDeliverOrderInformation($this->orderBuilder->orderType);
-        $orderInformation->SveaOrderId = $this->orderBuilder->orderId;
-        $orderInformation->OrderType = $this->orderBuilder->orderType;
-
-        if ($this->orderBuilder->orderType == "Invoice") {
-            $invoiceDetails = new SveaDeliverInvoiceDetails();
-            $invoiceDetails->InvoiceDistributionType = $this->orderBuilder->distributionType;
-            $invoiceDetails->IsCreditInvoice = isset($this->orderBuilder->invoiceIdToCredit) ? TRUE : FALSE;
-            if (isset($this->orderBuilder->invoiceIdToCredit)) {
-                $invoiceDetails->InvoiceIdToCredit = $this->orderBuilder->invoiceIdToCredit;
-            }
-            $invoiceDetails->NumberOfCreditDays = isset($this->orderBuilder->numberOfCreditDays) ? $this->orderBuilder->numberOfCreditDays : 0;
-            $formatter = new WebServiceRowFormatter($this->orderBuilder);
-            $orderRow['OrderRow'] = $formatter->formatRows();
-            $invoiceDetails->OrderRows = $orderRow;
-            $orderInformation->DeliverInvoiceDetails = $invoiceDetails;
-        }
-
-        $sveaDeliverOrder->DeliverOrderInformation = $orderInformation;
-        $object = new SveaRequest();
-        $object->request = $sveaDeliverOrder;
-        return $object;
-    }
-
-    /**
-     * Prepare and sends request
-     * @return type CloseOrderEuResponse
-     */
-    public function doRequest() {
-        $object = $this->prepareRequest();
-        $url = $this->orderBuilder->conf->getEndPoint($this->orderBuilder->orderType);
-        $request = new SveaDoRequest($url);
-        $svea_req = $request->DeliverOrderEu($object);
-
-        $response = new \SveaResponse($svea_req,"");
-        return $response->response;
-    }
+        }    
+    }       
+    
+    abstract function validate($orderBuilder); // validate is defined by subclasses, should validate all order fields required for call is present
 }
