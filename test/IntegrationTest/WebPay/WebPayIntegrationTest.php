@@ -8,7 +8,7 @@ require_once $root . '/../../TestUtil.php';
 /**
  * @author Kristian Grossman-Madsen for Svea WebPay
  */
-class OrderBuilderIntegrationTest extends PHPUnit_Framework_TestCase {
+class WebPayIntegrationTest extends PHPUnit_Framework_TestCase {
 
     // CreateOrderBuilder synchronous payment methods
     public function test_CreateOrderBuilder_Invoice_Accepted() {
