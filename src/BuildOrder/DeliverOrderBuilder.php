@@ -16,10 +16,6 @@ class deliverOrderBuilder extends OrderBuilder {
      */
     public $orderId;
     
-    /**
-     * @var string String "Invoice" or "PaymentPlan"
-     */
-    //public $orderType;
 
     public function __construct($config) {
         $this->handleValidator = new HandleOrderValidator();
@@ -69,12 +65,7 @@ class deliverOrderBuilder extends OrderBuilder {
     public function setCreditInvoice($invoiceId) {
         $this->invoiceIdToCredit = $invoiceId;
         return $this;
-    }
-    /** @var int */
-    public $numberOfCreditDays;
-
-    
-    
+    }  
     /**
      * If Invoice is to be credit Invoice
      * @var Invoice Id
@@ -84,12 +75,14 @@ class deliverOrderBuilder extends OrderBuilder {
     /**
      * Invoice payments only!
      * @param int $numberOfDaysAsInt
-     * @return \deliverOrder
+     * @return $this
      */
     public function setNumberOfCreditDays($numberOfDaysAsInt) {
         $this->numberOfCreditDays = $numberOfDaysAsInt;
         return $this;
     }
+    /** @var int $numberOfCreditDays */
+    public $numberOfCreditDays;
 
     /**
      * deliverInvoiceOrder updates the Invoice order with additional information and prepares it for delivery.
@@ -104,11 +97,14 @@ class deliverOrderBuilder extends OrderBuilder {
 
     /**
      * deliverPaymentPlanOrder prepares the PaymentPlan order for delivery.
-     * @return \DeliverPaymentPlan
+     * @return DeliverPaymentPlan
      */
     public function deliverPaymentPlanOrder() {
         $this->orderType = "PaymentPlan";
         $this->handleValidator->validate($this);
         return new DeliverPaymentPlan($this);
     }
+    /** @var string orderType  one of "Invoice" or "PaymentPlan" @todo check if there is an orderType constant?? */
+    public $orderType;
+    
 }
