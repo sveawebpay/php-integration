@@ -10,9 +10,50 @@ require_once 'HandleOrder.php';
 class DeliverInvoice extends HandleOrder {
 
     /**
-     * @param type $order
+     * @param DeliverOrderBuilder $deliverOrderBuilder
      */
-    public function __construct($order) {
-        parent::__construct($order);
+    public function __construct($deliverOrderBuilder) {
+        parent::__construct($deliverOrderBuilder);
     }
+    
+    /**
+     * Returns prepared request
+     * @return \SveaRequest
+     */
+    public function prepareRequest() {
+        $errors = $this->validateRequest();
+        if (count($errors) > 0) {
+            $exceptionString = "";
+            foreach ($errors as $key => $value) {
+                $exceptionString .="-". $key. " : ".$value."\n";
+            }
+
+            throw new ValidationException($exceptionString);
+        }
+        $sveaDeliverOrder = new SveaDeliverOrder;
+        $sveaDeliverOrder->Auth = $this->getStoreAuthorization();
+        $orderInformation = new SveaDeliverOrderInformation($this->orderBuilder->orderType);
+        $orderInformation->SveaOrderId = $this->orderBuilder->orderId;
+        $orderInformation->OrderType = $this->orderBuilder->orderType;
+
+        if ($this->orderBuilder->orderType == "Invoice") {
+            $invoiceDetails = new SveaDeliverInvoiceDetails();
+            $invoiceDetails->InvoiceDistributionType = $this->orderBuilder->distributionType;
+            $invoiceDetails->IsCreditInvoice = isset($this->orderBuilder->invoiceIdToCredit) ? TRUE : FALSE;
+            if (isset($this->orderBuilder->invoiceIdToCredit)) {
+                $invoiceDetails->InvoiceIdToCredit = $this->orderBuilder->invoiceIdToCredit;
+            }
+            $invoiceDetails->NumberOfCreditDays = isset($this->orderBuilder->numberOfCreditDays) ? $this->orderBuilder->numberOfCreditDays : 0;
+            $formatter = new WebServiceRowFormatter($this->orderBuilder);
+            $orderRow['OrderRow'] = $formatter->formatRows();
+            $invoiceDetails->OrderRows = $orderRow;
+            $orderInformation->DeliverInvoiceDetails = $invoiceDetails;
+        }
+
+        $sveaDeliverOrder->DeliverOrderInformation = $orderInformation;
+        $object = new SveaRequest();
+        $object->request = $sveaDeliverOrder;
+        return $object;
+    }    
+    
 }
