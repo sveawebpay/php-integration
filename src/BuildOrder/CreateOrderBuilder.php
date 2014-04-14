@@ -8,7 +8,7 @@ require_once SVEA_REQUEST_DIR . '/Includes.php';
  * CreateOrderBuilder collects and prepares order data to be sent to Svea.
  * 
  * Set all required order attributes in CreateOrderBuilder instance by using the 
- * instance setAttribute() methods. Instance methods can be chained together, as 
+ * OrderBuilder setAttribute() methods. Instance methods can be chained together, as 
  * they return the instance itself in a fluent fashion.
  * 
  * Finish setting order attributes by chosing a payment method using one of the
