@@ -8,102 +8,56 @@ $root = realpath(dirname(__FILE__));
 require_once $root . '/../../../TestUtil.php';
 
 /**
- * @author jona-lit
+ * @author Kristian Grossman-Madsen for Svea WebPay
  */
-class DeliverInvoiceIntegrationTest extends PHPUnit_Framework_TestCase {
+class DeliverPaymentPlanIntegrationTest extends PHPUnit_Framework_TestCase {
 
     /**
      * Function to use in testfunctions
      * @return SveaOrderId
      */
-    private function getInvoiceOrderId() {
+    private function getPaymentPlanOrderId() {
         $config = Svea\SveaConfig::getDefaultConfig();
-        $request = WebPay::createOrder($config)
-                ->addOrderRow(TestUtil::createOrderRow())
+        $response = WebPay::createOrder($config)
+                ->addOrderRow(TestUtil::createOrderRow(1000.00, 1))
                 ->addCustomerDetails(WebPayItem::individualCustomer()->setNationalIdNumber(194605092222))
                 ->setCountryCode("SE")
                 ->setCustomerReference("33")
                 ->setOrderDate("2012-12-12")
                 ->setCurrency("SEK")
-                ->useInvoicePayment()
+                ->usePaymentPlanPayment( TestUtil::getGetPaymentPlanParamsForTesting() )
                     ->doRequest();
-
-        return $request->sveaOrderId;
+        
+        return $response->sveaOrderId;
     }
 
-    public function testDeliverInvoiceOrder() {
+    public function testDeliverPaymentPlanOrder() {
         $config = Svea\SveaConfig::getDefaultConfig();
-        $orderId = $this->getInvoiceOrderId();
+        $orderId = $this->getPaymentPlanOrderId();
         $orderBuilder = WebPay::deliverOrder($config);
         $request = $orderBuilder
-                ->addOrderRow(TestUtil::createOrderRow())
                 ->setOrderId($orderId)
-                ->setNumberOfCreditDays(1)
                 ->setCountryCode("SE")
-                ->setInvoiceDistributionType('Post')//Post or Email
-                ->deliverInvoiceOrder()
+                ->deliverPaymentPlanOrder()
                     ->doRequest();
 
         $this->assertEquals(1, $request->accepted);
         $this->assertEquals(0, $request->resultcode);
-        $this->assertEquals(250, $request->amount);
-        $this->assertEquals('Invoice', $request->orderType);
-        //Invoice specifics
-        //$this->assertEquals(0000, $request->invoiceId); //differs in every test
-        //$this->assertEquals(date(), $request->dueDate); //differs in every test
-        //$this->assertEquals(date(), $request->invoiceDate); //differs in every test
-        $this->assertEquals('Post', $request->invoiceDistributionType);
-        //$this->assertEquals('Invoice', $request->contractNumber); //for paymentplan
+        $this->assertEquals(1250, $request->amount);
+        $this->assertEquals('PaymentPlan', $request->orderType);
     }
     
     /**
      * @expectedException Svea\ValidationException
      */ 
-    public function testDeliverInvoiceOrder_missing_setOrderId_throws_ValidationException() {
+    public function testDeliverPaymentPlanOrder_missing_setOrderId_throws_ValidationException() {
         $config = Svea\SveaConfig::getDefaultConfig();
-        $orderId = $this->getInvoiceOrderId();
+        $orderId = $this->getPaymentPlanOrderId();
         $orderBuilder = WebPay::deliverOrder($config);
         $request = $orderBuilder
-                ->addOrderRow(TestUtil::createOrderRow())
                 //->setOrderId($orderId)
-                ->setNumberOfCreditDays(1)
                 ->setCountryCode("SE")
-                ->setInvoiceDistributionType('Post')//Post or Email
-                ->deliverInvoiceOrder()
+                ->deliverPaymentPlanOrder()
                     ->doRequest();
     }     
-
-    /**
-     * @expectedException Svea\ValidationException
-     */ 
-    public function testDeliverInvoiceOrder_missing_addOrderRow_throws_ValidationException() {
-        $config = Svea\SveaConfig::getDefaultConfig();
-        $orderId = $this->getInvoiceOrderId();
-        $orderBuilder = WebPay::deliverOrder($config);
-        $request = $orderBuilder
-                //->addOrderRow(TestUtil::createOrderRow())
-                ->setOrderId($orderId)
-                ->setNumberOfCreditDays(1)
-                ->setCountryCode("SE")
-                ->setInvoiceDistributionType('Post')//Post or Email
-                ->deliverInvoiceOrder()
-                    ->doRequest();
-    }         
-    
-    /**
-     * @expectedException Svea\ValidationException
-     */ 
-    public function testDeliverInvoiceOrder_missing_setInvoiceDistributionType_throws_ValidationException() {
-        $config = Svea\SveaConfig::getDefaultConfig();
-        $orderId = $this->getInvoiceOrderId();
-        $orderBuilder = WebPay::deliverOrder($config);
-        $request = $orderBuilder
-                ->addOrderRow(TestUtil::createOrderRow())
-                ->setOrderId($orderId)
-                ->setNumberOfCreditDays(1)
-                ->setCountryCode("SE")
-                //->setInvoiceDistributionType('Post')//Post or Email
-                ->deliverInvoiceOrder()
-                    ->doRequest();
-    }    
 }

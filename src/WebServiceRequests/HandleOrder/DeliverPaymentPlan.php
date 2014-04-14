@@ -20,14 +20,7 @@ class DeliverPaymentPlan extends HandleOrder {
      */
     public function prepareRequest() {
         $errors = $this->validateRequest();
-        if (count($errors) > 0) {
-            $exceptionString = "";
-            foreach ($errors as $key => $value) {
-                $exceptionString .="-". $key. " : ".$value."\n";
-            }
 
-            throw new ValidationException($exceptionString);
-        }
         $sveaDeliverOrder = new SveaDeliverOrder;
         $sveaDeliverOrder->Auth = $this->getStoreAuthorization();
         $orderInformation = new SveaDeliverOrderInformation($this->orderBuilder->orderType);
@@ -52,4 +45,17 @@ class DeliverPaymentPlan extends HandleOrder {
         $responseObject = new \SveaResponse($response,"");
         return $responseObject->response;
     }        
+
+    public function validate($order) {
+        $errors = array();
+        $errors = $this->validateOrderId($order, $errors);
+        return $errors;
+    }
+
+    private function validateOrderId($order, $errors) {
+        if (isset($order->orderId) == FALSE) {
+            $errors['missing value'] = "OrderId is required. Use function setOrderId() with the SveaOrderId from the createOrder response.";
+        }
+        return $errors;
+    }     
 }

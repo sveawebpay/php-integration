@@ -56,7 +56,7 @@ class CloseOrder extends HandleOrder {
 
     private function validateOrderId($order, $errors) {
         if (isset($order->orderId) == FALSE) {
-            $errors['missing value'] = "OrderId is required. Use function setOrderId() with the SveaOrderIdd fromn the createOrder response.";
+            $errors['missing value'] = "OrderId is required. Use function setOrderId() with the SveaOrderId from the createOrder response.";
         }
         return $errors;
     }  
