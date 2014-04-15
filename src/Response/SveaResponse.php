@@ -62,7 +62,7 @@ class SveaResponse {
                 $this->response = new Svea\CloseOrderResult($message);
             }
             
-            // @param string $method  set for HostedAdminRequests, indicates the request method used  
+            // @param string $method  set for HostedAdminRequests, indicates the request method used
             elseif( isset($method) ) {
                 switch( $method ) {
                     case "querytransactionid":
