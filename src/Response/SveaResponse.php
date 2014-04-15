@@ -44,8 +44,6 @@ class SveaResponse {
      */
     public function __construct($message, $countryCode, $config = NULL) {
          
-        $config = $config == null ? Svea\SveaConfig::getDefaultConfig() : $config;
-        
         if (is_object($message)) {
             
             if (property_exists($message, "CreateOrderEuResult")) {
@@ -67,7 +65,6 @@ class SveaResponse {
             elseif (property_exists($message, "message"))   {
                  $this->response = new Svea\HostedAdminResponse($message,$countryCode,$config);
             }
-
         } 
         elseif ($message != NULL) {
             $this->response = new Svea\HostedPaymentResponse($message,$countryCode,$config);
