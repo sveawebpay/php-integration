@@ -1,5 +1,5 @@
 # PHP Integration Package API for SveaWebPay
-## Version 1.6.2
+## Version 1.6.3
 
 | Branch                            | Build status                               |
 |---------------------------------- |------------------------------------------- |
@@ -1076,15 +1076,16 @@ All synchronous responses are handled through *SveaResponse* and structured into
 
 Asynchronous responses recieved after sending the values *merchantid* and *xmlMessageBase64* to
 hosted solutions can also be processed through the *SveaResponse* class. The response from server will be sent to the *returnUrl*
-with POST or GET. The response contains the parameters:
-*response*, *merchantid*, and *mac*. The *response* is a Base64 encoded message.The *mac* is a calculated authorization message. Use *SveaResponse* to get a structured object similar to the synchronous answer instead.
+with POST or GET. 
+
+The response contains the parameters: *response*, *merchantid*, and *mac*. The *response* is a Base64 encoded message. The *mac* is a calculated authorization message. Use *SveaResponse* to get a structured object similar to the synchronous answer instead.
 
 For asynchronous services, create an instance of SveaResponse, pass it the resulting xml response as part of the $_REQUEST response along with countryCode and config, then receive your HostedResponse instance by calling the getResponse() method.
 
 Params:
-* The POST or GET message
-* CountryCode
-* [Config](https://github.com/sveawebpay/php-integration#configuration) object. //Optional. If not given, test values from SveaConfig.php will be used
+* The POST or GET message as an associative array with the keys "response", "merchantid" and "mac".
+* CountryCode, i.e. "SE"
+* Config(https://github.com/sveawebpay/php-integration#configuration), an object implementing the ConfigurationProvider interface.
 
 (For synchronous services, the appropriate WebServiceResponse instance is returned when calling ->doRequest() on the order object.)
 

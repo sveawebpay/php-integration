@@ -18,7 +18,7 @@ class SveaConfig {
     public static function getDefaultConfig() {
         return self::getTestConfig();
     }
-
+    
     public static function getProdConfig() {
         $prodConfig = array();
         $prodConfig["SE"] = array("auth" =>
@@ -124,5 +124,73 @@ class SveaConfig {
                             );
 
         return new SveaConfigurationProvider(array("url" => $url, "credentials" => $testConfig));
+    }
+    
+    /**
+     * getSingleCountryConfig() may be used to provide a specific configuration to use in i.e. tests
+     * Provide the following credentials as parameters. If a value is set to null, a default value will be provided instead.
+     * 
+     * @param string $countryCode
+     * @param string $invoiceUsername
+     * @param string $invoicePassword
+     * @param string $invoiceClientNo
+     * @param string $paymentplanUsername
+     * @param string $paymentplanPassword
+     * @param string $paymentplanClientNo
+     * @param string $merchantId
+     * @param string $secret
+     * @param bool $prod
+     * @return \Svea\SveaConfigurationProvider
+     */
+    public static function getSingleCountryConfig(
+            $countryCode, 
+            $invoiceUsername, $invoicePassword, $invoiceClientNo,
+            $paymentplanUsername, $paymentplanPassword, $paymentplanClientNo,
+            $merchantId, $secret,
+            $prod ) 
+    {        
+        // if a parameter was set to null, use default instead
+        $countryCode = ($countryCode == null) ? "SE" : $countryCode;
+        
+        $invoiceUsername = ($invoiceUsername == null) ? "sverigetest" : $invoiceUsername;
+        $invoicePassword = ($invoicePassword == null) ? "sverigetest" : $invoicePassword;
+        $invoiceClientNo = ($invoiceClientNo == null) ? "79021" : $invoiceClientNo;
+        
+        $paymentplanUsername = ($paymentplanUsername == null) ? "sverigetest" : $paymentplanUsername;
+        $paymentplanPassword = ($paymentplanPassword == null) ? "sverigetest" : $paymentplanPassword;
+        $paymentplanClientNo = ($paymentplanClientNo == null) ? "59999" : $paymentplanClientNo;
+
+        $merchantId = ($merchantId == null) ? "1130" : $merchantId;
+        $secret = ($secret == null ) ? "8a9cece566e808da63c6f07ff415ff9e127909d000d259aba24daa2fed6d9e3f8b0b62e8ad1fa91c7d7cd6fc3352deaae66cdb533123edf127ad7d1f4c77e7a3" : $secret;
+        $prod = ($prod == null) ? false : $prod;
+        
+        // set up credentials array for given country:
+        $singleCountryConfig[$countryCode] = array( "auth" =>
+            array(
+                \ConfigurationProvider::INVOICE_TYPE => 
+                    array("username" => $invoiceUsername, "password" => $invoicePassword, "clientNumber" => $invoiceClientNo),
+                \ConfigurationProvider::PAYMENTPLAN_TYPE => 
+                    array("username" => $paymentplanUsername, "password" => $paymentplanPassword, "clientNumber" => $paymentplanClientNo),
+                \ConfigurationProvider::HOSTED_TYPE => 
+                    array("merchantId" => $merchantId, "secret" => $secret)
+            )
+        );
+        
+        // the prod/test endpoints
+        $testurl = array(
+                       \ConfigurationProvider::HOSTED_TYPE      => self::SWP_TEST_URL,
+                       \ConfigurationProvider::INVOICE_TYPE     => self::SWP_TEST_WS_URL,
+                       \ConfigurationProvider::PAYMENTPLAN_TYPE => self::SWP_TEST_WS_URL,
+                       \ConfigurationProvider::HOSTED_ADMIN_TYPE => self::SWP_TEST_HOSTED_ADMIN_URL
+        );
+        $produrl = array(
+                       \ConfigurationProvider::HOSTED_TYPE      => self::SWP_PROD_URL,
+                       \ConfigurationProvider::INVOICE_TYPE     => self::SWP_PROD_WS_URL,
+                       \ConfigurationProvider::PAYMENTPLAN_TYPE => self::SWP_PROD_WS_URL,
+                       \ConfigurationProvider::HOSTED_ADMIN_TYPE => self::SWP_PROD_HOSTED_ADMIN_URL
+        );
+
+        // return a ConfigurationProvider object
+        return new SveaConfigurationProvider(array("url" => $prod ? $produrl : $testurl, "credentials" => $singleCountryConfig));        
     }
 }

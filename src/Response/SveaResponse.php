@@ -44,8 +44,6 @@ class SveaResponse {
      */
     public function __construct($message, $countryCode, $config = NULL, $method = NULL) {
          
-        $config = $config == null ? Svea\SveaConfig::getDefaultConfig() : $config;
-        
         if (is_object($message)) {
             
             if (property_exists($message, "CreateOrderEuResult")) {
