@@ -43,7 +43,7 @@ class SveaResponse {
      * @return mixed instance of a subclass to HostedResponse or WebServiceResponse, respectively
      */
     public function __construct($message, $countryCode, $config = NULL, $method = NULL) {
-         
+
         if (is_object($message)) {
             
             if (property_exists($message, "CreateOrderEuResult")) {
@@ -62,7 +62,7 @@ class SveaResponse {
                 $this->response = new Svea\CloseOrderResult($message);
             }
             
-            // @param string $method  set for HostedAdminRequests, indicates the request method used  
+            // @param string $method  set for HostedAdminRequests, indicates the request method used
             elseif( isset($method) ) {
                 switch( $method ) {
                     case "querytransactionid":
@@ -85,10 +85,10 @@ class SveaResponse {
                         break;
                     
                     default:
-                        print_r( "unknown method: " ); print_r( $method ); die(); // TODO throw exception instead, fix before release
+                        throw new Exception("unknown method: $method");
                         break;
                 }
-            }                        
+            }
             // legacy fallback -- webservice from hosted_admin -- used by preparedpayment 
             elseif (property_exists($message, "message"))   {                
                  $this->response = new Svea\HostedAdminResponse($message,$countryCode,$config);

@@ -36,17 +36,30 @@ class HostedPaymentResponse extends HostedResponse{
      */
     function __construct($response,$countryCode,$config) {
         if (is_array($response)) {
-            if (array_key_exists("mac",$response) && array_key_exists("response",$response)) {
-                $decodedXml = base64_decode($response["response"]);
-                $secret = $config->getSecret(\ConfigurationProvider::HOSTED_TYPE,$countryCode);
-                if ($this->validateMac($response["response"],$response['mac'],$secret)) {
-                    $this->formatXml($decodedXml);
-                } else {
+            if (array_key_exists("mac",$response)) {
+                if( array_key_exists("response",$response) ) {
+                    $decodedXml = base64_decode($response["response"]);
+                    $secret = $config->getSecret(\ConfigurationProvider::HOSTED_TYPE,$countryCode);
+                    if ($this->validateMac($response["response"],$response['mac'],$secret)) {
+                        $this->formatXml($decodedXml);
+                    } else {
+                        $this->accepted = 0;
+                        $this->resultcode = '0';
+                        $this->errormessage = "Response failed authorization. MAC not valid.";
+                    }
+                }
+                else {
                     $this->accepted = 0;
                     $this->resultcode = '0';
-                    $this->errormessage = "Response failed authorization. MAC not valid.";
+                    $this->errormessage = "Response is not recognized.";
+        
                 }
             }
+            else {
+                $this->accepted = 0;
+                $this->resultcode = '0';
+                $this->errormessage = "Response is not recognized.";
+            }            
         } 
         else {
             $this->accepted = 0;
