@@ -49,9 +49,9 @@ class RecurTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
     function test_manual_recur_transaction_amount() {
         
         // Stop here and mark this test as incomplete.
-        $this->markTestIncomplete(
-          'skeleton for manual test of recur transaction amount'
-        );
+//        $this->markTestIncomplete(
+//          'skeleton for manual test of recur transaction amount'
+//        );
         
         // 1. go to test.sveaekonomi.se/webpay/admin/start.xhtml 
         // 2. go to verktyg -> betalning
@@ -101,6 +101,7 @@ class RecurTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals( $expiryyear, $response->expiryyear );  
         $this->assertEquals( $subscriptionid, $response->subscriptionid );  
 
+        $this->assertObjectHasAttribute( "transactionId", $response );
         $this->assertEquals( $new_customerrefno, $response->customerrefno );  
         $this->assertEquals( $new_amount, $response->amount );         
     }    

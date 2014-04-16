@@ -47,6 +47,8 @@ class RecurTransactionResponse extends HostedAdminResponse{
             $this->setErrorParams( (string)$hostedAdminResponse->statuscode ); 
         }
 
+        $this->transactionId = (string)$hostedAdminResponse->transaction['id'];
+        
         $this->customerrefno = (string)$hostedAdminResponse->transaction->customerrefno;
         $this->paymentmethod = (string)$hostedAdminResponse->transaction->paymentmethod;
         $this->merchantid = (string)$hostedAdminResponse->transaction->merchantid;
