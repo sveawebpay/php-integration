@@ -9,6 +9,11 @@ require_once  SVEA_REQUEST_DIR.'/Constant/PaymentMethod.php';
  * @author Anneli Halld'n, Daniel Brolund, Kristian Grossman-Madsen for Svea WebPay
  */
 class CardPayment extends HostedPayment {
+    
+    const RECURRINGCAPTURE = "RECURRINGCAPTURE";
+    const ONECLICKCAPTURE = "ONECLICKCAPTURE";
+    const RECURRING = "RECURRING";
+    const ONECLICK = "ONECLICK";
 
     /**
      * Creates a new CardPayment containing a given order.
@@ -48,4 +53,29 @@ class CardPayment extends HostedPayment {
         $this->request['excludePaymentMethods'] = $this->configureExcludedPaymentMethods();        
         return parent::calculateRequestValues();       
     }
+    
+    /**
+     * Set subscription type for recurring payments. Subscription type may be one
+     * of CardPayment::RECURRINGPAYMENT | CardPayment::ONECLICKCAPTURE (all countries)
+     * or CardPayment::RECURRING | CardPayment::ONECLICK (Scandinavian countries only) 
+     * 
+     * The initial transaction status will either be AUTHORIZED (i.e. it may be charged
+     * after it has been confirmed) or REGISTERED (i.e. the initial amount will be
+     * reserved for a time by the bank, and then released) for RECURRING and ONECLICK.
+     * 
+     * Use of setSubscriptionType() will set the attributes subscriptionId and subscriptionType
+     * in the HostedPaymentResponse.
+     * 
+     * @todo write test for this.
+     * 
+     * @todo write tests to find out which countries are "scandinavian"?
+     * 
+     * @param string $subscriptionType  @see CardPayment constants
+     * @return $this
+     */
+    public function setSubscriptionType( $subscriptionType ) {
+        $this->subscriptionType = $subscriptionType;
+        return $this;
+    }
+    
 }

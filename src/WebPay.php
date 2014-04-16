@@ -58,8 +58,8 @@ class WebPay {
      * $paymentPlanParamsResonseObject->value[0..n] (for n campaignCodes), where
      * value['campaignCode' => campaignCode, 'pricePerMonth' => pricePerMonth]
      *
-     * @param type decimal $price
-     * @param type object $paramsResonseObject
+     * @param float $price
+     * @param object $paymentPlanParamsResonseObject
      * @return Svea\PaymentPlanPricePerMonth $paymentPlanParamsResonseObject
      *
      */
@@ -69,8 +69,8 @@ class WebPay {
 
     /**
      * Start Building Request Deliver Orders.
-     * @return \deliverOrderBuilder object
-     * @param instance of implementation class of ConfigurationProvider Interface
+     * @return deliverOrderBuilder object
+     * @param ConfigurationProvider $config  instance of implementation class of ConfigurationProvider Interface
      */
     public static function deliverOrder($config = NULL) {
         if( $config == NULL ) { WebPay::throwMissingConfigException(); }
@@ -86,8 +86,8 @@ class WebPay {
      * ->setCountryCode() 
      * @todo fix rest of documentation
      * 
-     * @param ConfigurationProvider $config
-     * @return \Svea\QueryTransaction
+     * @param ConfigurationProvider $config  instance of implementation class of ConfigurationProvider Interface
+     * @return Svea\QueryTransaction
      * @throws Exception
      */
     public static function queryOrder( $config = NULL ) {
@@ -208,6 +208,7 @@ class WebPay {
         return new Svea\LowerTransaction($config);
     }
     
+    /** helper function, throws exception if no config is given */
     private static function throwMissingConfigException() {
         throw new Exception('-missing parameter: This method requires an ConfigurationProvider object as parameter. Create a class that implements class ConfigurationProvider. Set returnvalues to configuration values. Create an object from that class. Alternative use static function from class SveaConfig e.g. SveaConfig::getDefaultConfig(). You can replace the default config values to return your own config values in the method.');   
     }

@@ -36,9 +36,9 @@ class HostedXmlBuilder {
      * Returns the webservice payment request message xml
      * payment request structure as in "Technical Specification WebPay v 2.6.8"
      * 
-     * @param type $request
+     * @param HostedPayment $request
      * @param CreateOrderBuilder $order
-     * @return type
+     * @return string
      * This method expect UTF-8 input
      */
     public function getPaymentXML($request, $order) {
@@ -70,9 +70,13 @@ class HostedXmlBuilder {
         if($request['callbackUrl'] != null){
             $this->XMLWriter->writeElement("callbackurl", $request['callbackUrl']);
         }
-        // subscriptiontype
+        // subscriptiontype -- optional         
+        if (isset($request['subscriptionType'])) {
+            $this->XMLWriter->writeElement("subscriptiontype", $request['subscriptionType']); // subscriptiontype
+        }
+        
         // simulatorcode
-
+        
         // excludepaymentmethods -- in exclude element
         if (isset($request['excludePaymentMethods'])) {
             $this->serializeExcludePayments($request['excludePaymentMethods']); // excludepaymentmethods   
@@ -396,11 +400,24 @@ class HostedXmlBuilder {
     }
     
     /*
-     * write xml for webservice "loweramount" call, used by LowerTransaction
-     *
-     * @param elements -- associative array of element names and values
+     * write xml for webservice "recur" call, used by RecurTransaction
      * 
+     * @param elements -- associative array of element names and values
      */
+    public function getRecurTransactionXML( $elements ){
+        $this->setBaseXML();
+        $this->XMLWriter->startElement("recur");
+   
+        foreach( $elements as $element => $value ) {
+            $this->XMLWriter->writeElement($element,$value);
+        }
+
+        $this->XMLWriter->endElement();
+        $this->XMLWriter->endDocument();
+        
+        return $this->XMLWriter->flush();
+    }    
+
     public function getListPaymentMethodsXML( $elements ){
         $this->setBaseXML();
         $this->XMLWriter->startElement("getpaymentmethods");

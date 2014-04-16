@@ -272,7 +272,7 @@ class HostedPayment {
         if (isset($this->order->customerIdentity->ipAddress)) {
              $this->request['ipAddress'] = $this->order->customerIdentity->ipAddress; /// used by payment (optional), preparepayment (required)
         }        
-        
+
         $this->request['langCode'] = $this->langCode;
         
         $this->request['returnUrl'] = $this->returnUrl;
@@ -280,7 +280,11 @@ class HostedPayment {
         $this->request['cancelUrl'] = $this->cancelUrl;
 
         $this->request['currency'] = strtoupper(trim($this->order->currency));
-               
+
+        if (isset($this->subscriptionType)) {
+             $this->request['subscriptionType'] = $this->subscriptionType;
+        }                
+        
         return $this->request;
     }
         
