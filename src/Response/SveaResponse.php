@@ -80,6 +80,9 @@ class SveaResponse {
                     case "loweramount":
                         $this->response = new Svea\LowerTransactionResponse($message, $countryCode, $config);
                         break;    
+                    case "recur":
+                        $this->response = new Svea\RecurTransactionResponse($message, $countryCode, $config);
+                        break;    
                     case "getpaymentmethods":
                         $this->response = new Svea\ListPaymentMethodsResponse($message, $countryCode, $config);
                         break;

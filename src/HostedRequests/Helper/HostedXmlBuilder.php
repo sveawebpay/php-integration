@@ -400,11 +400,24 @@ class HostedXmlBuilder {
     }
     
     /*
-     * write xml for webservice "loweramount" call, used by LowerTransaction
-     *
-     * @param elements -- associative array of element names and values
+     * write xml for webservice "recur" call, used by RecurTransaction
      * 
+     * @param elements -- associative array of element names and values
      */
+    public function getRecurTransactionXML( $elements ){
+        $this->setBaseXML();
+        $this->XMLWriter->startElement("recur");
+   
+        foreach( $elements as $element => $value ) {
+            $this->XMLWriter->writeElement($element,$value);
+        }
+
+        $this->XMLWriter->endElement();
+        $this->XMLWriter->endDocument();
+        
+        return $this->XMLWriter->flush();
+    }    
+
     public function getListPaymentMethodsXML( $elements ){
         $this->setBaseXML();
         $this->XMLWriter->startElement("getpaymentmethods");
