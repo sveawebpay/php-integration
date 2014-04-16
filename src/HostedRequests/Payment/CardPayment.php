@@ -57,9 +57,18 @@ class CardPayment extends HostedPayment {
     /**
      * Set subscription type for recurring payments. Subscription type may be one
      * of CardPayment::RECURRINGPAYMENT | CardPayment::ONECLICKCAPTURE (all countries)
-     * @todo -- or CardPayment::RECURRING | CardPayment::ONECLICK (Scandinavian countries only) 
+     * or CardPayment::RECURRING | CardPayment::ONECLICK (Scandinavian countries only) 
      * 
-     * @todo write test to find out which countries are "scandinavian"??
+     * The initial transaction status will either be AUTHORIZED (i.e. it may be charged
+     * after it has been confirmed) or REGISTERED (i.e. the initial amount will be
+     * reserved for a time by the bank, and then released) for RECURRING and ONECLICK.
+     * 
+     * Use of setSubscriptionType() will set the attributes subscriptionId and subscriptionType
+     * in the HostedPaymentResponse.
+     * 
+     * @todo write test for this.
+     * 
+     * @todo write tests to find out which countries are "scandinavian"?
      * 
      * @param string $subscriptionType  @see CardPayment constants
      * @return $this
