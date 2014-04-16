@@ -9,6 +9,8 @@ require_once  SVEA_REQUEST_DIR.'/Constant/PaymentMethod.php';
  * @author Anneli Halld'n, Daniel Brolund, Kristian Grossman-Madsen for Svea WebPay
  */
 class CardPayment extends HostedPayment {
+    
+    const RECURRINGCAPTURE = "RECURRINGCAPTURE";
 
     /**
      * Creates a new CardPayment containing a given order.
@@ -48,4 +50,17 @@ class CardPayment extends HostedPayment {
         $this->request['excludePaymentMethods'] = $this->configureExcludedPaymentMethods();        
         return parent::calculateRequestValues();       
     }
+    
+    /**
+     * Set subscription type for recurring payments. Subscription type may be one
+     * of CardPayment::RECURRINGPAYMENT
+     * 
+     * @param string $subscriptionType  @see CardPayment constants
+     * @return $this
+     */
+    public function setSubscriptionType( $subscriptionType ) {
+        $this->subscriptionType = $subscriptionType;
+        return $this;
+    }
+    
 }
