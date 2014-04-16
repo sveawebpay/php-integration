@@ -405,9 +405,9 @@ class CardPaymentTest extends \PHPUnit_Framework_TestCase {
 
 
     /**
-     * test that we can set the subscriptiontype RECURRINGCAPTURE
+     * test that we can set the subscriptiontype using setSubscriptionType()
      */
-    public function test_cardPayment_setSubscriptionType_RECURRINGCAPTURE() {
+    public function test_cardPayment_setSubscriptionType() {
         $cardPayment = new CardPayment(\TestUtil::createOrder());
         $cardPayment->setSubscriptionType(CardPayment::RECURRINGCAPTURE);
 

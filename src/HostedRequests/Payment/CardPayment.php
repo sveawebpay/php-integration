@@ -11,6 +11,9 @@ require_once  SVEA_REQUEST_DIR.'/Constant/PaymentMethod.php';
 class CardPayment extends HostedPayment {
     
     const RECURRINGCAPTURE = "RECURRINGCAPTURE";
+    const ONECLICKCAPTURE = "ONECLICKCAPTURE";
+    const RECURRING = "RECURRING";
+    const ONECLICK = "ONECLICK";
 
     /**
      * Creates a new CardPayment containing a given order.
@@ -53,7 +56,10 @@ class CardPayment extends HostedPayment {
     
     /**
      * Set subscription type for recurring payments. Subscription type may be one
-     * of CardPayment::RECURRINGPAYMENT
+     * of CardPayment::RECURRINGPAYMENT | CardPayment::ONECLICKCAPTURE (all countries)
+     * @todo -- or CardPayment::RECURRING | CardPayment::ONECLICK (Scandinavian countries only) 
+     * 
+     * @todo write test to find out which countries are "scandinavian"??
      * 
      * @param string $subscriptionType  @see CardPayment constants
      * @return $this
