@@ -53,45 +53,56 @@ class RecurTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
           'skeleton for manual test of recur transaction amount'
         );
         
-        // Set the below to match the transaction, then run the test.
-        $customerrefno = 317;
-        $subscriptionId = 580012;
-        $amount = 3000;
-// @todo + övriga från original subscription-transaktionen
-        
-        // i.e. order of 117 kr => 11700 at Svea, Svea status AUTHORIZED
-        // - 100 => success, 11600 at Svea, Svea status AUTHORIZED
-        // - 11600 => success, Svea status ANNULLED
-        // - 1 => failure, accepted = 0, resultcode = "105 (ILLEGAL_TRANSACTIONSTATUS)", errormessage = "Invalid transaction status."
-        // 
-        // new order of 130 kr => 13000 at Svea
-        // - 13001 => failure, accepted = 0, resultcode = "305 (BAD_AMOUNT), errormessage = "Invalid value for amount."
-        // - 10000 => success, success, 3000 at Svea, Svea status AUTHORIZED
-        // - 3001 => failure, accepted = 0, resultcode = "305 (BAD_AMOUNT), errormessage = "Invalid value for amount."
-        // - 3000 => success, Svea status ANNULLED
-        
+        // 1. go to test.sveaekonomi.se/webpay/admin/start.xhtml 
+        // 2. go to verktyg -> betalning
+        // 3. enter our test merchantid: 1130
+        // 4. use the following xml, making sure to update to a unique customerrefno:
+        // <paymentmethod>KORTCERT</paymentmethod><subscriptiontype>RECURRINGCAPTURE</subscriptiontype><currency>SEK</currency><amount>500</amount><vat>100</vat><customerrefno>test_recur_NN</customerrefno><returnurl>https://test.sveaekonomi.se/webpay/admin/merchantresponsetest.xhtml</returnurl>
+        // 5. the result should be:
+        // <response><transaction id="581497"><paymentmethod>KORTCERT</paymentmethod><merchantid>1130</merchantid><customerrefno>test_recur_1</customerrefno><amount>500</amount><currency>SEK</currency><subscriptionid>2922</subscriptionid><cardtype>VISA</cardtype><maskedcardno>444433xxxxxx1100</maskedcardno><expirymonth>02</expirymonth><expiryyear>16</expiryyear><authcode>993955</authcode></transaction><statuscode>0</statuscode></response>
+
+        // 6. enter the received subscription id, etc. below and run the test
+
+        // Set the below to match the original transaction, then run the test.
+        $paymentmethod = "KORTCERT";  
+        $merchantid = 1130;  
+        $currency = "SEK";  
+        $cardtype = "VISA";  
+        $maskedcardno = "444433xxxxxx1100";
+        $expirymonth = 02;  
+        $expiryyear = 16;  
+        $subscriptionid = 2922; 
+
+        // the below applies to the recur request, and may differ from the original transaction
+        $new_amount = "2500"; // in minor currency  
+        $new_customerrefno = "test_recur_".date('c');  
+
+        // below is actual test, shouldn't need to change it
         $request = new Svea\RecurTransaction( Svea\SveaConfig::getDefaultConfig() );
         $response = $request                
-            ->setTransactionId( $transactionId )
-            ->setAmountToLower( $amountToLower )
+            ->setSubscriptionId( $subscriptionid )
+            ->setCurrency( $currency )
+            ->setCustomerRefNo( $new_customerrefno )
+            ->setAmount( $new_amount )
             ->setCountryCode( "SE" )
             ->doRequest();        
         
         $this->assertInstanceOf( "Svea\RecurTransactionResponse", $response );
         
         print_r($response);                
-        $this->assertEquals( 1, $response->accepted );        
-        $this->assertEquals( $customerrefno, $response->customerrefno );  
-        $this->assertEquals( $paymentmethod, $response->paymentmethod );  
+        $this->assertEquals( 1, $response->accepted );  
+        
+        $this->assertEquals( "CARD", $response->paymentmethod );    // CARD is alias for KORTCERT, used by webservice...
         $this->assertEquals( $merchantid, $response->merchantid );  
-        $this->assertEquals( $amount, $response->amount );  
         $this->assertEquals( $currency, $response->currency );  
         $this->assertEquals( $cardtype, $response->cardtype );  
         $this->assertEquals( $maskedcardno, $response->maskedcardno );  
         $this->assertEquals( $expirymonth, $response->expirymonth );  
         $this->assertEquals( $expiryyear, $response->expiryyear );  
-        $this->assertEquals( $authcode, $response->authcode );  
         $this->assertEquals( $subscriptionid, $response->subscriptionid );  
+
+        $this->assertEquals( $new_customerrefno, $response->customerrefno );  
+        $this->assertEquals( $new_amount, $response->amount );         
     }    
 }
 ?>
