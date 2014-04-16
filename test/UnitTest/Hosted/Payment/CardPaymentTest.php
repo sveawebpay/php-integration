@@ -414,6 +414,24 @@ class CardPaymentTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals( CardPayment::RECURRINGCAPTURE, $cardPayment->subscriptionType );
     }
     
+    /**
+     * test that <subscriptiontype> is included in payment request xml
+     */
+    public function test_cardPayment_request_xml_includes_subscriptiontype() {
+        $cardPayment = new CardPayment(\TestUtil::createOrder());
+        $cardPayment
+            ->setSubscriptionType(CardPayment::RECURRINGCAPTURE)
+            ->setCallbackUrl("http://myurl.se")
+            ->setReturnUrl("http://myurl.se")
+        ;
+        $paymentForm = $cardPayment->getPaymentForm();
+
+        $subscriptiontype = "<subscriptiontype>RECURRINGCAPTURE<\/subscriptiontype>"; // remember to escape <_/_subscriptiontype>
+        //$this->assertRegExp("/[a-zA-Z0-9<>]*".$subscriptiontype."[a-zA-Z0-9<>]*/","foo<subscriptiontype>RECURRINGCAPTURE</subscriptiontype>bar");
+        
+        //print_r($paymentForm->xmlMessage);        
+        $this->assertRegExp("/[a-zA-Z0-9<>]*".$subscriptiontype."[a-zA-Z0-9<>]*/", $paymentForm->xmlMessage );
+    }    
     
 
 }

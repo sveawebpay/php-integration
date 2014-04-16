@@ -56,10 +56,11 @@ class CardPayment extends HostedPayment {
      * of CardPayment::RECURRINGPAYMENT
      * 
      * @param string $subscriptionType  @see CardPayment constants
+     * @return $this
      */
     public function setSubscriptionType( $subscriptionType ) {
-        
         $this->subscriptionType = $subscriptionType;
+        return $this;
     }
     
 }
