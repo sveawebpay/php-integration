@@ -53,7 +53,7 @@ class AnnulTransactionTest extends PHPUnit_Framework_TestCase {
         $this->assertTrue( isset($form['message']) );
     }
     
-        function test_prepareRequest_request_has_correct_merchantid_mac_and_annulTransaction_request_message_contents() {
+    function test_prepareRequest_request_has_correct_merchantid_mac_and_annulTransaction_request_message_contents() {
 
         // set up creditTransaction object & get request form
         $transactionId = 987654;       
@@ -82,5 +82,39 @@ class AnnulTransactionTest extends PHPUnit_Framework_TestCase {
         
     }
 
+    function test_prepareRequest_missing_transactionId_throws_exception() {
+
+        $this->setExpectedException(
+            'Svea\ValidationException', 
+            '-missing value : transactionId is required. Use function setTransactionId() with the SveaOrderId from the createOrder response.'
+        );        
+        
+        // set up creditTransaction object & get request form
+//        $transactionId = 987654;       
+//        $this->annulObject->setTransactionId( $transactionId );
+
+        $countryCode = "SE";
+        $this->annulObject->setCountryCode($countryCode);
+                
+        $form = $this->annulObject->prepareRequest();
+        
+        // get our merchantid & secret
+        $merchantid = $this->configObject->getMerchantId( ConfigurationProvider::HOSTED_TYPE, $countryCode);
+        $secret = $this->configObject->getSecret( ConfigurationProvider::HOSTED_TYPE, $countryCode);
+         
+        // check mechantid
+        $this->assertEquals( $merchantid, urldecode($form['merchantid']) );
+
+        // check valid mac
+        $this->assertEquals( hash("sha512", urldecode($form['message']). $secret), urldecode($form['mac']) );
+        
+        // check annul request message contents
+        $xmlMessage = new SimpleXMLElement( base64_decode(urldecode($form['message'])) );
+
+        $this->assertEquals( "annul", $xmlMessage->getName() );   // root node        
+        $this->assertEquals((string)$transactionId, $xmlMessage->transactionid);
+        
+    }
+        
 }
 ?>

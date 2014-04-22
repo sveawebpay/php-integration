@@ -168,6 +168,7 @@ class ConfirmTransactionTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals((string)$captureDate, $xmlMessage->capturedate);     
     }
       
+    // really a test of parent class HostedRequest countryCode requirement...    
     function test_prepareRequest_missing_countryCode_throws_exception() {
 
         $this->setExpectedException(
@@ -203,7 +204,6 @@ class ConfirmTransactionTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals( "confirm", $xmlMessage->getName() );   // root node        
         $this->assertEquals((string)$transactionId, $xmlMessage->transactionid);
         $this->assertEquals((string)$captureDate, $xmlMessage->capturedate);     
-    }
-    
+    }    
 }
 ?>
