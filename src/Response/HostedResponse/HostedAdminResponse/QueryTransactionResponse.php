@@ -63,7 +63,6 @@ class QueryTransactionResponse extends HostedAdminResponse{
             $this->setErrorParams( (string)$hostedAdminResponse->statuscode ); 
         }
        
-        print_r($hostedAdminResponse->transaction);
         //        //SimpleXMLElement Object
         //(
         //    [@attributes] => Array
