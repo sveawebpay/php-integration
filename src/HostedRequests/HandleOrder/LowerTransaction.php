@@ -32,6 +32,7 @@ class LowerTransaction extends HostedRequest {
      * prepares the elements used in the request to svea
      */
     public function prepareRequest() {
+        $this->validateRequest();
 
         $xmlBuilder = new HostedXmlBuilder();
         
@@ -58,4 +59,25 @@ class LowerTransaction extends HostedRequest {
         return $request_fields;
     }
 
+    public function validate($self) {
+        $errors = array();
+        $errors = $this->validateTransactionId($self, $errors);
+        $errors = $this->validateAmountToLower($self, $errors);
+        return $errors;
+    }
+    
+    private function validateTransactionId($self, $errors) {
+        if (isset($self->transactionId) == FALSE) {                                                        
+            $errors['missing value'] = "transactionId is required. Use function setTransactionId() with the SveaOrderId from the createOrder response."; // TODO check if the createOrder response sets transactionId or SveaOrderId and update error string accordingly
+        }
+        return $errors;
+    }   
+    
+    private function validateAmountToLower($self, $errors) {
+        if (isset($self->amountToLower) == FALSE) {                                                        
+            $errors['missing value'] = "amountToLower is required. Use function setAmountToLower().";
+        }
+        return $errors;    
+    }    
+    
 }
