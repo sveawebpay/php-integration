@@ -67,4 +67,25 @@ class HostedRequest {
 
         return $sveaResponse->response; 
     }
+    
+    /**
+     * Validates the orderBuilder object to make sure that all required settings
+     * are present. If not, throws an exception. Actual validation is delegated
+     * to subclass validate() implementations.
+     *
+     * @throws ValidationException
+     */
+    public function validateRequest() {
+        $errors = $this->validate($this);             
+        if (count($errors) > 0) {
+            $exceptionString = "";
+            foreach ($errors as $key => $value) {
+                $exceptionString .="-". $key. " : ".$value."\n";
+            }
+
+            throw new ValidationException($exceptionString);
+        }    
+    }       
+
+   // abstract function validate($self); // validate is defined by subclasses, should validate all elements required for call is present
 }
