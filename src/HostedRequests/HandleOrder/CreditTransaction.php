@@ -19,7 +19,11 @@ class CreditTransaction extends HostedRequest {
     }
 
     /**
-     * @param string $transactionId  the transaction to credit
+     * Set the transaction id, which must have status SUCCESS at Svea.
+     * 
+     * Required.
+     * 
+     * @param string $transactionId
      * @return $this
      */
     function setTransactionId( $transactionId ) {
@@ -28,7 +32,11 @@ class CreditTransaction extends HostedRequest {
     }
     
     /**
-     * @param type $creditAmount  amount to credit, in minor currency (i.e. 1 SEK => 100 in minor currency)
+     * Set the amount to credit.
+     * 
+     * Required.
+     * 
+     * @param int $creditAmount  amount to credit, in minor currency (i.e. 1 SEK => 100 in minor currency)
      * @return $this
      */
     function setCreditAmount( $creditAmount ) {

@@ -28,5 +28,12 @@ class WebPayAdminUnitTest extends \PHPUnit_Framework_TestCase {
         $confirmTransactionObject = \WebPayAdmin::confirmTransaction($config);        
         $this->assertInstanceOf( "Svea\ConfirmTransaction", $confirmTransactionObject );
     }
-  
+
+    public function test_creditTransaction() {
+        $config = SveaConfig::getDefaultConfig();
+        $creditTransactionObject = \WebPayAdmin::creditTransaction($config);        
+        $this->assertInstanceOf( "Svea\CreditTransaction", $creditTransactionObject );
+    }
+
+    
 }

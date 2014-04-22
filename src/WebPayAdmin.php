@@ -39,8 +39,8 @@ class WebPayAdmin {
      * captured on the given capturedate.
      * 
      * Use the WebPayAdmin::confirmTransaction() entrypoint to get an instance of
-     * of ConfirmTransaction. Then provide more information about the transaction and
-     * setnd the request using @see ConfirmTransaction methods.
+     * ConfirmTransaction. Then provide more information about the transaction and
+     * send the request using @see ConfirmTransaction methods.
      * 
      * @param ConfigurationProvider $configs
      * @return \Svea\ConfirmTransaction
@@ -48,6 +48,22 @@ class WebPayAdmin {
     static function confirmTransaction($config) {
         return new Svea\ConfirmTransaction($config);
     }
+    
+    /**
+     * creditTransaction can used to credit transactions. Only transactions that
+     * have reached the status SUCCESS can be credited.
+     * 
+     * Use the WebPayAdmin::creditTransaction() entrypoint to get an instance of
+     * CreditTransaction. Then provide more information about the transaction and
+     * send the request using @see CreditTransaction methods.
+     * 
+     * @param ConfigurationProvider $configs
+     * @return \Svea\CreditTransaction
+     */
+
+    static function creditTransaction($config) {
+        return new Svea\CreditTransaction($config);
+    }    
     
     // WebserviceRequest/HandleOrder
     
