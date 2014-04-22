@@ -4,11 +4,11 @@ namespace Svea;
 require_once SVEA_REQUEST_DIR . '/Includes.php';
 
 /**
- * Hosted Request is the parent of all hosted webservice requests
+ * Hosted Request is the parent of all hosted webservice requests.
  * 
  * @author Kristian Grossman-Madsen
  */
-class HostedRequest {
+abstract class HostedRequest {
 
     /** @var ConfigurationProvider $config */
     protected $config;
@@ -94,5 +94,5 @@ class HostedRequest {
         }    
     }       
 
-   // abstract function validate($self); // validate is defined by subclasses, should validate all elements required for call is present
+    abstract function validate($self); // validate is defined by subclasses, should validate all elements required for call is present
 }
