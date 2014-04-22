@@ -18,31 +18,64 @@ class RecurTransaction extends HostedRequest {
         parent::__construct($config);
     }
     
+    /**
+     * If recur is to an international acquirer the currency for the recurring transaction must be the same as for the registration transaction.
+     * 
+     * Optional.
+     * 
+     * @param string $currency
+     * @return \Svea\RecurTransaction
+     */
     function setCurrency( $currency ) {
         $this->currency = $currency;
         return $this;
     }
     
+    /**
+     * Note that if subscriptiontype is either RECURRING or RECURRINGCAPTURE, 
+     * the amount must be given in the same currency as the initial transaction. 
+     * 
+     * Required.
+     * 
+     * @param int $amount  amount in minor currency
+     * @return \Svea\RecurTransaction
+     */
     function setAmount( $amount ) {
         $this->amount = $amount;
         return $this;
     }
 
+    /**
+     * The new unique customer reference number.
+     * 
+     * Required.
+     * 
+     * @param string $customerRefNo
+     * @return \Svea\RecurTransaction
+     */
     function setCustomerRefNo( $customerRefNo ) {
         $this->customerRefNo = $customerRefNo;
         return $this;
     }
     
+    /**
+     * The subscription id returned with the inital transaction response.
+     *
+     * Required.
+     *  
+     * @param int $subscriptionId
+     * @return \Svea\RecurTransaction
+     */
     function setSubscriptionId( $subscriptionId ) {
         $this->subscriptionId = $subscriptionId;
         return $this;
     }
     
-    
     /**
      * prepares the elements used in the request to svea
      */
     public function prepareRequest() {
+        $this->validateRequest();
 
         $xmlBuilder = new HostedXmlBuilder();
         
@@ -52,11 +85,12 @@ class RecurTransaction extends HostedRequest {
         
         // message contains the confirm request
         $messageContents = array(
-            "currency" => $this->currency,
             "amount" => $this->amount,
             "customerrefno" => $this->customerRefNo,
             "subscriptionid" => $this->subscriptionId
         ); 
+        if( isset( $this->currency ) ) { $messageContents["currency"] = $this->currency; }
+
         $message = $xmlBuilder->getRecurTransactionXML( $messageContents );     // TODO inject method into HostedXMLBuilder instead
 
         // calculate mac
@@ -71,4 +105,32 @@ class RecurTransaction extends HostedRequest {
         return $request_fields;
     }
 
+    public function validate($self) {
+        $errors = array();
+        $errors = $this->validateAmount($self, $errors);
+        $errors = $this->validateCustomerRefNo($self, $errors);
+        $errors = $this->validateSubscriptionId($self, $errors);
+        return $errors;
+    }
+    
+    private function validateAmount($self, $errors) {
+        if (isset($self->amount) == FALSE) {                                                        
+            $errors['missing value'] = "amount is required. Use function setAmount().";
+        }
+        return $errors;
+    }  
+    
+    private function validateCustomerRefNo($self, $errors) {
+        if (isset($self->customerRefNo) == FALSE) {                                                        
+            $errors['missing value'] = "customerRefNo is required. Use function setCustomerRefNo().";
+        }
+        return $errors;
+    }  
+    
+    private function validateSubscriptionId($self, $errors) {
+        if (isset($self->subscriptionId) == FALSE) {                                                        
+            $errors['missing value'] = "subscriptionId is required. Use function setSubscriptionId() with the subscriptionId from the createOrder response."; // TODO check if the createOrder response sets subscriptionId and update error string accordingly
+        }
+        return $errors;
+    }    
 }
