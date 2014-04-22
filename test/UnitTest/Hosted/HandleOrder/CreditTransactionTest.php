@@ -15,7 +15,7 @@ class CreditTransactionTest extends PHPUnit_Framework_TestCase {
     // fixture, run once before each test method
     protected function setUp() {
         $this->configObject = Svea\SveaConfig::getDefaultConfig();
-        $this->creditObject = WebPay::creditTransaction( $this->configObject );
+        $this->creditObject = new Svea\CreditTransaction( $this->configObject );
     }
 
     // test methods

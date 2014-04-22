@@ -15,7 +15,7 @@ class ConfirmTransactionTest extends PHPUnit_Framework_TestCase {
     // fixture, run once before each test method
     protected function setUp() {
         $this->configObject = Svea\SveaConfig::getDefaultConfig();
-        $this->confirmObject = WebPay::confirmTransaction( $this->configObject );
+        $this->confirmObject = new Svea\ConfirmTransaction( $this->configObject );
     }
 
     // test methods

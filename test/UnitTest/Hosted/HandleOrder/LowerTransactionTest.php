@@ -15,7 +15,7 @@ class LowerTransactionTest extends PHPUnit_Framework_TestCase {
     // fixture, run once before each test method
     protected function setUp() {
         $this->configObject = Svea\SveaConfig::getDefaultConfig();
-        $this->lowerTransactionObject = WebPay::lowerTransaction( $this->configObject );
+        $this->lowerTransactionObject = new Svea\LowerTransaction( $this->configObject );
     }
 
     // test methods
