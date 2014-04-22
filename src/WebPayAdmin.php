@@ -5,6 +5,8 @@ include_once SVEA_REQUEST_DIR . "/Includes.php";
 
 /**
  * WebPayAdmin provides entrypoints to administrative functions provided by Svea.
+ * 
+ * 
  *
  * @version 2.0.0
  * @author Kristian Grossman-Madsen for Svea WebPay
@@ -12,6 +14,24 @@ include_once SVEA_REQUEST_DIR . "/Includes.php";
  * @api 
  */
 class WebPayAdmin {
+
+    // HostedRequest/HandleOrder
+    
+    /**
+     * Use annulTransaction to get an AnnulTransaction object. Then use the
+     * required methods to provide more information about the transaction you 
+     * wish to cancel (annul) and send the request.
+     * 
+     * @param ConfigurationProvider $config
+     * @return \Svea\AnnulTransaction
+     */
+    static function annulTransaction($config) {
+        return new Svea\AnnulTransaction($config);
+    }
+    
+    
+    // WebserviceRequest/HandleOrder
+    
     
     /** helper function, throws exception if no config is given */
     private static function throwMissingConfigException() {
