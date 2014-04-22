@@ -27,6 +27,11 @@ abstract class HostedRequest {
     }
     
     /**
+     * Set the country. Used to disambiguate between the various credentials in
+     * ConfigurationProvider.
+     * 
+     * Required.
+     * 
      * @param string $countryCode
      * @return $this
      */
