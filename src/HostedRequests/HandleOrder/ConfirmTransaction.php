@@ -79,6 +79,7 @@ class ConfirmTransaction extends HostedRequest {
     public function validate($self) {
         $errors = array();
         $errors = $this->validateTransactionId($self, $errors);
+        $errors = $this->validateCaptureDate($self, $errors);
         return $errors;
     }
     
@@ -87,6 +88,12 @@ class ConfirmTransaction extends HostedRequest {
             $errors['missing value'] = "transactionId is required. Use function setTransactionId() with the SveaOrderId from the createOrder response."; // TODO check if the createOrder response sets transactionId or SveaOrderId and update error string accordingly
         }
         return $errors;
-    }      
+    }   
     
+    private function validateCaptureDate($self, $errors) {
+        if (isset($self->captureDate) == FALSE) {                                                        
+            $errors['missing value'] = "captureDate is required. Use function setCaptureDate().";
+        }
+        return $errors;
+    }       
 }
