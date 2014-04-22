@@ -102,35 +102,13 @@ class CreditTransactionTest extends PHPUnit_Framework_TestCase {
             '-missing value : transactionId is required. Use function setTransactionId() with the SveaOrderId from the createOrder response.'
         );
         
-        // set up creditTransaction object & get request form
-//        $transactionId = 987654;       
-//        $this->creditObject->setTransactionId( $transactionId );
-
         $creditAmount = 100;
         $this->creditObject->setCreditAmount( $creditAmount );
         
         $countryCode = "SE";
         $this->creditObject->setCountryCode($countryCode);
                 
-        $form = $this->creditObject->prepareRequest();
-        
-        // get our merchantid & secret
-        $merchantid = $this->configObject->getMerchantId( ConfigurationProvider::HOSTED_TYPE, $countryCode);
-        $secret = $this->configObject->getSecret( ConfigurationProvider::HOSTED_TYPE, $countryCode);
-         
-        // check mechantid
-        $this->assertEquals( $merchantid, urldecode($form['merchantid']) );
-
-        // check valid mac
-        $this->assertEquals( hash("sha512", urldecode($form['message']). $secret), urldecode($form['mac']) );
-        
-        // check credit request message contents
-        $xmlMessage = new SimpleXMLElement( base64_decode(urldecode($form['message'])) );
-
-        $this->assertEquals( "credit", $xmlMessage->getName() );   // root node        
-        $this->assertEquals((string)$transactionId, $xmlMessage->transactionid);
-        $this->assertEquals((string)$creditAmount, $xmlMessage->amounttocredit);
-        
+        $form = $this->creditObject->prepareRequest();    
     }    
 
     function test_prepareRequest_missing_creditAmount_throws_exception() {
@@ -140,35 +118,13 @@ class CreditTransactionTest extends PHPUnit_Framework_TestCase {
             '-missing value : creditAmount is required. Use function setCreditAmount().'
         );        
         
-        // set up creditTransaction object & get request form
         $transactionId = 987654;       
         $this->creditObject->setTransactionId( $transactionId );
 
-//        $creditAmount = 100;
-//        $this->creditObject->setCreditAmount( $creditAmount );
-        
         $countryCode = "SE";
         $this->creditObject->setCountryCode($countryCode);
                 
         $form = $this->creditObject->prepareRequest();
-        
-        // get our merchantid & secret
-        $merchantid = $this->configObject->getMerchantId( ConfigurationProvider::HOSTED_TYPE, $countryCode);
-        $secret = $this->configObject->getSecret( ConfigurationProvider::HOSTED_TYPE, $countryCode);
-         
-        // check mechantid
-        $this->assertEquals( $merchantid, urldecode($form['merchantid']) );
-
-        // check valid mac
-        $this->assertEquals( hash("sha512", urldecode($form['message']). $secret), urldecode($form['mac']) );
-        
-        // check credit request message contents
-        $xmlMessage = new SimpleXMLElement( base64_decode(urldecode($form['message'])) );
-
-        $this->assertEquals( "credit", $xmlMessage->getName() );   // root node        
-        $this->assertEquals((string)$transactionId, $xmlMessage->transactionid);
-        $this->assertEquals((string)$creditAmount, $xmlMessage->amounttocredit);
-        
     }      
 }
 ?>

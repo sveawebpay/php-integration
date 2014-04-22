@@ -46,7 +46,6 @@ class ListPaymentMethodsTest extends PHPUnit_Framework_TestCase {
     
     function test_prepareRequest_request_has_correct_merchantid_mac_and_ListPaymentMethods_request_message_contents() {
 
-
         $countryCode = "SE";
         $this->listpaymentmethodObject->setCountryCode($countryCode);
                 
@@ -69,5 +68,22 @@ class ListPaymentMethodsTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals((string)$merchantid, $xmlMessage->merchantid);        
     }
 
+    function test_prepareRequest_missing_merchantId_throws_exception() {
+
+        $this->setExpectedException(
+            'Svea\ValidationException', 
+            '-missing value : merchantId is required, check your ConfigurationProvider credentials.'
+        );        
+        
+        $countryCode = "SE";
+        $this->listpaymentmethodObject->setCountryCode($countryCode);
+
+        // hack to clear merchantid
+        $this->configObject->conf['credentials'][$countryCode]['auth']['HOSTED']['merchantId'] = null;
+        
+        $form = $this->listpaymentmethodObject->prepareRequest();       
+        
+        print_r( $form );
+    }       
 }
 ?>

@@ -101,10 +101,6 @@ class ConfirmTransactionTest extends PHPUnit_Framework_TestCase {
             '-missing value : transactionId is required. Use function setTransactionId() with the SveaOrderId from the createOrder response.'
         );
         
-        // set up confirmTransaction object & get request form
-//        $transactionId = 987654;       
-//        $this->confirmObject->setTransactionId( $transactionId );
-
         $captureDate = "2014-03-21";
         $this->confirmObject->setCaptureDate( $captureDate );
         
@@ -112,23 +108,6 @@ class ConfirmTransactionTest extends PHPUnit_Framework_TestCase {
         $this->confirmObject->setCountryCode($countryCode);
                 
         $form = $this->confirmObject->prepareRequest();
-        
-        // get our merchantid & secret
-        $merchantid = $this->configObject->getMerchantId( ConfigurationProvider::HOSTED_TYPE, $countryCode);
-        $secret = $this->configObject->getSecret( ConfigurationProvider::HOSTED_TYPE, $countryCode);
-         
-        // check mechantid
-        $this->assertEquals( $merchantid, urldecode($form['merchantid']) );
-
-        // check valid mac
-        $this->assertEquals( hash("sha512", urldecode($form['message']). $secret), urldecode($form['mac']) );
-        
-        // check confirm request message contents
-        $xmlMessage = new SimpleXMLElement( base64_decode(urldecode($form['message'])) );
-
-        $this->assertEquals( "confirm", $xmlMessage->getName() );   // root node        
-        $this->assertEquals((string)$transactionId, $xmlMessage->transactionid);
-        $this->assertEquals((string)$captureDate, $xmlMessage->capturedate);     
     }
 
     function test_prepareRequest_missing_captureDate_throws_exception() {
@@ -138,34 +117,13 @@ class ConfirmTransactionTest extends PHPUnit_Framework_TestCase {
             '-missing value : captureDate is required. Use function setCaptureDate().'
         );
         
-        // set up confirmTransaction object & get request form
         $transactionId = 987654;       
         $this->confirmObject->setTransactionId( $transactionId );
 
-//        $captureDate = "2014-03-21";
-//        $this->confirmObject->setCaptureDate( $captureDate );
-        
         $countryCode = "SE";
         $this->confirmObject->setCountryCode($countryCode);
                 
-        $form = $this->confirmObject->prepareRequest();
-        
-        // get our merchantid & secret
-        $merchantid = $this->configObject->getMerchantId( ConfigurationProvider::HOSTED_TYPE, $countryCode);
-        $secret = $this->configObject->getSecret( ConfigurationProvider::HOSTED_TYPE, $countryCode);
-         
-        // check mechantid
-        $this->assertEquals( $merchantid, urldecode($form['merchantid']) );
-
-        // check valid mac
-        $this->assertEquals( hash("sha512", urldecode($form['message']). $secret), urldecode($form['mac']) );
-        
-        // check confirm request message contents
-        $xmlMessage = new SimpleXMLElement( base64_decode(urldecode($form['message'])) );
-
-        $this->assertEquals( "confirm", $xmlMessage->getName() );   // root node        
-        $this->assertEquals((string)$transactionId, $xmlMessage->transactionid);
-        $this->assertEquals((string)$captureDate, $xmlMessage->capturedate);     
+        $form = $this->confirmObject->prepareRequest();       
     }
       
     // really a test of parent class HostedRequest countryCode requirement...    
@@ -176,34 +134,13 @@ class ConfirmTransactionTest extends PHPUnit_Framework_TestCase {
             '-missing value : countryCode is required. Use function setCountryCode().'
         );
         
-        // set up confirmTransaction object & get request form
         $transactionId = 987654;       
         $this->confirmObject->setTransactionId( $transactionId );
 
         $captureDate = "2014-03-21";
         $this->confirmObject->setCaptureDate( $captureDate );
-        
-//        $countryCode = "SE";
-//        $this->confirmObject->setCountryCode($countryCode);
                 
-        $form = $this->confirmObject->prepareRequest();
-        
-        // get our merchantid & secret
-        $merchantid = $this->configObject->getMerchantId( ConfigurationProvider::HOSTED_TYPE, $countryCode);
-        $secret = $this->configObject->getSecret( ConfigurationProvider::HOSTED_TYPE, $countryCode);
-         
-        // check mechantid
-        $this->assertEquals( $merchantid, urldecode($form['merchantid']) );
-
-        // check valid mac
-        $this->assertEquals( hash("sha512", urldecode($form['message']). $secret), urldecode($form['mac']) );
-        
-        // check confirm request message contents
-        $xmlMessage = new SimpleXMLElement( base64_decode(urldecode($form['message'])) );
-
-        $this->assertEquals( "confirm", $xmlMessage->getName() );   // root node        
-        $this->assertEquals((string)$transactionId, $xmlMessage->transactionid);
-        $this->assertEquals((string)$captureDate, $xmlMessage->capturedate);     
+        $form = $this->confirmObject->prepareRequest();     
     }    
 }
 ?>

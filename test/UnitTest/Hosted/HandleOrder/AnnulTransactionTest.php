@@ -89,31 +89,10 @@ class AnnulTransactionTest extends PHPUnit_Framework_TestCase {
             '-missing value : transactionId is required. Use function setTransactionId() with the SveaOrderId from the createOrder response.'
         );        
         
-        // set up creditTransaction object & get request form
-//        $transactionId = 987654;       
-//        $this->annulObject->setTransactionId( $transactionId );
-
         $countryCode = "SE";
         $this->annulObject->setCountryCode($countryCode);
                 
-        $form = $this->annulObject->prepareRequest();
-        
-        // get our merchantid & secret
-        $merchantid = $this->configObject->getMerchantId( ConfigurationProvider::HOSTED_TYPE, $countryCode);
-        $secret = $this->configObject->getSecret( ConfigurationProvider::HOSTED_TYPE, $countryCode);
-         
-        // check mechantid
-        $this->assertEquals( $merchantid, urldecode($form['merchantid']) );
-
-        // check valid mac
-        $this->assertEquals( hash("sha512", urldecode($form['message']). $secret), urldecode($form['mac']) );
-        
-        // check annul request message contents
-        $xmlMessage = new SimpleXMLElement( base64_decode(urldecode($form['message'])) );
-
-        $this->assertEquals( "annul", $xmlMessage->getName() );   // root node        
-        $this->assertEquals((string)$transactionId, $xmlMessage->transactionid);
-        
+        $form = $this->annulObject->prepareRequest();     
     }
         
 }
