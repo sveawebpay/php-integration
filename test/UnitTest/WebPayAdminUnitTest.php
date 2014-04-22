@@ -15,9 +15,18 @@ class WebPayAdminUnitTest extends \PHPUnit_Framework_TestCase {
         $this->assertInstanceOf( "WebPayAdmin", $adminObject );
     }
 
+    //HostedRequest/HandleOrder classes
+    
     public function test_annulTransaction() {
         $config = SveaConfig::getDefaultConfig();
         $annulTransactionObject = \WebPayAdmin::annulTransaction($config);        
         $this->assertInstanceOf( "Svea\AnnulTransaction", $annulTransactionObject );
     }
+    
+    public function test_confirmTransaction() {
+        $config = SveaConfig::getDefaultConfig();
+        $confirmTransactionObject = \WebPayAdmin::confirmTransaction($config);        
+        $this->assertInstanceOf( "Svea\ConfirmTransaction", $confirmTransactionObject );
+    }
+  
 }

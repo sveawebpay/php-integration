@@ -18,9 +18,13 @@ class WebPayAdmin {
     // HostedRequest/HandleOrder
     
     /**
-     * Use annulTransaction to get an AnnulTransaction object. Then use the
-     * required methods to provide more information about the transaction you 
-     * wish to cancel (annul) and send the request.
+     * annulTransaction is used to cancel (annul) a card transaction. The 
+     * transaction must have status AUTHORIZED or CONFIRMED at Svea. (Indicating 
+     * that the transaction has not yet been captured (settled).)
+     * 
+     * Use the WebPayAdmin::annulTransaction() entrypoint to get an instance of
+     * AnnulTransaction. Then provide more information about the transaction and
+     * send the request using @see AnnulTransaction methods.
      * 
      * @param ConfigurationProvider $config
      * @return \Svea\AnnulTransaction
@@ -29,6 +33,21 @@ class WebPayAdmin {
         return new Svea\AnnulTransaction($config);
     }
     
+    /**
+     * confirmTransaction can be performed on card transaction having the status 
+     * AUTHORIZED. This will result in a CONFIRMED transaction that will be
+     * captured on the given capturedate.
+     * 
+     * Use the WebPayAdmin::confirmTransaction() entrypoint to get an instance of
+     * of ConfirmTransaction. Then provide more information about the transaction and
+     * setnd the request using @see ConfirmTransaction methods.
+     * 
+     * @param ConfigurationProvider $configs
+     * @return \Svea\ConfirmTransaction
+     */
+    static function confirmTransaction($config) {
+        return new Svea\ConfirmTransaction($config);
+    }
     
     // WebserviceRequest/HandleOrder
     
