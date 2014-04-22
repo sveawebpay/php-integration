@@ -61,7 +61,7 @@ class HostedRequest {
         $responseXML = curl_exec($ch);
         curl_close($ch);
         
-        // create SveaResponse to handle annul response
+        // create SveaResponse to handle response
         $responseObj = new \SimpleXMLElement($responseXML);        
         $sveaResponse = new \SveaResponse($responseObj, $this->countryCode, $this->config, $this->method);
 
@@ -76,7 +76,14 @@ class HostedRequest {
      * @throws ValidationException
      */
     public function validateRequest() {
-        $errors = $this->validate($this);             
+        // validate sub-class requirements by calling sub-class validate() method
+        $errors = $this->validate($this);
+        
+        // validate HostedRequest requirements
+        if (isset($this->countryCode) == FALSE) {                                                        
+            $errors['missing value'] = "countryCode is required. Use function setCountryCode().";
+        }
+        
         if (count($errors) > 0) {
             $exceptionString = "";
             foreach ($errors as $key => $value) {
