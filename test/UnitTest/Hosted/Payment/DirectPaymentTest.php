@@ -62,14 +62,14 @@ class DirectPaymentTest extends \PHPUnit_Framework_TestCase {
 
         $xmlMessage = new \SimpleXMLElement($form->xmlMessage);
         
-print_r( $xmlMessage->excludepaymentmethods->exclude );
-echo " ";
-        $excluded = (array)$xmlMessage->excludepaymentmethods->exclude;
-print_r( $excluded );
-        
-        $this->assertTrue( in_array( SystemPaymentMethod::KORTCERT, $excluded ) );
-        $this->assertTrue( in_array( SystemPaymentMethod::SKRILL, $excluded ) );
-        $this->assertTrue( in_array( SystemPaymentMethod::PAYPAL, $excluded ) );
+//        $excluded = (array)$xmlMessage->excludepaymentmethods->exclude; // only works with php 5.5
+//        $this->assertTrue( in_array( SystemPaymentMethod::KORTCERT, $excluded ) );
+//        $this->assertTrue( in_array( SystemPaymentMethod::SKRILL, $excluded ) );
+//        $this->assertTrue( in_array( SystemPaymentMethod::PAYPAL, $excluded ) );
+
+        $this->assertEquals( SystemPaymentMethod::KORTCERT, $xmlMessage->excludepaymentmethods->exclude[14] );
+        $this->assertEquals( SystemPaymentMethod::SKRILL, $xmlMessage->excludepaymentmethods->exclude[15] );
+        $this->assertEquals( SystemPaymentMethod::PAYPAL, $xmlMessage->excludepaymentmethods->exclude[16] );        
     }
 
     public function testBuildDirectBankPayment() {
