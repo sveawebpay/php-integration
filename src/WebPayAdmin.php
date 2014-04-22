@@ -38,6 +38,8 @@ class WebPayAdmin {
      * AUTHORIZED. This will result in a CONFIRMED transaction that will be
      * captured on the given capturedate.
      * 
+     * Note that this method only supports Card transactions.
+     * 
      * Use the WebPayAdmin::confirmTransaction() entrypoint to get an instance of
      * ConfirmTransaction. Then provide more information about the transaction and
      * send the request using @see ConfirmTransaction methods.
@@ -50,7 +52,7 @@ class WebPayAdmin {
     }
     
     /**
-     * creditTransaction can used to credit transactions. Only transactions that
+     * creditTransaction can be used to credit transactions. Only transactions that
      * have reached the status SUCCESS can be credited.
      * 
      * Use the WebPayAdmin::creditTransaction() entrypoint to get an instance of
@@ -60,11 +62,27 @@ class WebPayAdmin {
      * @param ConfigurationProvider $configs
      * @return \Svea\CreditTransaction
      */
-
     static function creditTransaction($config) {
         return new Svea\CreditTransaction($config);
     }    
     
+    /**
+     * listPaymentMethods fetches all paymentmethods connected to the given 
+     * ConfigurationProvider and country.
+     *
+     * Use the WebPayAdmin::listPaymentMethods() entrypoint to get an instance of
+     * ListPaymentMethods. Then provide more information about the transaction and
+     * send the request using @see ListPaymentMethod methods. 
+     * 
+     * Following the ->doRequest call you receive a @see \Svea\ListPaymentMethodsResponse
+     * 
+     * @param ConfigurationProvider $configs
+     * @return \Svea\ListPaymentMethods
+     */
+    static function listPaymentMethods($config) {
+        return new Svea\ListPaymentMethods($config);
+    }  
+
     // WebserviceRequest/HandleOrder
     
     

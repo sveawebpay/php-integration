@@ -35,5 +35,10 @@ class WebPayAdminUnitTest extends \PHPUnit_Framework_TestCase {
         $this->assertInstanceOf( "Svea\CreditTransaction", $creditTransactionObject );
     }
 
-    
+    public function test_listPaymentMethods() {
+        $config = SveaConfig::getDefaultConfig();
+        $listPaymentMethodsObject = \WebPayAdmin::listPaymentMethods($config);        
+        $this->assertInstanceOf( "Svea\ListPaymentMethods", $listPaymentMethodsObject );
+    }
+        
 }
