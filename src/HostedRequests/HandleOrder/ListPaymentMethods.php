@@ -19,6 +19,7 @@ class ListPaymentMethods extends HostedRequest {
      * prepares the elements used in the request to svea
      */
     public function prepareRequest() {
+        $this->validateRequest();
 
         $xmlBuilder = new HostedXmlBuilder();
         
@@ -43,4 +44,18 @@ class ListPaymentMethods extends HostedRequest {
         );
         return $request_fields;
     }
+    
+    public function validate($self) {
+        $errors = array();
+        $errors = $this->validateMerchantId($self, $errors);
+        return $errors;
+    }
+    
+    private function validateMerchantId($self, $errors) {
+        if ( null == $self->config->getMerchantId( \ConfigurationProvider::HOSTED_TYPE, $this->countryCode) ) {                                                    
+            $errors['missing value'] = "merchantId is required, check your ConfigurationProvider credentials.";
+        }
+        return $errors;
+    }     
+    
 }

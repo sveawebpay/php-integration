@@ -94,5 +94,37 @@ class CreditTransactionTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals((string)$creditAmount, $xmlMessage->amounttocredit);
         
     }
+
+    function test_prepareRequest_missing_transactionId_throws_exception() {
+        
+        $this->setExpectedException(
+            'Svea\ValidationException', 
+            '-missing value : transactionId is required. Use function setTransactionId() with the SveaOrderId from the createOrder response.'
+        );
+        
+        $creditAmount = 100;
+        $this->creditObject->setCreditAmount( $creditAmount );
+        
+        $countryCode = "SE";
+        $this->creditObject->setCountryCode($countryCode);
+                
+        $form = $this->creditObject->prepareRequest();    
+    }    
+
+    function test_prepareRequest_missing_creditAmount_throws_exception() {
+
+        $this->setExpectedException(
+            'Svea\ValidationException', 
+            '-missing value : creditAmount is required. Use function setCreditAmount().'
+        );        
+        
+        $transactionId = 987654;       
+        $this->creditObject->setTransactionId( $transactionId );
+
+        $countryCode = "SE";
+        $this->creditObject->setCountryCode($countryCode);
+                
+        $form = $this->creditObject->prepareRequest();
+    }      
 }
 ?>

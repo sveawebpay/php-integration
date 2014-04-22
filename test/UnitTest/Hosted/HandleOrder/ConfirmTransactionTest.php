@@ -2,7 +2,7 @@
 $root = realpath(dirname(__FILE__));
 
 require_once $root . '/../../../../src/Includes.php';
-require_once $root . '/../../../../src/WebServiceRequests/svea_soap/SveaSoapConfig.php';
+//require_once $root . '/../../../../src/WebServiceRequests/svea_soap/SveaSoapConfig.php';
 
 /**
  * @author Kristian Grossman-Madsen for Svea Webpay
@@ -93,5 +93,54 @@ class ConfirmTransactionTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals((string)$transactionId, $xmlMessage->transactionid);
         $this->assertEquals((string)$captureDate, $xmlMessage->capturedate);     
     }
+
+    function test_prepareRequest_missing_transactionId_throws_exception() {
+
+        $this->setExpectedException(
+            'Svea\ValidationException', 
+            '-missing value : transactionId is required. Use function setTransactionId() with the SveaOrderId from the createOrder response.'
+        );
+        
+        $captureDate = "2014-03-21";
+        $this->confirmObject->setCaptureDate( $captureDate );
+        
+        $countryCode = "SE";
+        $this->confirmObject->setCountryCode($countryCode);
+                
+        $form = $this->confirmObject->prepareRequest();
+    }
+
+    function test_prepareRequest_missing_captureDate_throws_exception() {
+
+        $this->setExpectedException(
+            'Svea\ValidationException', 
+            '-missing value : captureDate is required. Use function setCaptureDate().'
+        );
+        
+        $transactionId = 987654;       
+        $this->confirmObject->setTransactionId( $transactionId );
+
+        $countryCode = "SE";
+        $this->confirmObject->setCountryCode($countryCode);
+                
+        $form = $this->confirmObject->prepareRequest();       
+    }
+      
+    // really a test of parent class HostedRequest countryCode requirement...    
+    function test_prepareRequest_missing_countryCode_throws_exception() {
+
+        $this->setExpectedException(
+            'Svea\ValidationException', 
+            '-missing value : countryCode is required. Use function setCountryCode().'
+        );
+        
+        $transactionId = 987654;       
+        $this->confirmObject->setTransactionId( $transactionId );
+
+        $captureDate = "2014-03-21";
+        $this->confirmObject->setCaptureDate( $captureDate );
+                
+        $form = $this->confirmObject->prepareRequest();     
+    }    
 }
 ?>
