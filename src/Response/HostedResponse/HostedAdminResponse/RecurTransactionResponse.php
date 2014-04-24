@@ -11,6 +11,7 @@ require_once SVEA_REQUEST_DIR . '/Includes.php';
  */
 class RecurTransactionResponse extends HostedAdminResponse{
 
+    public $transactionid;
     /** string $customerrefno @todo correct name for the package, used service attribute name */
     public $customerrefno;
     public $paymentmethod;
@@ -47,7 +48,7 @@ class RecurTransactionResponse extends HostedAdminResponse{
             $this->setErrorParams( (string)$hostedAdminResponse->statuscode ); 
         }
 
-        $this->transactionId = (string)$hostedAdminResponse->transaction['id'];
+        $this->transactionid = (string)$hostedAdminResponse->transaction['id'];
         
         $this->customerrefno = (string)$hostedAdminResponse->transaction->customerrefno;
         $this->paymentmethod = (string)$hostedAdminResponse->transaction->paymentmethod;

@@ -134,7 +134,10 @@ class HostedXmlBuilder {
         if($request['callbackUrl'] != null){
             $this->XMLWriter->writeElement("callbackurl", $request['callbackUrl']);
         }
-        // subscriptiontype
+        // subscriptiontype -- optional         
+        if (isset($request['subscriptionType'])) {
+            $this->XMLWriter->writeElement("subscriptiontype", $request['subscriptionType']); // subscriptiontype
+        }
         // simulatorcode
         if (isset($request['excludePaymentMethods'])) {
             $this->serializeExcludePayments($request['excludePaymentMethods']); // excludepaymentmethods   
