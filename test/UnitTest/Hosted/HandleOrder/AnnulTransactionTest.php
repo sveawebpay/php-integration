@@ -53,7 +53,7 @@ class AnnulTransactionTest extends PHPUnit_Framework_TestCase {
         $this->assertTrue( isset($form['message']) );
     }
     
-        function test_prepareRequest_request_has_correct_merchantid_mac_and_annulTransaction_request_message_contents() {
+    function test_prepareRequest_request_has_correct_merchantid_mac_and_annulTransaction_request_message_contents() {
 
         // set up creditTransaction object & get request form
         $transactionId = 987654;       
@@ -82,5 +82,18 @@ class AnnulTransactionTest extends PHPUnit_Framework_TestCase {
         
     }
 
+    function test_prepareRequest_missing_transactionId_throws_exception() {
+
+        $this->setExpectedException(
+            'Svea\ValidationException', 
+            '-missing value : transactionId is required. Use function setTransactionId() with the SveaOrderId from the createOrder response.'
+        );        
+        
+        $countryCode = "SE";
+        $this->annulObject->setCountryCode($countryCode);
+                
+        $form = $this->annulObject->prepareRequest();     
+    }
+        
 }
 ?>

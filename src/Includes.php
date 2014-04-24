@@ -9,6 +9,7 @@ if (!defined('SVEA_REQUEST_DIR'))
     define('SVEA_REQUEST_DIR', dirname(__FILE__));
 
 include_once(SVEA_REQUEST_DIR . "/WebPay.php");
+include_once(SVEA_REQUEST_DIR . "/WebPayAdmin.php");
 
 foreach (glob(SVEA_REQUEST_DIR . "/BuildOrder/*.php") as $config)
     include_once($config);

@@ -17,14 +17,26 @@ class LowerTransaction extends HostedRequest {
         $this->method = "loweramount";
         parent::__construct($config);
     }
-    
+    /**
+     * Set the id of the transaction to modify. This is received with the 
+     * response from Svea following a successful createOrder request.
+     * 
+     * @param numeric $transactionId
+     * @return \Svea\LowerTransaction
+     */
     function setTransactionId( $transactionId ) {
         $this->transactionId = $transactionId;
         return $this;
     }
     
-    function setAmountToLower( $transactionId ) {
-        $this->amountToLower = $transactionId;
+    /**
+     * The amount in minor currecy (i.e. 1 SEK => 100)
+     * 
+     * @param numeric $amountInMinorCurrency
+     * @return \Svea\LowerTransaction
+     */
+    function setAmountToLower( $amountInMinorCurrency ) {
+        $this->amountToLower = $amountInMinorCurrency;
         return $this;
     }
     
@@ -32,6 +44,7 @@ class LowerTransaction extends HostedRequest {
      * prepares the elements used in the request to svea
      */
     public function prepareRequest() {
+        $this->validateRequest();
 
         $xmlBuilder = new HostedXmlBuilder();
         
@@ -58,4 +71,25 @@ class LowerTransaction extends HostedRequest {
         return $request_fields;
     }
 
+    public function validate($self) {
+        $errors = array();
+        $errors = $this->validateTransactionId($self, $errors);
+        $errors = $this->validateAmountToLower($self, $errors);
+        return $errors;
+    }
+    
+    private function validateTransactionId($self, $errors) {
+        if (isset($self->transactionId) == FALSE) {                                                        
+            $errors['missing value'] = "transactionId is required. Use function setTransactionId() with the SveaOrderId from the createOrder response."; // TODO check if the createOrder response sets transactionId or SveaOrderId and update error string accordingly
+        }
+        return $errors;
+    }   
+    
+    private function validateAmountToLower($self, $errors) {
+        if (isset($self->amountToLower) == FALSE) {                                                        
+            $errors['missing value'] = "amountToLower is required. Use function setAmountToLower().";
+        }
+        return $errors;    
+    }    
+    
 }

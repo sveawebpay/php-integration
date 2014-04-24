@@ -19,7 +19,11 @@ class CreditTransaction extends HostedRequest {
     }
 
     /**
-     * @param string $transactionId  the transaction to credit
+     * Set the transaction id, which must have status SUCCESS at Svea.
+     * 
+     * Required.
+     * 
+     * @param string $transactionId
      * @return $this
      */
     function setTransactionId( $transactionId ) {
@@ -28,7 +32,11 @@ class CreditTransaction extends HostedRequest {
     }
     
     /**
-     * @param type $creditAmount  amount to credit, in minor currency (i.e. 1 SEK => 100 in minor currency)
+     * Set the amount to credit.
+     * 
+     * Required.
+     * 
+     * @param int $creditAmount  amount to credit, in minor currency (i.e. 1 SEK => 100 in minor currency)
      * @return $this
      */
     function setCreditAmount( $creditAmount ) {
@@ -40,7 +48,8 @@ class CreditTransaction extends HostedRequest {
      * prepares the elements used in the request to svea
      */
     public function prepareRequest() {
-
+        $this->validateRequest();
+        
         $xmlBuilder = new HostedXmlBuilder();
         
         // get our merchantid & secret
@@ -64,5 +73,26 @@ class CreditTransaction extends HostedRequest {
             'mac' => urlencode($mac)
         );
         return $request_fields;
+    }
+    
+    public function validate($self) {
+        $errors = array();
+        $errors = $this->validateTransactionId($self, $errors);
+        $errors = $this->validateCreditAmount($self, $errors);
+        return $errors;
+    }
+    
+    private function validateTransactionId($self, $errors) {
+        if (isset($self->transactionId) == FALSE) {                                                        
+            $errors['missing value'] = "transactionId is required. Use function setTransactionId() with the SveaOrderId from the createOrder response."; // TODO check if the createOrder response sets transactionId or SveaOrderId and update error string accordingly
+        }
+        return $errors;
+    }   
+    
+    private function validateCreditAmount($self, $errors) {
+        if (isset($self->creditAmount) == FALSE) {                                                        
+            $errors['missing value'] = "creditAmount is required. Use function setCreditAmount().";
+        }
+        return $errors;    
     }
 }

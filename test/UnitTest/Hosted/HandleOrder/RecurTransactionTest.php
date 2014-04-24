@@ -120,5 +120,89 @@ class RecurTransactionTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals((string)$currency, $xmlMessage->currency);   
         $this->assertEquals((string)$amount, $xmlMessage->amount);        
     }
+    
+    function test_prepareRequest_missing_customerRefNo_throws_exception() {
+
+        $this->setExpectedException(
+            'Svea\ValidationException', 
+            '-missing value : customerRefNo is required. Use function setCustomerRefNo().'
+        );   
+  
+        $subscriptionId = 987654;       
+        $this->recurTransactionObject->setSubscriptionId( $subscriptionId );
+
+        $currency = "SEK";
+        $this->recurTransactionObject->setCurrency( $currency );
+
+        $amount = 100;
+        $this->recurTransactionObject->setAmount( $amount );
+        
+        $countryCode = "SE";
+        $this->recurTransactionObject->setCountryCode($countryCode);
+                
+        $form = $this->recurTransactionObject->prepareRequest();   
+    }    
+    
+    function test_prepareRequest_missing_subscriptionId_throws_exception() {
+
+        $this->setExpectedException(
+            'Svea\ValidationException', 
+            '-missing value : subscriptionId is required. Use function setSubscriptionId() with the subscriptionId from the createOrder response.'
+        );   
+    
+        $customerRefNo = "myCustomerRefNo";       
+        $this->recurTransactionObject->setCustomerRefNo( $customerRefNo );
+        
+        $currency = "SEK";
+        $this->recurTransactionObject->setCurrency( $currency );
+
+        $amount = 100;
+        $this->recurTransactionObject->setAmount( $amount );
+        
+        $countryCode = "SE";
+        $this->recurTransactionObject->setCountryCode($countryCode);
+                
+        $form = $this->recurTransactionObject->prepareRequest();   
+    }   
+    
+ 
+    function test_prepareRequest_missing_amount_throws_exception() {
+
+        $this->setExpectedException(
+            'Svea\ValidationException', 
+            '-missing value : amount is required. Use function setAmount().'
+        );   
+    
+        $customerRefNo = "myCustomerRefNo";       
+        $this->recurTransactionObject->setCustomerRefNo( $customerRefNo );
+        
+        $subscriptionId = 987654;       
+        $this->recurTransactionObject->setSubscriptionId( $subscriptionId );
+
+        $currency = "SEK";
+        $this->recurTransactionObject->setCurrency( $currency );
+
+        $countryCode = "SE";
+        $this->recurTransactionObject->setCountryCode($countryCode);
+                
+        $form = $this->recurTransactionObject->prepareRequest();   
+    }   
+    
+    function test_prepareRequest_missing_currency_does_not_throw_an_exception() {
+    
+        $customerRefNo = "myCustomerRefNo";       
+        $this->recurTransactionObject->setCustomerRefNo( $customerRefNo );
+        
+        $subscriptionId = 987654;       
+        $this->recurTransactionObject->setSubscriptionId( $subscriptionId );
+
+        $amount = 100;
+        $this->recurTransactionObject->setAmount( $amount );
+        
+        $countryCode = "SE";
+        $this->recurTransactionObject->setCountryCode($countryCode);
+                
+        $form = $this->recurTransactionObject->prepareRequest();   
+    }     
 }
 ?>

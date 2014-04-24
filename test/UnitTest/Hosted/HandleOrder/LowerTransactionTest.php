@@ -15,7 +15,7 @@ class LowerTransactionTest extends PHPUnit_Framework_TestCase {
     // fixture, run once before each test method
     protected function setUp() {
         $this->configObject = Svea\SveaConfig::getDefaultConfig();
-        $this->lowerTransactionObject = WebPay::lowerTransaction( $this->configObject );
+        $this->lowerTransactionObject = new Svea\LowerTransaction( $this->configObject );
     }
 
     // test methods
@@ -93,5 +93,39 @@ class LowerTransactionTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals((string)$transactionId, $xmlMessage->transactionid);
         $this->assertEquals((string)$amountToLower, $xmlMessage->amounttolower);        
     }
+  
+    function test_prepareRequest_missing_transactionId_throws_exception() {
+        
+        $this->setExpectedException(
+            'Svea\ValidationException', 
+            '-missing value : transactionId is required. Use function setTransactionId() with the SveaOrderId from the createOrder response.'
+        );
+        
+        $amountToLower = 100;
+        $this->lowerTransactionObject->setAmountToLower( $amountToLower );
+     
+        $countryCode = "SE";
+        $this->lowerTransactionObject->setCountryCode($countryCode);
+                
+        $form = $this->lowerTransactionObject->prepareRequest();      
+    }    
+
+    
+    function test_prepareRequest_missing_amountToLower_throws_exception() {
+
+        $this->setExpectedException(
+            'Svea\ValidationException', 
+            '-missing value : amountToLower is required. Use function setAmountToLower().'
+        );
+        
+        $transactionId = 987654;       
+        $this->lowerTransactionObject->setTransactionId( $transactionId );
+
+        $countryCode = "SE";
+        $this->lowerTransactionObject->setCountryCode($countryCode);
+                
+        $form = $this->lowerTransactionObject->prepareRequest();
+    }    
+    
 }
 ?>

@@ -77,23 +77,22 @@ class WebPay {
 
         return new Svea\deliverOrderBuilder($config);
     }
-
     
-    /**
-     * Query information about an order. Support Card and Directbank orders.
-     * Use the follwing methods:
-     * ->setOrderId( transactionId ) from createOrder request response
-     * ->setCountryCode() 
-     * @todo fix rest of documentation
-     * 
-     * @param ConfigurationProvider $config  instance of implementation class of ConfigurationProvider Interface
-     * @return Svea\QueryTransaction
-     * @throws Exception
-     */
-    public static function queryOrder( $config = NULL ) {
-        if( $config == NULL ) { WebPay::throwMissingConfigException(); }
-        return new Svea\QueryTransaction($config);
-    }
+//    /**
+//     * Query information about an order. Supports Card and Directbank orders.
+//     * Use the follwing methods:
+//     * ->setOrderId( transactionId ) from createOrder request response
+//     * ->setCountryCode() 
+//     * @todo fix rest of documentation
+//     * 
+//     * @param ConfigurationProvider $config  instance of implementation class of ConfigurationProvider Interface
+//     * @return Svea\QueryTransaction
+//     * @throws Exception
+//     */
+//    public static function queryOrder( $config = NULL ) {
+//        if( $config == NULL ) { WebPay::throwMissingConfigException(); }
+//        return new Svea\QueryOrderBuilder($config);
+//    }
     
     /**
      * Cancel an undelivered/unconfirmed order. Supports Invoice, PaymentPlan and Card orders.
@@ -141,73 +140,18 @@ class WebPay {
 
         return new Svea\GetAddresses($config);
     }
-
-    /**
-     * Get all paymentmethods connected to the given ConfigurationProvider and country.
-     * Use the following methods: 
-     * ->setCountryCode()
-     * ->doRequest() 
-     * @param ConfigurationProvider $config  instance implementing ConfigurationProvider
-     * @return ListPaymentMethodsResponse
-     */
-    public static function listPaymentMethods($config = NULL) {
-        if( $config == NULL ) { WebPay::throwMissingConfigException(); }
-        return new Svea\ListPaymentMethods($config);
-    }
     
     /**
      * Get all paymentmethods connected to your account
      * @param ConfigurationProvider $config  instance implementing ConfigurationProvider
      * @return string[] array of available paymentmethods for this ConfigurationProvider
-     * @deprecated 2.0.0 use listPaymentMethods instead, which returns a HostedResponse object instead of an array
+     * @deprecated 2.0.0 use WebPayAdmin::listPaymentMethods instead, which returns a HostedResponse object instead of an array
      */
     public static function getPaymentMethods($config = NULL) {
         if( $config == NULL ) { WebPay::throwMissingConfigException(); }
         return new Svea\GetPaymentMethods($config);
     }
-    
-    /**
-     * Credit an existing Card or Bank transaction.
-     * The transaction must have reached Svea status SUCCESS.
-     * @param ConfigurationProvider $config instance implementing ConfigurationProvider
-     */
-    public static function creditTransaction( $config = NULL ) {
-        if( $config == NULL ) { WebPay::throwMissingConfigException(); }
-        
-        return new Svea\CreditTransaction($config);
-    }
-        
-    /**
-     * Confirm an existing Card transaction.
-     * The transaction must have Svea status AUTHORIZED. After a successful request
-     * the transaction will get status CONFIRMED.
-     * Note that this only supports Card transactions.
-     * 
-     * @param ConfigurationProvider $config instance implementing ConfigurationProvider
-     */
-    public static function confirmTransaction( $config = NULL ) {
-        if( $config == NULL ) { WebPay::throwMissingConfigException(); }
-        
-        return new Svea\ConfirmTransaction($config);
-    }
-    
-    /**
-     * Lower the amount for an existing Card transaction.
-     * The transaction must have Svea status AUTHORIZED or CONFIRMED. 
-     * If the amount is lowered by an amount equal to the transaction authorized
-     * amount, then after a successful request the transaction will get the 
-     * status ANNULLED.
-     * 
-     * Note that this only supports Card transactions.
-     * 
-     * @param ConfigurationProvider $config instance implementing ConfigurationProvider
-     */
-    public static function lowerTransaction( $config = NULL ) {
-        if( $config == NULL ) { WebPay::throwMissingConfigException(); }
-        
-        return new Svea\LowerTransaction($config);
-    }
-    
+                    
     /** helper function, throws exception if no config is given */
     private static function throwMissingConfigException() {
         throw new Exception('-missing parameter: This method requires an ConfigurationProvider object as parameter. Create a class that implements class ConfigurationProvider. Set returnvalues to configuration values. Create an object from that class. Alternative use static function from class SveaConfig e.g. SveaConfig::getDefaultConfig(). You can replace the default config values to return your own config values in the method.');   
