@@ -56,7 +56,7 @@ class CardPayment extends HostedPayment {
     
     /**
      * Set subscription type for recurring payments. Subscription type may be one
-     * of CardPayment::RECURRINGPAYMENT | CardPayment::ONECLICKCAPTURE (all countries)
+     * of CardPayment::RECURRINGCAPTURE | CardPayment::ONECLICKCAPTURE (all countries)
      * or CardPayment::RECURRING | CardPayment::ONECLICK (Scandinavian countries only) 
      * 
      * The initial transaction status will either be AUTHORIZED (i.e. it may be charged
