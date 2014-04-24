@@ -84,21 +84,45 @@ class WebPayAdmin {
     }  
 
     /**
-     * Lower the amount for an existing Card transaction.
-     * The transaction must have Svea status AUTHORIZED or CONFIRMED. 
-     * If the amount is lowered by an amount equal to the transaction authorized
-     * amount, then after a successful request the transaction will get the 
-     * status ANNULLED.
+     * lowerTransaction modifies the amount in an existing card transaction 
+     * having status AUTHORIZED or CONFIRMED. If the amount is lowered by an 
+     * amount equal to the transaction authorized amount, then after a 
+     * successful request the transaction will get the status ANNULLED.
      * 
-     * Note that this only supports Card transactions.
+     * Use the WebPayAdmin::lowerTransaction() entrypoint to get an instance of
+     * LowerTransaction. Then provide more information about the transaction and
+     * send the request using @see LowerTransaction methods.
+     * 
+     * Following the ->doRequest call you receive a @see \Svea\LowerTransactionResponse
      * 
      * @param ConfigurationProvider $config instance implementing ConfigurationProvider
+     * @return Svea\LowerTransaction
+     * @throws Exception
+     * 
      */
     public static function lowerTransaction( $config = NULL ) {
         if( $config == NULL ) { WebPay::throwMissingConfigException(); }
         
         return new Svea\LowerTransaction($config);
-    }    
+    }
+    
+    /**
+     * Query information about an existing card or direct bank transaction.
+     * 
+     * Use the WebPayAdmin::queryTransaction() entrypoint to get an instance of
+     * QueryTransaction. Then provide more information about the transaction and
+     * send the request using @see QueryTransaction methods.
+     * 
+     * Note that this only supports queries based on the Svea transactionId.
+     *
+     * @param ConfigurationProvider $config  instance of implementation class of ConfigurationProvider Interface
+     * @return Svea\QueryTransaction
+     * @throws Exception
+     */
+    public static function queryTransaction( $config = NULL ) {
+        if( $config == NULL ) { WebPay::throwMissingConfigException(); }
+        return new Svea\QueryTransaction($config);
+    }
     
     // WebserviceRequest/HandleOrder
     

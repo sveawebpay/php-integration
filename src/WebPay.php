@@ -78,21 +78,21 @@ class WebPay {
         return new Svea\deliverOrderBuilder($config);
     }
     
-    /**
-     * Query information about an order. Support Card and Directbank orders.
-     * Use the follwing methods:
-     * ->setOrderId( transactionId ) from createOrder request response
-     * ->setCountryCode() 
-     * @todo fix rest of documentation
-     * 
-     * @param ConfigurationProvider $config  instance of implementation class of ConfigurationProvider Interface
-     * @return Svea\QueryTransaction
-     * @throws Exception
-     */
-    public static function queryOrder( $config = NULL ) {
-        if( $config == NULL ) { WebPay::throwMissingConfigException(); }
-        return new Svea\QueryTransaction($config);
-    }
+//    /**
+//     * Query information about an order. Supports Card and Directbank orders.
+//     * Use the follwing methods:
+//     * ->setOrderId( transactionId ) from createOrder request response
+//     * ->setCountryCode() 
+//     * @todo fix rest of documentation
+//     * 
+//     * @param ConfigurationProvider $config  instance of implementation class of ConfigurationProvider Interface
+//     * @return Svea\QueryTransaction
+//     * @throws Exception
+//     */
+//    public static function queryOrder( $config = NULL ) {
+//        if( $config == NULL ) { WebPay::throwMissingConfigException(); }
+//        return new Svea\QueryOrderBuilder($config);
+//    }
     
     /**
      * Cancel an undelivered/unconfirmed order. Supports Invoice, PaymentPlan and Card orders.

@@ -17,14 +17,26 @@ class LowerTransaction extends HostedRequest {
         $this->method = "loweramount";
         parent::__construct($config);
     }
-    
+    /**
+     * Set the id of the transaction to modify. This is received with the 
+     * response from Svea following a successful createOrder request.
+     * 
+     * @param numeric $transactionId
+     * @return \Svea\LowerTransaction
+     */
     function setTransactionId( $transactionId ) {
         $this->transactionId = $transactionId;
         return $this;
     }
     
-    function setAmountToLower( $transactionId ) {
-        $this->amountToLower = $transactionId;
+    /**
+     * The amount in minor currecy (i.e. 1 SEK => 100)
+     * 
+     * @param numeric $amountInMinorCurrency
+     * @return \Svea\LowerTransaction
+     */
+    function setAmountToLower( $amountInMinorCurrency ) {
+        $this->amountToLower = $amountInMinorCurrency;
         return $this;
     }
     

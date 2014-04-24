@@ -46,4 +46,11 @@ class WebPayAdminUnitTest extends \PHPUnit_Framework_TestCase {
         $lowerTransactionObject = \WebPayAdmin::lowerTransaction($config);        
         $this->assertInstanceOf( "Svea\LowerTransaction", $lowerTransactionObject );
     }     
+    
+    public function test_queryTransaction() {
+        $config = SveaConfig::getDefaultConfig();
+        $queryTransactionObject = \WebPayAdmin::queryTransaction($config);        
+        $this->assertInstanceOf( "Svea\QueryTransaction", $queryTransactionObject );
+    }      
+    
 }
