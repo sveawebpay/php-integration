@@ -77,7 +77,6 @@ class WebPay {
 
         return new Svea\deliverOrderBuilder($config);
     }
-
     
     /**
      * Query information about an order. Support Card and Directbank orders.
@@ -141,7 +140,6 @@ class WebPay {
 
         return new Svea\GetAddresses($config);
     }
-
     
     /**
      * Get all paymentmethods connected to your account
@@ -153,24 +151,7 @@ class WebPay {
         if( $config == NULL ) { WebPay::throwMissingConfigException(); }
         return new Svea\GetPaymentMethods($config);
     }
-                
-    /**
-     * Lower the amount for an existing Card transaction.
-     * The transaction must have Svea status AUTHORIZED or CONFIRMED. 
-     * If the amount is lowered by an amount equal to the transaction authorized
-     * amount, then after a successful request the transaction will get the 
-     * status ANNULLED.
-     * 
-     * Note that this only supports Card transactions.
-     * 
-     * @param ConfigurationProvider $config instance implementing ConfigurationProvider
-     */
-    public static function lowerTransaction( $config = NULL ) {
-        if( $config == NULL ) { WebPay::throwMissingConfigException(); }
-        
-        return new Svea\LowerTransaction($config);
-    }
-    
+                    
     /** helper function, throws exception if no config is given */
     private static function throwMissingConfigException() {
         throw new Exception('-missing parameter: This method requires an ConfigurationProvider object as parameter. Create a class that implements class ConfigurationProvider. Set returnvalues to configuration values. Create an object from that class. Alternative use static function from class SveaConfig e.g. SveaConfig::getDefaultConfig(). You can replace the default config values to return your own config values in the method.');   
