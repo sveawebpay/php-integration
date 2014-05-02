@@ -403,6 +403,36 @@ class CardPaymentTest extends \PHPUnit_Framework_TestCase {
          $this->assertEquals("-2500", $xmlMessage->vat);
     }
 
+    public function test_BuildCardPayment_With_InvoiceFee_ExVat_IncVat() {
+        $config = SveaConfig::getDefaultConfig();
+        $form = \WebPay::createOrder($config)
+                ->addOrderRow(\WebPayItem::orderRow()
+                        ->setArticleNumber("1")
+                        ->setQuantity(1)
+                        ->setAmountExVat(240.00)
+                        ->setAmountIncVat(300.00)
+                        ->setDescription("CD")
+                )
+                ->addFee(\WebPayItem::invoiceFee()
+                        ->setAmountExVat(80)
+                        ->setAmountIncVat(100)
+                        ->setName("test_BuildCardPayment_With_InvoiceFee title")
+                        ->setDescription("test_BuildCardPayment_With_InvoiceFee description")
+                        ->setUnit("kr")
+                )
+                ->setClientOrderNumber("33")
+                ->setCurrency("SEK")
+                ->setCountryCode("SE")
+                ->usePayPageCardOnly() // PayPageObject
+                    ->setReturnUrl("http://myurl.se")
+                    ->getPaymentForm();
+
+        $xmlMessage = new \SimpleXMLElement($form->xmlMessage);
+
+        $this->assertEquals("8000", $xmlMessage->vat);
+        $this->assertEquals("40000", $xmlMessage->amount);
+    }
+
 
     /**
      * test that we can set the subscriptiontype using setSubscriptionType()
