@@ -20,7 +20,22 @@ class CancelOrderRequest extends AdminServiceRequest {
         $this->orderBuilder = $cancelOrderBuilder;
     }
     
+    
+    /**
+     * Prepare and sends request to Svea admin service
+     * @return CloseOrderEuResponse
+     */
     public function doRequest() {
-        
+        $this->prepareRequest();
     }
+    
+    public function prepareRequest() {
+        $soapRequest = new \StdClass();
+        $soapRequest->Authentication = new \StdClass();
+        $soapRequest->Authentication->Username = "foo";
+        $soapRequest->Authentication->Password = "bar";
+        
+        return $soapRequest;
+    }
+    
 }
