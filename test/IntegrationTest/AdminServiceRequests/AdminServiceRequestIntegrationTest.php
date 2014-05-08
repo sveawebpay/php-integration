@@ -10,6 +10,7 @@ class AdminServiceRequestIntegrationTest extends PHPUnit_Framework_TestCase{
 
     public function testCancelOrderRequest() {
         
+        $config = new stdClass();
         $sveaOrderIdToClose = 123456;
         
         $mockedBuilder = new StdClass();
