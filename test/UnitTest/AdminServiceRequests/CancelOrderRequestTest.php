@@ -22,6 +22,6 @@ class CancelOrderRequestTest extends PHPUnit_Framework_TestCase {
         
         $this->assertTrue( isset($request->Authentication) );
         $this->assertTrue( isset($request->Authentication->Username) );
-        $this->assertTrue( isset($request->Authentication->Password) );        
+        $this->assertTrue( isset($request->Authentication->Password) );
     }    
 }

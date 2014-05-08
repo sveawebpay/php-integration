@@ -10,12 +10,22 @@ class AdminServiceRequestIntegrationTest extends PHPUnit_Framework_TestCase{
 
     public function testCancelOrderRequest() {
         
-        $config = new stdClass();
-        $sveaOrderIdToClose = 123456;
+        $username = "sverigetest";
+        $password = "sverigetest";
+        $clientid = 79021;
         
+        $orderType = "Invoice";
+        $sveaOrderIdToClose = 344801;
+        
+        $config = new stdClass();
+        $config->username = $username;
+        $config->password = $password;
+        $config->clientId = $clientid;
+                
         $mockedBuilder = new StdClass();
         $mockedBuilder->conf = $config;
         $mockedBuilder->sveaOrderId = $sveaOrderIdToClose;
+        $mockedBuilder->orderType = $orderType;
         
         $request = new Svea\CancelOrderRequest( $mockedBuilder );
         $response = $request->doRequest();
