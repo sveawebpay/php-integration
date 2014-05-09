@@ -4,10 +4,9 @@
 include_once SVEA_REQUEST_DIR . "/Includes.php";
 
 /**
- * WebPayAdmin provides entrypoints to administrative functions provided by Svea.
+ * WebPayAdmin provides entrypoints to the various administrative functions 
+ * provided by Svea.
  * 
- * 
- *
  * @version 2.0.0
  * @author Kristian Grossman-Madsen for Svea WebPay
  * @package WebPay
@@ -15,6 +14,34 @@ include_once SVEA_REQUEST_DIR . "/Includes.php";
  */
 class WebPayAdmin {
 
+    /**
+     * Cancel an undelivered/unconfirmed order. Supports Invoice, PaymentPlan 
+     * and Card orders. (For Direct Bank orders, see CreditOrder instead.)
+     *  
+     * Use the following methods to set the order attributes needed in the request: 
+     * ->setOrderId(sveaOrderId or transactionId from createOrder response)
+     * ->setCountryCode()
+     * 
+     * Then select the correct ordertype and perform the request:
+     * ->cancelInvoiceOrder() | cancelPartPaymentOrder() | cancelCardOrder()
+     *   ->doRequest
+     * 
+     * The final doRequest() response is of one of the following types and may 
+     * contain different attributes depending on the original payment method:
+     * @see CloseOrderResult (Invoice or PartPayment orders) or
+     * @see HostedAdminResponse (Card orders)
+     * 
+     * @param ConfigurationProvider $config  instance implementing ConfigurationProvider
+     * @return Svea\CancelOrderBuilder object
+     * @throws Exception
+     */
+    public static function cancelOrder($config = NULL) {
+        if( $config == NULL ) { WebPay::throwMissingConfigException(); }        
+        return new Svea\CancelOrderBuilder($config);
+    }
+
+////////////////////////////////////////////////////////////////////////////////////////    
+    
     // HostedRequest/HandleOrder
     
     /**
