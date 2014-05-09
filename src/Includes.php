@@ -18,6 +18,11 @@ foreach (glob(SVEA_REQUEST_DIR . "/BuildOrder/Validator/*.php") as $config)
 foreach (glob(SVEA_REQUEST_DIR . "/BuildOrder/RowBuilders/*.php") as $config)
     include_once($config);
 
+foreach (glob(SVEA_REQUEST_DIR . "/AdminServiceRequests/*.php") as $config)
+    include_once($config);
+foreach (glob(SVEA_REQUEST_DIR . "/AdminServiceRequests/admin_soap/*.php") as $config)
+    include_once($config);
+
 foreach (glob(SVEA_REQUEST_DIR . "/HostedRequests/*.php") as $config)
     include_once($config);
 foreach (glob(SVEA_REQUEST_DIR . "/HostedRequests/HandleOrder/*.php") as $config)
