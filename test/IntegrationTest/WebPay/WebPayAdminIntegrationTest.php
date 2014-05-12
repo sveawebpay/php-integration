@@ -59,7 +59,7 @@ class WebPayAdminIntegrationTest extends PHPUnit_Framework_TestCase {
 
         // Stop here and mark this test as incomplete.
         $this->markTestIncomplete(
-            'skeleton for manual test of cancelOrder for a card order' // TODO
+            'skeleton for manual test of cancelOrder for a card order'
         );
         
         // Set the below to match the transaction, then run the test.
