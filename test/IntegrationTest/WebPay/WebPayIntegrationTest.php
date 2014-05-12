@@ -72,16 +72,13 @@ class WebPayIntegrationTest extends PHPUnit_Framework_TestCase {
 
         //print_r( $response );
         $this->assertEquals(1, $response->accepted);                
+        $this->assertInstanceOf( "Svea\DeliverOrderResult", $response );    // deliverOrderResult => deliverOrderEU 
     }
    
     public function test_deliverOrder_PaymentPlan_Accepted() {
         
         $order = WebPay::createOrder( Svea\SveaConfig::getDefaultConfig() )
-            ->addOrderRow( WebPayItem::orderRow()
-                ->setQuantity(1)
-                ->setAmountExVat(1000.00)
-                ->setVatPercent(25)
-            )
+            ->addOrderRow( TestUtil::createOrderRow() )
             ->addCustomerDetails( TestUtil::createIndividualCustomer("SE") )
             ->setCountryCode("SE")
             ->setCurrency("SEK")
@@ -107,7 +104,8 @@ class WebPayIntegrationTest extends PHPUnit_Framework_TestCase {
         $response = $deliverOrderBuilder->deliverPaymentPlanOrder()->doRequest();
 
         //print_r( $response );
-        $this->assertEquals(1, $response->accepted);                
+        $this->assertEquals(1, $response->accepted);
+        $this->assertInstanceOf( "Svea\DeliverOrderResult", $response );
     }
     
     /**
@@ -133,6 +131,29 @@ class WebPayIntegrationTest extends PHPUnit_Framework_TestCase {
 
         //print_r( $response );
         $this->assertEquals(1, $response->accepted);
-                
+        $this->assertInstanceOf( "Svea\ConfirmTransactionResponse", $response );                
     }    
+
+    public function test_deliverOrder_Invoice_without_orderRows_yields_deliverOrdersResponse() {
+        
+        // create order, get orderid to deliver
+        $createOrderBuilder = TestUtil::createOrder();
+        $response = $createOrderBuilder->useInvoicePayment()->doRequest();
+        $this->assertEquals(1, $response->accepted);
+        
+        $orderId = $response->sveaOrderId;
+        
+        $deliverOrderBuilder = WebPay::deliverOrder( Svea\SveaConfig::getDefaultConfig() )
+                ->addOrderRow( TestUtil::createOrderRow() )
+                ->setCountryCode("SE")
+                ->setOrderId( $orderId )
+                ->setInvoiceDistributionType(\DistributionType::POST)
+        ;
+        
+        $response = $deliverOrderBuilder->deliverInvoiceOrder()->doRequest();
+
+        //print_r( $response );
+        $this->assertEquals(1, $response->accepted);
+        $this->assertInstanceOf( "Svea\DeliverOrdersResult", $response );  // deliverOrder_s_Response => Admin service deliverOrders  
+    }        
 }
