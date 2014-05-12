@@ -17,6 +17,12 @@ require_once SVEA_REQUEST_DIR . '/Includes.php';
  * ->setCountryCode("SE")
  * ->setOrderId( $orderId )
  * 
+ * Card required methods:
+ * ->setOrderId( $orderId )
+ * ->setCountryCode("SE")
+ * Card optional methods:
+ * ->setCaptureDate( $orderId )
+ *  
  * @author Kristian Grossman-Madsen, Anneli Halld'n, Daniel Brolund for Svea Webpay
  */
 class deliverOrderBuilder extends OrderBuilder {
@@ -26,8 +32,7 @@ class deliverOrderBuilder extends OrderBuilder {
      * This is the link between deliverOrder and createOrder.
      * @var Order id
      */
-    public $orderId;
-    
+    public $orderId;    
 
     public function __construct($config) {
         parent::__construct($config);
@@ -115,5 +120,22 @@ class deliverOrderBuilder extends OrderBuilder {
     }
     /** @var string orderType  one of "Invoice" or "PaymentPlan" @todo check if there is an orderType constant?? */
     public $orderType;
-    
+
+    /**
+     * deliverCardOrder() sets the status of a card order to CONFIRMED.
+     * A default capturedate equal to the current date will be supplied. This 
+     * may be overridden using the ConfirmTransaction setCaptureDate() method 
+     * @return DeliverPaymentPlan
+     */
+    public function deliverCardOrder() {        
+        $defaultCaptureDate = explode("T", date('c')); // [0] contains date part
+
+        $confirmTransaction = new ConfirmTransaction($this->conf);
+        $confirmTransaction
+            ->setCountryCode($this->countryCode)
+            ->setTransactionId($this->orderId)
+            ->setCaptureDate($defaultCaptureDate[0])
+        ;
+        return $confirmTransaction;
+    }    
 }
