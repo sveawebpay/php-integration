@@ -9,40 +9,26 @@ require_once SVEA_REQUEST_DIR . '/Includes.php';
  * @author Kristian Grossman-Madsen
  */
 class CancelOrderRequest extends AdminServiceRequest {
-
-    /** string $action  the AdminService action modelled by this class */
-    private $action; 
     
-    // TODO mocked for now with a StdClass object containing attributes, will operate like other orderBuilder objects
+    /** @var cancelOrderBuilder $orderBuilder */
     public $orderBuilder;    
 
     /**
-     * @param type $orderBuilder
+     * @param cancelOrderBuilder $orderBuilder
      */
     public function __construct($cancelOrderBuilder) {
         $this->action = "CancelOrder";
         $this->orderBuilder = $cancelOrderBuilder;
-    }
-    
-    
-    /**
-     * Prepare and send request to Svea admin service using AdminSoap helpers
-     * @return StdClass  raw response @todo
-     */
-    public function doRequest() {
-        $soapRequest = $this->prepareRequest();
-        
-        $soapClient = new AdminSoap\SoapClient( $this->orderBuilder->conf->endpoint );
-        $response = $soapClient->doSoapCall($this->action, $soapRequest );
-        return $response;        
-    }
-    
+    }    
+
     /**
      * populate and return soap request contents
      * @return Svea\AdminSoap\CancelOrderRequest
      */    
-    public function prepareRequest() {
-
+    public function prepareRequest() {        
+        
+        $this->validateRequest();
+        
         $soapRequest = new AdminSoap\CancelOrderRequest( 
                 new AdminSoap\Authentication( 
                     $this->orderBuilder->conf->username, 
@@ -55,5 +41,24 @@ class CancelOrderRequest extends AdminServiceRequest {
         
         return $soapRequest;
     }
-}    
+        
+    public function validate() {
+        $errors = array();
+        $errors = $this->validateOrderId($errors);
+        $errors = $this->validateOrderType($errors);
+        return $errors;
+    }
     
+    private function validateOrderId($errors) {
+        if (isset($this->orderBuilder->sveaOrderId) == FALSE) {                                                        
+            $errors['missing value'] = "sveaOrderId is required.";
+        }
+        return $errors;
+    }               
+    private function validateOrderType($errors) {
+        if (isset($this->orderBuilder->orderType) == FALSE) {                                                        
+            $errors['missing value'] = "orderType is required.";
+        }
+        return $errors;
+    }                     
+}        

@@ -123,7 +123,7 @@ class OrderBuilder {
     public $relativeDiscountRows = array();
    
     /**
-     * @param string Country code as described by Iso 3166-1: "SE", "NO", "DK", "FI", "DE", "NL"
+     * @param string Country code as described by ISO 3166-1: "SE", "NO", "DK", "FI", "DE", "NL"
      * @return $this
      */
     public function setCountryCode($countryCodeAsString) {
@@ -131,14 +131,13 @@ class OrderBuilder {
         return $this;
     }
     /**
-     * Country code as described by Iso 3166-1: "SE", "NO", "DK", "FI","DE", "NL", see http://www.iso.org/iso/country_code for a list.
+     * Country code as described by ISO 3166-1: "SE", "NO", "DK", "FI","DE", "NL", see http://www.iso.org/iso/country_code for a list.
      * @var string
      */
     public $countryCode;
 
     /**
-     * @param string $currencyAsString ex. "SEK"
-     * @TODO TODO look up ISO standard of currency
+     * @param string $currencyAsString in ISO 4217 three-letter format, ex. "SEK", "EUR"
      * @return $this
      */
     public function setCurrency($currencyAsString) {
@@ -147,7 +146,7 @@ class OrderBuilder {
         return $this;
     }
     /**
-     * Currency in three-letter format Ex: "SEK", "EUR" @todo TODO lookup ISO currency 
+     * Currency in ISO 4217 three-letter format, ex. "SEK", "EUR"
      * @var string
      */
     public $currency;

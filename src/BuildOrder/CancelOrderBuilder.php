@@ -7,15 +7,20 @@ require_once SVEA_REQUEST_DIR . '/Includes.php';
  * CancelOrderBuilder is the class used to cancel an order with Svea, that has
  * not yet been delivered (invoice, payment plan) or been confirmed (card).
  * 
- * setOrderId() specifies the Svea order id to cancel, this must be the order id
- * returned with the create order doRequest response.
+ * Supports Invoice, Payment Plan and Card orders. For Direct Bank orders, @see
+ * CreditOrderBuilder instead.
  * 
- * usePaymentMethod() specifies the payment method used when creating the order.
+ * Use setOrderId() to specify the Svea order id, this is the order id returned 
+ * with the original create order request response.
  *
- * doRequest() will send the cancelOrder request to Svea, and the resulting 
- * response specifies the outcome of the request. 
+ * Use setCountryCode() to specify the country code matching the original create
+ * order request.
  * 
- * @TODO give response outcome details here
+ * Use either cancelInvoiceOrder(), cancelPaymentPlanOrder or cancelCardOrder,
+ * which ever matches the payment method used in the original order request.
+ *  
+ * The final doRequest() will send the cancelOrder request to Svea, and the 
+ * resulting response code specifies the outcome of the request. 
  * 
  * @author Kristian Grossman-Madsen for Svea Webpay
  */
@@ -23,18 +28,13 @@ class CancelOrderBuilder {
 
     /** ConfigurationProvider $conf  */
     public $conf;
-    /** string $countryCode */
-    public $countryCode;
-
-    /** string $orderId  Svea order id to cancel, as returned in the createOrder request response, either a transactionId or a SveaOrderId */
-    public $orderId;
-
+    
     public function __construct($config) {
          $this->conf = $config;
     }
 
     /**
-     * Required. The id of the order to cancel.
+     * Required. Use SveaOrderId recieved with createOrder response.
      * @param string $orderIdAsString
      * @return $this
      */
@@ -42,20 +42,23 @@ class CancelOrderBuilder {
         $this->orderId = $orderIdAsString;
         return $this;
     }
+    /** string $orderId  Svea order id to cancel, as returned in the createOrder request response, either a transactionId or a SveaOrderId */
+    public $orderId;
     
     /**
-     * Required. The countryCode of the order to cancel. 
-     * @todo check why this is needed, and see if can be done away with?
-     * @param string $countryAsString
+     * Required. Use same countryCode as in createOrder request.
+     * @param string $countryCode
      * @return $this
      */
-    public function setCountryCode($countryAsString) {
-        $this->countryCode = $countryAsString;
+    public function setCountryCode($countryCodeAsString) {
+        $this->countryCode = $countryCodeAsString;
         return $this;
     }
-    
+    /** @var string $countryCode */
+    public $countryCode;
+        
     /**
-     * Use closeInvoiceOrder() to close an Invoice order.
+     * Use cancelInvoiceOrder() to close an Invoice order.
      * @return CloseOrder
      */
     public function cancelInvoiceOrder() {
@@ -64,25 +67,24 @@ class CancelOrderBuilder {
     }
     
     /**
-     * Use closeInvoiceOrder() to close an Invoice order.
+     * Use cancelPaymentPlanOrder() to close a PaymentPlan order.
      * @return CloseOrder
      */
     public function cancelPaymentPlanOrder() {
         $this->orderType = \ConfigurationProvider::PAYMENTPLAN_TYPE;
-        return new CloseOrder($this);
+        return new CloseOrder($this);    
     }
     
+    /** @var string "Invoice" or "PaymentPlan" */
+    public $orderType;  
+
     /**
-     * Use closePaymentPlanOrder() to close a PaymentPlan order.
-     * @return CloseOrder
+     * Use cancelCardOrder() to close a Card order.
+     * @return AnnulTransaction
      */
     public function cancelCardOrder() {
         $this->orderType = \ConfigurationProvider::HOSTED_ADMIN_TYPE;
         $annulTransaction = new AnnulTransaction($this->conf);
         return $annulTransaction->setTransactionId($this->orderId)->setCountryCode($this->countryCode);
-    }
-    
-    /** @var string "Invoice" or "PaymentPlan" */
-    public $orderType;    
-    
+    }  
 }
