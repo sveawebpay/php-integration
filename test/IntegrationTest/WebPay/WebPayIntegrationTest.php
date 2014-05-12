@@ -11,28 +11,40 @@ require_once $root . '/../../TestUtil.php';
 class WebPayIntegrationTest extends PHPUnit_Framework_TestCase {
 
     // CreateOrderBuilder synchronous payment methods
-    public function test_CreateOrderBuilder_Invoice_Accepted() {
-        $country = "SE";
-        $order = TestUtil::createOrder( TestUtil::createIndividualCustomer($country) );
+    public function test_createOrder_Invoice_SE_Accepted() {
+        $order = WebPay::createOrder( Svea\SveaConfig::getDefaultConfig() )
+            ->addOrderRow( TestUtil::createOrderRow() )
+            ->addCustomerDetails( TestUtil::createIndividualCustomer("SE") )
+            ->setCountryCode("SE")
+            ->setCurrency("SEK")
+            ->setCustomerReference("created by TestUtil::createOrder()")
+            ->setClientOrderNumber( "clientOrderNumber:".date('c'))
+            ->setOrderDate( date('c') )
+        ;
         $response = $order->useInvoicePayment()->doRequest();
 
         $this->assertEquals(1, $response->accepted);
     }
     
-    public function _test_CreateOrderBuilder_Paymentplan_Accepted() {
-        $country = "SE";
-        $order = TestUtil::createOrder( TestUtil::createIndividualCustomer($country) )
+    public function test_createOrder_Paymentplan_SE_Accepted() {
+
+        $order = WebPay::createOrder( Svea\SveaConfig::getDefaultConfig() )
             ->addOrderRow( WebPayItem::orderRow()
                 ->setQuantity(1)
                 ->setAmountExVat(1000.00)
                 ->setVatPercent(25)
             )
+            ->addCustomerDetails( TestUtil::createIndividualCustomer("SE") )
+            ->setCountryCode("SE")
+            ->setCurrency("SEK")
+            ->setCustomerReference("created by TestUtil::createOrder()")
+            ->setClientOrderNumber( "clientOrderNumber:".date('c'))
+            ->setOrderDate( date('c') )
         ;
         $response = $order->usePaymentPlanPayment( TestUtil::getGetPaymentPlanParamsForTesting() )->doRequest();
 
         $this->assertEquals(1, $response->accepted);
     }    
     
-    // CreateOrderBuilder asynchronous payment methods   //TODO
-    
+    // CreateOrderBuilder asynchronous payment methods   //TODO    
 }
