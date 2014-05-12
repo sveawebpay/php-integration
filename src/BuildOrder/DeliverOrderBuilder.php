@@ -5,6 +5,13 @@ require_once 'OrderBuilder.php';
 require_once SVEA_REQUEST_DIR . '/Includes.php';
 
 /**
+ * 
+ * Invoice required methods: 
+ * ->addOrderRow( TestUtil::createOrderRow() )
+ * ->setCountryCode("SE")
+ * ->setOrderId( $orderId )
+ * ->setInvoiceDistributionType(\DistributionType::POST)
+ *
  * @author Kristian Grossman-Madsen, Anneli Halld'n, Daniel Brolund for Svea Webpay
  */
 class deliverOrderBuilder extends OrderBuilder {

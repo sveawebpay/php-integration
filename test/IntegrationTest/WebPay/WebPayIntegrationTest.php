@@ -10,6 +10,7 @@ require_once $root . '/../../TestUtil.php';
  */
 class WebPayIntegrationTest extends PHPUnit_Framework_TestCase {
 
+    /// WebPay::createOrder()
     // CreateOrderBuilder synchronous payment methods
     public function test_createOrder_Invoice_SE_Accepted() {
         $order = WebPay::createOrder( Svea\SveaConfig::getDefaultConfig() )
@@ -47,4 +48,29 @@ class WebPayIntegrationTest extends PHPUnit_Framework_TestCase {
     }    
     
     // CreateOrderBuilder asynchronous payment methods   //TODO    
+    
+    
+    /// WebPay::deliverOrder()
+    public function test_deliverOrder_Invoice_Accepted() {
+        
+        // create order, get orderid to deliver
+        $createOrderBuilder = TestUtil::createOrder();
+        $response = $createOrderBuilder->useInvoicePayment()->doRequest();
+
+        $this->assertEquals(1, $response->accepted);
+        
+        $orderId = $response->sveaOrderId;
+        
+        $deliverOrderBuilder = WebPay::deliverOrder( Svea\SveaConfig::getDefaultConfig() )
+                ->addOrderRow( TestUtil::createOrderRow() )
+                ->setCountryCode("SE")
+                ->setOrderId( $orderId )
+                ->setInvoiceDistributionType(\DistributionType::POST)
+        ;
+        
+        $response = $deliverOrderBuilder->deliverInvoiceOrder()->doRequest();
+
+        $this->assertEquals(1, $response->accepted);
+                
+    }
 }
