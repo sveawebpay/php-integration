@@ -12,6 +12,11 @@ require_once SVEA_REQUEST_DIR . '/Includes.php';
  * ->setOrderId( $orderId )
  * ->setInvoiceDistributionType(\DistributionType::POST)
  *
+ * PaymentPlan required methods:
+ * ->addOrderRow( TestUtil::createOrderRow() )
+ * ->setCountryCode("SE")
+ * ->setOrderId( $orderId )
+ * 
  * @author Kristian Grossman-Madsen, Anneli Halld'n, Daniel Brolund for Svea Webpay
  */
 class deliverOrderBuilder extends OrderBuilder {

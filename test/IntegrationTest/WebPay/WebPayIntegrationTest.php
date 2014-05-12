@@ -56,7 +56,6 @@ class WebPayIntegrationTest extends PHPUnit_Framework_TestCase {
         // create order, get orderid to deliver
         $createOrderBuilder = TestUtil::createOrder();
         $response = $createOrderBuilder->useInvoicePayment()->doRequest();
-
         $this->assertEquals(1, $response->accepted);
         
         $orderId = $response->sveaOrderId;
@@ -70,6 +69,44 @@ class WebPayIntegrationTest extends PHPUnit_Framework_TestCase {
         
         $response = $deliverOrderBuilder->deliverInvoiceOrder()->doRequest();
 
+        //print_r( $response );
+        $this->assertEquals(1, $response->accepted);
+                
+    }
+   
+    public function test_deliverOrder_PaymentPlan_Accepted() {
+        
+        $order = WebPay::createOrder( Svea\SveaConfig::getDefaultConfig() )
+            ->addOrderRow( WebPayItem::orderRow()
+                ->setQuantity(1)
+                ->setAmountExVat(1000.00)
+                ->setVatPercent(25)
+            )
+            ->addCustomerDetails( TestUtil::createIndividualCustomer("SE") )
+            ->setCountryCode("SE")
+            ->setCurrency("SEK")
+            ->setCustomerReference("created by TestUtil::createOrder()")
+            ->setClientOrderNumber( "clientOrderNumber:".date('c'))
+            ->setOrderDate( date('c') )
+        ;
+        $response = $order->usePaymentPlanPayment( TestUtil::getGetPaymentPlanParamsForTesting() )->doRequest();
+        $this->assertEquals(1, $response->accepted);
+        
+        $orderId = $response->sveaOrderId;
+
+        $deliverOrderBuilder = WebPay::deliverOrder( Svea\SveaConfig::getDefaultConfig() )
+            ->addOrderRow( WebPayItem::orderRow()
+                ->setQuantity(1)
+                ->setAmountExVat(1000.00)
+                ->setVatPercent(25)
+            )
+            ->setCountryCode("SE")
+            ->setOrderId( $orderId )
+        ;        
+        
+        $response = $deliverOrderBuilder->deliverPaymentPlanOrder()->doRequest();
+
+        //print_r( $response );
         $this->assertEquals(1, $response->accepted);
                 
     }
