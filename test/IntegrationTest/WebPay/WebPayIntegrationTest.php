@@ -11,7 +11,6 @@ require_once $root . '/../../TestUtil.php';
 class WebPayIntegrationTest extends PHPUnit_Framework_TestCase {
 
     /// WebPay::createOrder()
-    // CreateOrderBuilder synchronous payment methods
     public function test_createOrder_Invoice_SE_Accepted() {
         $order = WebPay::createOrder( Svea\SveaConfig::getDefaultConfig() )
             ->addOrderRow( TestUtil::createOrderRow() )
@@ -47,9 +46,11 @@ class WebPayIntegrationTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(1, $response->accepted);
     }    
     
-    // CreateOrderBuilder asynchronous payment methods   //TODO    
-    
-    
+    // CreateOrderBuilder card payment method
+    // see CardPaymentURLIntegrationTest->test_manual_CardPayment_getPaymentURL()
+        
+    // CreateOrderBuilder direct bank payment method   //TODO    
+       
     /// WebPay::deliverOrder()
     public function test_deliverOrder_Invoice_Accepted() {
         
@@ -107,7 +108,6 @@ class WebPayIntegrationTest extends PHPUnit_Framework_TestCase {
         $response = $deliverOrderBuilder->deliverPaymentPlanOrder()->doRequest();
 
         //print_r( $response );
-        $this->assertEquals(1, $response->accepted);
-                
+        $this->assertEquals(1, $response->accepted);                
     }
 }
