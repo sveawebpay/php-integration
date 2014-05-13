@@ -50,11 +50,12 @@ class CancelOrderRequest extends AdminServiceRequest {
     }
     
     private function validateOrderId($errors) {
-        if (isset($this->orderBuilder->sveaOrderId) == FALSE) {                                                        
-            $errors['missing value'] = "sveaOrderId is required.";
+        if (isset($this->orderBuilder->orderId) == FALSE) {                                                        
+            $errors['missing value'] = "orderId is required.";
         }
         return $errors;
-    }               
+    }
+    
     private function validateOrderType($errors) {
         if (isset($this->orderBuilder->orderType) == FALSE) {                                                        
             $errors['missing value'] = "orderType is required.";
