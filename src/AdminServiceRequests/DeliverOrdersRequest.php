@@ -22,43 +22,57 @@ class DeliverOrdersRequest extends AdminServiceRequest {
     }    
 
     /**
-     * populate and return soap request contents
-     * @return Svea\AdminSoap\CancelOrderRequest
+     * populate and return soap request contents using AdminSoap helper classes to get the correct data format
+     * @return Svea\AdminSoap\DeliverOrderRequest
      */    
     public function prepareRequest() {        
         
         $this->validateRequest();
         
-//        $soapRequest = new AdminSoap\DeliverOrderRequest( 
-//                new AdminSoap\Authentication( 
-//                    $this->orderBuilder->conf->username, 
-//                    $this->orderBuilder->conf->password 
-//                ),
-//                $this->orderBuilder->sveaOrderId, 
-//                $this->orderBuilder->orderType,
-//                $this->orderBuilder->conf->clientId 
-//        );
-        
+        $soapRequest = new AdminSoap\DeliverOrdersRequest( 
+            new AdminSoap\Authentication( 
+                $this->orderBuilder->conf->getUsername( strtoupper($this->orderBuilder->orderType), $this->orderBuilder->countryCode ), 
+                $this->orderBuilder->conf->getPassword( strtoupper($this->orderBuilder->orderType), $this->orderBuilder->countryCode ) 
+            ),
+            $this->orderBuilder->distributionType,
+            new AdminSoap\OrdersToDeliver(
+                new AdminSoap\DeliverOrderInformation(
+                    $this->orderBuilder->conf->getClientNumber( strtoupper($this->orderBuilder->orderType), $this->orderBuilder->countryCode ),
+                    $this->orderBuilder->orderType,
+                    $this->orderBuilder->orderId
+                )
+            )
+        );
+                
         return $soapRequest;
     }
         
     public function validate() {
         $errors = array();
-//        $errors = $this->validateOrderId($errors);
-//        $errors = $this->validateOrderType($errors);
+        $errors = $this->validateDistributionType($errors);
+        $errors = $this->validateOrderId($errors);
+        $errors = $this->validateOrderType($errors);
         return $errors;
     }
     
-//    private function validateOrderId($errors) {
-//        if (isset($this->orderBuilder->sveaOrderId) == FALSE) {                                                        
-//            $errors['missing value'] = "sveaOrderId is required.";
-//        }
-//        return $errors;
-//    }               
-//    private function validateOrderType($errors) {
-//        if (isset($this->orderBuilder->orderType) == FALSE) {                                                        
-//            $errors['missing value'] = "orderType is required.";
-//        }
-//        return $errors;
-//    }                     
+    private function validateDistributionType($errors) {
+        if (isset($this->orderBuilder->distributionType) == FALSE) {                                                        
+            $errors['missing value'] = "distributionType is required.";
+        }
+        return $errors;
+    }    
+    
+    private function validateOrderId($errors) {
+        if (isset($this->orderBuilder->orderId) == FALSE) {                                                        
+            $errors['missing value'] = "orderId is required.";
+        }
+        return $errors;
+    }               
+
+    private function validateOrderType($errors) {
+        if (isset($this->orderBuilder->orderType) == FALSE) {                                                        
+            $errors['missing value'] = "orderType is required.";
+        }
+        return $errors;
+    }                     
 }        

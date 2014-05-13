@@ -6,7 +6,7 @@ require_once $root . '/../../../src/Includes.php';
 /**
  * @author Kristian Grossman-Madsen for Svea Webpay
  */
-class AdminServiceRequestIntegrationTest extends PHPUnit_Framework_TestCase{
+class CancelOrderRequestIntegrationTest extends PHPUnit_Framework_TestCase{
 
     /**
      * 1. create an Invoice|PaymentPlan order
@@ -14,27 +14,22 @@ class AdminServiceRequestIntegrationTest extends PHPUnit_Framework_TestCase{
      * 3. run the test
      */
     public function test_manual_CancelOrderRequest() {
-        
-        $username = "sverigetest";
-        $password = "sverigetest";
-        $clientid = 79021;
-        
-        $orderType = "Invoice";
-        $sveaOrderIdToClose = 344807;
-        
-        $config = new stdClass();
-        $config->username = $username;
-        $config->password = $password;
-        $config->clientId = $clientid;
-        $config->endpoint = "https://partnerweb.sveaekonomi.se/WebPayAdminService_Test/AdminService.svc/backward";
 
+        // Stop here and mark this test as incomplete.
+        $this->markTestIncomplete(
+            'skeleton for test_manual_CancelOrderRequest' // TODO
+        );
                 
-        $mockedBuilder = new StdClass();
-        $mockedBuilder->conf = $config;
-        $mockedBuilder->sveaOrderId = $sveaOrderIdToClose;
-        $mockedBuilder->orderType = $orderType;
+        $countryCode = "SE";
+        $sveaOrderIdToClose = 346808;        
+        $orderType = "Invoice"; // TODO -- \ConfigurationProvider::INVOICE_TYPE is "INVOICE", need to be "Invoice"
         
-        $request = new Svea\CancelOrderRequest( $mockedBuilder );
+        $cancelOrderBuilder = new Svea\CancelOrderBuilder( Svea\SveaConfig::getDefaultConfig() );
+        $cancelOrderBuilder->setCountryCode( $countryCode );
+        $cancelOrderBuilder->setOrderId( $sveaOrderIdToClose );
+        $cancelOrderBuilder->orderType = $orderType;
+        
+        $request = new Svea\CancelOrderRequest( $cancelOrderBuilder );
         $response = $request->doRequest();
         
         //print_r( $response );        

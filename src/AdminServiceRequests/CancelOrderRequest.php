@@ -31,12 +31,12 @@ class CancelOrderRequest extends AdminServiceRequest {
         
         $soapRequest = new AdminSoap\CancelOrderRequest( 
                 new AdminSoap\Authentication( 
-                    $this->orderBuilder->conf->username, 
-                    $this->orderBuilder->conf->password 
+                    $this->orderBuilder->conf->getUsername( strtoupper($this->orderBuilder->orderType), $this->orderBuilder->countryCode ), 
+                    $this->orderBuilder->conf->getPassword( strtoupper($this->orderBuilder->orderType), $this->orderBuilder->countryCode ) 
                 ),
-                $this->orderBuilder->sveaOrderId, 
+                $this->orderBuilder->orderId, 
                 $this->orderBuilder->orderType,
-                $this->orderBuilder->conf->clientId 
+                $this->orderBuilder->conf->getClientNumber( strtoupper($this->orderBuilder->orderType), $this->orderBuilder->countryCode )
         );
         
         return $soapRequest;
