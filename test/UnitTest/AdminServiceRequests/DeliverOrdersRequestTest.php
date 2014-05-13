@@ -15,12 +15,13 @@ class DeliverOrdersRequestTest extends \PHPUnit_Framework_TestCase {
     public $builderObject;
     
     public function setUp() {        
-        $this->builderObject = new deliverOrdersBuilder(SveaConfig::getDefaultConfig());  
+        $this->builderObject = new deliverOrderBuilder(SveaConfig::getDefaultConfig());  
 //        $this->builderObject->setOrderId(123456);
     }
     
     public function testClassExists() {
-        $deliverOrdersRequestObject = new DeliverOrdersRequest( new deliverOrdersBuilder(SveaConfig::getDefaultConfig() ) );
+        $deliverOrderBuilder = new deliverOrderBuilder( SveaConfig::getDefaultConfig() );        
+        $deliverOrdersRequestObject = new DeliverOrdersRequest( $deliverOrderBuilder );
         $this->assertInstanceOf('Svea\DeliverOrdersRequest', $deliverOrdersRequestObject);
     }
     

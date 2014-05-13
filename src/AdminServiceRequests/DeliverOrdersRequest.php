@@ -29,7 +29,7 @@ class DeliverOrdersRequest extends AdminServiceRequest {
         
         $this->validateRequest();
         
-//        $soapRequest = new AdminSoap\CancelOrderRequest( 
+//        $soapRequest = new AdminSoap\DeliverOrderRequest( 
 //                new AdminSoap\Authentication( 
 //                    $this->orderBuilder->conf->username, 
 //                    $this->orderBuilder->conf->password 
@@ -42,13 +42,13 @@ class DeliverOrdersRequest extends AdminServiceRequest {
         return $soapRequest;
     }
         
-//    public function validate() {
-//        $errors = array();
+    public function validate() {
+        $errors = array();
 //        $errors = $this->validateOrderId($errors);
 //        $errors = $this->validateOrderType($errors);
-//        return $errors;
-//    }
-//    
+        return $errors;
+    }
+    
 //    private function validateOrderId($errors) {
 //        if (isset($this->orderBuilder->sveaOrderId) == FALSE) {                                                        
 //            $errors['missing value'] = "sveaOrderId is required.";
