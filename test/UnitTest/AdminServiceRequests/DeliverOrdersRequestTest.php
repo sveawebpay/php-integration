@@ -16,33 +16,49 @@ class DeliverOrdersRequestTest extends \PHPUnit_Framework_TestCase {
     
     public function setUp() {        
         $this->builderObject = new deliverOrderBuilder(SveaConfig::getDefaultConfig());  
-//        $this->builderObject->setOrderId(123456);
+        $this->builderObject->setOrderId(123456);
+        $this->builderObject->setInvoiceDistributionType(\DistributionType::POST);        
+        $this->builderObject->orderType = \ConfigurationProvider::INVOICE_TYPE;                                                        
     }
     
     public function testClassExists() {
-        $deliverOrderBuilder = new deliverOrderBuilder( SveaConfig::getDefaultConfig() );        
-        $deliverOrdersRequestObject = new DeliverOrdersRequest( $deliverOrderBuilder );
+        $deliverOrdersRequestObject = new DeliverOrdersRequest(new deliverOrderBuilder(SveaConfig::getDefaultConfig()));
         $this->assertInstanceOf('Svea\DeliverOrdersRequest', $deliverOrdersRequestObject);
     }
     
-    /**
-     * @expectedException Svea\ValidationException 
-     * @expectedExceptionMessage -missing value: sveaOrderId is required. Use function setSveaOrderId().
-     */
-//    public function test_validate_throws_exception_on_missing_OrderId() {
-//        unset( $this->builderObject->sveaOrderId );
-//
-//        $cancelOrderRequestObject = new CancelOrderRequest( $this->builderObject );
-//        $request = $cancelOrderRequestObject->prepareRequest();
-//    }
-    /**
-     * @expectedException Svea\ValidationException 
-     * @expectedExceptionMessage -missing value: orderType is required.
-     */
-//    public function test_validate_throws_exception_on_missing_OrderType() {
-//        unset( $this->builderObject->orderType );
-//
-//        $cancelOrderRequestObject = new CancelOrderRequest( $this->builderObject );
-//        $request = $cancelOrderRequestObject->prepareRequest();
-//    }      
+    public function test_validate_throws_exception_on_missing_DistributionType() {
+
+        $this->setExpectedException(
+          'Svea\ValidationException', '-missing value : distributionType is required.'
+        );
+        
+        unset( $this->builderObject->distributionType );
+
+        $deliverOrderRequestObject = new DeliverOrdersRequest( $this->builderObject );
+        $request = $deliverOrderRequestObject->prepareRequest();
+    }
+    
+    public function test_validate_throws_exception_on_missing_OrderId() {
+
+        $this->setExpectedException(
+          'Svea\ValidationException', '-missing value : orderId is required.'
+        );
+        
+        unset( $this->builderObject->orderId );
+
+        $deliverOrderRequestObject = new DeliverOrdersRequest( $this->builderObject );
+        $request = $deliverOrderRequestObject->prepareRequest();
+    }
+
+    public function test_validate_throws_exception_on_missing_OrderType() {
+        
+        $this->setExpectedException(
+          'Svea\ValidationException', '-missing value : orderType is required.'
+        );
+        
+        unset( $this->builderObject->orderType );
+
+        $deliverOrderRequestObject = new DeliverOrdersRequest( $this->builderObject );
+        $request = $deliverOrderRequestObject->prepareRequest();
+    }      
 }
