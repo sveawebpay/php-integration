@@ -7,7 +7,7 @@ include_once SVEA_REQUEST_DIR . "/Includes.php";
  * WebPayAdmin provides entrypoints to the various administrative functions 
  * provided by Svea.
  * 
- * @version 2.0.0
+ * @version 2.0b
  * @author Kristian Grossman-Madsen for Svea WebPay
  * @package WebPay
  * @api 
