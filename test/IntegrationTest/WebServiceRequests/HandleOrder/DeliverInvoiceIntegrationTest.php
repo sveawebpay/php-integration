@@ -75,21 +75,23 @@ class DeliverInvoiceIntegrationTest extends PHPUnit_Framework_TestCase {
 
     /**
      * @expectedException Svea\ValidationException
+     * 
+     * bypasses WebPay::deliverOrders, as 2.0 allows deliverOrder w/o orderRows
      */ 
-    public function testDeliverInvoiceOrder_missing_addOrderRow_throws_ValidationException() {
+    public function test_DeliverInvoice_missing_addOrderRow_throws_ValidationException() {
         $config = Svea\SveaConfig::getDefaultConfig();
         $orderId = $this->getInvoiceOrderId();
-        $orderBuilder = WebPay::deliverOrder($config);
-        $request = $orderBuilder
+        $orderBuilder = new \Svea\deliverOrderBuilder($config);
+        $orderBuilder = $orderBuilder
                 //->addOrderRow(TestUtil::createOrderRow())
                 ->setOrderId($orderId)
                 ->setNumberOfCreditDays(1)
                 ->setCountryCode("SE")
                 ->setInvoiceDistributionType('Post')//Post or Email
-                ->deliverInvoiceOrder()
-                    ->doRequest();
-    }         
-    
+        ;
+        $deliverInvoiceObject = new \Svea\DeliverInvoice( $orderBuilder );
+        $response = $deliverInvoiceObject->doRequest();                
+    }
     /**
      * @expectedException Svea\ValidationException
      */ 

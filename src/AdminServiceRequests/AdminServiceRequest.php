@@ -9,6 +9,8 @@ require_once SVEA_REQUEST_DIR . '/Includes.php';
  * @author Kristian Grossman-Madsen
  */
 abstract class AdminServiceRequest {
+    
+    const ADMIN_SERVICE_TEST = "https://partnerweb.sveaekonomi.se/WebPayAdminService_test/AdminService.svc/backward";   // TODO add to ConfigurationProvider
 
     /** @var string $action  the AdminService soap action called by this class */
     protected $action; 
@@ -17,15 +19,14 @@ abstract class AdminServiceRequest {
     protected $countryCode; 
           
     /**
-     * Prepare and send request to Svea admin service using AdminSoap helpers
+     * Set up the soap client and perform the soap call, with the soap action and prepared request from the relevant subclass 
      * @return StdClass  raw response @todo
      */
-    public function doRequest() {
-        $soapRequest = $this->prepareRequest();
-        
-        $soapClient = new AdminSoap\SoapClient( $this->orderBuilder->conf->endpoint );
-        $response = $soapClient->doSoapCall($this->action, $soapRequest );
-        return $response;        
+    public function doRequest() { 
+        $soapClient = new AdminSoap\SoapClient( AdminServiceRequest::ADMIN_SERVICE_TEST );
+        $soapResponse = $soapClient->doSoapCall($this->action, $this->prepareRequest() );     
+        $sveaResponse = new \SveaResponse( $soapResponse, null, null, $this->action );
+        return $sveaResponse->getResponse();        
     }
     
     /**
@@ -49,5 +50,7 @@ abstract class AdminServiceRequest {
         }    
     }       
 
+    abstract function prepareRequest(); // prepare the soap request data
+    
     abstract function validate(); // validate is defined by subclasses, should validate all elements required for call is present
 }

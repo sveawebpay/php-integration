@@ -43,9 +43,13 @@ class SveaResponse {
      * @return mixed instance of a subclass to HostedResponse or WebServiceResponse, respectively
      */
     public function __construct($message, $countryCode, $config = NULL, $method = NULL) {
-
+        
+        // WebService requests get a stdClass object back from the SoapClient instance
         if (is_object($message)) {
+
+            // TODO fix it so that these too look at $method instead of using property_exists()
             
+            // Web Service EU responses
             if (property_exists($message, "CreateOrderEuResult")) {
                 $this->response = new Svea\CreateOrderResponse($message);
             } 
@@ -62,9 +66,15 @@ class SveaResponse {
                 $this->response = new Svea\CloseOrderResult($message);
             }
             
-            // @param string $method  set for HostedAdminRequests, indicates the request method used
-            elseif( isset($method) ) {
+            elseif( isset($method) ) {                
                 switch( $method ) {
+
+                    // $method is set for Admin Web Service requests
+                    case "DeliverOrders":
+                        $this->response = new Svea\DeliverOrdersResponse( $message );
+                        break;
+                    
+                    // $method is set for HostedAdminRequests, indicates the request method used                    
                     case "querytransactionid":
                         $this->response = new Svea\QueryTransactionResponse($message, $countryCode, $config);
                         break;

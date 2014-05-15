@@ -5,6 +5,24 @@ require_once 'OrderBuilder.php';
 require_once SVEA_REQUEST_DIR . '/Includes.php';
 
 /**
+ * 
+ * Invoice required methods: 
+ * ->addOrderRow( TestUtil::createOrderRow() )
+ * ->setCountryCode("SE")
+ * ->setOrderId( $orderId )
+ * ->setInvoiceDistributionType(\DistributionType::POST)
+ *
+ * PaymentPlan required methods:
+ * ->addOrderRow( TestUtil::createOrderRow() )
+ * ->setCountryCode("SE")
+ * ->setOrderId( $orderId )
+ * 
+ * Card required methods:
+ * ->setOrderId( $orderId )
+ * ->setCountryCode("SE")
+ * Card optional methods:
+ * ->setCaptureDate( $orderId )
+ *  
  * @author Kristian Grossman-Madsen, Anneli Halld'n, Daniel Brolund for Svea Webpay
  */
 class deliverOrderBuilder extends OrderBuilder {
@@ -14,15 +32,26 @@ class deliverOrderBuilder extends OrderBuilder {
      * This is the link between deliverOrder and createOrder.
      * @var Order id
      */
-    public $orderId;
-    
+    public $orderId;    
 
     public function __construct($config) {
         parent::__construct($config);
     }
 
     /**
-     * Required.
+     * @deprecated 2.0.0 Use WebPayAdmin::UpdateOrder to modify or partially deliver an order.
+     * 
+     * 1.x: Required. Use setOrderRos to add order rows to deliver. Rows matching 
+     * the original create order request order rows will be invoiced by Svea. 
+     * 
+     * If not all order rows match, the order will be partially delivered/invoiced, 
+     * see the Svea Web Service EU API documentation for details.
+     */
+    public function addOrderRow($itemOrderRowObject) {
+        return parent::addOrderRow($itemOrderRowObject);
+    }
+
+    /* Required. Set order id of the order you wish to deliver.
      * @param string $orderIdAsString
      * @return $this
      */
@@ -83,14 +112,25 @@ class deliverOrderBuilder extends OrderBuilder {
     /** @var int $numberOfCreditDays */
     public $numberOfCreditDays;
 
+    
     /**
-     * deliverInvoiceOrder updates the Invoice order with additional information and prepares it for delivery.
-     * The method will automatically match all order rows that are to be delivered to those rows that was sent when creating the Invoice order.
+     * To ensure backwards compatibility, deliverInvoiceOrder() checks if the 
+     * order has any order rows defined, if so performs a DeliverOrderEU request
+     * to Svea, passing on the order rows.
+     * 
+     * If no order rows are defined, it performs av DeliverOrders request using
+     * the Admin Web Service API at Svea.
+     * 
      * @return DeliverInvoice
      */
     public function deliverInvoiceOrder() {
-        $this->orderType = "Invoice";
-        return new DeliverInvoice($this);
+        if( count($this->orderRows) >0 ) {
+            return new DeliverInvoice($this);
+        }
+        else {
+            $this->orderType = "Invoice";
+            return new DeliverOrdersRequest($this);
+        }
     }
 
     /**
@@ -98,10 +138,28 @@ class deliverOrderBuilder extends OrderBuilder {
      * @return DeliverPaymentPlan
      */
     public function deliverPaymentPlanOrder() {
-        $this->orderType = "PaymentPlan";
         return new DeliverPaymentPlan($this);
     }
-    /** @var string orderType  one of "Invoice" or "PaymentPlan" @todo check if there is an orderType constant?? */
+    /** @var string orderType  one of "Invoice" or "PaymentPlan"*/
     public $orderType;
-    
+
+    /**
+     * deliverCardOrder() sets the status of a card order to CONFIRMED.
+     * A default capturedate equal to the current date will be supplied. This 
+     * may be overridden using the ConfirmTransaction setCaptureDate() method 
+     * @return DeliverPaymentPlan
+     */
+    public function deliverCardOrder() {        
+        $this->orderType = \ConfigurationProvider::HOSTED_TYPE;
+        
+        $defaultCaptureDate = explode("T", date('c')); // [0] contains date part
+
+        $confirmTransaction = new ConfirmTransaction($this->conf);
+        $confirmTransaction
+            ->setCountryCode($this->countryCode)
+            ->setTransactionId($this->orderId)
+            ->setCaptureDate($defaultCaptureDate[0])
+        ;
+        return $confirmTransaction;
+    }    
 }

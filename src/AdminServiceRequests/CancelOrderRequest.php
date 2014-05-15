@@ -31,12 +31,12 @@ class CancelOrderRequest extends AdminServiceRequest {
         
         $soapRequest = new AdminSoap\CancelOrderRequest( 
                 new AdminSoap\Authentication( 
-                    $this->orderBuilder->conf->username, 
-                    $this->orderBuilder->conf->password 
+                    $this->orderBuilder->conf->getUsername( strtoupper($this->orderBuilder->orderType), $this->orderBuilder->countryCode ), 
+                    $this->orderBuilder->conf->getPassword( strtoupper($this->orderBuilder->orderType), $this->orderBuilder->countryCode ) 
                 ),
-                $this->orderBuilder->sveaOrderId, 
+                $this->orderBuilder->orderId, 
                 $this->orderBuilder->orderType,
-                $this->orderBuilder->conf->clientId 
+                $this->orderBuilder->conf->getClientNumber( strtoupper($this->orderBuilder->orderType), $this->orderBuilder->countryCode )
         );
         
         return $soapRequest;
@@ -50,11 +50,12 @@ class CancelOrderRequest extends AdminServiceRequest {
     }
     
     private function validateOrderId($errors) {
-        if (isset($this->orderBuilder->sveaOrderId) == FALSE) {                                                        
-            $errors['missing value'] = "sveaOrderId is required.";
+        if (isset($this->orderBuilder->orderId) == FALSE) {                                                        
+            $errors['missing value'] = "orderId is required.";
         }
         return $errors;
-    }               
+    }
+    
     private function validateOrderType($errors) {
         if (isset($this->orderBuilder->orderType) == FALSE) {                                                        
             $errors['missing value'] = "orderType is required.";

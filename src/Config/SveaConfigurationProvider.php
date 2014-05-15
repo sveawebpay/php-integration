@@ -83,7 +83,7 @@ class SveaConfigurationProvider implements \ConfigurationProvider {
     public function getEndPoint($type) {
         $uType = strtoupper($type);
         if (array_key_exists($uType,$this->conf['url']) == FALSE) {
-            $this->throwInvalidTypeException();
+            $this->throwInvalidTypeException( $type );
         }
         return $this->conf['url'][$uType];
     }
@@ -119,9 +119,10 @@ class SveaConfigurationProvider implements \ConfigurationProvider {
     /**
      * @throws InvalidTypeException
      */
-    private function throwInvalidTypeException() {
+    private function throwInvalidTypeException( $invalid_type ) {
         throw new InvalidTypeException(sprintf(
-            'Invalid type. Accepted values: %s, %s or %s',
+            'Invalid type \"%s\". Accepted values: %s, %s, %s or %s',
+            $invalid_type,
             \ConfigurationProvider::INVOICE_TYPE,
             \ConfigurationProvider::PAYMENTPLAN_TYPE,
             \ConfigurationProvider::HOSTED_TYPE,

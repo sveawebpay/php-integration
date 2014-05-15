@@ -17,6 +17,7 @@ class CancelOrderRequestTest extends \PHPUnit_Framework_TestCase {
     public function setUp() {        
         $this->builderObject = new cancelOrderBuilder(SveaConfig::getDefaultConfig());  
         $this->builderObject->setOrderId(123456);
+        $this->builderObject->orderType = \ConfigurationProvider::INVOICE_TYPE;                                                        
     }
     
     public function testClassExists() {
@@ -24,23 +25,24 @@ class CancelOrderRequestTest extends \PHPUnit_Framework_TestCase {
         $this->assertInstanceOf('Svea\CancelOrderRequest', $cancelOrderRequestObject);
     }
     
-    /**
-     * @expectedException Svea\ValidationException 
-     * @expectedExceptionMessage -missing value: sveaOrderId is required. Use function setSveaOrderId().
-     */
     public function test_validate_throws_exception_on_missing_OrderId() {
-        unset( $this->builderObject->sveaOrderId );
 
+        $this->setExpectedException(
+          'Svea\ValidationException', '-missing value : orderId is required.'
+        );
+        
+        unset( $this->builderObject->orderId );
         $cancelOrderRequestObject = new CancelOrderRequest( $this->builderObject );
         $request = $cancelOrderRequestObject->prepareRequest();
     }
-    /**
-     * @expectedException Svea\ValidationException 
-     * @expectedExceptionMessage -missing value: orderType is required.
-     */
-    public function test_validate_throws_exception_on_missing_OrderType() {
-        unset( $this->builderObject->orderType );
 
+    public function test_validate_throws_exception_on_missing_OrderType() {
+        
+        $this->setExpectedException(
+          'Svea\ValidationException', '-missing value : orderType is required.'
+        );
+               
+        unset( $this->builderObject->orderType );
         $cancelOrderRequestObject = new CancelOrderRequest( $this->builderObject );
         $request = $cancelOrderRequestObject->prepareRequest();
     }      

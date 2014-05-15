@@ -4,8 +4,13 @@ namespace Svea;
 require_once 'HandleOrder.php';
 
 /**
- * Update Created Invoiceorder with additional information and prepare it for delivery.
- * @author Anneli Halld'n, Daniel Brolund for Svea Webpay
+ * DeliverInvoice sets up a DeliverOrderEU request, using information from the
+ * provided deliverOrderBuilder object. If all provided order rows match the
+ * order rows from the corresponding createOrderEU request the order is invoiced
+ * in full by Svea. If not, the order will be partially delivered. See further
+ * the Svea Web Service EU API.
+ * 
+ * @author Anneli Halld'n, Daniel Brolund, Kristian Grossman-Madsen for Svea Webpay
  */
 class DeliverInvoice extends HandleOrder {
 
@@ -13,6 +18,8 @@ class DeliverInvoice extends HandleOrder {
      * @param DeliverOrderBuilder $deliverOrderBuilder
      */
     public function __construct($deliverOrderBuilder) {
+        $deliverOrderBuilder->orderType = "Invoice";       // todo change to use ConfigurationProvider constants
+
         parent::__construct($deliverOrderBuilder);
     }
     
@@ -65,12 +72,20 @@ class DeliverInvoice extends HandleOrder {
 
     public function validate($order) {
         $errors = array();
+        $errors = $this->validateCountryCode($order, $errors);
         $errors = $this->validateOrderId($order, $errors);
         $errors = $this->validateInvoiceDetails($order, $errors);
         $errors = $this->validateOrderRows($order, $errors);
         return $errors;
     }
 
+    private function validateCountryCode($order, $errors) {
+        if (isset($order->countryCode) == FALSE) {
+            $errors['missing value'] = "CountryCode is required. Use function setCountryCode().";
+        }
+        return $errors;
+    }    
+    
     private function validateOrderId($order, $errors) {
         if (isset($order->orderId) == FALSE) {
             $errors['missing value'] = "OrderId is required. Use function setOrderId() with the SveaOrderId from the createOrder response.";
