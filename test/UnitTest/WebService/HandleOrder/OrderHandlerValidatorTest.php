@@ -50,14 +50,20 @@ class OrderHandlerValidatorTest extends PHPUnit_Framework_TestCase {
     /**
      * @expectedException Svea\ValidationException
      * @expectedExceptionMessage No rows has been included. Use function beginOrderRow(), beginShippingfee() or beginInvoiceFee().
+     * 
+     * 2.0 goes directly to DeliverInvoice
      */
     public function testFailOnMissingOrderRowsOnInvoiceDeliver() {
         $config = Svea\SveaConfig::getDefaultConfig();
-        $builder = WebPay::deliverOrder($config);
-        $object = $builder
-                ->setOrderId('id')
-                ->setInvoiceDistributionType('Post')
-                ->deliverInvoiceOrder();
+        $builder = new \Svea\deliverOrderBuilder($config);
+        $builder
+            ->setOrderId('id')
+            ->setInvoiceDistributionType('Post')
+        ;        
+        $object = new \Svea\DeliverInvoice( $builder );
         $object->prepareRequest();
     }
+
+    
+    
 }

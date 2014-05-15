@@ -19,6 +19,7 @@ class DeliverOrderResult extends WebServiceResponse{
     protected function formatObject($message) {
         $this->accepted = $message->DeliverOrderEuResult->Accepted;
         $this->resultcode = $message->DeliverOrderEuResult->ResultCode;
+
         if ($this->accepted == 1) {
             $this->amount = $message->DeliverOrderEuResult->DeliverOrderResult->Amount;
             $this->orderType = $message->DeliverOrderEuResult->DeliverOrderResult->OrderType;

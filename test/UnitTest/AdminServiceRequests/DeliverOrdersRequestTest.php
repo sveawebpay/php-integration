@@ -17,6 +17,7 @@ class DeliverOrdersRequestTest extends \PHPUnit_Framework_TestCase {
     public function setUp() {        
         $this->builderObject = new deliverOrderBuilder(SveaConfig::getDefaultConfig());  
         $this->builderObject->setOrderId(123456);
+        $this->builderObject->setCountryCode("SE");
         $this->builderObject->setInvoiceDistributionType(\DistributionType::POST);        
         $this->builderObject->orderType = \ConfigurationProvider::INVOICE_TYPE;                                                        
     }

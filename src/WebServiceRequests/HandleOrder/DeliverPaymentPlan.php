@@ -11,6 +11,7 @@ class DeliverPaymentPlan extends HandleOrder {
      * @param type $order
      */
     public function __construct($order) {
+        $order->orderType = "PaymentPlan";   // todo change to use ConfigurationProvider constants
         parent::__construct($order);
     }
 

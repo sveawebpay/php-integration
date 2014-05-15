@@ -24,8 +24,9 @@ abstract class AdminServiceRequest {
      */
     public function doRequest() { 
         $soapClient = new AdminSoap\SoapClient( AdminServiceRequest::ADMIN_SERVICE_TEST );
-        $response = $soapClient->doSoapCall($this->action, $this->prepareRequest() );
-        return $response;        
+        $soapResponse = $soapClient->doSoapCall($this->action, $this->prepareRequest() );     
+        $sveaResponse = new \SveaResponse( $soapResponse, null, null, $this->action );
+        return $sveaResponse->getResponse();        
     }
     
     /**
