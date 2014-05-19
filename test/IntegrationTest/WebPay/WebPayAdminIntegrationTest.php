@@ -76,6 +76,6 @@ class WebPayAdminIntegrationTest extends PHPUnit_Framework_TestCase {
         
         $this->assertEquals( 1, $response->accepted );        
         $this->assertEquals( $customerrefno, $response->customerrefno );  
-    }   
-
+    }       
+    
 }

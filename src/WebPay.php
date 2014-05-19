@@ -35,7 +35,7 @@ include_once SVEA_REQUEST_DIR . "/Includes.php";
  * 
  * WebPay:: 
  *   createOrder  -- create order and pay via invoice, payment plan, card, or direct bank payment methods
- *   deliverOrder (with orderRows)-- partially deliver, change or credit invoice, payment plan orders depending on set options
+ *   (deliverOrder) (with orderRows)-- partially deliver, change or credit invoice, payment plan orders depending on set options
  *   *deliverOrder (without orderRows) -- deliver in full invoice, payment plan orders, confirms card orders 
  *   (closeOrder) -- cancel non-delivered invoice or payment plan
  *   getAddresses -- fetch addresses connected with a provided customer identity
@@ -44,10 +44,11 @@ include_once SVEA_REQUEST_DIR . "/Includes.php";
  *   getPaymentPlanPricePerMonth -- calculates price per month over all available campaigns for a specified amount 
  * 
  * WebPayAdmin:: 
- *   cancelOrder -- cancel non-delivered invoice or payment plan orders, or annul non-confirmed card orders
- *   **creditOrder -- credit delivered invoice or payment plan orders, or credit confirmed card orders
- *   **updateOrder -- change order row contents of a non-delivered invoice or payment plan order, or lower amount of non-confirmed card orders
+ *   cancelOrder -- cancel in whole non-delivered invoice or payment plan orders, or annul non-confirmed card orders
  *   **queryOrder -- get information about an order
+ *   **queryOrderRows -- get the current status of the numbered order rows in an order
+ *   **creditOrderRows -- credit delivered invoice or payment plan order order rows, or credit confirmed card orders
+ *   **updateOrderRows -- update non-delivered invoice or payment plan order order rows, or lower amount to charge for non-confirmed card orders
  *   **listPaymentMethods -- WPA equivalent of WP::getPaymentMethods
  * 
  * The following methods are provided in WebPayAdmin as a stopgap measure to perform administrative functions for card orders.
@@ -170,23 +171,7 @@ class WebPay {
 
         return new Svea\deliverOrderBuilder($config);
     }
-    
-//    /**
-//     * Query information about an order. Supports Card and Directbank orders.
-//     * Use the follwing methods:
-//     * ->setOrderId( transactionId ) from createOrder request response
-//     * ->setCountryCode() 
-//     * @todo fix rest of documentation
-//     * 
-//     * @param ConfigurationProvider $config  instance of implementation class of ConfigurationProvider Interface
-//     * @return Svea\QueryTransaction
-//     * @throws Exception
-//     */
-//    public static function queryOrder( $config = NULL ) {
-//        if( $config == NULL ) { WebPay::throwMissingConfigException(); }
-//        return new Svea\QueryOrderBuilder($config);
-//    }
-    
+        
     /**
      * Start building Request to close orders. Only supports Invoice or Payment plan orders.
      * @return Svea\closeOrderBuilder object
