@@ -23,27 +23,25 @@ class GetOrdersRequest extends AdminServiceRequest {
 
     /**
      * populate and return soap request contents using AdminSoap helper classes to get the correct data format
-     * @return Svea\AdminSoap\DeliverOrderRequest
+     * @return Svea\AdminSoap\GetOrdersRequest
      */    
     public function prepareRequest() {        
         
         $this->validateRequest();
         
         $soapRequest = array();
-//        $soapRequest = new AdminSoap\DeliverOrdersRequest( 
-//            new AdminSoap\Authentication( 
-//                $this->orderBuilder->conf->getUsername( strtoupper($this->orderBuilder->orderType), $this->orderBuilder->countryCode ), 
-//                $this->orderBuilder->conf->getPassword( strtoupper($this->orderBuilder->orderType), $this->orderBuilder->countryCode ) 
-//            ),
-//            $this->orderBuilder->distributionType,
-//            new AdminSoap\OrdersToDeliver(
-//                new AdminSoap\DeliverOrderInformation(
-//                    $this->orderBuilder->conf->getClientNumber( strtoupper($this->orderBuilder->orderType), $this->orderBuilder->countryCode ),
-//                    $this->orderBuilder->orderType,
-//                    $this->orderBuilder->orderId
-//                )
-//            )
-//        );
+        $soapRequest = new AdminSoap\GetOrdersRequest( 
+            new AdminSoap\Authentication( 
+                $this->orderBuilder->conf->getUsername( strtoupper($this->orderBuilder->orderType), $this->orderBuilder->countryCode ), 
+                $this->orderBuilder->conf->getPassword( strtoupper($this->orderBuilder->orderType), $this->orderBuilder->countryCode ) 
+            ),
+            new AdminSoap\OrdersToRetrieve(
+                new AdminSoap\GetOrderInformation(
+                    $this->orderBuilder->conf->getClientNumber( strtoupper($this->orderBuilder->orderType), $this->orderBuilder->countryCode ),
+                    $this->orderBuilder->orderId
+                )
+            )
+        );
                 
         return $soapRequest;
     }

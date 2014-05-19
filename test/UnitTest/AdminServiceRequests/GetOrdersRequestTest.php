@@ -18,7 +18,6 @@ class GetOrdersRequestTest extends \PHPUnit_Framework_TestCase {
         $this->builderObject = new OrderBuilder(SveaConfig::getDefaultConfig());  
         // TODO create classes w/methods for below
         $this->builderObject->orderId = 123456;
-        $this->builderObject->orderType = \ConfigurationProvider::INVOICE_TYPE;                                                        
     }
     
     public function testClassExists() {
@@ -35,16 +34,5 @@ class GetOrdersRequestTest extends \PHPUnit_Framework_TestCase {
         unset( $this->builderObject->orderId );
         $getOrdersRequestObject = new GetOrdersRequest( $this->builderObject );
         $request = $getOrdersRequestObject->prepareRequest();
-    }
-
-    public function test_validate_throws_exception_on_missing_OrderType() {
-        
-        $this->setExpectedException(
-          'Svea\ValidationException', '-missing value : orderType is required.'
-        );
-
-        unset( $this->builderObject->orderType );
-        $getOrdersRequestObject = new GetOrdersRequest( $this->builderObject );
-        $request = $getOrdersRequestObject->prepareRequest();
-    }      
+    }    
 }
