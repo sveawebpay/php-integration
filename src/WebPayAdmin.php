@@ -40,39 +40,38 @@ class WebPayAdmin {
         return new Svea\CancelOrderBuilder($config);
     }
     
-    /**
-     * Fetch the current order rows of an order. The returned data structure may 
-     * then be used to cancel, update, or credit individual order rows.
-     *
-     *  Use the follwing methods:
-     * ->setOrderId( transactionId ) from the original createOrder request response
-     * @todo ... more?
-     *       
-     * @param ConfigurationProvider $config  instance implementing ConfigurationProvider
-     * @return ... 
-     * @throws Exception
-     */
-    public static function queryOrderRows( $config = NULL ) {
-        if( $config == NULL ) { WebPay::throwMissingConfigException(); }
-        return new Svea\QueryOrderRowsBuilder($config);
-    }
-        
-    
 //    /**
-//     * Query information about an order. Supports Card and Directbank orders.
-//     * Use the follwing methods:
-//     * ->setOrderId( transactionId ) from createOrder request response
-//     * ->setCountryCode() 
-//     * @todo fix rest of documentation
-//     * 
-//     * @param ConfigurationProvider $config  instance of implementation class of ConfigurationProvider Interface
-//     * @return Svea\QueryTransaction
+//     * Fetch the current order rows of an order. The returned data structure may 
+//     * then be used to cancel, update, or credit individual order rows.
+//     *
+//     *  Use the follwing methods:
+//     * ->setOrderId( transactionId ) from the original createOrder request response
+//     * @todo ... more?
+//     *       
+//     * @param ConfigurationProvider $config  instance implementing ConfigurationProvider
+//     * @return ... 
 //     * @throws Exception
 //     */
-//    public static function queryOrder( $config = NULL ) {
+//    public static function queryOrderRows( $config = NULL ) {
 //        if( $config == NULL ) { WebPay::throwMissingConfigException(); }
-//        return new Svea\QueryOrderBuilder($config);
+//        return new Svea\QueryOrderRowsBuilder($config);
 //    }
+        
+    /**
+     * Query information about an order. Supports Card and Directbank orders.
+     * Use the follwing methods:
+     * ->setOrderId( transactionId ) from createOrder request response
+     * ->setCountryCode() 
+     * @todo fix rest of documentation
+     * 
+     * @param ConfigurationProvider $config  instance of implementation class of ConfigurationProvider Interface
+     * @return Svea\QueryTransaction
+     * @throws Exception
+     */
+    public static function queryOrder( $config = NULL ) {
+        if( $config == NULL ) { WebPay::throwMissingConfigException(); }
+        return new Svea\QueryOrderBuilder($config);
+    }
     
     
     
