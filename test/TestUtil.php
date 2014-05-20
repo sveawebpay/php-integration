@@ -38,6 +38,33 @@ class TestUtil {
     }
     
     /**
+     * creates a populated order object for use in tests
+     * 
+     * @return Svea\createOrderBuilder object
+     * 
+     */
+    public static function createOrderWithoutOrderRows( $customer = NULL ) {
+
+        // poor man's overloading
+        if( $customer == NULL ) {
+            $customer = TestUtil::createIndividualCustomer("SE");
+        }
+        
+        $config = Svea\SveaConfig::getDefaultConfig();
+        
+        $orderObject = WebPay::createOrder($config)
+                ->addCustomerDetails( $customer )
+                ->setCountryCode("SE")
+                ->setCurrency("SEK")
+                ->setCustomerReference("created by TestUtil::createOrder()")
+                ->setClientOrderNumber( "clientOrderNumber:".date('c'))
+                ->setOrderDate( date('c') )
+        ;
+        
+        return $orderObject;
+    }
+    
+    /**
      * Creates an OrderRow object for use in populating order objects.
      * @param float $amount, defaults to 100
      * @param int $amount, defaults to 2
