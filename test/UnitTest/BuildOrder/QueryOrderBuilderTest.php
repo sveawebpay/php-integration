@@ -34,6 +34,12 @@ class QueryOrderBuilderTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals($country, $this->queryOrderObject->countryCode);        
     }
     
+    public function test_queryOrderBuilder_setOrderType() {
+        $orderType = \ConfigurationProvider::INVOICE_TYPE;
+        $this->queryOrderObject->setOrderType($orderType);
+        $this->assertEquals($orderType, $this->queryOrderObject->orderType);        
+    }
+    
     public function test_queryOrderBuilder_setPaymentMethod_INVOICE_returns_QueryOrder_with_correct_orderType() {
         $orderId = "123456";
         $paymentMethod = \PaymentMethod::INVOICE;   // todo check these ws ConfigProvicer::INVOICE_TYPE et al...

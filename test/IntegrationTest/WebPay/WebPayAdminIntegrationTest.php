@@ -98,7 +98,7 @@ class WebPayAdminIntegrationTest extends PHPUnit_Framework_TestCase {
         $b_description = "B Description";    
         $b_discount = 0;
         
-        $order = TestUtil::createOrder( TestUtil::createIndividualCustomer($country) )
+        $order = TestUtil::createOrderWithoutOrderRows( TestUtil::createIndividualCustomer($country) )
             ->addOrderRow( WebPayItem::orderRow()
                 ->setQuantity($a_quantity)
                 ->setAmountExVat($a_amountExVat)
@@ -115,7 +115,7 @@ class WebPayAdminIntegrationTest extends PHPUnit_Framework_TestCase {
                 ->setDiscountPercent($b_discount)              
             )                
         ;
-        $orderResponse = $order->usePaymentPlanPayment( TestUtil::getGetPaymentPlanParamsForTesting() )->doRequest();
+        $orderResponse = $order->useInvoicePayment()->doRequest();
 
 //print_r($orderResponse);
         $this->assertEquals(1, $orderResponse->accepted);
@@ -125,14 +125,32 @@ class WebPayAdminIntegrationTest extends PHPUnit_Framework_TestCase {
         // query orderrows
         $queryOrderBuilder = WebPayAdmin::queryOrder( Svea\SveaConfig::getDefaultConfig() )
             ->setOrderId( $createdOrderId )
-            ->queryInvoiceOrder()
+            ->setCountryCode($country)
         ;
                 
-        $queryResponse = $queryOrderBuilder->doRequest(); 
+        $queryResponse = $queryOrderBuilder->queryInvoiceOrder()->doRequest(); 
         
+        print_r( $queryResponse);
+        $this->assertEquals(1, $queryResponse->accepted);
         // assert that order rows are the same
-        $this->assertEqual( $a_amountExVat, $queryResponse->numberedOrderRows[0]->amountExVat );
-        $this->assertEqual( $b_amountExVat, $queryResponse->numberedOrderRows[1]->amountExVat );
+        $this->assertEquals( $a_quantity, $queryResponse->numberedOrderRows[0]->quantity );
+        $this->assertEquals( $a_amountExVat, $queryResponse->numberedOrderRows[0]->amountExVat );
+        
+        $this->assertEquals( $b_quantity, $queryResponse->numberedOrderRows[1]->quantity );
+        $this->assertEquals( $b_amountExVat, $queryResponse->numberedOrderRows[1]->amountExVat );        
+        $this->assertEquals( $b_vatPercent, $queryResponse->numberedOrderRows[1]->vatPercent );
+        $this->assertEquals( $b_articleNumber, $queryResponse->numberedOrderRows[1]->articleNumber );
+        $this->assertEquals( $b_unit, $queryResponse->numberedOrderRows[1]->unit );
+        $this->assertStringStartsWith( $b_name, $queryResponse->numberedOrderRows[1]->description );
+        $this->assertStringEndsWith( $b_description, $queryResponse->numberedOrderRows[1]->description );
+        $this->assertEquals( $b_discount, $queryResponse->numberedOrderRows[1]->discountPercent );
+
+        $this->assertEquals( null, $queryResponse->numberedOrderRows[1]->creditInvoiceId ); // not set
+        $this->assertEquals( null, $queryResponse->numberedOrderRows[1]->invoiceId ); // not set
+        $this->assertEquals( 2, $queryResponse->numberedOrderRows[1]->rowNumber );  // rows are 1-indexed
+        $this->assertEquals( "NotDelivered", $queryResponse->numberedOrderRows[1]->status );
+
+        
     }    
     
     

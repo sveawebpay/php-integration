@@ -26,7 +26,7 @@ class GetOrdersRequest extends AdminServiceRequest {
      * @return Svea\AdminSoap\GetOrdersRequest
      */    
     public function prepareRequest() {        
-        
+                   
         $this->validateRequest();
         
         $soapRequest = array();
@@ -42,7 +42,7 @@ class GetOrdersRequest extends AdminServiceRequest {
                 )
             )
         );
-                
+
         return $soapRequest;
     }
         

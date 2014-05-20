@@ -56,11 +56,23 @@ class QueryOrderBuilder {
     public $countryCode;
 
     /**
+     * Required.
+     * @param string $orderType -- one of ConfigurationProvider::INVOICE_TYPE, ::PAYMENTPLAN_TYPE, ::HOSTED_TYPE
+     * @return $this
+     */
+    public function setOrderType($orderTypeAsConst) {
+        $this->orderType = $orderTypeAsConst;
+        return $this;
+    }
+    /** @var string $orderType -- one of ConfigurationProvider::INVOICE_TYPE, ::PAYMENTPLAN_TYPE, ::HOSTED_TYPE */
+    public $orderType;    
+    
+    /**
      * Use queryInvoiceOrder() to query an Invoice order using AdminServiceRequest GetOrders request
      * @return GetOrdersRequest 
      */
     public function queryInvoiceOrder() {
-        $this->orderType = \ConfigurationProvider::INVOICE_TYPE;
+        $this->setOrderType(\ConfigurationProvider::INVOICE_TYPE );
         return new GetOrdersRequest($this);
     }
     
@@ -69,12 +81,10 @@ class QueryOrderBuilder {
      * @return GetOrdersRequest 
      */
     public function queryPaymentPlanOrder() {
-        $this->orderType = \ConfigurationProvider::PAYMENTPLAN_TYPE;
+        $this->setOrderType(\ConfigurationProvider::PAYMENTPLAN_TYPE);
         return new GetOrdersRequest($this);    
     }
-    
-    /** @var string "Invoice" or "PaymentPlan" */
-    public $orderType;  
+
 //
 //    /**
 //     * Use queryCardOrder() to query a Card order.

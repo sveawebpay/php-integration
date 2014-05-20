@@ -16,21 +16,21 @@ class GetOrdersRequestIntegrationTest extends PHPUnit_Framework_TestCase{
     public function test_manual_GetOrdersRequest() {
         
         // Stop here and mark this test as incomplete.
-        $this->markTestIncomplete(
-            'skeleton for test_manual_GetOrdersRequest' // TODO
-        );
+//        $this->markTestIncomplete(
+//            'skeleton for test_manual_GetOrdersRequest' // TODO
+//        );
         
         $countryCode = "SE";
         $sveaOrderIdToGet = 348629;
-        $orderType = "Invoice"; // TODO fix configurationProvider::INVOICE
+        $orderType = ConfigurationProvider::INVOICE_TYPE;
         
-        $getOrdersBuilder = new Svea\OrderBuilder( Svea\SveaConfig::getDefaultConfig() );
-        $getOrdersBuilder->orderId = $sveaOrderIdToGet;
-        $getOrdersBuilder->orderType = $orderType;
-        $getOrdersBuilder->countryCode = $countryCode;
-        
+        $getOrdersBuilder = new Svea\QueryOrderBuilder( Svea\SveaConfig::getDefaultConfig() );
+        $getOrdersBuilder->setOrderId($sveaOrderIdToGet);
+        $getOrdersBuilder->setCountryCode($countryCode);
+        $getOrdersBuilder->setOrderType($orderType);        
+
         $request = new Svea\GetOrdersRequest( $getOrdersBuilder );
-        $response = $request->doRequest();
+        $response = $request-> doRequest();
         
         print_r( $response );        
         $this->assertInstanceOf('Svea\GetOrdersResponse', $response);
