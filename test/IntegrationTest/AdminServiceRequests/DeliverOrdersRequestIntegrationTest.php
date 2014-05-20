@@ -21,7 +21,7 @@ class DeliverOrdersRequestIntegrationTest extends PHPUnit_Framework_TestCase{
         );
         
         $countryCode = "SE";
-        $sveaOrderIdToDeliver = 346761;
+        $sveaOrderIdToDeliver = 348196;
         $orderType = "Invoice"; // TODO -- \ConfigurationProvider::INVOICE_TYPE is "INVOICE", need to be "Invoice"
         
         $deliverOrderBuilder = new Svea\DeliverOrderBuilder( Svea\SveaConfig::getDefaultConfig() );
@@ -33,7 +33,8 @@ class DeliverOrdersRequestIntegrationTest extends PHPUnit_Framework_TestCase{
         $request = new Svea\DeliverOrdersRequest( $deliverOrderBuilder );
         $response = $request->doRequest();
         
-        //print_r( $response );        
-        $this->assertEquals(0, $response->ResultCode );    // raw response
+        print_r( $response );        
+        $this->assertInstanceOf('Svea\DeliverOrdersResponse', $response);
+        $this->assertEquals(1, $response->accepted );
     }
 }
