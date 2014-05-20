@@ -35,4 +35,26 @@ class GetOrdersRequestTest extends \PHPUnit_Framework_TestCase {
         $getOrdersRequestObject = new GetOrdersRequest( $this->builderObject );
         $request = $getOrdersRequestObject->prepareRequest();
     }    
+
+    public function test_validate_throws_exception_on_missing_OrderType() {
+
+        $this->setExpectedException(
+          'Svea\ValidationException', '-missing value : orderType is required.'
+        );
+        
+        unset( $this->builderObject->orderType );
+        $getOrdersRequestObject = new GetOrdersRequest( $this->builderObject );
+        $request = $getOrdersRequestObject->prepareRequest();
+    }    
+    
+    public function test_validate_throws_exception_on_missing_CountryCode() {
+
+        $this->setExpectedException(
+          'Svea\ValidationException', '-missing value : countryCode is required.'
+        );
+        
+        unset( $this->builderObject->countryCode );
+        $getOrdersRequestObject = new GetOrdersRequest( $this->builderObject );
+        $request = $getOrdersRequestObject->prepareRequest();
+    }
 }
