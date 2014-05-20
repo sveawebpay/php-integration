@@ -40,7 +40,7 @@ class QueryOrderBuilderTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals($orderType, $this->queryOrderObject->orderType);        
     }
     
-    public function test_queryOrderBuilder_setPaymentMethod_INVOICE_returns_QueryOrder_with_correct_orderType() {
+    public function test_queryOrderBuilder_queryInvoiceOrder_returns_GetOrdersRequest_with_correct_orderType() {
         $orderId = "123456";
         $paymentMethod = \PaymentMethod::INVOICE;   // todo check these ws ConfigProvicer::INVOICE_TYPE et al...
         
@@ -51,7 +51,7 @@ class QueryOrderBuilderTest extends \PHPUnit_Framework_TestCase {
 
     }
     
-    public function test_queryOrderBuilder_setPaymentMethod_PAYMENTPLAN_returns_QueryOrder_with_correct_orderType() {
+    public function test_queryOrderBuilder_queryPaymentPlanOrder_returns_GetOrdersRequest_with_correct_orderType() {
         $orderId = "123456";
         $paymentMethod = \PaymentMethod::PAYMENTPLAN;   // todo check these ws ConfigProvicer::INVOICE_TYPE et al...
         
@@ -62,13 +62,12 @@ class QueryOrderBuilderTest extends \PHPUnit_Framework_TestCase {
 
     }
     
-//    public function test_queryOrderBuilder_setPaymentMethod_KORTCERT_returns_CloseOrder() {
-//        $orderId = "123456";
-//        $paymentMethod = \PaymentMethod::KORTCERT;
-//        
-//        $annulTransactionObject = $this->queryOrderObject->setOrderId($orderId)->cancelCardOrder();
-//        
-//        $this->assertInstanceOf("Svea\AnnulTransaction", $annulTransactionObject);
-//    }
-//    
+    public function test_queryOrderBuilder_queryCardOrder_returns_QueryTransaction() {
+        $orderId = "123456";
+        $paymentMethod = \ConfigurationProvider::HOSTED_ADMIN_TYPE;
+        
+        $queryOrderObject = $this->queryOrderObject->setOrderId($orderId)->queryCardOrder();
+        
+        $this->assertInstanceOf("Svea\QueryTransaction", $queryOrderObject);
+    }  
 }

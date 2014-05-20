@@ -85,14 +85,13 @@ class QueryOrderBuilder {
         return new GetOrdersRequest($this);    
     }
 
-//
-//    /**
-//     * Use queryCardOrder() to query a Card order.
-//     * @return QueryTransaction
-//     */
-//    public function queryCardOrder() {
-//        $this->orderType = \ConfigurationProvider::HOSTED_ADMIN_TYPE;
-//        $queryTransaction = new QueryTransaction($this->conf);
-//        return $queryTransaction->setTransactionId($this->orderId)->setCountryCode($this->countryCode);
-//    }  
+    /**
+     * Use queryCardOrder() to query a Card order.
+     * @return QueryTransaction
+     */
+    public function queryCardOrder() {
+        $this->setOrderType(\ConfigurationProvider::HOSTED_ADMIN_TYPE);
+        $queryTransaction = new QueryTransaction($this->conf);
+        return $queryTransaction->setTransactionId($this->orderId)->setCountryCode($this->countryCode);
+    }  
 }
