@@ -46,20 +46,28 @@ class CancelOrderRequest extends AdminServiceRequest {
         $errors = array();
         $errors = $this->validateOrderId($errors);
         $errors = $this->validateOrderType($errors);
+        $errors = $this->validateCountryCode($errors);
         return $errors;
     }
     
     private function validateOrderId($errors) {
         if (isset($this->orderBuilder->orderId) == FALSE) {                                                        
-            $errors['missing value'] = "orderId is required.";
+            $errors[] = array('missing value' => "orderId is required.");
         }
         return $errors;
     }
     
     private function validateOrderType($errors) {
         if (isset($this->orderBuilder->orderType) == FALSE) {                                                        
-            $errors['missing value'] = "orderType is required.";
+            $errors[] = array('missing value' => "orderType is required.");
         }
         return $errors;
-    }                     
+    }      
+
+    private function validateCountryCode($errors) {
+        if (isset($this->orderBuilder->countryCode) == FALSE) {                                                        
+            $errors[] = array('missing value' => "countryCode is required.");
+        }
+        return $errors;
+    }     
 }        
