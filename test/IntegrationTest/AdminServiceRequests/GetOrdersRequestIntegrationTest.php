@@ -16,9 +16,9 @@ class GetOrdersRequestIntegrationTest extends PHPUnit_Framework_TestCase{
     public function test_manual_GetOrdersRequest() {
         
         // Stop here and mark this test as incomplete.
-//        $this->markTestIncomplete(
-//            'skeleton for test_manual_GetOrdersRequest' // TODO
-//        );
+        $this->markTestIncomplete(
+            'skeleton for test_manual_GetOrdersRequest' // TODO
+        );
         
         $countryCode = "SE";
         $sveaOrderIdToGet = 348629;
@@ -34,6 +34,6 @@ class GetOrdersRequestIntegrationTest extends PHPUnit_Framework_TestCase{
         
         print_r( $response );        
         $this->assertInstanceOf('Svea\GetOrdersResponse', $response);
-//        $this->assertEquals(0, $response->ResultCode );    // raw response
+        $this->assertEquals(1, $response->accepted );
     }
 }
