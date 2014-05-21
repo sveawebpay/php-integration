@@ -4,7 +4,7 @@ namespace Svea;
 /**
  * Helper class for formatting orderrows in the right format for WebService soap-calls
  *
- * @author Anneli Halld'n, Daniel Brolund, Kristian Grossman-Madsen for Svea Webpay
+ * @author Anneli Halld'n, Daniel Brolund, Kristian Grossman-Madsen for Svea WebPay
  */
 class WebServiceRowFormatter {
 
@@ -134,15 +134,15 @@ class WebServiceRowFormatter {
 
     private function formatOrderRows() {
         foreach ($this->order->orderRows as $row) {
+            
             $orderRow = new SveaOrderRow();
+
             if (isset($row->articleNumber)) {
                 $orderRow->ArticleNumber = $row->articleNumber;
             }
-            if (isset($row->description)) {
-                $orderRow->Description = (isset($row->name) ? $row->name . ': ' : "") . $row->description;
-            } elseif (isset($row->name) && isset($row->description) == false) {
-                $orderRow->Description = $row->name;
-            }
+
+            $orderRow->Description = $this->formatRowNameAndDescription( $row );            
+
             if (isset($row->unit)) {
                 $orderRow->Unit = $row->unit;
             }
@@ -170,21 +170,48 @@ class WebServiceRowFormatter {
         }
     }
 
+    /**
+     * As the Europe Web Service API only has a description field, join name and description, if both are given.
+     * 
+     * @param OrderRow|ShippingFee|et al. $webPayItemRow  an instance of the order row classes from WebPayItem
+     * @return string  the combined description string that should be written to Description
+     */
+    private function formatRowNameAndDescription( $webPayItemRow ) {
+
+        $description = ""; //fallback to empty string if we haven't got either of name or description
+        
+        // if both name and description are set in the package orderrow, add both to the request row description field
+        if( isset($webPayItemRow->name) && isset($webPayItemRow->description) ) {
+            $description = $webPayItemRow->name.': '.$webPayItemRow->description;
+        }
+        // else, use either description or name, if set
+        else {            
+            if( isset($webPayItemRow->description) ) {
+                $description = $webPayItemRow->description;
+            }
+            if( isset($webPayItemRow->name) ) {
+                $description = $webPayItemRow->name;
+            } 
+        }
+        
+        return $description;
+    }   
+    
     private function formatShippingFeeRows() {
         if (!isset($this->order->shippingFeeRows)) {
             return;
         }
 
         foreach ($this->order->shippingFeeRows as $row) {
+
             $orderRow = new SveaOrderRow();
+            
             if (isset($row->shippingId)) {
                 $orderRow->ArticleNumber = $row->shippingId;
             }
-            if (isset($row->description)) {
-                $orderRow->Description = (isset($row->name) ? $row->name . ': ' : "") . $row->description;
-            } elseif (isset($row->name) && isset($row->description) == false) {
-                $orderRow->Description = $row->name;
-            }
+
+            $orderRow->Description = $this->formatRowNameAndDescription( $row );            
+
             if (isset($row->unit)) {
                 $orderRow->Unit = $row->unit;
             }
@@ -217,13 +244,13 @@ class WebServiceRowFormatter {
         }
 
         foreach ($this->order->invoiceFeeRows as $row) {
+            
             $orderRow = new SveaOrderRow();
+
             $orderRow->ArticleNumber = "";
-            if (isset($row->description)) {
-                $orderRow->Description = (isset($row->name) ? $row->name . ': ' : "") . $row->description;
-            } elseif (isset($row->name) && isset($row->description) == false) {
-                $orderRow->Description = $row->name;
-            }
+            
+            $orderRow->Description = $this->formatRowNameAndDescription( $row );            
+            
             if (isset($row->unit)) {
                 $orderRow->Unit = $row->unit;
             }
@@ -269,11 +296,9 @@ class WebServiceRowFormatter {
             if (isset($discountRow->discountId)) {
                 $orderRow->ArticleNumber = $discountRow->discountId;
             }
-            if (isset($discountRow->description)) {
-                $orderRow->Description = (isset($discountRow->name) ? $discountRow->name . ': ' : "") . $discountRow->description;
-            } elseif (isset($discountRow->name) && isset($discountRow->description) == false) {
-                $orderRow->Description = $discountRow->name;
-            }
+            
+            $orderRow->Description = $this->formatRowNameAndDescription( $discountRow );            
+            
             if( sizeof($this->totalAmountPerVatRateIncVat)>1 ) {  // add tax rate for split discount to description
                 $orderRow->Description .= " (".$vatRate."%)";
             }
@@ -313,11 +338,9 @@ class WebServiceRowFormatter {
             if (isset($discountRow->discountId)) {
                 $orderRow->ArticleNumber = $discountRow->discountId;
             }
-            if (isset($discountRow->description)) {
-                $orderRow->Description = (isset($discountRow->name) ? $discountRow->name . ': ' : "") . $discountRow->description;
-            } elseif (isset($discountRow->name) && isset($discountRow->description) == false) {
-                $orderRow->Description = $discountRow->name;
-            }
+            
+            $orderRow->Description = $this->formatRowNameAndDescription( $discountRow );            
+            
             if( sizeof($this->totalAmountPerVatRateExVat)>1 ) {  // add tax rate for split discount to description
                 $orderRow->Description .= " (".$vatRate."%)";
             }
@@ -362,12 +385,9 @@ class WebServiceRowFormatter {
                     if (isset($row->discountId)) {
                         $orderRow->ArticleNumber = $row->discountId;
                     }
-                    if (isset($row->description)) {
-                        $orderRow->Description = (isset($row->name) ? $row->name . ': ' : "") . $row->description;
-                    } elseif (isset($row->name) && isset($row->description) == false) {
-                        $orderRow->Description = $row->name;
-                    }
-
+            
+                    $orderRow->Description = $this->formatRowNameAndDescription( $row );            
+            
                     if (isset($row->unit)) {
                         $orderRow->Unit = $row->unit;
                     }
@@ -394,12 +414,9 @@ class WebServiceRowFormatter {
                     if (isset($row->discountId)) {
                         $orderRow->ArticleNumber = $row->discountId;
                     }
-                    if (isset($row->description)) {
-                        $orderRow->Description = (isset($row->name) ? $row->name . ': ' : "") . $row->description;
-                    } elseif (isset($row->name) && isset($row->description) == false) {
-                        $orderRow->Description = $row->name;
-                    }
-
+            
+                    $orderRow->Description = $this->formatRowNameAndDescription( $row );            
+            
                     if (isset($row->unit)) {
                         $orderRow->Unit = $row->unit;
                     }
@@ -428,14 +445,13 @@ class WebServiceRowFormatter {
             foreach( $this->totalAmountPerVatRateIncVat as $vatRate => $amountAtThisVatRateIncVat ) {
 
                 $orderRow = new SveaOrderRow();
+
                 if (isset($row->discountId)) {
                     $orderRow->ArticleNumber = $row->discountId;
                 }
-                if (isset($row->description)) {
-                    $orderRow->Description = (isset($row->name) ? $row->name . ': ' : "") . $row->description;
-                } elseif (isset($row->name) && isset($row->description) == false) {
-                    $orderRow->Description = $row->name;
-                }
+                
+                $orderRow->Description = $this->formatRowNameAndDescription( $row );            
+                
                 if( sizeof($this->totalAmountPerVatRateIncVat)>1 ) {  // add tax rate for split discount to description
                     $orderRow->Description .= " (".$vatRate."%)";
                 }
