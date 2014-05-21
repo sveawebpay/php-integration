@@ -75,13 +75,13 @@ class WebPayAdminIntegrationTest extends PHPUnit_Framework_TestCase {
         $this->assertInstanceOf( "Svea\HostedAdminResponse", $response );
         
         $this->assertEquals( 1, $response->accepted );        
-        $this->assertEquals( $customerrefno, $response->customerrefno );  
+        $this->assertEquals( $customerrefno, $response->customerrefno );
     }    
     
     /**
-     *  test_queryOrderRows_queryInvoiceOrder_order
+     *  test_queryOrder_queryInvoiceOrder_order
      */
-    function test_queryOrderRows_queryInvoiceOrder_order() {
+    function test_queryOrder_queryInvoiceOrder_order() {
         // create invoice order w/three rows (2xA, 1xB)
         $country = "SE";
 
@@ -150,9 +150,9 @@ class WebPayAdminIntegrationTest extends PHPUnit_Framework_TestCase {
     }            
     
     /**
-     *  test_queryOrderRows_queryPaymentPlanOrder_order
+     *  test_queryOrder_queryPaymentPlanOrder_order
      */
-    function test_queryOrderRows_queryPaymentPlanOrder_order() {
+    function test_queryOrder_queryPaymentPlanOrder_order() {
         // create order w/three rows (2xA, 1xB)
         $country = "SE";
 
@@ -221,20 +221,20 @@ class WebPayAdminIntegrationTest extends PHPUnit_Framework_TestCase {
     }   
     
     /**
-     * test_manual_queryOrderRows_queryCard_order_step_1
+     * test_manual_queryOrder_queryCard_order_step_1
      *
      */
-    function test_manual_queryOrderRows_queryCard_order_step_1() {
+    function test_manual_queryOrder_queryCard_order_step_1() {
         
         // Stop here and mark this test as incomplete.
         $this->markTestIncomplete(
-            'skeleton for manual test_manual_queryOrderRows_queryCard_order_step_1, step 1'
+            'skeleton for manual test_manual_queryOrder_queryCard_order_step_1, step 1'
         );
           
         // 1. remove (put in a comment) the above code to enable the test
         // 2. run the test, and get the paymenturl from the output
         // 3. go to the paymenturl and complete the transaction manually, making note of the response transactionid
-        // 4. enter the transactionid into test_manual_queryOrderRows_queryCard_order_step_12() below and run the test
+        // 4. enter the transactionid into test_manual_queryOrder_queryCard_order_step_12() below and run the test
         
         $orderLanguage = "sv";   
         $returnUrl = "http://foo.bar.com";
@@ -289,20 +289,20 @@ class WebPayAdminIntegrationTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals( 1, $response->accepted );                
 
         // print the url to use to confirm the transaction
-        print_r( " test_manual_queryOrderRows_queryCard_order_step_1(): " . $response->testurl ." ");
+        print_r( " test_manual_queryOrder_queryCard_order_step_1(): " . $response->testurl ." ");
     }
     
     /**
-     * test_manual_queryOrderRows_queryCard_order_step_2
+     * test_manual_queryOrder_queryCard_order_step_2
      * 
      * run this test manually after you've performed a card transaction and have gotten the transaction details needed
 
      */  
-    function test_manual_queryOrderRows_queryCard_order_step_2() {
+    function test_manual_queryOrder_queryCard_order_step_2() {
         
         // Stop here and mark this test as incomplete.
 //        $this->markTestIncomplete(
-//            'skeleton for manual test_manual_queryOrderRows_queryCard_order_step_2, step 2'
+//            'skeleton for manual test_manual_queryOrder_queryCard_order_step_2, step 2'
 //        );
         
         // 1. remove (put in a comment) the above code to enable the test
@@ -458,20 +458,20 @@ class WebPayAdminIntegrationTest extends PHPUnit_Framework_TestCase {
     }   
     
     /**
-     * test_manual_queryOrderRows_queryDirectBank_order_step_1
+     * test_manual_queryOrder_queryDirectBank_order_step_1
      *
      */
-    function test_manual_queryOrderRows_queryDirectBank_order_step_1() {
+    function test_manual_queryOrder_queryDirectBank_order_step_1() {
         
         // Stop here and mark this test as incomplete.
         $this->markTestIncomplete(
-            'skeleton for test_manual_queryOrderRows_queryDirectBank_order_step_1, step 1'
+            'skeleton for test_manual_queryOrder_queryDirectBank_order_step_1, step 1'
         );
           
         // 1. remove (put in a comment) the above code to enable the test
         // 2. run the test, and get the paymenturl from the output
         // 3. go to the paymenturl and complete the transaction manually, making note of the response transactionid
-        // 4. enter the transactionid into test_manual_queryOrderRows_queryCard_order_step_12() below and run the test
+        // 4. enter the transactionid into test_manual_queryOrder_queryCard_order_step_12() below and run the test
         
         $orderLanguage = "sv";   
         $returnUrl = "http://foo.bar.com";
@@ -526,19 +526,19 @@ class WebPayAdminIntegrationTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals( 1, $response->accepted );                
 
         // print the url to use to confirm the transaction
-        print_r( " test_manual_queryOrderRows_queryDirectBank_order_step_1(): " . $response->testurl ." ");
+        print_r( " test_manual_queryOrder_queryDirectBank_order_step_1(): " . $response->testurl ." ");
     }
     
     /**
-     * test_manual_queryOrderRows_queryDirectBank_order_step_2
+     * test_manual_queryOrder_queryDirectBank_order_step_2
      * 
      * run this test manually after you've performed a direct bank transaction and have gotten the transaction details needed
      */  
-    function test_manual_queryOrderRows_queryDirectBank_order_step_2() {
+    function test_manual_queryOrder_queryDirectBank_order_step_2() {
         
         // Stop here and mark this test as incomplete.
 //        $this->markTestIncomplete(
-//            'skeleton for test_manual_queryOrderRows_queryDirectBank_order_step_2, step 2'
+//            'skeleton for test_manual_queryOrder_queryDirectBank_order_step_2, step 2'
 //        );
         
         // 1. remove (put in a comment) the above code to enable the test

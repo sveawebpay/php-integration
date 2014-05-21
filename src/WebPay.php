@@ -45,10 +45,11 @@ include_once SVEA_REQUEST_DIR . "/Includes.php";
  * 
  * WebPayAdmin:: 
  *   cancelOrder -- cancel in whole non-delivered invoice or payment plan orders, or annul non-confirmed card orders
- *   **queryOrder -- get information about an order
- *   **queryOrderRows -- get the current status of the numbered order rows in an order
- *   **creditOrderRows -- credit delivered invoice or payment plan order order rows, or credit confirmed card orders
- *   **updateOrderRows -- update non-delivered invoice or payment plan order order rows, or lower amount to charge for non-confirmed card orders
+ *   queryOrder -- get information about an order, including numbered order rows for invoice or payment plan orders
+ *   **addOrderRows -- add order rows to non-delivered invoice or payment plan order
+ *   **updateOrderRows -- update order rows in non-delivered invoice or payment plan order, or lower amount to charge (only) for non-confirmed card orders
+ *   **deleteOrderRows -- remove order rows in non-delivered invoice or payment plan order, or lower amount to charge (only) for non-confirmed card orders
+ *   **creditOrderRows -- credit order rows in delivered invoice or payment plan order, or credit confirmed card orders
  *   **listPaymentMethods -- WPA equivalent of WP::getPaymentMethods
  * 
  * The following methods are provided in WebPayAdmin as a stopgap measure to perform administrative functions for card orders.
