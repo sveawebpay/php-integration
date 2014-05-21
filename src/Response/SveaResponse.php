@@ -76,6 +76,9 @@ class SveaResponse {
                     case "GetOrders":
                         $this->response = new Svea\GetOrdersResponse( $message );
                         break;
+                    case "CancelOrderRows":
+                        $this->response = $message;
+                        break;
                                         
                     // $method is set for HostedAdminRequests, indicates the request method used                    
                     case "querytransactionid":
