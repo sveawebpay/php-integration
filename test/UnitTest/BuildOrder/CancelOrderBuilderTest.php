@@ -15,7 +15,7 @@ class CancelOrderBuilderTest extends \PHPUnit_Framework_TestCase {
     protected $cancelOrderObject;
     
     function setUp() {
-        $this->cancelOrderObject = \WebPayAdmin::cancelOrder(SveaConfig::getDefaultConfig());  
+        $this->cancelOrderObject = new CancelOrderBuilder(SveaConfig::getDefaultConfig());  
     }
     
     public function test_CancelOrderBuilder_class_exists() {     

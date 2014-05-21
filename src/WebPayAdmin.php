@@ -39,7 +39,32 @@ class WebPayAdmin {
         if( $config == NULL ) { WebPay::throwMissingConfigException(); }        
         return new Svea\CancelOrderBuilder($config);
     }
-
+    
+    /**
+     * Query information about an order. Supports all order payment methods.
+     * Use the following methods (@see QueryOrderBuilder):
+     * ->setOrderId()
+     * ->setCountryCode()  
+     * 
+     * Then select the correct ordertype and perform the request:
+     * ->queryInvoiceOrder() | queryPaymentPlanOrder() | queryCardOrder() | queryDirectBankOrder()
+     *   ->doRequest()
+     *  
+     * The final doRequest() response is of one of the following types and may 
+     * contain different attributes depending on the original payment method:
+     * @see Svea\GetOrdersResponse (Invoice or PartPayment orders) or
+     * @see Svea\QueryTransactionResponse (Card or DirectBank orders)
+     * 
+     * @param ConfigurationProvider $config  instance implementing ConfigurationProvider
+     * @return Svea\QueryOrderBuilder
+     * @throws Exception
+     */
+    public static function queryOrder( $config = NULL ) {
+        if( $config == NULL ) { WebPay::throwMissingConfigException(); }
+        return new Svea\QueryOrderBuilder($config);
+    }
+    
+    
 ////////////////////////////////////////////////////////////////////////////////////////    
     
     // HostedRequest/HandleOrder

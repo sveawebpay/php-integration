@@ -42,8 +42,10 @@ abstract class AdminServiceRequest {
         
         if (count($errors) > 0) {
             $exceptionString = "";
-            foreach ($errors as $key => $value) {
-                $exceptionString .="-". $key. " : ".$value."\n";
+            foreach ($errors as $error) {
+                foreach( $error as $key => $value) {
+                    $exceptionString .="-". $key. " : ".$value."\n";
+                }
             }
 
             throw new ValidationException($exceptionString);
