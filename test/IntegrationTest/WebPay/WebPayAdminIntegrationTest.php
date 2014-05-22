@@ -640,5 +640,70 @@ class WebPayAdminIntegrationTest extends PHPUnit_Framework_TestCase {
         $this->assertStringEndsWith( $b_description, $queryResponse->orderrows[1]->description );
         $this->assertEquals( $b_discount, $queryResponse->orderrows[1]->discountPercent );
     }   
+
+    // CancelOrderRowsBuilder endpoints: cancelInvoiceOrderRows(), cancelPaymentPlanOrderRows(), cancelCardOrderRows()
+    function test_CancelOrderBuilderRows_Invoice_single_row_success() {
+        $country = "SE";
+        $order = TestUtil::createOrderWithoutOrderRows( TestUtil::createIndividualCustomer($country) );
+        $order->addOrderRow(TestUtil::createOrderRow(1.00));        
+        $order->addOrderRow(TestUtil::createOrderRow(2.00));
+        $orderResponse = $order->useInvoicePayment()->doRequest();
+       
+        $this->assertEquals(1, $orderResponse->accepted);
+         
+        $cancelResponse = WebPayAdmin::cancelOrderRows( Svea\SveaConfig::getDefaultConfig() )
+                ->setOrderId($orderResponse->sveaOrderId)
+                ->setCountryCode($country)
+                ->setRowToCancel( 1 )
+                ->cancelInvoiceOrderRows()
+                    ->doRequest();
+        
+        $this->assertEquals(1, $cancelResponse->accepted);
+    }
     
+    // CancelOrderRowsBuilder endpoints: cancelInvoiceOrderRows(), cancelPaymentPlanOrderRows(), cancelCardOrderRows()
+    function test_CancelOrderBuilderRows_Invoice_multiple_rows_success() {
+        $country = "SE";
+        $order = TestUtil::createOrderWithoutOrderRows( TestUtil::createIndividualCustomer($country) );
+        $order->addOrderRow(TestUtil::createOrderRow(1.00));        
+        $order->addOrderRow(TestUtil::createOrderRow(2.00));
+        $orderResponse = $order->useInvoicePayment()->doRequest();
+       
+        $this->assertEquals(1, $orderResponse->accepted);
+         
+        $cancelResponse = WebPayAdmin::cancelOrderRows( Svea\SveaConfig::getDefaultConfig() )
+                ->setOrderId($orderResponse->sveaOrderId)
+                ->setCountryCode($country)
+                ->setRowsToCancel( array(1,2) )
+                ->setRowsToCancel( 3 )
+                ->cancelInvoiceOrderRows()
+                    ->doRequest();
+        
+        $this->assertEquals(1, $cancelResponse->accepted);
+    } 
+
+    // CancelOrderRowsBuilder endpoints: cancelInvoiceOrderRows(), cancelPaymentPlanOrderRows(), cancelCardOrderRows()
+    function test_CancelOrderBuilderRows_PaymentPlan_single_row_success() {
+        $country = "SE";
+        $order = TestUtil::createOrderWithoutOrderRows( TestUtil::createIndividualCustomer($country) );
+        $order->addOrderRow(TestUtil::createOrderRow(1000.00));        
+        $order->addOrderRow(TestUtil::createOrderRow(2000.00));
+        $orderResponse = $order->usePaymentPlanPayment( TestUtil::getGetPaymentPlanParamsForTesting($country))->doRequest();
+       
+        $this->assertEquals(1, $orderResponse->accepted);
+         
+        $cancelResponse = WebPayAdmin::cancelOrderRows( Svea\SveaConfig::getDefaultConfig() )
+                ->setOrderId($orderResponse->sveaOrderId)
+                ->setCountryCode($country)
+                ->setRowToCancel( 2 )
+                ->cancelPaymentPlanOrderRows()
+                    ->doRequest();
+        
+        $this->assertEquals(1, $cancelResponse->accepted);
+    }    
+    
+    function test_CancelOrderBuilderRows_Card_single_row_success() {
+        // TODO implement card
+        $this->assertTrue( false ); 
+    }
 }
