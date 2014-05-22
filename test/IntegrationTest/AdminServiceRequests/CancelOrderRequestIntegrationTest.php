@@ -21,8 +21,8 @@ class CancelOrderRequestIntegrationTest extends PHPUnit_Framework_TestCase{
         );
                 
         $countryCode = "SE";
-        $sveaOrderIdToClose = 346808;        
-        $orderType = "Invoice"; // TODO -- \ConfigurationProvider::INVOICE_TYPE is "INVOICE", need to be "Invoice"
+        $sveaOrderIdToClose = 349698;        
+        $orderType = \ConfigurationProvider::INVOICE_TYPE;
         
         $cancelOrderBuilder = new Svea\CancelOrderBuilder( Svea\SveaConfig::getDefaultConfig() );
         $cancelOrderBuilder->setCountryCode( $countryCode );
@@ -33,6 +33,8 @@ class CancelOrderRequestIntegrationTest extends PHPUnit_Framework_TestCase{
         $response = $request->doRequest();
         
         //print_r( $response );        
-        $this->assertEquals(0, $response->ResultCode );    // raw response
+        $this->assertInstanceOf('Svea\CancelOrderResponse', $response);
+        $this->assertEquals(0, $response->resultcode );    
+
     }
 }

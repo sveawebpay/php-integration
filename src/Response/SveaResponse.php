@@ -70,6 +70,9 @@ class SveaResponse {
                 switch( $method ) {
 
                     // $method is set for Admin Web Service requests
+                    case "CancelOrder":
+                        $this->response = new Svea\CancelOrderResponse( $message );
+                        break;                    
                     case "DeliverOrders":
                         $this->response = new Svea\DeliverOrdersResponse( $message );
                         break;
@@ -77,9 +80,9 @@ class SveaResponse {
                         $this->response = new Svea\GetOrdersResponse( $message );
                         break;
                     case "CancelOrderRows":
-                        $this->response = $message;
+                        $this->response = new Svea\CancelOrderResponse( $message );
                         break;
-                                        
+                    
                     // $method is set for HostedAdminRequests, indicates the request method used                    
                     case "querytransactionid":
                         $this->response = new Svea\QueryTransactionResponse($message, $countryCode, $config);
