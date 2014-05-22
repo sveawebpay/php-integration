@@ -42,29 +42,28 @@ class QueryOrderBuilderTest extends \PHPUnit_Framework_TestCase {
     
     public function test_queryOrderBuilder_queryInvoiceOrder_returns_GetOrdersRequest_with_correct_orderType() {
         $orderId = "123456";
-        $paymentMethod = \PaymentMethod::INVOICE;   // todo check these ws ConfigProvicer::INVOICE_TYPE et al...
+        $paymentMethod = \ConfigurationProvider::INVOICE_TYPE;   // todo check these ws ConfigProvicer::INVOICE_TYPE et al...
         
         $queryOrderObject = $this->queryOrderObject->setOrderId($orderId)->queryInvoiceOrder();
         
         $this->assertInstanceOf("Svea\GetOrdersRequest", $queryOrderObject);
-        $this->assertEquals(\ConfigurationProvider::INVOICE_TYPE, $queryOrderObject->orderBuilder->orderType);
+        $this->assertEquals($paymentMethod, $queryOrderObject->orderBuilder->orderType);
 
     }
     
     public function test_queryOrderBuilder_queryPaymentPlanOrder_returns_GetOrdersRequest_with_correct_orderType() {
         $orderId = "123456";
-        $paymentMethod = \PaymentMethod::PAYMENTPLAN;   // todo check these ws ConfigProvicer::INVOICE_TYPE et al...
+        $paymentMethod = \ConfigurationProvider::PAYMENTPLAN_TYPE;   // todo check these ws ConfigProvicer::INVOICE_TYPE et al...
         
         $queryOrderObject = $this->queryOrderObject->setOrderId($orderId)->queryPaymentPlanOrder();
         
         $this->assertInstanceOf("Svea\GetOrdersRequest", $queryOrderObject);
-        $this->assertEquals(\ConfigurationProvider::PAYMENTPLAN_TYPE, $queryOrderObject->orderBuilder->orderType);
+        $this->assertEquals($paymentMethod, $queryOrderObject->orderBuilder->orderType);
 
     }
     
     public function test_queryOrderBuilder_queryCardOrder_returns_QueryTransaction() {
         $orderId = "123456";
-        $paymentMethod = \ConfigurationProvider::HOSTED_ADMIN_TYPE;
         
         $queryOrderObject = $this->queryOrderObject->setOrderId($orderId)->queryCardOrder();
         
