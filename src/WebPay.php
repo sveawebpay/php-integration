@@ -33,25 +33,83 @@ include_once SVEA_REQUEST_DIR . "/Includes.php";
  * METHOD OVERVIEW:
  * (methods in parenthesises are deprecated), *starred methods are new to 2.0, **double starred methods are not yet implemented in release 2.0b
  * 
- * WebPay:: 
- *   createOrder  -- create order and pay via invoice, payment plan, card, or direct bank payment methods
- *   (deliverOrder) (with orderRows)-- partially deliver, change or credit invoice, payment plan orders depending on set options
- *   *deliverOrder (without orderRows) -- deliver in full invoice, payment plan orders, confirms card orders 
- *   (closeOrder) -- cancel non-delivered invoice or payment plan
- *   getAddresses -- fetch addresses connected with a provided customer identity
- *   getPaymentMethods -- fetch available payment methods for a clientid, used by i.e. direct bank orders
- *   getPaymentPlanParams -- fetch current campaigns (payment plan params) for a clientid, used by paymentplan orders
- *   getPaymentPlanPricePerMonth -- calculates price per month over all available campaigns for a specified amount 
- * 
- * WebPayAdmin:: 
- *   cancelOrder -- cancel in whole non-delivered invoice or payment plan orders, or annul non-confirmed card orders
- *   queryOrder -- get information about an order, including numbered order rows for invoice or payment plan orders
- *   **addOrderRows -- add order rows to non-delivered invoice or payment plan order
- *   **updateOrderRows -- update order rows in non-delivered invoice or payment plan order, or lower amount to charge (only) for non-confirmed card orders
- *   **deleteOrderRows -- remove order rows in non-delivered invoice or payment plan order, or lower amount to charge (only) for non-confirmed card orders
- *   **creditOrderRows -- credit order rows in delivered invoice or payment plan order, or credit confirmed card orders
- *   **listPaymentMethods -- WPA equivalent of WP::getPaymentMethods
- * 
+
+WebPay:: 
+  createOrder  -- create order and pay via invoice, payment plan, card, or direct bank payment methods
+  (deliverOrder) (with orderRows)-- partially deliver, change or credit invoice, payment plan orders depending on set options
+  *deliverOrder (without orderRows) -- deliver in full invoice, payment plan orders, confirms card orders 
+  (closeOrder) -- cancel non-delivered invoice or payment plan
+  getAddresses -- fetch addresses connected with a provided customer identity
+  getPaymentMethods -- fetch available payment methods for a clientid, used by i.e. direct bank orders
+  getPaymentPlanParams -- fetch current campaigns (payment plan params) for a clientid, used by paymentplan orders
+  getPaymentPlanPricePerMonth -- calculates price per month over all available campaigns for a specified amount 
+
+WebPayAdmin::
+  cancelOrder -- cancel in whole non-delivered invoice or payment plan orders, or annul non-confirmed card orders
+  queryOrder -- get information about an order, including numbered order rows for invoice or payment plan orders
+
+ **cancelOrderRows -- cancel order rows in non-delivered invoice or payment plan order, or lower amount to charge (only) for non-confirmed card orders
+-	->cancelInvoiceOrderRows(): use admin service CancelOrderRows with given numbered order rows to cancel order row
+-	->cancelPaymentPlanOrderRows(): as for invoice
+-	->cancelCardOrderRows: use LowerTransaction with given numbered order rows to lower the amount to charge by the order row amount; note that order rows won’t change, just the order total
+-	->cancelDirectBankOrderRows: not supported
+
+-	amend queryOrder() to return numbered order rows for hosted orders as well
+-	amend cancelCardOrderRows() to work with numbered order rows, do LowerTransaction request
+
+  **addOrderRows -- add order rows to non-delivered invoice or payment plan order
+-	->addInvoiceOrderRows(): use admin service AddOrderRows with given Svea\OrderRow objects to add order rows
+-	->addPaymentPlanOrderRows(): as for invoice above
+-	->addCardOrderRows(): – not supported
+-	->addDirectBankOrderRows(): --  not supported
+
+-	implement admin service AddOrderRows
+-	create AdminSoap classes
+-	create AddOrderRowsResult class
+-	create AddOrderRowsBuilder class
+-	->setOrderRows( Svea\OrderRow:newOrderRow )
+-	->setOrderId()
+-	Validation of OrderBuilder attributes needed to place request
+
+  **updateOrderRows -- update order rows in non-delivered invoice or payment plan order, or lower amount to charge (only) for non-confirmed card orders
+-	->updateInvoiceOrderRows(): use admin service UpdateOrderRows with given (numbered order row, Svea\OrderRow object) pairs to update order rows
+-	->updatePaymentPlanOrderRows(): as for invoice
+-	->updateCardOrderRows(): -- only possible to lower the amount for an order, method should ensure this.
+-	->updateDirectBankRows(): -- not supported
+
+-	Implement admin service UpdateOrderRows
+-	Create AdminSoap classes
+-	Create UpdateOrderRowsResult class
+-	Create UpdateOrderRowsBuilder class
+-	->updateOrderRows( int:numberedOrderRow, Svea\OrderRow:updatedOrderRow)
+-	->setOrderId()
+-	Validation of OrderBuilder attributes needed to place request
+
+-	Card: check if amount is <= current amount, or return error message
+-	Card: do LowerTransaction request
+
+  **creditOrderRows -- credit order rows in delivered invoice or payment plan order, or credit confirmed card orders
+-	->creditInvoiceOrderRows(): use admin service CreditInvoiceRows with given numbered order rows to credit order rows, should return invoicenumber of creditinvoice
+-	->creditPaymentPlanOrderRows(): as for invoice above
+-	->creditCardOrderRows(): use CreditTransaction with given numbered order rows to credit the order row amount; note that order rows won’t change, just the order total
+-	->creditDirectBankOrderRows: as for card above
+
+-	Implement admin service CreditInvoiceRows
+-	Create AdminSoap classes
+-	Create CreditOrderRowsResult class
+-	Create creditOrderRowsBuilder class
+-	->creditOrderRows( int:numberedOrderRow )
+-	->setOrderId()
+-	Validation of OrderBuilder attributes needed to place request
+
+-	Card: (we haven’t got state of the order, and can’t check status of individual order rows, so won’t do any validation -- document)
+-	Card: do CreditTransaction request for the amount
+
+  **listPaymentMethods -- WPA equivalent of WP::getPaymentMethods 
+
+-	straightforward port of existing WebPay::getPaymentMethods, but should return object instead of array
+-	create listPaymentMethodsResult class
+
  * The following methods are provided in WebPayAdmin as a stopgap measure to perform administrative functions for card orders.
  * These entrypoints will be removed from the package in the 2.0 release, but will still be available in the Svea namespace.
  * 
