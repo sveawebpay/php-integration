@@ -16,13 +16,13 @@ class DeliverOrdersRequestIntegrationTest extends PHPUnit_Framework_TestCase{
     public function test_manual_DeliverOrdersRequest() {
         
         // Stop here and mark this test as incomplete.
-        $this->markTestIncomplete(
-            'skeleton for test_manual_DeliverOrdersRequest' // TODO
-        );
+//        $this->markTestIncomplete(
+//            'skeleton for test_manual_DeliverOrdersRequest' // TODO
+//        );
         
         $countryCode = "SE";
-        $sveaOrderIdToDeliver = 348196;
-        $orderType = "Invoice"; // TODO -- \ConfigurationProvider::INVOICE_TYPE is "INVOICE", need to be "Invoice"
+        $sveaOrderIdToDeliver = 349699;
+        $orderType = \ConfigurationProvider::INVOICE_TYPE;
         
         $deliverOrderBuilder = new Svea\DeliverOrderBuilder( Svea\SveaConfig::getDefaultConfig() );
         $deliverOrderBuilder->setCountryCode( $countryCode );

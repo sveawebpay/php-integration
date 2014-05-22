@@ -38,7 +38,7 @@ class DeliverOrdersRequest extends AdminServiceRequest {
             new AdminSoap\OrdersToDeliver(
                 new AdminSoap\DeliverOrderInformation(
                     $this->orderBuilder->conf->getClientNumber( strtoupper($this->orderBuilder->orderType), $this->orderBuilder->countryCode ),
-                    $this->orderBuilder->orderType,
+                    AdminServiceRequest::CamelCaseOrderType( $this->orderBuilder->orderType ),
                     $this->orderBuilder->orderId
                 )
             )
