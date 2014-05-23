@@ -30,22 +30,21 @@ class AddOrderRowsRequest extends AdminServiceRequest {
                    
         $this->validateRequest();
 
-//        $orderRowNumbers = array();        
-//        foreach( $this->orderBuilder->rowsToAdd as $rowToAdd ) {       
-//            $orderRowNumbers[] = new \SoapVar($rowToAdd, XSD_LONG, null, null, 'long', "http://schemas.microsoft.com/2003/10/Serialization/Arrays");
-//        }        
+        $orderRowNumbers = array();        
+        foreach( $this->orderBuilder->orderRows as $orderRow ) {       
+            $orderRows[] = new \SoapVar($orderRow, SOAP_ENC_OBJECT, null, null, 'OrderRow', "http://schemas.microsoft.com/2003/10/Serialization/Arrays");
+        }        
         
-//        $soapRequest = new AdminSoap\AddOrderRowsRequest( 
-//            new AdminSoap\Authentication( 
-//                $this->orderBuilder->conf->getUsername( strtoupper($this->orderBuilder->orderType), $this->orderBuilder->countryCode ), 
-//                $this->orderBuilder->conf->getPassword( strtoupper($this->orderBuilder->orderType), $this->orderBuilder->countryCode ) 
-//            ),
-//            $this->orderBuilder->conf->getClientNumber( strtoupper($this->orderBuilder->orderType), $this->orderBuilder->countryCode ),
-//            new \SoapVar($orderRowNumbers, SOAP_ENC_OBJECT),            
-//            AdminServiceRequest::CamelCaseOrderType( $this->orderBuilder->orderType ),
-//            $this->orderBuilder->orderId
-//        );
-        $soapRequest = array();
+        $soapRequest = new AdminSoap\AddOrderRowsRequest( 
+            new AdminSoap\Authentication( 
+                $this->orderBuilder->conf->getUsername( strtoupper($this->orderBuilder->orderType), $this->orderBuilder->countryCode ), 
+                $this->orderBuilder->conf->getPassword( strtoupper($this->orderBuilder->orderType), $this->orderBuilder->countryCode ) 
+            ),
+            $this->orderBuilder->conf->getClientNumber( strtoupper($this->orderBuilder->orderType), $this->orderBuilder->countryCode ),
+            new \SoapVar($orderRows, SOAP_ENC_OBJECT),            
+            AdminServiceRequest::CamelCaseOrderType( $this->orderBuilder->orderType ),
+            $this->orderBuilder->orderId
+        );
         return $soapRequest;
     }
         

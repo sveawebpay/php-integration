@@ -25,6 +25,7 @@ class test_AddOrderRowsRequestIntegrationTest extends PHPUnit_Framework_TestCase
         $country = "SE";
         $order = TestUtil::createOrder( TestUtil::createIndividualCustomer($country) )
             ->addOrderRow( WebPayItem::orderRow()
+                ->setDescription("original row")
                 ->setQuantity(1)
                 ->setAmountExVat(1.00)
                 ->setVatPercent(25)
@@ -34,14 +35,14 @@ class test_AddOrderRowsRequestIntegrationTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(1, $orderResponse->accepted);
 
         // add order rows to builderobject
-        $this->builderObject->orderRows[] = TestUtil::createOrderRow( 1.00 );
+        $this->builderObject->orderRows[] = TestUtil::createOrderRow( 1.00, 1 );
         $this->builderObject->orderId = $orderResponse->sveaOrderId;
                 
         $addOrderRowsRequest = new Svea\AddOrderRowsRequest( $this->builderObject );
         $addOrderRowsResponse = $addOrderRowsRequest->doRequest();
         
-        print_r( $addOrderRowsResponse );        
+        //print_r( $addOrderRowsResponse );        
         $this->assertInstanceOf('Svea\AddOrderRowsResponse', $addOrderRowsResponse);
-        $this->assertEquals(1, $addOrderRowsResponse->accepted );    
+        $this->assertEquals(1, $addOrderRowsResponse->accepted );
     }
 }
