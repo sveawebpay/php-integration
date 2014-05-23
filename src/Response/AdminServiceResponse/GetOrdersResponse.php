@@ -216,7 +216,7 @@ class GetOrdersResponse {
                 // [RowNumber]
                 // [Status]
             
-                $newrow = new OrderRow(); // webpay orderrow
+                $newrow = new NumberedOrderRow(); // webpay orderrow
                 //WebPayItem OrderRow:          
                 // $articleNumber   *
                 // $quantity        *

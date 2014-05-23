@@ -76,9 +76,10 @@ class WebPayAdmin {
      * @see cancelOrderRowsBuilder methods:
      * ->setOrderId()
      * ->setCountryCode()
-     * ->setRowToCancel()
-     * ->setRowsToCancel()
-     * 
+     * ->setRowToCancel() (one or more)
+     * ->setRowsToCancel() (optional)
+     * ->setNumberedOrderRows() (card only)
+     *  
      * @param ConfigurationProvider $config  instance implementing ConfigurationProvider
      * @return Svea\CancelOrderRowsBuilder
      * @throws Exception

@@ -187,9 +187,9 @@ class QueryTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
     function test_manual_query_card_queryTransaction_returntype() {
 
         // Stop here and mark this test as incomplete.
-//        $this->markTestIncomplete(
-//            'skeleton for manual test of query card transaction' // TODO
-//        );
+        $this->markTestIncomplete(
+            'skeleton for manual test of query card transaction' // TODO
+        );
 
         // 1. go to test.sveaekonomi.se/webpay/admin/start.xhtml 
         // 2. go to verktyg -> betalning
@@ -214,8 +214,8 @@ class QueryTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
         
         print_r($response);
         $this->assertEquals( 1, $response->accepted );    
-        $this->assertInstanceOf( "Svea\NumberedOrderRow", $response->orderrows[0] );              
-        $this->assertInstanceOf( "Svea\NumberedOrderRow", $response->orderrows[1] );
+        $this->assertInstanceOf( "Svea\NumberedOrderRow", $response->numberedOrderRows[0] );              
+        $this->assertInstanceOf( "Svea\NumberedOrderRow", $response->numberedOrderRows[1] );
 
         $this->assertEquals( 0, $response->orderrows[1]->vatDiscount );
     }

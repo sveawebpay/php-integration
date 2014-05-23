@@ -16,9 +16,9 @@ class DeliverOrdersRequestIntegrationTest extends PHPUnit_Framework_TestCase{
     public function test_manual_DeliverOrdersRequest() {
         
         // Stop here and mark this test as incomplete.
-//        $this->markTestIncomplete(
-//            'skeleton for test_manual_DeliverOrdersRequest' // TODO
-//        );
+        $this->markTestIncomplete(
+            'skeleton for test_manual_DeliverOrdersRequest' // TODO
+        );
         
         $countryCode = "SE";
         $sveaOrderIdToDeliver = 349699;

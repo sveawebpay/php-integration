@@ -6,6 +6,10 @@ require_once SVEA_REQUEST_DIR . '/Includes.php';
 /**
  * QueryTransactionResponse handles the query transaction response
  * 
+ * Note that the amount and vat attributes only reflect the initial payment 
+ * transaction result, they are not authorative after i.e. loweramount has
+ * been called on a transaction, see the authorizedamount attribute.
+ * 
  * @author Kristian Grossman-Madsen for Svea WebPay
  */
 class QueryTransactionResponse extends HostedAdminResponse{
@@ -40,8 +44,8 @@ class QueryTransactionResponse extends HostedAdminResponse{
     public $merchantresponsecode;
     /** @var string $paymentmethod */
     public $paymentmethod;
-    /** @var NumberedOrderRow[] $orderrows  array of NumberedOrderRows w/set Name, Description, ArticleNumber, AmountExVat, VatPercent, Quantity and Unit, rowNumber */
-    public $orderrows;
+    /** @var NumberedOrderRow[] $numberedOrderRows  array of NumberedOrderRows w/set Name, Description, ArticleNumber, AmountExVat, VatPercent, Quantity and Unit, rowNumber */
+    public $numberedOrderRows;
       
     function __construct($message,$countryCode,$config) {
         parent::__construct($message,$countryCode,$config);
@@ -212,7 +216,7 @@ class QueryTransactionResponse extends HostedAdminResponse{
 
                 $rownumber +=1;
                 
-                $this->orderrows[] = $newrow;
+                $this->numberedOrderRows[] = $newrow;
             }
         }  
     }
