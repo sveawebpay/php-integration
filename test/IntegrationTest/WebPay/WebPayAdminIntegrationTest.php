@@ -821,87 +821,139 @@ class WebPayAdminIntegrationTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(8700,  $query2Response->vat);
         $this->assertEquals(12500, $query2Response->authorizedamount);
 
-//Svea\QueryTransactionResponse Object
-//(
-//    [rawQueryTransactionsResponse] => /.../
-//
-//    [transactionId] => 582695
-//    [customerrefno] => clientOrderNumber:2014-05-23T11:21:56 02:00
-//    [merchantid] => 1130
-//    [status] => AUTHORIZED
-//    [amount] => 48700
-//    [currency] => SEK
-//    [vat] => 8700
-//    [capturedamount] => 
-//    [authorizedamount] => 12500
-//    [created] => 2014-05-23 11:22:08.067
-//    [creditstatus] => CREDNONE
-//    [creditedamount] => 0
-//    [merchantresponsecode] => 0
-//    [paymentmethod] => KORTCERT
-//    [numberedOrderRows] => Array
-//        (
-//            [0] => Svea\NumberedOrderRow Object
-//                (
-//                    [creditInvoiceId] => 
-//                    [invoiceId] => 
-//                    [rowNumber] => 1
-//                    [status] => 
-//                    [articleNumber] => 
-//                    [quantity] => 2
-//                    [unit] => 
-//                    [amountExVat] => 100
-//                    [amountIncVat] => 
-//                    [vatPercent] => 25
-//                    [name] => 
-//                    [description] => 
-//                    [discountPercent] => 
-//                    [vatDiscount] => 0
-//                )
-//
-//            [1] => Svea\NumberedOrderRow Object
-//                (
-//                    [creditInvoiceId] => 
-//                    [invoiceId] => 
-//                    [rowNumber] => 2
-//                    [status] => 
-//                    [articleNumber] => 
-//                    [quantity] => 1
-//                    [unit] => 
-//                    [amountExVat] => 100
-//                    [amountIncVat] => 
-//                    [vatPercent] => 25
-//                    [name] => 
-//                    [description] => 
-//                    [discountPercent] => 
-//                    [vatDiscount] => 0
-//                )
-//
-//            [2] => Svea\NumberedOrderRow Object
-//                (
-//                    [creditInvoiceId] => 
-//                    [invoiceId] => 
-//                    [rowNumber] => 3
-//                    [status] => 
-//                    [articleNumber] => 
-//                    [quantity] => 1
-//                    [unit] => 
-//                    [amountExVat] => 100
-//                    [amountIncVat] => 
-//                    [vatPercent] => 12
-//                    [name] => 
-//                    [description] => 
-//                    [discountPercent] => 
-//                    [vatDiscount] => 0
-//                )
-//
-//        )
-//
-//    [accepted] => 1
-//    [resultcode] => 0
-//    [errormessage] => 
-//)
-//        
+    //Svea\QueryTransactionResponse Object
+    //(
+    //    [rawQueryTransactionsResponse] => /.../
+    //
+    //    [transactionId] => 582695
+    //    [customerrefno] => clientOrderNumber:2014-05-23T11:21:56 02:00
+    //    [merchantid] => 1130
+    //    [status] => AUTHORIZED
+    //    [amount] => 48700
+    //    [currency] => SEK
+    //    [vat] => 8700
+    //    [capturedamount] => 
+    //    [authorizedamount] => 12500
+    //    [created] => 2014-05-23 11:22:08.067
+    //    [creditstatus] => CREDNONE
+    //    [creditedamount] => 0
+    //    [merchantresponsecode] => 0
+    //    [paymentmethod] => KORTCERT
+    //    [numberedOrderRows] => Array
+    //        (
+    //            [0] => Svea\NumberedOrderRow Object
+    //                (
+    //                    [creditInvoiceId] => 
+    //                    [invoiceId] => 
+    //                    [rowNumber] => 1
+    //                    [status] => 
+    //                    [articleNumber] => 
+    //                    [quantity] => 2
+    //                    [unit] => 
+    //                    [amountExVat] => 100
+    //                    [amountIncVat] => 
+    //                    [vatPercent] => 25
+    //                    [name] => 
+    //                    [description] => 
+    //                    [discountPercent] => 
+    //                    [vatDiscount] => 0
+    //                )
+    //
+    //            [1] => Svea\NumberedOrderRow Object
+    //                (
+    //                    [creditInvoiceId] => 
+    //                    [invoiceId] => 
+    //                    [rowNumber] => 2
+    //                    [status] => 
+    //                    [articleNumber] => 
+    //                    [quantity] => 1
+    //                    [unit] => 
+    //                    [amountExVat] => 100
+    //                    [amountIncVat] => 
+    //                    [vatPercent] => 25
+    //                    [name] => 
+    //                    [description] => 
+    //                    [discountPercent] => 
+    //                    [vatDiscount] => 0
+    //                )
+    //
+    //            [2] => Svea\NumberedOrderRow Object
+    //                (
+    //                    [creditInvoiceId] => 
+    //                    [invoiceId] => 
+    //                    [rowNumber] => 3
+    //                    [status] => 
+    //                    [articleNumber] => 
+    //                    [quantity] => 1
+    //                    [unit] => 
+    //                    [amountExVat] => 100
+    //                    [amountIncVat] => 
+    //                    [vatPercent] => 12
+    //                    [name] => 
+    //                    [description] => 
+    //                    [discountPercent] => 
+    //                    [vatDiscount] => 0
+    //                )
+    //
+    //        )
+    //
+    //    [accepted] => 1
+    //    [resultcode] => 0
+    //    [errormessage] => 
+    //)
+    //        
+    }
+    
+    // AddOrderRows() ->addInvoiceOrderRows() ->addPaymentPlanOrderRows() w/WebPayItem::OrderRow/ShippingFee/InvoiceFee/FixedDiscount/RelativeDiscount
+    function test_AddOrderRows_addInvoiceOrderRows_single_row_success() {
+        $country = "SE";
+        $order = TestUtil::createOrderWithoutOrderRows( TestUtil::createIndividualCustomer($country) );
+        $order->addOrderRow(TestUtil::createOrderRow(1.00));        
+        $orderResponse = $order->useInvoicePayment()->doRequest();       
+        $this->assertEquals(1, $orderResponse->accepted);
+         
+        $addOrderRowsResponse = WebPayAdmin::addOrderRows( Svea\SveaConfig::getDefaultConfig() )
+                ->setOrderId($orderResponse->sveaOrderId)
+                ->setCountryCode($country)
+                ->addOrderRow( TestUtil::createOrderRow(2.00) )
+                ->addInvoiceOrderRows()
+                    ->doRequest();
         
-    } 
+        $this->assertEquals(1, $addOrderRowsResponse->accepted);  
+    }
+    
+    function test_AddOrderRows_addInvoiceOrderRows_multiple_rows_success() {
+        $country = "SE";
+        $order = TestUtil::createOrderWithoutOrderRows( TestUtil::createIndividualCustomer($country) );
+        $order->addOrderRow(TestUtil::createOrderRow(1.00));        
+        $orderResponse = $order->useInvoicePayment()->doRequest();       
+        $this->assertEquals(1, $orderResponse->accepted);
+         
+        $addOrderRowsResponse = WebPayAdmin::addOrderRows( Svea\SveaConfig::getDefaultConfig() )
+                ->setOrderId($orderResponse->sveaOrderId)
+                ->setCountryCode($country)
+                ->addOrderRow( TestUtil::createOrderRow(2.00) )
+                ->addOrderRows( array( TestUtil::createOrderRow(3.00), TestUtil::createOrderRow(4.00) ) )
+                ->addInvoiceOrderRows()
+                    ->doRequest();
+        
+        $this->assertEquals(1, $addOrderRowsResponse->accepted);  
+    }    
+    
+    function test_AddOrderRows_addPaymentPlanOrderRows_single_row_success() {
+        $country = "SE";
+        $order = TestUtil::createOrderWithoutOrderRows( TestUtil::createIndividualCustomer($country) );
+        $order->addOrderRow(TestUtil::createOrderRow(1.00));        
+        $orderResponse = $order->usePaymentPlanPayment( TestUtil::getGetPaymentPlanParamsForTesting($country) )->doRequest();       
+        $this->assertEquals(1, $orderResponse->accepted);
+
+        $addOrderRowsResponse = WebPayAdmin::addOrderRows( Svea\SveaConfig::getDefaultConfig() )
+                ->setOrderId($orderResponse->sveaOrderId)
+                ->setCountryCode($country)
+                ->addOrderRow( TestUtil::createOrderRow(2.00) )
+                ->addPaymentPlanOrderRows()
+                    ->doRequest();
+        
+        $this->assertEquals(1, $addOrderRowsResponse->accepted);  
+    }                
 }
