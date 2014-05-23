@@ -42,6 +42,7 @@ class WebPayAdmin {
     
     /**
      * Query information about an order. Supports all order payment methods.
+     * 
      * Use the following methods (@see QueryOrderBuilder):
      * ->setOrderId()
      * ->setCountryCode()  
@@ -64,7 +65,30 @@ class WebPayAdmin {
         return new Svea\QueryOrderBuilder($config);
     }
     
-    
+    /**
+     * Cancel order rows in an order. Supports Invoice, Payment Plan and Card orders.
+     * (Direct Bank orders are not supported, see CreditOrderRows instead.)
+     * 
+     * Use the WebPayAdmin::queryOrder() entrypoint to get information about the order,
+     * the queryOrder response numberedOrderRows attribute contains the order rows.
+     * 
+     * Then provide more information about the transaction and send the request using 
+     * @see cancelOrderRowsBuilder methods:
+     * ->setOrderId()
+     * ->setCountryCode()
+     * ->setRowToCancel() (one or more)
+     * ->setRowsToCancel() (optional)
+     * ->setNumberedOrderRows() (card only)
+     *  
+     * @param ConfigurationProvider $config  instance implementing ConfigurationProvider
+     * @return Svea\CancelOrderRowsBuilder
+     * @throws Exception
+     */
+    public static function cancelOrderRows( $config = NULL ) {
+        if( $config == NULL ) { WebPay::throwMissingConfigException(); }
+        return new Svea\CancelOrderRowsBuilder($config);
+    }
+        
 ////////////////////////////////////////////////////////////////////////////////////////    
     
     // HostedRequest/HandleOrder
@@ -176,8 +200,7 @@ class WebPayAdmin {
         return new Svea\QueryTransaction($config);
     }
     
-    // WebserviceRequest/HandleOrder
-    
+        
     
     /** helper function, throws exception if no config is given */
     private static function throwMissingConfigException() {

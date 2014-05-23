@@ -21,8 +21,8 @@ class DeliverOrdersRequestIntegrationTest extends PHPUnit_Framework_TestCase{
         );
         
         $countryCode = "SE";
-        $sveaOrderIdToDeliver = 348196;
-        $orderType = "Invoice"; // TODO -- \ConfigurationProvider::INVOICE_TYPE is "INVOICE", need to be "Invoice"
+        $sveaOrderIdToDeliver = 349699;
+        $orderType = \ConfigurationProvider::INVOICE_TYPE;
         
         $deliverOrderBuilder = new Svea\DeliverOrderBuilder( Svea\SveaConfig::getDefaultConfig() );
         $deliverOrderBuilder->setCountryCode( $countryCode );

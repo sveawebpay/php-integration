@@ -55,4 +55,21 @@ abstract class AdminServiceRequest {
     abstract function prepareRequest(); // prepare the soap request data
     
     abstract function validate(); // validate is defined by subclasses, should validate all elements required for call is present
+    
+    /**
+     * the integration package ConfigurationProvider::INVOICE_TYPE and ::PAYMENTPLAN_TYPE constanst are all caps, whereas the admin service
+     * enumeration used in the calls are CamelCase. This function converts the package constants so they work with the admin service.
+     */
+    protected static function CamelCaseOrderType( $orderTypeAsConst ) {
+        switch( $orderTypeAsConst ) {
+            case \ConfigurationProvider::INVOICE_TYPE:
+                return "Invoice";
+                break;
+            case \ConfigurationProvider::PAYMENTPLAN_TYPE:
+                return "PaymentPlan";
+                break;
+            default:
+                return $orderTypeAsConst;
+        }
+    }
 }

@@ -41,7 +41,7 @@ class CancelOrderRowsRequest extends AdminServiceRequest {
             ),
             $this->orderBuilder->conf->getClientNumber( strtoupper($this->orderBuilder->orderType), $this->orderBuilder->countryCode ),
             new \SoapVar($orderRowNumbers, SOAP_ENC_OBJECT),            
-            $this->orderBuilder->orderType,
+            AdminServiceRequest::CamelCaseOrderType( $this->orderBuilder->orderType ),
             $this->orderBuilder->orderId
         );
 

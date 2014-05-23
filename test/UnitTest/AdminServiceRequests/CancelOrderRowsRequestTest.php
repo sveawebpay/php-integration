@@ -17,7 +17,7 @@ class CancelOrderRowsRequestTest extends \PHPUnit_Framework_TestCase {
     public function setUp() {        
         $this->builderObject = new OrderBuilder(SveaConfig::getDefaultConfig());  
         $this->builderObject->orderId = 123456;
-        $this->builderObject->orderType = "Invoice"; // todo -- should use \ConfigurationProvider::INVOICE_TYPE;
+        $this->builderObject->orderType = \ConfigurationProvider::INVOICE_TYPE;
         $this->builderObject->countryCode = "SE";
         $this->builderObject->rowsToCancel = array(1);
     }
