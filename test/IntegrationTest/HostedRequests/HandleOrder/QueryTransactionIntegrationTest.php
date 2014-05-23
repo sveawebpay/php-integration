@@ -137,7 +137,7 @@ class QueryTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals( 0, $response->orderrows[0]->vatDiscount );
                         
         $this->assertInstanceOf( "Svea\OrderRow", $response->orderrows[1] );
-         $this->assertEquals( "124", $response->orderrows[1]->articleNumber );
+        $this->assertEquals( "124", $response->orderrows[1]->articleNumber );
         $this->assertEquals( "2", $response->orderrows[1]->quantity );
         $this->assertEquals( "m2", $response->orderrows[1]->unit );
         $this->assertEquals( 100, $response->orderrows[1]->amountExVat );
@@ -177,5 +177,76 @@ class QueryTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
         
         
     }    
-}
+
+    /**
+     * test_manual_query_card_queryTransactionResponse 
+     * 
+     * run this manually after you've performed a card transaction and have set
+     * the transaction status to success using the tools in the logg admin.
+     */  
+    function test_manual_query_card_queryTransaction_returntype() {
+
+        // Stop here and mark this test as incomplete.
+//        $this->markTestIncomplete(
+//            'skeleton for manual test of query card transaction' // TODO
+//        );
+
+        // 1. go to test.sveaekonomi.se/webpay/admin/start.xhtml 
+        // 2. go to verktyg -> betalning
+        // 3. enter our test merchantid: 1130
+        // 4. use the following xml, making sure to update to a unique customerrefno:
+        // <paymentmethod>KORTCERT</paymentmethod><currency>SEK</currency><amount>25500</amount><vat>600</vat><customerrefno>test_manual_query_card_2</customerrefno><returnurl>https://test.sveaekonomi.se/webpay/admin/merchantresponsetest.xhtml</returnurl><orderrows><row><name>Orderrow1</name><amount>500</amount><vat>100</vat><description>Orderrow description</description><quantity>1</quantity><sku>123</sku><unit>st</unit></row><row><name>Orderrow2</name><amount>12500</amount><vat>2500</vat><description>Orderrow2 description</description><quantity>2</quantity><sku>124</sku><unit>m2</unit></row></orderrows>
+        // 5. the result should be:
+        // <response><transaction id="580964"><paymentmethod>KORTCERT</paymentmethod><merchantid>1130</merchantid><customerrefno>test_manual_query_card_3</customerrefno><amount>25500</amount><currency>SEK</currency><cardtype>VISA</cardtype><maskedcardno>444433xxxxxx1100</maskedcardno><expirymonth>02</expirymonth><expiryyear>15</expiryyear><authcode>898924</authcode></transaction><statuscode>0</statuscode></response>
+
+        // 6. enter the received transaction id below and run the test
+        
+        // Set the below to match the transaction, then run the test.
+        $transactionId = 582690;
+
+        $request = new Svea\QueryTransaction( Svea\SveaConfig::getDefaultConfig() );
+        $response = $request
+            ->setTransactionId( $transactionId )
+            ->setCountryCode( "SE" )
+            ->doRequest();        
+         
+        $this->assertInstanceOf( "Svea\QueryTransactionResponse", $response );
+        
+        print_r($response);
+        $this->assertEquals( 1, $response->accepted );    
+        $this->assertInstanceOf( "Svea\NumberedOrderRow", $response->orderrows[0] );              
+        $this->assertInstanceOf( "Svea\NumberedOrderRow", $response->orderrows[1] );
+
+        $this->assertEquals( 0, $response->orderrows[1]->vatDiscount );
+    }
+    
+    
+//<paymentmethod>KORTCERT</paymentmethod>
+//    <currency>EUR</currency>
+//    <amount>1000</amount>
+//    <vat>200</vat>
+//    <customerrefno>test_1400770436503</customerrefno>
+//    <returnurl>https://test.sveaekonomi.se/webpay/public/merchantresponsetest.xhtml</returnurl>
+//<orderrows>
+//    <row>
+//        <name>Orderrow1</name>
+//        <amount>500</amount>
+//        <vat>100</vat>
+//        <description>row A</description>
+//        <quantity>1</quantity>
+//        <sku>665</sku>
+//        <unit>st</unit>
+//    </row>
+//    <row>
+//        <name>Orderrow1</name>
+//        <amount>1000</amount>
+//        <vat>200</vat>
+//        <description>row B</description>
+//        <quantity>1</quantity>
+//        <sku>665</sku>
+//        <unit>st</unit>
+//    </row>
+//</orderrows>
+    
+    }
 ?>

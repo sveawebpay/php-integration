@@ -10,6 +10,8 @@ require_once SVEA_REQUEST_DIR . '/Includes.php';
  */
 class QueryTransactionResponse extends HostedAdminResponse{
 
+    public $rawQueryTransactionsResponse;
+    
     /** @var string $transactionId  the queried transactionId */
     public $transactionId;
     /** @var string $customerrefno */
@@ -38,7 +40,7 @@ class QueryTransactionResponse extends HostedAdminResponse{
     public $merchantresponsecode;
     /** @var string $paymentmethod */
     public $paymentmethod;
-    /** @var OrderRow[] $orderrows  array of OrderRows w/set Name, Description, ArticleNumber, AmountExVat, VatPercent, Quantity and Unit */
+    /** @var NumberedOrderRow[] $orderrows  array of NumberedOrderRows w/set Name, Description, ArticleNumber, AmountExVat, VatPercent, Quantity and Unit, rowNumber */
     public $orderrows;
       
     function __construct($message,$countryCode,$config) {
@@ -149,6 +151,8 @@ class QueryTransactionResponse extends HostedAdminResponse{
         // queryTransaction
         if(property_exists($hostedAdminResponse->transaction,"customerrefno") && property_exists($hostedAdminResponse->transaction,"merchantid")){
                 
+            $this->rawQueryTransactionsResponse = $hostedAdminResponse; // the raw GetOrders response
+            
             $this->transactionId = (string)$hostedAdminResponse->transaction['id'];
             
             $this->customerrefno = (string)$hostedAdminResponse->transaction->customerrefno;
@@ -165,6 +169,7 @@ class QueryTransactionResponse extends HostedAdminResponse{
             $this->merchantresponsecode = (string)$hostedAdminResponse->transaction->merchantresponsecode;
             $this->paymentmethod = (string)$hostedAdminResponse->transaction->paymentmethod;
 
+            $rownumber = 1;
             foreach( $hostedAdminResponse->transaction->orderrows->row as $orderrow ) {
 
                 $orderrow = (array)$orderrow;
@@ -177,7 +182,7 @@ class QueryTransactionResponse extends HostedAdminResponse{
                 // [sku]
                 // [unit]
                 
-                $newrow = new OrderRow(); // webpay orderrow
+                $newrow = new NumberedOrderRow(); // webpay orderrow
                 //WebPayItem OrderRow:          
                 // $articleNumber
                 // $quantity
@@ -199,6 +204,13 @@ class QueryTransactionResponse extends HostedAdminResponse{
                     ->setUnit( (string)$orderrow['unit'] )
                     ->setVatPercent( ( $orderrow['vat']/($orderrow['amount']-$orderrow['vat'])*100 ) )
                 ;
+
+                $newrow->creditInvoiceId = null;
+                $newrow->invoiceId = null;
+                $newrow->rowNumber = $rownumber;
+                $newrow->status = null;
+
+                $rownumber +=1;
                 
                 $this->orderrows[] = $newrow;
             }
