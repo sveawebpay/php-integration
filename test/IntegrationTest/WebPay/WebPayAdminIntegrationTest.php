@@ -1008,4 +1008,45 @@ class WebPayAdminIntegrationTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(1, $addOrderRowsResponse->accepted);
         // todo query result & check amounts, description automatically
     }   
+ 
+    function test_UpdateOrderRows_updateInvoiceOrderRows_single_row_success() {
+        $country = "SE";
+        $order = TestUtil::createOrderWithoutOrderRows( TestUtil::createIndividualCustomer($country) );
+        $order->addOrderRow( WebPayItem::orderRow()
+            ->setArticleNumber("1")
+            ->setQuantity( 1 )
+            ->setAmountExVat( 1.00 )
+            ->setVatPercent(25)
+            ->setDescription("A Specification")
+            ->setName('A Name')
+            ->setUnit("st")
+            ->setDiscountPercent(0)
+        );      
+        $orderResponse = $order->useInvoicePayment()->doRequest();       
+        $this->assertEquals(1, $orderResponse->accepted);
+
+        // update all attributes for a numbered orderRow
+
+        $updateOrderRowsResponse = WebPayAdmin::updateOrderRows( Svea\SveaConfig::getDefaultConfig() )
+                ->setOrderId($orderResponse->sveaOrderId)
+                ->setCountryCode($country)
+                ->addNumberedOrderRow( WebPayItem::numberedOrderRow()
+                    ->setArticleNumber("2")
+                    ->setQuantity( 2 )
+                    ->setAmountExVat( 2.00 )
+                    ->setVatPercent(26)
+                    ->setDescription("2Specification")
+                    ->setName('2Name')
+                    ->setUnit("2st")
+                    ->setDiscountPercent(1)
+                    ->setRowNumber(1)
+                )    
+                ->setRowToUpdate(1)
+                ->updateInvoiceOrderRows()
+                    ->doRequest();
+        
+        print_r("test_UpdateOrderRows_updateInvoiceOrderRows_single_row_success: "); print_r( $orderResponse->sveaOrderId );
+        $this->assertEquals(1, $updateOrderRowsResponse->accepted);  
+        // todo query result & check amounts, description automatically        
+    }
 }
