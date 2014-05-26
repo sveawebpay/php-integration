@@ -82,13 +82,32 @@ class WebPayAdmin {
      *  
      * @param ConfigurationProvider $config  instance implementing ConfigurationProvider
      * @return Svea\CancelOrderRowsBuilder
-     * @throws Exception
+     * @throws ValidationException
      */
     public static function cancelOrderRows( $config = NULL ) {
         if( $config == NULL ) { WebPay::throwMissingConfigException(); }
         return new Svea\CancelOrderRowsBuilder($config);
     }
-        
+
+    /**
+     * Add order rows to an order. Supports Invoice and Payment Plan orders.
+     * (Card and Direct Bank orders are not supported.)
+     * 
+     * Then provide more information about the order rows and send the request using 
+     * @see addOrderRowsBuilder methods:
+     * ->setOrderId()
+     * ->setCountryCode()
+     * ->addOrderRow() (one or more)
+     * ->addOrderRows() (optional)
+     *  
+     * @param ConfigurationProvider $config  instance implementing ConfigurationProvider
+     * @return Svea\AddOrderRowsBuilder
+     */
+    public static function addOrderRows( $config = NULL ) {
+        if( $config == NULL ) { WebPay::throwMissingConfigException(); }
+        return new Svea\AddOrderRowsBuilder($config);
+    }           
+    
 ////////////////////////////////////////////////////////////////////////////////////////    
     
     // HostedRequest/HandleOrder

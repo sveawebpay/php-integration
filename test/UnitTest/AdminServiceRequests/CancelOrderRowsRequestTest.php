@@ -71,13 +71,14 @@ class CancelOrderRowsRequestTest extends \PHPUnit_Framework_TestCase {
         $request = $CancelOrderRowsRequestObject->prepareRequest();
     }
     
-    public function test_prepareRequest_handles_single_rowToCancel() {
-        
-        $this->builderObject->orderId = 349090;
-        $this->builderObject->rowsToCancel = array(3);
-        $CancelOrderRowsRequestObject = new CancelOrderRowsRequest( $this->builderObject );
-        $response = $CancelOrderRowsRequestObject->doRequest();
-        
-        print_r($response);
-    }
+//    public function test_prepareRequest_handles_single_rowToCancel() {    // todo move to integrationtest, set up w/created order
+//        
+//        $this->builderObject->orderId = 349090;
+//        $this->builderObject->rowsToCancel = array(3);
+//        $CancelOrderRowsRequestObject = new CancelOrderRowsRequest( $this->builderObject );
+//        $response = $CancelOrderRowsRequestObject->doRequest();
+//                
+//        //print_r($response);
+//        $this->assertEquals( 1, $response->accepted)
+//    }
 }
