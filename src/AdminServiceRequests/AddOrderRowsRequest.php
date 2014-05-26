@@ -31,9 +31,9 @@ class AddOrderRowsRequest extends AdminServiceRequest {
         $this->validateRequest();
 
         $orderRowNumbers = array();        
-        foreach( $this->orderBuilder->orderRows as $orderRow ) {       
-            $orderRows[] = new \SoapVar($orderRow, SOAP_ENC_OBJECT, null, null, 'OrderRow', "http://schemas.microsoft.com/2003/10/Serialization/Arrays");
-        }        
+        foreach( $this->orderBuilder->orderRows as $orderRow ) {      
+            $orderRows[] = new \SoapVar( new AdminSoap\OrderRow($orderRow), SOAP_ENC_OBJECT, null, null, 'OrderRow', "http://schemas.datacontract.org/2004/07/DataObjects.Webservice" );
+        }
         
         $soapRequest = new AdminSoap\AddOrderRowsRequest( 
             new AdminSoap\Authentication( 

@@ -60,7 +60,7 @@ class AddOrderRowsBuilderTest extends \PHPUnit_Framework_TestCase {
     
     public function test_addOrderRowsBuilder_missing_orderRows_throws_exception() {
         
-        $this->setExpectedException('ValidationException');
+        $this->setExpectedException('Svea\ValidationException');
         
         $orderId = "123456";
         $addOrderRowsObject = $this->addOrderRowsObject
