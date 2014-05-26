@@ -21,4 +21,45 @@ class NumberedOrderRow extends OrderRow {
     
     /** @var string $status  one of: NotDelivered | Delivered | Cancelled */
     public $status;
+
+    /**
+     * Optional.
+     * @param numeric $creditInvoiceIdAsNumeric
+     * @return $this
+     */
+    public function setCreditInvoiceId($creditInvoiceIdAsNumeric) {
+        $this->creditInvoiceId = $creditInvoiceIdAsNumeric;
+        return $this;
+    }    
+    
+    /**
+     * Optional.
+     * @param numeric $invoiceIdAsNumeric
+     * @return $this
+     */
+    public function setinvoiceId($invoiceIdAsNumeric) {
+        $this->invoiceId = $invoiceIdAsNumeric;
+        return $this;
+    }   
+    
+    /**
+     * Optional.
+     * @param numeric $rowNumberAsNumeric
+     * @return $this
+     */
+    public function setRowNumber($rowNumberAsNumeric) {
+        $this->rowNumber = $rowNumberAsNumeric;
+        return $this;
+    }   
+    
+    /**
+     * Optional.
+     * @param string $status
+     * @return $this
+     */
+    public function setStatus($status) {
+        $this->status = $status;
+        return $this;
+    }   
+    
 }
