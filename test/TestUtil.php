@@ -77,7 +77,7 @@ class TestUtil {
             ->setQuantity( $quantity )
             ->setAmountExVat( $amount )
             ->setDescription("Specification")
-            ->setName('Prod')
+            ->setName('Product')
             ->setUnit("st")
             ->setVatPercent(25)
             ->setDiscountPercent(0);

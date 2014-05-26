@@ -25,6 +25,7 @@ class AddOrderRowsRequest extends AdminServiceRequest {
     /**
      * populate and return soap request contents using AdminSoap helper classes to get the correct data format
      * @return Svea\AdminSoap\AddOrderRowsRequest
+     * @throws Svea\ValidationException
      */    
     public function prepareRequest() {        
                    
@@ -32,7 +33,30 @@ class AddOrderRowsRequest extends AdminServiceRequest {
 
         $orderRowNumbers = array();        
         foreach( $this->orderBuilder->orderRows as $orderRow ) {      
-            $orderRows[] = new \SoapVar( new AdminSoap\OrderRow($orderRow), SOAP_ENC_OBJECT, null, null, 'OrderRow', "http://schemas.datacontract.org/2004/07/DataObjects.Webservice" );
+
+            // handle different ways to spec an orderrow            
+            // inc + ex
+            if( !isset($orderRow->vatPercent) && (isset($orderRow->amountExVat) && isset($orderRow->amountIncVat)) ) {
+                $orderRow->vatPercent = WebServiceRowFormatter::calculateVatPercentFromPriceExVatAndPriceIncVat($orderRow->amountIncVat, $orderRow->amountExVat );
+            }
+            // % + inc
+            elseif( (isset($orderRow->vatPercent) && isset($orderRow->amountIncVat)) && !isset($orderRow->amountExVat) ) {
+                $orderRow->amountExVat = WebServiceRowFormatter::convertIncVatToExVat($orderRow->amountIncVat, $orderRow->vatPercent);
+            }
+            // % + ex, no need to do anything
+                              
+            $orderRows[] = new \SoapVar( 
+                new AdminSoap\OrderRow(
+                    $orderRow->articleNumber, 
+                    $orderRow->name.": ".$orderRow->description,
+                    $orderRow->discountPercent,
+                    $orderRow->quantity, 
+                    $orderRow->amountExVat, 
+                    $orderRow->unit, 
+                    $orderRow->vatPercent
+                ),
+                SOAP_ENC_OBJECT, null, null, 'OrderRow', "http://schemas.datacontract.org/2004/07/DataObjects.Webservice" 
+            );
         }
         
         $soapRequest = new AdminSoap\AddOrderRowsRequest( 
@@ -53,7 +77,8 @@ class AddOrderRowsRequest extends AdminServiceRequest {
         $errors = $this->validateOrderId($errors);
         $errors = $this->validateOrderType($errors);
         $errors = $this->validateCountryCode($errors);
-        $errors = $this->validateRowsToAdd($errors);                        
+        $errors = $this->validateRowsToAdd($errors);     
+        $errors = $this->validateRowsHasPriceAndVatInformation($errors);
         return $errors;
     }
     
@@ -83,5 +108,14 @@ class AddOrderRowsRequest extends AdminServiceRequest {
             $errors[] = array('missing value' => "orderRows is required.");
         }
         return $errors;
-    }  
+    }
+    // todo validate that orderrows contain all needed information, i.e. don't
+    private function validateRowsHasPriceAndVatInformation($errors) {
+        foreach( $this->orderBuilder->orderRows as $orderRow ) {                                                        
+            if( !isset($orderRow->vatPercent) && (!isset($orderRow->amountIncVat) && !isset($orderRow->amountExVat)) ) {            
+                $errors[] = array('missing order row vat information' => "cannot calculate orderRow vatPercent, need at least two of amountExVat, amountIncVat and vatPercent.");
+            }
+        }
+        return $errors;
+    }
 }        

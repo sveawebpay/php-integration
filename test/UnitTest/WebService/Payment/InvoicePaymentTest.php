@@ -219,7 +219,7 @@ class InvoicePaymentTest extends PHPUnit_Framework_TestCase {
 
         //First orderrow is a product
         $this->assertEquals(1, $request->request->CreateOrderInformation->OrderRows['OrderRow'][0]->ArticleNumber);
-        $this->assertEquals('Prod: Specification', $request->request->CreateOrderInformation->OrderRows['OrderRow'][0]->Description);
+        $this->assertEquals('Product: Specification', $request->request->CreateOrderInformation->OrderRows['OrderRow'][0]->Description);
         $this->assertEquals(100.00, $request->request->CreateOrderInformation->OrderRows['OrderRow'][0]->PricePerUnit);
         $this->assertEquals(2, $request->request->CreateOrderInformation->OrderRows['OrderRow'][0]->NumberOfUnits);
         $this->assertEquals('st', $request->request->CreateOrderInformation->OrderRows['OrderRow'][0]->Unit);
@@ -252,7 +252,7 @@ class InvoicePaymentTest extends PHPUnit_Framework_TestCase {
                     ->setQuantity(2)
                     ->setAmountIncVat(125.00)
                     ->setDescription("Specification")
-                    ->setName('Prod')
+                    ->setName('Product')
                     ->setUnit("st")
                     ->setVatPercent(25)
                     ->setDiscountPercent(0)
@@ -284,7 +284,7 @@ class InvoicePaymentTest extends PHPUnit_Framework_TestCase {
 
         //First orderrow is a product
         $this->assertEquals(1, $request->request->CreateOrderInformation->OrderRows['OrderRow'][0]->ArticleNumber);
-        $this->assertEquals('Prod: Specification', $request->request->CreateOrderInformation->OrderRows['OrderRow'][0]->Description);
+        $this->assertEquals('Product: Specification', $request->request->CreateOrderInformation->OrderRows['OrderRow'][0]->Description);
         $this->assertEquals(100.00, $request->request->CreateOrderInformation->OrderRows['OrderRow'][0]->PricePerUnit);
         $this->assertEquals(2, $request->request->CreateOrderInformation->OrderRows['OrderRow'][0]->NumberOfUnits);
         $this->assertEquals('st', $request->request->CreateOrderInformation->OrderRows['OrderRow'][0]->Unit);
@@ -318,7 +318,7 @@ class InvoicePaymentTest extends PHPUnit_Framework_TestCase {
                     ->setAmountIncVat(125.00)
                     ->setAmountExVat(100.00)
                     ->setDescription("Specification")
-                    ->setName('Prod')
+                    ->setName('Product')
                     ->setUnit("st")
                     ->setDiscountPercent(0)
                     )
@@ -349,7 +349,7 @@ class InvoicePaymentTest extends PHPUnit_Framework_TestCase {
 
         //First orderrow is a product
         $this->assertEquals(1, $request->request->CreateOrderInformation->OrderRows['OrderRow'][0]->ArticleNumber);
-        $this->assertEquals('Prod: Specification', $request->request->CreateOrderInformation->OrderRows['OrderRow'][0]->Description);
+        $this->assertEquals('Product: Specification', $request->request->CreateOrderInformation->OrderRows['OrderRow'][0]->Description);
         $this->assertEquals(100.00, $request->request->CreateOrderInformation->OrderRows['OrderRow'][0]->PricePerUnit);
         $this->assertEquals(2, $request->request->CreateOrderInformation->OrderRows['OrderRow'][0]->NumberOfUnits);
         $this->assertEquals('st', $request->request->CreateOrderInformation->OrderRows['OrderRow'][0]->Unit);

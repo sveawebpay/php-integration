@@ -109,14 +109,4 @@ class AddOrderRowsBuilder {
         $this->setOrderType(\ConfigurationProvider::PAYMENTPLAN_TYPE );
         return new AddOrderRowsRequest($this);
     }    
-
-    
-    private function validateAddCardOrderRows() {           
-        if(count($this->orderRows) == 0) {
-            $exceptionString = "One or more orderRows are required for addOrderRows(). Use methods addOrderRow() or addOrderRows().";
-            throw new ValidationException($exceptionString);
-        }
-
-    } 
-
 }

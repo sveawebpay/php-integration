@@ -52,6 +52,17 @@ class WebServiceRowFormatter {
         return Helper::bround( ($amountExVat * (1+$vatPercent/100)) ,2);
     }
       
+    /**
+     * Helper function, calculates vat percentage as int from prices with and without vat.
+     * Note: this function will drop any vat rate fractions, i.e. it only handles vat rates that can be expressed as integers.
+     */
+    public static function calculateVatPercentFromPriceExVatAndPriceIncVat( $incVat, $exVat ) {
+        if( $exVat == 0.0 || $incVat == 0.0 ) // avoid -100% vat on i.e. free products or fees
+            return 0;
+        else
+            return round( (($incVat/$exVat) -1) *100);
+    }    
+    
     public function formatRows() {
         $this->newRows = array();
 
@@ -120,16 +131,6 @@ class WebServiceRowFormatter {
         if ($this->totalAmountExVat > 0) {
             $this->totalVatAsPercent = $this->totalVatAsAmount / $this->totalAmountIncVat; //e.g. 0,20 if percentage 20
         }
-    }
-
-    /**
-     * Helper function, calculates vat percentage as int from prices with and without vat.
-     */
-    private function calculateVatPercentFromPriceExVatAndPriceIncVat( $incVat, $exVat ) {
-        if( $exVat == 0.0 || $incVat == 0.0 ) // avoid -100% vat on i.e. free products or fees
-            return 0;
-        else
-            return round( (($incVat/$exVat) -1) *100);
     }
 
     private function formatOrderRows() {
