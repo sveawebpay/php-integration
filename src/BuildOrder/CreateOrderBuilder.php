@@ -193,7 +193,7 @@ class CreateOrderBuilder {
     }
 
     /**
-     * @param type $customerReferenceAsString ex. "test".rand(0 9999)
+     * @param string $customerReferenceAsString  This should contain a customer reference, as in "customer #123".
      * @return \createOrder
      */
     public function setCustomerReference($customerReferenceAsString) {
@@ -202,7 +202,7 @@ class CreateOrderBuilder {
     }
 
     /**
-     * @param type $clientOrderNumberAsString
+     * @param string $clientOrderNumberAsString  This should contain the client side order number, i.e. "order #20140519-371"
      * @return \createOrder
      */
     public function setClientOrderNumber($clientOrderNumberAsString) {

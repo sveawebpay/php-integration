@@ -28,8 +28,8 @@ class CardPaymentIntegrationTest extends \PHPUnit_Framework_TestCase {
                 ->setOrderDate("2012-12-12")
                 ->setCurrency("SEK")
                 ->usePayPage() // PayPageObject
-                ->setReturnUrl("http://myurl.se")
-                ->getPaymentForm();
+                    ->setReturnUrl("http://myurl.se")
+                    ->getPaymentForm();
         $url = "https://test.sveaekonomi.se/webpay/payment";
 
         /** CURL  **/
