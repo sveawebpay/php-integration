@@ -100,6 +100,7 @@ class WebPayAdminIntegrationTest extends PHPUnit_Framework_TestCase {
 //        
 //        $order = TestUtil::createOrderWithoutOrderRows( TestUtil::createIndividualCustomer($country) )
 //            ->addOrderRow( WebPayItem::orderRow()
+//                
 //                ->setQuantity($a_quantity)
 //                ->setAmountExVat($a_amountExVat)
 //                ->setVatPercent($a_vatPercent)
@@ -1030,7 +1031,7 @@ class WebPayAdminIntegrationTest extends PHPUnit_Framework_TestCase {
         $updateOrderRowsResponse = WebPayAdmin::updateOrderRows( Svea\SveaConfig::getDefaultConfig() )
                 ->setOrderId($orderResponse->sveaOrderId)
                 ->setCountryCode($country)
-                ->addNumberedOrderRow( WebPayItem::numberedOrderRow()
+                ->addOrderRow( WebPayItem::numberedOrderRow()
                     ->setArticleNumber("2")
                     ->setQuantity( 2 )
                     ->setAmountExVat( 2.00 )

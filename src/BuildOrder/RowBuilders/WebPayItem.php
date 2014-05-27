@@ -21,6 +21,14 @@ class WebPayItem {
     }
 
     /**
+     * @return \Svea\NumberedOrderRow
+     */
+     public static function numberedOrderRow() {
+         return new Svea\NumberedOrderRow();
+    }
+    
+    
+    /**
      * Sets shipping fee
      * @return \Svea\ShippingFee
      */

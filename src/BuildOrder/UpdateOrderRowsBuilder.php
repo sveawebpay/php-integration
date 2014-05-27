@@ -18,7 +18,9 @@ require_once SVEA_REQUEST_DIR . '/Includes.php';
  * Use setCountryCode() to specify the country code matching the original create
  * order request.
  * 
- * Use addOrderRow() or addOrderRows() to specify the order row(s) to add to the order.
+ * Use addOrderRow() or addOrderRows() to specify the order row(s) to add to the order. 
+ * The order row numbers must match those given in setRow(s)ToUpdate() and the order. 
+ * // TODO what if they don't?? 
  * 
  * Then use either updateInvoiceOrderRows() or updatePaymentPlanOrderRows(), or
  * updateCardOrderRows(), which ever matches the payment method used in the original order request.
@@ -33,9 +35,12 @@ class UpdateOrderRowsBuilder {
     /** @var ConfigurationProvider $conf  */
     public $conf;
     
-    /** @var NumberedOrderRows[] $numberedOrderRows */
-    public $orderRows;
+    /** @var NumberedOrderRows[] $numberedOrderRows  the updated order rows */
+    public $numberedOrderRows;
 
+    /** @var int[] $rowsToUpdate  the order rows to update, must match both numberedOrderRows above and the actual order order rows */
+    public $rowsToUpdate;
+    
     public function __construct($config) {
          $this->conf = $config;
          $this->orderRows = array();
@@ -77,6 +82,26 @@ class UpdateOrderRowsBuilder {
     /** @var string $orderType -- one of ConfigurationProvider::INVOICE_TYPE, ::PAYMENTPLAN_TYPE */
     public $orderType;    
 
+    /**
+     * Required.
+     * @param int $row
+     * @return $this
+     */
+    public function setRowToUpdate( $row ) {
+        $this->rowsToUpdate[] = $row;
+        return $this;
+    }    
+    
+    /**
+     * Convenience method to add several rows at once.
+     * @param int[] $rows
+     * @return $this
+     */
+    public function setRowsToUpdate( $rows ) {
+        array_merge( $this->rowsToUpdate, $rows );
+        return $this;
+    }      
+    
     /**
      * Required.
      * @param NumberedOrderRow $row
