@@ -1010,7 +1010,69 @@ class WebPayAdminIntegrationTest extends PHPUnit_Framework_TestCase {
 //        // todo query result & check amounts, description automatically
 //    }   
 // 
-    function test_UpdateOrderRows_updateInvoiceOrderRows_single_row_success() {
+//    function test_UpdateOrderRows_updateInvoiceOrderRows_single_row_success() {
+//        $country = "SE";
+//
+//        // create order
+//        $order = TestUtil::createOrderWithoutOrderRows( TestUtil::createIndividualCustomer($country) );
+//        $order->addOrderRow( WebPayItem::orderRow()
+//            ->setArticleNumber("1")
+//            ->setQuantity( 1 )
+//            ->setAmountExVat( 1.00 )
+//            ->setVatPercent(25)
+//            ->setDescription("A Specification")
+//            ->setName('A Name')
+//            ->setUnit("st")
+//            ->setDiscountPercent(0)
+//        );      
+//        $order->addOrderRow( WebPayItem::orderRow()
+//            ->setArticleNumber("2")
+//            ->setQuantity( 1 )
+//            ->setAmountExVat( 2.00 )
+//            ->setVatPercent(25)
+//            ->setDescription("B Specification")
+//            ->setName('B Name')
+//            ->setUnit("st")
+//            ->setDiscountPercent(0)
+//        );         $orderResponse = $order->useInvoicePayment()->doRequest();       
+//        $this->assertEquals(1, $orderResponse->accepted);
+//
+////        // query order
+////        $query = WebPayAdmin::queryOrder( Svea\SveaConfig::getDefaultConfig() );
+////        $query->setCountryCode($country)->setOrderId($orderResponse->sveaOrderId);
+////        $queryResponse = $query->queryInvoiceOrder()->doRequest();
+////        
+////        //print_r($queryResponse);
+////        $this->assertEquals(1, $queryResponse->accepted);
+//
+//        // update all attributes for a numbered orderRow   
+//        $updateOrderRowsResponse = WebPayAdmin::updateOrderRows( Svea\SveaConfig::getDefaultConfig() )
+//                ->setOrderId($orderResponse->sveaOrderId)
+//                ->setCountryCode($country)
+//                ->updateOrderRow( WebPayItem::numberedOrderRow()
+//                    ->setArticleNumber("10")
+//                    ->setQuantity( 1 )
+//                    ->setAmountExVat( 10.00 )
+//                    ->setVatPercent(26)
+//                    ->setDescription("K Specification")
+//                    ->setName('K Name')
+//                    ->setUnit("st")
+//                    ->setDiscountPercent(1)
+////                    ->setCreditInvoiceId()
+////                    ->setInvoiceId()
+//                    ->setRowNumber(1)
+//                    ->setStatus(Svea\NumberedOrderRow::ORDERROWSTATUS_NOTDELIVERED)
+//                )    
+//                ->updateInvoiceOrderRows()
+//                    ->doRequest();
+//        
+////        print_r( $updateOrderRowsResponse );
+//        print_r("test_UpdateOrderRows_updateInvoiceOrderRows_single_row_success: "); print_r( $orderResponse->sveaOrderId );
+//        $this->assertEquals(1, $updateOrderRowsResponse->accepted);
+//        // todo query result & check amounts, description automatically        
+//    }
+    
+    function test_CreditOrderRows_creditInvoiceOrderRows_single_row_success() {
         $country = "SE";
 
         // create order
@@ -1042,34 +1104,29 @@ class WebPayAdminIntegrationTest extends PHPUnit_Framework_TestCase {
         $query->setCountryCode($country)->setOrderId($orderResponse->sveaOrderId);
         $queryResponse = $query->queryInvoiceOrder()->doRequest();
         
-        //print_r($queryResponse);
+        print_r($queryResponse);
         $this->assertEquals(1, $queryResponse->accepted);
 
-        // update all attributes for a numbered orderRow
-    
-        $updateOrderRowsResponse = WebPayAdmin::updateOrderRows( Svea\SveaConfig::getDefaultConfig() )
+        // credit an order row
+        $creditOrderRowsResponse = WebPayAdmin::creditOrderRows( Svea\SveaConfig::getDefaultConfig() )
                 ->setOrderId($orderResponse->sveaOrderId)
                 ->setCountryCode($country)
-                ->updateOrderRow( WebPayItem::numberedOrderRow()
-                    ->setArticleNumber("10")
+                ->addCreditOrderRow( WebPayItem::orderRow()
+                    ->setArticleNumber("k1")
                     ->setQuantity( 1 )
-                    ->setAmountExVat( 10.00 )
-                    ->setVatPercent(26)
-                    ->setDescription("K Specification")
-                    ->setName('K Name')
+                    ->setAmountExVat( 1.00 )
+                    ->setVatPercent(25)
+                    ->setDescription("CreditRow Specification")
+                    ->setName('CreditRow Name')
                     ->setUnit("st")
-                    ->setDiscountPercent(1)
-//                    ->setCreditInvoiceId()
-//                    ->setInvoiceId()
-                    ->setRowNumber(1)
-                    ->setStatus(Svea\NumberedOrderRow::ORDERROWSTATUS_NOTDELIVERED)
+                    ->setDiscountPercent(0)
                 )    
-                ->updateInvoiceOrderRows()
+                ->creditInvoiceOrderRows()
                     ->doRequest();
         
-//        print_r( $updateOrderRowsResponse );
-        print_r("test_UpdateOrderRows_updateInvoiceOrderRows_single_row_success: "); print_r( $orderResponse->sveaOrderId );
-        $this->assertEquals(1, $updateOrderRowsResponse->accepted);
+        print_r( $creditOrderRowsResponse );
+        print_r("test_CreditOrderRows_creditInvoiceOrderRows_single_row_success: "); print_r( $orderResponse->sveaOrderId );
+        $this->assertEquals(1, $creditOrderRowsResponse->accepted);
         // todo query result & check amounts, description automatically        
-    }
+    }    
 }
