@@ -22,7 +22,7 @@ $countryCode = "SE"; // should match request countryCode
 $rawResponse = $_POST;
 
 // decode the raw response by passing it through the SveaResponse class
-$myResponse = new SveaResponse( $rawResponse );
+$myResponse = new SveaResponse( $rawResponse, $countryCode, $myConfig );
 
 // The decoded response is available through the ->getResponse() method.
 // Check the response attribute 'accepted' for true to see if the request succeeded, if not, see the attributes resultcode and/or errormessage
