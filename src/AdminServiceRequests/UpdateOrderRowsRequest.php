@@ -2,37 +2,36 @@
 namespace Svea;
 
 require_once SVEA_REQUEST_DIR . '/Includes.php';
-require_once 'AdminServiceRequest.php';
 
 /**
- * Admin Service AddOrderRowsRequest class
+ * Admin Service UpdateOrderRowsRequest class
  * 
  * @author Kristian Grossman-Madsen
  */
-class AddOrderRowsRequest extends AdminServiceRequest {
+class UpdateOrderRowsRequest extends AdminServiceRequest {
     
-    /** @var AddOrderRowBuilder $orderBuilder */
+    /** @var UpdateOrderRowBuilder $orderBuilder */
     public $orderBuilder;
 
     /**
-     * @param addOrderRowsBuilder $orderBuilder
+     * @param updateOrderRowsBuilder $orderBuilder
      */
-    public function __construct($addOrderRowsBuilder) {
-        $this->action = "AddOrderRows";
-        $this->orderBuilder = $addOrderRowsBuilder;
+    public function __construct($updateOrderRowsBuilder) {
+        $this->action = "UpdateOrderRows";
+        $this->orderBuilder = $updateOrderRowsBuilder;
     }
 
     /**
      * populate and return soap request contents using AdminSoap helper classes to get the correct data format
-     * @return Svea\AdminSoap\AddOrderRowsRequest
+     * @return Svea\AdminSoap\UpdateOrderRowsRequest
      * @throws Svea\ValidationException
      */    
     public function prepareRequest() {        
                    
         $this->validateRequest();
 
-        $orderRowNumbers = array();        
-        foreach( $this->orderBuilder->orderRows as $orderRow ) {      
+        $updatedOrderRows = array();       
+        foreach( $this->orderBuilder->numberedOrderRows as $orderRow ) {      
 
             // handle different ways to spec an orderrow            
             // inc + ex
@@ -44,31 +43,38 @@ class AddOrderRowsRequest extends AdminServiceRequest {
                 $orderRow->amountExVat = WebServiceRowFormatter::convertIncVatToExVat($orderRow->amountIncVat, $orderRow->vatPercent);
             }
             // % + ex, no need to do anything
+            
+            // TODO validate that rowNumber is set in all orderrows
                               
-            $orderRows[] = new \SoapVar( 
-                new AdminSoap\OrderRow(
-                    $orderRow->articleNumber, 
+            $updatedOrderRows[] = new \SoapVar( 
+                new AdminSoap\NumberedOrderRow(
+                    $orderRow->articleNumber,
                     $orderRow->name.": ".$orderRow->description,
                     $orderRow->discountPercent,
-                    $orderRow->quantity, 
-                    $orderRow->amountExVat, 
-                    $orderRow->unit, 
-                    $orderRow->vatPercent
+                    $orderRow->quantity,
+                    $orderRow->amountExVat,
+                    $orderRow->unit,
+                    $orderRow->vatPercent,                        
+                    $orderRow->creditInvoiceId,
+                    $orderRow->invoiceId,
+                    $orderRow->rowNumber,
+                    $orderRow->status
                 ),
-                SOAP_ENC_OBJECT, null, null, 'OrderRow', "http://schemas.datacontract.org/2004/07/DataObjects.Webservice" 
+                SOAP_ENC_OBJECT, null, null, 'NumberedOrderRow', "http://schemas.datacontract.org/2004/07/DataObjects.Admin.Service" 
             );
         }
         
-        $soapRequest = new AdminSoap\AddOrderRowsRequest( 
+        $soapRequest = new AdminSoap\UpdateOrderRowsRequest( 
             new AdminSoap\Authentication( 
                 $this->orderBuilder->conf->getUsername( strtoupper($this->orderBuilder->orderType), $this->orderBuilder->countryCode ), 
                 $this->orderBuilder->conf->getPassword( strtoupper($this->orderBuilder->orderType), $this->orderBuilder->countryCode ) 
             ),
             $this->orderBuilder->conf->getClientNumber( strtoupper($this->orderBuilder->orderType), $this->orderBuilder->countryCode ),
-            new \SoapVar($orderRows, SOAP_ENC_OBJECT),            
             AdminServiceRequest::CamelCaseOrderType( $this->orderBuilder->orderType ),
-            $this->orderBuilder->orderId
+            $this->orderBuilder->orderId,
+            new \SoapVar($updatedOrderRows, SOAP_ENC_OBJECT)
         );
+       
         return $soapRequest;
     }
         
@@ -77,8 +83,8 @@ class AddOrderRowsRequest extends AdminServiceRequest {
         $errors = $this->validateOrderId($errors);
         $errors = $this->validateOrderType($errors);
         $errors = $this->validateCountryCode($errors);
-        $errors = $this->validateRowsToAdd($errors);     
-        $errors = $this->validateRowsHasPriceAndVatInformation($errors);
+        $errors = $this->validateNumberedOrderRowsExist($errors);                        
+        $errors = $this->validateNumberedOrderRowsHasPriceAndVatInformation($errors);                        
         return $errors;
     }
     
@@ -103,19 +109,19 @@ class AddOrderRowsRequest extends AdminServiceRequest {
         return $errors;
     }    
     
-    private function validateRowsToAdd($errors) {
-        if (isset($this->orderBuilder->orderRows) == FALSE) {                                                        
-            $errors[] = array('missing value' => "orderRows is required.");
+    private function validateNumberedOrderRowsExist($errors) {
+        if (isset($this->orderBuilder->numberedOrderRows) == FALSE) {                                                        
+            $errors[] = array('missing value' => "numberedOrderRows is required.");
         }
         return $errors;
     }
-
-    private function validateRowsHasPriceAndVatInformation($errors) {
-        foreach( $this->orderBuilder->orderRows as $orderRow ) {                                                        
+    
+    private function validateNumberedOrderRowsHasPriceAndVatInformation($errors) {
+        foreach( $this->orderBuilder->numberedOrderRows as $orderRow ) {                                                        
             if( !isset($orderRow->vatPercent) && (!isset($orderRow->amountIncVat) && !isset($orderRow->amountExVat)) ) {            
                 $errors[] = array('missing order row vat information' => "cannot calculate orderRow vatPercent, need at least two of amountExVat, amountIncVat and vatPercent.");
             }
         }
         return $errors;
-    }
+    } 
 }        
