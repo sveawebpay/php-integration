@@ -119,7 +119,7 @@ class WebPayAdmin {
 // * 	Create AdminSoap classes
 // * 	Create UpdateOrderRowsResult class
 // * 	Create UpdateOrderRowsBuilder class
-// * 	->updateOrderRows( int:numberedOrderRow, Svea\OrderRow:updatedOrderRow)
+// * 	->updateOrderRows( Svea\NumberedOrderRow:updatedOrderRow)
 // * 	->setOrderId()
 // * 	Validation of OrderBuilder attributes needed to place request
 // * 
@@ -139,7 +139,6 @@ class WebPayAdmin {
      * ->setCountryCode()
      * ->setRowToUpdate() (one or more)
      * ->setRowsToUpdate() (optional)
-     * ->setNumberedOrderRows() (Invoice or Payment Plan orders only)
      *  
      * @param ConfigurationProvider $config  instance implementing ConfigurationProvider
      * @return Svea\UpdateOrderRowsBuilder

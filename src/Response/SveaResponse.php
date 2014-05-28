@@ -85,7 +85,10 @@ class SveaResponse {
                     case "AddOrderRows":
                         $this->response = new Svea\AddOrderRowsResponse( $message );
                         break;
-                        
+                    case "UpdateOrderRows":
+                        $this->response = new Svea\UpdateOrderRowsResponse( $message );
+                        break;
+                                            
                     // $method is set for HostedAdminRequests, indicates the request method used                    
                     case "querytransactionid":
                         $this->response = new Svea\QueryTransactionResponse($message, $countryCode, $config);

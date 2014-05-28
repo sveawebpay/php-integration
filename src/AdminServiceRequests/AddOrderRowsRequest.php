@@ -109,7 +109,7 @@ class AddOrderRowsRequest extends AdminServiceRequest {
         }
         return $errors;
     }
-    // todo validate that orderrows contain all needed information, i.e. don't
+
     private function validateRowsHasPriceAndVatInformation($errors) {
         foreach( $this->orderBuilder->orderRows as $orderRow ) {                                                        
             if( !isset($orderRow->vatPercent) && (!isset($orderRow->amountIncVat) && !isset($orderRow->amountExVat)) ) {            

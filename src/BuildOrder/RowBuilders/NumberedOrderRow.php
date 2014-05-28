@@ -9,7 +9,10 @@ require_once 'OrderRow.php'; // fix for class loader sequencing problem
  * directly via the service requests GetOrders, or QueryTransaction, responses.
  */
 class NumberedOrderRow extends OrderRow {
-
+    const ORDERROWSTATUS_NOTDELIVERED = 'NotDelivered';
+    const ORDERROWSTATUS_DELIVERED = 'Delivered';
+    const ORDERROWSTATUS_CANCELLED = 'Cancelled';
+    
     /** @var numeric $creditInvoiceId  reference to invoice to credit */
     public $creditInvoiceId;
     

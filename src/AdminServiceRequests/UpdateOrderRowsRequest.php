@@ -24,14 +24,44 @@ class UpdateOrderRowsRequest extends AdminServiceRequest {
     /**
      * populate and return soap request contents using AdminSoap helper classes to get the correct data format
      * @return Svea\AdminSoap\UpdateOrderRowsRequest
+     * @throws Svea\ValidationException
      */    
     public function prepareRequest() {        
                    
         $this->validateRequest();
 
-        $orderRowNumbers = array();        
-        foreach( $this->orderBuilder->rowsToUpdate as $rowToUpdate ) {       
-            $orderRowNumbers[] = new \SoapVar($rowToUpdate, XSD_LONG, null, null, 'long', "http://schemas.microsoft.com/2003/10/Serialization/Arrays");
+        $updatedOrderRows = array();       
+        foreach( $this->orderBuilder->numberedOrderRows as $orderRow ) {      
+
+            // handle different ways to spec an orderrow            
+            // inc + ex
+            if( !isset($orderRow->vatPercent) && (isset($orderRow->amountExVat) && isset($orderRow->amountIncVat)) ) {
+                $orderRow->vatPercent = WebServiceRowFormatter::calculateVatPercentFromPriceExVatAndPriceIncVat($orderRow->amountIncVat, $orderRow->amountExVat );
+            }
+            // % + inc
+            elseif( (isset($orderRow->vatPercent) && isset($orderRow->amountIncVat)) && !isset($orderRow->amountExVat) ) {
+                $orderRow->amountExVat = WebServiceRowFormatter::convertIncVatToExVat($orderRow->amountIncVat, $orderRow->vatPercent);
+            }
+            // % + ex, no need to do anything
+            
+            // TODO validate that rowNumber is set in all orderrows
+                              
+            $updatedOrderRows[] = new \SoapVar( 
+                new AdminSoap\NumberedOrderRow(
+                    $orderRow->articleNumber,
+                    $orderRow->name.": ".$orderRow->description,
+                    $orderRow->discountPercent,
+                    $orderRow->quantity,
+                    $orderRow->amountExVat,
+                    $orderRow->unit,
+                    $orderRow->vatPercent,                        
+                    $orderRow->creditInvoiceId,
+                    $orderRow->invoiceId,
+                    $orderRow->rowNumber,
+                    $orderRow->status
+                ),
+                SOAP_ENC_OBJECT, null, null, 'NumberedOrderRow', "http://schemas.datacontract.org/2004/07/DataObjects.Admin.Service" 
+            );
         }
         
         $soapRequest = new AdminSoap\UpdateOrderRowsRequest( 
@@ -40,13 +70,11 @@ class UpdateOrderRowsRequest extends AdminServiceRequest {
                 $this->orderBuilder->conf->getPassword( strtoupper($this->orderBuilder->orderType), $this->orderBuilder->countryCode ) 
             ),
             $this->orderBuilder->conf->getClientNumber( strtoupper($this->orderBuilder->orderType), $this->orderBuilder->countryCode ),
-            new \SoapVar($orderRowNumbers, SOAP_ENC_OBJECT),            
             AdminServiceRequest::CamelCaseOrderType( $this->orderBuilder->orderType ),
-            $this->orderBuilder->orderId
+            $this->orderBuilder->orderId,
+            new \SoapVar($updatedOrderRows, SOAP_ENC_OBJECT)
         );
-
        
-                
         return $soapRequest;
     }
         
@@ -55,7 +83,8 @@ class UpdateOrderRowsRequest extends AdminServiceRequest {
         $errors = $this->validateOrderId($errors);
         $errors = $this->validateOrderType($errors);
         $errors = $this->validateCountryCode($errors);
-        $errors = $this->validateRowsToUpdate($errors);                        
+        $errors = $this->validateNumberedOrderRowsExist($errors);                        
+        $errors = $this->validateNumberedOrderRowsHasPriceAndVatInformation($errors);                        
         return $errors;
     }
     
@@ -80,10 +109,19 @@ class UpdateOrderRowsRequest extends AdminServiceRequest {
         return $errors;
     }    
     
-    private function validateRowsToUpdate($errors) {
-        if (isset($this->orderBuilder->rowsToUpdate) == FALSE) {                                                        
-            $errors[] = array('missing value' => "rowsToUpdate is required.");
+    private function validateNumberedOrderRowsExist($errors) {
+        if (isset($this->orderBuilder->numberedOrderRows) == FALSE) {                                                        
+            $errors[] = array('missing value' => "numberedOrderRows is required.");
         }
         return $errors;
-    }  
+    }
+    
+    private function validateNumberedOrderRowsHasPriceAndVatInformation($errors) {
+        foreach( $this->orderBuilder->numberedOrderRows as $orderRow ) {                                                        
+            if( !isset($orderRow->vatPercent) && (!isset($orderRow->amountIncVat) && !isset($orderRow->amountExVat)) ) {            
+                $errors[] = array('missing order row vat information' => "cannot calculate orderRow vatPercent, need at least two of amountExVat, amountIncVat and vatPercent.");
+            }
+        }
+        return $errors;
+    } 
 }        
