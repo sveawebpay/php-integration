@@ -137,8 +137,8 @@ class WebPayAdmin {
      * @see updateOrderRowsBuilder methods:
      * ->setOrderId()
      * ->setCountryCode()
-     * ->setRowToUpdate() (one or more)
-     * ->setRowsToUpdate() (optional)
+     * ->updateOrderRow() (one or more)
+     * ->updateOrderRows() (optional)
      *  
      * @param ConfigurationProvider $config  instance implementing ConfigurationProvider
      * @return Svea\UpdateOrderRowsBuilder
@@ -147,8 +147,29 @@ class WebPayAdmin {
     public static function updateOrderRows( $config = NULL ) {
         if( $config == NULL ) { WebPay::throwMissingConfigException(); }
         return new Svea\UpdateOrderRowsBuilder($config);
-    }           
+    }
     
+    /**
+     * Credit order rows in a delivered invoice or payment plan order, a charged card
+     * order or a direct bank order. Supports all payment methods.
+     * 
+     * Add the order row(s) to credit to using the creditOrderRow(s) method. For invoice
+     * and payment plan orders, you will also receive a credit invoice id in the response.
+     * 
+     * @see updateOrderRowsBuilder methods:
+     * ->setOrderId()
+     * ->setCountryCode()
+     * ->creditOrderRow() (one or more)
+     * ->creditOrderRows() (optional)
+     *  
+     * @param ConfigurationProvider $config  instance implementing ConfigurationProvider
+     * @return Svea\UpdateOrderRowsBuilder
+     * @throws ValidationException
+     */
+    public static function creditOrderRows( $config = NULL ) {
+        if( $config == NULL ) { WebPay::throwMissingConfigException(); }
+        return new Svea\CreditOrderRowsBuilder($config);
+    }  
     
 ////////////////////////////////////////////////////////////////////////////////////////    
     

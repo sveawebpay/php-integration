@@ -905,6 +905,13 @@ class WebPayAdminIntegrationTest extends PHPUnit_Framework_TestCase {
 //    //        
 //    }
 //    
+//    // query invoice order w/single order row
+//    // query invoice order w/multiple order rows
+//    // query payment plan order row(s)
+//    // query card order row(s)
+//    // query direct bank order row(s)
+//    // negative tests?
+//    
 //    // AddOrderRows() ->addInvoiceOrderRows() ->addPaymentPlanOrderRows() w/WebPayItem::OrderRow/ShippingFee/InvoiceFee/FixedDiscount/RelativeDiscount
 //    function test_AddOrderRows_addInvoiceOrderRows_single_row_success() {
 //        $country = "SE";
@@ -1072,6 +1079,13 @@ class WebPayAdminIntegrationTest extends PHPUnit_Framework_TestCase {
 //        // todo query result & check amounts, description automatically        
 //    }
     
+    // update multiple invoice order rows    
+    // update payment plan order row(s)
+    // update card order rows 
+    // update direct bank order rows - should fail
+    // update card > original order - should fail
+    
+    
     function test_CreditOrderRows_creditInvoiceOrderRows_single_row_success() {
         $country = "SE";
 
@@ -1111,7 +1125,7 @@ class WebPayAdminIntegrationTest extends PHPUnit_Framework_TestCase {
         $creditOrderRowsResponse = WebPayAdmin::creditOrderRows( Svea\SveaConfig::getDefaultConfig() )
                 ->setOrderId($orderResponse->sveaOrderId)
                 ->setCountryCode($country)
-                ->addCreditOrderRow( WebPayItem::orderRow()
+                ->creditOrderRow( WebPayItem::orderRow()
                     ->setArticleNumber("k1")
                     ->setQuantity( 1 )
                     ->setAmountExVat( 1.00 )
@@ -1129,4 +1143,12 @@ class WebPayAdminIntegrationTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(1, $creditOrderRowsResponse->accepted);
         // todo query result & check amounts, description automatically        
     }    
+    
+    // credit multiple invoice order rows    
+    // credit payment plan order row(s)
+    // credit card order rows
+    // credit direct bank order rows
+    // credit invoice/pp/card/db amount > original order - should fail
+    // 
+    
 }
