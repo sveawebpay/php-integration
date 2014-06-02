@@ -13,6 +13,12 @@ class CreditOrderRowsRequest extends AdminServiceRequest {
     
     /** @var CreditOrderRowBuilder $orderBuilder */
     public $orderBuilder;
+    
+    /** @var SoapVar[] $rowNumbers  initally empty, contains the indexes of all order rows that will be credited */
+    public $rowNumbers; 
+    
+    /** @var SoapVar[] $orderRows  initially empty, specifies any additional credit order rows to credit */    
+    public $orderRows;
 
     /**
      * @param creditOrderRowsBuilder $orderBuilder
@@ -20,6 +26,8 @@ class CreditOrderRowsRequest extends AdminServiceRequest {
     public function __construct($creditOrderRowsBuilder) {
         $this->action = "CreditInvoiceRows";
         $this->orderBuilder = $creditOrderRowsBuilder;
+        $this->rowNumbers = array();
+        $this->orderRows = array();
     }
 
     /**
@@ -30,11 +38,6 @@ class CreditOrderRowsRequest extends AdminServiceRequest {
     public function prepareRequest() {        
                    
         $this->validateRequest();
-
-        $rowNumbers = array();        
-        foreach( $this->orderBuilder->rowsToCredit as $rowToCredit ) {       
-            $rowNumbers[] = new \SoapVar($rowToCredit, XSD_LONG, null, null, 'long', "http://schemas.microsoft.com/2003/10/Serialization/Arrays");
-        }    
         
         foreach( $this->orderBuilder->creditOrderRows as $orderRow ) {      
 
@@ -49,7 +52,7 @@ class CreditOrderRowsRequest extends AdminServiceRequest {
             }
             // % + ex, no need to do anything
                               
-            $orderRows[] = new \SoapVar( 
+            $this->orderRows[] = new \SoapVar( 
                 new AdminSoap\OrderRow(
                     $orderRow->articleNumber, 
                     $orderRow->name.": ".$orderRow->description,
@@ -63,6 +66,10 @@ class CreditOrderRowsRequest extends AdminServiceRequest {
             );
         }
         
+        foreach( $this->orderBuilder->rowsToCredit as $rowToCredit ) {       
+            $this->rowNumbers[] = new \SoapVar($rowToCredit, XSD_LONG, null,null, 'long', "http://schemas.microsoft.com/2003/10/Serialization/Arrays");
+        }    
+        
         $soapRequest = new AdminSoap\CreditInvoiceRowsRequest( 
             new AdminSoap\Authentication( 
                 $this->orderBuilder->conf->getUsername( strtoupper($this->orderBuilder->orderType), $this->orderBuilder->countryCode ), 
@@ -71,8 +78,9 @@ class CreditOrderRowsRequest extends AdminServiceRequest {
             $this->orderBuilder->conf->getClientNumber( strtoupper($this->orderBuilder->orderType), $this->orderBuilder->countryCode ),
             $this->orderBuilder->distributionType,
             $this->orderBuilder->invoiceId,
-            new \SoapVar($orderRows, SOAP_ENC_OBJECT),         
-            new \SoapVar($rowNumbers, SOAP_ENC_OBJECT)
+                
+            $this->orderRows,
+            $this->rowNumbers
         );
         return $soapRequest;
     }

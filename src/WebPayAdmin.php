@@ -150,17 +150,26 @@ class WebPayAdmin {
     }
     
     /**
-     * Credit order rows in a delivered invoice or payment plan order, a charged card
-     * order or a direct bank order. Supports all payment methods.
+     * Credit order rows in a delivered invoice order, a charged card order or 
+     * a direct bank order. Supports all payment methods.
      * 
-     * Add the order row(s) to credit to using the creditOrderRow(s) method. For invoice
-     * and payment plan orders, you will also receive a credit invoice id in the response.
+     * Add the delivered order row(s) to credit using the setRowtoCredit() or 
+     * setRowsToCredit() methods. The row numbers should reflect the invoice 
+     * order rows you wish to credit.
+     *
+     * You can also add additional credit rows to include in the credit invoice,
+     * specify these using the addCreditOrderRow() or addCreditOrderRows() methods.
+     * 
+     * For credited invoice orders, you will also receive a reference to the new
+     * credit invoice issued with the response.
      * 
      * @see updateOrderRowsBuilder methods:
-     * ->setOrderId()
      * ->setCountryCode()
-     * ->creditOrderRow() (one or more)
-     * ->creditOrderRows() (optional)
+     * ->setInvoiceId()
+     * ->setRowToCredit() (one or more)
+     * ->setRowsToCredit() (optional)
+     * ->addCreditOrderRow() (optional)
+     * ->addCreditOrderRows() (optional)
      *  
      * @param ConfigurationProvider $config  instance implementing ConfigurationProvider
      * @return Svea\UpdateOrderRowsBuilder

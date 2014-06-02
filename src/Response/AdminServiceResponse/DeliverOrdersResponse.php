@@ -2,7 +2,7 @@
 namespace Svea;
 
 /**
- * Handles the Svea Admin Web Service CancelOrder request response.
+ * Handles the Svea Admin Web Service DeliverOrder request response.
  * 
  * @author Kristian Grossman-Madsen
  */
@@ -57,44 +57,3 @@ class DeliverOrdersResponse {
         }
     }
 }
-
-//Admin DeliverOrders Invoice response example:
-//
-//<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
-//   <s:Body>
-//      <DeliverOrdersResponse xmlns="http://tempuri.org/">
-//         <DeliverOrdersResult xmlns:a="http://schemas.datacontract.org/2004/07/DataObjects.Admin.Service" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
-//            <a:ErrorMessage i:nil="true"/>
-//            <a:ResultCode>0</a:ResultCode>
-//            <a:OrdersDelivered>
-//               <a:DeliverOrderResult>
-//                  <a:ClientId>79021</a:ClientId>
-//                  <a:DeliveredAmount>250.00</a:DeliveredAmount>
-//                  <a:DeliveryReferenceNumber>1026571</a:DeliveryReferenceNumber>
-//                  <a:OrderType>Invoice</a:OrderType>
-//                  <a:SveaOrderId>346812</a:SveaOrderId>
-//               </a:DeliverOrderResult>
-//            </a:OrdersDelivered>
-//         </DeliverOrdersResult>
-//      </DeliverOrdersResponse>
-//   </s:Body>
-//</s:Envelope>
-
-//stdClass Object
-//(
-//    [ErrorMessage] => 
-//    [ResultCode] => 0
-//    [OrdersDelivered] => stdClass Object
-//        (
-//            [DeliverOrderResult] => stdClass Object
-//                (
-//                    [ClientId] => 79021
-//                    [DeliveredAmount] => 250.00
-//                    [DeliveryReferenceNumber] => 1026572
-//                    [OrderType] => Invoice
-//                    [SveaOrderId] => 346761
-//                )
-//
-//        )
-//
-//)

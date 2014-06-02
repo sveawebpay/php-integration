@@ -29,9 +29,17 @@ class CreditInvoiceRowsRequest {
                 "-","--","InvoiceDistributionType","http://schemas.datacontract.org/2004/07/DataObjects.Admin.Service");   
         $this->InvoiceId = new \SoapVar( $invoiceId, XSD_LONG, 
                 "-","--","InvoiceId","http://schemas.datacontract.org/2004/07/DataObjects.Admin.Service");
-        $this->NewCreditInvoiceRows = new \SoapVar( $newCreditInvoiceRows, SOAP_ENC_OBJECT, 
-                "-","--","NewCreditInvoiceRows","http://schemas.datacontract.org/2004/07/DataObjects.Admin.Service");
+   
+        if( count($newCreditInvoiceRows) > 0) {
+            $this->NewCreditInvoiceRows = new \SoapVar( $newCreditInvoiceRows, SOAP_ENC_OBJECT, 
+                    "-","--","NewCreditInvoiceRows","http://schemas.datacontract.org/2004/07/DataObjects.Admin.Service");
+        }
+        else
+        {
+            unset( $this->NewCreditInvoiceRows );
+        }        
+
         $this->RowNumbers = new \SoapVar( $orderRowNumbers, SOAP_ENC_OBJECT, 
-                "-","--","RowNumbers","http://schemas.datacontract.org/2004/07/DataObjects.Admin.Service");
+                "-","--","RowNumbers","http://schemas.datacontract.org/2004/07/DataObjects.Admin.Service");  
     }
 }
