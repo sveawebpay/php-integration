@@ -106,8 +106,12 @@ class CancelOrderRowsBuilder {
     
     /**
      * CancelCardOrderRows: Required
-     * When cancelling card order rows, you must pass the an array of NumberedOrderRows
-     * along with the request.
+     * When cancelling card order rows, you must pass in an array of NumberedOrderRows
+     * along with the request. This array is then matched with the order rows specified
+     * with setRow(s)ToCredit(). 
+     * 
+     * Note: the card order does not update the state of any cancelled order rows, only
+     * the total order amount to be charged.     
      */
     public function setNumberedOrderRows( $numberedOrderRows ) {
         $this->numberedOrderRows = $numberedOrderRows;
@@ -152,7 +156,7 @@ class CancelOrderRowsBuilder {
         ;
                 
         return $lowerTransaction;
-    }  
+    }
     
     private function validateCancelCardOrderRows() {           
         if(count($this->numberedOrderRows) == 0) {
