@@ -209,10 +209,22 @@ class CreditOrderRowsBuilderIntegrationTest extends PHPUnit_Framework_TestCase {
         
         // Stop here and mark this test as incomplete.
         $this->markTestIncomplete(
-            'test_manual_setup_CreditCardOrderRows_testdata -- run this first to setup order for CreditOrderRows tests to work with. 
+            '1. test_manual_setup_CreditCardOrderRows_testdata -- run this first to setup order for CreditOrderRows tests to work with. 
             Run once, then make sure to approve the invoice in the admin interface. Then uncomment and run CreditOrderRows tests.'
-        );    
                 
+
+            // 2. verktyg / confirm, use this xml w/correct transactionid => status = CONFIRMED
+            //
+            //<?xml version="1.0" encoding="UTF-8"? >
+            //<confirm>
+            //<transactionid>583004</transactionid>
+            //<capturedate>2014-06-02</capturedate>
+            //</confirm>
+
+            // 3. scehmalagda jobb / dailycapture kortcert task => status = SUCCESS
+                
+        );          
+        
         $orderLanguage = "sv";   
         $returnUrl = "http://127.0.0.1";
         $ipAddress = "127.0.0.1";
