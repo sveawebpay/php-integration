@@ -15,6 +15,25 @@ include_once SVEA_REQUEST_DIR . "/Includes.php";
 class WebPayAdmin {
 
     /**
+     * Add order rows to an order. Supports Invoice and Payment Plan orders.
+     * (Card and Direct Bank orders are not supported.)
+     * 
+     * Provide information about the new order rows and send the request using 
+     * @see addOrderRowsBuilder methods:
+     * ->setOrderId()
+     * ->setCountryCode()
+     * ->addOrderRow() (one or more)
+     * ->addOrderRows() (optional)
+     *  
+     * @param ConfigurationProvider $config  instance implementing ConfigurationProvider
+     * @return Svea\AddOrderRowsBuilder
+     */
+    public static function addOrderRows( $config = NULL ) {
+        if( $config == NULL ) { WebPay::throwMissingConfigException(); }
+        return new Svea\AddOrderRowsBuilder($config);
+    }               
+    
+    /**
      * Cancel an undelivered/unconfirmed order. Supports Invoice, PaymentPlan 
      * and Card orders. (For Direct Bank orders, see CreditOrder instead.)
      *  
@@ -89,25 +108,7 @@ class WebPayAdmin {
         return new Svea\CancelOrderRowsBuilder($config);
     }
 
-    /**
-     * Add order rows to an order. Supports Invoice and Payment Plan orders.
-     * (Card and Direct Bank orders are not supported.)
-     * 
-     * Provide information about the new order rows and send the request using 
-     * @see addOrderRowsBuilder methods:
-     * ->setOrderId()
-     * ->setCountryCode()
-     * ->addOrderRow() (one or more)
-     * ->addOrderRows() (optional)
-     *  
-     * @param ConfigurationProvider $config  instance implementing ConfigurationProvider
-     * @return Svea\AddOrderRowsBuilder
-     */
-    public static function addOrderRows( $config = NULL ) {
-        if( $config == NULL ) { WebPay::throwMissingConfigException(); }
-        return new Svea\AddOrderRowsBuilder($config);
-    }           
-    
+
 // * updateOrderRows -- update order rows in non-delivered invoice or payment plan order, 
 //         or lower amount to charge (only) for non-confirmed card orders
 // * 	->updateInvoiceOrderRows(): use admin service UpdateOrderRows with given (numbered order row, Svea\OrderRow object) pairs to update order rows
