@@ -1,5 +1,4 @@
 <?php
-namespace Svea;
 
 $root = realpath(dirname(__FILE__));
 require_once $root . '/../../src/Includes.php';
@@ -11,10 +10,17 @@ require_once $root . '/../TestUtil.php';
 class WebPayAdminUnitTest extends \PHPUnit_Framework_TestCase {
 
     public function test_WebPayAdmin_class_exists() {
-        $adminObject = new \WebPayAdmin();        
+        $adminObject = new WebPayAdmin();        
         $this->assertInstanceOf( "WebPayAdmin", $adminObject );
     }
 
+    public function test_cancelOrder_returns_CancelOrderBuilder() {
+        $builderObject = WebPayAdmin::cancelOrder( Svea\SveaConfig::getDefaultConfig() );        
+        $this->assertInstanceOf( "Svea\CancelOrderBuilder", $builderObject );
+    }
+    
+    // todo add tests for rest of orderBuilder classes here
+    
     //HostedRequest/HandleOrder classes
     
 //    public function test_annulTransaction() {
