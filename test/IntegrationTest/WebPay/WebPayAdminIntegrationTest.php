@@ -1074,7 +1074,7 @@ class WebPayAdminIntegrationTest extends PHPUnit_Framework_TestCase {
                     ->doRequest();
         
 //        print_r( $updateOrderRowsResponse );
-        print_r("test_UpdateOrderRows_updateInvoiceOrderRows_single_row_success: "); print_r( $orderResponse->sveaOrderId );
+//        print_r("test_UpdateOrderRows_updateInvoiceOrderRows_single_row_success: "); print_r( $orderResponse->sveaOrderId );
         $this->assertEquals(1, $updateOrderRowsResponse->accepted);
         // todo query result & check amounts, description automatically        
     }

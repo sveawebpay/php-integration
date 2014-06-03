@@ -315,9 +315,9 @@ class CreditOrderRowsBuilderIntegrationTest extends PHPUnit_Framework_TestCase {
     
     function test_CreditOrderRows_CreditCardOrderRows_addCreditOrderRow_setRowToCredit_success() {
         // Stop here and mark this test as incomplete.
-//        $this->markTestIncomplete(
-//            'first set up confirmed transaction and enter id in setUp()'
-//        );         
+        $this->markTestIncomplete(
+            'first set up confirmed transaction and enter id in setUp()'
+        );         
 
         // query orderrows
         $queryOrderBuilder = WebPayAdmin::queryOrder( Svea\SveaConfig::getDefaultConfig() )
