@@ -19,11 +19,16 @@ class WebPayAdminUnitTest extends \PHPUnit_Framework_TestCase {
         $this->assertInstanceOf( "Svea\AddOrderRowsBuilder", $builderObject );
     }    
     
+    public function test_cancelOrderRows_returns_AddOrderRowsBuilder() {
+        $builderObject = WebPayAdmin::cancelOrderRows( Svea\SveaConfig::getDefaultConfig() );        
+        $this->assertInstanceOf( "Svea\CancelOrderRowsBuilder", $builderObject );
+    }    
+    
     public function test_cancelOrder_returns_CancelOrderBuilder() {
         $builderObject = WebPayAdmin::cancelOrder( Svea\SveaConfig::getDefaultConfig() );        
         $this->assertInstanceOf( "Svea\CancelOrderBuilder", $builderObject );
     }
-    
+        
     // todo add tests for rest of orderBuilder classes here
     
     //HostedRequest/HandleOrder classes
