@@ -9,7 +9,6 @@ require_once $root . '/../../TestUtil.php';
  * @author Kristian Grossman-Madsen for Svea WebPay
  */
 class WebPayAdminIntegrationTest extends PHPUnit_Framework_TestCase {
-
     
     /**
      *  test_queryOrder_queryInvoiceOrder_order
@@ -396,17 +395,17 @@ class WebPayAdminIntegrationTest extends PHPUnit_Framework_TestCase {
      *
      */
     function test_manual_queryOrder_queryDirectBank_order_step_1() {
-        
+
         // Stop here and mark this test as incomplete.
         $this->markTestIncomplete(
             'skeleton for test_manual_queryOrder_queryDirectBank_order_step_1, step 1'
         );
-          
+
         // 1. remove (put in a comment) the above code to enable the test
         // 2. run the test, and get the paymenturl from the output
         // 3. go to the paymenturl and complete the transaction manually, making note of the response transactionid
         // 4. enter the transactionid into test_manual_queryOrder_queryCard_order_step_12() below and run the test
-        
+
         $orderLanguage = "sv";   
         $returnUrl = "http://foo.bar.com";
         $ipAddress = "127.0.0.1";
@@ -584,219 +583,5 @@ class WebPayAdminIntegrationTest extends PHPUnit_Framework_TestCase {
     
  
         
-    function test_CreditOrderRows_creditInvoiceOrderRows_single_setRowToCredit_success() {
-        $country = "SE";
-
-        // create order
-        $order = TestUtil::createOrderWithoutOrderRows( TestUtil::createIndividualCustomer($country) );
-        $order->addOrderRow( WebPayItem::orderRow()
-            ->setArticleNumber("1")
-            ->setQuantity( 1 )
-            ->setAmountExVat( 1.00 )
-            ->setVatPercent(25)
-            ->setDescription("A Specification")
-            ->setName('A Name')
-            ->setUnit("st")
-            ->setDiscountPercent(0)
-        );      
-        $order->addOrderRow( WebPayItem::orderRow()
-            ->setArticleNumber("2")
-            ->setQuantity( 1 )
-            ->setAmountExVat( 2.00 )
-            ->setVatPercent(25)
-            ->setDescription("B Specification")
-            ->setName('B Name')
-            ->setUnit("st")
-            ->setDiscountPercent(0)
-        );         $orderResponse = $order->useInvoicePayment()->doRequest();       
-        $this->assertEquals(1, $orderResponse->accepted);
-
-        // deliver order
-        $deliver = WebPay::deliverOrder( Svea\SveaConfig::getDefaultConfig() );
-        $deliver->setCountryCode($country)->setOrderId($orderResponse->sveaOrderId)->setInvoiceDistributionType(DistributionType::POST);
-        $deliverResponse = $deliver->deliverInvoiceOrder()->doRequest();
-        
-        print_r($deliverResponse);
-        $this->assertEquals(1, $deliverResponse->accepted);
-
-        // credit an order row
-        $creditOrderRowsResponse = WebPayAdmin::creditOrderRows( Svea\SveaConfig::getDefaultConfig() )
-                ->setInvoiceId(1027017)//$deliverResponse->invoiceId)
-                ->setInvoiceDistributionType( DistributionType::POST )
-                ->setCountryCode($country)
-                ->setRowToCredit( 1 ) 
-                ->creditInvoiceOrderRows()
-                    ->doRequest();
-        
-        print_r( $creditOrderRowsResponse );
-        print_r("test_CreditOrderRows_creditInvoiceOrderRows_single_row_success: "); print_r( $deliverResponse->invoiceId );
-        $this->assertEquals(1, $creditOrderRowsResponse->accepted);
-    }    
-
-    function test_CreditOrderRows_creditInvoiceOrderRows_multiple_setRowToCredit_success() {
-        // Stop here and mark this test as incomplete.
-        $this->markTestIncomplete(
-            'skeleton for manual test_manual_queryOrder_queryCard_order_step_1, step 1'
-        );        
-    } // todo
-    
-    function test_CreditOrderRows_creditInvoiceOrderRows_addCreditOrderRow_success() {
-        $country = "SE";
-
-        // create order
-        $order = TestUtil::createOrderWithoutOrderRows( TestUtil::createIndividualCustomer($country) );
-        $order->addOrderRow( WebPayItem::orderRow()
-            ->setArticleNumber("1")
-            ->setQuantity( 1 )
-            ->setAmountExVat( 1.00 )
-            ->setVatPercent(25)
-            ->setDescription("A Specification")
-            ->setName('A Name')
-            ->setUnit("st")
-            ->setDiscountPercent(0)
-        );      
-        $order->addOrderRow( WebPayItem::orderRow()
-            ->setArticleNumber("2")
-            ->setQuantity( 1 )
-            ->setAmountExVat( 2.00 )
-            ->setVatPercent(25)
-            ->setDescription("B Specification")
-            ->setName('B Name')
-            ->setUnit("st")
-            ->setDiscountPercent(0)
-        );         $orderResponse = $order->useInvoicePayment()->doRequest();       
-        $this->assertEquals(1, $orderResponse->accepted);
-
-        // deliver order
-        $deliver = WebPay::deliverOrder( Svea\SveaConfig::getDefaultConfig() );
-        $deliver->setCountryCode($country)->setOrderId($orderResponse->sveaOrderId)->setInvoiceDistributionType(DistributionType::POST);
-        $deliverResponse = $deliver->deliverInvoiceOrder()->doRequest();
-        
-        print_r($deliverResponse);
-        $this->assertEquals(1, $deliverResponse->accepted);
-
-        // credit an order row
-        $creditOrderRowsResponse = WebPayAdmin::creditOrderRows( Svea\SveaConfig::getDefaultConfig() )
-                ->setInvoiceId($deliverResponse->invoiceId)
-                ->setInvoiceDistributionType( DistributionType::POST )
-                ->setCountryCode($country)
-                ->addCreditOrderRow( WebPayItem::orderRow()
-                    ->setArticleNumber("k1")
-                    ->setQuantity( 1 )
-                    ->setAmountExVat( 1.00 )
-                    ->setVatPercent(25)
-                    ->setDescription("CreditRow Specification")
-                    ->setName('CreditRow Name')
-                    ->setUnit("st")
-                    ->setDiscountPercent(0)
-                )    
-                ->creditInvoiceOrderRows()
-                    ->doRequest();
-        
-        print_r( $creditOrderRowsResponse );
-        print_r("test_CreditOrderRows_creditInvoiceOrderRows_single_row_success: "); print_r( $deliverResponse->invoiceId );
-        $this->assertEquals(1, $creditOrderRowsResponse->accepted);
-    }    
-
-    function test_CreditOrderRows_creditInvoiceOrderRows_multiple_addCreditOrderRow_success() {
-        // Stop here and mark this test as incomplete.
-        $this->markTestIncomplete(
-            'skeleton for manual test_manual_queryOrder_queryCard_order_step_1, step 1'
-        );        
-    } // todo    
-    
-    function test_CreditOrderRows_creditInvoiceOrderRows_addCreditOrderRow_setRowToCredit_success() {
-        $country = "SE";
-
-        // create order
-        $order = TestUtil::createOrderWithoutOrderRows( TestUtil::createIndividualCustomer($country) );
-        $order->addOrderRow( WebPayItem::orderRow()
-            ->setArticleNumber("1")
-            ->setQuantity( 1 )
-            ->setAmountExVat( 1.00 )
-            ->setVatPercent(25)
-            ->setDescription("A Specification")
-            ->setName('A Name')
-            ->setUnit("st")
-            ->setDiscountPercent(0)
-        );      
-        $order->addOrderRow( WebPayItem::orderRow()
-            ->setArticleNumber("2")
-            ->setQuantity( 1 )
-            ->setAmountExVat( 2.00 )
-            ->setVatPercent(25)
-            ->setDescription("B Specification")
-            ->setName('B Name')
-            ->setUnit("st")
-            ->setDiscountPercent(0)
-        );         $orderResponse = $order->useInvoicePayment()->doRequest();       
-        $this->assertEquals(1, $orderResponse->accepted);
-
-        // deliver order
-        $deliver = WebPay::deliverOrder( Svea\SveaConfig::getDefaultConfig() );
-        $deliver->setCountryCode($country)->setOrderId($orderResponse->sveaOrderId)->setInvoiceDistributionType(DistributionType::POST);
-        $deliverResponse = $deliver->deliverInvoiceOrder()->doRequest();
-        
-        print_r($deliverResponse);
-        $this->assertEquals(1, $deliverResponse->accepted);
-
-        // credit an order row
-        $creditOrderRowsResponse = WebPayAdmin::creditOrderRows( Svea\SveaConfig::getDefaultConfig() )
-                ->setInvoiceId($deliverResponse->invoiceId)
-                ->setInvoiceDistributionType( DistributionType::POST )
-                ->setCountryCode($country)
-                ->addCreditOrderRow( WebPayItem::orderRow()
-                    ->setArticleNumber("k1")
-                    ->setQuantity( 1 )
-                    ->setAmountExVat( 1.00 )
-                    ->setVatPercent(25)
-                    ->setDescription("CreditRow Specification")
-                    ->setName('CreditRow Name')
-                    ->setUnit("st")
-                    ->setDiscountPercent(0)
-                )    
-                ->creditInvoiceOrderRows()
-                    ->doRequest();
-        
-        print_r( $creditOrderRowsResponse );
-        print_r("test_CreditOrderRows_creditInvoiceOrderRows_single_row_success: "); print_r( $deliverResponse->invoiceId );
-        $this->assertEquals(1, $creditOrderRowsResponse->accepted);
-    }    
-
-    function test_CreditOrderRows_creditPaymentPlanOrderRows_addCreditOrderRow_setRowToCredit_success() {
-        // Stop here and mark this test as incomplete.
-        $this->markTestIncomplete(
-            'skeleton for manual test_manual_queryOrder_queryCard_order_step_1, step 1'
-        );        
-    } // todo  
-
-    function test_CreditOrderRows_creditCardOrderRows_addCreditOrderRow_setRowToCredit_success() {
-        // Stop here and mark this test as incomplete.
-        $this->markTestIncomplete(
-            'skeleton for manual test_manual_queryOrder_queryCard_order_step_1, step 1'
-        );        
-    } // todo  
-
-    function test_CreditOrderRows_creditDirectBankOrderRows_addCreditOrderRow_setRowToCredit_success() {
-        // Stop here and mark this test as incomplete.
-        $this->markTestIncomplete(
-            'skeleton for manual test_manual_queryOrder_queryCard_order_step_1, step 1'
-        );
-    } // todo
-    
-    function test_CreditOrderRows_creditInvoiceOrderRows_addCreditOrderRow_setRowToCredit_exceeds_original_order_fails() {
-        // Stop here and mark this test as incomplete.
-        $this->markTestIncomplete(
-            'skeleton for manual test_manual_queryOrder_queryCard_order_step_1, step 1'
-        );
-    } // todo
-
-    function test_CreditOrderRows_creditCardOrderRows_addCreditOrderRow_setRowToCredit_exceeds_original_order_fails() {
-        // Stop here and mark this test as incomplete.
-        $this->markTestIncomplete(
-            'skeleton for manual test_manual_queryOrder_queryCard_order_step_1, step 1'
-        );
-    } // todo
-    
     
 }

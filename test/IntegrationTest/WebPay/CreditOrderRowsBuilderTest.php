@@ -131,7 +131,7 @@ class CreditOrderRowsBuilderIntegrationTest extends PHPUnit_Framework_TestCase {
                 ->creditInvoiceOrderRows()
                     ->doRequest();
                 
-        print_r("test_CreditOrderRows_creditInvoiceOrderRows_multiple_setRowToCredit_success:\n");
+        print_r("test_CreditOrderRows_creditInvoiceOrderRows_multiple_setRowsToCredit_success:\n");
         print_r( $creditOrderRowsResponse );
         $this->assertEquals(1, $creditOrderRowsResponse->accepted);
         $this->assertEquals(-113.25, $creditOrderRowsResponse->amount);
@@ -370,5 +370,5 @@ class CreditOrderRowsBuilderIntegrationTest extends PHPUnit_Framework_TestCase {
             'first set up approved invoice and enter id in setUp()'
         );  
     } // todo
-}
+    }
 ?>
