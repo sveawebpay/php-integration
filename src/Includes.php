@@ -32,15 +32,15 @@ foreach (glob(SVEA_REQUEST_DIR . "/HostedRequests/Helper/*.php") as $config)
 foreach (glob(SVEA_REQUEST_DIR . "/HostedRequests/Payment/*.php") as $config)
     include_once($config);
 
-foreach (glob(SVEA_REQUEST_DIR . "/WebServiceRequests/GetAddresses/*.php") as $config)
+foreach (glob(SVEA_REQUEST_DIR . "/WebService/GetAddresses/*.php") as $config)
     include_once($config);
-foreach (glob(SVEA_REQUEST_DIR . "/WebServiceRequests/GetPaymentPlanParams/*.php") as $config)
+foreach (glob(SVEA_REQUEST_DIR . "/WebService/GetPaymentPlanParams/*.php") as $config)
     include_once($config);
-foreach (glob(SVEA_REQUEST_DIR . "/WebServiceRequests/HandleOrder/*.php") as $config)
+foreach (glob(SVEA_REQUEST_DIR . "/WebService/HandleOrder/*.php") as $config)
     include_once($config);
-foreach (glob(SVEA_REQUEST_DIR . "/WebServiceRequests/Helper/*.php") as $config)
+foreach (glob(SVEA_REQUEST_DIR . "/WebService/Helper/*.php") as $config)
     include_once($config);
-foreach (glob(SVEA_REQUEST_DIR . "/WebServiceRequests/Payment/*.php") as $config)
+foreach (glob(SVEA_REQUEST_DIR . "/WebService/Payment/*.php") as $config)
     include_once($config);
 
 foreach (glob(SVEA_REQUEST_DIR . "/Response/*.php") as $config)
