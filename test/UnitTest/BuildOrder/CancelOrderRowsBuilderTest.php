@@ -44,31 +44,13 @@ class CancelOrderRowsBuilderTest extends \PHPUnit_Framework_TestCase {
         $orderId = "123456";
         $cancelOrderRowsObject = $this->cancelOrderRowsObject->setOrderId($orderId)->cancelInvoiceOrderRows();
         
-        $this->assertInstanceOf("Svea\CancelOrderRowsRequest", $cancelOrderRowsObject);
+        $this->assertInstanceOf("Svea\AdminService\CancelOrderRowsRequest", $cancelOrderRowsObject);
     }
     
     public function test_cancelOrderRowsBuilder_cancelPaymentPlanOrderRowsBuilder_returns_CancelOrderRowsRequest() {
         $orderId = "123456";  
         $cancelOrderRowsObject = $this->cancelOrderRowsObject->setOrderId($orderId)->cancelPaymentPlanOrderRows();
         
-        $this->assertInstanceOf("Svea\CancelOrderRowsRequest", $cancelOrderRowsObject);
+        $this->assertInstanceOf("Svea\AdminService\CancelOrderRowsRequest", $cancelOrderRowsObject);
     }
-    
-        // todo mock NumberedOrderRow object/add to TestUtil to get populated object.
-//    public function test_cancelOrderRowsBuilder_cancelCardOrderRowsBuilder_returns_LowerTransaction() {
-//        
-//        // Stop here and mark this test as incomplete.
-////        $this->markTestIncomplete(
-////            'todo'
-////        );
-//        
-//        $orderId = "123456";
-//        $cancelOrderRowsObject = $this->cancelOrderRowsObject
-//                ->setOrderId($orderId)
-//                ->setRowToCancel( 1 )
-//                ->setNumberedOrderRows( new NumberedOrderRow() )
-//                ->cancelCardOrderRows();
-//        
-//        $this->assertInstanceOf("Svea\LowerTransaction", $cancelOrderRowsObject);
-//    }  
 }

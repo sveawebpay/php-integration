@@ -16,12 +16,12 @@ class DeliverOrdersRequestIntegrationTest extends PHPUnit_Framework_TestCase{
     public function test_manual_DeliverOrdersRequest() {
         
         // Stop here and mark this test as incomplete.
-        $this->markTestIncomplete(
-            'skeleton for test_manual_DeliverOrdersRequest' // TODO
-        );
+//        $this->markTestIncomplete(
+//            'skeleton for test_manual_DeliverOrdersRequest'
+//        );
         
         $countryCode = "SE";
-        $sveaOrderIdToDeliver = 349699;
+        $sveaOrderIdToDeliver = 349699; // need to exist, be closed
         $orderType = \ConfigurationProvider::INVOICE_TYPE;
         
         $deliverOrderBuilder = new Svea\DeliverOrderBuilder( Svea\SveaConfig::getDefaultConfig() );
@@ -30,11 +30,12 @@ class DeliverOrdersRequestIntegrationTest extends PHPUnit_Framework_TestCase{
         $deliverOrderBuilder->setInvoiceDistributionType(DistributionType::POST);
         $deliverOrderBuilder->orderType = $orderType;
           
-        $request = new Svea\DeliverOrdersRequest( $deliverOrderBuilder );
+        $request = new Svea\AdminService\DeliverOrdersRequest( $deliverOrderBuilder );
         $response = $request->doRequest();
         
-        print_r( $response );        
+        //print_r( $response );        
         $this->assertInstanceOf('Svea\DeliverOrdersResponse', $response);
-        $this->assertEquals(1, $response->accepted );
+        $this->assertEquals(0, $response->accepted ); // 
+        $this->assertEquals(20000, $response->resultcode ); // 20000, order is closed.
     }
 }

@@ -1,5 +1,5 @@
 <?php
-namespace Svea\AdminSoap;
+namespace Svea\AdminService\AdminSoap;
 
 class GetOrdersRequest {
     public $Authentication;     // note that the order of the attributes matter!

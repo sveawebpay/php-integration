@@ -29,7 +29,7 @@ class GetOrdersRequestIntegrationTest extends PHPUnit_Framework_TestCase{
         $getOrdersBuilder->setCountryCode($countryCode);
         $getOrdersBuilder->setOrderType($orderType);        
 
-        $request = new Svea\GetOrdersRequest( $getOrdersBuilder );
+        $request = new Svea\AdminService\GetOrdersRequest( $getOrdersBuilder );
         $response = $request-> doRequest();
         
         //print_r( $response );        

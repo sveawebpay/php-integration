@@ -1,5 +1,5 @@
 <?php
-namespace Svea;
+namespace Svea\AdminService;
 
 require_once SVEA_REQUEST_DIR . '/Includes.php';
 
@@ -48,7 +48,7 @@ abstract class AdminServiceRequest {
                 }
             }
 
-            throw new ValidationException($exceptionString);
+            throw new \Svea\ValidationException($exceptionString);
         }    
     }       
 

@@ -16,9 +16,9 @@ class CancelOrderRequestIntegrationTest extends PHPUnit_Framework_TestCase{
     public function test_manual_CancelOrderRequest() {
 
         // Stop here and mark this test as incomplete.
-        $this->markTestIncomplete(
-            'skeleton for test_manual_CancelOrderRequest' // TODO
-        );
+//        $this->markTestIncomplete(
+//            'skeleton for test_manual_CancelOrderRequest'
+//        );
                 
         $countryCode = "SE";
         $sveaOrderIdToClose = 349698;        
@@ -29,12 +29,13 @@ class CancelOrderRequestIntegrationTest extends PHPUnit_Framework_TestCase{
         $cancelOrderBuilder->setOrderId( $sveaOrderIdToClose );
         $cancelOrderBuilder->orderType = $orderType;
         
-        $request = new Svea\CancelOrderRequest( $cancelOrderBuilder );
+        $request = new Svea\AdminService\CancelOrderRequest( $cancelOrderBuilder );
         $response = $request->doRequest();
         
-        //print_r( $response );        
+        //print_r("cancelorderrequest: "); print_r( $response );        
         $this->assertInstanceOf('Svea\CancelOrderResponse', $response);
-        $this->assertEquals(0, $response->resultcode );    
+        $this->assertEquals(1, $response->accepted );    
+        $this->assertEquals(0, $response->resultcode );        
 
     }
 }

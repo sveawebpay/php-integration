@@ -1,5 +1,5 @@
 <?php
-namespace Svea;
+namespace Svea\AdminService;
 
 require_once SVEA_REQUEST_DIR . '/Includes.php';
 require_once 'AdminServiceRequest.php';

@@ -1,5 +1,4 @@
 <?php
-namespace Svea;
 
 $root = realpath(dirname(__FILE__));
 require_once $root . '/../../../src/Includes.php';
@@ -15,7 +14,7 @@ class DeliverOrdersRequestTest extends \PHPUnit_Framework_TestCase {
     public $builderObject;
     
     public function setUp() {        
-        $this->builderObject = new deliverOrderBuilder(SveaConfig::getDefaultConfig());  
+        $this->builderObject = new Svea\DeliverOrderBuilder(Svea\SveaConfig::getDefaultConfig());  
         $this->builderObject->setOrderId(123456);
         $this->builderObject->setCountryCode("SE");
         $this->builderObject->setInvoiceDistributionType(\DistributionType::POST);        
@@ -23,8 +22,8 @@ class DeliverOrdersRequestTest extends \PHPUnit_Framework_TestCase {
     }
     
     public function testClassExists() {
-        $deliverOrdersRequestObject = new DeliverOrdersRequest(new deliverOrderBuilder(SveaConfig::getDefaultConfig()));
-        $this->assertInstanceOf('Svea\DeliverOrdersRequest', $deliverOrdersRequestObject);
+        $deliverOrdersRequestObject = new Svea\AdminService\DeliverOrdersRequest(new Svea\DeliverOrderBuilder(Svea\SveaConfig::getDefaultConfig()));
+        $this->assertInstanceOf('Svea\AdminService\DeliverOrdersRequest', $deliverOrdersRequestObject);
     }
     
     public function test_validate_throws_exception_on_missing_DistributionType() {
@@ -35,7 +34,7 @@ class DeliverOrdersRequestTest extends \PHPUnit_Framework_TestCase {
         
         unset( $this->builderObject->distributionType );
 
-        $deliverOrderRequestObject = new DeliverOrdersRequest( $this->builderObject );
+        $deliverOrderRequestObject = new Svea\AdminService\DeliverOrdersRequest( $this->builderObject );
         $request = $deliverOrderRequestObject->prepareRequest();
     }
     
@@ -47,7 +46,7 @@ class DeliverOrdersRequestTest extends \PHPUnit_Framework_TestCase {
         
         unset( $this->builderObject->orderId );
 
-        $deliverOrderRequestObject = new DeliverOrdersRequest( $this->builderObject );
+        $deliverOrderRequestObject = new Svea\AdminService\DeliverOrdersRequest( $this->builderObject );
         $request = $deliverOrderRequestObject->prepareRequest();
     }
 
@@ -59,7 +58,7 @@ class DeliverOrdersRequestTest extends \PHPUnit_Framework_TestCase {
         
         unset( $this->builderObject->orderType );
 
-        $deliverOrderRequestObject = new DeliverOrdersRequest( $this->builderObject );
+        $deliverOrderRequestObject = new Svea\AdminService\DeliverOrdersRequest( $this->builderObject );
         $request = $deliverOrderRequestObject->prepareRequest();
     }      
 }

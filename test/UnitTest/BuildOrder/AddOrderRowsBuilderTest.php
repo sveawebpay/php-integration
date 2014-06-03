@@ -45,7 +45,7 @@ class AddOrderRowsBuilderTest extends \PHPUnit_Framework_TestCase {
                 ->addOrderRow( \TestUtil::createOrderRow(1.00) )
                 ->addInvoiceOrderRows();
         
-        $this->assertInstanceOf("Svea\AddOrderRowsRequest", $addOrderRowsObject);
+        $this->assertInstanceOf("Svea\AdminService\AddOrderRowsRequest", $addOrderRowsObject);
     }
     
     public function test_addOrderRowsBuilder_addPaymentPlanOrderRowsBuilder_returns_AddOrderRowsRequest() {
@@ -55,7 +55,7 @@ class AddOrderRowsBuilderTest extends \PHPUnit_Framework_TestCase {
                 ->addOrderRow( \TestUtil::createOrderRow(1.00) )
                 ->addPaymentPlanOrderRows();
         
-        $this->assertInstanceOf("Svea\AddOrderRowsRequest", $addOrderRowsObject);
+        $this->assertInstanceOf("Svea\AdminService\AddOrderRowsRequest", $addOrderRowsObject);
     }
     
     public function test_addOrderRowsBuilder_missing_orderRows_throws_exception() {

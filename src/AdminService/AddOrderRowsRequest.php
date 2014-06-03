@@ -1,5 +1,5 @@
 <?php
-namespace Svea;
+namespace Svea\AdminService;
 
 require_once SVEA_REQUEST_DIR . '/Includes.php';
 require_once 'AdminServiceRequest.php';
@@ -24,8 +24,8 @@ class AddOrderRowsRequest extends AdminServiceRequest {
 
     /**
      * populate and return soap request contents using AdminSoap helper classes to get the correct data format
-     * @return Svea\AdminSoap\AddOrderRowsRequest
-     * @throws Svea\ValidationException
+     * @return \Svea\AdminService\AdminSoap\AddOrderRowsRequest
+     * @throws \Svea\ValidationException
      */    
     public function prepareRequest() {        
                    
@@ -37,11 +37,11 @@ class AddOrderRowsRequest extends AdminServiceRequest {
             // handle different ways to spec an orderrow            
             // inc + ex
             if( !isset($orderRow->vatPercent) && (isset($orderRow->amountExVat) && isset($orderRow->amountIncVat)) ) {
-                $orderRow->vatPercent = WebServiceRowFormatter::calculateVatPercentFromPriceExVatAndPriceIncVat($orderRow->amountIncVat, $orderRow->amountExVat );
+                $orderRow->vatPercent = \Svea\WebServiceRowFormatter::calculateVatPercentFromPriceExVatAndPriceIncVat($orderRow->amountIncVat, $orderRow->amountExVat );
             }
             // % + inc
             elseif( (isset($orderRow->vatPercent) && isset($orderRow->amountIncVat)) && !isset($orderRow->amountExVat) ) {
-                $orderRow->amountExVat = WebServiceRowFormatter::convertIncVatToExVat($orderRow->amountIncVat, $orderRow->vatPercent);
+                $orderRow->amountExVat = \Svea\WebServiceRowFormatter::convertIncVatToExVat($orderRow->amountIncVat, $orderRow->vatPercent);
             }
             // % + ex, no need to do anything
                               

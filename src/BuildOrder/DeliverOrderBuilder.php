@@ -129,7 +129,7 @@ class deliverOrderBuilder extends OrderBuilder {
         }
         else {
             $this->orderType = "Invoice";
-            return new DeliverOrdersRequest($this);
+            return new AdminService\DeliverOrdersRequest($this);
         }
     }
 

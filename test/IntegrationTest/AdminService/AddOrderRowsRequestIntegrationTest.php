@@ -11,8 +11,8 @@ class test_AddOrderRowsRequestIntegrationTest extends PHPUnit_Framework_TestCase
 
     public $builderObject;
     
-    public function setUp() {        
-        $this->builderObject = new Svea\OrderBuilder( Svea\SveaConfig::getDefaultConfig());        // todo change to AddOrderRowsBuilder
+    public function setUp() {
+        $this->builderObject = new Svea\OrderBuilder( Svea\SveaConfig::getDefaultConfig());
         $this->builderObject->orderId = 123456;
         $this->builderObject->orderType = \ConfigurationProvider::INVOICE_TYPE;
         $this->builderObject->countryCode = "SE";
@@ -38,7 +38,7 @@ class test_AddOrderRowsRequestIntegrationTest extends PHPUnit_Framework_TestCase
         $this->builderObject->orderRows[] = TestUtil::createOrderRow( 1.00, 1 );
         $this->builderObject->orderId = $orderResponse->sveaOrderId;
                 
-        $addOrderRowsRequest = new Svea\AddOrderRowsRequest( $this->builderObject );
+        $addOrderRowsRequest = new Svea\AdminService\AddOrderRowsRequest( $this->builderObject );
         $addOrderRowsResponse = $addOrderRowsRequest->doRequest();
         
         //print_r( $addOrderRowsResponse );        

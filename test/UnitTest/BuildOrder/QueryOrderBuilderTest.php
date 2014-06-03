@@ -46,7 +46,7 @@ class QueryOrderBuilderTest extends \PHPUnit_Framework_TestCase {
         
         $queryOrderObject = $this->queryOrderObject->setOrderId($orderId)->queryInvoiceOrder();
         
-        $this->assertInstanceOf("Svea\GetOrdersRequest", $queryOrderObject);
+        $this->assertInstanceOf("Svea\AdminService\GetOrdersRequest", $queryOrderObject);
         $this->assertEquals($paymentMethod, $queryOrderObject->orderBuilder->orderType);
 
     }
@@ -57,7 +57,7 @@ class QueryOrderBuilderTest extends \PHPUnit_Framework_TestCase {
         
         $queryOrderObject = $this->queryOrderObject->setOrderId($orderId)->queryPaymentPlanOrder();
         
-        $this->assertInstanceOf("Svea\GetOrdersRequest", $queryOrderObject);
+        $this->assertInstanceOf("Svea\AdminService\GetOrdersRequest", $queryOrderObject);
         $this->assertEquals($paymentMethod, $queryOrderObject->orderBuilder->orderType);
 
     }
