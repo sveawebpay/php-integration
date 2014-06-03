@@ -15,7 +15,8 @@ class CreditOrderRowsBuilderIntegrationTest extends PHPUnit_Framework_TestCase {
     protected function setUp()
     {
         $this->country = "SE";
-        $this->invoiceIdToTest = 583004;   // set this to the approved invoice set up by test_manual_setup_CreditOrderRows_testdata()
+        $this->invoiceIdToTest = 1027229;   // set this to the approved invoice set up by test_manual_setup_CreditOrderRows_testdata()
+        $this->successfulTransactionToTest = 583036; // set to a card transaction w/status success, see test_manual_setup_CreditCardOrderRows_testdata
     }       
 
     // CreditCardOrderRows    
@@ -25,7 +26,8 @@ class CreditOrderRowsBuilderIntegrationTest extends PHPUnit_Framework_TestCase {
         // Stop here and mark this test as incomplete.
         $this->markTestIncomplete(
             'test_manual_setup_CreditOrderRows_testdata -- run this first to setup order for CreditOrderRows tests to work with. 
-            Run once, then make sure to approve the invoice in the admin interface. Then uncomment and run CreditOrderRows tests.'
+            Run once, then make sure to log as ug 79021 and approve the invoice in the admin interface. 
+            Then uncomment and run CreditOrderRows tests.'
         );    
                 
         // create order
@@ -99,8 +101,8 @@ class CreditOrderRowsBuilderIntegrationTest extends PHPUnit_Framework_TestCase {
             'first set up approved invoice and enter id in setUp()'
         );     
               
-        $creditOrderRowsResponse = new Svea\CreditOrderRowsBuilder( Svea\SveaConfig::getDefaultConfig() );
-        $creditOrderRowsResponse
+        $creditOrderRowsRequest = new Svea\CreditOrderRowsBuilder( Svea\SveaConfig::getDefaultConfig() );
+        $creditOrderRowsResponse = $creditOrderRowsRequest
                 ->setInvoiceId( $this->invoiceIdToTest )
                 ->setInvoiceDistributionType( DistributionType::POST )
                 ->setCountryCode($this->country)
@@ -120,8 +122,8 @@ class CreditOrderRowsBuilderIntegrationTest extends PHPUnit_Framework_TestCase {
             'first set up approved invoice and enter id in setUp()'
         );  
         
-        $creditOrderRowsResponse = new Svea\CreditOrderRowsBuilder( Svea\SveaConfig::getDefaultConfig() );
-        $creditOrderRowsResponse
+        $creditOrderRowsRequest = new Svea\CreditOrderRowsBuilder( Svea\SveaConfig::getDefaultConfig() );
+        $creditOrderRowsResponse = $creditOrderRowsRequest
                 ->setInvoiceId( $this->invoiceIdToTest )
                 ->setInvoiceDistributionType( DistributionType::POST )
                 ->setCountryCode($this->country)
@@ -141,8 +143,8 @@ class CreditOrderRowsBuilderIntegrationTest extends PHPUnit_Framework_TestCase {
             'first set up approved invoice and enter id in setUp()'
         );     
 
-        $creditOrderRowsResponse = new Svea\CreditOrderRowsBuilder( Svea\SveaConfig::getDefaultConfig() );
-        $creditOrderRowsResponse
+        $creditOrderRowsRequest = new Svea\CreditOrderRowsBuilder( Svea\SveaConfig::getDefaultConfig() );
+        $creditOrderRowsResponse = $creditOrderRowsRequest
                 ->setInvoiceId( $this->invoiceIdToTest )
                 ->setInvoiceDistributionType( DistributionType::POST )
                 ->setCountryCode($this->country)
@@ -178,8 +180,8 @@ class CreditOrderRowsBuilderIntegrationTest extends PHPUnit_Framework_TestCase {
             'first set up approved invoice and enter id in setUp()'
         );     
 
-        $creditOrderRowsResponse = new Svea\CreditOrderRowsBuilder( Svea\SveaConfig::getDefaultConfig() );
-        $creditOrderRowsResponse
+        $creditOrderRowsRequest = new Svea\CreditOrderRowsBuilder( Svea\SveaConfig::getDefaultConfig() );
+        $creditOrderRowsResponse = $creditOrderRowsRequest
                 ->setInvoiceId( $this->invoiceIdToTest )
                 ->setInvoiceDistributionType( DistributionType::POST )
                 ->setCountryCode($this->country)
@@ -210,18 +212,15 @@ class CreditOrderRowsBuilderIntegrationTest extends PHPUnit_Framework_TestCase {
         // Stop here and mark this test as incomplete.
         $this->markTestIncomplete(
             '1. test_manual_setup_CreditCardOrderRows_testdata -- run this first to setup order for CreditOrderRows tests to work with. 
-            Run once, then make sure to approve the invoice in the admin interface. Then uncomment and run CreditOrderRows tests.'
-                
-
-            // 2. verktyg / confirm, use this xml w/correct transactionid => status = CONFIRMED
-            //
-            //<?xml version="1.0" encoding="UTF-8"? >
-            //<confirm>
-            //<transactionid>583004</transactionid>
-            //<capturedate>2014-06-02</capturedate>
-            //</confirm>
-
-            // 3. scehmalagda jobb / dailycapture kortcert task => status = SUCCESS
+            Run once, then make sure to approve the invoice in the admin interface. Then uncomment and run CreditOrderRows tests.               
+             
+            2. verktyg / confirm, merchant 1130, use this xml w/correct transactionid, todays date => status = CONFIRMED         
+            <confirm>
+            <transactionid>583004</transactionid>
+            <capturedate>2014-06-02</capturedate>
+            </confirm>
+            
+            3. schemalagda jobb / dailycapture kortcert task => status = SUCCESS'
                 
         );          
         
@@ -319,23 +318,23 @@ class CreditOrderRowsBuilderIntegrationTest extends PHPUnit_Framework_TestCase {
             'first set up confirmed transaction and enter id in setUp()'
         );         
 
-        // query orderrows
+        // query orderrows to pass in creditOrderRows->setNumberedOrderRows()
         $queryOrderBuilder = WebPayAdmin::queryOrder( Svea\SveaConfig::getDefaultConfig() )
-            ->setOrderId( $this->invoiceIdToTest )
+            ->setOrderId( $this->successfulTransactionToTest )
             ->setCountryCode($this->country)
         ;
                 
         $queryResponse = $queryOrderBuilder->queryCardOrder()->doRequest(); 
         
-        print_r( $queryResponse );
+        //print_r( $queryResponse );
         $this->assertEquals(1, $queryResponse->accepted);
         
         $creditOrderRowsBuilder = new Svea\CreditOrderRowsBuilder( Svea\SveaConfig::getDefaultConfig() );
         $creditOrderRowsRequest = $creditOrderRowsBuilder
-            ->setOrderId( $this->invoiceIdToTest )
+            ->setOrderId( $this->successfulTransactionToTest )
             ->setCountryCode( $this->country )
             ->setRowToCredit( 1 ) 
-            ->setNumberedOrderRows( $queryResponse->numberedOrderRows )
+            ->setNumberedOrderRows( $queryResponse->numberedOrderRows ) // use the queried order rows as base for what amount to credit
             ->creditCardOrderRows()
         ;
         $creditOrderRowsResponse = $creditOrderRowsRequest->doRequest();
@@ -344,15 +343,19 @@ class CreditOrderRowsBuilderIntegrationTest extends PHPUnit_Framework_TestCase {
         print_r( $creditOrderRowsResponse );
         
         $this->assertEquals(1, $creditOrderRowsResponse->accepted);
+        
+        // query orderrows again
+        $queryOrderBuilder = WebPayAdmin::queryOrder( Svea\SveaConfig::getDefaultConfig() )
+            ->setOrderId( $this->successfulTransactionToTest )
+            ->setCountryCode($this->country)
+        ;
+                
+        $queryResponse = $queryOrderBuilder->queryCardOrder()->doRequest();         
+        $this->assertEquals(1, $queryResponse->accepted);
+        print_r( $queryResponse );
+        $this->assertEquals(12500, $queryResponse->creditedamount);
+        
     }
-
-
-    function test_CreditOrderRows_creditDirectBankOrderRows_addCreditOrderRow_setRowToCredit_success() {
-        // Stop here and mark this test as incomplete.
-        $this->markTestIncomplete(
-            'first set up approved invoice and enter id in setUp()'
-        );  
-    } // todo
     
     function test_CreditOrderRows_creditInvoiceOrderRows_addCreditOrderRow_setRowToCredit_exceeds_original_order_fails() {
         // Stop here and mark this test as incomplete.
@@ -368,6 +371,4 @@ class CreditOrderRowsBuilderIntegrationTest extends PHPUnit_Framework_TestCase {
         );  
     } // todo
 }
-
-
 ?>

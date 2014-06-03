@@ -24,6 +24,16 @@ class WebPayAdminUnitTest extends \PHPUnit_Framework_TestCase {
         $this->assertInstanceOf( "Svea\CancelOrderRowsBuilder", $builderObject );
     }    
     
+    public function test_creditOrderRows_returns_AddOrderRowsBuilder() {
+        $builderObject = WebPayAdmin::creditOrderRows( Svea\SveaConfig::getDefaultConfig() );        
+        $this->assertInstanceOf( "Svea\CreditOrderRowsBuilder", $builderObject );
+    }        
+    
+    public function test_updateOrderRows_returns_AddOrderRowsBuilder() {
+        $builderObject = WebPayAdmin::updateOrderRows( Svea\SveaConfig::getDefaultConfig() );        
+        $this->assertInstanceOf( "Svea\UpdateOrderRowsBuilder", $builderObject );
+    }    
+    
     public function test_cancelOrder_returns_CancelOrderBuilder() {
         $builderObject = WebPayAdmin::cancelOrder( Svea\SveaConfig::getDefaultConfig() );        
         $this->assertInstanceOf( "Svea\CancelOrderBuilder", $builderObject );
