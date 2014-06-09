@@ -1,9 +1,6 @@
 <?php
-namespace Svea;
+namespace Svea\HostedService;
 
-/**
- *
- */
 class HostedRowFormatter {
 
     private $totalAmount;       // order item rows, rounded to 2 decimals, multiplied by 100 to integer
@@ -78,20 +75,20 @@ class HostedRowFormatter {
                 $rawAmount = floatval($row->amountExVat) *($row->vatPercent/100+1);
                 $rawVat = floatval($row->amountExVat) *($row->vatPercent/100);
 
-                $tempRow->setAmount( Helper::bround($rawAmount,2) *100 );
-                $tempRow->setVat( Helper::bround($rawVat,2) *100 );
+                $tempRow->setAmount( \Svea\Helper::bround($rawAmount,2) *100 );
+                $tempRow->setVat( \Svea\Helper::bround($rawVat,2) *100 );
 
             } elseif (isset($row->amountIncVat) && isset($row->vatPercent)) {
                 $rawAmount = $row->amountIncVat;
                 $rawVat = $row->amountIncVat - ($row->amountIncVat/($row->vatPercent/100+1));
-                $tempRow->setAmount( Helper::bround($rawAmount,2) *100 );
-                $tempRow->setVat( Helper::bround($rawVat,2) *100 );
+                $tempRow->setAmount( \Svea\Helper::bround($rawAmount,2) *100 );
+                $tempRow->setVat( \Svea\Helper::bround($rawVat,2) *100 );
 
             } else {
                 $rawAmount = $row->amountIncVat;
                 $rawVat = ($row->amountIncVat - $row->amountExVat);
-                $tempRow->setAmount( Helper::bround($rawAmount,2)*100 );
-                $tempRow->setVat( Helper::bround($rawVat,2) *100);
+                $tempRow->setAmount( \Svea\Helper::bround($rawAmount,2)*100 );
+                $tempRow->setVat( \Svea\Helper::bround($rawVat,2) *100);
             }
 
             if (isset($row->unit)) {
@@ -109,8 +106,8 @@ class HostedRowFormatter {
             $this->newRows[] = $tempRow;
             $this->totalAmount += ($tempRow->amount * $row->quantity);
             $this->totalVat +=  ($tempRow->vat * $row->quantity);
-            $this->rawAmount += Helper::bround( ($rawAmount * $row->quantity) ,2) *100;
-            $this->rawVat +=  Helper::bround( ($rawVat * $row->quantity) ,2) *100;
+            $this->rawAmount += \Svea\Helper::bround( ($rawAmount * $row->quantity) ,2) *100;
+            $this->rawVat +=  \Svea\Helper::bround( ($rawVat * $row->quantity) ,2) *100;
         }
     }
 
@@ -140,20 +137,20 @@ class HostedRowFormatter {
             if (isset($row->amountExVat) && isset($row->vatPercent)) {
                 $rawAmount = floatval($row->amountExVat) *($row->vatPercent/100+1);
                 $rawVat = floatval($row->amountExVat) *($row->vatPercent/100);
-                $tempRow->setAmount( Helper::bround($rawAmount,2) *100 );
-                $tempRow->setVat( Helper::bround($rawVat,2) *100 );
+                $tempRow->setAmount( \Svea\Helper::bround($rawAmount,2) *100 );
+                $tempRow->setVat( \Svea\Helper::bround($rawVat,2) *100 );
 
             } elseif (isset($row->amountIncVat) && isset($row->vatPercent)) {
                 $rawAmount = $row->amountIncVat;
                 $rawVat = $row->amountIncVat - ($row->amountIncVat/($row->vatPercent/100+1));
-                $tempRow->setAmount( Helper::bround($rawAmount,2) *100 );
-                $tempRow->setVat( Helper::bround($rawVat,2) *100 );
+                $tempRow->setAmount( \Svea\Helper::bround($rawAmount,2) *100 );
+                $tempRow->setVat( \Svea\Helper::bround($rawVat,2) *100 );
 
             } else {
                 $rawAmount = $row->amountIncVat;
                 $rawVat = ($row->amountIncVat - $row->amountExVat);
-                $tempRow->setAmount( Helper::bround($rawAmount,2)*100 );
-                $tempRow->setVat( Helper::bround($rawVat,2) *100);
+                $tempRow->setAmount( \Svea\Helper::bround($rawAmount,2)*100 );
+                $tempRow->setVat( \Svea\Helper::bround($rawVat,2) *100);
             }
 
             if (isset($row->unit)) {
@@ -194,20 +191,20 @@ class HostedRowFormatter {
             if (isset($row->amountExVat) && isset($row->vatPercent)) {
                 $rawAmount = floatval($row->amountExVat) *($row->vatPercent/100+1);
                 $rawVat = floatval($row->amountExVat) *($row->vatPercent/100);
-                $tempRow->setAmount( Helper::bround($rawAmount,2) *100 );
-                $tempRow->setVat( Helper::bround($rawVat,2) *100 );
+                $tempRow->setAmount( \Svea\Helper::bround($rawAmount,2) *100 );
+                $tempRow->setVat( \Svea\Helper::bround($rawVat,2) *100 );
 
             } elseif (isset($row->amountIncVat) && isset($row->vatPercent)) {
                 $rawAmount = $row->amountIncVat;
                 $rawVat = $row->amountIncVat - ($row->amountIncVat/($row->vatPercent/100+1));
-                $tempRow->setAmount( Helper::bround($rawAmount,2) *100 );
-                $tempRow->setVat( Helper::bround($rawVat,2) *100 );
+                $tempRow->setAmount( \Svea\Helper::bround($rawAmount,2) *100 );
+                $tempRow->setVat( \Svea\Helper::bround($rawVat,2) *100 );
 
             } else {
                 $rawAmount = $row->amountIncVat;
                 $rawVat = ($row->amountIncVat - $row->amountExVat);
-                $tempRow->setAmount( Helper::bround($rawAmount,2)*100 );
-                $tempRow->setVat( Helper::bround($rawVat,2) *100);
+                $tempRow->setAmount( \Svea\Helper::bround($rawAmount,2)*100 );
+                $tempRow->setVat( \Svea\Helper::bround($rawVat,2) *100);
             }
 
             if (isset($row->unit)) {
@@ -246,8 +243,8 @@ class HostedRowFormatter {
 
                 $rawAmount = $row->amount;
                 $rawVat = $this->totalVat/100 * $discountInPercent;     // divide by 100 so that our "round and multiply" works in setVat below
-                $tempRow->setAmount( - Helper::bround($rawAmount,2)*100 );
-                $tempRow->setVat( - Helper::bround($rawVat,2)*100 );
+                $tempRow->setAmount( - \Svea\Helper::bround($rawAmount,2)*100 );
+                $tempRow->setVat( - \Svea\Helper::bround($rawVat,2)*100 );
             }
 
             // if specified amount ex vat, split the discount across vat rates according to relative amounts taken ex vat. as we apply the discount before tax,
@@ -256,28 +253,28 @@ class HostedRowFormatter {
                 $discountInPercent = ($row->amountExVat * 100) / ($this->totalAmount - $this->totalVat);
                 $rawAmount = $row->amountExVat;
                 $rawVat = $this->totalVat/100 * $discountInPercent;     // divide by 100 so that our "round and multiply" works in setVat below
-                $tempRow->setAmount( - Helper::bround($rawAmount + $rawVat,2)*100);
-                $tempRow->setVat( - Helper::bround($rawVat,2)*100 );
+                $tempRow->setAmount( - \Svea\Helper::bround($rawAmount + $rawVat,2)*100);
+                $tempRow->setVat( - \Svea\Helper::bround($rawVat,2)*100 );
             }
 
             // calculate amount, vat from two out of three given by customer, see unit tests in HostedPaymentTest
             elseif (isset($row->amountExVat) && isset($row->vatPercent)) {
                 $rawAmount = $row->amountExVat *($row->vatPercent/100+1);
                 $rawVat = $row->amountExVat *($row->vatPercent/100);
-                $tempRow->setAmount( - Helper::bround($rawAmount,2) *100 );
-                $tempRow->setVat( - Helper::bround($rawVat,2) *100 );
+                $tempRow->setAmount( - \Svea\Helper::bround($rawAmount,2) *100 );
+                $tempRow->setVat( - \Svea\Helper::bround($rawVat,2) *100 );
 
             } elseif (isset($row->amount) && isset($row->vatPercent)) {
                 $rawAmount = $row->amount;
                 $rawVat = $row->amount - ($row->amount/($row->vatPercent/100+1));
-                $tempRow->setAmount( - Helper::bround($rawAmount,2) *100 );
-                $tempRow->setVat( - Helper::bround($rawVat,2) *100 );
+                $tempRow->setAmount( - \Svea\Helper::bround($rawAmount,2) *100 );
+                $tempRow->setVat( - \Svea\Helper::bround($rawVat,2) *100 );
 
             } else {
                 $rawAmount = $row->amount;
                 $rawVat = ( $row->amount - $row->amountExVat);
-                $tempRow->setAmount( - Helper::bround($rawAmount,2)*100 );
-                $tempRow->setVat( - Helper::bround($rawVat,2) *100);
+                $tempRow->setAmount( - \Svea\Helper::bround($rawAmount,2)*100 );
+                $tempRow->setVat( - \Svea\Helper::bround($rawVat,2) *100);
             }
 
             if (isset($row->unit)) {
@@ -327,8 +324,8 @@ class HostedRowFormatter {
             $rawAmount = $this->rawAmount/100 * $row->discountPercent/100;
             $rawVat = $this->rawVat/100 * $row->discountPercent/100;
 
-            $tempRow->setAmount( - Helper::bround($rawAmount,2)*100 );
-            $tempRow->setVat( - Helper::bround($rawVat,2)*100 );
+            $tempRow->setAmount( - \Svea\Helper::bround($rawAmount,2)*100 );
+            $tempRow->setVat( - \Svea\Helper::bround($rawVat,2)*100 );
 
             $tempRow->setQuantity(1);
 

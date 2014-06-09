@@ -1,5 +1,5 @@
 <?php
-namespace Svea;
+namespace Svea\HostedService;
 
 /**
  * @author anne-hal
@@ -14,25 +14,25 @@ class ExcludePayments {
     public static function excludeInvoicesAndPaymentPlan() {
         $methods = array();
 
-        $methods[] = SystemPaymentMethod::INVOICESE;
-        $methods[] = SystemPaymentMethod::PAYMENTPLANSE;
-        $methods[] = SystemPaymentMethod::INVOICE_SE;
-        $methods[] = SystemPaymentMethod::PAYMENTPLAN_SE;
+        $methods[] = \Svea\SystemPaymentMethod::INVOICESE;
+        $methods[] = \Svea\SystemPaymentMethod::PAYMENTPLANSE;
+        $methods[] = \Svea\SystemPaymentMethod::INVOICE_SE;
+        $methods[] = \Svea\SystemPaymentMethod::PAYMENTPLAN_SE;
 
-        $methods[] = SystemPaymentMethod::INVOICE_DE;
-        $methods[] = SystemPaymentMethod::PAYMENTPLAN_DE;
+        $methods[] = \Svea\SystemPaymentMethod::INVOICE_DE;
+        $methods[] = \Svea\SystemPaymentMethod::PAYMENTPLAN_DE;
 
-        $methods[] = SystemPaymentMethod::INVOICE_DK;
-        $methods[] = SystemPaymentMethod::PAYMENTPLAN_DK;
+        $methods[] = \Svea\SystemPaymentMethod::INVOICE_DK;
+        $methods[] = \Svea\SystemPaymentMethod::PAYMENTPLAN_DK;
 
-        $methods[] = SystemPaymentMethod::INVOICE_FI;
-        $methods[] = SystemPaymentMethod::PAYMENTPLAN_FI;
+        $methods[] = \Svea\SystemPaymentMethod::INVOICE_FI;
+        $methods[] = \Svea\SystemPaymentMethod::PAYMENTPLAN_FI;
 
-        $methods[] = SystemPaymentMethod::INVOICE_NL;
-        $methods[] = SystemPaymentMethod::PAYMENTPLAN_NL;
+        $methods[] = \Svea\SystemPaymentMethod::INVOICE_NL;
+        $methods[] = \Svea\SystemPaymentMethod::PAYMENTPLAN_NL;
 
-        $methods[] = SystemPaymentMethod::INVOICE_NO;
-        $methods[] = SystemPaymentMethod::PAYMENTPLAN_NO;
+        $methods[] = \Svea\SystemPaymentMethod::INVOICE_NO;
+        $methods[] = \Svea\SystemPaymentMethod::PAYMENTPLAN_NO;
 
         return $methods;
     }

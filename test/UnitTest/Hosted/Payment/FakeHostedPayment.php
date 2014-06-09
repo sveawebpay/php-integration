@@ -1,5 +1,6 @@
 <?php
-namespace Svea;
+use Svea\HostedService\HostedPayment as HostedPayment;
+use Svea\HostedService\ExcludePayments as ExcludePayments;
 
 $root = realpath(dirname(__FILE__));
 require_once $root . '/../../../../src/Includes.php';

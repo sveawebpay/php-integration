@@ -1,5 +1,5 @@
 <?php
-namespace Svea;
+namespace Svea\HostedService;
 
 class HostedOrderRowBuilder {
 

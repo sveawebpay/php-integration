@@ -5,7 +5,7 @@ require_once SVEA_REQUEST_DIR . '/Includes.php';
 
 /**
  * OrderBuilder collects and prepares order data to be sent to Svea. It is used
- * by createOrderBuilder and DeliverOrderBuilder.
+ * by CSWreateOrderBuilder and DeliverOrderBuilder.
  * 
  * Set all required order attributes in CreateOrderBuilder instance by using the 
  * instance setAttribute() methods. Instance methods can be chained together, as 

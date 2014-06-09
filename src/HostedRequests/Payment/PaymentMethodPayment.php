@@ -1,5 +1,5 @@
 <?php
-namespace Svea;
+namespace Svea\HostedService;
 
 /**
  * @author anne-hal, Kristian Grossman-Madsen

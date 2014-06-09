@@ -1,5 +1,5 @@
 <?php
-namespace Svea;
+namespace Svea\HostedService;
 
 require_once 'HostedPayment.php';
 require_once  SVEA_REQUEST_DIR.'/Constant/PaymentMethod.php';
