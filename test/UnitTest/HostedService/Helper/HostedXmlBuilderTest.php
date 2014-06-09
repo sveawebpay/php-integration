@@ -3,7 +3,7 @@ use Svea\HostedService\HostedXmlBuilder as HostedXmlBuilder;
 
 $root = realpath(dirname(__FILE__));
 require_once $root . '/../../../../src/Includes.php';
-require_once $root . '/../../../../test/UnitTest/Hosted/Payment/FakeHostedPayment.php';
+require_once $root . '/../Payment/FakeHostedPayment.php';
 
 class HostedXmlBuilderTest extends \PHPUnit_Framework_TestCase {
     

@@ -68,7 +68,8 @@ class CardPaymentURLIntegrationTest extends \PHPUnit_Framework_TestCase {
             ->setReturnUrl($returnUrl)
             ->getPaymentURL();
 
-        // check that request was accepted
+        // check that request was accepted        
+//        print_r($response);
         $this->assertEquals( 1, $response->accepted );                
 
         // check that response set id, created exist and not null
