@@ -1,25 +1,25 @@
 <?php
-namespace Svea;
+namespace Svea\HostedService;
 
 require_once 'HostedAdminResponse.php'; // fix for class loader sequencing problem
 require_once SVEA_REQUEST_DIR . '/Includes.php';
 
 /**
- * AnnulTransactionResponse handles the annul transaction response
+ * CreditTransactionResponse handles the credit transaction response
  * 
  * @author Kristian Grossman-Madsen for Svea WebPay
  */
-class AnnulTransactionResponse extends HostedAdminResponse{
+class CreditTransactionResponse extends HostedAdminResponse{
 
-    /** string $customerrefno @todo correct name for the package, used service attribute name */
+    /** string $customerrefno */
     public $customerrefno;
-    
+
     function __construct($message,$countryCode,$config) {
         parent::__construct($message,$countryCode,$config);
     }
 
     /**
-     * formatXml() parses the annul transaction response xml into an object, and
+     * formatXml() parses the credit transaction response xml into an object, and
      * then sets the response attributes accordingly.
      * 
      * @param string $hostedAdminResponseXML  hostedAdminResponse as xml

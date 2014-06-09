@@ -19,7 +19,7 @@ class ListPaymentMethodsIntegrationTest extends \PHPUnit_Framework_TestCase {
             ->setCountryCode( "SE" )
             ->doRequest();
 
-        $this->assertInstanceOf( "Svea\ListPaymentMethodsResponse", $response );
+        $this->assertInstanceOf( "Svea\HostedService\ListPaymentMethodsResponse", $response );
         
         //print_r( $response );
         $this->assertEquals( 1, $response->accepted );

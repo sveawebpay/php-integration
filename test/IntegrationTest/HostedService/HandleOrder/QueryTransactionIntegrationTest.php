@@ -67,7 +67,7 @@ class QueryTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
             ->setCountryCode( "SE" )
             ->doRequest();
 
-        $this->assertInstanceOf( "Svea\QueryTransactionResponse", $response );
+        $this->assertInstanceOf( "Svea\HostedService\QueryTransactionResponse", $response );
         
         // if we receive an error from the service, the integration test passes
         $this->assertEquals( 0, $response->accepted );
@@ -106,7 +106,7 @@ class QueryTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
             ->setCountryCode( "SE" )
             ->doRequest();        
          
-        $this->assertInstanceOf( "Svea\QueryTransactionResponse", $response );
+        $this->assertInstanceOf( "Svea\HostedService\QueryTransactionResponse", $response );
         
         print_r($response);
         $this->assertEquals( 1, $response->accepted );    
@@ -211,7 +211,7 @@ class QueryTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
             ->setCountryCode( "SE" )
             ->doRequest();        
          
-        $this->assertInstanceOf( "Svea\QueryTransactionResponse", $response );
+        $this->assertInstanceOf( "Svea\HostedService\QueryTransactionResponse", $response );
         
         print_r($response);
         $this->assertEquals( 1, $response->accepted );    

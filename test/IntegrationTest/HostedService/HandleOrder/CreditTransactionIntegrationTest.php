@@ -29,7 +29,7 @@ class CreditTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
             ->setCountryCode( "SE" )
             ->doRequest();
 
-        $this->assertInstanceOf( "Svea\CreditTransactionResponse", $response );
+        $this->assertInstanceOf( "Svea\HostedService\CreditTransactionResponse", $response );
         
         $this->assertEquals( 0, $response->accepted );
         $this->assertEquals( "128 (NO_SUCH_TRANS)", $response->resultcode );    
@@ -60,7 +60,7 @@ class CreditTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
             ->setCountryCode( "SE" )
             ->doRequest();        
         
-        $this->assertInstanceOf( "Svea\CreditTransactionResponse", $response );
+        $this->assertInstanceOf( "Svea\HostedService\CreditTransactionResponse", $response );
         
         print_r( $response );
         $this->assertEquals( 1, $response->accepted );        

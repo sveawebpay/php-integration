@@ -27,7 +27,7 @@ class AnnulTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
             ->setCountryCode( "SE" )
             ->doRequest();
 
-        $this->assertInstanceOf( "Svea\AnnulTransactionResponse", $response );
+        $this->assertInstanceOf( "Svea\HostedService\AnnulTransactionResponse", $response );
         
         // if we receive an error from the service, the integration test passes
         $this->assertEquals( 0, $response->accepted );
@@ -58,7 +58,7 @@ class AnnulTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
     
         $response = $request->doRequest();        
          
-        $this->assertInstanceOf( "Svea\AnnulTransactionResponse", $response );
+        $this->assertInstanceOf( "Svea\HostedService\AnnulTransactionResponse", $response );
         
         print_r( $response); 
         $this->assertEquals( 1, $response->accepted );        

@@ -1,5 +1,5 @@
 <?php
-namespace Svea;
+namespace Svea\HostedService;
 
 require_once 'HostedAdminResponse.php'; // fix for class loader sequencing problem
 require_once SVEA_REQUEST_DIR . '/Includes.php';

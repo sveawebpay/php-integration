@@ -1,5 +1,5 @@
 <?php
-namespace Svea;
+namespace Svea\HostedService;
 
 require_once SVEA_REQUEST_DIR . '/Includes.php';
 
@@ -186,7 +186,7 @@ class QueryTransactionResponse extends HostedAdminResponse{
                 // [sku]
                 // [unit]
                 
-                $newrow = new NumberedOrderRow(); // webpay orderrow
+                $newrow = new \Svea\NumberedOrderRow(); // webpay orderrow
                 //WebPayItem OrderRow:          
                 // $articleNumber
                 // $quantity

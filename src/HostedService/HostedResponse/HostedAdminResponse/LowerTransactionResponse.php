@@ -1,15 +1,15 @@
 <?php
-namespace Svea;
+namespace Svea\HostedService;
 
 require_once 'HostedAdminResponse.php'; // fix for class loader sequencing problem
 require_once SVEA_REQUEST_DIR . '/Includes.php';
 
 /**
- * ConfirmTransactionResponse handles the confirm transaction response
+ * LowerTransactionResponse handles the lower transaction response
  * 
  * @author Kristian Grossman-Madsen for Svea WebPay
  */
-class ConfirmTransactionResponse extends HostedAdminResponse{
+class LowerTransactionResponse extends HostedAdminResponse{
 
     /** string $customerrefno @todo correct name for the package, used service attribute name */
     public $customerrefno;
@@ -19,7 +19,7 @@ class ConfirmTransactionResponse extends HostedAdminResponse{
     }
 
     /**
-     * formatXml() parses the confirm transaction response xml into an object, and
+     * formatXml() parses the lower transaction response xml into an object, and
      * then sets the response attributes accordingly.
      * 
      * @param string $hostedAdminResponseXML  hostedAdminResponse as xml
