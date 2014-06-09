@@ -27,20 +27,25 @@ class SveaResponse {
     public $response;
 
     /**
-     * The constructor checks the parameter $message to see if the service response
-     * has come in as a SimpleXMLElement object or as a raw xml string. Then it
-     * creates the appropriate Response object which parses the response and does
-     * error handling et al.
+     * The constructor accepts the returned Svea service response. $message, and
+     * returns an instance of the corresponding service response class which
+     * parses $message and sets any returned attributes, along with the common 
+     * response attributes $accepted, $resultcode and $errormessage.
+     * 
+     * If the $method parameter is set, it is used to determind the service
+     * type, if not, we check $message itself to see if the service response
+     * has come in as a SimpleXMLElement object (i.e. a WebService response), or
+     * a raw xml string (i.e. a HostedService response). 
      * 
      * The resulting parsed response attributes are available for inspection 
      * through the getResponse() method. Inspect the individual response using
-     * i.e. $myInstanceOfSveaResponse->getResponse()->serviceResponseAttribute
+     * i.e. $myInstanceOfSveaResponse->getResponse()->theAttributeInQuestion
      * 
-     * @param SimpleXMLElement|string  $message contains the Svea service response, either as an object or as raw xml (for hosted payments)
-     * @param string $countryCode
-     * @param SveaConfigurationProvider $config
-     * @param string $method  set for HostedAdminRequests, indicates the request method used  
-     * @return mixed instance of a subclass to HostedResponse or WebServiceResponse, respectively
+     * @param mixed $message  contains the Svea service response
+     * @param string $countryCode  needed along with $config to decode response
+     * @param SveaConfigurationProvider  $config
+     * @param string $method  set for i.e. HostedAdmin, AdminService requests  
+     * @return mixed  one of the various service request response classes
      */
     public function __construct($message, $countryCode, $config = NULL, $method = NULL) {
         
@@ -69,7 +74,7 @@ class SveaResponse {
             elseif( isset($method) ) {                
                 switch( $method ) {
 
-                    // $method is set for Admin Web Service requests
+                    // $method is set for i.e. AdminService requests
                     case "CancelOrder":
                         $this->response = new Svea\CancelOrderResponse( $message );
                         break;                    
@@ -92,7 +97,7 @@ class SveaResponse {
                         $this->response = new Svea\CreditInvoiceRowsResponse( $message );
                         break;
                     
-                    // $method is set for HostedAdminRequests, indicates the request method used                    
+                    // $method is also set for HostedAdminRequests, indicates the request method used                    
                     case "querytransactionid":
                         $this->response = new Svea\QueryTransactionResponse($message, $countryCode, $config);
                         break;
@@ -120,11 +125,14 @@ class SveaResponse {
                         break;
                 }
             }
+            
             // legacy fallback -- webservice from hosted_admin -- used by preparedpayment 
             elseif (property_exists($message, "message"))   {                
                  $this->response = new Svea\HostedAdminResponse($message,$countryCode,$config);
             }
         } 
+        
+        // webservice hosted payment
         elseif ($message != NULL) {
             $this->response = new Svea\HostedPaymentResponse($message,$countryCode,$config);
         } 
@@ -134,8 +142,7 @@ class SveaResponse {
     }
     
     /**
-     * Returns an instance of the corresponding response object class 
-     * (see constructor above)
+     * Returns an instance of the corresponding service response object class (see constructor above)
      *
      * @return mixed 
      */
