@@ -1,5 +1,8 @@
 <?php
-namespace Svea;
+/**
+ * Namespace Svea\WebService Implements SveaWebPay Europe Web Service API 1.4.5.
+ */
+namespace Svea\WebService;
 
 require_once SVEA_REQUEST_DIR . '/WebService/svea_soap/SveaSoapConfig.php';
 require_once SVEA_REQUEST_DIR . '/Config/SveaConfig.php';
@@ -94,20 +97,20 @@ class GetAddresses {
      * @return SveaRequest
      */
     public function prepareRequest() {
-        $auth = new SveaAuth(
+        $auth = new WebServiceSoap\SveaAuth(
             $this->conf->getUsername($this->orderType,  $this->countryCode),
             $this->conf->getPassword($this->orderType,  $this->countryCode),
             $this->conf->getClientNumber($this->orderType,  $this->countryCode)                
         );
 
-        $address = new SveaAddress( 
+        $address = new WebServiceSoap\SveaAddress( 
             $auth, 
             (isset($this->companyId) ? true : false), 
             $this->countryCode, 
             (isset($this->companyId) ? $this->companyId : $this->ssn) 
         );
 
-        $this->request = new SveaRequest( $address );
+        $this->request = new WebServiceSoap\SveaRequest( $address );
 
         return $this->request;
     }
@@ -120,7 +123,7 @@ class GetAddresses {
         $this->request = $this->prepareRequest();
         
         $url = $this->conf->getEndPoint($this->orderType);
-        $request = new SveaDoRequest($url);
+        $request = new WebServiceSoap\SveaDoRequest($url);
 
         $svea_req = $request->GetAddresses($this->request);
 

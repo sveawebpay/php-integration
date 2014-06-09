@@ -1,6 +1,8 @@
 <?php
 // Integration tests should not need to use the namespace
 
+use \Svea\WebService\GetAddresses as GetAddresses;
+
 $root = realpath(dirname(__FILE__));
 require_once $root . '/../../../../src/Includes.php';
 
@@ -9,11 +11,17 @@ require_once $root . '/../../../../src/Includes.php';
  */
 class GetAddressesIntegrationTest extends PHPUnit_Framework_TestCase {
 
+    private $config;
+    private $addressRequest;
+    
+    public function SetUp() {
+        $this->config = Svea\SveaConfig::getDefaultConfig();
+        $this->addressRequest = new GetAddresses($this->config);
+    }
+    
     // private, company
     public function testGetAddressesResult_Private() {
-        $config = Svea\SveaConfig::getDefaultConfig();
-        $addressRequest = WebPay::getAddresses($config);
-        $request = $addressRequest
+        $request = $this->addressRequest
             ->setOrderTypeInvoice()
             ->setCountryCode("SE")
             ->setIndividual("194605092222")
@@ -22,9 +30,7 @@ class GetAddressesIntegrationTest extends PHPUnit_Framework_TestCase {
     }
 
     public function testGetAddressesResult_Company() {
-        $config = Svea\SveaConfig::getDefaultConfig();
-        $addressRequest = WebPay::getAddresses($config);
-        $request = $addressRequest
+        $request = $this->addressRequest
             ->setOrderTypeInvoice()
             ->setCountryCode("SE")
             ->setCompany("4608142222")
@@ -33,9 +39,7 @@ class GetAddressesIntegrationTest extends PHPUnit_Framework_TestCase {
     }
 
     public function testGetAddressesResult_PaymentPlan() {
-        $config = Svea\SveaConfig::getDefaultConfig();
-        $addressRequest = WebPay::getAddresses($config);
-        $request = $addressRequest
+        $request = $this->addressRequest
             ->setOrderTypePaymentPlan()
             ->setCountryCode("SE")
             ->setCompany("4608142222")
@@ -44,9 +48,7 @@ class GetAddressesIntegrationTest extends PHPUnit_Framework_TestCase {
     }
 
     public function testGetAddressesResult_Invoice() {
-        $config = Svea\SveaConfig::getDefaultConfig();
-        $addressRequest = WebPay::getAddresses($config);
-        $request = $addressRequest
+        $request = $this->addressRequest
             ->setOrderTypeInvoice()
             ->setCountryCode("SE")
             ->setCompany("4608142222")
@@ -55,9 +57,7 @@ class GetAddressesIntegrationTest extends PHPUnit_Framework_TestCase {
     }
     
     public function test_GetAddressesResult_Invoice_NoSuchEntity() {
-        $config = Svea\SveaConfig::getDefaultConfig();
-        $addressRequest = WebPay::getAddresses($config);
-        $request = $addressRequest
+        $request = $this->addressRequest
             ->setOrderTypeInvoice()
             ->setCountryCode("SE")
             ->setIndividual("4608142222")   // setIndividual w/Company SSN
@@ -67,9 +67,7 @@ class GetAddressesIntegrationTest extends PHPUnit_Framework_TestCase {
     }
         
     public function test_GetAddressesResult_Invoice_Errormessage() {
-        $config = Svea\SveaConfig::getDefaultConfig();
-        $addressRequest = WebPay::getAddresses($config);
-        $request = $addressRequest
+        $request = $this->addressRequest
             ->setOrderTypeInvoice()
             ->setCountryCode("SE")
             ->setIndividual("4608142222")   // setIndividual w/Company SSN
@@ -80,9 +78,7 @@ class GetAddressesIntegrationTest extends PHPUnit_Framework_TestCase {
     }        
 
     public function test_GetAddresses_CredentialsForPrivate_areCorrect() {
-        $config = Svea\SveaConfig::getDefaultConfig();
-        $addressRequest = WebPay::getAddresses($config);
-        $request = $addressRequest
+        $request = $this->addressRequest
                 ->setOrderTypeInvoice()
                 ->setCountryCode("SE")
                 ->setIndividual("194605092222")
@@ -104,9 +100,7 @@ class GetAddressesIntegrationTest extends PHPUnit_Framework_TestCase {
     }
 
     public function test_GetAddresses_CredentialsForCompany_areCorrect() {
-        $config = Svea\SveaConfig::getDefaultConfig();
-        $addressRequest = WebPay::getAddresses($config);
-        $request = $addressRequest
+        $request = $this->addressRequest
                 ->setOrderTypeInvoice()
                 ->setCountryCode("SE")
                 ->setCompany("164608142222")    // 12 digit orgnr should start with 16 or be 10 digits.
@@ -142,9 +136,7 @@ class GetAddressesIntegrationTest extends PHPUnit_Framework_TestCase {
     // getAddresses is supported for the following countries and customer types
     // SE/private
     public function test_GetAddresses_Sweden_Private_isAccepted() {
-        $config = Svea\SveaConfig::getDefaultConfig();
-        $addressRequest = WebPay::getAddresses($config);
-        $request = $addressRequest
+        $request = $this->addressRequest
                 ->setOrderTypeInvoice()
                 ->setCountryCode("SE")
                 ->setIndividual("194605092222")
@@ -155,9 +147,7 @@ class GetAddressesIntegrationTest extends PHPUnit_Framework_TestCase {
     }
     // DK/private
     public function test_GetAddresses_Denmark_Private_isAccepted() {
-        $config = Svea\SveaConfig::getDefaultConfig();
-        $addressRequest = WebPay::getAddresses($config);
-        $request = $addressRequest
+        $request = $this->addressRequest
                 ->setOrderTypeInvoice()
                 ->setCountryCode("DK")
                 ->setIndividual("2603692503")
@@ -168,9 +158,7 @@ class GetAddressesIntegrationTest extends PHPUnit_Framework_TestCase {
     }
     // SE/company
     public function test_GetAddresses_Sweden_Company_isAccepted() {
-        $config = Svea\SveaConfig::getDefaultConfig();
-        $addressRequest = WebPay::getAddresses($config);
-        $request = $addressRequest
+        $request = $this->addressRequest
                 ->setOrderTypeInvoice()
                 ->setCountryCode("SE")
                 ->setCompany("4608142222")
@@ -181,9 +169,7 @@ class GetAddressesIntegrationTest extends PHPUnit_Framework_TestCase {
     }
     // DK/company
     public function test_GetAddresses_Denmark_Company_isAccepted() {
-        $config = Svea\SveaConfig::getDefaultConfig();
-        $addressRequest = WebPay::getAddresses($config);
-        $request = $addressRequest
+        $request = $this->addressRequest
                 ->setOrderTypeInvoice()
                 ->setCountryCode("DK")
                 ->setCompany("99999993")
@@ -194,9 +180,7 @@ class GetAddressesIntegrationTest extends PHPUnit_Framework_TestCase {
     }
     // NO/company
     public function test_GetAddresses_Norway_Company_isAccepted() {
-        $config = Svea\SveaConfig::getDefaultConfig();
-        $addressRequest = WebPay::getAddresses($config);
-        $request = $addressRequest
+        $request = $this->addressRequest
                 ->setOrderTypeInvoice()
                 ->setCountryCode("NO")
                 ->setCompany("923313850")
@@ -208,9 +192,7 @@ class GetAddressesIntegrationTest extends PHPUnit_Framework_TestCase {
 
     // NO/private
     public function test_GetAddresses_Norway_Private_isDisabled() {
-        $config = Svea\SveaConfig::getDefaultConfig();
-        $addressRequest = WebPay::getAddresses($config);
-        $request = $addressRequest
+        $request = $this->addressRequest
                 ->setOrderTypeInvoice()
                 ->setCountryCode("NO")
                 ->setCompany("17054512066")
@@ -223,9 +205,7 @@ class GetAddressesIntegrationTest extends PHPUnit_Framework_TestCase {
 
     // DE
     public function test_GetAddresses_Germany_Company_isNotImplemented() {
-        $config = Svea\SveaConfig::getDefaultConfig();
-        $addressRequest = WebPay::getAddresses($config);
-        $request = $addressRequest
+        $request = $this->addressRequest
                 ->setOrderTypeInvoice()
                 ->setCountryCode("DE")
                 ->setCompany("19680403")
@@ -237,9 +217,7 @@ class GetAddressesIntegrationTest extends PHPUnit_Framework_TestCase {
 
     // NL
     public function test_GetAddresses_Netherlands_Company_isNotImplemented() {
-        $config = Svea\SveaConfig::getDefaultConfig();
-        $addressRequest = WebPay::getAddresses($config);
-        $request = $addressRequest
+        $request = $this->addressRequest
                 ->setOrderTypeInvoice()
                 ->setCountryCode("NL")
                 ->setCompany("19550307")

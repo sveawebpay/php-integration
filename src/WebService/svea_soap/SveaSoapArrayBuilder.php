@@ -1,5 +1,5 @@
 <?php
-namespace Svea;
+namespace Svea\WebService\WebServiceSoap;
 
 /**
  * Use to transform order object into array if needed for soapClient

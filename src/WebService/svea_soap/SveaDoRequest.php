@@ -1,5 +1,5 @@
 <?php
-namespace Svea;
+namespace Svea\WebService\WebServiceSoap;
 
 require_once SVEA_REQUEST_DIR . '/Config/SveaConfig.php';
 

@@ -1,5 +1,8 @@
 <?php
-namespace Svea;
+/**
+ * classes that support building SOAP requests
+ */
+namespace Svea\WebService\WebServiceSoap;
 
 /* 
  * TODO document attributes

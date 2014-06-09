@@ -1,4 +1,7 @@
 <?php
+/**
+ * classes that support building SOAP requests
+ */
 namespace Svea\AdminService\AdminSoap;
 
 class AddOrderRowsRequest {

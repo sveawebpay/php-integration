@@ -1,6 +1,6 @@
 <?php
 /**
- * Implements SveaWebPay Administration Service API 1.12
+ * Namespace Svea\AdminService Implements SveaWebPay Administration Service API 1.12.
  */
 namespace Svea\AdminService;
 
