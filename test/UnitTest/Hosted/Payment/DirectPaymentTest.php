@@ -1,5 +1,6 @@
 <?php
 namespace Svea;
+use \Svea\HostedService\DirectPayment as DirectPayment;
 
 $root = realpath(dirname(__FILE__));
 require_once $root . '/../../../../test/UnitTest/BuildOrder/OrderBuilderTest.php';

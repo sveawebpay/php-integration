@@ -1,5 +1,6 @@
 <?php
 namespace Svea;
+use \Svea\HostedService\CardPayment as CardPayment;
 
 $root = realpath(dirname(__FILE__));
 require_once $root . '/../../../TestUtil.php';
@@ -462,7 +463,5 @@ class CardPaymentTest extends \PHPUnit_Framework_TestCase {
         //print_r($paymentForm->xmlMessage);        
         $this->assertRegExp("/[a-zA-Z0-9<>]*".$subscriptiontype."[a-zA-Z0-9<>]*/", $paymentForm->xmlMessage );
     }    
-    
-
 }
 

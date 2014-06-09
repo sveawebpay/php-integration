@@ -26,10 +26,10 @@ class DirectPayment extends HostedPayment {
         // first, exclude all invoice/paymentplan payment methods
         $methods = ExcludePayments::excludeInvoicesAndPaymentPlan();
         //card
-        $methods[] = SystemPaymentMethod::KORTCERT;
-        $methods[] = SystemPaymentMethod::SKRILL;
+        $methods[] = \Svea\SystemPaymentMethod::KORTCERT;
+        $methods[] = \Svea\SystemPaymentMethod::SKRILL;
         //other
-        $methods[] = SystemPaymentMethod::PAYPAL;
+        $methods[] = \Svea\SystemPaymentMethod::PAYPAL;
 
         return $methods;
     }

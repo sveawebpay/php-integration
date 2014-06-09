@@ -35,7 +35,7 @@ class CreateOrderBuilder extends OrderBuilder {
      * @return CardPayment
      */
     public function usePayPageCardOnly() {
-        return new CardPayment($this);
+        return new HostedService\CardPayment($this);
     }
 
     /**
@@ -45,7 +45,7 @@ class CreateOrderBuilder extends OrderBuilder {
      * @return DirectPayment
      */
     public function usePayPageDirectBankOnly() {
-        return new DirectPayment($this);
+        return new HostedService\DirectPayment($this);
     }
 
     /**
@@ -55,7 +55,7 @@ class CreateOrderBuilder extends OrderBuilder {
      * @return PayPagePayment
      */
     public function usePayPage() {
-        $paypagepayment = new PayPagePayment($this);
+        $paypagepayment = new HostedService\PayPagePayment($this);
         return $paypagepayment;
     }
 
@@ -69,7 +69,7 @@ class CreateOrderBuilder extends OrderBuilder {
      * @return PaymentMethodPayment
      */
     public function usePaymentMethod($paymentMethodAsConst) {
-        return new PaymentMethodPayment($this, $paymentMethodAsConst);
+        return new HostedService\PaymentMethodPayment($this, $paymentMethodAsConst);
     }
 
     /**

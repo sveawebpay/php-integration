@@ -245,7 +245,7 @@ class HostedPayment {
      * @return string[] $errors an array containing the validation errors found
      */
     public function validateOrder() {
-        $validator = new HostedOrderValidator();
+        $validator = new \Svea\HostedOrderValidator();
         $errors = $validator->validate($this->order);
         if (($this->order->countryCode == "NL" || $this->order->countryCode == "DE") && isset($this->paymentMethod)) {
             if( isset($this->paymentMethod) && 

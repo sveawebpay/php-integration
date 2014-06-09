@@ -33,14 +33,14 @@ class CardPayment extends HostedPayment {
         $methods = ExcludePayments::excludeInvoicesAndPaymentPlan();
 
         //directbanks
-        $methods[] = SystemPaymentMethod::BANKAXESS;
-        $methods[] = SystemPaymentMethod::DBNORDEASE;
-        $methods[] = SystemPaymentMethod::DBSEBSE;
-        $methods[] = SystemPaymentMethod::DBSEBFTGSE;
-        $methods[] = SystemPaymentMethod::DBSHBSE;
-        $methods[] = SystemPaymentMethod::DBSWEDBANKSE;
+        $methods[] = \Svea\SystemPaymentMethod::BANKAXESS;
+        $methods[] = \Svea\SystemPaymentMethod::DBNORDEASE;
+        $methods[] = \Svea\SystemPaymentMethod::DBSEBSE;
+        $methods[] = \Svea\SystemPaymentMethod::DBSEBFTGSE;
+        $methods[] = \Svea\SystemPaymentMethod::DBSHBSE;
+        $methods[] = \Svea\SystemPaymentMethod::DBSWEDBANKSE;
         //other
-        $methods[] = SystemPaymentMethod::PAYPAL;
+        $methods[] = \Svea\SystemPaymentMethod::PAYPAL;
 
         return $methods;
     }
