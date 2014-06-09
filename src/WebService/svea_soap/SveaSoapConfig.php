@@ -1,5 +1,5 @@
 <?php
-namespace Svea;
+namespace Svea\WebService\WebServiceSoap;
 
 /**
  * Autoload all classes for building svea-soap object

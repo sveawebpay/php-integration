@@ -240,7 +240,7 @@ class WebPay {
     public static function getAddresses($config = NULL) {
         if( $config == NULL ) { WebPay::throwMissingConfigException(); }
 
-        return new Svea\GetAddresses($config);
+        return new Svea\WebService\GetAddresses($config);
     }
     
     /**

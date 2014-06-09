@@ -63,7 +63,7 @@ class CancelOrderBuilder {
      */
     public function cancelInvoiceOrder() {
         $this->orderType = \ConfigurationProvider::INVOICE_TYPE;
-        return new CloseOrder($this);
+        return new WebService\CloseOrder($this);
     }
     
     /**
@@ -72,7 +72,7 @@ class CancelOrderBuilder {
      */
     public function cancelPaymentPlanOrder() {
         $this->orderType = \ConfigurationProvider::PAYMENTPLAN_TYPE;
-        return new CloseOrder($this);    
+        return new WebService\CloseOrder($this);    
     }
     
     /** @var string "Invoice" or "PaymentPlan" */

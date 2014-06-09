@@ -1,5 +1,7 @@
 <?php
 
+use Svea\WebService\WebServiceRowFormatter as WebServiceRowFormatter;
+
 $root = realpath(dirname(__FILE__));
 
 require_once $root . '/../../../../src/Includes.php';
@@ -8,28 +10,28 @@ class WebServiceRowFormatterTest extends PHPUnit_Framework_TestCase {
 
     public function test_convertIncVatToExVat() {
 
-        $this->assertEquals( 8.00, Svea\WebServiceRowFormatter::convertIncVatToExVat( 10.00, 25 ) );
-        $this->assertEquals( 69.99, Svea\WebServiceRowFormatter::convertIncVatToExVat( 69.99*1.25, 25 ) );
+        $this->assertEquals( 8.00, WebServiceRowFormatter::convertIncVatToExVat( 10.00, 25 ) );
+        $this->assertEquals( 69.99, WebServiceRowFormatter::convertIncVatToExVat( 69.99*1.25, 25 ) );
 
-        $this->assertEquals( 0, Svea\WebServiceRowFormatter::convertIncVatToExVat( 0, 0 ) );
-        $this->assertEquals( 1, Svea\WebServiceRowFormatter::convertIncVatToExVat( 1, 0 ) );
-        $this->assertEquals( 0, Svea\WebServiceRowFormatter::convertIncVatToExVat( 0*1.25, 25 ) );
+        $this->assertEquals( 0, WebServiceRowFormatter::convertIncVatToExVat( 0, 0 ) );
+        $this->assertEquals( 1, WebServiceRowFormatter::convertIncVatToExVat( 1, 0 ) );
+        $this->assertEquals( 0, WebServiceRowFormatter::convertIncVatToExVat( 0*1.25, 25 ) );
 
-        $this->assertEquals( 100.00, Svea\WebServiceRowFormatter::convertIncVatToExVat( 100.00*1.06, 6 ) );
-        $this->assertEquals( 100.00, Svea\WebServiceRowFormatter::convertIncVatToExVat( 100.00*1.0825, 8.25 ) );
+        $this->assertEquals( 100.00, WebServiceRowFormatter::convertIncVatToExVat( 100.00*1.06, 6 ) );
+        $this->assertEquals( 100.00, WebServiceRowFormatter::convertIncVatToExVat( 100.00*1.0825, 8.25 ) );
     }
 
     public function test_convertExVatToIncVat() {
 
-        $this->assertEquals( 10.00, Svea\WebServiceRowFormatter::convertExVatToIncVat( 8.00, 25 ) );
-        $this->assertEquals( round(69.99*1.25,2,PHP_ROUND_HALF_EVEN), Svea\WebServiceRowFormatter::convertExVatToIncVat( 69.99, 25 ) );
+        $this->assertEquals( 10.00, WebServiceRowFormatter::convertExVatToIncVat( 8.00, 25 ) );
+        $this->assertEquals( round(69.99*1.25,2,PHP_ROUND_HALF_EVEN), WebServiceRowFormatter::convertExVatToIncVat( 69.99, 25 ) );
 
-        $this->assertEquals( 0, Svea\WebServiceRowFormatter::convertExVatToIncVat( 0, 0 ) );
-        $this->assertEquals( 1, Svea\WebServiceRowFormatter::convertExVatToIncVat( 1, 0 ) );
-        $this->assertEquals( 0, Svea\WebServiceRowFormatter::convertExVatToIncVat( 0, 25 ) );
+        $this->assertEquals( 0, WebServiceRowFormatter::convertExVatToIncVat( 0, 0 ) );
+        $this->assertEquals( 1, WebServiceRowFormatter::convertExVatToIncVat( 1, 0 ) );
+        $this->assertEquals( 0, WebServiceRowFormatter::convertExVatToIncVat( 0, 25 ) );
 
-        $this->assertEquals( 100.00*1.06, Svea\WebServiceRowFormatter::convertExVatToIncVat( 100.00, 6 ) );
-        $this->assertEquals( round(100.00*1.0825,2,PHP_ROUND_HALF_EVEN), Svea\WebServiceRowFormatter::convertExVatToIncVat( 100.00, 8.25 ) );
+        $this->assertEquals( 100.00*1.06, WebServiceRowFormatter::convertExVatToIncVat( 100.00, 6 ) );
+        $this->assertEquals( round(100.00*1.0825,2,PHP_ROUND_HALF_EVEN), WebServiceRowFormatter::convertExVatToIncVat( 100.00, 8.25 ) );
     }
 
     public function test_FormatOrderRows_includes_all_attributes_in_formatted_rows() {
@@ -45,7 +47,7 @@ class WebServiceRowFormatterTest extends PHPUnit_Framework_TestCase {
                 ->setUnit("st")
                 );
 
-        $formatter = new Svea\WebServiceRowFormatter($order);
+        $formatter = new WebServiceRowFormatter($order);
         $resultRows = $formatter->formatRows();
         $testedRow = $resultRows[0];
 
@@ -72,7 +74,7 @@ class WebServiceRowFormatterTest extends PHPUnit_Framework_TestCase {
                     ->setUnit("st")
                 );
 
-        $formatter = new Svea\WebServiceRowFormatter($order);
+        $formatter = new WebServiceRowFormatter($order);
         $resultRows = $formatter->formatRows();
         $testedRow = $resultRows[0];
 
@@ -98,7 +100,7 @@ class WebServiceRowFormatterTest extends PHPUnit_Framework_TestCase {
                 ->setUnit("st")
                 );
 
-        $formatter = new Svea\WebServiceRowFormatter($order);
+        $formatter = new WebServiceRowFormatter($order);
         $resultRows = $formatter->formatRows();
         $testedRow = $resultRows[0];
 
@@ -141,7 +143,7 @@ class WebServiceRowFormatterTest extends PHPUnit_Framework_TestCase {
                     ->setUnit("st")
                 );
 
-        $formatter = new Svea\WebServiceRowFormatter($order);
+        $formatter = new WebServiceRowFormatter($order);
         $resultRows = $formatter->formatRows();
         $testedRow = $resultRows[3];
 
@@ -177,7 +179,7 @@ class WebServiceRowFormatterTest extends PHPUnit_Framework_TestCase {
                     ->setAmountExVat(100.00)
                 );
 
-        $formatter = new Svea\WebServiceRowFormatter($order);
+        $formatter = new WebServiceRowFormatter($order);
         $resultRows = $formatter->formatRows();
 
         // 100*200/300 = 66.66 ex. 25% vat => discount 83.33 (incl. 16.67 vat @25%)
@@ -197,10 +199,10 @@ class WebServiceRowFormatterTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(6, $testedRow->VatPercent);
 
         // order total should be 166.66 (incl. 33.33 vat @25%) + 70.67 (incl. 4.00 vat @6%) = 237.33 (incl 37.33 vat @18.665%) 
-        $total = Svea\WebServiceRowFormatter::convertExVatToIncVat( $resultRows[0]->PricePerUnit, $resultRows[0]->VatPercent ) * $resultRows[0]->NumberOfUnits +
-                Svea\WebServiceRowFormatter::convertExVatToIncVat( $resultRows[1]->PricePerUnit, $resultRows[1]->VatPercent )  * $resultRows[1]->NumberOfUnits +
-                Svea\WebServiceRowFormatter::convertExVatToIncVat( $resultRows[2]->PricePerUnit, $resultRows[2]->VatPercent )  * $resultRows[2]->NumberOfUnits +
-                Svea\WebServiceRowFormatter::convertExVatToIncVat( $resultRows[3]->PricePerUnit, $resultRows[3]->VatPercent ) * $resultRows[3]->NumberOfUnits;
+        $total = WebServiceRowFormatter::convertExVatToIncVat( $resultRows[0]->PricePerUnit, $resultRows[0]->VatPercent ) * $resultRows[0]->NumberOfUnits +
+                WebServiceRowFormatter::convertExVatToIncVat( $resultRows[1]->PricePerUnit, $resultRows[1]->VatPercent )  * $resultRows[1]->NumberOfUnits +
+                WebServiceRowFormatter::convertExVatToIncVat( $resultRows[2]->PricePerUnit, $resultRows[2]->VatPercent )  * $resultRows[2]->NumberOfUnits +
+                WebServiceRowFormatter::convertExVatToIncVat( $resultRows[3]->PricePerUnit, $resultRows[3]->VatPercent ) * $resultRows[3]->NumberOfUnits;
         $this->assertEquals(237.33, $total);
    }
 
@@ -231,7 +233,7 @@ class WebServiceRowFormatterTest extends PHPUnit_Framework_TestCase {
                     ->setUnit("kr")
                 );
 
-        $formatter = new Svea\WebServiceRowFormatter($order);
+        $formatter = new WebServiceRowFormatter($order);
         $resultRows = $formatter->formatRows();
         $testedRow = $resultRows[3];
         $this->assertEquals("f1i", $testedRow->ArticleNumber);
@@ -267,7 +269,7 @@ class WebServiceRowFormatterTest extends PHPUnit_Framework_TestCase {
                     ->setUnit("st")
                 );
 
-        $formatter = new Svea\WebServiceRowFormatter($order);
+        $formatter = new WebServiceRowFormatter($order);
         $resultRows = $formatter->formatRows();
 
         // 100*250/356 = 70.22 incl. 25% vat => 14.04 vat as amount
@@ -285,10 +287,10 @@ class WebServiceRowFormatterTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(6, $testedRow->VatPercent);
 
         // order total should be 250 + 106 - 100 = 256 (incl. 40.27 vat)
-        $total = Svea\WebServiceRowFormatter::convertExVatToIncVat( $resultRows[0]->PricePerUnit, $resultRows[0]->VatPercent ) * $resultRows[0]->NumberOfUnits +
-                Svea\WebServiceRowFormatter::convertExVatToIncVat( $resultRows[1]->PricePerUnit, $resultRows[1]->VatPercent )  * $resultRows[1]->NumberOfUnits +
-                Svea\WebServiceRowFormatter::convertExVatToIncVat( $resultRows[2]->PricePerUnit, $resultRows[2]->VatPercent )  * $resultRows[2]->NumberOfUnits +
-                Svea\WebServiceRowFormatter::convertExVatToIncVat( $resultRows[3]->PricePerUnit, $resultRows[3]->VatPercent ) * $resultRows[3]->NumberOfUnits;
+        $total = WebServiceRowFormatter::convertExVatToIncVat( $resultRows[0]->PricePerUnit, $resultRows[0]->VatPercent ) * $resultRows[0]->NumberOfUnits +
+                WebServiceRowFormatter::convertExVatToIncVat( $resultRows[1]->PricePerUnit, $resultRows[1]->VatPercent )  * $resultRows[1]->NumberOfUnits +
+                WebServiceRowFormatter::convertExVatToIncVat( $resultRows[2]->PricePerUnit, $resultRows[2]->VatPercent )  * $resultRows[2]->NumberOfUnits +
+                WebServiceRowFormatter::convertExVatToIncVat( $resultRows[3]->PricePerUnit, $resultRows[3]->VatPercent ) * $resultRows[3]->NumberOfUnits;
         $this->assertEquals(256.00, $total);
    }
 
@@ -317,7 +319,7 @@ class WebServiceRowFormatterTest extends PHPUnit_Framework_TestCase {
                     ->setUnit("kr")
                 );
 
-        $formatter = new Svea\WebServiceRowFormatter($order);
+        $formatter = new WebServiceRowFormatter($order);
         $resultRows = $formatter->formatRows();
 
         // 100*250/250 = 100 discount incl. 25% vat => 20 discount vat as amount
@@ -328,10 +330,10 @@ class WebServiceRowFormatterTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(25, $testedRow->VatPercent);
 
         // order total should be 250-100+53+29 = 232 kr
-        $total = Svea\WebServiceRowFormatter::convertExVatToIncVat( $resultRows[0]->PricePerUnit, $resultRows[0]->VatPercent ) * $resultRows[0]->NumberOfUnits +
-                Svea\WebServiceRowFormatter::convertExVatToIncVat( $resultRows[1]->PricePerUnit, $resultRows[1]->VatPercent )  * $resultRows[1]->NumberOfUnits +
-                Svea\WebServiceRowFormatter::convertExVatToIncVat( $resultRows[2]->PricePerUnit, $resultRows[2]->VatPercent )  * $resultRows[2]->NumberOfUnits +
-                Svea\WebServiceRowFormatter::convertExVatToIncVat( $resultRows[3]->PricePerUnit, $resultRows[3]->VatPercent ) * $resultRows[3]->NumberOfUnits;
+        $total = WebServiceRowFormatter::convertExVatToIncVat( $resultRows[0]->PricePerUnit, $resultRows[0]->VatPercent ) * $resultRows[0]->NumberOfUnits +
+                WebServiceRowFormatter::convertExVatToIncVat( $resultRows[1]->PricePerUnit, $resultRows[1]->VatPercent )  * $resultRows[1]->NumberOfUnits +
+                WebServiceRowFormatter::convertExVatToIncVat( $resultRows[2]->PricePerUnit, $resultRows[2]->VatPercent )  * $resultRows[2]->NumberOfUnits +
+                WebServiceRowFormatter::convertExVatToIncVat( $resultRows[3]->PricePerUnit, $resultRows[3]->VatPercent ) * $resultRows[3]->NumberOfUnits;
         $this->assertEquals(232.00, $total);
 
    }
@@ -361,7 +363,7 @@ class WebServiceRowFormatterTest extends PHPUnit_Framework_TestCase {
                     ->setUnit("kr")
                 );
 
-        $formatter = new Svea\WebServiceRowFormatter($order);
+        $formatter = new WebServiceRowFormatter($order);
         $resultRows = $formatter->formatRows();
 
         // 100*200/200 = 100 discount excl.% vat => 20 discount vat as amount
@@ -372,10 +374,10 @@ class WebServiceRowFormatterTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(25, $testedRow->VatPercent);
 
         // order total should be 250-125+53+29 = 207 kr
-        $total = Svea\WebServiceRowFormatter::convertExVatToIncVat( $resultRows[0]->PricePerUnit, $resultRows[0]->VatPercent ) * $resultRows[0]->NumberOfUnits +
-                Svea\WebServiceRowFormatter::convertExVatToIncVat( $resultRows[1]->PricePerUnit, $resultRows[1]->VatPercent )  * $resultRows[1]->NumberOfUnits +
-                Svea\WebServiceRowFormatter::convertExVatToIncVat( $resultRows[2]->PricePerUnit, $resultRows[2]->VatPercent )  * $resultRows[2]->NumberOfUnits +
-                Svea\WebServiceRowFormatter::convertExVatToIncVat( $resultRows[3]->PricePerUnit, $resultRows[3]->VatPercent ) * $resultRows[3]->NumberOfUnits;
+        $total = WebServiceRowFormatter::convertExVatToIncVat( $resultRows[0]->PricePerUnit, $resultRows[0]->VatPercent ) * $resultRows[0]->NumberOfUnits +
+                WebServiceRowFormatter::convertExVatToIncVat( $resultRows[1]->PricePerUnit, $resultRows[1]->VatPercent )  * $resultRows[1]->NumberOfUnits +
+                WebServiceRowFormatter::convertExVatToIncVat( $resultRows[2]->PricePerUnit, $resultRows[2]->VatPercent )  * $resultRows[2]->NumberOfUnits +
+                WebServiceRowFormatter::convertExVatToIncVat( $resultRows[3]->PricePerUnit, $resultRows[3]->VatPercent ) * $resultRows[3]->NumberOfUnits;
         $this->assertEquals(207.00, $total);
    }
 
@@ -407,7 +409,7 @@ class WebServiceRowFormatterTest extends PHPUnit_Framework_TestCase {
                     ->setAmountExVat(100.00)
                 );
 
-        $formatter = new Svea\WebServiceRowFormatter($order);
+        $formatter = new WebServiceRowFormatter($order);
         $resultRows = $formatter->formatRows();
 
         // 100*200/300 = 66.66 ex. 25% vat => 83.33 vat as amount
@@ -425,11 +427,11 @@ class WebServiceRowFormatterTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(6, $testedRow->VatPercent);
 
         // order total should be 166.67+70.67 +53 = 237.34 +53
-        $total = Svea\WebServiceRowFormatter::convertExVatToIncVat( $resultRows[0]->PricePerUnit, $resultRows[0]->VatPercent ) * $resultRows[0]->NumberOfUnits +
-                Svea\WebServiceRowFormatter::convertExVatToIncVat( $resultRows[1]->PricePerUnit, $resultRows[1]->VatPercent )  * $resultRows[1]->NumberOfUnits +
-                Svea\WebServiceRowFormatter::convertExVatToIncVat( $resultRows[2]->PricePerUnit, $resultRows[2]->VatPercent )  * $resultRows[2]->NumberOfUnits +
-                Svea\WebServiceRowFormatter::convertExVatToIncVat( $resultRows[3]->PricePerUnit, $resultRows[3]->VatPercent )  * $resultRows[3]->NumberOfUnits +
-                Svea\WebServiceRowFormatter::convertExVatToIncVat( $resultRows[4]->PricePerUnit, $resultRows[4]->VatPercent ) * $resultRows[4]->NumberOfUnits;
+        $total = WebServiceRowFormatter::convertExVatToIncVat( $resultRows[0]->PricePerUnit, $resultRows[0]->VatPercent ) * $resultRows[0]->NumberOfUnits +
+                WebServiceRowFormatter::convertExVatToIncVat( $resultRows[1]->PricePerUnit, $resultRows[1]->VatPercent )  * $resultRows[1]->NumberOfUnits +
+                WebServiceRowFormatter::convertExVatToIncVat( $resultRows[2]->PricePerUnit, $resultRows[2]->VatPercent )  * $resultRows[2]->NumberOfUnits +
+                WebServiceRowFormatter::convertExVatToIncVat( $resultRows[3]->PricePerUnit, $resultRows[3]->VatPercent )  * $resultRows[3]->NumberOfUnits +
+                WebServiceRowFormatter::convertExVatToIncVat( $resultRows[4]->PricePerUnit, $resultRows[4]->VatPercent ) * $resultRows[4]->NumberOfUnits;
         $this->assertEquals(237.33+53, $total);
    }
 
@@ -459,7 +461,7 @@ class WebServiceRowFormatterTest extends PHPUnit_Framework_TestCase {
                     ->setUnit("st")
                 );
 
-        $formatter = new Svea\WebServiceRowFormatter($order);
+        $formatter = new WebServiceRowFormatter($order);
         $resultRows = $formatter->formatRows();
 
         // 100*250/356 = 70.22 incl. 25% vat => 14.04 vat as amount
@@ -477,11 +479,11 @@ class WebServiceRowFormatterTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(6, $testedRow->VatPercent);
 
         // order total should be 250 + 106 - 100 +53= 256+53
-        $total = Svea\WebServiceRowFormatter::convertExVatToIncVat( $resultRows[0]->PricePerUnit, $resultRows[0]->VatPercent ) * $resultRows[0]->NumberOfUnits +
-                Svea\WebServiceRowFormatter::convertExVatToIncVat( $resultRows[1]->PricePerUnit, $resultRows[1]->VatPercent )  * $resultRows[1]->NumberOfUnits +
-                Svea\WebServiceRowFormatter::convertExVatToIncVat( $resultRows[2]->PricePerUnit, $resultRows[2]->VatPercent )  * $resultRows[2]->NumberOfUnits +
-                Svea\WebServiceRowFormatter::convertExVatToIncVat( $resultRows[3]->PricePerUnit, $resultRows[3]->VatPercent )  * $resultRows[3]->NumberOfUnits +
-                Svea\WebServiceRowFormatter::convertExVatToIncVat( $resultRows[4]->PricePerUnit, $resultRows[4]->VatPercent ) * $resultRows[4]->NumberOfUnits;
+        $total = WebServiceRowFormatter::convertExVatToIncVat( $resultRows[0]->PricePerUnit, $resultRows[0]->VatPercent ) * $resultRows[0]->NumberOfUnits +
+                WebServiceRowFormatter::convertExVatToIncVat( $resultRows[1]->PricePerUnit, $resultRows[1]->VatPercent )  * $resultRows[1]->NumberOfUnits +
+                WebServiceRowFormatter::convertExVatToIncVat( $resultRows[2]->PricePerUnit, $resultRows[2]->VatPercent )  * $resultRows[2]->NumberOfUnits +
+                WebServiceRowFormatter::convertExVatToIncVat( $resultRows[3]->PricePerUnit, $resultRows[3]->VatPercent )  * $resultRows[3]->NumberOfUnits +
+                WebServiceRowFormatter::convertExVatToIncVat( $resultRows[4]->PricePerUnit, $resultRows[4]->VatPercent ) * $resultRows[4]->NumberOfUnits;
         $this->assertEquals(256.00 +53, $total);
    }
 
@@ -509,7 +511,7 @@ class WebServiceRowFormatterTest extends PHPUnit_Framework_TestCase {
                     ->setUnit("st")
                 );
 
-        $formatter = new Svea\WebServiceRowFormatter($order);
+        $formatter = new WebServiceRowFormatter($order);
         $resultRows = $formatter->formatRows();
 
         // 100 @25% vat = -80 excl. vat
@@ -552,7 +554,7 @@ class WebServiceRowFormatterTest extends PHPUnit_Framework_TestCase {
                     ->setVatPercent(6)
                 );
 
-        $formatter = new Svea\WebServiceRowFormatter($order);
+        $formatter = new WebServiceRowFormatter($order);
         $resultRows = $formatter->formatRows();
 
         $testedRow = $resultRows[2];
@@ -596,7 +598,7 @@ class WebServiceRowFormatterTest extends PHPUnit_Framework_TestCase {
                     ->setUnit("kr")
                 );
 
-        $formatter = new Svea\WebServiceRowFormatter($order);
+        $formatter = new WebServiceRowFormatter($order);
         $resultRows = $formatter->formatRows();
         $testedRow = $resultRows[3];
 
@@ -635,7 +637,7 @@ class WebServiceRowFormatterTest extends PHPUnit_Framework_TestCase {
                     ->setUnit("kr")
                 );
 
-        $formatter = new Svea\WebServiceRowFormatter($order);
+        $formatter = new WebServiceRowFormatter($order);
         $resultRows = $formatter->formatRows();
 
         $testedRow = $resultRows[3];
@@ -689,7 +691,7 @@ class WebServiceRowFormatterTest extends PHPUnit_Framework_TestCase {
                     ->setUnit("st")
                 );
 
-        $formatter = new Svea\WebServiceRowFormatter($order);
+        $formatter = new WebServiceRowFormatter($order);
         $resultRows = $formatter->formatRows();
 
         $testedRow = $resultRows[2];
@@ -733,7 +735,7 @@ class WebServiceRowFormatterTest extends PHPUnit_Framework_TestCase {
                 ->setVatPercent(25)
                 );
 
-        $formatter = new Svea\WebServiceRowFormatter($order);
+        $formatter = new WebServiceRowFormatter($order);
         $resultRows = $formatter->formatRows();
 
         $testedRow = $resultRows[0];

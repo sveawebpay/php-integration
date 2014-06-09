@@ -60,7 +60,7 @@ class OrderHandlerValidatorTest extends PHPUnit_Framework_TestCase {
             ->setOrderId('id')
             ->setInvoiceDistributionType('Post')
         ;        
-        $object = new \Svea\DeliverInvoice( $builder );
+        $object = new \Svea\WebService\DeliverInvoice( $builder );
         $object->prepareRequest();
     }
 

@@ -40,7 +40,7 @@ class WebServicePayment {
     /**
      * Rebuild $order with svea_soap package to be in right format for SveaWebPay Europe Web service API
      * @return prepared SveaRequest
-     * @throws ValidationException
+     * @throws \Svea\ValidationException
      */
     public function prepareRequest() {
         $errors = $this->validateOrder();
@@ -50,7 +50,7 @@ class WebServicePayment {
                 $exceptionString .="-". $key. " : ".$value."\n";
             }
 
-            throw new ValidationException($exceptionString);
+            throw new \Svea\ValidationException($exceptionString);
         }
         $sveaOrder = new WebServiceSoap\SveaOrder;
         $sveaOrder->Auth = $this->getPasswordBasedAuthorization();
@@ -80,7 +80,7 @@ class WebServicePayment {
     /**
      * Transforms object to array and sends it to SveaWebPay Europe Web service API by php SoapClient
      * @return CreateOrderEuResponse 
-     * @throws ValidationException
+     * @throws \Svea\ValidationException
      */
     public function doRequest() {
 

@@ -1,5 +1,4 @@
 <?php
-namespace Svea;
 
 $root = realpath(dirname(__FILE__));
 require_once $root . '/../../../src/Includes.php';
@@ -15,7 +14,7 @@ class CancelOrderBuilderTest extends \PHPUnit_Framework_TestCase {
     protected $cancelOrderObject;
     
     function setUp() {
-        $this->cancelOrderObject = new CancelOrderBuilder(SveaConfig::getDefaultConfig());  
+        $this->cancelOrderObject = new Svea\CancelOrderBuilder(Svea\SveaConfig::getDefaultConfig());  
     }
     
     public function test_CancelOrderBuilder_class_exists() {     
@@ -40,7 +39,7 @@ class CancelOrderBuilderTest extends \PHPUnit_Framework_TestCase {
         
         $closeOrderObject = $this->cancelOrderObject->setOrderId($orderId)->cancelInvoiceOrder();
         
-        $this->assertInstanceOf("Svea\CloseOrder", $closeOrderObject);
+        $this->assertInstanceOf("Svea\WebService\CloseOrder", $closeOrderObject);
         $this->assertEquals(\ConfigurationProvider::INVOICE_TYPE, $closeOrderObject->orderBuilder->orderType);
 
     }
@@ -51,7 +50,7 @@ class CancelOrderBuilderTest extends \PHPUnit_Framework_TestCase {
         
         $closeOrderObject = $this->cancelOrderObject->setOrderId($orderId)->cancelPaymentPlanOrder();
         
-        $this->assertInstanceOf("Svea\CloseOrder", $closeOrderObject);
+        $this->assertInstanceOf("Svea\WebService\CloseOrder", $closeOrderObject);
         $this->assertEquals(\ConfigurationProvider::PAYMENTPLAN_TYPE, $closeOrderObject->orderBuilder->orderType);
     }
     

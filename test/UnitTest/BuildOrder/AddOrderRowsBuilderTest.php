@@ -1,5 +1,4 @@
 <?php
-namespace Svea;
 
 $root = realpath(dirname(__FILE__));
 require_once $root . '/../../../src/Includes.php';
@@ -13,11 +12,11 @@ class AddOrderRowsBuilderTest extends \PHPUnit_Framework_TestCase {
     protected $addOrderRowsObject;
     
     function setUp() {
-        $this->addOrderRowsObject = new AddOrderRowsBuilder(SveaConfig::getDefaultConfig());  
+        $this->addOrderRowsObject = new Svea\AddOrderRowsBuilder(Svea\SveaConfig::getDefaultConfig());  
     }
     
     public function test_addOrderRowsBuilder_class_exists() {     
-        $this->assertInstanceOf("Svea\addOrderRowsBuilder", $this->addOrderRowsObject);
+        $this->assertInstanceOf("Svea\AddOrderRowsBuilder", $this->addOrderRowsObject);
     }
     
     public function test_addOrderRowsBuilder_setOrderId() {

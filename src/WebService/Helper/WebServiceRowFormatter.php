@@ -205,7 +205,7 @@ class WebServiceRowFormatter {
 
         foreach ($this->order->shippingFeeRows as $row) {
 
-            $orderRow = new SveaOrderRow();
+            $orderRow = new WebServiceSoap\SveaOrderRow();            
             
             if (isset($row->shippingId)) {
                 $orderRow->ArticleNumber = $row->shippingId;
@@ -246,7 +246,7 @@ class WebServiceRowFormatter {
 
         foreach ($this->order->invoiceFeeRows as $row) {
             
-            $orderRow = new SveaOrderRow();
+            $orderRow = new WebServiceSoap\SveaOrderRow();            
 
             $orderRow->ArticleNumber = "";
             
@@ -313,7 +313,7 @@ class WebServiceRowFormatter {
             $discountAtThisVatRateIncVat = $discountRow->amount * ($amountAtThisVatRateIncVat / $this->totalAmountIncVat );
             $discountAtThisVatRateExVat = 
                     WebServiceRowFormatter::convertIncVatToExVat( $discountAtThisVatRateIncVat, $vatRate );
-            $orderRow->PricePerUnit = -1*Helper::bround($discountAtThisVatRateExVat,2);
+            $orderRow->PricePerUnit = (-1) * \Svea\Helper::bround($discountAtThisVatRateExVat,2);
             $orderRow->VatPercent = $vatRate;
             $splitRows[] = $orderRow;
         }
@@ -354,7 +354,7 @@ class WebServiceRowFormatter {
             //calculate discount
             $discountAtThisVatRateExVat = $discountRow->amountExVat * ($amountAtThisVatRateExVat / $this->totalAmountExVat );
 
-            $orderRow->PricePerUnit = -1*Helper::bround($discountAtThisVatRateExVat,2);
+            $orderRow->PricePerUnit = (-1) * \Svea\Helper::bround($discountAtThisVatRateExVat,2);
             $orderRow->VatPercent = $vatRate;
             $splitRows[] = $orderRow;
         }
@@ -401,7 +401,7 @@ class WebServiceRowFormatter {
                     $discountAtThisVatRateExVat = 
                             WebServiceRowFormatter::convertIncVatToExVat( $discountAtThisVatRateIncVat, $vatRate );
                     
-                    $orderRow->PricePerUnit = -1*Helper::bround($discountAtThisVatRateExVat,2);
+                    $orderRow->PricePerUnit = (-1) * \Svea\Helper::bround($discountAtThisVatRateExVat,2);
                     $orderRow->VatPercent = $vatRate;
 
                     $this->newRows[] = $orderRow;
@@ -428,7 +428,7 @@ class WebServiceRowFormatter {
                     $vatRate = $row->vatPercent;
                     $discountAtThisVatRateExVat = $row->amountExVat;
 
-                    $orderRow->PricePerUnit = -1*Helper::bround($discountAtThisVatRateExVat,2);
+                    $orderRow->PricePerUnit = (-1) * \Svea\Helper::bround($discountAtThisVatRateExVat,2);
                     $orderRow->VatPercent = $vatRate;
 
                     $this->newRows[] = $orderRow;
