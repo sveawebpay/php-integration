@@ -1,5 +1,5 @@
 <?php
-// Integration tests should not need to use the namespace
+use \Svea\WebService\GetPaymentPlanParams as GetPaymentPlanParams;
 
 $root = realpath(dirname(__FILE__));
 require_once $root . '/../../../../src/Includes.php';
@@ -11,7 +11,7 @@ class GetPaymentPlanParamsIntegrationTest extends PHPUnit_Framework_TestCase {
 
     public function testPaymentPlanParamsResult() {
         $config = Svea\SveaConfig::getDefaultConfig();
-        $paymentPlanRequest = WebPay::getPaymentPlanParams($config);
+        $paymentPlanRequest = new GetPaymentPlanParams($config);
         $request = $paymentPlanRequest
                 ->setCountryCode("SE")
                 ->doRequest();
@@ -21,7 +21,7 @@ class GetPaymentPlanParamsIntegrationTest extends PHPUnit_Framework_TestCase {
 
     public function testResultGetPaymentPlanParams() {
         $config = Svea\SveaConfig::getDefaultConfig();
-        $paymentPlanRequest = WebPay::getPaymentPlanParams($config);
+        $paymentPlanRequest = new GetPaymentPlanParams($config);
         $request = $paymentPlanRequest
                 ->setCountryCode("SE")
                 ->doRequest();

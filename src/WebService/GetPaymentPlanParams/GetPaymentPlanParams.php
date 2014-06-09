@@ -1,5 +1,5 @@
 <?php
-namespace Svea;
+namespace Svea\WebService;
 
 require_once SVEA_REQUEST_DIR . '/WebService/svea_soap/SveaSoapConfig.php';
 require_once SVEA_REQUEST_DIR . '/Config/SveaConfig.php';
@@ -38,13 +38,13 @@ class GetPaymentPlanParams {
      * @return SveaRequest
      */
     public function prepareRequest() {
-        $auth = new SveaAuth( 
+        $auth = new WebServiceSoap\SveaAuth( 
             $this->conf->getUsername(\ConfigurationProvider::PAYMENTPLAN_TYPE,  $this->countryCode),
             $this->conf->getPassword(\ConfigurationProvider::PAYMENTPLAN_TYPE,  $this->countryCode),   
             $this->conf->getClientNumber(\ConfigurationProvider::PAYMENTPLAN_TYPE,  $this->countryCode)   
         );
 
-        $object = new SveaRequest();
+        $object = new WebServiceSoap\SveaRequest();
         $object->request = (object) array("Auth" => $auth);
 
         return $object;
@@ -57,7 +57,7 @@ class GetPaymentPlanParams {
     public function doRequest() {
         $requestObject = $this->prepareRequest();
         $url = $this->conf->getEndPoint(\ConfigurationProvider::PAYMENTPLAN_TYPE);
-        $request = new SveaDoRequest($url);
+        $request = new WebServiceSoap\SveaDoRequest($url);
         $response = $request->GetPaymentPlanParamsEu($requestObject);
 
         $responseObject = new \SveaResponse($response,"");

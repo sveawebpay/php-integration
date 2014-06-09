@@ -184,7 +184,7 @@ class WebPay {
     public static function getPaymentPlanParams($config = NULL) {
         if( $config == NULL ) { WebPay::throwMissingConfigException(); }
 
-        return new Svea\GetPaymentPlanParams($config);
+        return new Svea\WebService\GetPaymentPlanParams($config);
     }
 
     /**
