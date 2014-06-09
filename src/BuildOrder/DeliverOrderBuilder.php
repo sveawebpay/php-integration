@@ -125,7 +125,7 @@ class deliverOrderBuilder extends OrderBuilder {
      */
     public function deliverInvoiceOrder() {
         if( count($this->orderRows) >0 ) {
-            return new DeliverInvoice($this);
+            return new WebService\DeliverInvoice($this);
         }
         else {
             $this->orderType = "Invoice";

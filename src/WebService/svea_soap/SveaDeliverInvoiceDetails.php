@@ -1,5 +1,5 @@
 <?php
-namespace Svea;
+namespace Svea\WebService\WebServiceSoap;
 
 /**
  * Include in SveaDeliverOrderInformation for Invoice only

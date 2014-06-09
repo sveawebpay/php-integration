@@ -89,7 +89,7 @@ class DeliverInvoiceIntegrationTest extends PHPUnit_Framework_TestCase {
                 ->setCountryCode("SE")
                 ->setInvoiceDistributionType('Post')//Post or Email
         ;
-        $deliverInvoiceObject = new \Svea\DeliverInvoice( $orderBuilder );
+        $deliverInvoiceObject = new Svea\WebService\DeliverInvoice( $orderBuilder );
         $response = $deliverInvoiceObject->doRequest();                
     }
     /**

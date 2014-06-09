@@ -30,14 +30,14 @@ class DeliverInvoice extends HandleOrder {
     public function prepareRequest() {
         $errors = $this->validateRequest();
 
-        $sveaDeliverOrder = new SveaDeliverOrder;
+        $sveaDeliverOrder = new WebServiceSoap\SveaDeliverOrder;
         $sveaDeliverOrder->Auth = $this->getStoreAuthorization();
-        $orderInformation = new SveaDeliverOrderInformation($this->orderBuilder->orderType);
+        $orderInformation = new WebServiceSoap\SveaDeliverOrderInformation($this->orderBuilder->orderType);
         $orderInformation->SveaOrderId = $this->orderBuilder->orderId;
         $orderInformation->OrderType = $this->orderBuilder->orderType;
 
         if ($this->orderBuilder->orderType == "Invoice") {
-            $invoiceDetails = new SveaDeliverInvoiceDetails();
+            $invoiceDetails = new WebServiceSoap\SveaDeliverInvoiceDetails();
             $invoiceDetails->InvoiceDistributionType = $this->orderBuilder->distributionType;
             $invoiceDetails->IsCreditInvoice = isset($this->orderBuilder->invoiceIdToCredit) ? TRUE : FALSE;
             if (isset($this->orderBuilder->invoiceIdToCredit)) {
@@ -51,7 +51,7 @@ class DeliverInvoice extends HandleOrder {
         }
 
         $sveaDeliverOrder->DeliverOrderInformation = $orderInformation;
-        $object = new SveaRequest();
+        $object = new WebServiceSoap\SveaRequest();
         $object->request = $sveaDeliverOrder;
         return $object;
     }    
@@ -63,7 +63,7 @@ class DeliverInvoice extends HandleOrder {
     public function doRequest() {
         $requestObject = $this->prepareRequest();
         $url = $this->orderBuilder->conf->getEndPoint($this->orderBuilder->orderType);
-        $request = new SveaDoRequest($url);
+        $request = new WebServiceSoap\SveaDoRequest($url);
         $response = $request->DeliverOrderEu($requestObject);
         $responseObject = new \SveaResponse($response,"");
         return $responseObject->response;
