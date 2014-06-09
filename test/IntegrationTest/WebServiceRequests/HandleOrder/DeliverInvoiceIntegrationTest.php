@@ -81,7 +81,7 @@ class DeliverInvoiceIntegrationTest extends PHPUnit_Framework_TestCase {
     public function test_DeliverInvoice_missing_addOrderRow_throws_ValidationException() {
         $config = Svea\SveaConfig::getDefaultConfig();
         $orderId = $this->getInvoiceOrderId();
-        $orderBuilder = new \Svea\deliverOrderBuilder($config);
+        $orderBuilder = new \Svea\DeliverOrderBuilder($config);
         $orderBuilder = $orderBuilder
                 //->addOrderRow(TestUtil::createOrderRow())
                 ->setOrderId($orderId)

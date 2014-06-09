@@ -5,7 +5,7 @@ require_once 'HandleOrder.php';
 
 /**
  * DeliverInvoice sets up a DeliverOrderEU request, using information from the
- * provided deliverOrderBuilder object. If all provided order rows match the
+ * provided DeliverOrderBuilder object. If all provided order rows match the
  * order rows from the corresponding createOrderEU request the order is invoiced
  * in full by Svea. If not, the order will be partially delivered. See further
  * the Svea Web Service EU API.
@@ -15,12 +15,12 @@ require_once 'HandleOrder.php';
 class DeliverInvoice extends HandleOrder {
 
     /**
-     * @param DeliverOrderBuilder $deliverOrderBuilder
+     * @param DeliverOrderBuilder $DeliverOrderBuilder
      */
-    public function __construct($deliverOrderBuilder) {
-        $deliverOrderBuilder->orderType = "Invoice";       // todo change to use ConfigurationProvider constants
+    public function __construct($DeliverOrderBuilder) {
+        $DeliverOrderBuilder->orderType = "Invoice";       // todo change to use ConfigurationProvider constants
 
-        parent::__construct($deliverOrderBuilder);
+        parent::__construct($DeliverOrderBuilder);
     }
     
     /**

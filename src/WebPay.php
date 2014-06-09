@@ -211,13 +211,13 @@ class WebPay {
 
     /**
      * Start Building Request Deliver Orders.
-     * @return deliverOrderBuilder object
+     * @return DeliverOrderBuilder object
      * @param ConfigurationProvider $config  instance of implementation class of ConfigurationProvider Interface
      */
     public static function deliverOrder($config = NULL) {
         if( $config == NULL ) { WebPay::throwMissingConfigException(); }
 
-        return new Svea\deliverOrderBuilder($config);
+        return new Svea\DeliverOrderBuilder($config);
     }
         
     /**

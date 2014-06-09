@@ -16,9 +16,9 @@ class DeliverOrdersRequest extends AdminServiceRequest {
     /**
      * @param cancelOrderBuilder $orderBuilder
      */
-    public function __construct($deliverOrderBuilder) {
+    public function __construct($DeliverOrderBuilder) {
         $this->action = "DeliverOrders";
-        $this->orderBuilder = $deliverOrderBuilder;
+        $this->orderBuilder = $DeliverOrderBuilder;
     }    
 
     /**

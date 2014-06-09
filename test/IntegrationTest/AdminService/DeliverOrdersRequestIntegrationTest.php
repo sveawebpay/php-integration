@@ -24,13 +24,13 @@ class DeliverOrdersRequestIntegrationTest extends PHPUnit_Framework_TestCase{
         $sveaOrderIdToDeliver = 349699; // need to exist, be closed
         $orderType = \ConfigurationProvider::INVOICE_TYPE;
         
-        $deliverOrderBuilder = new Svea\DeliverOrderBuilder( Svea\SveaConfig::getDefaultConfig() );
-        $deliverOrderBuilder->setCountryCode( $countryCode );
-        $deliverOrderBuilder->setOrderId( $sveaOrderIdToDeliver );
-        $deliverOrderBuilder->setInvoiceDistributionType(DistributionType::POST);
-        $deliverOrderBuilder->orderType = $orderType;
+        $DeliverOrderBuilder = new Svea\DeliverOrderBuilder( Svea\SveaConfig::getDefaultConfig() );
+        $DeliverOrderBuilder->setCountryCode( $countryCode );
+        $DeliverOrderBuilder->setOrderId( $sveaOrderIdToDeliver );
+        $DeliverOrderBuilder->setInvoiceDistributionType(DistributionType::POST);
+        $DeliverOrderBuilder->orderType = $orderType;
           
-        $request = new Svea\AdminService\DeliverOrdersRequest( $deliverOrderBuilder );
+        $request = new Svea\AdminService\DeliverOrdersRequest( $DeliverOrderBuilder );
         $response = $request->doRequest();
         
         //print_r( $response );        

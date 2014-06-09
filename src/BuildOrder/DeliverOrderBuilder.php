@@ -25,7 +25,7 @@ require_once SVEA_REQUEST_DIR . '/Includes.php';
  *  
  * @author Kristian Grossman-Madsen, Anneli Halld'n, Daniel Brolund for Svea Webpay
  */
-class deliverOrderBuilder extends OrderBuilder {
+class DeliverOrderBuilder extends OrderBuilder {
 
      /**
      * Order Id is recieved in response to ->doRequest when creating order.
