@@ -1,5 +1,6 @@
 <?php
-// Integration tests should not need to use the namespace
+use \Svea\WebService\GetPaymentPlanParams as GetPaymentPlanParams;
+use \Svea\WebService\PaymentPlanPricePerMonth as PaymentPlanPricePerMonth;
 
 $root = realpath(dirname(__FILE__));
 require_once $root . '/../../../../src/Includes.php';
@@ -11,7 +12,7 @@ class PaymentPlanPricePerMonthTest extends PHPUnit_Framework_TestCase {
 
     private function getGetPaymentPlanParamsResponseForTesting() {
         $config = Svea\SveaConfig::getDefaultConfig();
-        $addressRequest = WebPay::getPaymentPlanParams($config);
+        $addressRequest = new GetPaymentPlanParams($config);
         $response = $addressRequest
                 ->setCountryCode("SE")
                 ->doRequest();
@@ -20,14 +21,14 @@ class PaymentPlanPricePerMonthTest extends PHPUnit_Framework_TestCase {
 
     public function testBuildPriceCalculator() {
         $params = $this->getGetPaymentPlanParamsResponseForTesting();
-        $response = WebPay::paymentPlanPricePerMonth(2000,$params);
+        $response = new PaymentPlanPricePerMonth(2000,$params);
         $this->assertEquals(213060, $response->values[0]['campaignCode']);
         $this->assertEquals(2029, $response->values[0]['pricePerMonth']);
     }
 
     function testBuildPriceCalculatorWithLowPrice() {
         $params = $this->getGetPaymentPlanParamsResponseForTesting();
-        $response = WebPay::paymentPlanPricePerMonth(200,$params);
+        $response = new PaymentPlanPricePerMonth(200,$params);
         $this->assertEmpty($response->values);
     }
 }
