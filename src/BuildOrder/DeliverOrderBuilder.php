@@ -25,7 +25,7 @@ require_once SVEA_REQUEST_DIR . '/Includes.php';
  *  
  * @author Kristian Grossman-Madsen, Anneli Halld'n, Daniel Brolund for Svea Webpay
  */
-class deliverOrderBuilder extends OrderBuilder {
+class DeliverOrderBuilder extends OrderBuilder {
 
      /**
      * Order Id is recieved in response to ->doRequest when creating order.
@@ -125,11 +125,11 @@ class deliverOrderBuilder extends OrderBuilder {
      */
     public function deliverInvoiceOrder() {
         if( count($this->orderRows) >0 ) {
-            return new DeliverInvoice($this);
+            return new WebService\DeliverInvoice($this);
         }
         else {
             $this->orderType = "Invoice";
-            return new DeliverOrdersRequest($this);
+            return new AdminService\DeliverOrdersRequest($this);
         }
     }
 
@@ -138,7 +138,7 @@ class deliverOrderBuilder extends OrderBuilder {
      * @return DeliverPaymentPlan
      */
     public function deliverPaymentPlanOrder() {
-        return new DeliverPaymentPlan($this);
+        return new WebService\DeliverPaymentPlan($this);
     }
     /** @var string orderType  one of "Invoice" or "PaymentPlan"*/
     public $orderType;

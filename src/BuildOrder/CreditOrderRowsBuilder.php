@@ -176,7 +176,7 @@ class CreditOrderRowsBuilder {
      */
     public function creditInvoiceOrderRows() {
         $this->setOrderType(\ConfigurationProvider::INVOICE_TYPE );
-        return new CreditOrderRowsRequest($this);
+        return new AdminService\CreditOrderRowsRequest($this);
     }
     
     /**

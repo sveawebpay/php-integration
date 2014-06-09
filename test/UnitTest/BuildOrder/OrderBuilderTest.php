@@ -3,8 +3,8 @@ namespace Svea;
 
 $root = realpath(dirname(__FILE__));
 require_once $root . '/../../../src/Includes.php';
-require_once $root . '/../../../src/WebServiceRequests/svea_soap/SveaSoapConfig.php';
-require_once $root . '/../VoidValidator.php';
+require_once $root . '/../../../src/WebService/svea_soap/SveaSoapConfig.php';
+require_once $root . '/Validator/VoidValidator.php';
 
 $root = realpath(dirname(__FILE__));
 require_once $root . '/../../TestUtil.php';
@@ -20,7 +20,7 @@ class OrderBuilderTest extends \PHPUnit_Framework_TestCase {
     protected function setUp() {
         $config = SveaConfig::getDefaultConfig();
         $this->orderBuilder = \WebPay::createOrder($config);
-        $this->orderBuilder->validator = new VoidValidator();
+//        $this->orderBuilder->validator = new VoidValidator();
     }
 
     public function testBuildOrderWithOrderRow() {

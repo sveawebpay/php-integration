@@ -6,7 +6,7 @@ require_once SVEA_REQUEST_DIR . '/Includes.php';
 /**
  * @author Kristian Grossman-Madsen, Anneli Halld'n, Daniel Brolund for Svea Webpay
  */
-class closeOrderBuilder {
+class CloseOrderBuilder {
     
     public function __construct($config) {
         $this->conf = $config;
@@ -43,7 +43,7 @@ class closeOrderBuilder {
      */
     public function closeInvoiceOrder() {
         $this->orderType = \ConfigurationProvider::INVOICE_TYPE;
-        return new CloseOrder($this);
+        return new WebService\CloseOrder($this);
     }
     
     /**
@@ -52,7 +52,7 @@ class closeOrderBuilder {
      */
     public function closePaymentPlanOrder() {
         $this->orderType = \ConfigurationProvider::PAYMENTPLAN_TYPE;
-        return new CloseOrder($this);
+        return new WebService\CloseOrder($this);
     }
     
     /** @var string "Invoice" or "PaymentPlan" */

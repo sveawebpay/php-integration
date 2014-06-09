@@ -40,7 +40,7 @@ class IdentityValidator {
     /**
      * Validates that either NationalIdNumber (individual customers) or companyVatNumber (company customers) is set to a non-empty string.
      * (NationalIdNumber or companyVatNumber required for SE, NO, DK, FI orders)
-     * @param Svea\createOrderBuilder $order
+     * @param Svea\CreateOrderBuilder $order
      * @param array of string $errors  -- validator errors array
      * @return array of string $errors -- updated validator errors array
      */

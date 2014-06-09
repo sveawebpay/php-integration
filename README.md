@@ -72,7 +72,7 @@ the request to the service. In general, the objects will validate that all requi
 stating what is missing for the service in question. 
 
 Examples of these classes are HostedRequest/HandleOrder/AnnulTransaction, HostedRequest/Payment/CardPayment, 
-WebServiceRequest/HandleOrder/CloseOrder, WebServiceRequests/Payment/InvoicePayment, AdminServiceRequest/CancelOrderRequest, et al.
+WebServiceRequest/HandleOrder/CloseOrder, WebService/Payment/InvoicePayment, AdminServiceRequest/CancelOrderRequest, et al.
 
 NOTES ON THE PACKAGE DESIGN:
 This structure enables the WebPay and WebPayAdmin entrypoint methods to confine themselves to the order domain, and pushes the various service 
@@ -88,11 +88,11 @@ Svea namespace. All service classes are documented by generated documentation in
 
 WebPay: 
   createOrder creates BuildOrder/orderBuilder objects containing order data
-    -- useInvoicePayment creates an instance of WebServiceRequests/Payment/InvoicePayment which does request to Svea Europe Web Service SOAP service
+    -- useInvoicePayment creates an instance of WebService/Payment/InvoicePayment which does request to Svea Europe Web Service SOAP service
     -- useCardPayment creates and instance of HostedRequest/Payment/CardPayment which returns the xml request to send to the SveaWebPay service 
 WebPayAdmin:
   cancelOrder creates a BuildOrder/cancelOrderBuilder object populated with data about the order to cancel
-    -- cancelInvoiceOrder creates an instance of WebServiceRequests/HandleOrder/CloseOrder
+    -- cancelInvoiceOrder creates an instance of WebService/HandleOrder/CloseOrder
     -- cancelCardOrder creates an instance of HostedRequests/HandleOrder/AnnulTransaction
 
 COMPATIBILTIY:

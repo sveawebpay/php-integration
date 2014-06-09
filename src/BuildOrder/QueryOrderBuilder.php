@@ -73,7 +73,7 @@ class QueryOrderBuilder {
      */
     public function queryInvoiceOrder() {
         $this->setOrderType(\ConfigurationProvider::INVOICE_TYPE );
-        return new GetOrdersRequest($this);
+        return new AdminService\GetOrdersRequest($this);
     }
     
     /**
@@ -82,7 +82,7 @@ class QueryOrderBuilder {
      */
     public function queryPaymentPlanOrder() {
         $this->setOrderType(\ConfigurationProvider::PAYMENTPLAN_TYPE);
-        return new GetOrdersRequest($this);    
+        return new AdminService\GetOrdersRequest($this);    
     }
 
     /**
@@ -91,7 +91,7 @@ class QueryOrderBuilder {
      */
     public function queryCardOrder() {
         $this->setOrderType(\ConfigurationProvider::HOSTED_ADMIN_TYPE);
-        $queryTransaction = new QueryTransaction($this->conf);
+        $queryTransaction = new HostedService\QueryTransaction($this->conf);
         return $queryTransaction->setTransactionId($this->orderId)->setCountryCode($this->countryCode);
     }  
 }

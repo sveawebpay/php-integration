@@ -122,7 +122,7 @@ include_once SVEA_REQUEST_DIR . "/Includes.php";
  * stating what is missing for the service in question. 
  * 
  * Examples of these classes are HostedRequest/HandleOrder/AnnulTransaction, HostedRequest/Payment/CardPayment, 
- * WebServiceRequest/HandleOrder/CloseOrder, WebServiceRequests/Payment/InvoicePayment, AdminServiceRequest/CancelOrderRequest, et al.
+ * WebServiceRequest/HandleOrder/CloseOrder, WebService/Payment/InvoicePayment, AdminServiceRequest/CancelOrderRequest, et al.
  * 
  * NOTES ON THE PACKAGE DESIGN:
  * This structure enables the WebPay and WebPayAdmin entrypoint methods to confine themselves to the order domain, and pushes the various service request details lower into the package stack, away from the immediate viewpoint of the integrator view. Thus all payment methods may be accessed in an uniform way, with the package doing the main work of massaging the order data to fit the various services. 
@@ -136,11 +136,11 @@ include_once SVEA_REQUEST_DIR . "/Includes.php";
  * 
  * WebPay: 
  *   createOrder creates BuildOrder/orderBuilder objects containing order data
- *     -- useInvoicePayment creates an instance of WebServiceRequests/Payment/InvoicePayment which does request to Svea Europe Web Service SOAP service
+ *     -- useInvoicePayment creates an instance of WebService/Payment/InvoicePayment which does request to Svea Europe Web Service SOAP service
  *     -- useCardPayment creates and instance of HostedRequest/Payment/CardPayment which returns the xml request to send to the SveaWebPay service 
  * WebPayAdmin:
  *   cancelOrder creates a BuildOrder/cancelOrderBuilder object populated with data about the order to cancel
- *     -- cancelInvoiceOrder creates an instance of WebServiceRequests/HandleOrder/CloseOrder
+ *     -- cancelInvoiceOrder creates an instance of WebService/HandleOrder/CloseOrder
  *     -- cancelCardOrder creates an instance of HostedRequests/HandleOrder/AnnulTransaction
  * 
  * COMPATIBILTIY:
@@ -184,7 +184,7 @@ class WebPay {
     public static function getPaymentPlanParams($config = NULL) {
         if( $config == NULL ) { WebPay::throwMissingConfigException(); }
 
-        return new Svea\GetPaymentPlanParams($config);
+        return new Svea\WebService\GetPaymentPlanParams($config);
     }
 
     /**
@@ -211,25 +211,25 @@ class WebPay {
 
     /**
      * Start Building Request Deliver Orders.
-     * @return deliverOrderBuilder object
+     * @return DeliverOrderBuilder object
      * @param ConfigurationProvider $config  instance of implementation class of ConfigurationProvider Interface
      */
     public static function deliverOrder($config = NULL) {
         if( $config == NULL ) { WebPay::throwMissingConfigException(); }
 
-        return new Svea\deliverOrderBuilder($config);
+        return new Svea\DeliverOrderBuilder($config);
     }
         
     /**
      * Start building Request to close orders. Only supports Invoice or Payment plan orders.
-     * @return Svea\closeOrderBuilder object
+     * @return Svea\CloseOrderBuilder object
      * @param ConfigurationProvider $config  instance implementing ConfigurationProvider
      * @deprecated 2.0.0 -- use WebPayAdmin::cancelOrder instead, which supports both synchronous and asynchronous orders
      */
     public static function closeOrder($config = NULL) {
         if( $config == NULL ) { WebPay::throwMissingConfigException(); }
 
-        return new Svea\closeOrderBuilder($config);
+        return new Svea\CloseOrderBuilder($config);
     }
     
     /**
@@ -240,7 +240,7 @@ class WebPay {
     public static function getAddresses($config = NULL) {
         if( $config == NULL ) { WebPay::throwMissingConfigException(); }
 
-        return new Svea\GetAddresses($config);
+        return new Svea\WebService\GetAddresses($config);
     }
     
     /**
@@ -251,7 +251,7 @@ class WebPay {
      */
     public static function getPaymentMethods($config = NULL) {
         if( $config == NULL ) { WebPay::throwMissingConfigException(); }
-        return new Svea\GetPaymentMethods($config);
+        return new Svea\HostedService\GetPaymentMethods($config);
     }
                     
     /** helper function, throws exception if no config is given */

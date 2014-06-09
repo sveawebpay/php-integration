@@ -124,7 +124,7 @@ class CancelOrderRowsBuilder {
      */
     public function cancelInvoiceOrderRows() {
         $this->setOrderType(\ConfigurationProvider::INVOICE_TYPE );
-        return new CancelOrderRowsRequest($this);
+        return new AdminService\CancelOrderRowsRequest($this);
     }
     
     /**
@@ -133,7 +133,7 @@ class CancelOrderRowsBuilder {
      */
     public function cancelPaymentPlanOrderRows() {
         $this->setOrderType(\ConfigurationProvider::PAYMENTPLAN_TYPE);
-        return new CancelOrderRowsRequest($this);    
+        return new AdminService\CancelOrderRowsRequest($this);    
     }
 
     /**

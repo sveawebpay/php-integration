@@ -105,7 +105,7 @@ class UpdateOrderRowsBuilder {
      */
     public function updateInvoiceOrderRows() {
         $this->setOrderType(\ConfigurationProvider::INVOICE_TYPE );
-        return new UpdateOrderRowsRequest($this);
+        return new AdminService\UpdateOrderRowsRequest($this);
     }
     
     /**
@@ -114,6 +114,6 @@ class UpdateOrderRowsBuilder {
      */
     public function updatePaymentPlanOrderRows() {
         $this->setOrderType(\ConfigurationProvider::PAYMENTPLAN_TYPE );
-        return new UpdateOrderRowsRequest($this);
+        return new AdminService\UpdateOrderRowsRequest($this);
     }
 }

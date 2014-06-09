@@ -55,12 +55,12 @@ class OrderHandlerValidatorTest extends PHPUnit_Framework_TestCase {
      */
     public function testFailOnMissingOrderRowsOnInvoiceDeliver() {
         $config = Svea\SveaConfig::getDefaultConfig();
-        $builder = new \Svea\deliverOrderBuilder($config);
+        $builder = new \Svea\DeliverOrderBuilder($config);
         $builder
             ->setOrderId('id')
             ->setInvoiceDistributionType('Post')
         ;        
-        $object = new \Svea\DeliverInvoice( $builder );
+        $object = new \Svea\WebService\DeliverInvoice( $builder );
         $object->prepareRequest();
     }
 

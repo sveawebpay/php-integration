@@ -44,13 +44,13 @@ class UpdateOrderRowsBuilderTest extends \PHPUnit_Framework_TestCase {
         $orderId = "123456";
         $updateOrderRowsObject = $this->updateOrderRowsObject->setOrderId($orderId)->updateInvoiceOrderRows();
         
-        $this->assertInstanceOf("Svea\UpdateOrderRowsRequest", $updateOrderRowsObject);
+        $this->assertInstanceOf("Svea\AdminService\UpdateOrderRowsRequest", $updateOrderRowsObject);
     }
     
     public function test_updateOrderRowsBuilder_updatePaymentPlanOrderRowsBuilder_returns_UpdateOrderRowsRequest() {
         $orderId = "123456";  
         $updateOrderRowsObject = $this->updateOrderRowsObject->setOrderId($orderId)->updatePaymentPlanOrderRows();
         
-        $this->assertInstanceOf("Svea\UpdateOrderRowsRequest", $updateOrderRowsObject);
+        $this->assertInstanceOf("Svea\AdminService\UpdateOrderRowsRequest", $updateOrderRowsObject);
     }
 }

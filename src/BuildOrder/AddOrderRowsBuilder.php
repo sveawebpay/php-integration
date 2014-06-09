@@ -99,7 +99,7 @@ class AddOrderRowsBuilder {
      */
     public function addInvoiceOrderRows() {
         $this->setOrderType(\ConfigurationProvider::INVOICE_TYPE );
-        return new AddOrderRowsRequest($this);
+        return new AdminService\AddOrderRowsRequest($this);
     }
     /**
      * Use addPaymentPlanOrderRows() to add rows to a PaymentPlan order using AdminServiceRequest AddOrderRows request
@@ -107,6 +107,6 @@ class AddOrderRowsBuilder {
      */
     public function addPaymentPlanOrderRows() {
         $this->setOrderType(\ConfigurationProvider::PAYMENTPLAN_TYPE );
-        return new AddOrderRowsRequest($this);
+        return new AdminService\AddOrderRowsRequest($this);
     }    
 }

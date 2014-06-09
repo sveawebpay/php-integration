@@ -35,7 +35,7 @@ class CreateOrderBuilder extends OrderBuilder {
      * @return CardPayment
      */
     public function usePayPageCardOnly() {
-        return new CardPayment($this);
+        return new HostedService\CardPayment($this);
     }
 
     /**
@@ -45,7 +45,7 @@ class CreateOrderBuilder extends OrderBuilder {
      * @return DirectPayment
      */
     public function usePayPageDirectBankOnly() {
-        return new DirectPayment($this);
+        return new HostedService\DirectPayment($this);
     }
 
     /**
@@ -55,7 +55,7 @@ class CreateOrderBuilder extends OrderBuilder {
      * @return PayPagePayment
      */
     public function usePayPage() {
-        $paypagepayment = new PayPagePayment($this);
+        $paypagepayment = new HostedService\PayPagePayment($this);
         return $paypagepayment;
     }
 
@@ -69,7 +69,7 @@ class CreateOrderBuilder extends OrderBuilder {
      * @return PaymentMethodPayment
      */
     public function usePaymentMethod($paymentMethodAsConst) {
-        return new PaymentMethodPayment($this, $paymentMethodAsConst);
+        return new HostedService\PaymentMethodPayment($this, $paymentMethodAsConst);
     }
 
     /**
@@ -77,7 +77,7 @@ class CreateOrderBuilder extends OrderBuilder {
      * @return InvoicePayment
      */
     public function useInvoicePayment() {
-        return new InvoicePayment($this);
+        return new WebService\InvoicePayment($this);
     }
 
     /**
@@ -89,7 +89,7 @@ class CreateOrderBuilder extends OrderBuilder {
     public function usePaymentPlanPayment($campaignCodeAsString, $sendAutomaticGiroPaymentFormAsBool = 0) {
         $this->campaignCode = $campaignCodeAsString;
         $this->sendAutomaticGiroPaymentForm = $sendAutomaticGiroPaymentFormAsBool;
-        return new PaymentPlanPayment($this);
+        return new WebService\PaymentPlanPayment($this);
     }
 
    /**
