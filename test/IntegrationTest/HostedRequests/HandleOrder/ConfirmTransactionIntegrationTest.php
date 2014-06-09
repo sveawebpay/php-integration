@@ -1,5 +1,5 @@
 <?php
-// Integration tests should not need to use the namespace
+use Svea\HostedService\ConfirmTransaction as ConfirmTransaction;
 
 $root = realpath(dirname(__FILE__));
 require_once $root . '/../../../../src/Includes.php';
@@ -24,7 +24,7 @@ class ConfirmTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
 
         // Stop here and mark this test as incomplete.
         $this->markTestIncomplete(
-          'not yet implemented, requires webdriver support' // TODO
+          'not yet implemented, requires webdriver support'
         );
         
         // also, needs to have SUCCESS status set on transaction
@@ -42,7 +42,7 @@ class ConfirmTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
         
         $url = "https://test.sveaekonomi.se/webpay/payment";
 
-        // do request modeled on CardPymentIntegrationTest.php
+        // do request modeled on CardPaymentIntegrationTest.php
                 
         // make sure the transaction has status AUTHORIZED at Svea
         
@@ -62,7 +62,7 @@ class ConfirmTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
         $transactionId = 987654;
         $captureDate = "2014-03-21";
 
-        $request = new Svea\ConfirmTransaction( Svea\SveaConfig::getDefaultConfig() );
+        $request = new ConfirmTransaction( Svea\SveaConfig::getDefaultConfig() );
         $response = $request
             ->setTransactionId( $transactionId )
             ->setCaptureDate( $captureDate )
@@ -90,28 +90,25 @@ class ConfirmTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
         );
         
         // Set the below to match the transaction, then run the test.
-        $customerrefno = 314;
-        $transactionId = 579967;
-        $captureDate = "2014-03-21";
+        $customerrefno = "clientOrderNumber:2014-06-09T14:02:33 02:00";
+        $transactionId = 583151;
+        $captureDate = "2014-06-09";
 
                 
-        $request = new Svea\ConfirmTransaction( Svea\SveaConfig::getDefaultConfig() );
+        $request = new ConfirmTransaction( Svea\SveaConfig::getDefaultConfig() );
         $response = $request
             ->setTransactionId( $transactionId )
             ->setCaptureDate( $captureDate )
             ->setCountryCode( "SE" )
             ->doRequest();        
         
+        print_r( $response );
         $this->assertInstanceOf( "Svea\ConfirmTransactionResponse", $response );
-
-//        print_r( $response );
-        
+     
         // if we receive an error from the service, the integration test passes
         $this->assertEquals( 1, $response->accepted );        
         $this->assertEquals( $customerrefno, $response->customerrefno );  
-        
 
-        
     }    
 }
 ?>

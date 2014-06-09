@@ -56,7 +56,7 @@ abstract class HostedRequest {
         rtrim($fieldsString, '&');
 
         $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $this->config->getEndpoint(SveaConfigurationProvider::HOSTED_ADMIN_TYPE). $this->method);
+        curl_setopt($ch, CURLOPT_URL, $this->config->getEndpoint( \Svea\SveaConfigurationProvider::HOSTED_ADMIN_TYPE). $this->method);
         curl_setopt($ch, CURLOPT_POST, count($fields));
         curl_setopt($ch, CURLOPT_POSTFIELDS, $fieldsString);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);

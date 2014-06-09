@@ -1,5 +1,5 @@
 <?php
-// Integration tests should not need to use the namespace
+use Svea\HostedService\AnnulTransaction as AnnulTransaction;
 
 $root = realpath(dirname(__FILE__));
 require_once $root . '/../../../../src/Includes.php';
@@ -21,7 +21,7 @@ class AnnulTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
              
         $transactionId = 987654;
 
-        $request = new Svea\AnnulTransaction( Svea\SveaConfig::getDefaultConfig() );
+        $request = new AnnulTransaction( Svea\SveaConfig::getDefaultConfig() );
         $response = $request
             ->setTransactionId( $transactionId )
             ->setCountryCode( "SE" )
@@ -51,7 +51,7 @@ class AnnulTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
         $customerrefno = 313;
         $transactionId = 579929;
 
-        $request = new Svea\AnnulTransaction( Svea\SveaConfig::getDefaultConfig() );
+        $request = new AnnulTransaction( Svea\SveaConfig::getDefaultConfig() );
         $response = $request
             ->setTransactionId( $transactionId )
             ->setCountryCode( "SE" );
