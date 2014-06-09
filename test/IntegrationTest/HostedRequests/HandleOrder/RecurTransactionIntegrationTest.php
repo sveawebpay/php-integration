@@ -1,5 +1,5 @@
 <?php
-// Integration tests should not need to use the namespace
+use Svea\HostedService\RecurTransaction as RecurTransaction;
 
 $root = realpath(dirname(__FILE__));
 require_once $root . '/../../../../src/Includes.php';
@@ -24,7 +24,7 @@ class RecurTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
         $currency = "SEK";
         $amount = 100;
                 
-        $request = new Svea\RecurTransaction( Svea\SveaConfig::getDefaultConfig() );
+        $request = new RecurTransaction( Svea\SveaConfig::getDefaultConfig() );
         $response = $request  
             ->setSubscriptionId( $subscriptionId )
             ->setCustomerRefNo( $customerRefNo )
@@ -57,7 +57,7 @@ class RecurTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
         // 2. go to verktyg -> betalning
         // 3. enter our test merchantid: 1130
         // 4. use the following xml, making sure to update to a unique customerrefno:
-        // <paymentmethod>KORTCERT</paymentmethod><subscriptiontype>RECURRINGCAPTURE</subscriptiontype><currency>SEK</currency><amount>500</amount><vat>100</vat><customerrefno>test_recur_NN</customerrefno><returnurl>https://test.sveaekonomi.se/webpay/admin/merchantresponsetest.xhtml</returnurl>
+        // <paymentmethod>KORTCERT</paymentmethod><subscriptiontype>RECURRINGCAPTURE</subscriptiontype><currency>SEK</currency><amount>500</amount><vat>100</vat><customerrefno>test_recur_NN</customerrefno><returnurl>https://test.sveaekonomi.se/webpay-admin/admin/merchantresponsetest.xhtml</returnurl>
         // 5. the result should be:
         // <response><transaction id="581497"><paymentmethod>KORTCERT</paymentmethod><merchantid>1130</merchantid><customerrefno>test_recur_1</customerrefno><amount>500</amount><currency>SEK</currency><subscriptionid>2922</subscriptionid><cardtype>VISA</cardtype><maskedcardno>444433xxxxxx1100</maskedcardno><expirymonth>02</expirymonth><expiryyear>16</expiryyear><authcode>993955</authcode></transaction><statuscode>0</statuscode></response>
 
@@ -70,15 +70,15 @@ class RecurTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
         $cardtype = "VISA";  
         $maskedcardno = "444433xxxxxx1100";
         $expirymonth = 02;  
-        $expiryyear = 16;  
-        $subscriptionid = 2922; 
+        $expiryyear = 15;  
+        $subscriptionid = 3036; 
 
         // the below applies to the recur request, and may differ from the original transaction
         $new_amount = "2500"; // in minor currency  
         $new_customerrefno = "test_recur_".date('c');  
 
         // below is actual test, shouldn't need to change it
-        $request = new Svea\RecurTransaction( Svea\SveaConfig::getDefaultConfig() );
+        $request = new RecurTransaction( Svea\SveaConfig::getDefaultConfig() );
         $response = $request                
             ->setSubscriptionId( $subscriptionid )
             ->setCurrency( $currency )
@@ -101,7 +101,7 @@ class RecurTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals( $expiryyear, $response->expiryyear );  
         $this->assertEquals( $subscriptionid, $response->subscriptionid );  
 
-        $this->assertObjectHasAttribute( "transactionId", $response );
+        $this->assertObjectHasAttribute( "transactionid", $response );
         $this->assertEquals( $new_customerrefno, $response->customerrefno );  
         $this->assertEquals( $new_amount, $response->amount );         
     }    

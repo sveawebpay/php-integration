@@ -1,5 +1,6 @@
 <?php
 // Integration tests should not need to use the namespace
+use Svea\HostedService\QueryTransaction as QueryTransaction;
 
 $root = realpath(dirname(__FILE__));
 require_once $root . '/../../../../src/Includes.php';
@@ -60,7 +61,7 @@ class QueryTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
              
         $transactionId = 987654;
                 
-        $request = new Svea\QueryTransaction( Svea\SveaConfig::getDefaultConfig() );
+        $request = new QueryTransaction( Svea\SveaConfig::getDefaultConfig() );
         $response = $request
             ->setTransactionId( $transactionId )
             ->setCountryCode( "SE" )
@@ -99,7 +100,7 @@ class QueryTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
         // Set the below to match the transaction, then run the test.
         $transactionId = 580964;
 
-        $request = new Svea\QueryTransaction( Svea\SveaConfig::getDefaultConfig() );
+        $request = new QueryTransaction( Svea\SveaConfig::getDefaultConfig() );
         $response = $request
             ->setTransactionId( $transactionId )
             ->setCountryCode( "SE" )
@@ -204,7 +205,7 @@ class QueryTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
         // Set the below to match the transaction, then run the test.
         $transactionId = 582690;
 
-        $request = new Svea\QueryTransaction( Svea\SveaConfig::getDefaultConfig() );
+        $request = new QueryTransaction( Svea\SveaConfig::getDefaultConfig() );
         $response = $request
             ->setTransactionId( $transactionId )
             ->setCountryCode( "SE" )

@@ -251,7 +251,7 @@ class WebPay {
      */
     public static function getPaymentMethods($config = NULL) {
         if( $config == NULL ) { WebPay::throwMissingConfigException(); }
-        return new Svea\GetPaymentMethods($config);
+        return new Svea\HostedService\GetPaymentMethods($config);
     }
                     
     /** helper function, throws exception if no config is given */

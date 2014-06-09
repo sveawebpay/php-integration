@@ -1,5 +1,5 @@
 <?php
-// Integration tests should not need to use the namespace
+use Svea\HostedService\CreditTransaction as CreditTransaction;
 
 $root = realpath(dirname(__FILE__));
 require_once $root . '/../../../../src/Includes.php';
@@ -22,7 +22,7 @@ class CreditTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
         $transactionId = 987654;
         $amount = 100;
                 
-        $request = new Svea\CreditTransaction( Svea\SveaConfig::getDefaultConfig() );
+        $request = new CreditTransaction( Svea\SveaConfig::getDefaultConfig() );
         $response = $request
             ->setTransactionId( $transactionId )
             ->setCreditAmount( $amount )
@@ -49,11 +49,11 @@ class CreditTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
         );
         
         // Set the below to match the transaction, then run the test.
-        $customerrefno = 312;
-        $transactionId = 579893;
+        //$customerrefno = 312;
+        $transactionId = 583151;
         $amount = 100;
                 
-        $request = new Svea\CreditTransaction( Svea\SveaConfig::getDefaultConfig() );
+        $request = new CreditTransaction( Svea\SveaConfig::getDefaultConfig() );
         $response = $request
             ->setTransactionId( $transactionId )
             ->setCreditAmount( $amount )
@@ -64,7 +64,7 @@ class CreditTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
         
         print_r( $response );
         $this->assertEquals( 1, $response->accepted );        
-        $this->assertEquals( $customerrefno, $response->customerrefno );  
+        //$this->assertEquals( $customerrefno, $response->customerrefno );  
     }    
 }
 ?>

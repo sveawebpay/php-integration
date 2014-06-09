@@ -1,5 +1,5 @@
 <?php
-// Integration tests should not need to use the namespace
+use Svea\HostedService\LowerTransaction as LowerTransaction;
 
 $root = realpath(dirname(__FILE__));
 require_once $root . '/../../../../src/Includes.php';
@@ -50,8 +50,7 @@ class LowerTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
         
         // assert response from lowerTransactionAmount equals success
     }
-    
-    
+        
     /**
      * test_lower_transaction_transaction_not_found 
      * 
@@ -62,7 +61,7 @@ class LowerTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
         $transactionId = 987654;
         $amountToLower = 100;
                 
-        $request = new Svea\LowerTransaction( Svea\SveaConfig::getDefaultConfig() );
+        $request = new LowerTransaction( Svea\SveaConfig::getDefaultConfig() );
         $response = $request  
             ->setTransactionId( $transactionId )
             ->setAmountToLower( $amountToLower )
@@ -105,7 +104,7 @@ class LowerTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
         // - 3001 => failure, accepted = 0, resultcode = "305 (BAD_AMOUNT), errormessage = "Invalid value for amount."
         // - 3000 => success, Svea status ANNULLED
         
-        $request = new Svea\LowerTransaction( Svea\SveaConfig::getDefaultConfig() );
+        $request = new LowerTransaction( Svea\SveaConfig::getDefaultConfig() );
         $response = $request                
             ->setTransactionId( $transactionId )
             ->setAmountToLower( $amountToLower )
