@@ -60,7 +60,7 @@ class CancelOrderBuilderTest extends \PHPUnit_Framework_TestCase {
         
         $annulTransactionObject = $this->cancelOrderObject->setOrderId($orderId)->cancelCardOrder();
         
-        $this->assertInstanceOf("Svea\AnnulTransaction", $annulTransactionObject);
+        $this->assertInstanceOf("Svea\HostedService\AnnulTransaction", $annulTransactionObject);
     }
     
 }

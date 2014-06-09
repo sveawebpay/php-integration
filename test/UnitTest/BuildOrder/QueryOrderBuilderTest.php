@@ -67,6 +67,6 @@ class QueryOrderBuilderTest extends \PHPUnit_Framework_TestCase {
         
         $queryOrderObject = $this->queryOrderObject->setOrderId($orderId)->queryCardOrder();
         
-        $this->assertInstanceOf("Svea\QueryTransaction", $queryOrderObject);
+        $this->assertInstanceOf("Svea\HostedService\QueryTransaction", $queryOrderObject);
     }  
 }

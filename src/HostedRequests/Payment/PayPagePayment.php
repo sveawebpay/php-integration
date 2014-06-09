@@ -1,5 +1,6 @@
 <?php
 namespace Svea\HostedService;
+use Svea\SystemPaymentMethod as SystemPaymentMethod;
 
 require_once  SVEA_REQUEST_DIR.'/Constant/PaymentMethod.php';
 

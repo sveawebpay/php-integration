@@ -91,7 +91,7 @@ class QueryOrderBuilder {
      */
     public function queryCardOrder() {
         $this->setOrderType(\ConfigurationProvider::HOSTED_ADMIN_TYPE);
-        $queryTransaction = new QueryTransaction($this->conf);
+        $queryTransaction = new HostedService\QueryTransaction($this->conf);
         return $queryTransaction->setTransactionId($this->orderId)->setCountryCode($this->countryCode);
     }  
 }

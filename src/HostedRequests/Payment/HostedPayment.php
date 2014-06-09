@@ -144,7 +144,7 @@ class HostedPayment {
                 $exceptionString .="-". $key. " : ".$value."\n";
             }
 
-            throw new ValidationException($exceptionString);
+            throw new \Svea\ValidationException($exceptionString);
         }
 
         $xmlBuilder = new HostedXmlBuilder();
@@ -188,7 +188,7 @@ class HostedPayment {
                 $exceptionString .="-". $key. " : ".$value."\n";
             }
 
-            throw new ValidationException($exceptionString);
+            throw new \Svea\ValidationException($exceptionString);
         }
                 
         $xmlBuilder = new HostedXmlBuilder();

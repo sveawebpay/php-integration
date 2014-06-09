@@ -1,5 +1,6 @@
 <?php
 namespace Svea;
+use \Svea\HostedService\HostedRowFormatter as HostedRowFormatter;
 
 require_once 'FakeHostedPayment.php';
 
