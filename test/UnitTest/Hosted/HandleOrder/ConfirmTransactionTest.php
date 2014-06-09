@@ -1,8 +1,6 @@
 <?php
 $root = realpath(dirname(__FILE__));
-
 require_once $root . '/../../../../src/Includes.php';
-//require_once $root . '/../../../../src/WebService/svea_soap/SveaSoapConfig.php';
 
 /**
  * @author Kristian Grossman-Madsen for Svea Webpay
@@ -15,12 +13,12 @@ class ConfirmTransactionTest extends PHPUnit_Framework_TestCase {
     // fixture, run once before each test method
     protected function setUp() {
         $this->configObject = Svea\SveaConfig::getDefaultConfig();
-        $this->confirmObject = new Svea\ConfirmTransaction( $this->configObject );
+        $this->confirmObject = new Svea\HostedService\ConfirmTransaction( $this->configObject );
     }
 
     // test methods
     function test_class_exists(){
-        $this->assertInstanceOf( "Svea\ConfirmTransaction", $this->confirmObject);
+        $this->assertInstanceOf( "Svea\HostedService\ConfirmTransaction", $this->confirmObject);
         $this->assertEquals( "confirm", PHPUnit_Framework_Assert::readAttribute($this->confirmObject, 'method') );                
     }
     

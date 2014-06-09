@@ -2,7 +2,6 @@
 use \Svea\HostedService\AnnulTransaction as AnnulTransaction;
 
 $root = realpath(dirname(__FILE__));
-
 require_once $root . '/../../../../src/Includes.php';
 require_once $root . '/../../../../src/WebService/svea_soap/SveaSoapConfig.php';
 
