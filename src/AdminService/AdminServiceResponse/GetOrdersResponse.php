@@ -1,5 +1,5 @@
 <?php
-namespace Svea;
+namespace Svea\AdminService;
 
 /**
  * Handles the Svea Admin Web Service GetOrders request response.
@@ -216,7 +216,7 @@ class GetOrdersResponse {
                 // [RowNumber]
                 // [Status]
             
-                $newrow = new NumberedOrderRow(); // webpay orderrow
+                $newrow = new \Svea\NumberedOrderRow(); // webpay orderrow
                 //WebPayItem OrderRow:          
                 // $articleNumber   *
                 // $quantity        *

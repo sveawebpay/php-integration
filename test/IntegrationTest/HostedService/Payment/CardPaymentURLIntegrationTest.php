@@ -41,6 +41,7 @@ class CardPaymentURLIntegrationTest extends \PHPUnit_Framework_TestCase {
         
         // create order
         $order = \TestUtil::createOrder( TestUtil::createIndividualCustomer("SE")->setIpAddress($ipAddress) );
+        $order->setCustomerReference("foobar".date('c'));
         // set payment method
         // call getPaymentURL
         $response = $order
@@ -60,6 +61,7 @@ class CardPaymentURLIntegrationTest extends \PHPUnit_Framework_TestCase {
         
         // create order
         $order = \TestUtil::createOrder( TestUtil::createIndividualCustomer("SE")->setIpAddress($ipAddress) );
+        $order->setCustomerReference("foobar".date('c'));
         // set payment method
         // call getPaymentURL
         $response = $order
@@ -69,7 +71,7 @@ class CardPaymentURLIntegrationTest extends \PHPUnit_Framework_TestCase {
             ->getPaymentURL();
 
         // check that request was accepted        
-//        print_r($response);
+        //print_r($response);
         $this->assertEquals( 1, $response->accepted );                
 
         // check that response set id, created exist and not null
@@ -94,7 +96,7 @@ class CardPaymentURLIntegrationTest extends \PHPUnit_Framework_TestCase {
         // 2. run the test, and get the subscription paymenturl from the output
         // 3. go to the paymenturl and complete the transaction.
         // 4. go to test.sveaekonomi.se/webpay/admin/start.xhtml
-        // 5. retrieve the transactioId from the response in the transaction log
+        // 5. retrieve the transactionid from the response in the transaction log
         
         $orderLanguage = "sv";   
         $returnUrl = "http://foo.bar.com";

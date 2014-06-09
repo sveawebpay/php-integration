@@ -1,5 +1,5 @@
 <?php
-namespace Svea;
+namespace Svea\AdminService;
 
 /**
  * Handles the Svea Admin Web Service DeliverOrder request response.

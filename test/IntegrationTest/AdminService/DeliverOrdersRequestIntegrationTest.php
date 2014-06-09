@@ -34,7 +34,7 @@ class DeliverOrdersRequestIntegrationTest extends PHPUnit_Framework_TestCase{
         $response = $request->doRequest();
         
         //print_r( $response );        
-        $this->assertInstanceOf('Svea\DeliverOrdersResponse', $response);
+        $this->assertInstanceOf('Svea\AdminService\DeliverOrdersResponse', $response);
         $this->assertEquals(0, $response->accepted ); // 
         $this->assertEquals(20000, $response->resultcode ); // 20000, order is closed.
     }

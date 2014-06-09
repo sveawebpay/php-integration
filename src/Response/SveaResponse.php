@@ -76,25 +76,25 @@ class SveaResponse {
 
                     // $method is set for i.e. AdminService requests
                     case "CancelOrder":
-                        $this->response = new Svea\CancelOrderResponse( $message );
+                        $this->response = new Svea\AdminService\CancelOrderResponse( $message );
                         break;                    
                     case "DeliverOrders":
-                        $this->response = new Svea\DeliverOrdersResponse( $message );
+                        $this->response = new Svea\AdminService\DeliverOrdersResponse( $message );
                         break;
                     case "GetOrders":
-                        $this->response = new Svea\GetOrdersResponse( $message );
+                        $this->response = new Svea\AdminService\GetOrdersResponse( $message );
                         break;
                     case "CancelOrderRows":
-                        $this->response = new Svea\CancelOrderRowsResponse( $message );
+                        $this->response = new Svea\AdminService\CancelOrderRowsResponse( $message );
                         break;                    
                     case "AddOrderRows":
-                        $this->response = new Svea\AddOrderRowsResponse( $message );
+                        $this->response = new Svea\AdminService\AddOrderRowsResponse( $message );
                         break;
                     case "UpdateOrderRows":
-                        $this->response = new Svea\UpdateOrderRowsResponse( $message );
+                        $this->response = new Svea\AdminService\UpdateOrderRowsResponse( $message );
                         break;
                     case "CreditInvoiceRows":
-                        $this->response = new Svea\CreditInvoiceRowsResponse( $message );
+                        $this->response = new Svea\AdminService\CreditInvoiceRowsResponse( $message );
                         break;
                     
                     // $method is also set for HostedAdminRequests, indicates the request method used                    

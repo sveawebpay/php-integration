@@ -1,14 +1,14 @@
 <?php
-namespace Svea;
+namespace Svea\AdminService;
 
 require_once 'AdminServiceResponse.php';
 
 /**
- * Handles the Svea Admin Web Service CancelOrderRowsResponse request response.
+ * Handles the Svea Admin Web Service CancelOrder request response.
  * 
  * @author Kristian Grossman-Madsen
  */
-class CancelOrderRowsResponse extends AdminServiceResponse {
+class CancelOrderResponse extends AdminServiceResponse {
   
     function __construct($message) {
         $this->formatObject($message);  

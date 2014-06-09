@@ -1,14 +1,14 @@
 <?php
-namespace Svea;
+namespace Svea\AdminService;
 
 require_once 'AdminServiceResponse.php';
 
 /**
- * Handles the Svea Admin Web Service CancelOrder request response.
+ * Handles the Svea Admin Web Service UpdateOrderRows request response.
  * 
  * @author Kristian Grossman-Madsen
  */
-class CancelOrderResponse extends AdminServiceResponse {
+class UpdateOrderRowsResponse extends AdminServiceResponse {
   
     function __construct($message) {
         $this->formatObject($message);  
@@ -21,7 +21,7 @@ class CancelOrderResponse extends AdminServiceResponse {
         parent::formatObject($message);
         
         if ($this->accepted == 1) {
-            // nothing to do for cancelOrderRequest response
+            // nothing to do for updateOrderRequest response
         }
     }
 }

@@ -155,6 +155,6 @@ class WebPayIntegrationTest extends PHPUnit_Framework_TestCase {
 
         //print_r( $deliverResponse );        
         $this->assertEquals(1, $deliverResponse->accepted);
-        $this->assertInstanceOf( "Svea\DeliverOrdersResponse", $deliverResponse );  // deliverOrder_s_Response => Admin service deliverOrders  
+        $this->assertInstanceOf( "Svea\AdminService\DeliverOrdersResponse", $deliverResponse );  // deliverOrder_s_Response => Admin service deliverOrders  
     }        
 }

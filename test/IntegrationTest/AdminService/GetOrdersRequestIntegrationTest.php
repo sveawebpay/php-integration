@@ -33,7 +33,7 @@ class GetOrdersRequestIntegrationTest extends PHPUnit_Framework_TestCase{
         $response = $request-> doRequest();
         
         //print_r( $response );        
-        $this->assertInstanceOf('Svea\GetOrdersResponse', $response);
+        $this->assertInstanceOf('Svea\AdminService\GetOrdersResponse', $response);
         $this->assertEquals(1, $response->accepted );
     }
 }

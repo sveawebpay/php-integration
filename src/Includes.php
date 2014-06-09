@@ -27,6 +27,8 @@ foreach (glob(SVEA_REQUEST_DIR . "/Helper/*.php") as $config)
 
 foreach (glob(SVEA_REQUEST_DIR . "/AdminService/*.php") as $config)
     include_once($config);
+foreach (glob(SVEA_REQUEST_DIR . "/AdminService/AdminServiceResponse/*.php") as $config)
+    include_once($config);
 foreach (glob(SVEA_REQUEST_DIR . "/AdminService/admin_soap/*.php") as $config)
     include_once($config);
 
@@ -51,8 +53,6 @@ foreach (glob(SVEA_REQUEST_DIR . "/WebService/Payment/*.php") as $config)
     include_once($config);
 
 foreach (glob(SVEA_REQUEST_DIR . "/Response/*.php") as $config)
-    include_once($config);
-foreach (glob(SVEA_REQUEST_DIR . "/Response/AdminServiceResponse/*.php") as $config)
     include_once($config);
 
 foreach (glob(SVEA_REQUEST_DIR . "/Response/WebServiceResponse/*.php") as $config)

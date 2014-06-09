@@ -1,5 +1,5 @@
 <?php
-namespace Svea;
+namespace Svea\AdminService;
 
 /**
  * Handles common Svea Admin Web Service request response attributes.
