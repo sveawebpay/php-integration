@@ -138,7 +138,7 @@ class DeliverOrderBuilder extends OrderBuilder {
      * @return DeliverPaymentPlan
      */
     public function deliverPaymentPlanOrder() {
-        return new DeliverPaymentPlan($this);
+        return new WebService\DeliverPaymentPlan($this);
     }
     /** @var string orderType  one of "Invoice" or "PaymentPlan"*/
     public $orderType;
