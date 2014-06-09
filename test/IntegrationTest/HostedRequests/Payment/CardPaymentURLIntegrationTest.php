@@ -16,7 +16,7 @@ class CardPaymentURLIntegrationTest extends \PHPUnit_Framework_TestCase {
      * 
      * @todo move to unit test for getPaymentURL validation
      */
-    public function _test_CardPayment_getPaymentURL_throws_validationException_if_missing_ipAddress() {
+    public function test_CardPayment_getPaymentURL_throws_validationException_if_missing_ipAddress() {
         $orderLanguage = "sv";   
         $returnUrl = "returnUrl";
         $ipAddress = "127.0.0.1";
@@ -34,7 +34,7 @@ class CardPaymentURLIntegrationTest extends \PHPUnit_Framework_TestCase {
         $this->assertInstanceOf( "Svea\HostedAdminResponse", $response );     
     }
     
-    public function _test_CardPayment_getPaymentURL_returns_HostedResponse() {
+    public function test_CardPayment_getPaymentURL_returns_HostedResponse() {
         $orderLanguage = "sv";   
         $returnUrl = "http://foo.bar.com";
         $ipAddress = "127.0.0.1";
@@ -53,7 +53,7 @@ class CardPaymentURLIntegrationTest extends \PHPUnit_Framework_TestCase {
 
     }
     
-    public function _test_CardPayment_getPaymentURL_response_is_accepted_and_contains_response_attributes() {
+    public function test_CardPayment_getPaymentURL_response_is_accepted_and_contains_response_attributes() {
         $orderLanguage = "sv";   
         $returnUrl = "http://foo.bar.com";
         $ipAddress = "127.0.0.1";
