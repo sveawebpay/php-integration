@@ -1,6 +1,6 @@
 <?php
-$root = realpath(dirname(__FILE__));
 
+$root = realpath(dirname(__FILE__));
 require_once $root . '/../../../../src/Includes.php';
 require_once $root . '/../../../../src/WebService/svea_soap/SveaSoapConfig.php';
 
@@ -15,12 +15,12 @@ class CreditTransactionTest extends PHPUnit_Framework_TestCase {
     // fixture, run once before each test method
     protected function setUp() {
         $this->configObject = Svea\SveaConfig::getDefaultConfig();
-        $this->creditObject = new Svea\CreditTransaction( $this->configObject );
+        $this->creditObject = new Svea\HostedService\CreditTransaction( $this->configObject );
     }
 
     // test methods
     function test_class_exists(){
-        $this->assertInstanceOf( "Svea\CreditTransaction", $this->creditObject);      
+        $this->assertInstanceOf( "Svea\HostedService\CreditTransaction", $this->creditObject);      
         $this->assertEquals( "credit", PHPUnit_Framework_Assert::readAttribute($this->creditObject, 'method') );        
     }
     

@@ -1,6 +1,6 @@
 <?php
-$root = realpath(dirname(__FILE__));
 
+$root = realpath(dirname(__FILE__));
 require_once $root . '/../../../../src/Includes.php';
 require_once $root . '/../../../../src/WebService/svea_soap/SveaSoapConfig.php';
 
@@ -15,12 +15,12 @@ class QueryTransactionTest extends PHPUnit_Framework_TestCase {
     // fixture, run once before each test method
     protected function setUp() {
         $this->configObject = Svea\SveaConfig::getDefaultConfig();
-        $this->queryObject = new Svea\QueryTransaction( $this->configObject );
+        $this->queryObject = new Svea\HostedService\QueryTransaction( $this->configObject );
     }
 
     // test methods
     function test_class_exists(){        
-        $this->assertInstanceOf( "Svea\QueryTransaction", $this->queryObject);
+        $this->assertInstanceOf( "Svea\HostedService\QueryTransaction", $this->queryObject);
         $this->assertEquals( "querytransactionid", PHPUnit_Framework_Assert::readAttribute($this->queryObject, 'method') );        
     }
     

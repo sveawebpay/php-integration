@@ -15,12 +15,12 @@ class ListPaymentMethodsTest extends PHPUnit_Framework_TestCase {
     // fixture, run once before each test method
     protected function setUp() {
         $this->configObject = Svea\SveaConfig::getDefaultConfig();
-        $this->listpaymentmethodObject = new Svea\ListPaymentMethods( $this->configObject );
+        $this->listpaymentmethodObject = new Svea\HostedService\ListPaymentMethods( $this->configObject );
     }
 
     // test methods
     function test_class_exists(){
-        $this->assertInstanceOf( "Svea\ListPaymentMethods", $this->listpaymentmethodObject);      
+        $this->assertInstanceOf( "Svea\HostedService\ListPaymentMethods", $this->listpaymentmethodObject);      
         $this->assertEquals( "getpaymentmethods", PHPUnit_Framework_Assert::readAttribute($this->listpaymentmethodObject, 'method') );        
     }
     
