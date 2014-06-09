@@ -1,5 +1,5 @@
 <?php
-namespace Svea;
+namespace Svea\HostedService;
 
 /**
  * Rewrites formatted object to xml format to send to external service.

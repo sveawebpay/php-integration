@@ -1,5 +1,5 @@
 <?php
-namespace Svea;
+namespace Svea\HostedService;
 
 require_once SVEA_REQUEST_DIR . '/Includes.php';
 
@@ -95,7 +95,7 @@ abstract class HostedRequest {
                 $exceptionString .="-". $key. " : ".$value."\n";
             }
 
-            throw new ValidationException($exceptionString);
+            throw new \Svea\ValidationException($exceptionString);
         }    
     }       
 

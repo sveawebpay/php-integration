@@ -1,4 +1,6 @@
 <?php
+use \Svea\HostedService\AnnulTransaction as AnnulTransaction;
+
 $root = realpath(dirname(__FILE__));
 
 require_once $root . '/../../../../src/Includes.php';
@@ -15,12 +17,12 @@ class AnnulTransactionTest extends PHPUnit_Framework_TestCase {
     // fixture, run once before each test method
     protected function setUp() {
         $this->configObject = Svea\SveaConfig::getDefaultConfig();
-        $this->annulObject = new Svea\AnnulTransaction( $this->configObject );
+        $this->annulObject = new AnnulTransaction( $this->configObject );
     }
 
     // test methods
     function test_class_exists(){
-        $this->assertInstanceOf( "Svea\AnnulTransaction", $this->annulObject);      
+        $this->assertInstanceOf( "Svea\HostedService\AnnulTransaction", $this->annulObject);      
         $this->assertEquals( "annul", PHPUnit_Framework_Assert::readAttribute($this->annulObject, 'method') );        
     }
     
