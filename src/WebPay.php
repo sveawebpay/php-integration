@@ -222,14 +222,14 @@ class WebPay {
         
     /**
      * Start building Request to close orders. Only supports Invoice or Payment plan orders.
-     * @return Svea\closeOrderBuilder object
+     * @return Svea\CloseOrderBuilder object
      * @param ConfigurationProvider $config  instance implementing ConfigurationProvider
      * @deprecated 2.0.0 -- use WebPayAdmin::cancelOrder instead, which supports both synchronous and asynchronous orders
      */
     public static function closeOrder($config = NULL) {
         if( $config == NULL ) { WebPay::throwMissingConfigException(); }
 
-        return new Svea\closeOrderBuilder($config);
+        return new Svea\CloseOrderBuilder($config);
     }
     
     /**

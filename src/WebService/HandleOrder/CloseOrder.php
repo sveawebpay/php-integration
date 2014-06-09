@@ -10,10 +10,10 @@ require_once 'HandleOrder.php';
 class CloseOrder extends HandleOrder {
 
     /**
-     * @param CloseOrderBuilder $closeOrderBuilder
+     * @param CloseOrderBuilder $CloseOrderBuilder
      */
-    public function __construct($closeOrderBuilder) {
-        parent::__construct($closeOrderBuilder);
+    public function __construct($CloseOrderBuilder) {
+        parent::__construct($CloseOrderBuilder);
     }
 
     /**
