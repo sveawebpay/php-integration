@@ -1,5 +1,5 @@
 <?php
-namespace Svea;
+namespace Svea\WebService;
 
 /**
  * Helper class for formatting orderrows in the right format for WebService soap-calls
@@ -38,7 +38,7 @@ class WebServiceRowFormatter {
      */
     public static function convertIncVatToExVat( $amountIncVat, $vatPercent) {
         $reverseVatPercent = (1-(1/(1+$vatPercent/100))); // calculate "reverse vat", i.e. 25% => 20%
-        return Helper::bround( ($amountIncVat - $amountIncVat * $reverseVatPercent) ,2);
+        return \Svea\Helper::bround( ($amountIncVat - $amountIncVat * $reverseVatPercent) ,2);
     }
     
     /**
@@ -49,7 +49,7 @@ class WebServiceRowFormatter {
      * @return float amountExVat
      */
     public static function convertExVatToIncVat( $amountExVat, $vatPercent) {
-        return Helper::bround( ($amountExVat * (1+$vatPercent/100)) ,2);
+        return \Svea\Helper::bround( ($amountExVat * (1+$vatPercent/100)) ,2);
     }
       
     /**
@@ -136,7 +136,7 @@ class WebServiceRowFormatter {
     private function formatOrderRows() {
         foreach ($this->order->orderRows as $row) {
             
-            $orderRow = new SveaOrderRow();
+            $orderRow = new WebServiceSoap\SveaOrderRow();
 
             if (isset($row->articleNumber)) {
                 $orderRow->ArticleNumber = $row->articleNumber;

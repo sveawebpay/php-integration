@@ -1,5 +1,5 @@
 <?php
-namespace Svea;
+namespace Svea\WebService;
 
 /**
  * Update Created PaymentPlanorder with additional information and prepare it for delivery.

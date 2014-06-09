@@ -77,7 +77,7 @@ class CreateOrderBuilder extends OrderBuilder {
      * @return InvoicePayment
      */
     public function useInvoicePayment() {
-        return new InvoicePayment($this);
+        return new WebService\InvoicePayment($this);
     }
 
     /**
@@ -89,7 +89,7 @@ class CreateOrderBuilder extends OrderBuilder {
     public function usePaymentPlanPayment($campaignCodeAsString, $sendAutomaticGiroPaymentFormAsBool = 0) {
         $this->campaignCode = $campaignCodeAsString;
         $this->sendAutomaticGiroPaymentForm = $sendAutomaticGiroPaymentFormAsBool;
-        return new PaymentPlanPayment($this);
+        return new WebService\PaymentPlanPayment($this);
     }
 
    /**

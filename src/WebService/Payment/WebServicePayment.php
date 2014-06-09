@@ -1,5 +1,5 @@
 <?php
-namespace Svea;
+namespace Svea\WebService;
 
 require_once SVEA_REQUEST_DIR . '/WebService/svea_soap/SveaSoapConfig.php';
 require_once SVEA_REQUEST_DIR . '/Config/SveaConfig.php';
@@ -23,7 +23,7 @@ class WebServicePayment {
 
     private function getPasswordBasedAuthorization() {
        // $authArray = $this->order->conf->getPasswordBasedAuthorization($this->orderType);
-        $auth = new SveaAuth();           //TODO update these to use SveaAuth constructors
+        $auth = new WebServiceSoap\SveaAuth();           //TODO update these to use SveaAuth constructors
         $auth->Username = $this->order->conf->getUsername($this->orderType,  $this->order->countryCode);
         $auth->Password = $this->order->conf->getPassword($this->orderType,  $this->order->countryCode);
         $auth->ClientNumber = $this->order->conf->getClientNumber($this->orderType,  $this->order->countryCode);
@@ -32,7 +32,7 @@ class WebServicePayment {
 
     public function validateOrder() {
         $this->order->orderType = $this->orderType;
-         $validator = new WebServiceOrderValidator();
+         $validator = new \Svea\WebServiceOrderValidator();
          $errors = $validator->validate($this->order);
          return $errors;
     }
@@ -52,7 +52,7 @@ class WebServicePayment {
 
             throw new ValidationException($exceptionString);
         }
-        $sveaOrder = new SveaOrder;
+        $sveaOrder = new WebServiceSoap\SveaOrder;
         $sveaOrder->Auth = $this->getPasswordBasedAuthorization();
         //make orderrows and put in CreateOrderInfromation
         $orderinformation = $this->formatOrderInformationWithOrderRows($this->order->orderRows);
@@ -68,7 +68,7 @@ class WebServicePayment {
         $orderinformation->CustomerReference = $this->order->customerReference;
         $sveaOrder->CreateOrderInformation = $this->setOrderType($orderinformation);
 
-        $object = new SveaRequest();
+        $object = new WebServiceSoap\SveaRequest();
         $object->request = $sveaOrder;
 
         //do request
@@ -86,7 +86,7 @@ class WebServicePayment {
 
         $object = $this->prepareRequest();
         $url = $this->order->conf->getEndPoint($this->orderType);
-        $request = new SveaDoRequest($url);
+        $request = new WebServiceSoap\SveaDoRequest($url);
         $svea_req = $request->CreateOrderEu($object);
 
         $response = new \SveaResponse($svea_req,"");
@@ -99,7 +99,7 @@ class WebServicePayment {
      * @return \SveaCreateOrderInformation
      */
     protected function formatOrderInformationWithOrderRows($rows) {
-        $orderInformation = new SveaCreateOrderInformation((isset($this->order->campaignCode) ? $this->order->campaignCode : ""),
+        $orderInformation = new WebServiceSoap\SveaCreateOrderInformation((isset($this->order->campaignCode) ? $this->order->campaignCode : ""),
                         (isset($this->order->sendAutomaticGiroPaymentForm) ? $this->order->sendAutomaticGiroPaymentForm : 0));
 
         $formatter = new WebServiceRowFormatter($this->order);
@@ -131,7 +131,7 @@ class WebServicePayment {
                 && $this->order->countryCode != 'NO'
                 && $this->order->countryCode != 'FI'
                 && $this->order->countryCode != 'DK') {
-            $euIdentity = new SveaIdentity($isCompany);
+            $euIdentity = new WebServiceSoap\SveaIdentity($isCompany);
 
             if ($isCompany) {
                 $euIdentity->CompanyVatNumber = $companyId;
@@ -148,7 +148,7 @@ class WebServicePayment {
             $idValues[$type] = $euIdentity;
         }
 
-        $individualCustomerIdentity = new SveaCustomerIdentity($idValues);
+        $individualCustomerIdentity = new WebServiceSoap\SveaCustomerIdentity($idValues);
         //For nordic countries NationalIdNumber is required
         if ($this->order->countryCode != 'NL' && $this->order->countryCode != 'DE') {
             //set with companyVatNumber for Company and NationalIdNumber for individual
@@ -197,7 +197,7 @@ class WebServicePayment {
                 && $this->order->countryCode != 'NO'
                 && $this->order->countryCode != 'FI'
                 && $this->order->countryCode != 'DK') {
-            $euIdentity = new SveaIdentity($isCompany);
+            $euIdentity = new WebServiceSoap\SveaIdentity($isCompany);
 
             if ($isCompany) {
                 $euIdentity->CompanyVatNumber = $companyId;
@@ -214,7 +214,7 @@ class WebServicePayment {
             $idValues[$type] = $euIdentity;
         }
 
-        $individualCustomerIdentity = new SveaCustomerIdentity($idValues);
+        $individualCustomerIdentity = new WebServiceSoap\SveaCustomerIdentity($idValues);
         //For nordic countries NationalIdNumber is required
         if ($this->order->countryCode != 'NL' && $this->order->countryCode != 'DE') {
             //set with companyVatNumber for Company and NationalIdNumber for individual

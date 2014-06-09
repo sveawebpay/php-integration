@@ -1,5 +1,6 @@
 <?php
-// Integration tests should not need to use the namespace
+use Svea\WebService\CloseOrder as CloseOrder;
+
 
 $root = realpath(dirname(__FILE__));
 require_once $root . '/../../../../src/Includes.php';

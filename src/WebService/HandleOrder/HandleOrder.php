@@ -1,5 +1,5 @@
 <?php
-namespace Svea;
+namespace Svea\WebService;
 
 require_once SVEA_REQUEST_DIR . '/WebService/svea_soap/SveaSoapConfig.php';
 require_once SVEA_REQUEST_DIR . '/Config/SveaConfig.php';
@@ -25,7 +25,7 @@ abstract class HandleOrder {
      * @return SveaAuth
      */
     protected function getStoreAuthorization() {
-        return new SveaAuth( 
+        return new WebServiceSoap\SveaAuth( 
                     $this->orderBuilder->conf->getUsername($this->orderBuilder->orderType,  $this->orderBuilder->countryCode),
                     $this->orderBuilder->conf->getPassword($this->orderBuilder->orderType,  $this->orderBuilder->countryCode),
                     $this->orderBuilder->conf->getClientNumber($this->orderBuilder->orderType,  $this->orderBuilder->countryCode)
@@ -50,7 +50,7 @@ abstract class HandleOrder {
                 $exceptionString .="-". $key. " : ".$value."\n";
             }
 
-            throw new ValidationException($exceptionString);
+            throw new \Svea\ValidationException($exceptionString);
         }    
     }       
     

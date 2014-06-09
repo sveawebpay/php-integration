@@ -1,5 +1,5 @@
 <?php
-namespace Svea;
+namespace Svea\WebService;
 
 require_once 'HandleOrder.php';
 
@@ -18,18 +18,18 @@ class CloseOrder extends HandleOrder {
 
     /**
      * Returns prepared closeOrder request
-     * @return \SveaRequest
+     * @return Svea\WebService\WebServiceSoap\SveaRequest
      */
     public function prepareRequest() {
         $this->validateRequest();
                 
-        $sveaCloseOrder = new SveaCloseOrder;
+        $sveaCloseOrder = new WebServiceSoap\SveaCloseOrder;
         $sveaCloseOrder->Auth = $this->getStoreAuthorization();
-        $orderInfo = new SveaCloseOrderInformation();
+        $orderInfo = new WebServiceSoap\SveaCloseOrderInformation();
         $orderInfo->SveaOrderId = $this->orderBuilder->orderId;
         $sveaCloseOrder->CloseOrderInformation = $orderInfo;
 
-        $object = new SveaRequest();
+        $object = new WebServiceSoap\SveaRequest();
         $object->request = $sveaCloseOrder;
 
         return $object;
@@ -42,7 +42,7 @@ class CloseOrder extends HandleOrder {
     public function doRequest() {
         $requestObject = $this->prepareRequest();
         $url = $this->orderBuilder->conf->getEndPoint($this->orderBuilder->orderType);
-        $request = new SveaDoRequest($url);
+        $request = new WebServiceSoap\SveaDoRequest($url);
         $response = $request->CloseOrderEu($requestObject);
         $responseObject = new \SveaResponse($response,"");
         return $responseObject->response;

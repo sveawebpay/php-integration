@@ -1,5 +1,5 @@
 <?php
-namespace Svea;
+namespace Svea\WebService\WebServiceSoap;
 
 /**
  * @author Anneli Halld'n, Daniel Brolund for Svea Webpay
