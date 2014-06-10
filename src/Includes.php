@@ -59,13 +59,13 @@ foreach (glob(SVEA_REQUEST_DIR . "/WebService/Helper/*.php") as $config)
 foreach (glob(SVEA_REQUEST_DIR . "/WebService/Payment/*.php") as $config)
     include_once($config);
 
-foreach (glob(SVEA_REQUEST_DIR . "/Response/*.php") as $config)
+foreach (glob(SVEA_REQUEST_DIR . "/WebService/WebServiceResponse/*.php") as $config)
+    include_once($config);
+foreach (glob(SVEA_REQUEST_DIR . "/WebService/WebServiceResponse/CustomerIdentity/*.php") as $config)
+    include_once($config);
+foreach (glob(SVEA_REQUEST_DIR . "/WebService/WebServiceResponse/CampaignCode/*.php") as $config)
     include_once($config);
 
-foreach (glob(SVEA_REQUEST_DIR . "/Response/WebServiceResponse/*.php") as $config)
-    include_once($config);
-foreach (glob(SVEA_REQUEST_DIR . "/Response/WebServiceResponse/CustomerIdentity/*.php") as $config)
-    include_once($config);
-foreach (glob(SVEA_REQUEST_DIR . "/Response/WebServiceResponse/CampaignCode/*.php") as $config)
+foreach (glob(SVEA_REQUEST_DIR . "/Response/*.php") as $config)
     include_once($config);
 

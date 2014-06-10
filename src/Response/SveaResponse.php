@@ -56,19 +56,19 @@ class SveaResponse {
             
             // Web Service EU responses
             if (property_exists($message, "CreateOrderEuResult")) {
-                $this->response = new Svea\CreateOrderResponse($message);
+                $this->response = new Svea\WebService\CreateOrderResponse($message);
             } 
             elseif (property_exists($message, "GetAddressesResult")) {
-                $this->response = new Svea\GetAddressesResponse($message);
+                $this->response = new Svea\WebService\GetAddressesResponse($message);
             } 
             elseif (property_exists($message, "GetPaymentPlanParamsEuResult")) {
-                $this->response = new Svea\PaymentPlanParamsResponse($message);
+                $this->response = new Svea\WebService\PaymentPlanParamsResponse($message);
             } 
             elseif (property_exists($message, "DeliverOrderEuResult")) {
-                $this->response = new Svea\DeliverOrderResult($message);
+                $this->response = new Svea\WebService\DeliverOrderResult($message);
             } 
             elseif (property_exists($message, "CloseOrderEuResult")) {
-                $this->response = new Svea\CloseOrderResult($message);
+                $this->response = new Svea\WebService\CloseOrderResult($message);
             }
             
             elseif( isset($method) ) {                
