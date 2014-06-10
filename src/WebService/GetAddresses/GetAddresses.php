@@ -8,20 +8,16 @@ require_once SVEA_REQUEST_DIR . '/WebService/svea_soap/SveaSoapConfig.php';
 require_once SVEA_REQUEST_DIR . '/Config/SveaConfig.php';
 
 /**
- * Applicable for SE, NO & DK.
+ * Applicable for SE, DK & NO (company only) customers. 
  *
- * If customer has multiple addresses, or you just want to show the customer
- * the address which the invoice or product is to be delivered to, you can use
- * this class. It returns an array with all the associated addresses for a
- * specific SecurityNumber.
- *
- * Each address gets an AddressSelector-hash that identifies the address. This
- * can be used when creating orders to have the invoice be sent to the specified
- * address.
- *
- * TODO document attributes
+ * Use this method to fetch the validated address that Svea will send the 
+ * customer invoice/contract to, for invoice/payment plan orders, respectively.
  * 
- * @author Anneli Halld'n, Daniel Brolund, Kristian Grossman-Madsen for Svea Webpay
+ * The method returns an array of all the associated addresses for a given 
+ * customer identity. Each address has an AddressSelector attribute that 
+ * uniquely identifies the address.
+ *
+ * @author Anneli Halld'n, Daniel Brolund, Kristian Grossman-Madsen for Svea WebPay
  */
 class GetAddresses {
 
@@ -32,6 +28,9 @@ class GetAddresses {
     public $orderType;
     public $conf;
 
+    /**
+     * @param \ConfigurationProvider $config
+     */
     function __construct($config) {
         $this->conf = $config;
     }
@@ -56,7 +55,7 @@ class GetAddresses {
 
     /**
      * Required
-     * @param string $countryCodeAsString
+     * @param string $countryCodeAsString  one of {SE, DK, NO}
      * @return $this
      */
     public function setCountryCode($countryCodeAsString) {
@@ -66,10 +65,7 @@ class GetAddresses {
 
     /**
      * Required if customer is Company
-     * @param string $companyIdAsString
-     * Sweden: Organisationsnummer,
-     * Norway: Vat number,
-     * Denmark: CVR
+     * @param string $companyIdAsString  SE: Organisationsnummer, DK: CVR, NO: Vat number
      * @return $this
      */
     public function setCompany($companyIdAsString) {
@@ -79,22 +75,22 @@ class GetAddresses {
 
     /**
      * Required if customer is Individual
-     * @param string $NationalIdNumberAsString
-     * Sweden: Personnummer,
-     * Norway: Personalnumber,
-     * Denmark: CPR
+     * @param string $NationalIdNumberAsString  SE: Personnummer, DK: CPR, NO: N/A
      * @return $this
      */
     public function setIndividual($NationalIdNumberAsString) {
-
         $this->ssn = $NationalIdNumberAsString;
         return $this;
     }
 
     /**
-     * Sets and returns prepared request object attribute, which can then be 
-     * inspected to see the contents of the request be sent to Svea 
-     * @return SveaRequest
+     * Sets and returns prepared request object. Used by doRequest().
+     * 
+     * (The prepared request object may be inspected to see what attributes will
+     * be sent to Svea -- use ->prepareRequest() in place of ->doRequest() and
+     * inspect the resulting SveaRequest object.)
+     * 
+     * @return WebServiceSoap\SveaRequest
      */
     public function prepareRequest() {
         $auth = new WebServiceSoap\SveaAuth(
@@ -117,7 +113,7 @@ class GetAddresses {
 
     /**
      * Prepares and Sends request
-     * @return GetAddressesResponse object
+     * @return GetAddressesResponse
      */
     public function doRequest() {
         $this->request = $this->prepareRequest();

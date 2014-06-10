@@ -4,10 +4,10 @@ namespace Svea\WebService;
 require_once 'WebServiceResponse.php';
 
 /**
- * Handles the Svea Webservice GetAddresses request response.
+ * Handles the Svea WebService GetAddresses request response. 
+ * (Note that this maps to the legacy Web Service, not the Europe Web Service GetAddresses request.)
  *
- * For attribute descriptions, see formatObject() method documentation
- * Possible resultcodes are {Error, Accepted, NoSuchEntity}
+ * For attribute descriptions, see the formatObject() method documentation
  * 
  * @attrib string $resultcode -- response specific result code
  * @attrib array of GetAddressIdentity $customerIdentity
@@ -29,7 +29,6 @@ class GetAddressesResponse extends WebServiceResponse{
      * 
      *  $response->$customerIdentity[0..n] // array of GetAddressIdentity
      */
-    
     protected function formatObject($message) {
         
         // was request accepted?

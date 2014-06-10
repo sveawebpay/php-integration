@@ -5,6 +5,7 @@ require_once 'OrderBuilder.php';
 require_once SVEA_REQUEST_DIR . '/Includes.php';
 
 /**
+ * DeliverOrderBuilder
  * 
  * Invoice required methods: 
  * ->addOrderRow( TestUtil::createOrderRow() )
@@ -23,6 +24,32 @@ require_once SVEA_REQUEST_DIR . '/Includes.php';
  * Card optional methods:
  * ->setCaptureDate( $orderId )
  *  
+ */
+
+/**
+ * DeliverOrderBuilder collects and prepares order data for use in a deliver 
+ * order request to Svea.
+ * 
+ * For invoice and payment plan orders, the deliver order request should be performed 
+ * once the ordered items have been sent out to the customer. The deliver order request
+ * triggers the customer invoice being sent out to the customer by Svea. 
+ * 
+ * For card orders, the deliver order request confirms the card transaction, which in
+ * turn causes the card transaction to be batch processed by Svea.
+ * 
+ * Generally, orders are delivered in full, and so will also be the case for orders
+ * delivered when no order rows have been added to the DeliverOrderBuilder object.
+ * 
+ * Set all required order attributes in a DeliverOrderBuilder instance by using the 
+ * OrderBuilder setAttribute() methods. Instance methods can be chained together, as 
+ * they return the instance itself in a fluent manner.
+ * 
+ * Finish by using the delivery method matching the payment method specified in the 
+ * createOrder request.
+ * 
+ * You can then go on specifying any payment method specific settings, using methods provided by the 
+ * returned deliver order request class.
+ * 
  * @author Kristian Grossman-Madsen, Anneli Halld'n, Daniel Brolund for Svea Webpay
  */
 class DeliverOrderBuilder extends OrderBuilder {
@@ -33,10 +60,6 @@ class DeliverOrderBuilder extends OrderBuilder {
      * @var Order id
      */
     public $orderId;    
-
-    public function __construct($config) {
-        parent::__construct($config);
-    }
 
     /**
      * @deprecated 2.0.0 Use WebPayAdmin::UpdateOrder to modify or partially deliver an order.
@@ -115,13 +138,13 @@ class DeliverOrderBuilder extends OrderBuilder {
     
     /**
      * To ensure backwards compatibility, deliverInvoiceOrder() checks if the 
-     * order has any order rows defined, if so performs a DeliverOrderEU request
-     * to Svea, passing on the order rows.
+     * order has any order rows defined, and if so performs a DeliverOrderEU 
+     * request to Svea, passing on the order rows.
      * 
-     * If no order rows are defined, it performs av DeliverOrders request using
-     * the Admin Web Service API at Svea.
+     * If no order rows are defined, deliverInvoiceOrder() performs a 
+     * DeliverOrders request using the Admin Web Service API at Svea.
      * 
-     * @return DeliverInvoice
+     * @return WebService\DeliverInvoice|AdminService\DeliverOrdersRequest
      */
     public function deliverInvoiceOrder() {
         if( count($this->orderRows) >0 ) {
@@ -145,8 +168,11 @@ class DeliverOrderBuilder extends OrderBuilder {
 
     /**
      * deliverCardOrder() sets the status of a card order to CONFIRMED.
+     * 
      * A default capturedate equal to the current date will be supplied. This 
      * may be overridden using the ConfirmTransaction setCaptureDate() method 
+     * on the returned ConfirmTransaction object.
+     * 
      * @return DeliverPaymentPlan
      */
     public function deliverCardOrder() {        
@@ -154,7 +180,7 @@ class DeliverOrderBuilder extends OrderBuilder {
         
         $defaultCaptureDate = explode("T", date('c')); // [0] contains date part
 
-        $confirmTransaction = new ConfirmTransaction($this->conf);
+        $confirmTransaction = new HostedService\ConfirmTransaction($this->conf);
         $confirmTransaction
             ->setCountryCode($this->countryCode)
             ->setTransactionId($this->orderId)
@@ -162,4 +188,11 @@ class DeliverOrderBuilder extends OrderBuilder {
         ;
         return $confirmTransaction;
     }    
+
+    /**  
+     * @param \ConfigurationProvider $config 
+     */
+    public function __construct($config) {
+        parent::__construct($config);
+    }
 }
