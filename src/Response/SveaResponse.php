@@ -27,20 +27,25 @@ class SveaResponse {
     public $response;
 
     /**
-     * The constructor checks the parameter $message to see if the service response
-     * has come in as a SimpleXMLElement object or as a raw xml string. Then it
-     * creates the appropriate Response object which parses the response and does
-     * error handling et al.
+     * The constructor accepts the returned Svea service response. $message, and
+     * returns an instance of the corresponding service response class which
+     * parses $message and sets any returned attributes, along with the common 
+     * response attributes $accepted, $resultcode and $errormessage.
+     * 
+     * If the $method parameter is set, it is used to determind the service
+     * type, if not, we check $message itself to see if the service response
+     * has come in as a SimpleXMLElement object (i.e. a WebService response), or
+     * a raw xml string (i.e. a HostedService response). 
      * 
      * The resulting parsed response attributes are available for inspection 
      * through the getResponse() method. Inspect the individual response using
-     * i.e. $myInstanceOfSveaResponse->getResponse()->serviceResponseAttribute
+     * i.e. $myInstanceOfSveaResponse->getResponse()->theAttributeInQuestion
      * 
-     * @param SimpleXMLElement|string  $message contains the Svea service response, either as an object or as raw xml (for hosted payments)
-     * @param string $countryCode
-     * @param SveaConfigurationProvider $config
-     * @param string $method  set for HostedAdminRequests, indicates the request method used  
-     * @return mixed instance of a subclass to HostedResponse or WebServiceResponse, respectively
+     * @param mixed $message  contains the Svea service response
+     * @param string $countryCode  needed along with $config to decode response
+     * @param SveaConfigurationProvider  $config
+     * @param string $method  set for i.e. HostedAdmin, AdminService requests  
+     * @return mixed  one of the various service request response classes
      */
     public function __construct($message, $countryCode, $config = NULL, $method = NULL) {
         
@@ -51,68 +56,68 @@ class SveaResponse {
             
             // Web Service EU responses
             if (property_exists($message, "CreateOrderEuResult")) {
-                $this->response = new Svea\CreateOrderResponse($message);
+                $this->response = new Svea\WebService\CreateOrderResponse($message);
             } 
             elseif (property_exists($message, "GetAddressesResult")) {
-                $this->response = new Svea\GetAddressesResponse($message);
+                $this->response = new Svea\WebService\GetAddressesResponse($message);
             } 
             elseif (property_exists($message, "GetPaymentPlanParamsEuResult")) {
-                $this->response = new Svea\PaymentPlanParamsResponse($message);
+                $this->response = new Svea\WebService\PaymentPlanParamsResponse($message);
             } 
             elseif (property_exists($message, "DeliverOrderEuResult")) {
-                $this->response = new Svea\DeliverOrderResult($message);
+                $this->response = new Svea\WebService\DeliverOrderResult($message);
             } 
             elseif (property_exists($message, "CloseOrderEuResult")) {
-                $this->response = new Svea\CloseOrderResult($message);
+                $this->response = new Svea\WebService\CloseOrderResult($message);
             }
             
             elseif( isset($method) ) {                
                 switch( $method ) {
 
-                    // $method is set for Admin Web Service requests
+                    // $method is set for i.e. AdminService requests
                     case "CancelOrder":
-                        $this->response = new Svea\CancelOrderResponse( $message );
+                        $this->response = new Svea\AdminService\CancelOrderResponse( $message );
                         break;                    
                     case "DeliverOrders":
-                        $this->response = new Svea\DeliverOrdersResponse( $message );
+                        $this->response = new Svea\AdminService\DeliverOrdersResponse( $message );
                         break;
                     case "GetOrders":
-                        $this->response = new Svea\GetOrdersResponse( $message );
+                        $this->response = new Svea\AdminService\GetOrdersResponse( $message );
                         break;
                     case "CancelOrderRows":
-                        $this->response = new Svea\CancelOrderRowsResponse( $message );
+                        $this->response = new Svea\AdminService\CancelOrderRowsResponse( $message );
                         break;                    
                     case "AddOrderRows":
-                        $this->response = new Svea\AddOrderRowsResponse( $message );
+                        $this->response = new Svea\AdminService\AddOrderRowsResponse( $message );
                         break;
                     case "UpdateOrderRows":
-                        $this->response = new Svea\UpdateOrderRowsResponse( $message );
+                        $this->response = new Svea\AdminService\UpdateOrderRowsResponse( $message );
                         break;
                     case "CreditInvoiceRows":
-                        $this->response = new Svea\CreditInvoiceRowsResponse( $message );
+                        $this->response = new Svea\AdminService\CreditInvoiceRowsResponse( $message );
                         break;
                     
-                    // $method is set for HostedAdminRequests, indicates the request method used                    
+                    // $method is also set for HostedAdminRequests, indicates the request method used                    
                     case "querytransactionid":
-                        $this->response = new Svea\QueryTransactionResponse($message, $countryCode, $config);
+                        $this->response = new Svea\HostedService\QueryTransactionResponse($message, $countryCode, $config);
                         break;
                     case "annul":
-                        $this->response = new Svea\AnnulTransactionResponse($message, $countryCode, $config);
+                        $this->response = new Svea\HostedService\AnnulTransactionResponse($message, $countryCode, $config);
                         break;                     
                     case "credit":
-                        $this->response = new Svea\CreditTransactionResponse($message, $countryCode, $config);
+                        $this->response = new Svea\HostedService\CreditTransactionResponse($message, $countryCode, $config);
                         break;                       
                     case "confirm":
-                        $this->response = new Svea\ConfirmTransactionResponse($message, $countryCode, $config);
+                        $this->response = new Svea\HostedService\ConfirmTransactionResponse($message, $countryCode, $config);
                         break;   
                     case "loweramount":
-                        $this->response = new Svea\LowerTransactionResponse($message, $countryCode, $config);
+                        $this->response = new Svea\HostedService\LowerTransactionResponse($message, $countryCode, $config);
                         break;    
                     case "recur":
-                        $this->response = new Svea\RecurTransactionResponse($message, $countryCode, $config);
+                        $this->response = new Svea\HostedService\RecurTransactionResponse($message, $countryCode, $config);
                         break;    
                     case "getpaymentmethods":
-                        $this->response = new Svea\ListPaymentMethodsResponse($message, $countryCode, $config);
+                        $this->response = new Svea\HostedService\ListPaymentMethodsResponse($message, $countryCode, $config);
                         break;
                     
                     default:
@@ -120,13 +125,16 @@ class SveaResponse {
                         break;
                 }
             }
+            
             // legacy fallback -- webservice from hosted_admin -- used by preparedpayment 
             elseif (property_exists($message, "message"))   {                
-                 $this->response = new Svea\HostedAdminResponse($message,$countryCode,$config);
+                 $this->response = new Svea\HostedService\HostedAdminResponse($message,$countryCode,$config);
             }
         } 
+        
+        // webservice hosted payment
         elseif ($message != NULL) {
-            $this->response = new Svea\HostedPaymentResponse($message,$countryCode,$config);
+            $this->response = new Svea\HostedService\HostedPaymentResponse($message,$countryCode,$config);
         } 
         else {
             $this->response = "Response is not recognized.";
@@ -134,8 +142,7 @@ class SveaResponse {
     }
     
     /**
-     * Returns an instance of the corresponding response object class 
-     * (see constructor above)
+     * Returns an instance of the corresponding service response object class (see constructor above)
      *
      * @return mixed 
      */

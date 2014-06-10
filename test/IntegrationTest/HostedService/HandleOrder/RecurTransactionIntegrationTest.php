@@ -33,7 +33,7 @@ class RecurTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
             ->setCountryCode( "SE" )
             ->doRequest();
 
-        $this->assertInstanceOf( "Svea\RecurTransactionResponse", $response );
+        $this->assertInstanceOf( "Svea\HostedService\RecurTransactionResponse", $response );
         
         // if we receive an error from the service, the integration test passes
         $this->assertEquals( 0, $response->accepted );
@@ -87,7 +87,7 @@ class RecurTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
             ->setCountryCode( "SE" )
             ->doRequest();        
         
-        $this->assertInstanceOf( "Svea\RecurTransactionResponse", $response );
+        $this->assertInstanceOf( "Svea\HostedService\RecurTransactionResponse", $response );
         
         print_r($response);                
         $this->assertEquals( 1, $response->accepted );  

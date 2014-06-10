@@ -33,7 +33,7 @@ class CancelOrderRequestIntegrationTest extends PHPUnit_Framework_TestCase{
         $response = $request->doRequest();
         
         //print_r("cancelorderrequest: "); print_r( $response );        
-        $this->assertInstanceOf('Svea\CancelOrderResponse', $response);
+        $this->assertInstanceOf('Svea\AdminService\CancelOrderResponse', $response);
         $this->assertEquals(1, $response->accepted );    
         $this->assertEquals(0, $response->resultcode );        
 

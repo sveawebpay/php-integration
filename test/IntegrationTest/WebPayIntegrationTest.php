@@ -72,7 +72,7 @@ class WebPayIntegrationTest extends PHPUnit_Framework_TestCase {
 
         //print_r( $response );
         $this->assertEquals(1, $response->accepted);                
-        $this->assertInstanceOf( "Svea\DeliverOrderResult", $response );    // deliverOrderResult => deliverOrderEU 
+        $this->assertInstanceOf( "Svea\WebService\DeliverOrderResult", $response );    // deliverOrderResult => deliverOrderEU 
     }
    
     public function test_deliverOrder_deliverPaymentPlanOrder_with_orderrows_use_DeliverOrderEU_and_is_accepted() {
@@ -110,7 +110,7 @@ class WebPayIntegrationTest extends PHPUnit_Framework_TestCase {
 
         //print_r( $response );
         $this->assertEquals(1, $response->accepted);
-        $this->assertInstanceOf( "Svea\DeliverOrderResult", $response );
+        $this->assertInstanceOf( "Svea\WebService\DeliverOrderResult", $response );
     }
     
     public function test_manual_deliverOrder_deliverCardOrder_use_ConfirmTransaction_and_is_accepted() {
@@ -155,6 +155,6 @@ class WebPayIntegrationTest extends PHPUnit_Framework_TestCase {
 
         //print_r( $deliverResponse );        
         $this->assertEquals(1, $deliverResponse->accepted);
-        $this->assertInstanceOf( "Svea\DeliverOrdersResponse", $deliverResponse );  // deliverOrder_s_Response => Admin service deliverOrders  
+        $this->assertInstanceOf( "Svea\AdminService\DeliverOrdersResponse", $deliverResponse );  // deliverOrder_s_Response => Admin service deliverOrders  
     }        
 }

@@ -27,6 +27,8 @@ foreach (glob(SVEA_REQUEST_DIR . "/Helper/*.php") as $config)
 
 foreach (glob(SVEA_REQUEST_DIR . "/AdminService/*.php") as $config)
     include_once($config);
+foreach (glob(SVEA_REQUEST_DIR . "/AdminService/AdminServiceResponse/*.php") as $config)
+    include_once($config);
 foreach (glob(SVEA_REQUEST_DIR . "/AdminService/admin_soap/*.php") as $config)
     include_once($config);
 
@@ -37,6 +39,13 @@ foreach (glob(SVEA_REQUEST_DIR . "/HostedService/HandleOrder/*.php") as $config)
 foreach (glob(SVEA_REQUEST_DIR . "/HostedService/Helper/*.php") as $config)
     include_once($config);
 foreach (glob(SVEA_REQUEST_DIR . "/HostedService/Payment/*.php") as $config)
+    include_once($config);
+
+foreach (glob(SVEA_REQUEST_DIR . "/HostedService/HostedResponse/*.php") as $config)
+    include_once($config);
+foreach (glob(SVEA_REQUEST_DIR . "/HostedService/HostedResponse/HostedAdminResponse/*.php") as $config)
+    include_once($config);
+foreach (glob(SVEA_REQUEST_DIR . "/HostedService/HostedResponse/HostedPaymentResponse/*.php") as $config)
     include_once($config);
 
 foreach (glob(SVEA_REQUEST_DIR . "/WebService/GetAddresses/*.php") as $config)
@@ -50,23 +59,13 @@ foreach (glob(SVEA_REQUEST_DIR . "/WebService/Helper/*.php") as $config)
 foreach (glob(SVEA_REQUEST_DIR . "/WebService/Payment/*.php") as $config)
     include_once($config);
 
+foreach (glob(SVEA_REQUEST_DIR . "/WebService/WebServiceResponse/*.php") as $config)
+    include_once($config);
+foreach (glob(SVEA_REQUEST_DIR . "/WebService/WebServiceResponse/CustomerIdentity/*.php") as $config)
+    include_once($config);
+foreach (glob(SVEA_REQUEST_DIR . "/WebService/WebServiceResponse/CampaignCode/*.php") as $config)
+    include_once($config);
+
 foreach (glob(SVEA_REQUEST_DIR . "/Response/*.php") as $config)
     include_once($config);
-foreach (glob(SVEA_REQUEST_DIR . "/Response/AdminServiceResponse/*.php") as $config)
-    include_once($config);
-
-foreach (glob(SVEA_REQUEST_DIR . "/Response/WebServiceResponse/*.php") as $config)
-    include_once($config);
-foreach (glob(SVEA_REQUEST_DIR . "/Response/WebServiceResponse/CustomerIdentity/*.php") as $config)
-    include_once($config);
-foreach (glob(SVEA_REQUEST_DIR . "/Response/WebServiceResponse/CampaignCode/*.php") as $config)
-    include_once($config);
-
-foreach (glob(SVEA_REQUEST_DIR . "/Response/HostedResponse/*.php") as $config)
-    include_once($config);
-foreach (glob(SVEA_REQUEST_DIR . "/Response/HostedResponse/HostedAdminResponse/*.php") as $config)
-    include_once($config);
-foreach (glob(SVEA_REQUEST_DIR . "/Response/HostedResponse/HostedPaymentResponse/*.php") as $config)
-    include_once($config);
-
 
