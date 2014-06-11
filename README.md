@@ -1,5 +1,241 @@
 # PHP Integration Package API for SveaWebPay
 
+## Version 2.0.0
+The Svea WebPay Integration package uses semantic versioning (http://semver.org). This means that you can expect your integrations to remain backwards compatible during a major version release cycle. Previous versions of the package can be accessed through the github releases view (https://github.com/sveawebpay/php-integration/releases).
+
+### Current build status
+| Branch                            | Build status                               |
+|---------------------------------- |------------------------------------------- |
+| master (latest release)           | [![Build Status](https://travis-ci.org/sveawebpay/php-integration.png?branch=master)](https://travis-ci.org/sveawebpay/php-integration) |
+| develop                           | [![Build Status](https://travis-ci.org/sveawebpay/php-integration.png?branch=develop)](https://travis-ci.org/sveawebpay/php-integration) |
+
+## Index
+* [Introduction](https://github.com/sveawebpay/php-integration#introduction)
+* [Configuration](https://github.com/sveawebpay/php-integration#configuration)
+* [1. CreateOrder](https://github.com/sveawebpay/php-integration#1-createorder)
+    * [Specify order](https://github.com/sveawebpay/php-integration#12-specify-order)
+    * [Customer identity](https://github.com/sveawebpay/php-integration#13-customer-identity)
+    * [Other values](https://github.com/sveawebpay/php-integration#14-other-values)
+    * [Choose payment](https://github.com/sveawebpay/php-integration#15-choose-payment)
+* [2. GetPaymentPlanParams](https://github.com/sveawebpay/php-integration#2-getpaymentplanparams)
+    *  [PaymentPlanPricePerMonth](https://github.com/sveawebpay/php-integration#21-paymentplanpricepermonth)
+* [3. GetAddresses](https://github.com/sveawebpay/php-integration#3-getaddresses)
+* [4. DeliverOrder](https://github.com/sveawebpay/php-integration#4-deliverorder)
+    * [Specify order](https://github.com/sveawebpay/php-integration#42-specify-order)
+    * [Other values](https://github.com/sveawebpay/php-integration#43-other-values)
+* [5. CreditInvoice](https://github.com/sveawebpay/php-integration#5-creditInvoice)
+* [6. CloseOrder](https://github.com/sveawebpay/php-integration#6-closeorder)
+* [7. Response handler](https://github.com/sveawebpay/php-integration#7-response-handler)
+* [8. GetPaymentMethods](https://github.com/sveawebpay/php-integration#8-getpaymentmethods)
+* [9. AdditionalDeveloperResources](https://github.com/sveawebpay/php-integration#9-additional-developer-resources)
+* [APPENDIX](https://github.com/sveawebpay/php-integration#appendix)
+
+
+## Introduction
+The Svea WebPay integration package is built to help developers in the integration of the various Svea payment services. Using the integration package will aid in making your implementation maintainable and simplifies the way you consume the Svea services. 
+
+The Svea WebPay integration package provides a set of entrypoint classes and methods that unify how the various Svea payment services are accessed. 
+
+Use the WebPay class methods to implement web payments using Svea services. The WebPayAdmin class can then be used to administer the orders placed using Svea payment services from within your integration. 
+
+The package also provides service request classes to use the Svea services directly, without needing to build well-formed request data et al.
+
+### Package design philosophy:
+In general, a service request starts out with creating an order object using one of the WebPay or WebPayAdmin class entrypoint methods. 
+
+The order is then built up with data using fluid method calls on the order object. At a certain point, a method is used to select 
+which service the request will be directed against. This method then returns an object of a different class, which handles the actual 
+request to the service chosen. 
+
+An example of this workflow is the following invoice payment, where we wish to perform an invoice order. Assume that we have already 
+prepared objects containing the ordered items (with price, article number info, et al) and customer information (name, address, et al), 
+along with our Svea account credentials.
+
+```php
+...
+
+$order = WebPay::createOrder( $myConfig );  // create the order object, passing in my Svea account credentials
+
+$order->addOrderRow( $orderedItem );        // add order items objects to the order (see below for details)
+$order->addOrderRow( $anotherItem ); 
+
+$order->addCustomerDetails( $customer );    // add customer information object to the order (see below for details)
+
+$order->setOrderDate("2014-06-10")          // add various additional required information to the order object
+      ->setCountryCode("SE")                // here, methods are chained together in a fluid fashion            
+      ->setCustomerReference("1701")
+      ->setClientOrderNumber("");
+
+$request = $order->useInvoicePayment()      // we wish to place the order using the Svea Invoice payment method
+
+$response = $request->doRequest();          // send the request to Svea and receive a response object
+
+...
+```
+
+Above, we start out by calling the API method WebPay::createOrder(), which returns an instance of the CreateOrderBuilder class. 
+
+Then, the class methods addOrderRow(), addCustomerDetails(), setOrderDate(), setCountryCode(), setCustomerReference(), and setClientOrderNumber() 
+are used to populate the orderbuilder object with all required order information needed for an invoice order.
+
+Then, the useInvoicePayment() method is called, returning an instance of the WebService\InvoicePayment class. We then call the doRequest() method, 
+which validates the provided order information, and makes the request to Svea, returning an instance of the WebService\CreateOrderResponse class.
+
+To determine the outcome of the payment request, we can then inspect the response attributes, i.e. check if( $response->accepted == true ).
+
+### Bypassing the WebPay and WebPayAdmin entrypoint methods
+The above structure enables the WebPay and WebPayAdmin entrypoint methods to confine themselves to the order domain, and pushes the various service 
+request details lower into the package stack, away from the immediate viewpoint of the integrator. Thus all payment methods and services are accessed 
+in a uniform way, with the package doing the main work of massaging the order data to fit the selected payment method or service request. 
+
+This also provides future compatibility, as the main WebPay and WebPayAdmin entrypoint methods stay stable whereas the details of how the services
+are bering called by the package may change in the future.
+
+That being said, there are no additional prohibitions on using the various service call wrapper classes to access the Svea services directly, while
+still not having to worry about the details on how to i.e. build the various SOAP calls or format the XML data structures.
+
+It is therefore possible to instantiate the service request classes directly, making sure to set all relevant methods before finishing with a method 
+to perform the request to the service. In general, we validate that all required attributes are present, and if not, an exception 
+will be thrown stating what attributes are missing for the service request in question. 
+
+See further the Svea, Svea\WebService, Svea\AdminService and Svea\HostedService namespaces for further information. All service classes are documented by generated documentation included in the apidoc folder. 
+
+### Namespaces
+The package makes use of PHP namespaces, grouping most classes under the namespace Svea. The entrypoint classes WebPay, WebPayAdmin and associated support classes are excluded from the Svea namespace. See the generated documentation for available classes and methods.
+
+For compatibility with existing integrations built with version 1.x. of the package, we have provided a file "_NamespaceSvea.php" which may be included,
+which maps references to the classes now sorted under Svea\WebService and Svea\HostedService to their old location in the Svea namespace. TODO
+
+See the PHP documentation for more information on [namespaces in PHP](http://php.net/manual/en/language.namespaces.php).
+
+### Fluidity
+The WebPay and WebPayAdmin entrypoint methods are built as a fluent API so you can use method chaining when implementing it in your code. We recommend making sure that your IDE code completion of available integration package methods is enabled to make full use of this feature.
+
+### Development environment
+The Svea WebPay PHP integration package is developed and tested using NetBeans IDE 7.3.1 with the phpunit 3.7.24 plugin.
+
+## Installing
+
+### Requirements
+The integration package requires PHP 5.3 or higher to use. 
+
+To run the package test suite, phpunit 3.7 is needed. To regenerate the apidoc documentation, phpdocumentor 2.3 or higher is needed.
+
+### Package installation
+The integration package files are located under the src/ folder. Copy the contents of the src/ folder to a folder in your project, we suggest the name "svea".
+Then include the package file *Includes.php* in your integration. You should now be able to access the package classes.
+
+TODO code snippet to check that you can access the integration package files. => examples
+
+```php
+require_once 'Includes.php';
+
+$order = WebPay::createOrder($config);
+assert() // ngt som inte använder config?
+
+```
+
+[<< To top](https://github.com/sveawebpay/php-integration#php-integration-package-api-for-sveawebpay)
+
+## Configuration
+In order to make use of the Svea services you need to supply your account credentials to authorize yourself against the Svea services. For the Invoice and Payment Plan payment methods, the credentials consist of a set of Username, Password and Client number (one set for each country and service type). For Card and Direct Bank payment methods, the credentials consist of a (single) set of Merchant id and Secret Word.
+
+You should have received the above credentials from Svea when creating a service account. If not, please contact your Svea account manager.
+
+### Supplying your account credentials
+The WebPay and WebPayAdmin entrypoint methods all require a config object when called. The easiest way to get such an object is to use the SveaConfig::getDefaultConfig() method. Per default, it returns a config object with the Svea test account credentials as used by the integration package test suite. 
+
+In order to use your own account credentials, either edit the SveaConfig.php file with your actual account credentials, or implement the ConfigurationProvider interface in a class of your own -- your implementation could for instance fetch the needed credentials from a database in place of the SveaConfig.php file.
+
+See further the ConfigurationProvider interface and the SveaConfig.php files.
+
+Example: There are two ways to configure Svea authorization. Choose one of the following:
+
+1 - **Replace the file named SveaConfig.php** in folder Config looking the same as existing file
+   but with your own authorization values. Determining to use the test or the prod values there are two ways:
+
+```php
+    /**
+    * 1.
+    * Manually changing the getDefaultConfig() to return the getProdConfig() or the getTestConfig().
+    * In this case no parameter is neccesary when calling a function in WebPay.
+    */
+
+   $foo = WebPay::createOrder($config);
+```
+
+```php
+    /**
+    * 2.
+    * Giving either the getProdConfig() or the getTestConfig() as parameter when calling a function in WebPay.
+    * This way makes it possible to put a condition in implemantation code to check testmode.
+    */
+
+    if ($testmode == TRUE) {
+        $config = SveaConfig::getTestConfig();
+    } else {
+        $config = SveaConfig::getProdConfig();
+    }
+   $foo = WebPay::createOrder($config);
+```
+
+2 - You have the authorization credentials saved in a database, probably set using the administration interface in your webshop.
+    
+**Create a class that implements the ConfigurationProvider interface** (or, one class for testing values, one class for production). The interface methods should fetch and return the credentials from the database. The integration package will then call these functions to get the value from your database.
+
+```php
+require_once "Includes.php";
+
+class MyConfigTest implements ConfigurationProvider 
+{
+    public function getEndPoint($type) {
+        if ($type == ConfigurationProvider::HOSTED_TYPE) {
+            return SveaConfig::SWP_TEST_URL;;
+        } elseif ($type == ConfigurationProvider::INVOICE_TYPE || $type == ConfigurationProvider::PAYMENTPLAN_TYPE) {
+            return SveaConfig::SWP_TEST_WS_URL;
+        } else {
+           throw new Exception('Invalid type. Accepted values: INVOICE, PAYMENTPLAN or HOSTED');
+        }
+    }
+
+    //if you have different countries or types the parameters are a help to put up conditions
+    public function getMerchantId($type, $country) {
+        return $myMerchantId;
+    }
+
+    public function getPassword($type, $country) {
+        return $myPassword;
+    }
+
+    public function getSecret($type, $country) {
+        return $mySecret;
+    }
+
+    public function getUsername($type, $country) {
+        return $myUsername;
+    }
+
+    public function getClientNumber($type, $country) {
+        return $myClientNumber;
+    }
+}
+```
+
+Later when starting a WebPay action in your integration file, put an instance of your class as parameter to the constructor.
+
+```php
+    if ($this->testmode == true) { //Find your testmode settings
+        $conf = new MyConfigTest(); //if test, use your class that returns test authorization
+    } 
+    else {
+        $conf = new MyConfigProd(); //if production mode, use your class that returns production authorization
+    }
+    $foo = WebPay::CreateOrder($conf); //Create your CreateOrder object and continue building your order. Se next steps.
+```
+
+[<< To top](https://github.com/sveawebpay/php-integration#php-integration-package-api-for-sveawebpay)
+
+
 METHOD OVERVIEW:
 (methods in parenthesises are deprecated), *starred methods are new to 2.0, **double starred methods are not yet implemented in release 2.0b
 
@@ -48,256 +284,15 @@ now, but new integrations are naturally advised to avoid using them. Alternate
 methods are provided for most.
 ```
 
-## Version 2.0.0
-The Svea WebPay Integration package uses semantic versioning (http://semver.org). This means that you can expect your integrations to remain backwards compatible during a major version release cycle. Previous versions of the package can be accessed through the github releases view (https://github.com/sveawebpay/php-integration/releases).
-
-### Current build status
-| Branch                            | Build status                               |
-|---------------------------------- |------------------------------------------- |
-| master (latest release)           | [![Build Status](https://travis-ci.org/sveawebpay/php-integration.png?branch=master)](https://travis-ci.org/sveawebpay/php-integration) |
-| develop                           | [![Build Status](https://travis-ci.org/sveawebpay/php-integration.png?branch=develop)](https://travis-ci.org/sveawebpay/php-integration) |
-
-## Index
-* [Introduction](https://github.com/sveawebpay/php-integration#introduction)
-* [Configuration](https://github.com/sveawebpay/php-integration#configuration)
-* [1. CreateOrder](https://github.com/sveawebpay/php-integration#1-createorder)
-    * [Specify order](https://github.com/sveawebpay/php-integration#12-specify-order)
-    * [Customer identity](https://github.com/sveawebpay/php-integration#13-customer-identity)
-    * [Other values](https://github.com/sveawebpay/php-integration#14-other-values)
-    * [Choose payment](https://github.com/sveawebpay/php-integration#15-choose-payment)
-* [2. GetPaymentPlanParams](https://github.com/sveawebpay/php-integration#2-getpaymentplanparams)
-    *  [PaymentPlanPricePerMonth](https://github.com/sveawebpay/php-integration#21-paymentplanpricepermonth)
-* [3. GetAddresses](https://github.com/sveawebpay/php-integration#3-getaddresses)
-* [4. DeliverOrder](https://github.com/sveawebpay/php-integration#4-deliverorder)
-    * [Specify order](https://github.com/sveawebpay/php-integration#42-specify-order)
-    * [Other values](https://github.com/sveawebpay/php-integration#43-other-values)
-* [5. CreditInvoice](https://github.com/sveawebpay/php-integration#5-creditInvoice)
-* [6. CloseOrder](https://github.com/sveawebpay/php-integration#6-closeorder)
-* [7. Response handler](https://github.com/sveawebpay/php-integration#7-response-handler)
-* [8. GetPaymentMethods](https://github.com/sveawebpay/php-integration#8-getpaymentmethods)
-* [9. AdditionalDeveloperResources](https://github.com/sveawebpay/php-integration#9-additional-developer-resources)
-* [APPENDIX](https://github.com/sveawebpay/php-integration#appendix)
-
-
-## Introduction
-This integration package is built for developers to simplify the integration of Svea WebPay services.
-Using this package will make your implementation sustainable and unaffected by changes in our payment systems. 
-Just make sure to update the package regularly.
-
-### Package design philosophy:
-In general, a service request starts out with creating an order object using one of the WebPay or WebPayAdmin class entrypoint methods. 
-
-The order is then built up with data using fluid method calls on the order object. At a certain point, a method is used to select 
-which service the request will be directed against. This method then returns an object of a different class, which handles the actual 
-request to the service chosen. 
-
-An example of this workflow is the following invoice payment, where we wish to perform an invoice order. Assume that we have already 
-prepared objects containing the ordered items (with price, article number info, et al) and customer information (name, address, et al), 
-along with our Svea account credentials.
-
-```php
-...
-
-$order = WebPay::createOrder( $myConfig );  // create the order object, passing in my Svea account credentials
-
-$order->addOrderRow( $orderedItem );        // add order items objects to the order (see below for details)
-$order->addOrderRow( $anotherItem ); 
-
-$order->addCustomerDetails( $customer );    // add customer information object to the order (see below for details)
-
-$order->setOrderDate("2014-06-10")          // add various additional required information to the order object
-      ->setCountryCode("SE")                // here, methods are chained together in a fluid fashion            
-      ->setCustomerReference("1701")
-      ->setClientOrderNumber("");
-
-$request = $order->useInvoicePayment()      // we wish to place the order using the Svea Invoice payment method
-
-$response = $request->doRequest();          // send the request to Svea and receive a response object
-
-...
-```
-
-Above, we start out by calling the API method WebPay::createOrder(), which returns an instance of the CreateOrderBuilder class. 
-
-Then, the class methods addOrderRow(), addCustomerDetails(), setOrderDate(), setCountryCode(), setCustomerReference(), and setClientOrderNumber() 
-are used to populate the orderbuilder object with all required order information needed for an invoice order.
-
-Then, the useInvoicePayment() method is called, returning an instance of the WebService\InvoicePayment class. We then call the doRequest() method, 
-which validates the provided order information, and makes the request to Svea, returning an instance of the WebService\CreateOrderResponse class.
-
-To determine the outcome of the payment request, we can then inspect the response attributes, i.e. check if( $response->accepted == true ).
-
-### Bypassing the WebPay and WebPayAdmin entrypoint methods
-The above structure enables the WebPay and WebPayAdmin entrypoint methods to confine themselves to the order domain, and pushes the various service 
-request details lower into the package stack, away from the immediate viewpoint of the integrator. Thus all payment methods and services are accessed 
-in a uniform way, with the package doing the main work of massaging the order data to fit the selected payment method/service. 
-
-This also provides future compatibility, as the main WebPay and WebPayAdmin entrypoint methods stay stable whereas the details of how the services
-are called by the package may change in the future.
-
-That being said, there are no additional prohibitions on using the various service call wrapper classes to access the Svea services directly, while
-still not having to worry about the details on how to i.e. build the various SOAP calls or XML data structures. These are the classes contained within the Svea namespace. 
-
-It is therefore possible to create service request objects directly, making sure to set all relevant methods before finishing with a method 
-to perform the request to the service. In general, the objects will validate that all required attributes are present, and if not, an exception 
-will be thrown stating what attributes are missing for the service request in question. 
-
-See further the Svea, Svea\WebService, Svea\AdminService and Svea\HostedService namespaces for further information. All service classes are documented by generated documentation included in the apidoc folder. 
-
-### Namespaces
-The package makes use of PHP namespaces, grouping most classes under the namespace Svea. The entrypoint classes, WebPay, WebPayAdmin and support classes are are excluded from the Svea namespace. See the generated documentation for available methods.
-
-For compatibility with existing integrations built with version 1.x. of the package, we have provided a file "_NamespaceSvea.php" which may be included,
-which maps references to the classes now sorted under Svea\WebService and Svea\HostedService to their old location in the Svea namespace.
-
-See the PHP documentation for more information on [namespaces in PHP](http://php.net/manual/en/language.namespaces.php).
-
-### Fluidity
-The WebPay API is built as a *fluent API* so you can use *method chaining* when implementing it in your code. We recommend making sure that your IDE code completion of package methods is enabled.
-
-### Development environment
-The Svea WebPay PHP integration package is developed and tested using NetBeans IDE 7.3.1 with the phpunit 3.7.24.
-
-## Installing 
-The package files are located under the src/ folder in the distribution. Copy the contents of the src/ folder to a folder in your project.
-Then include the file  *Includes.php* from the php integration package in your integration. You should now be able to access the package classes.
-
-```php
-require_once 'Includes.php';
-
-$order = WebPay::createOrder($config);
-assert( TODO
-
-```
-
-[<< To top](https://github.com/sveawebpay/php-integration#php-integration-package-api-for-sveawebpay)
-
-## Configuration
-The Configuration needed to be set differs of how many different paymentmethods and Countries you have i the same installation.
-The SveaConfig file can handle multiple paymentmethods and countries. The authorization values are recieved from Svea Ekonomi when creating an account.
-If no configuration is done, default settings and testdata found in SveaConfig::getDefaultConfig() will be used.
-
-There are two ways to configure Svea authorization. Choose one of the following:
-
-1 - **Replace the file named SveaConfig.php** in folder Config looking the same as existing file
-   but with your own authorization values. Determining to use the test or the prod values there are two ways:
-
-```php
-    /**
-    * 1.
-    * Manually changing the getDefaultConfig() to return the getProdConfig() or the getTestConfig().
-    * In this case no parameter is neccesary when calling a function in WebPay.
-    */
-
-   $foo = WebPay::createOrder($config);
-```
-
-```php
-    /**
-    * 2.
-    * Giving either the getProdConfig() or the getTestConfig() as parameter when calling a function in WebPay.
-    * This way makes it possible to put a condition in implemantation code to check testmode.
-    */
-
-    if ($testmode == TRUE) {
-        $config = SveaConfig::getTestConfig();
-    } else {
-        $config = SveaConfig::getProdConfig();
-    }
-   $foo = WebPay::createOrder($config);
-```
-
-2 - If your have the authorization values saved in a database, probably using an administration interface in your shop.
-    **Create a class** (eg. one for testing values, one for production) that implements the ConfigurationProvider Interface. Let the implemented functions return the authorization values asked for.
-    The integration package will then call these functions to get the value from your database.
-
-```php
-    require_once Includes.php
-
-   class MyConfigTest implements ConfigurationProvider{
-
-        /**
-        * Constants for the endpoint url found in the class SveaConfig.php
-        * @param $type eg. HOSTED, INVOICE or PAYMENTPLAN
-        */
-        public function getEndPoint($type) {
-            if ($type == ConfigurationProvider::HOSTED_TYPE) {
-                return   SveaConfig::SWP_TEST_URL;;
-            } elseif ($type == ConfigurationProvider::INVOICE_TYPE || $type == ConfigurationProvider::PAYMENTPLAN_TYPE) {
-                return SveaConfig::SWP_TEST_WS_URL;
-            } else {
-               throw new Exception('Invalid type. Accepted values: INVOICE, PAYMENTPLAN or HOSTED');
-            }
-        }
-        /**
-        * get the return value from your database or likewise
-        * @param $type eg. HOSTED, INVOICE or PAYMENTPLAN
-        * $param $country CountryCode eg. SE, NO, DK, FI, NL, DE
-        */
-        public function getMerchantId($type, $country) {
-            //if you have different countries or types the parameters are a help to put up conditions
-            return $myMerchantId;
-        }
-         /**
-        * get the return value from your database or likewise
-        * @param $type eg. HOSTED, INVOICE or PAYMENTPLAN
-        * $param $country CountryCode eg. SE, NO, DK, FI, NL, DE
-        */
-        public function getPassword($type, $country) {
-            return $myPassword;
-        }
-        /**
-        * get the return value from your database or likewise
-        * @param $type eg. HOSTED, INVOICE or PAYMENTPLAN
-        * $param $country CountryCode eg. SE, NO, DK, FI, NL, DE
-        */
-        public function getSecret($type, $country) {
-            return $mySecret;
-        }
-        /**
-        * get the return value from your database or likewise
-        * @param $type eg. HOSTED, INVOICE or PAYMENTPLAN
-        * $param $country CountryCode eg. SE, NO, DK, FI, NL, DE
-        */
-        public function getUsername($type, $country) {
-            return $myUsername;
-        }
-        /**
-        * get the return value from your database or likewise
-        * @param $type eg. HOSTED, INVOICE or PAYMENTPLAN
-        * $param $country CountryCode eg. SE, NO, DK, FI, NL, DE
-        */
-        public function getClientNumber($type, $country) {
-            return $myClientNumber;
-        }
-    }
-```
-
-  Later when starting an WebPay action in your integration file, put an instance of your class as parameter to the constructor.
-  If left blank, the default settings in the class SveaConfig will be used.
-
-```php
-    //Find your testmode settings
-    if ($this->testmode == 1) {
-        //if test, use your class that returns test authorization
-        $conf = new MyConfigTest();
-    } else {
-        //if production mode, use your class that returns production authorization
-        $conf = new MyConfigProd();
-    }
-        //Create your CreateOrder object and continue building your order. Se next steps.
-        $foo = WebPay::CreateOrder($conf);
-```
-
-[<< To top](https://github.com/sveawebpay/php-integration#php-integration-package-api-for-sveawebpay)
-
 ## 1. createOrder
-Creates an order and performs payment for all payment forms. Invoice and payment plan will perform
-a synchronous payment and return a response.
-Other hosted payments, like card, direct bank and other payments from the *PayPage*,
-on the other hand are asynchronous. They will return an html form with formatted message to send from your store.
+Creates an order and performs payment for all payment forms. 
+
+Invoice and payment plan will perform a synchronous payment request and return a response. Hosted payments, like card, direct bank and other payments selected via the PayPage, are asynchronous. They will return an html form containing a formatted message to send to Svea.
+
 For every new payment type implementation, you follow the steps from the beginning and chose your payment type preffered in the end:
 Build order -> choose payment type -> doRequest/getPaymentForm
+
+TODO replace with link to example file
 
 ```php
 $response = WebPay::createOrder($config)
@@ -361,6 +356,7 @@ You can use the add-functions with an WebPayItem object or an array of WebPayIte
 ->addOrderRow(WebPayItem::orderRow()->...)
 
 //or
+
 $orderRows[] = WebPayItem::orderRow()->...;
 ->addOrderRow($orderRows);
 
