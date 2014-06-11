@@ -36,7 +36,7 @@ class GetAddresses {
     }
 
     /**
-     * Required for Invoice type
+     * Required - you need call the method that corresponds to the account credentials (i.e. invoice or paymentplan) used for the address lookup.
      * @return $this
      */
     public function setOrderTypeInvoice() {
@@ -45,7 +45,7 @@ class GetAddresses {
     }
 
     /**
-     * Required for PaymentPlan type
+     * Required - you need call the method that corresponds to the account credentials (i.e. invoice or paymentplan) used for the address lookup.
      * @return $this
      */
     public function setOrderTypePaymentPlan() {
@@ -54,7 +54,11 @@ class GetAddresses {
     }
 
     /**
-     * Required
+     * Required - you need to supply the country code that corresponds to the account credentials used for the address lookup.
+     *  
+     * Note that this means that you cannot look up a user in a foreign country, this is a consequence of the fact that the
+     * invoice and partpayment methods don't support foreign orders.
+     * 
      * @param string $countryCodeAsString  one of {SE, DK, NO}
      * @return $this
      */
@@ -75,6 +79,9 @@ class GetAddresses {
 
     /**
      * Required if customer is Individual
+     * 
+     * Note that GetAddresses is not supported for individuals in Norway.
+     * 
      * @param string $NationalIdNumberAsString  SE: Personnummer, DK: CPR, NO: N/A
      * @return $this
      */

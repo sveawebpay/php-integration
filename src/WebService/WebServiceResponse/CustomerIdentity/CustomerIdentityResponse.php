@@ -4,26 +4,25 @@ namespace Svea\WebService;
 /**
  *  CustomerIdentityResponse structure
  * 
- *  @attrib $customerType;       
- *  @attrib $nationalIdNumber;   
- *  @attrib $phoneNumber;        
- *  @attrib $fullName;           
- *  @attrib $street;             
- *  @attrib $coAddress;          
- *  @attrib $zipCode;            
- *  @attrib $locality;           
- *
  *  @author Anneli Halld'n, Daniel Brolund, Kristian Grossman-Madsen for Svea Webpay
  */  
 class CustomerIdentityResponse {
 
+    /** @var string $customerType  one of { Person, Business } */
     public $customerType;       
+    /** @var string $nationalIdNumber */
     public $nationalIdNumber;   
+    /** @var string $phoneNumber */
     public $phoneNumber;        
+    /** @var string $fullName */
     public $fullName;           
+    /** @var string $street */
     public $street;             
+    /** @var string $coAddress */
     public $coAddress;          
+    /** @var string $zipCode */
     public $zipCode;            
+    /** @var string $locality */
     public $locality;      
     
     /**

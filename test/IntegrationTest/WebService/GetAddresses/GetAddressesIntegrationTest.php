@@ -28,7 +28,7 @@ class GetAddressesIntegrationTest extends PHPUnit_Framework_TestCase {
             ->doRequest();
         $this->assertEquals(1, $request->accepted);
     }
-
+    
     public function testGetAddressesResult_Company() {
         $request = $this->addressRequest
             ->setOrderTypeInvoice()

@@ -6,19 +6,16 @@ require_once 'CustomerIdentityResponse.php';
 /**
  *  GetAddressIdentity structure
  *
- *  @attrib $addressSelector
- *  
- *  The following are not guaranteed to be set
- *  @property $firstName
- *  @property $lastName
- *
  *  @author anne-hal, Kristian Grossman-Madsen
  */
 class GetAddressIdentity extends CustomerIdentityResponse {
 
+    /** @var string $nationalIdNumber */
     public $addressSelector;
-    //public $firstName;
-    //public $lastName;
+    /** @var string $firstName  only set in case of a createorder request */
+    public $firstName;
+    /** @var string $lastName  only set in case of a createorder request */
+    public $lastName;
 
     function __construct( $customer ) {
         $this->addressSelector = isset($customer->AddressSelector) ? $customer->AddressSelector : "";        
