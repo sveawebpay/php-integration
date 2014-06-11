@@ -70,7 +70,7 @@ include_once SVEA_REQUEST_DIR . "/Includes.php";
  *   (queryTransaction) -- returns Svea\QueryTransaction object, used to get information about a card or direct bank order 
  * 
  * INNER WORKINGS (examples):
- * In general, the WebPay API starts out with creating an order object, which is then build up with data using fluid method calls. 
+ * In general, the WebPay API starts out with creating an order object, which is then built up with data using fluid method calls. 
  * At a certain point, a method is used to select which service the order will go against. This method then returns an object of a 
  * different class, which handles the request to the service chosen. 
  * 
@@ -119,8 +119,8 @@ include_once SVEA_REQUEST_DIR . "/Includes.php";
  * WebPayItem, as well as various constant container classes.
  * 
  * The WebPay:: class methods contains the functions needed to create orders and
- * perform payment requests using Svea payment methods. It contains functions to
- * define order contents, send order requests, as well as support functions 
+ * perform payment requests using Svea payment methods. It contains methods to
+ * define order contents, send order requests, as well as support methods 
  * needed to do this.
  * 
  * The WebPayAdmin:: methods are used to administrate orders after they have been
@@ -258,15 +258,13 @@ class WebPay {
      * @return Svea\CloseOrderBuilder
      */
     public static function closeOrder($config = NULL) {
-        if( $config == NULL ) { $this->throwMissingConfigException(); }
+        if( $config == NULL ) { WebPay::throwMissingConfigException(); }
 
         return new Svea\CloseOrderBuilder($config);
     }
-    
-
-                    
+        
     /** helper function, throws exception if no config is given */
-    private function throwMissingConfigException() {
+    private static function throwMissingConfigException() {
         throw new Exception('-missing parameter: This method requires an ConfigurationProvider object as parameter. Create a class that implements class ConfigurationProvider. Set returnvalues to configuration values. Create an object from that class. Alternative use static function from class SveaConfig e.g. SveaConfig::getDefaultConfig(). You can replace the default config values to return your own config values in the method.');   
     }
 }

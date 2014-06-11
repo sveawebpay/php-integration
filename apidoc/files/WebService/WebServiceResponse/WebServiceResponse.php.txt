@@ -6,14 +6,14 @@ require_once SVEA_REQUEST_DIR . '/Includes.php';
 /** 
  * Handles the various Svea WebPay WebserviceEU responses
  * 
- * @attrib accepted                 // true iff request was accepted by the service 
- * @attrib errormessage             // may be set iff accepted above is false
- * 
  * @author Anneli Halld'n, Daniel Brolund, Kristian Grossman-Masen for Svea Webpay
  */
 abstract class WebServiceResponse {
 
+    /** @var bool $accepted  true iff the request succeeded */
     public $accepted;
+    
+    /** @var string $errormessage  set iff the request returned an unsuccessful response, see also the returncode attribute */
     public $errormessage;   
 
     function __construct($message) {

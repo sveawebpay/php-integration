@@ -47,11 +47,13 @@ class OrderRow {
     public $unit;
 
     /**
-     * Precisely two of these values must be set in the WebPayItem object:  AmountExVat, AmountIncVat or VatPercent for Orderrow. 
-     * Use functions setAmountExVat(), setAmountIncVat() or setVatPercent().
+     * Required - precisely two of these values must be set in the WebPayItem object:  AmountExVat, AmountIncVat or VatPercent for Orderrow. 
+     * Use functions setAmountExVat(), setAmountIncVat() or setVatPercent(). Note: The preferred way is to use setAmountExVat() and setVatPercent().
      * 
      * Order row item price excluding taxes, expressed as a float value. 
      *  
+     * 
+     * 
      * The integration package supports fractions input at any precision, but 
      * when sending the request Svea numbers are rounded to two decimal places.
      * 
@@ -66,8 +68,8 @@ class OrderRow {
     public $amountExVat;
     
     /**
-     * Precisely two of these values must be set in the WebPayItem object:  AmountExVat, AmountIncVat or VatPercent for Orderrow. 
-     * Use functions setAmountExVat(), setAmountIncVat() or setVatPercent().
+     * Required - precisely two of these values must be set in the WebPayItem object:  AmountExVat, AmountIncVat or VatPercent for Orderrow. 
+     * Use functions setAmountExVat(), setAmountIncVat() or setVatPercent(). Note: The preferred way is to use setAmountExVat() and setVatPercent().
      * 
      * Order row item price including tax, expressed as a float value. 
      *  
@@ -96,8 +98,8 @@ class OrderRow {
     public $amountIncVat;
     
     /**
-     * Precisely two of these values must be set in the WebPayItem object:  AmountExVat, AmountIncVat or VatPercent for Orderrow. 
-     * Use functions setAmountExVat(), setAmountIncVat() or setVatPercent().
+     * Required - precisely two of these values must be set in the WebPayItem object:  AmountExVat, AmountIncVat or VatPercent for Orderrow. 
+     * Use functions setAmountExVat(), setAmountIncVat() or setVatPercent(). Note: The preferred way is to use setAmountExVat() and setVatPercent().
      * 
      * @param int $vatPercentAsInt
      * @return $this

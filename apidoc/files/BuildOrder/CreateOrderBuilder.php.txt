@@ -16,6 +16,10 @@ require_once SVEA_REQUEST_DIR . '/Includes.php';
  * 
  * You can then go on specifying any payment method specific settings, using methods provided by the 
  * returned payment request class.
+ *
+ * The Invoice and Payment plan payment methods will perform a synchronous payment request and immediately return a response.  
+ * The Card, Direct bank, and hosted methods via PayPage are asynchronous. These will return an html form containing a 
+ * formatted message to send to Svea, which in turn sends a response to a given return url.
  * 
  * @author Kristian Grossman-Madsen, Anneli Halld'n, Daniel Brolund for Svea Webpay
  */

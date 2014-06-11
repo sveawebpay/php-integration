@@ -9,15 +9,15 @@ require_once 'WebServiceResponse.php';
  *
  * For attribute descriptions, see the formatObject() method documentation
  * 
- * @attrib string $resultcode -- response specific result code
- * @attrib array of GetAddressIdentity $customerIdentity
- * 
  * @author anne-hal, Kristian Grossman-Madsen
  */
 class GetAddressesResponse extends WebServiceResponse{
 
+    /** @var string $resultcode */
     public $resultcode;
-    public $customerIdentity = array();  // array of GetAddressIdentity
+    
+    /** @var GetAddressIdentity [] array of GetAddressIdentity */
+    public $customerIdentity = array();
     
     /**
      *  formatObject sets the following attributes:
@@ -27,12 +27,17 @@ class GetAddressesResponse extends WebServiceResponse{
      *
      *  $response->resultcode               // one of {Error, Accepted, NoSuchEntity}
      * 
-     *  $response->$customerIdentity[0..n] // array of GetAddressIdentity
+     *  $response->$customerIdentity[0..n] // array of Svea\GetAddressIdentity
      */
     protected function formatObject($message) {
         
         // was request accepted?
-        $this->accepted = $message->GetAddressesResult->Accepted;
+        if( $message->GetAddressesResult->RejectionCode == "Error" ) {
+            $this->accepted = 0;
+        }
+        else {
+            $this->accepted = $message->GetAddressesResult->Accepted;
+        }
         $this->errormessage = isset($message->GetAddressesResult->ErrorMessage) ? $message->GetAddressesResult->ErrorMessage : "";        
 
         // set response resultcode
@@ -47,7 +52,7 @@ class GetAddressesResponse extends WebServiceResponse{
     public function formatCustomerIdentity($customers) {
 
         is_array($customers->CustomerAddress) ? $loopValue = $customers->CustomerAddress : $loopValue = $customers;
-
+        
         foreach ($loopValue as $customer) {
             $temp = new GetAddressIdentity( $customer );
             

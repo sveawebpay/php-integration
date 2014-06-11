@@ -62,7 +62,13 @@ class OrderBuilder {
     }
     
     /**
-     * Required. Add customer information to the order. 
+     * Required for invoice and payment plan orders - add customer information to the order 
+     * 
+     * See the customer objects for information on required customer information fields for
+     * invoice and payment plan orders.
+     * 
+     * @see \Svea\IndividualCustomer \Svea\IndividualCustomer 
+     * @see \Svea\CompanyCustomer \Svea\CompanyCustomer 
      * 
      * @param \Svea\IndividualCustomer|\Svea\CompanyCustomer $itemCustomerObject
      * @return $this
@@ -73,6 +79,8 @@ class OrderBuilder {
     }
 
     /**
+     * Required - you need to add at least one order row to the order 
+     * 
      * @param \Svea\OrderRow $itemOrderRowObject
      * @return $this
      */
@@ -88,7 +96,7 @@ class OrderBuilder {
     }
   
     /**
-     * Adds a shipping fee or invoice fee to the order
+     * Optional - adds a shipping fee or invoice fee to the order
      * 
      * @param \Svea\InvoiceFee|\Svea\ShippingFee $itemFeeObject
      * @return $this
@@ -115,7 +123,12 @@ class OrderBuilder {
     }
 
     /**
-     * Adds a fixed amount discount or an order total percent discount to the order
+     * Optional - adds a fixed amount discount or an order total percent discount to the order
+     * 
+     * See the discount objects for information on how the discount is calculated et al.
+     * 
+     * @see \Svea\FixedDiscount \Svea\FixedDiscount 
+     * @see \Svea\RelativeDiscount \Svea\RelativeDiscount 
      * 
      * @param \Svea\FixedDiscount|\Svea\RelativeDiscount $itemDiscountObject
      * @return $this
@@ -143,15 +156,25 @@ class OrderBuilder {
     }
   
     /**
-     * @param string $countryCodeAsString Country code as described by ISO 3166-1: "SE", "NO", "DK", "FI", "DE", "NL"
+     * Required - set order country code, we recommend basing this on the customer billing address
+     * 
+     * For orders using the invoice or payment plan payment methods, you need to supply a country code that corresponds 
+     * to the account credentials used for the address lookup. (Note that this means that these methods don't support 
+     * orders from foreign countries, this is a consequence of the fact that the invoice and payment plan payment 
+     * methods don't support foreign orders.)
+     * 
+     * @param string $countryCodeAsString Country code as described by ISO 3166-1, one of "SE", "NO", "DK", "FI", "DE", "NL"
      * @return $this
-     */
+     */    
+    
     public function setCountryCode($countryCodeAsString) {
         $this->countryCode = $countryCodeAsString;
         return $this;
     }
 
     /**
+     * Required for Card, Direct Bank and pay page orders - set the order currency
+     * 
      * @param string $currencyAsString in ISO 4217 three-letter format, ex. "SEK", "EUR"
      * @return $this
      */
@@ -162,7 +185,7 @@ class OrderBuilder {
     }
 
     /**
-     * Client customer reference
+     * Optional - set a client side customer reference, i.e. customer number etc.
      * 
      * @param string  $customerReferenceAsString needs to be unique to the order for card and direct bank orders
      * @return $this
@@ -173,7 +196,9 @@ class OrderBuilder {
     }
 
     /**
-     * Client order number
+     * Required for Card, Direct Bank and pay page orders - set a client side order identifier, i.e. the webshop order number etc.
+     * 
+     * Note that for Card and Direct Bank orders, you may not reuse a previously sent client order number, or you'll get error 127 from the service. 
      * 
      * @param string  $clientOrderNumberAsString
      * @return $this
@@ -183,7 +208,9 @@ class OrderBuilder {
         return $this;
     }
 
-    /**
+    /** 
+     * Required for Invoice and Payment plan orders -- set the order date
+     * 
      * @param string $orderDateAsString  ISO 8601 date, as produced by php date('c'): "2004-02-12T15:19:21+00:00", also accepts dates like "2004-02-12"
      * @return $this
      */
@@ -192,13 +219,13 @@ class OrderBuilder {
         return $this;
     }
 
-   /**
-     * @internal for testfunctions
-     * @param type $func
-     * @return $this
-     */
-    public function run($func) {
-        $func($this);
-        return $this;
-    }
+//   /**
+//     * @internal for testfunctions
+//     * @param type $func
+//     * @return $this
+//     */
+//    public function run($func) {
+//        $func($this);
+//        return $this;
+//    }
 }

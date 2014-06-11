@@ -36,10 +36,11 @@ $myOrder = WebPay::createOrder( $myConfig );
 $myOrder->setCountryCode("SE");                         // customer country, we recommend basing this on the customer billing address
 $myOrder->setCurrency("SEK");                           // order currency
 // You may also chain fluent methods together:
-$myOrder->setCustomerReference("customer #123")         // This should contain a customer reference, as in "customer #123".
-        ->setClientOrderNumber("order #20140519-374")   // This should contain the client side order number, i.e. "order #20140519-371"
-        ->setOrderDate("2014-05-28");                   // or use an ISO801 date as produced by i.e. date('c')
-
+$myOrder
+        ->setClientOrderNumber("order #20140519-375")   // required - use a not previously sent client side order identifier, i.e. "order #20140519-371"
+//        ->setCustomerReference("customer #123")         // optional - This should contain a customer reference, as in "customer #123".
+//        ->setOrderDate("2014-05-28")                    // optional - or use an ISO801 date as produced by i.e. date('c')
+;
 // Then specify the items bought as order rows, using the methods in the Svea\OrderRow class, and adding them to the order:
 $firstBoughtItem = WebPayItem::orderRow();
 $firstBoughtItem->setAmountExVat( 10.99 );
@@ -68,6 +69,8 @@ $myCustomerInformation->setName( $customerFirstName, $customerLastName);
 $sveaAddress = Svea\Helper::splitStreetAddress($customerAddress); // Svea requires an address and a house number
 $myCustomerInformation->setStreetAddress( $sveaAddress[0], $sveaAddress[1] );
 $myCustomerInformation->setZipCode( $customerZipCode )->setLocality( $customerCity );
+
+$myOrder->addCustomerDetails( $myCustomerInformation );
 
 // We have now completed specifying the order, and wish to send the payment request to Svea. To do so, we first select a payment method.
 // For card orders, we recommend using the ->usePaymentMethod(PaymentMethod::KORTCERT), which processes card orders via Certitrade.

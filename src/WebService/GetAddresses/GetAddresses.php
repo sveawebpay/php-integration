@@ -59,7 +59,7 @@ class GetAddresses {
      * Note that this means that you cannot look up a user in a foreign country, this is a consequence of the fact that the
      * invoice and partpayment methods don't support foreign orders.
      * 
-     * @param string $countryCodeAsString  one of {SE, DK, NO}
+     * @param string $countryCodeAsString Country code as described by ISO 3166-1, one of "SE", "NO", "DK"
      * @return $this
      */
     public function setCountryCode($countryCodeAsString) {
@@ -68,7 +68,8 @@ class GetAddresses {
     }
 
     /**
-     * Required if customer is Company
+     * Required for Invoice and Payment Plan orders - use this to identify a company customer 
+     * 
      * @param string $companyIdAsString  SE: Organisationsnummer, DK: CVR, NO: Vat number
      * @return $this
      */
@@ -78,9 +79,7 @@ class GetAddresses {
     }
 
     /**
-     * Required if customer is Individual
-     * 
-     * Note that GetAddresses is not supported for individuals in Norway.
+     * Required for Invoice and Payment Plan orders - use this to identify an individual customer 
      * 
      * @param string $NationalIdNumberAsString  SE: Personnummer, DK: CPR, NO: N/A
      * @return $this
