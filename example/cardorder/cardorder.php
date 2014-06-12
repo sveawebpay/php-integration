@@ -38,8 +38,8 @@ $myOrder->setCurrency("SEK");                           // order currency
 // You may also chain fluent methods together:
 $myOrder
         ->setClientOrderNumber("order #20140519-375")   // required - use a not previously sent client side order identifier, i.e. "order #20140519-371"
-//        ->setCustomerReference("customer #123")         // optional - This should contain a customer reference, as in "customer #123".
-//        ->setOrderDate("2014-05-28")                    // optional - or use an ISO801 date as produced by i.e. date('c')
+        ->setCustomerReference("customer #123")         // optional - This should contain a customer reference, as in "customer #123".
+        ->setOrderDate("2014-05-28")                    // optional - or use an ISO801 date as produced by i.e. date('c')
 ;
 // Then specify the items bought as order rows, using the methods in the Svea\OrderRow class, and adding them to the order:
 $firstBoughtItem = WebPayItem::orderRow();
@@ -83,7 +83,7 @@ $myPath = implode( '/', $myPath);
 
 // Then set any additional required request attributes as detailed below. (See Svea\PaymentMethodPayment and Svea\HostedPayment classes for details.)
 $myCardOrderRequest
-    ->setCardPageLanguage("SV")                             // ISO639 language code, i.e. "SV", "EN" etc. Defaults to English.
+    ->setCardPageLanguage("SV")                                     // ISO639 language code, i.e. "SV", "EN" etc. Defaults to English.
     ->setCancelUrl("http://localhost/".$myPath."/cardorder.php")    // The cancel url to which the user is redirected, should the payment be cancelled
     ->setReturnUrl("http://localhost/".$myPath."/landingpage.php"); // The return url where we receive and process the finished request response
        

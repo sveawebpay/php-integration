@@ -504,7 +504,7 @@ $order
 
 [<< To top](https://github.com/sveawebpay/php-integration#php-integration-package-api-for-sveawebpay)
 
-## 1.5 Choose payment method to use
+## 1.5 Choose the order payment method to use
 Finish the order specification process by choosing a payment method with the order useXX() methods.
 
 Invoice and Payment plan payment methods will perform a synchronous request to Svea and return a response object.
@@ -563,9 +563,6 @@ $response = $request->doRequest();
 ```
 Another complete, runnable example of a synchronous (invoice) order can be found in the examples/invoiceorder folder.
 
-Another complete, runnable example of an asynchronous (card) order can be found in the examples/cardorder folder. 
-
-
 #### 1.5.2 PaymentPlanPayment
 The Payment plan payment method is restricted to individual customers and can not be used by legal entities, i.e. companies or organisations.
 
@@ -598,270 +595,154 @@ $response = $request->doRequest();
 [<< To top](https://github.com/sveawebpay/php-integration#php-integration-package-api-for-sveawebpay)
 
 ### Asynchronous payments - Hosted solutions
-Build the order object. Then select the payment method and specify the various attributes using the methods applicable to hosted payments (see below). Recieve the *PaymentForm* object using getPaymentForm(), specifying *merchantid*, *xmlMessageBase64* and *mac*.
-
-The form is then sent using a http POST to SveaConfig::SWP_TEST_URL or SveaConfig::SWP_PROD_URL. The *PaymentForm* object also contains a complete html form as string and the html form element as array.
-
-The response is returned as XML, use the Svea [response handler](https://github.com/sveawebpay/php-integration#6-response-handler)
-to format the response
+Create and build the order object. Then select the payment method to use and specify the various attributes using the methods applicable to hosted payments (see below). Get an instance of PaymentForm using the getPaymentForm() method.
 
 ```html
-    <form name='paymentForm' id='paymentForm' method='post' action='SveaConfig::SWP_TEST_URL'>
-        <input type='hidden' name='merchantid' value='{$this->merchantid}' />
-        <input type='hidden' name='message' value='{$this->xmlMessageBase64}' />
-        <input type='hidden' name='mac' value='{$this->mac}' />
-        <input type="submit" name="submit" value="Submit" />
-    </form>
+<form name='paymentForm' id='paymentForm' method='post' action='SveaConfig::SWP_TEST_URL'>
+    <input type='hidden' name='merchantid' value='{$this->merchantid}' />
+    <input type='hidden' name='message' value='{$this->xmlMessageBase64}' />
+    <input type='hidden' name='mac' value='{$this->mac}' />
+    <input type="submit" name="submit" value="Submit" />
+</form>
 ```
 
-->setReturnUrl()
-When a hosted payment transaction completes (regardless of outcome, i.e. accepted or denied),
-the payment service will answer with a response xml message sent to the return url specified.
+The received form is sent using a http POST to the url indicated by i.e. SveaConfig::SWP_TEST_URL. The PaymentForm instance also contains the complete html form as string and the html form elements as an array. See the HostedService\PaymentForm class.
 
-->setCallbackUrl()
-In case the hosted payment transaction completes, but the service is unable to return a response to the return url,
-the payment service will retry several times using the callback url as a fallback, if specified. This may happen if
-i.e. the user closes the browser before the payment service redirects back to the shop.
+The service response is returned as XML, use the [SveaResponse](https://github.com/sveawebpay/php-integration#6-response-handler)
+to format the response
 
-->setCancelUrl()
-In case the hosted payment service is cancelled by the user, the payment service will redirect back to the cancel url.
-Unless a return url is specified, no cancel button will be presented at the payment service.
+#### Response URL:s
 
-See also class HostedPayment.
+->setReturnUrl() When a hosted payment transaction completes (regardless of outcome, i.e. accepted or denied), the payment service will answer with a response xml message sent to the return url specified.
 
-#### 1.5.3 PayPage with card payment options
+->setCallbackUrl() In case the hosted payment transaction completes, but the service is unable to return a response to the return url, the payment service will retry several times using the callback url as a fallback, if specified. This may happen if i.e. the user closes the browser before the payment service redirects back to the shop.
+
+->setCancelUrl() In case the hosted payment service is cancelled by the user, the payment service will redirect back to the cancel url. Unless a return url is specified, no cancel button will be presented at the payment service.
+
+See the HostedService\HostedPayment class.
+
+### 1.5.3 PayPage with card payment options
 *PayPage* with available card payments only.
 
-##### 1.5.3.1 Request
+#### 1.5.3.1 Request
 ```php
-$form = WebPay::createOrder($config)
-->addOrderRow(
-    WebPayItem::orderRow()
-        ->setArticleNumber("1")
-        ->setQuantity(2)
-        ->setAmountExVat(100.00)
-        ->setDescription("Specification")
-        ->setName('Prod')
-        ->setUnit("st")
-        ->setVatPercent(25)
-        ->setDiscountPercent(0)
-    )
-    ->setCountryCode("SE")
-    ->setClientOrderNumber("33")
-    ->setOrderDate("2012-12-12")
-    ->setCurrency("SEK")
-        ->usePayPageCardOnly()
-            ->setPayPageLanguage("sv")                          //Optional, default english
-            ->setReturnUrl("http://myurl.se")                   //Required
-            ->setCallbackUrl("http://myurl.se")                 //Optional
-            ->setCancelUrl("http://myurl.se")                   //Optional
-            ->setCall("http://myurl.se")                        //Optional
-                ->getPaymentForm();
-
-```
-##### 1.5.3.2 Return
-The values of *xmlMessageBase64*, *merchantid* and *mac* are to be sent as xml to SveaWebPay.
-Function getPaymentForm() returns object type *PaymentForm* with accessible members:
-
-| Member                            | Description                               |
-|---------------------------------- |-------------------------------------------|
-| xmlMessageBase64                  | Payment information in XML-format, Base64 encoded.|
-| xmlMessage                        | Payment information in XML-format.        |
-| merchantid                        | Authorization                             |
-| secretWord                        | Authorization                             |
-| mac                               | Message authentication code.              |
-| completeHtmlFormWithSubmitButton  | A complete Html form with method= "post" with submit button to include in your code. |
-| htmlFormFieldsAsArray             | Array of Html form fields to include.     |
-| rawFields                         | Array of values to send in Html form. ($merchantid, $xmlMessageBase64, $mac) |
-
-```php
-$form = ...
+...
+$form = $order
+    ->usePayPageCardOnly()
+        ->setPayPageLanguage("sv")                          // Optional, default english
+        ->setReturnUrl("http://myurl.se")                   // Required
+        ->setCallbackUrl("http://myurl.se")                 // Optional
+        ->setCancelUrl("http://myurl.se")                   // Optional
+        ->setCall("http://myurl.se")                        // Optional
         ->getPaymentForm();
-
-echo $form->completeHtmlFormWithSubmitButton; //Will render a hidden form with submit button in browser
+...
 ```
 
-#### 1.5.4 PayPage with direct bank payment options
-*PayPage* with available direct bank payments only.
+A complete, runnable example of a card order using PaymentMethodPayment can be found in the examples/cardorder folder. 
 
-##### 1.5.4.1 Request
-```php
-$form = WebPay::createOrder($config)
-->addOrderRow(
-    WebPayItem::orderRow()
-        ->setArticleNumber("1")
-        ->setQuantity(2)
-        ->setAmountExVat(100.00)
-        ->setDescription("Specification")
-        ->setName('Prod')
-        ->setUnit("st")
-        ->setVatPercent(25)
-        ->setDiscountPercent(0)
-    )
-    ->setCountryCode("SE")
-    ->setCustomerReference("33")
-    ->setOrderDate("2012-12-12")
-    ->setCurrency("SEK")
-        ->usePayPageDirectBankOnly()
-            ->setPayPageLanguage("sv")                          //Optional, default english
-            ->setReturnUrl("http://myurl.se")                   //Required
-            ->setCancelUrl("http://myurl.se")                   //Optional
-            ->getPaymentForm();
-```
-##### 1.5.4.2 Return
-Returns object type PaymentForm:
-
-| Member                            | Description                               |
-|---------------------------------- |-------------------------------------------|
-| xmlMessageBase64                  | Payment information in XML-format, Base64 encoded.|
-| xmlMessage                        | Payment information in XML-format.        |
-| merchantid                        | Authorization                             |
-| secretWord                        | Authorization                             |
-| mac                               | Message authentication code.              |
-| completeHtmlFormWithSubmitButton  | A complete Html form with method= "post" with submit button to include in your code. |
-| htmlFormFieldsAsArray             | Array of Html form fields to include.     |
-| rawFields                         | Array of values to send in Html form. ($merchantid, $xmlMessageBase64, $mac) |
+### 1.5.4 PayPage with direct bank payment options
+Send user to *PayPage* to select from available banks (only), and then perform a direct bank payment at the chosen bank
 
 ```php
-$form = ...
-        ->getPaymentForm();
-
-echo $form->completeHtmlFormWithSubmitButton; //Will render a hidden form with submit button in browser
+...
+$form = $order
+    ->usePayPageDirectBankOnly()
+        ->setPayPageLanguage("sv")                          //Optional, default english
+        ->setReturnUrl("http://myurl.se")                   //Required
+        ->setCancelUrl("http://myurl.se")                   //Optional
+        ->getPaymentForm()
+;
+...
 ```
 
-#### 1.5.5 PayPagePayment
-*PayPage* with all available payments. You can also custom the *PayPage* by using one of the methods for *PayPagePayments*:
-setPaymentMethod, includePaymentMethods, excludeCardPaymentMethods or excludeDirectPaymentMethods.
+### 1.5.5 PayPagePayment
+Send user to *PayPage* to select from the available payment methods. You can customise which payment methods to display, using the PayPagePayment methods includePaymentMethods(), excludePaymentMethods(), excludeCardPaymentMethods() and excludeDirectPaymentMethods().
 
-##### 1.5.5.1 Request
 ```php
-$form = WebPay::createOrder($config)
-    ->addOrderRow(
-        WebPayItem::orderRow()
-            ->setArticleNumber("1")
-            ->setQuantity(2)
-            ->setAmountExVat(100.00)
-            ->setDescription("Specification")
-            ->setName('Prod')
-            ->setUnit("st")
-            ->setVatPercent(25)
-            ->setDiscountPercent(0)
-        )
-        ->setCountryCode("SE")
-        ->setCustomerReference("33")
-        ->setOrderDate("2012-12-12")
-        ->setCurrency("SEK")
-            ->usePayPage()
-                ->setPayPageLanguage("sv")                          //Optional,@param: languageCode As ISO639, eg. "en", defalut english
-                ->setReturnUrl("http://myurl.se")                   //Required
-                ->setCancelUrl("http://myurl.se")                   //Optional
-                ->getPaymentForm();
+...
+$form = $order
+    ->usePayPage()
+        ->setPayPageLanguage("sv")                          //Optional, defaults to english
+        ->setReturnUrl("http://myurl.se")                   //Required
+        ->setCancelUrl("http://myurl.se")                   //Optional
+        ->getPaymentForm()
+;
+...
 ```
 
-###### 1.5.5.1.1 Exclude specific payment methods
+##### 1.5.5.1 Exclude specific payment methods
 Optional if you want to include specific payment methods for *PayPage*.
 ```php
+...
+$form = $order
     ->usePayPage()
-        ->setReturnUrl("http://myurl.se")                                               //Required
-        ->setCancelUrl("http://myurl.se")                                               //Optional
+        ->setReturnUrl("http://myurl.se")                                       //Required
+        ->setCancelUrl("http://myurl.se")                                       //Optional
         ->excludePaymentMethods(PaymentMethod::SEB_SE,PaymentMethod::INVOICE)   //Optional
         ->getPaymentForm();
-```
-###### 1.5.5.1.2 Include specific payment methods
-Optional if you want to include specific payment methods for *PayPage*.
-```php
-    ->usePayPage()
-        ->setReturnUrl("http://myurl.se")                                               //Required
-        ->includePaymentMethods(PaymentMethod::SEB_SE,PaymentMethod::INVOICE)   //Optional
-        ->getPaymentForm();
+...
 ```
 
-###### 1.5.5.1.3 Exclude Card payments
+##### 1.5.5.2 Include specific payment methods
+Optional if you want to include specific payment methods for *PayPage*.
+```php
+...
+$form = $order
+    ->usePayPage()
+        ->setReturnUrl("http://myurl.se")                                        //Required
+        ->includePaymentMethods(PaymentMethod::SEB_SE,PaymentMethod::INVOICE)   //Optional
+        ->getPaymentForm();
+...
+```
+
+##### 1.5.5.3 Exclude Card payments
 Optional if you want to exclude all cardpayment methods from *PayPage*.
 ```php
+...
+$form = $order
    ->usePayPage()
         ->setReturnUrl("http://myurl.se")                   //Required
         ->excludeCardPaymentMethods()                       //Optional
         ->getPaymentForm();
+...
 ```
 
-###### 1.5.5.1.4 Exclude Direct payments
+##### 1.5.5.4 Exclude Direct payments
 Optional if you want to exclude all direct bank payments methods from *PayPage*.
 ```php
-->usePayPage()
-    ->setReturnUrl("http://myurl.se")                       //Required
-    ->excludeDirectPaymentMethods()                         //Optional
-    ->getPaymentForm();
-```
-##### 1.5.5.2 Return
-Returns object type *PaymentForm*:
-
-| Member                            | Description                               |
-|---------------------------------- |-------------------------------------------|
-| xmlMessageBase64                  | Payment information in XML-format, Base64 encoded.|
-| xmlMessage                        | Payment information in XML-format.        |
-| merchantid                        | Authorization                             |
-| secretWord                        | Authorization                             |
-| mac                               | Message authentication code.              |
-| completeHtmlFormWithSubmitButton  | A complete Html form with method= "post" with submit button to include in your code. |
-| htmlFormFieldsAsArray             | Array of Html form fields to include.     |
-| rawFields                         | Array of values to send in Html form. ($merchantid, $xmlMessageBase64, $mac) |
-
-```php
-$form = ...
+...
+$form = $order
+    ->usePayPage()
+        ->setReturnUrl("http://myurl.se")                       //Required
+        ->excludeDirectPaymentMethods()                         //Optional
         ->getPaymentForm();
-
-echo $form->completeHtmlFormWithSubmitButton; //Will render a hidden form with submit button in browser
+...
 ```
 
-#### 1.5.6 PaymentMethod specified
-Go direct to specified payment method without the step *PayPage*.
-
-##### 1.5.6.1 Request
-```php
-$form = WebPay::createOrder($config)
-  ->addOrderRow(
-    WebPayItem::orderRow()
-        ->setArticleNumber("1")
-        ->setQuantity(2)
-        ->setAmountExVat(100.00)
-        ->setDescription("Specification")
-        ->setName('Prod')
-        ->setUnit("st")
-        ->setVatPercent(25)
-        ->setDiscountPercent(0)
-    )
-    ->setCountryCode("SE")
-    ->setClientOrderNumber("33")
-    ->setOrderDate("2012-12-12")
-    ->setCurrency("SEK")
-        ->usePaymentMethod(PaymentMethod::KORTCERT)             //Se APPENDIX for paymentmethods
-            ->setReturnUrl("http://myurl.se")                   //Required
-            ->setCancelUrl("http://myurl.se")                   //Optional
-            ->setCardPageLanguage("se")                         //Optional,@param: languageCode As ISO639, eg. "en", defalut english
-            ->getPaymentForm();
-
-```
-##### 1.5.6.2 Return
-The values of *xmlMessageBase64*, *merchantid* and *mac* are to be sent as xml to SveaWebPay.
-Function getPaymentForm() returns Object type PaymentForm with accessible members:
-
-| Member                            | Description                               |
-|---------------------------------- |-------------------------------------------|
-| xmlMessageBase64                  | Payment information in XML-format, Base64 encoded.|
-| xmlMessage                        | Payment information in XML-format.        |
-| merchantid                        | Authorization                             |
-| secretWord                        | Authorization                             |
-| mac                               | Message authentication code.              |
-| completeHtmlFormWithSubmitButton  | A complete Html form with method= "post" with submit button to include in your code. |
-| htmlFormFieldsAsArray             | Array of Html form fields to include.     |
-| rawFields                         | Array of values to send in Html form. ($merchantid, $xmlMessageBase64, $mac) |
+### 1.5.6 PaymentMethod specified
+Go direct to specified payment method, bypassing the *PayPage* completetly.
 
 ```php
-$form = ...
+...
+$form = $order
+    ->usePaymentMethod(PaymentMethod::KORTCERT)             //Se APPENDIX for paymentmethods
+        ->setReturnUrl("http://myurl.se")                   //Required
+        ->setCancelUrl("http://myurl.se")                   //Optional
+        ->setCardPageLanguage("se")                         //Optional,@param: languageCode As ISO639, eg. "en", defalut english
         ->getPaymentForm();
+...
+```
 
-echo $form->completeHtmlFormWithSubmitButton; //Will render a hidden form with submit button in browser
+### 1.5.7 The getPaymentForm() returned form
+
+The getPaymentForm() method returns an instance of HostedService\PaymentForm. Use the form class methods to get the form html.
+
+```php
+...
+echo $form->completeHtmlFormWithSubmitButton;   // complete html of hidden form with method="post" and submit button to include in your code
+//$form->htmlFormFieldsAsArray;                 // array of html form fields to include.
+//$form->rawFields;                             // array of values included in the html form. ($merchantid, $xmlMessageBase64, $mac)
+...
 ```
 
 #### Other Synchronous requests

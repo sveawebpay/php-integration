@@ -60,9 +60,10 @@ class HostedPayment {
     }
 
     /**
-     * setReturnUrl sets the hosted payment return url. Required.
+     * Required - setReturnUrl sets the hosted payment return url
      * 
-     * When the payment completes the service will answer with a response sent to the return url.
+     * When a hosted payment transaction completes (regardless of outcome, i.e. accepted or denied),
+     * the payment service will answer with a response xml message sent to the return url specified.
      * 
      * @param string $returnUrlAsString
      * @return $this
@@ -75,7 +76,10 @@ class HostedPayment {
     /**
      * setCallbackUrl sets up a callback url. Optional.
      * 
-     * In case the payment transaction completes, but the service is unable to return a response to the return url, the service will retry several times using the callback url as a fallback. This may happen if i.e. the user closes the browser before the service redirects back to the return url.
+     * In case the hosted payment transaction completes, but the service is unable to return a 
+     * response to the return url, the payment service will retry several times using the callback 
+     * url as a fallback, if specified. This may happen if i.e. the user closes the browser before 
+     * the payment service redirects back to the shop.
      * 
      * @param string $callbackUrlAsString
      * @return $this
@@ -88,7 +92,8 @@ class HostedPayment {
     /**
      * setCancelUrl sets the hosted payment cancel url and includes a cancel button on the hosted pay page. Optional.
      * 
-     * In case payment is cancelled by the user, the service will answer with a response sent to the cancel url. Unless a cancel url is specified, no cancel button will be presented on the pay page. 
+     * In case the hosted payment service is cancelled by the user, the payment service will redirect back to the 
+     * cancel url. Unless a return url is specified, no cancel button will be presented at the payment service.
      * 
      * @param string $cancelUrlAsString
      * @return $this
