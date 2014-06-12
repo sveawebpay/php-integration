@@ -2,6 +2,12 @@
 namespace Svea;
 
 /**
+ * Class CompanyCustomer, a customer information container for legal entities.
+ * 
+ * Note that "required" below as a requirement when CompanyCustomer is used to identify the 
+ * customer when using the invoice payment methods. (For card and direct bank
+ * orders, adding customer information to the order is optional.)
+ * 
  * @author anne-hal
  */
 class CompanyCustomer {

@@ -166,14 +166,13 @@ class OrderBuilder {
      * @param string $countryCodeAsString Country code as described by ISO 3166-1, one of "SE", "NO", "DK", "FI", "DE", "NL"
      * @return $this
      */    
-    
     public function setCountryCode($countryCodeAsString) {
         $this->countryCode = $countryCodeAsString;
         return $this;
     }
 
     /**
-     * Required for Card, Direct Bank and pay page orders - set the order currency
+     * Required for Card, Direct Bank and PayPage orders - set the order currency
      * 
      * @param string $currencyAsString in ISO 4217 three-letter format, ex. "SEK", "EUR"
      * @return $this
@@ -218,14 +217,4 @@ class OrderBuilder {
         $this->orderDate = $orderDateAsString;
         return $this;
     }
-
-//   /**
-//     * @internal for testfunctions
-//     * @param type $func
-//     * @return $this
-//     */
-//    public function run($func) {
-//        $func($this);
-//        return $this;
-//    }
 }

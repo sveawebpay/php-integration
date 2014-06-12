@@ -385,7 +385,7 @@ $order->
 ...
 ```
 
-### 1.2.4 Fixed Discount row item class
+### 1.2.4 FixedDiscount row item class
 Use this class when the discount or coupon is expressed as a percentage of the total product amount.
 
 If only AmountIncVat is given, we calculate the discount split across the tax (vat) rates present in the order. This will
@@ -411,7 +411,7 @@ $order->
 ...
 ```
 
-### 1.2.5 Relative Discount row item class
+### 1.2.5 RelativeDiscount row item class
 Use this class when the discount or coupon is expressed as a percentage of the total product amount.
 
 ```php
@@ -431,59 +431,77 @@ $order->
 [<< To top](https://github.com/sveawebpay/php-integration#php-integration-package-api-for-sveawebpay)
 
 ## 1.3 Customer Identity
-Create a customer identity item object using the WebPayItem::individualCustomer() or WebPayItem::companyCustomer() methods. Use the addCustomerDetails() method to add the customer information to the order. 
+Create a customer identity object using the WebPayItem::individualCustomer() or WebPayItem::companyCustomer() methods. Use the addCustomerDetails() method to add the customer information to the order. 
 
-Adding a customer identity is required for Invoice and Payment plan orders. For Card and Direct bank orders it is optional but recommended.
+Set customer identity attributes using the setXX() customer class methods, respectively. Required attributes varies depending on country and customer type, as well as payment method chosen. See below for an overview and usage examples.
 
-Set customer identity attributes using the setXX() customer class methods, respectively. Required attributes varies depending on country and customer type, as well as payment method chosen. See below for an overview, as well as examples 
+Adding a customer identity to the order is required for Invoice and Payment plan orders. For Card and Direct bank orders it is optional but recommended.
 
+### 1.3.1 IndividualCustomer class
+Read "required" below as a requirement when the IndividualCustomer is used to identify the customer when using the invoice or payment plan payment methods. 
+(For card and direct bank orders, adding customer information to the order is optional.)
+
+```php
+...
+$order->
+    addCustomerDetails(
+        WebPayItem::individualCustomer()
+            ->setNationalIdNumber(194605092222) // required for individual customers in SE, NO, DK, FI
+            ->setInitials("SB")                 // required for individual customers in NL
+            ->setBirthDate(1923, 12, 20)        // required for individual customers in NL and DE
+            ->setName("Tess", "Testson")        // required for individual customers in NL and DE
+            ->setStreetAddress("Gatan", 23)     // required in NL and DE
+            ->setZipCode(9999)                  // required in NL and DE
+            ->setLocality("Stan")               // required in NL and DE
+            ->setEmail("test@svea.com")         // optional but desirable
+            ->setIpAddress("123.123.123")       // optional but desirable
+            ->setCoAddress("c/o Eriksson")      // optional
+            ->setPhoneNumber(999999)            // optional
+    )
+;
+...
 ```
 
-####1.3.1 Options for individual customers
-```php
-->addCustomerDetails(
-    WebPayItem::individualCustomer()
-    ->setNationalIdNumber(194605092222) // required for individual customers in SE, NO, DK, FI
-    ->setInitials("SB")                 // required for individual customers in NL
-    ->setBirthDate(1923, 12, 20)        // required for individual customers in NL and DE
-    ->setName("Tess", "Testson")        // required for individual customers in NL and DE
-    ->setStreetAddress("Gatan", 23)     // required in NL and DE
-    ->setZipCode(9999)                  // required in NL and DE
-    ->setLocality("Stan")               // required in NL and DE
-    ->setEmail("test@svea.com")         // optional but desirable
-    ->setIpAddress("123.123.123")       // optional but desirable
-    ->setCoAddress("c/o Eriksson")      // optional
-    ->setPhoneNumber(999999)            // optional
-    )
-```
+### 1.3.2 CompanyCustomer class
+Read "required" below as a requirement when the CompanyCustomer is used to identify the customer when using the invoice payment methods. 
+(For card and direct bank orders, adding customer information to the order is optional.)
 
-####1.3.2 Options for company customers
 ```php
-->addCustomerDetails(
-    WebPayItem::companyCustomer()
-    ->setNationalIdNumber(2345234)      // required in SE, NO, DK, FI
-    ->setVatNumber("NL2345234")         // required in NL and DE
-    ->setCompanyName("TestCompagniet")  // required in NL and DE
-    ->setStreetAddress("Gatan", 23)     // required in NL and DE
-    ->setZipCode(9999)                  // required in NL and DE
-    ->setLocality("Stan")               // required in NL and DE
-    ->setEmail("test@svea.com")         // optional but desirable
-    ->setIpAddress("123.123.123")       // optional but desirable
-    ->setCoAddress("c/o Eriksson")      // optional
-    ->setPhoneNumber(999999)            // optional
-    ->setAddressSelector("7fd7768")     // optional, string recieved from WebPay::getAddress() request
+...
+$order->
+    addCustomerDetails(
+        WebPayItem::companyCustomer()
+            ->setNationalIdNumber(2345234)      // required in SE, NO, DK, FI
+            ->setVatNumber("NL2345234")         // required in NL and DE
+            ->setCompanyName("TestCompagniet")  // required in NL and DE
+            ->setStreetAddress("Gatan", 23)     // required in NL and DE
+            ->setZipCode(9999)                  // required in NL and DE
+            ->setLocality("Stan")               // required in NL and DE
+            ->setEmail("test@svea.com")         // optional but desirable
+            ->setIpAddress("123.123.123")       // optional but desirable
+            ->setCoAddress("c/o Eriksson")      // optional
+            ->setPhoneNumber(999999)            // optional
+            ->setAddressSelector("7fd7768")     // optional, string recieved from WebPay::getAddress() request
     )
+;
+...
 ```
 [<< To top](https://github.com/sveawebpay/php-integration#php-integration-package-api-for-sveawebpay)
 
-### 1.4 Other values
+## 1.4 Additional order attributes
+
 ```php
+...
+$order
     ->setCountryCode("SE")              // required
     ->setCurrency("SEK")                // required for card payment, direct payment and PayPage payment.
-    ->setClientOrderNumber("nr26")      // required for card payment, direct payment, PaymentMethod payment and PayPage payments.
-    ->setOrderDate("2012-12-12")        // required for synchronous payments
-    ->setCustomerReference("33")        // optional
+    ->setClientOrderNumber("14050626")  // required for card payment, direct payment, PaymentMethod payment and PayPage payments.
+    ->setCustomerReference("att: kgm")  // optional
+    ->setOrderDate("2012-12-12")        // required for invoice and payment plan payments
+;
+...
 ```
+
 [<< To top](https://github.com/sveawebpay/php-integration#php-integration-package-api-for-sveawebpay)
 
 ### 1.5 Choose payment

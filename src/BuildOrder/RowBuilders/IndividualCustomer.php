@@ -2,6 +2,12 @@
 namespace Svea;
 
 /**
+ * Class IndividualCustomer, a customer information container for private individuals.
+ * 
+ * Note that "required" below as a requirement when IndividualCustomer is used to identify the 
+ * customer when using the invoice or payment plan payment methods. (For card and direct bank
+ * orders, adding customer information to the order is optional.)
+ * 
  * @author anne-hal
  */
 class IndividualCustomer {
