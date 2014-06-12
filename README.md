@@ -177,7 +177,7 @@ methods are provided for most.
 ```
 
 
-##  WebPay class methods
+##  1. WebPay class methods
 
 The WebPay:: class methods contains the functions needed to create orders and
 perform payment requests using Svea payment methods. It contains methods to
@@ -263,7 +263,7 @@ Another complete, runnable example of an asynchronous (card) order can be found 
 
 [<< To top](https://github.com/sveawebpay/php-integration#php-integration-package-api-for-sveawebpay)
 
-## 1.2 Specify order items
+## 1.2 Specify the order items
 Order row, fee and discount items are added to the order. Together they add up the order total amount. 
 
 Use the WebPayItem class methods to instantiate and specify row items. Then add the items to the order object.
@@ -308,7 +308,7 @@ $order->addOrderRow($orderRows);
 
 You can add row items of the classes OrderRow, ShippingFee, InvoiceFee, FixedDiscount and RelativeDiscount to the order. 
 
-### 1.2.1 OrderRow row item class
+### 1.2.1 WebPayItem::orderRow()
 Use the OrderRow class for all kinds of products and other items. It is required to have a minimum of one order row.
 
 Specify the price using precisely two of these methods in order to specify the item price and tax rate: 
@@ -339,7 +339,7 @@ $order->
 ...
 ```
 
-### 1.2.2 ShippingFee row item class
+### 1.2.2 WebPayItem::shippingFee()
 Use this class to add shipping to the order.
 
 Specify the price using precisely two of these methods in order to specify the item price and tax rate: 
@@ -363,7 +363,7 @@ $order->
 ...
 ```
 
-### 1.2.3 InvoiceFee row item class
+### 1.2.3 WebPayItem::invoiceFee()
 Use this class to add fees associated with a payment method (i.e. invoice fee) to the order.
 
 Specify the price using precisely two of these methods in order to specify the item price and tax rate: 
@@ -385,8 +385,8 @@ $order->
 ...
 ```
 
-### 1.2.4 FixedDiscount row item class
-Use this class when the discount or coupon is expressed as a percentage of the total product amount.
+### 1.2.4 WebPayItem::fixedDiscount()
+Use this method when the discount or coupon is expressed as a percentage of the total product amount.
 
 If only AmountIncVat is given, we calculate the discount split across the tax (vat) rates present in the order. This will
 ensure that the correct discount vat is applied to the order.
@@ -411,8 +411,8 @@ $order->
 ...
 ```
 
-### 1.2.5 RelativeDiscount row item class
-Use this class when the discount or coupon is expressed as a percentage of the total product amount.
+### 1.2.5 WebPayItem::relativeDiscount() 
+Use this method when the discount or coupon is expressed as a percentage of the total product amount.
 
 ```php
 ...
@@ -430,14 +430,14 @@ $order->
 ```
 [<< To top](https://github.com/sveawebpay/php-integration#php-integration-package-api-for-sveawebpay)
 
-## 1.3 Customer Identity
+## 1.3 Specifying the order customer 
 Create a customer identity object using the WebPayItem::individualCustomer() or WebPayItem::companyCustomer() methods. Use the addCustomerDetails() method to add the customer information to the order. 
 
 Set customer identity attributes using the setXX() customer class methods, respectively. Required attributes varies depending on country and customer type, as well as payment method chosen. See below for an overview and usage examples.
 
 Adding a customer identity to the order is required for Invoice and Payment plan orders. For Card and Direct bank orders it is optional but recommended.
 
-### 1.3.1 IndividualCustomer class
+### 1.3.1 WebPayItem::individualCustomer()
 Read "required" below as a requirement when the IndividualCustomer is used to identify the customer when using the invoice or payment plan payment methods. 
 (For card and direct bank orders, adding customer information to the order is optional.)
 
@@ -462,7 +462,7 @@ $order->
 ...
 ```
 
-### 1.3.2 CompanyCustomer class
+### 1.3.2 WebPayItem::companyCustomer()
 Read "required" below as a requirement when the CompanyCustomer is used to identify the customer when using the invoice payment methods. 
 (For card and direct bank orders, adding customer information to the order is optional.)
 
@@ -624,7 +624,6 @@ See the HostedService\HostedPayment class.
 ### 1.5.3 PayPage with card payment options
 *PayPage* with available card payments only.
 
-#### 1.5.3.1 Request
 ```php
 ...
 $form = $order
@@ -745,34 +744,36 @@ echo $form->completeHtmlFormWithSubmitButton;   // complete html of hidden form 
 ...
 ```
 
-#### Other Synchronous requests
-
 ## 2. getPaymentPlanParams
-Use this function to retrieve campaign codes for possible payment plan options. Use prior to create payment plan payment.
+Use getPaymentPlanParams() to fetch all campaigns associated with a given client number. Use prior to create payment plan payment.
 
 ```php
-    $response = WebPay::getPaymentPlanParams($config)
-                ->setCountryCode("SE")
-                ->doRequest();
+...
+$response = 
+    WebPay::getPaymentPlanParams($config)
+        ->setCountryCode("SE")                  // Required
+        ->doRequest();
+...
 ```
 
-The *PaymentPlanParamsResponse* object contains the available payment campaigns in the array "campaignCodes":
+The response is an instance of WebService\PaymentPlanParamsResponse with the available campaigns in the array campaignCodes:
 ```php
-    $response->accepted
-    $response->resultcode
-    $response->campaignCodes[0..n]      // all available campaign payment plans in an array
-        ->campaignCode                      // numeric campaign code identifier
-        ->description                       // localised description string
-        ->paymentPlanType                   // human readable identifier (not guaranteed unique)
-        ->contractLengthInMonths
-        ->monthlyAnnuityFactor              // pricePerMonth = price * monthlyAnnuityFactor + notificationFee
-        ->initialFee
-        ->notificationFee
-        ->interestRatePercent
-        ->numberOfInterestFreeMonths
-        ->numberOfPaymentFreeMonths
-        ->fromAmount                        // amount lower limit for plan availability
-        ->toAmount                          // amount upper limit for plan availability
+        $response->accepted                 // true iff request was accepted by the service 
+        $response->errormessage             // may be set iff accepted above is false
+        $response->resultcode               // 27xxx, reason
+        $response->campaignCodes[]          // array of all available campaign payment plans in an array
+           ->campaignCode                      // numeric campaign code identifier
+           ->description                       // localised description string
+           ->paymentPlanType                   // human readable identifier (not guaranteed unique)
+           ->contractLengthInMonths
+           ->monthlyAnnuityFactor              // pricePerMonth = price * monthlyAnnuityFactor + notificationFee
+           ->initialFee
+           ->notificationFee
+           ->interestRatePercent
+           ->numberOfInterestFreeMonths
+           ->numberOfPaymentFreeMonths
+           ->fromAmount                        // amount lower limit for plan availability
+           ->toAmount                          // amount upper limit for plan availability
 ```
 
 [<< To top](https://github.com/sveawebpay/php-integration#php-integration-package-api-for-sveawebpay)
