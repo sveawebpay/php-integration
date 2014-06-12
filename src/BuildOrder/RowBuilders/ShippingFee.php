@@ -2,6 +2,8 @@
 namespace Svea;
 
 /**
+ * Use this class to add shipping to the order.
+ * 
  * @author anne-hal
  */
 class ShippingFee {

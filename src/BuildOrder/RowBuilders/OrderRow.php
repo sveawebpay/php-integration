@@ -1,6 +1,11 @@
 <?php
 namespace Svea;
 
+/**
+ * Use the OrderRow class for all kinds of products and other items. It is required to have a minimum of one order row.
+ * 
+ * @author anne-hal, Kristian Grossman-Madsen
+ */
 class OrderRow {
 
     /**

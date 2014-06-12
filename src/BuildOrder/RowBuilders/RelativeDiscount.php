@@ -2,6 +2,8 @@
 namespace Svea;
 
 /**
+ * Use this class when the discount or coupon is expressed as a percentage of the total product amount.
+ * 
  * @author anne-hal
  */
 class RelativeDiscount {

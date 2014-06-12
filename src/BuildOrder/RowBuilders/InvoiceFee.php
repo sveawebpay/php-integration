@@ -2,6 +2,8 @@
 namespace Svea;
 
 /**
+ * Use this class to add fees associated with a payment method (i.e. invoice fee) to the order.
+ * 
  * @author anne-hal, Kristian Grossman-Madsen
  */
 class InvoiceFee {

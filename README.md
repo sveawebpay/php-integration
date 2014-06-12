@@ -263,9 +263,10 @@ Another complete, runnable example of an asynchronous (card) order can be found 
 
 [<< To top](https://github.com/sveawebpay/php-integration#php-integration-package-api-for-sveawebpay)
 
-### 1.2 Specify order items
-Order and fee row items together add up to the order make up the order amount. You can add OrderRow, Fee and Discount items to the order. 
-Use the WebPayItem class methods to instantiate and specify row items. Then add the items using the addXX() methods on the order object.
+## 1.2 Specify order items
+Order row, fee and discount items are added to the order. Together they add up the order total amount. 
+
+Use the WebPayItem class methods to instantiate and specify row items. Then add the items to the order object.
 
 The following is code excerpt example of how to instantiate and add the an order row item to an order:
 
@@ -296,69 +297,96 @@ $myOrder->addOrderRow( WebPayItem::orderRow()->setQuantity(1)->setAmountExVat(10
 */
 ```
 
-//or
+You can also add an array of several order row items at once using the addOrderRows() method.
 
-$orderRows[] = WebPayItem::orderRow()->...;
-->addOrderRow($orderRows);
-
+```php
+...
+$orderRows = array( WebPayItem::orderRow()->setXX()->setXX()->setXX(), WebPayItem::orderRow()->setXX()->setXX()->setXX() );
+$order->addOrderRow($orderRows);
+...
 ```
 
-#### 1.2.1 OrderRow
-All products and other items. It´s required to have a minimum of one orderrow.
-Precisely two of these values must be set in the WebPayItem object, in order to specify the item tax rate:
-AmountExVat, AmountIncVat or VatPercent for Orderrow.
+You can add row items of the classes OrderRow, ShippingFee, InvoiceFee, FixedDiscount and RelativeDiscount to the order. 
 
-If you specify AmountIncVat, note that this may introduce a cumulative rounding error when ordering large
-quantities of an item, as the package bases the total order sum on a calculated price ex. vat.
+### 1.2.1 OrderRow row item class
+Use the OrderRow class for all kinds of products and other items. It is required to have a minimum of one order row.
 
-We recommend specifying price using AmountExVat and VatPercentage. If not, make sure not retain as much precision as
+Specify the price using precisely two of these methods in order to specify the item price and tax rate: 
+setAmountExVat(), setAmountIncVat() and setVatPercent().
+
+We recommend specifying price using setAmountExVat() and setVatPercentage(). If not, make sure not retain as much precision as
 possible, i.e. use no premature rounding (87.4875 is a "better" PriceIncVat than 87.49).
 
+If you use setAmountIncVat(), note that this may introduce a cumulative rounding error when ordering large
+quantities of an item, as the package bases the total order sum on a calculated price ex. vat.
+
 ```php
-->addOrderRow(
-      WebPayItem::orderRow()
-        ->setQuantity(2)                        // required
-        ->setAmountExVat(100.00)                // recommended to specify price using AmountExVat & VatPercent
-        ->setVatPercent(25)                     // recommended to specify price using AmountExVat & VatPercent
-        ->setAmountIncVat(125.00)               // optional, need to use two out of three of the price specification methods
-        ->setArticleNumber("1")                 // optional
-        ->setDescription("Specification")       // optional
-        ->setName('Prod')                       // optional
-        ->setUnit("st")                         // optional
-        ->setDiscountPercent(0)                 // optional
+...
+$order->
+    addOrderRow(
+        WebPayItem::orderRow()
+            ->setAmountExVat(100.00)                // recommended to specify price using AmountExVat & VatPercent
+            ->setVatPercent(25)                     // recommended to specify price using AmountExVat & VatPercent
+            ->setAmountIncVat(125.00)               // optional, need to use two out of three of the price specification methods
+            ->setQuantity(2)                        // required
+            ->setUnit("st")                         // optional
+            ->setName('Prod')                       // optional
+            ->setDescription("Specification")       // optional
+            ->setArticleNumber("1")                 // optional
+            ->setDiscountPercent(0)                 // optional
     )
+;
+...
 ```
 
-#### 1.2.2 ShippingFee
-The price can be set in a combination by using a minimum of two out of three functions: setAmountExVat(), setAmountIncVat()and setVatPercent().
+### 1.2.2 ShippingFee row item class
+Use this class to add shipping to the order.
+
+Specify the price using precisely two of these methods in order to specify the item price and tax rate: 
+setAmountExVat(), setAmountIncVat() and setVatPercent(). We recommend specifying price using setAmountExVat() and setVatPercentage().
+
 ```php
-->addFee(
-    WebPayItem::shippingFee()
-        ->setShippingId('33')                   // optional
-        ->setName('shipping')                   // optional
-        ->setDescription("Specification")       // optional
-        ->setAmountExVat(50)                    // optional, see info above
-        ->setAmountIncVat(62.50)                // optional, see info above
-        ->setVatPercent(25)                     // optional, see info above
-        ->setUnit("st")                         // optional
-        ->setDiscountPercent(0)                 // optional
-   )
-```
-#### 1.2.3 InvoiceFee
-The price can be set in a combination by using a minimum of two out of three functions: setAmountExVat(), setAmountIncVat()and setVatPercent().
-```php
-->addFee(
-    WebPayItem::invoiceFee()
-        ->setName('Svea fee')                   // optional
-        ->setDescription("Fee for invoice")     // optional
-        ->setAmountExVat(50)                    // optional, see info above
-        ->setAmountIncVat(62.50)                // optional, see info above
-        ->setVatPercent(25)                     // optional, see info above
-        ->setUnit("st")                         // optional
-        ->setDiscountPercent(0)                 // optional
+...
+$order->
+    addFee(
+        WebPayItem::shippingFee()
+            ->setShippingId('33')                   // optional
+            ->setName('shipping')                   // optional
+            ->setDescription("Specification")       // optional
+            ->setAmountExVat(50)                    // recommended to specify price using AmountExVat & VatPercent
+            ->setVatPercent(25)                     // recommended to specify price using AmountExVat & VatPercent
+            ->setAmountIncVat(62.50)                // optional, need to use two out of three of the price specification methods
+            ->setUnit("st")                         // optional
+            ->setDiscountPercent(0)                 // optional
     )
+;
+...
 ```
-#### 1.2.4 Fixed Discount
+
+### 1.2.3 InvoiceFee row item class
+Use this class to add fees associated with a payment method (i.e. invoice fee) to the order.
+
+Specify the price using precisely two of these methods in order to specify the item price and tax rate: 
+setAmountExVat(), setAmountIncVat() and setVatPercent(). We recommend specifying price using setAmountExVat() and setVatPercentage().
+
+```php
+...
+$order->
+    addFee(
+        WebPayItem::invoiceFee()
+            ->setName('Svea fee')                   // optional
+            ->setDescription("Fee for invoice")     // optional
+            ->setAmountExVat(50)                    // recommended to specify price using AmountExVat & VatPercent
+            ->setVatPercent(25)                     // recommended to specify price using AmountExVat & VatPercent
+            ->setAmountIncVat(62.50)                // optional, need to use two out of three of the price specification methods
+            ->setUnit("st")                         // optional
+            ->setDiscountPercent(0)                 // optional
+    )
+...
+```
+
+### 1.2.4 Fixed Discount row item class
+Use this class when the discount or coupon is expressed as a percentage of the total product amount.
 
 If only AmountIncVat is given, we calculate the discount split across the tax (vat) rates present in the order. This will
 ensure that the correct discount vat is applied to the order.
@@ -367,45 +395,47 @@ Otherwise, it is required to use at least two of the functions setAmountExVat(),
 If two of these three attributes are specified, we respect the amount indicated and include a discount with the appropriate tax rate.
 
 ```php
-->addDiscount(
-    WebPayItem::fixedDiscount()
-        ->setAmountIncVat(100.00)               //Recommended, see info above
-        ->setAmountExVat(1.0)                   //optional, see info above
-        ->setVatPercent(25)                     //optional, see info above
-        ->setDiscountId("1")                    //optional
-        ->setUnit("st")                         //optional
-        ->setDescription("FixedDiscount")       //optional
-        ->setName("Fixed")                      //optional
+...
+$order->
+    addDiscount(
+        WebPayItem::fixedDiscount()
+            ->setAmountIncVat(100.00)               // recommended, see info above
+            ->setAmountExVat(1.0)                   // optional, see info above
+            ->setVatPercent(25)                     // optional, see info above
+            ->setDiscountId("1")                    // optional
+            ->setUnit("st")                         // optional
+            ->setDescription("FixedDiscount")       // optional
+            ->setName("Fixed")                      // optional
     )
+;
+...
 ```
-#### 1.2.5 Relative Discount
-When discount or coupon is a percentage on total product amount. It may be given as an integer or a real value.
+
+### 1.2.5 Relative Discount row item class
+Use this class when the discount or coupon is expressed as a percentage of the total product amount.
+
 ```php
-->addDiscount(
-    WebPayItem::relativeDiscount()
-        ->setDiscountPercent(50.5)              //Required
-        ->setDiscountId("1")                    //optional
-        ->setUnit("st")                         //optional
-        ->setName('Relative')                   //optional
-        ->setDescription("RelativeDiscount")    //optional
+...
+$order->
+    addDiscount(
+        WebPayItem::relativeDiscount()
+        ->setDiscountPercent(50.5)              // required
+        ->setDiscountId("1")                    // optional
+        ->setUnit("st")                         // optional
+        ->setName('Relative')                   // optional
+        ->setDescription("RelativeDiscount")    // optional
     )
+;
+...
 ```
 [<< To top](https://github.com/sveawebpay/php-integration#php-integration-package-api-for-sveawebpay)
 
-### 1.3 Customer Identity
-Customer identity is required for invoice and payment plan orders. Required values varies
-depending on country and customer type. For SE, NO, DK and FI NationalIdNumber (Social Security Number)
-or company id number is required. Email and ip address are desirable.
+## 1.3 Customer Identity
+Create a customer identity item object using the WebPayItem::individualCustomer() or WebPayItem::companyCustomer() methods. Use the addCustomerDetails() method to add the customer information to the order. 
 
-To make it easy to set the right data depending on the customer type this example
-```php
+Adding a customer identity is required for Invoice and Payment plan orders. For Card and Direct bank orders it is optional but recommended.
 
-//create company or individual object
-$foo = WebPayItem::individualCustomer();
-if (*condition*) {
- $foo = $foo ->setEmail("test@svea.com") ;
-}
-->addOrderRow($foo);
+Set customer identity attributes using the setXX() customer class methods, respectively. Required attributes varies depending on country and customer type, as well as payment method chosen. See below for an overview, as well as examples 
 
 ```
 
@@ -413,17 +443,17 @@ if (*condition*) {
 ```php
 ->addCustomerDetails(
     WebPayItem::individualCustomer()
-    ->setNationalIdNumber(194605092222) //Required for individual customers in SE, NO, DK, FI
-    ->setInitials("SB")                 //Required for individual customers in NL
-    ->setBirthDate(1923, 12, 20)        //Required for individual customers in NL and DE
-    ->setName("Tess", "Testson")        //Required for individual customers in NL and DE
-    ->setStreetAddress("Gatan", 23)     //Required in NL and DE
-    ->setZipCode(9999)                  //Required in NL and DE
-    ->setLocality("Stan")               //Required in NL and DE
-    ->setEmail("test@svea.com")         //Optional but desirable
-    ->setIpAddress("123.123.123")       //Optional but desirable
-    ->setCoAddress("c/o Eriksson")      //Optional
-    ->setPhoneNumber(999999)            //Optional
+    ->setNationalIdNumber(194605092222) // required for individual customers in SE, NO, DK, FI
+    ->setInitials("SB")                 // required for individual customers in NL
+    ->setBirthDate(1923, 12, 20)        // required for individual customers in NL and DE
+    ->setName("Tess", "Testson")        // required for individual customers in NL and DE
+    ->setStreetAddress("Gatan", 23)     // required in NL and DE
+    ->setZipCode(9999)                  // required in NL and DE
+    ->setLocality("Stan")               // required in NL and DE
+    ->setEmail("test@svea.com")         // optional but desirable
+    ->setIpAddress("123.123.123")       // optional but desirable
+    ->setCoAddress("c/o Eriksson")      // optional
+    ->setPhoneNumber(999999)            // optional
     )
 ```
 
@@ -431,28 +461,28 @@ if (*condition*) {
 ```php
 ->addCustomerDetails(
     WebPayItem::companyCustomer()
-    ->setNationalIdNumber(2345234)      //Required in SE, NO, DK, FI
-    ->setVatNumber("NL2345234")         //Required in NL and DE
-    ->setCompanyName("TestCompagniet")  //Required in NL and DE
-    ->setStreetAddress("Gatan", 23)     //Required in NL and DE
-    ->setZipCode(9999)                  //Required in NL and DE
-    ->setLocality("Stan")               //Required in NL and DE
-    ->setEmail("test@svea.com")         //Optional but desirable
-    ->setIpAddress("123.123.123")       //Optional but desirable
-    ->setCoAddress("c/o Eriksson")      //Optional
-    ->setPhoneNumber(999999)            //Optional
-    ->setAddressSelector("7fd7768")     //Optional, string recieved from WebPay::getAddress() request
+    ->setNationalIdNumber(2345234)      // required in SE, NO, DK, FI
+    ->setVatNumber("NL2345234")         // required in NL and DE
+    ->setCompanyName("TestCompagniet")  // required in NL and DE
+    ->setStreetAddress("Gatan", 23)     // required in NL and DE
+    ->setZipCode(9999)                  // required in NL and DE
+    ->setLocality("Stan")               // required in NL and DE
+    ->setEmail("test@svea.com")         // optional but desirable
+    ->setIpAddress("123.123.123")       // optional but desirable
+    ->setCoAddress("c/o Eriksson")      // optional
+    ->setPhoneNumber(999999)            // optional
+    ->setAddressSelector("7fd7768")     // optional, string recieved from WebPay::getAddress() request
     )
 ```
 [<< To top](https://github.com/sveawebpay/php-integration#php-integration-package-api-for-sveawebpay)
 
 ### 1.4 Other values
 ```php
-    ->setCountryCode("SE")                      //Required
-    ->setCurrency("SEK")                        //Required for card payment, direct payment and PayPage payment.
-    ->setClientOrderNumber("nr26")              //Required for card payment, direct payment, PaymentMethod payment and PayPage payments.
-    ->setOrderDate("2012-12-12")                //Required for synchronous payments
-    ->setCustomerReference("33")                //Optional
+    ->setCountryCode("SE")              // required
+    ->setCurrency("SEK")                // required for card payment, direct payment and PayPage payment.
+    ->setClientOrderNumber("nr26")      // required for card payment, direct payment, PaymentMethod payment and PayPage payments.
+    ->setOrderDate("2012-12-12")        // required for synchronous payments
+    ->setCustomerReference("33")        // optional
 ```
 [<< To top](https://github.com/sveawebpay/php-integration#php-integration-package-api-for-sveawebpay)
 
