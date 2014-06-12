@@ -17,7 +17,10 @@ require_once SVEA_REQUEST_DIR . '/Config/SveaConfig.php';
  * customer identity. Each address has an AddressSelector attribute that 
  * uniquely identifies the address.
  *
- * @author Anneli Halld'n, Daniel Brolund, Kristian Grossman-Madsen for Svea WebPay
+ * The GetAddresses service is only applicable for SE, NO and DK customers and accounts. 
+ * In Norway, GetAddresses may only be performed on company customers.
+ * 
+ *  * @author Anneli Halld'n, Daniel Brolund, Kristian Grossman-Madsen for Svea WebPay
  */
 class GetAddresses {
 
