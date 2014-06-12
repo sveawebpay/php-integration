@@ -504,110 +504,103 @@ $order
 
 [<< To top](https://github.com/sveawebpay/php-integration#php-integration-package-api-for-sveawebpay)
 
-### 1.5 Choose payment
-End process by choosing the payment method you desire.
+## 1.5 Choose payment method to use
+Finish the order specification process by choosing a payment method with the order useXX() methods.
 
-Invoice and payment plan will perform a synchronous payment and return a response object.
+Invoice and Payment plan payment methods will perform a synchronous request to Svea and return a response object.
 
-Other hosted payments (card payments, direct bank payments and other methods via the *PayPage*) on the other hand are asynchronous. They will return an html form with formatted message to send from your store.
+Hosted payment methods, like Card, Direct bank and payment methods accessed via the PayPage, are asynchronous. They will return an html form with formatted message. You then send the form to Svea, and the customer is redirected, complete the payment, and the payment response is sent back to the provided return url. The response may also be sent to the url specified with setCallbackUrl() in case the customer doesn't return to the store after the transaction has concluded at the bank/card payment page. Process the response via the SveaResponse class, and you will receive a formatted response object.
 
-The response is then returned to the return url you have specified with setReturnUrl(). The response may also be sent to the url specified with setCallbackUrl() in case the customer doesn't return to the store after the transaction has concluded at the bank/card payment page.
-
-If you pass the xml response to an instance of *SveaResponse*, you will receive a formatted response object as well.
-
-##### Which payment method should I choose for different scenarios?
-I am using invoice and/or payment plan payments.
+### Which useXX() method do I use?
+I am using the invoice and/or payment plan payment methods in my integration.
 
 >The best way is to use [`->useInvoicePayment()`] (https://github.com/sveawebpay/php-integration#154-invoicepayment) and
 >[`->usePaymentPlanPayment()`] (https://github.com/sveawebpay/php-integration#154-paymentplanpayment).
 >These payments are synchronous and will give you an instant response.
 
-I am using card and/or direct bank payments.
+I am using the card and/or direct bank payment methods in my integration.
 >You can go by *PayPage* by using [`->usePayPageCardOnly()`] (https://github.com/sveawebpay/php-integration#151-paypage-with-card-payment-options)
 >and [`->usePayPageDirectBankOnly()`] (https://github.com/sveawebpay/php-integration#152-paypage-with-direct-bank-payment-options).
 >
->The best way if you know what specific payment you want to use, is to go direct to that specific payment, without landing on the PayPage, by using
+>The best way though, if you know what specific payment you want to use, is to go direct to that specific payment, bypassing the PayPage step, by using
 >[`->usePaymentMethod(PaymentMethod)`] (https://github.com/sveawebpay/php-integration#154-paymentmethod-specified).
->To know your optional PaymentMethods configured on your account, you can use [getPaymentMethods($config)](https://github.com/sveawebpay/php-integration#8-getpaymentmethods)
+>You can check the optional payment methods configured on your account using the [WebPay::getPaymentMethods()] method.(https://github.com/sveawebpay/php-integration#8-getpaymentmethods)
 >
 
-I am using all payments.
+I am using all payment methods in my integration.
 
 >The most effective way is to use [`->useInvoicePayment()`](https://github.com/sveawebpay/php-integration#154-invoicepayment)
 >and [`->usePaymentPlanPayment()`](https://github.com/sveawebpay/php-integration#154-paymentplanpayment)
 >for the synchronous payments, and use the [`->usePaymentMethod(PaymentMethod)`] (https://github.com/sveawebpay/php-integration#154-paymentmethod-specified)
->for the asynchronous requests. The method is preceded by [getPaymentMethods($config)](https://github.com/sveawebpay/php-integration#8-getpaymentmethods)
->to get the Payment methods configured on you account.
+>for the asynchronous requests. First use [WebPay::getPaymentMethods($config)](https://github.com/sveawebpay/php-integration#8-getpaymentmethods)
+>to get the different payment methods configured on you account.
 >
->Alternatively use the *PayPage* for the asynchronous requests by using [`->usePayPageCardOnly()`] (https://github.com/sveawebpay/php-integration#151-paypage-with-card-payment-options)
+>Alternatively you can go by *PayPage* for the asynchronous requests by using [`->usePayPageCardOnly()`] (https://github.com/sveawebpay/php-integration#151-paypage-with-card-payment-options)
 >and [`->usePayPageDirectBankOnly()`] (https://github.com/sveawebpay/php-integration#152-paypage-with-direct-bank-payment-options).
 
 I am using more than one payment and want them gathered on on place.
 
->You can go by PayPage and choose to show all your payments here, or modify to exclude or include one or more payments. Use [`->usePayPage()`] (https://github.com/sveawebpay/php-integration#153-paypagepayment) where you can custom your own *PayPage*.
-
-Note that Invoice and Payment plan payments will return an asynchronous response from here.
+>You can go by *PayPage* and choose to show all your payments here, or modify to exclude or include one or more payments. Use [`->usePayPage()`] (https://github.com/sveawebpay/php-integration#153-paypagepayment) where you can custom your own *PayPage*. This introduces an additional step in the customer checkout flow, though. Note also that Invoice and Payment plan payments will return an asynchronous when used from PayPage.
 
 ### Synchronous payments - Invoice and PaymentPlan
 The request gives an instant response.
 
-#### 1.5.1 InvoicePayment
+### 1.5.1 InvoicePayment
 Perform an invoice payment. This payment form will perform a synchronous payment and return a response.
-Returns *CreateOrderResponse* object.
+
 ```php
-    $response = WebPay::createOrder($config)
-      ->addOrderRow(
-    WebPayItem::orderRow()
-        ->setArticleNumber("1")
-        ->setQuantity(2)
-        ->setAmountExVat(100.00)
-        ->setDescription("Specification")
-        ->setName('Prod')
-        ->setUnit("st")
-        ->setVatPercent(25)
-        ->setDiscountPercent(0)
-    )
-         ->setCountryCode("SE")
-         ->setCustomerReference("33")
-         ->setOrderDate("2012-12-12")
-         ->setCurrency("SEK")
-             ->useInvoicePayment()
-                ->doRequest();
+...
+$order = WebPay::createOrder($config);
+$order
+    ->addOrderRow( ...
+    ->addCustomerDetails( ...
+    ->setCountryCode("SE")
+    ->setOrderDate("2012-12-12")
+;
+$request = $order->useInvoicePayment();
+$response = $request->doRequest();
+...
 ```
-#### 1.5.2 PaymentPlanPayment
-Payment plan payments is limited to individual customers, it can't be used by legal entities as companies or organisations.
+Another complete, runnable example of a synchronous (invoice) order can be found in the examples/invoiceorder folder.
 
-Perform *PaymentPlanPayment*. This payment form will perform a synchronous payment and return a response.
-Returns a *CreateOrderResponse* object. Preceded by WebPay::getPaymentPlanParams($config).
-Param: Campaign code recieved from getPaymentPlanParams().
+Another complete, runnable example of an asynchronous (card) order can be found in the examples/cardorder folder. 
+
+
+#### 1.5.2 PaymentPlanPayment
+The Payment plan payment method is restricted to individual customers and can not be used by legal entities, i.e. companies or organisations.
+
+First use WebPay::getPaymentPlanParams() to get the various campaign codes. Then chose a campaign to pass as parameter to the usePaymentPlanPayment() method.
 
 ```php
-$response = WebPay::createOrder($config)
-->addOrderRow(
-    WebPayItem::orderRow()
-        ->setArticleNumber("1")
-        ->setQuantity(2)
-        ->setAmountExVat(100.00)
-        ->setDescription("Specification")
-        ->setName('Prod')
-        ->setUnit("st")
-        ->setVatPercent(25)
-        ->setDiscountPercent(0)
-    )
-        ->setCountryCode("SE")
-        ->setCustomerReference("33")
-        ->setOrderDate("2012-12-12")
-        ->setCurrency("SEK")
-        ->usePaymentPlanPayment("camp1")                //Parameter: campaign code recieved from getPaymentPlanParams
-            ->doRequest();
+...
+// fetch all available campaigns from Svea
+$campaignsRequest = WebPay::getPaymentPlanParams($config);
+$campaignsRequest->setCountryCode("SE");
+$campaignsResponse = $campaignsRequest->doRequest();
+
+// we pick the first available campaign from the response
+$campaign = $campaignsResponse->campaignCodes[0]->campaignCode;
+
+// create the order
+$order = WebPay::createOrder($config);
+$order
+    ->addOrderRow( ...
+    ->addCustomerDetails( ...
+    ->setCountryCode("SE")
+    ->setOrderDate("2012-12-12")
+;
+
+// send the request, using the first available campaign with the payment plan payment method
+$request = $order->usePaymentPlanPayment($campaign)
+$response = $request->doRequest();
+...
 ```
 [<< To top](https://github.com/sveawebpay/php-integration#php-integration-package-api-for-sveawebpay)
 
 ### Asynchronous payments - Hosted solutions
-Build the order object. Then select the payment method and specifying the various attributes using the methods applicable to hosted payments (see below). Recieve the *PaymentForm* object using getPaymentForm(), specifying *merchantid*, *xmlMessageBase64* and *mac*.
+Build the order object. Then select the payment method and specify the various attributes using the methods applicable to hosted payments (see below). Recieve the *PaymentForm* object using getPaymentForm(), specifying *merchantid*, *xmlMessageBase64* and *mac*.
 
-The form is then sent by POST to SveaConfig::SWP_TEST_URL or SveaConfig::SWP_PROD_URL. The *PaymentForm* object also contains a complete html form as string
-and the html form element as array.
+The form is then sent using a http POST to SveaConfig::SWP_TEST_URL or SveaConfig::SWP_PROD_URL. The *PaymentForm* object also contains a complete html form as string and the html form element as array.
 
 The response is returned as XML, use the Svea [response handler](https://github.com/sveawebpay/php-integration#6-response-handler)
 to format the response
