@@ -16,7 +16,7 @@ class OrderRow {
     public $articleNumber;
     
     /**
-     * Required. Quantity expressed as numeric value. 
+     * Required -- item quantity, i.e. how many were ordered of this item
      * 
      * The integration package supports fractions input at any precision, but 
      * when sending the request to Svea numbers are rounded to two decimal places.
@@ -32,9 +32,7 @@ class OrderRow {
     public $quantity;
     
     /**
-     * Optional
-     * 
-     * The unit name, i.e. "pieces", "pcs.", "st.", "mb" et al. 
+     * Optional - the name of the unit used for the order quantity, i.e. "pieces", "pcs.", "st.", "mb" et al. 
      * 
      * @param string $unitAsString
      * @return $this
@@ -47,16 +45,11 @@ class OrderRow {
     public $unit;
 
     /**
-     * Required - precisely two of these values must be set in the WebPayItem object:  AmountExVat, AmountIncVat or VatPercent for Orderrow. 
-     * Use functions setAmountExVat(), setAmountIncVat() or setVatPercent(). Note: The preferred way is to use setAmountExVat() and setVatPercent().
+     * Recommended - precisely two of these values must be set in the WebPayItem object:  AmountExVat, AmountIncVat or VatPercent for Orderrow. 
+     * Use functions setAmountExVat(), setAmountIncVat() or setVatPercent(). The recommended is to use setAmountExVat() and setVatPercent().
      * 
      * Order row item price excluding taxes, expressed as a float value. 
      *  
-     * 
-     * 
-     * The integration package supports fractions input at any precision, but 
-     * when sending the request Svea numbers are rounded to two decimal places.
-     * 
      * @param float $AmountAsFloat
      * @return $this
      */
@@ -68,19 +61,32 @@ class OrderRow {
     public $amountExVat;
     
     /**
-     * Required - precisely two of these values must be set in the WebPayItem object:  AmountExVat, AmountIncVat or VatPercent for Orderrow. 
-     * Use functions setAmountExVat(), setAmountIncVat() or setVatPercent(). Note: The preferred way is to use setAmountExVat() and setVatPercent().
+     * Recommended - precisely two of these values must be set in the WebPayItem object:  AmountExVat, AmountIncVat or VatPercent for Orderrow. 
+     * Use functions setAmountExVat(), setAmountIncVat() or setVatPercent(). The recommended is to use setAmountExVat() and setVatPercent().
+     * 
+     * Order row item price vat rate in percent, expressed as an integer. 
+     *  
+     * @param int $vatPercentAsInt
+     * @return $this
+     */
+    public function setVatPercent($vatPercentAsInt) {
+        $this->vatPercent = $vatPercentAsInt;
+        return $this;
+    }
+    /** @var int $vatPercent */
+    public $vatPercent;
+    
+    /**
+     * Optional - precisely two of these values must be set in the WebPayItem object:  AmountExVat, AmountIncVat or VatPercent for Orderrow. 
+     * Use functions setAmountExVat(), setAmountIncVat() or setVatPercent(). The recommended is to use setAmountExVat() and setVatPercent().
      * 
      * Order row item price including tax, expressed as a float value. 
-     *  
-     * The integration package supports fractions input at any precision, but 
-     * when sending the request Svea numbers are rounded to two decimal places.
      * 
-     * Note:
+     * We recommend specifying AmountExVat and VatPercentage. If not, make sure not retain as much precision as possible, i.e. use no 
+     * premature rounding (87.4875 is a "better" PriceIncVat than 87.49) as the package processes the price before sending the request to Svea. 
+     * 
      * If you specify AmountIncVat, note that this may introduce a cumulative rounding error when ordering large
-     * quantities of an item, as the package bases the total order sum on a calculated price ex. vat.
-     * 
-     * We recommend specifying AmountExVat and VatPercentage.
+     * quantities of an item, as the package bases the total order sum on a calculated price ex. vat. 
      * 
      * Also, Svea uses bankers rounding (half-to-even) when calculating the order total, so at times a rounding error of at most
      * one cent/öre may show up if the implementation/shop does not use the same rounding method.
@@ -97,22 +103,12 @@ class OrderRow {
     /** @var float $amountIncVat */
     public $amountIncVat;
     
-    /**
-     * Required - precisely two of these values must be set in the WebPayItem object:  AmountExVat, AmountIncVat or VatPercent for Orderrow. 
-     * Use functions setAmountExVat(), setAmountIncVat() or setVatPercent(). Note: The preferred way is to use setAmountExVat() and setVatPercent().
-     * 
-     * @param int $vatPercentAsInt
-     * @return $this
-     */
-    public function setVatPercent($vatPercentAsInt) {
-        $this->vatPercent = $vatPercentAsInt;
-        return $this;
-    }
-    /** @var int $vatPercent */
-    public $vatPercent;
     
     /**
-     * Optional
+     * Optional - short item name
+     * 
+     * Note that this will be merged with the item description when the request is sent to Svea
+     * 
      * @param string $nameAsString
      * @return $this
      */
@@ -124,7 +120,10 @@ class OrderRow {
     public $name;
     
     /**
-     * Optional
+     * Optional - long item description
+     * 
+     * Note that this will be merged with the item name when the request is sent to Svea
+     * 
      * @param string $descriptionAsString
      * @return $this
      */

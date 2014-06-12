@@ -257,19 +257,44 @@ print_r( $myResponse->customerIdentity );
 
 The above example can be found in the examples/firstinvoice folder.
 
-A complete, runnable example of a synchronous (invoice) order can be found in the examples/invoiceorder folder.
+Another complete, runnable example of a synchronous (invoice) order can be found in the examples/invoiceorder folder.
 
-A complete, runnable example of an asynchronous (card) order can be found in the examples/cardorder folder. 
+Another complete, runnable example of an asynchronous (card) order can be found in the examples/cardorder folder. 
 
 [<< To top](https://github.com/sveawebpay/php-integration#php-integration-package-api-for-sveawebpay)
 
-### 1.2 Specify order
-order row items. You can add OrderRow, Fee and Discount items to the order. 
-Chose the right WebPayItem object as parameter.
-You can use the add-functions with an WebPayItem object or an array of WebPayItem objects as parameters.
+### 1.2 Specify order items
+Order and fee row items together add up to the order make up the order amount. You can add OrderRow, Fee and Discount items to the order. 
+Use the WebPayItem class methods to instantiate and specify row items. Then add the items using the addXX() methods on the order object.
+
+The following is code excerpt example of how to instantiate and add the an order row item to an order:
 
 ```php
-->addOrderRow(WebPayItem::orderRow()->...)
+...
+$myOrderRow = WebPayItem::orderRow();       // create the order row object
+
+$myOrderRow->setQuantity(1);                // required
+$myOrderRow->setAmountExVat(10.00)          // recommended to specify price using AmountExVat & VatPercent
+$myOrderRow->setVatPercent(12)              // recommended to specify price using AmountExVat & VatPercent
+
+$myOrder->addOrderRow( $myOrderRow );       // add order row to the order
+...
+
+/* the same code expressed in a more fluent style:
+$myOrder
+    ->addOrderRow( 
+        WebPayItem::orderRow()
+            ->setQuantity(1)
+            ->setAmountExVat(10.00)
+            ->setVatPercent(12) 
+    )
+;
+*/
+
+/* or, still fluent, but more compact: 
+$myOrder->addOrderRow( WebPayItem::orderRow()->setQuantity(1)->setAmountExVat(10.00)->setVatPercent(12) );
+*/
+```
 
 //or
 
@@ -286,21 +311,21 @@ AmountExVat, AmountIncVat or VatPercent for Orderrow.
 If you specify AmountIncVat, note that this may introduce a cumulative rounding error when ordering large
 quantities of an item, as the package bases the total order sum on a calculated price ex. vat.
 
-We recommend specifying AmountExVat and VatPercentage. If not, make sure not retain as much precision as
-possible when specifying prices, i.e. no premature rounding (87.4875 is a "better" PriceIncVat than 87.49).
+We recommend specifying price using AmountExVat and VatPercentage. If not, make sure not retain as much precision as
+possible, i.e. use no premature rounding (87.4875 is a "better" PriceIncVat than 87.49).
 
 ```php
 ->addOrderRow(
       WebPayItem::orderRow()
-        ->setQuantity(2)                        //Required
-        ->setAmountExVat(100.00)                //Optional, see info above
-        ->setAmountIncVat(125.00)               //Optional, see info above
-        ->setVatPercent(25)                     //Optional, see info above
-        ->setArticleNumber("1")                   //Optional
-        ->setDescription("Specification")       //Optional
-        ->setName('Prod')                       //Optional
-        ->setUnit("st")                         //Optional
-        ->setDiscountPercent(0)                 //Optional
+        ->setQuantity(2)                        // required
+        ->setAmountExVat(100.00)                // recommended to specify price using AmountExVat & VatPercent
+        ->setVatPercent(25)                     // recommended to specify price using AmountExVat & VatPercent
+        ->setAmountIncVat(125.00)               // optional, need to use two out of three of the price specification methods
+        ->setArticleNumber("1")                 // optional
+        ->setDescription("Specification")       // optional
+        ->setName('Prod')                       // optional
+        ->setUnit("st")                         // optional
+        ->setDiscountPercent(0)                 // optional
     )
 ```
 
@@ -309,14 +334,14 @@ The price can be set in a combination by using a minimum of two out of three fun
 ```php
 ->addFee(
     WebPayItem::shippingFee()
-        ->setShippingId('33')                   //Optional
-        ->setName('shipping')                   //Optional
-        ->setDescription("Specification")       //Optional
-        ->setAmountExVat(50)                    //Optional, see info above
-        ->setAmountIncVat(62.50)                //Optional, see info above
-        ->setVatPercent(25)                     //Optional, see info above
-        ->setUnit("st")                         //Optional
-        ->setDiscountPercent(0)                 //Optional
+        ->setShippingId('33')                   // optional
+        ->setName('shipping')                   // optional
+        ->setDescription("Specification")       // optional
+        ->setAmountExVat(50)                    // optional, see info above
+        ->setAmountIncVat(62.50)                // optional, see info above
+        ->setVatPercent(25)                     // optional, see info above
+        ->setUnit("st")                         // optional
+        ->setDiscountPercent(0)                 // optional
    )
 ```
 #### 1.2.3 InvoiceFee
@@ -324,13 +349,13 @@ The price can be set in a combination by using a minimum of two out of three fun
 ```php
 ->addFee(
     WebPayItem::invoiceFee()
-        ->setName('Svea fee')                   //Optional
-        ->setDescription("Fee for invoice")     //Optional
-        ->setAmountExVat(50)                    //Optional, see info above
-        ->setAmountIncVat(62.50)                //Optional, see info above
-        ->setVatPercent(25)                     //Optional, see info above
-        ->setUnit("st")                         //Optional
-        ->setDiscountPercent(0)                 //Optional
+        ->setName('Svea fee')                   // optional
+        ->setDescription("Fee for invoice")     // optional
+        ->setAmountExVat(50)                    // optional, see info above
+        ->setAmountIncVat(62.50)                // optional, see info above
+        ->setVatPercent(25)                     // optional, see info above
+        ->setUnit("st")                         // optional
+        ->setDiscountPercent(0)                 // optional
     )
 ```
 #### 1.2.4 Fixed Discount
@@ -345,12 +370,12 @@ If two of these three attributes are specified, we respect the amount indicated 
 ->addDiscount(
     WebPayItem::fixedDiscount()
         ->setAmountIncVat(100.00)               //Recommended, see info above
-        ->setAmountExVat(1.0)                   //Optional, see info above
-        ->setVatPercent(25)                     //Optional, see info above
-        ->setDiscountId("1")                    //Optional
-        ->setUnit("st")                         //Optional
-        ->setDescription("FixedDiscount")       //Optional
-        ->setName("Fixed")                      //Optional
+        ->setAmountExVat(1.0)                   //optional, see info above
+        ->setVatPercent(25)                     //optional, see info above
+        ->setDiscountId("1")                    //optional
+        ->setUnit("st")                         //optional
+        ->setDescription("FixedDiscount")       //optional
+        ->setName("Fixed")                      //optional
     )
 ```
 #### 1.2.5 Relative Discount
@@ -359,10 +384,10 @@ When discount or coupon is a percentage on total product amount. It may be given
 ->addDiscount(
     WebPayItem::relativeDiscount()
         ->setDiscountPercent(50.5)              //Required
-        ->setDiscountId("1")                    //Optional
-        ->setUnit("st")                         //Optional
-        ->setName('Relative')                   //Optional
-        ->setDescription("RelativeDiscount")    //Optional
+        ->setDiscountId("1")                    //optional
+        ->setUnit("st")                         //optional
+        ->setName('Relative')                   //optional
+        ->setDescription("RelativeDiscount")    //optional
     )
 ```
 [<< To top](https://github.com/sveawebpay/php-integration#php-integration-package-api-for-sveawebpay)
