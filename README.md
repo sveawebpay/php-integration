@@ -1,34 +1,15 @@
 # PHP Integration Package API for SveaWebPay
 
 ## Version 2.0.0
-The Svea WebPay Integration package uses semantic versioning (http://semver.org). This means that you can expect your integrations to remain backwards compatible during a major version release cycle. Previous versions of the package can be accessed through the github releases view (https://github.com/sveawebpay/php-integration/releases).
+The Svea WebPay Integration package uses semantic versioning (http://semver.org). This means that you can expect your integrations to remain backwards compatible during a major version release cycle. 
+
+Previous versions of the package can be accessed through the github releases view (https://github.com/sveawebpay/php-integration/releases).
 
 ### Current build status
 | Branch                            | Build status                               |
 |---------------------------------- |------------------------------------------- |
 | master (latest release)           | [![Build Status](https://travis-ci.org/sveawebpay/php-integration.png?branch=master)](https://travis-ci.org/sveawebpay/php-integration) |
 | develop                           | [![Build Status](https://travis-ci.org/sveawebpay/php-integration.png?branch=develop)](https://travis-ci.org/sveawebpay/php-integration) |
-
-## Index
-* [Introduction](https://github.com/sveawebpay/php-integration#introduction)
-* [Configuration](https://github.com/sveawebpay/php-integration#configuration)
-* [1. CreateOrder](https://github.com/sveawebpay/php-integration#1-createorder)
-    * [Specify order](https://github.com/sveawebpay/php-integration#12-specify-order)
-    * [Customer identity](https://github.com/sveawebpay/php-integration#13-customer-identity)
-    * [Other values](https://github.com/sveawebpay/php-integration#14-other-values) 
-   * [Choose payment](https://github.com/sveawebpay/php-integration#15-choose-payment)
-* [2. GetPaymentPlanParams](https://github.com/sveawebpay/php-integration#2-getpaymentplanparams)
-    *  [PaymentPlanPricePerMonth](https://github.com/sveawebpay/php-integration#21-paymentplanpricepermonth)
-* [3. GetAddresses](https://github.com/sveawebpay/php-integration#3-getaddresses)
-* [4. DeliverOrder](https://github.com/sveawebpay/php-integration#4-deliverorder)
-    * [Specify order](https://github.com/sveawebpay/php-integration#42-specify-order)
-    * [Other values](https://github.com/sveawebpay/php-integration#43-other-values)
-* [5. CreditInvoice](https://github.com/sveawebpay/php-integration#5-creditInvoice)
-* [6. CloseOrder](https://github.com/sveawebpay/php-integration#6-closeorder)
-* [7. Response handler](https://github.com/sveawebpay/php-integration#7-response-handler)
-* [8. GetPaymentMethods](https://github.com/sveawebpay/php-integration#8-getpaymentmethods)
-* [9. AdditionalDeveloperResources](https://github.com/sveawebpay/php-integration#9-additional-developer-resources)
-* [APPENDIX](https://github.com/sveawebpay/php-integration#appendix)
 
 
 ## Introduction
@@ -141,41 +122,6 @@ See further the ConfigurationProvider interface and the SveaConfig.php file.
 
 See also the provided example MyConfig.php under example/config_getaddresses for an example of a customised SveaConfig.php file and how to use it.
 
-[<< To top](https://github.com/sveawebpay/php-integration#php-integration-package-api-for-sveawebpay)
-
-```
-## WebPayAdmin entrypoint methods
-The WebPayAdmin:: methods are used to administrate orders after they have been accepted by Svea. They include methods to update, deliver, cancel and credit
-orders.
-
-WebPayAdmin:: 
-  cancelOrder -- cancel non-delivered invoice or payment plan orders, or annul non-confirmed card orders
-  **creditOrder -- credit delivered invoice or payment plan orders, or credit confirmed card orders
-  **updateOrder -- change order row contents of a non-delivered invoice or payment plan order, or lower amount of non-confirmed card orders
-  **queryOrder -- get information about an order
-  **listPaymentMethods -- WPA equivalent of WP::getPaymentMethods
-
-The following methods are provided in WebPayAdmin as a stopgap measure to perform administrative functions for card orders.
-These entrypoints will be removed from the package in the 2.0 release, but will still be available in the Svea namespace.
-
-WebPay: 
-  createOrder creates BuildOrder/orderBuilder objects containing order data
-    -- useInvoicePayment creates an instance of WebService/Payment/InvoicePayment which does request to Svea Europe Web Service SOAP service
-    -- useCardPayment creates and instance of HostedRequest/Payment/CardPayment which returns the xml request to send to the SveaWebPay service 
-WebPayAdmin:
-  cancelOrder creates a BuildOrder/cancelOrderBuilder object populated with data about the order to cancel
-    -- cancelInvoiceOrder creates an instance of WebService/HandleOrder/CloseOrder
-    -- cancelCardOrder creates an instance of HostedRequests/HandleOrder/AnnulTransaction
-
-COMPATIBILTIY:
-To create and administrate orders the WebPay class functions remain compatible
-with 1.x of the integration package. Some methods have been marked as 
-deprecated and/or moved into the new WebPayAdmin class. These will remain for
-now, but new integrations are naturally advised to avoid using them. Alternate
-methods are provided for most.
-```
-
-
 ##  1. WebPay class methods
 
 The WebPay:: class methods contains the functions needed to create orders and
@@ -183,23 +129,24 @@ perform payment requests using Svea payment methods. It contains methods to
 define order contents, send order requests, as well as support methods 
 needed to do this.
 
-###WebPay method overview
-(methods in parenthesises are deprecated), *starred methods are new to 2.0, **double starred methods are not yet implemented in release 2.0b
-
-*  createOrder  -- create order and pay via invoice, payment plan, card, or direct bank payment methods
-*  deliverOrder (with orderRows)-- partially deliver, change or credit invoice, payment plan orders depending on set options
-*  *deliverOrder (without orderRows) -- deliver in full invoice, payment plan orders, confirms card orders 
-*  (closeOrder) -- cancel non-delivered invoice or payment plan
+*  createOrder -- create order and pay via invoice, payment plan, card, or direct bank payment methods
+*  *createOrder -- (recurring orders)
+*  deliverOrder -- (with orderRows) partially deliver, change or credit invoice, payment plan orders depending on set options
+*  *deliverOrder -- (without orderRows) deliver in full invoice, payment plan orders, confirms card orders 
 *  getAddresses -- fetch addresses connected with a provided customer identity
 *  getPaymentMethods -- fetch available payment methods for a clientid, used by i.e. direct bank orders
 *  getPaymentPlanParams -- fetch current campaigns (payment plan params) for a clientid, used by paymentplan orders
 *  getPaymentPlanPricePerMonth -- calculates price per month over all available campaigns for a specified amount 
+*  (closeOrder) -- cancel non-delivered invoice or payment plan
 
-The underlying services and methods are contained in the Svea namespace, and may be accessed, though they may be subject to change.
+(methods in parenthesises are deprecated), *starred methods are new to 2.0)
 
 ## 1.1 WebPay::createOrder()
-createOrder() -- create order and pay via invoice, payment plan, card, or direct bank payment methods.
+Use createOrder() to create an order and pay via invoice, payment plan, card, or direct bank payment methods.
 
+See [CreateOrderBuilder] (http://htmlpreview.github.io/?https://raw.github.com/sveawebpay/php-integration/develop/apidoc/classes/Svea.CreateOrderBuilder.html) class for methods used to build the order object and select the payment method used.
+
+### 1.1.1 Order building -- a sample invoice order
 The following is a minimal example of how to place an order using the invoice payment method:
 
 ```php
@@ -254,20 +201,18 @@ print_r( $myResponse->customerIdentity );
 ?>
 ```
 
-The above example can be found in the examples/firstinvoice folder.
+The above example can be found in the [examples/firstorder] (https://github.com/sveawebpay/php-integration/blob/develop/example/firstinvoice/firstinvoice.php) folder.
 
-Another complete, runnable example of a synchronous (invoice) order can be found in the examples/invoiceorder folder.
+Additional examples can be found under ### 1.9 Additional example below. TODO
 
-Another complete, runnable example of an asynchronous (card) order can be found in the examples/cardorder folder. 
+## 1.1.2 Order building -- how to specify the order items
+Order row, fee and discount items are added to the order. Together the row items amount make up the order total to pay.
 
-[<< To top](https://github.com/sveawebpay/php-integration#php-integration-package-api-for-sveawebpay)
+Use the [WebPayItem] (http://htmlpreview.github.io/?https://raw.github.com/sveawebpay/php-integration/develop/apidoc/classes/WebPayItem.html) class methods to instantiate various types of row items. You can add row items of the type OrderRow, ShippingFee, InvoiceFee, FixedDiscount and RelativeDiscount to the order. 
 
-## 1.2 Specify the order items
-Order row, fee and discount items are added to the order. Together they add up the order total amount. 
+Then add the items to the order object using the [CreateOrderBuilder] (http://htmlpreview.github.io/?https://raw.github.com/sveawebpay/php-integration/develop/apidoc/classes/Svea.CreateOrderBuilder.html) methods. 
 
-Use the WebPayItem class methods to instantiate and specify row items. Then add the items to the order object.
-
-The following is code excerpt example of how to instantiate and add the an order row item to an order:
+The following is code excerpt example of how to instantiate and add an order row item to an order:
 
 ```php
 ...
@@ -280,36 +225,12 @@ $myOrderRow->setVatPercent(12)              // recommended to specify price usin
 $myOrder->addOrderRow( $myOrderRow );       // add order row to the order
 ...
 
-/* the same code expressed in a more fluent style:
-$myOrder
-    ->addOrderRow( 
-        WebPayItem::orderRow()
-            ->setQuantity(1)
-            ->setAmountExVat(10.00)
-            ->setVatPercent(12) 
-    )
-;
-
-or, still fluent, but more compact: 
+/* the same code expressed in a compact, fluent style:
 $myOrder->addOrderRow( WebPayItem::orderRow()->setQuantity(1)->setAmountExVat(10.00)->setVatPercent(12) );
 */
 ```
 
-You can also add an array of several order row items at once using the addOrderRows() method.
-
-```php
-...
-$orderRows = array( WebPayItem::orderRow()->setXX()->setXX()->setXX(), WebPayItem::orderRow()->setXX()->setXX()->setXX() );
-$order->addOrderRow($orderRows);
-...
-```
-
-You can add row items of the classes OrderRow, ShippingFee, InvoiceFee, FixedDiscount and RelativeDiscount to the order. 
-
-### 1.2.1 WebPayItem::orderRow()
-Use the OrderRow class for all kinds of products and other items. It is required to have a minimum of one order row.
-
-Specify the price using precisely two of these methods in order to specify the item price and tax rate: 
+Specify item price using precisely two of these methods in order to specify the item price and tax rate: 
 setAmountExVat(), setAmountIncVat() and setVatPercent().
 
 We recommend specifying price using setAmountExVat() and setVatPercentage(). If not, make sure not retain as much precision as
@@ -317,6 +238,12 @@ possible, i.e. use no premature rounding (87.4875 is a "better" PriceIncVat than
 
 If you use setAmountIncVat(), note that this may introduce a cumulative rounding error when ordering large
 quantities of an item, as the package bases the total order sum on a calculated price ex. vat.
+
+
+### 1.1.3 Order building -- WebPayItem::orderRow()
+Use this to add all kinds of products and other items. An order is required to have at least one order row.
+
+Use the [OrderRow] (http://htmlpreview.github.io/?https://raw.github.com/sveawebpay/php-integration/develop/apidoc/classes/Svea.OrderRow.html) class methods to specify the item using setXX(), including all *required* methods. 
 
 ```php
 ...
@@ -337,11 +264,10 @@ $order->
 ...
 ```
 
-### 1.2.2 WebPayItem::shippingFee()
+### 1.1.4 Order building -- WebPayItem::shippingFee()
 Use this class to add shipping to the order.
 
-Specify the price using precisely two of these methods in order to specify the item price and tax rate: 
-setAmountExVat(), setAmountIncVat() and setVatPercent(). We recommend specifying price using setAmountExVat() and setVatPercentage().
+Use the [ShippingFee] (http://htmlpreview.github.io/?https://raw.github.com/sveawebpay/php-integration/develop/apidoc/classes/Svea.ShippingFee.html) class methods to specify the item using setXX(), including all *required* methods. 
 
 ```php
 ...
@@ -361,8 +287,10 @@ $order->
 ...
 ```
 
-### 1.2.3 WebPayItem::invoiceFee()
+### 1.1.5 Order building -- WebPayItem::invoiceFee()
 Use this class to add fees associated with a payment method (i.e. invoice fee) to the order.
+
+Use the [InvoiceFee] (http://htmlpreview.github.io/?https://raw.github.com/sveawebpay/php-integration/develop/apidoc/classes/Svea.InvoiceFee.html) class methods to specify the item using setXX(), including all *required* methods. 
 
 Specify the price using precisely two of these methods in order to specify the item price and tax rate: 
 setAmountExVat(), setAmountIncVat() and setVatPercent(). We recommend specifying price using setAmountExVat() and setVatPercentage().
@@ -380,11 +308,14 @@ $order->
             ->setUnit("st")                         // optional
             ->setDiscountPercent(0)                 // optional
     )
+;
 ...
 ```
 
-### 1.2.4 WebPayItem::fixedDiscount()
+### 1.1.6 Order building -- WebPayItem::fixedDiscount()
 Use this method when the discount or coupon is expressed as a percentage of the total product amount.
+
+Use the [FixedDiscount] (http://htmlpreview.github.io/?https://raw.github.com/sveawebpay/php-integration/develop/apidoc/classes/Svea.FixedDiscount.html) class methods to specify the item using setXX(), including all *required* methods. 
 
 If only AmountIncVat is given, we calculate the discount split across the tax (vat) rates present in the order. This will
 ensure that the correct discount vat is applied to the order.
@@ -409,8 +340,10 @@ $order->
 ...
 ```
 
-### 1.2.5 WebPayItem::relativeDiscount() 
+### 1.1.7 Order building -- WebPayItem::relativeDiscount() 
 Use this method when the discount or coupon is expressed as a percentage of the total product amount.
+
+Use the [RelativeDiscount] (http://htmlpreview.github.io/?https://raw.github.com/sveawebpay/php-integration/develop/apidoc/classes/Svea.RelativeDiscount.html) class methods to specify the item using setXX(), including all *required* methods. 
 
 ```php
 ...
@@ -426,18 +359,18 @@ $order->
 ;
 ...
 ```
-[<< To top](https://github.com/sveawebpay/php-integration#php-integration-package-api-for-sveawebpay)
 
-## 1.3 Specifying customer information
+## 1.1.8 Order building -- Specifying customer information
 Create a customer identity object using the WebPayItem::individualCustomer() or WebPayItem::companyCustomer() methods. Use the addCustomerDetails() method to add the customer information to the order. 
 
 Set customer identity attributes using the setXX() customer class methods, respectively. Required attributes varies depending on country and customer type, as well as payment method chosen. See below for an overview and usage examples.
 
 Adding a customer identity to the order is required for Invoice and Payment plan orders. For Card and Direct bank orders it is optional but recommended.
 
-### 1.3.1 WebPayItem::individualCustomer()
-Read "required" below as a requirement when the IndividualCustomer is used to identify the customer when using the invoice or payment plan payment methods. 
-(For card and direct bank orders, adding customer information to the order is optional.)
+### 1.1.9 Order building -- WebPayItem::individualCustomer()
+Read "required" below as a requirement only when the IndividualCustomer is used to identify the customer when using the invoice or payment plan payment methods. (For card and direct bank orders, adding customer information to the order is optional.)
+
+Use the [IndividualCustomer] (http://htmlpreview.github.io/?https://raw.github.com/sveawebpay/php-integration/develop/apidoc/classes/Svea.IndividualCustomer.html) class methods to specify the item using setXX(), including all *required* methods. 
 
 ```php
 ...
@@ -460,9 +393,10 @@ $order->
 ...
 ```
 
-### 1.3.2 WebPayItem::companyCustomer()
-Read "required" below as a requirement when the CompanyCustomer is used to identify the customer when using the invoice payment methods. 
-(For card and direct bank orders, adding customer information to the order is optional.)
+### 1.1.10 Order building -- WebPayItem::companyCustomer()
+Read "required" below as a requirement only when the CompanyCustomer is used to identify the customer when using the invoice or payment plan payment methods. (For card and direct bank orders, adding customer information to the order is optional.)
+
+Use the [CompanyCustomer] (http://htmlpreview.github.io/?https://raw.github.com/sveawebpay/php-integration/develop/apidoc/classes/Svea.CompanyCustomer.html) class methods to specify the item using setXX(), including all *required* methods. 
 
 ```php
 ...
@@ -484,13 +418,13 @@ $order->
 ;
 ...
 ```
-[<< To top](https://github.com/sveawebpay/php-integration#php-integration-package-api-for-sveawebpay)
 
-## 1.4 Additional order attributes
+## 1.1.11 Order building -- Additional order attributes
 
 ```php
 ...
 $order
+    ...
     ->setCountryCode("SE")              // required
     ->setCurrency("SEK")                // required for card payment, direct payment and PayPage payment.
     ->setClientOrderNumber("14050626")  // required for card payment, direct payment, PaymentMethod payment and PayPage payments.
@@ -502,7 +436,7 @@ $order
 
 [<< To top](https://github.com/sveawebpay/php-integration#php-integration-package-api-for-sveawebpay)
 
-## 1.5 Choose the order payment method to use
+## 1.2 Payment method -- choose the payment method to use for the order
 Finish the order specification process by choosing a payment method with the order useXX() methods.
 
 Invoice and Payment plan payment methods will perform a synchronous request to Svea and return a response object.
@@ -745,6 +679,15 @@ $form = $order
 ...
 ```
 
+### 1.9 Additional examples
+
+An example of a synchronous (invoice) order can be found in the [examples/invoiceorder] folder.
+
+An example of an asynchronous (card) order can be found in the [examples/cardorder] folder. 
+
+An example of how to set up a recurring card order can be found in the [TODO] (examples/recur) folder.
+
+
 ## 2. WebPay::getPaymentPlanParams()
 Use getPaymentPlanParams() to fetch all campaigns associated with a given client number. Use prior to create payment plan payment.
 
@@ -934,7 +877,6 @@ $orderRows[] = WebPayItem::orderRow()->...;
 ->addOrderRow($orderRows)
 ```
 
-
 [<< To top](https://github.com/sveawebpay/php-integration#php-integration-package-api-for-sveawebpay)
 
 #### 4.2.1 OrderRow
@@ -1030,9 +972,6 @@ you will recieve an *InvoiceId* in the Response. To credit the invoice you follo
         ->doRequest();
 
 ```
-
-TODO add info on CreditTransaction et al here
-
 
 [<< To top](https://github.com/sveawebpay/php-integration#php-integration-package-api-for-sveawebpay)
 

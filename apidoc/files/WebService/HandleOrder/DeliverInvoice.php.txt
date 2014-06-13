@@ -18,7 +18,7 @@ class DeliverInvoice extends HandleOrder {
      * @param DeliverOrderBuilder $DeliverOrderBuilder
      */
     public function __construct($DeliverOrderBuilder) {
-        $DeliverOrderBuilder->orderType = "Invoice";       // todo change to use ConfigurationProvider constants
+        $DeliverOrderBuilder->orderType = "Invoice";
 
         parent::__construct($DeliverOrderBuilder);
     }

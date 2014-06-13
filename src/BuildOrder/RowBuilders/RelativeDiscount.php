@@ -2,9 +2,18 @@
 namespace Svea;
 
 /**
- * Use this class when the discount or coupon is expressed as a percentage of the total product amount.
- * 
- * @author anne-hal
+Use this method when the discount or coupon is expressed as a percentage of the total product amount.
+
+$order->
+    addDiscount(
+        WebPayItem::relativeDiscount()
+        ->setDiscountPercent(50.5)              // required
+        ->setDiscountId("1")                    // optional
+        ->setUnit("st")                         // optional
+        ->setName('Relative')                   // optional
+        ->setDescription("RelativeDiscount")    // optional
+    )
+;
  */
 class RelativeDiscount {
     

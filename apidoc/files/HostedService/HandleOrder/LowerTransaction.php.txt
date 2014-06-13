@@ -57,7 +57,7 @@ class LowerTransaction extends HostedRequest {
             "transactionid" => $this->transactionId,
             "amounttolower" => $this->amountToLower
         ); 
-        $message = $xmlBuilder->getLowerTransactionXML( $messageContents );     // TODO inject method into HostedXMLBuilder instead
+        $message = $xmlBuilder->getLowerTransactionXML( $messageContents );
 
         // calculate mac
         $mac = hash("sha512", base64_encode($message) . $secret);
@@ -80,7 +80,7 @@ class LowerTransaction extends HostedRequest {
     
     private function validateTransactionId($self, $errors) {
         if (isset($self->transactionId) == FALSE) {                                                        
-            $errors['missing value'] = "transactionId is required. Use function setTransactionId() with the SveaOrderId from the createOrder response."; // TODO check if the createOrder response sets transactionId or SveaOrderId and update error string accordingly
+            $errors['missing value'] = "transactionId is required. Use function setTransactionId() with the SveaOrderId from the createOrder response.";  
         }
         return $errors;
     }   

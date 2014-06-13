@@ -35,7 +35,7 @@ class QueryTransaction extends HostedRequest {
         $xmlBuilder = new HostedXmlBuilder();
         
         // get our merchantid & secret
-        $merchantId = $this->config->getMerchantId( \ConfigurationProvider::HOSTED_TYPE,  $this->countryCode);      // TODO HOSTED_ADMIN_TYPE?!
+        $merchantId = $this->config->getMerchantId( \ConfigurationProvider::HOSTED_TYPE,  $this->countryCode);
         $secret = $this->config->getSecret( \ConfigurationProvider::HOSTED_TYPE, $this->countryCode);
         
         // message contains the credit request
@@ -63,7 +63,7 @@ class QueryTransaction extends HostedRequest {
     
     private function validateTransactionId($self, $errors) {
         if (isset($self->transactionId) == FALSE) {                                                        
-            $errors['missing value'] = "transactionId is required. Use function setTransactionId() with the SveaOrderId from the createOrder response."; // TODO check if the createOrder response sets transactionId or SveaOrderId and update error string accordingly
+            $errors['missing value'] = "transactionId is required. Use function setTransactionId() with the SveaOrderId from the createOrder response.";  
         }
         return $errors;
     } 

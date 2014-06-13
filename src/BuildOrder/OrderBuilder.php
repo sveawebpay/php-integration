@@ -11,7 +11,14 @@ require_once SVEA_REQUEST_DIR . '/Includes.php';
  * instance setAttribute() methods. Instance methods can be chained together, as 
  * they return the instance itself in a fluent fashion.
  * 
- * @author Kristian Grossman-Madsen, Anneli Halld'n, Daniel Brolund for Svea WebPay
+$order
+    ->setCountryCode("SE")              // required
+    ->setCurrency("SEK")                // required for card payment, direct payment and PayPage payment.
+    ->setClientOrderNumber("14050626")  // required for card payment, direct payment, PaymentMethod payment and PayPage payments.
+    ->setCustomerReference("att: kgm")  // optional
+    ->setOrderDate("2012-12-12")        // required for invoice and payment plan payments
+;
+ *  * @author Kristian Grossman-Madsen, Anneli Halld'n, Daniel Brolund for Svea WebPay
  */
 class OrderBuilder {
 

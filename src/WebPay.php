@@ -122,7 +122,7 @@ class WebPay {
         return new Svea\HostedService\GetPaymentMethods($config);
     }
 
-    /** TODO fix
+    /**
      * Calculates price per month for all available campaigns.
      *
      * This is a helper function provided to calculate the monthly price for the

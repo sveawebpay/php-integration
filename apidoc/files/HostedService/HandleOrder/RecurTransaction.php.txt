@@ -91,7 +91,7 @@ class RecurTransaction extends HostedRequest {
         ); 
         if( isset( $this->currency ) ) { $messageContents["currency"] = $this->currency; }
 
-        $message = $xmlBuilder->getRecurTransactionXML( $messageContents );     // TODO inject method into HostedXMLBuilder instead
+        $message = $xmlBuilder->getRecurTransactionXML( $messageContents );
 
         // calculate mac
         $mac = hash("sha512", base64_encode($message) . $secret);
@@ -129,7 +129,7 @@ class RecurTransaction extends HostedRequest {
     
     private function validateSubscriptionId($self, $errors) {
         if (isset($self->subscriptionId) == FALSE) {                                                        
-            $errors['missing value'] = "subscriptionId is required. Use function setSubscriptionId() with the subscriptionId from the createOrder response."; // TODO check if the createOrder response sets subscriptionId and update error string accordingly
+            $errors['missing value'] = "subscriptionId is required. Use function setSubscriptionId() with the subscriptionId from the createOrder response.";
         }
         return $errors;
     }    

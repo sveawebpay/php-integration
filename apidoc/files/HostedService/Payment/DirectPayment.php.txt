@@ -5,7 +5,11 @@ require_once 'HostedPayment.php';
 require_once  SVEA_REQUEST_DIR.'/Constant/PaymentMethod.php';
 
 /**
- * Goes to PayPage and excludes all methods that are not direct payments
+ * Go to PayPage and exclude all methods that are not direct bank payments.
+ * 
+ * Send customer to *PayPage* to select from available banks (only). The customer
+ * then performs a direct bank payment at the chosen bank.
+ * 
  * @author Anneli Halld'n, Daniel Brolund, Kristian Grossman-Madsen for Svea WebPay
  */
 class DirectPayment extends HostedPayment {

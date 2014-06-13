@@ -13,7 +13,8 @@ include_once SVEA_REQUEST_DIR . "/Includes.php";
 class WebPayItem {
 
     /**
-     * 
+     * Use this to add all kinds of products and other items. An order is required to have at least one order row.
+     *
      * @return \Svea\OrderRow
      */
      public static function orderRow() {
@@ -21,6 +22,8 @@ class WebPayItem {
     }
 
     /**
+     * Use this only when supplying NumberedOrderRow items for the various WebPayAdmin order row administration functions.
+     * 
      * @return \Svea\NumberedOrderRow
      */
      public static function numberedOrderRow() {

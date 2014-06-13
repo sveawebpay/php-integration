@@ -11,7 +11,7 @@ require_once SVEA_REQUEST_DIR . '/Includes.php';
  */
 class AnnulTransactionResponse extends HostedAdminResponse{
 
-    /** string $customerrefno @todo correct name for the package, used service attribute name */
+    /** @var string $customerrefno */
     public $customerrefno;
     
     function __construct($message,$countryCode,$config) {

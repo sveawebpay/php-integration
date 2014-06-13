@@ -5,7 +5,6 @@ require_once SVEA_REQUEST_DIR . '/Includes.php';
 
 /**
  * @author anne-hal
- * @todo document HostedResponse (and others, SveaResponse) error handling/checking in main api/end user documentation.
  */
 class HostedPaymentResponse extends HostedResponse{
 
@@ -31,8 +30,6 @@ class HostedPaymentResponse extends HostedResponse{
      * @param string $response  hosted request response xml message
      * @param string $countryCode  two-letter country code
      * @param ConfigurationProveder  $config
-     * 
-     * $todo move validation of service response message to HostedResponse
      */
     function __construct($response,$countryCode,$config) {
         if (is_array($response)) {

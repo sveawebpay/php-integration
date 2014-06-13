@@ -12,7 +12,7 @@ require_once SVEA_REQUEST_DIR . '/Includes.php';
 class RecurTransactionResponse extends HostedAdminResponse{
 
     public $transactionid;
-    /** string $customerrefno @todo correct name for the package, used service attribute name */
+    /** string $customerrefno */
     public $customerrefno;
     public $paymentmethod;
     public $merchantid;

@@ -2,10 +2,33 @@
 namespace Svea;
 
 /**
- * Use the OrderRow class for all kinds of products and other items. It is required to have a minimum of one order row.
- * 
- * @author anne-hal, Kristian Grossman-Madsen
- */
+* Use the OrderRow class for all kinds of products and other items. It is required to have a minimum of one order row.
+* 
+* Specify the price using precisely two of these methods in order to specify the item price and tax rate: 
+* setAmountExVat(), setAmountIncVat() and setVatPercent().
+* 
+* We recommend specifying price using setAmountExVat() and setVatPercentage(). If not, make sure not retain as much precision as
+* possible, i.e. use no premature rounding (87.4875 is a "better" PriceIncVat than 87.49).
+* 
+* If you use setAmountIncVat(), note that this may introduce a cumulative rounding error when ordering large
+* quantities of an item, as the package bases the total order sum on a calculated price ex. vat.
+*  
+$order->
+    addOrderRow(
+        WebPayItem::orderRow()
+            ->setAmountExVat(100.00)                // recommended to specify price using AmountExVat & VatPercent
+            ->setVatPercent(25)                     // recommended to specify price using AmountExVat & VatPercent
+            ->setAmountIncVat(125.00)               // optional, need to use two out of three of the price specification methods
+            ->setQuantity(2)                        // required
+            ->setUnit("st")                         // optional
+            ->setName('Prod')                       // optional
+            ->setDescription("Specification")       // optional
+            ->setArticleNumber("1")                 // optional
+            ->setDiscountPercent(0)                 // optional
+    )
+;
+* @author anne-hal, Kristian Grossman-Madsen
+*/
 class OrderRow {
 
     /**

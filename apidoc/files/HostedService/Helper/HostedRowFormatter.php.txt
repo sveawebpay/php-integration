@@ -41,7 +41,7 @@ class HostedRowFormatter {
         $this->formatFixedDiscountRows($order);
         $this->formatRelativeDiscountRows($order);
 
-        return $this->newRows;  // TODO return self instead => chain functions instead of passing rows to formatTotalX() below
+        return $this->newRows; 
     }
 
     /**

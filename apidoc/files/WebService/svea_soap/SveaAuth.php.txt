@@ -20,7 +20,7 @@ class SveaAuth {
      * @param string $Password
      * @param string $ClientNumber
      */
-    function __construct( $Username = NULL, $Password = NULL, $ClientNumber = NULL ) {   // TODO remove default, and update test suite                   
+    function __construct( $Username = NULL, $Password = NULL, $ClientNumber = NULL ) {                
         if( $Username ) $this->Username = $Username;
         if( $Password ) $this->Password = $Password;
         if( $ClientNumber ) $this->ClientNumber = $ClientNumber; 

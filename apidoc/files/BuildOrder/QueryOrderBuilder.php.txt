@@ -6,7 +6,7 @@ require_once SVEA_REQUEST_DIR . '/Includes.php';
 /**
  * QueryOrderBuilder is the class used to query information about an order from Svea.
  * 
- * Supports TODO
+ * Supports fetching information about invoice, payment plan and card orders
  * 
  * Use setOrderId() to specify the Svea order id, this is the order id returned 
  * with the original create order request response.
