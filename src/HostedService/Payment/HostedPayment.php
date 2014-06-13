@@ -129,8 +129,6 @@ class HostedPayment {
         return $this;
     }
     
-    // TODO refactor getPaymentForm, getPaymentURL to move validation, xml building details to HostedRequest subclasses + add tests
-    
     /**
      * getPaymentForm returns a form object containing a webservice payment request
      * @return PaymentForm
@@ -140,7 +138,7 @@ class HostedPayment {
         //validate the order
         $errors = $this->validateOrder();
         $exceptionString = "";
-        if (count($errors) > 0 || (isset($this->returnUrl) == FALSE && isset($this->paymentMethod) == FALSE)) { // todo check if this works as expected
+        if (count($errors) > 0 || (isset($this->returnUrl) == FALSE && isset($this->paymentMethod) == FALSE)) {
             if (isset($this->returnUrl) == FALSE) {
              $exceptionString .="-missing value : ReturnUrl is required. Use function setReturnUrl().\n";
             }
@@ -184,7 +182,7 @@ class HostedPayment {
         }
         
         $exceptionString = "";
-        if (count($errors) > 0 || (isset($this->returnUrl) == FALSE && isset($this->paymentMethod) == FALSE)) { // todo check if this works as expected
+        if (count($errors) > 0 || (isset($this->returnUrl) == FALSE && isset($this->paymentMethod) == FALSE)) {
             if (isset($this->returnUrl) == FALSE) {
              $exceptionString .="-missing value : ReturnUrl is required. Use function setReturnUrl().\n";
             }
@@ -263,7 +261,6 @@ class HostedPayment {
     
     /** 
      * returns a list of request attributes-value pairs 
-     * @todo make sure orderValidator validates $this->request contents, not the base object properties, or bypass $request when building xml
      */
     public function calculateRequestValues() {
         // format order data

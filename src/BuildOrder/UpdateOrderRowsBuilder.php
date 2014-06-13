@@ -20,7 +20,6 @@ require_once SVEA_REQUEST_DIR . '/Includes.php';
  * 
  * Use updateOrderRow() or updateOrderRows() to specify the order row(s) to update in the order. 
  * The order row numbers must match those in the order. 
- * // TODO what if they don't?? 
  * 
  * Then use either updateInvoiceOrderRows() or updatePaymentPlanOrderRows(), or
  * updateCardOrderRows(), which ever matches the payment method used in the original order request.

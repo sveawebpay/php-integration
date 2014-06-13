@@ -56,7 +56,7 @@ class CompanyCustomer {
     
      /**
      * Optional
-     * @param int $phoneNumberAsInt  @todo check if int or string is correct?
+     * @param int $phoneNumberAsInt
      * @return $this
      */
     public function setPhoneNumber($phoneNumberAsInt) {

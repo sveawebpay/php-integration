@@ -10,7 +10,7 @@ require_once SVEA_REQUEST_DIR . '/Includes.php';
  */
 abstract class AdminServiceRequest {
     
-    const ADMIN_SERVICE_TEST = "https://partnerweb.sveaekonomi.se/WebPayAdminService_test/AdminService.svc/backward";   // TODO add to ConfigurationProvider
+    const ADMIN_SERVICE_TEST = "https://partnerweb.sveaekonomi.se/WebPayAdminService_test/AdminService.svc/backward";
 
     /** @var string $action  the AdminService soap action called by this class */
     protected $action; 
@@ -20,7 +20,7 @@ abstract class AdminServiceRequest {
           
     /**
      * Set up the soap client and perform the soap call, with the soap action and prepared request from the relevant subclass 
-     * @return StdClass  raw response @todo
+     * @return StdClass  raw response
      */
     public function doRequest() { 
         $soapClient = new AdminSoap\SoapClient( AdminServiceRequest::ADMIN_SERVICE_TEST );

@@ -85,7 +85,7 @@ class ConfirmTransaction extends HostedRequest {
     
     private function validateTransactionId($self, $errors) {
         if (isset($self->transactionId) == FALSE) {                                                        
-            $errors['missing value'] = "transactionId is required. Use function setTransactionId() with the SveaOrderId from the createOrder response."; // TODO check if the createOrder response sets transactionId or SveaOrderId and update error string accordingly
+            $errors['missing value'] = "transactionId is required. Use function setTransactionId() with the SveaOrderId from the createOrder response.";  
         }
         return $errors;
     }   

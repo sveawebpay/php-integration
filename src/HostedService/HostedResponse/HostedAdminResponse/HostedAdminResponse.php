@@ -23,7 +23,6 @@ class HostedAdminResponse extends HostedResponse{
      */
     function __construct($message,$countryCode,$config) {
 
-        // TODO extract response sanity checks to parent HostedResponse class
         if (is_object($message)) {
 
             if (property_exists($message,"mac") && property_exists($message,"message")) {

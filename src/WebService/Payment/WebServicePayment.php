@@ -23,7 +23,7 @@ class WebServicePayment {
 
     private function getPasswordBasedAuthorization() {
        // $authArray = $this->order->conf->getPasswordBasedAuthorization($this->orderType);
-        $auth = new WebServiceSoap\SveaAuth();           //TODO update these to use SveaAuth constructors
+        $auth = new WebServiceSoap\SveaAuth();
         $auth->Username = $this->order->conf->getUsername($this->orderType,  $this->order->countryCode);
         $auth->Password = $this->order->conf->getPassword($this->orderType,  $this->order->countryCode);
         $auth->ClientNumber = $this->order->conf->getClientNumber($this->orderType,  $this->order->countryCode);

@@ -33,10 +33,7 @@ class GetOrdersResponse {
     public $orderType;
     /** @var numeric $orderId */
     public $orderId;
-    /** 
-     * @var Svea\OrderRow[] $numberedOrderRows  array of OrderRow objects, 
-     * @todo with additional attributes injected: creditInvoiceId, invoiceId, rowNumber and status
-     */
+    /** @var Svea\OrderRow[] $numberedOrderRows  array of OrderRow objects */
     public $numberedOrderRows;
     
     /** 

@@ -4,9 +4,6 @@
  */
 namespace Svea\WebService\WebServiceSoap;
 
-/* 
- * TODO document attributes
- */
 class SveaAddress {
 
     public $Auth;

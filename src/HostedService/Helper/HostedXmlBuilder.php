@@ -54,11 +54,11 @@ class HostedXmlBuilder {
         // currency
         $this->XMLWriter->writeElement("currency", $request['currency']);
         // amount
-        $this->XMLWriter->writeElement("amount", round($request['amount']));            //TODO check round() here
+        $this->XMLWriter->writeElement("amount", round($request['amount']));             
 
         // vat -- optional
         if ($request['totalVat'] != null) {
-            $this->XMLWriter->writeElement("vat", round($request['totalVat']));         //TODO check round() here
+            $this->XMLWriter->writeElement("vat", round($request['totalVat']));          
         }
         // customerrefno -- optional
         $this->XMLWriter->writeElement("customerrefno", $request['clientOrderNumber']);
@@ -95,7 +95,7 @@ class HostedXmlBuilder {
         
         // not in specification, but seems legit
         if (isset($request['ipAddress'])) {
-             $this->XMLWriter->writeElement("ipaddress", $request['ipAddress']); // todo remove isset in favor of writing all elements passed in.
+             $this->XMLWriter->writeElement("ipaddress", $request['ipAddress']);
         }
 
         $this->XMLWriter->endElement();
@@ -107,7 +107,6 @@ class HostedXmlBuilder {
     /**
      * Returns the webservice preparepayment request message xml
      * uses the same code as getPaymentXML above, with the addition of the lang and ipaddress fields 
-     * @todo refactor to use same code as getPaymentXML
      * 
      * @param type $request
      * @param CreateOrderBuilder $order
@@ -123,10 +122,10 @@ class HostedXmlBuilder {
         }
         $this->XMLWriter->writeElement("lang", $request['langCode']);                   // required in preparepayment 
         $this->XMLWriter->writeElement("currency", $request['currency']);
-        $this->XMLWriter->writeElement("amount", round($request['amount']));            //TODO check round() here
+        $this->XMLWriter->writeElement("amount", round($request['amount']));             
 
         if ($request['totalVat'] != null) {
-            $this->XMLWriter->writeElement("vat", round($request['totalVat']));         //TODO check round() here
+            $this->XMLWriter->writeElement("vat", round($request['totalVat']));          
         }
         $this->XMLWriter->writeElement("customerrefno", $request['clientOrderNumber']);
         $this->XMLWriter->writeElement("returnurl", $request['returnUrl']);
@@ -213,7 +212,6 @@ class HostedXmlBuilder {
              $this->XMLWriter->writeElement("email", $order->customerIdentity->email);
         }
  
-        // TODO used by Invoice payment
         if (isset($order->customerIdentity->orgNumber)|| isset($order->customerIdentity->companyVatNumber)) {
             if (isset($order->customerIdentity->orgNumber)) {
                  $this->XMLWriter->writeElement("ssn", $order->customerIdentity->orgNumber);

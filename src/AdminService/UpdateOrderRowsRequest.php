@@ -43,9 +43,7 @@ class UpdateOrderRowsRequest extends AdminServiceRequest {
                 $orderRow->amountExVat = WebServiceRowFormatter::convertIncVatToExVat($orderRow->amountIncVat, $orderRow->vatPercent);
             }
             // % + ex, no need to do anything
-            
-            // TODO validate that rowNumber is set in all orderrows
-                              
+                                          
             $updatedOrderRows[] = new \SoapVar( 
                 new AdminSoap\NumberedOrderRow(
                     $orderRow->articleNumber,

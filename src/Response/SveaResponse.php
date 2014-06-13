@@ -52,8 +52,6 @@ class SveaResponse {
         // WebService requests get a stdClass object back from the SoapClient instance
         if (is_object($message)) {
 
-            // TODO fix it so that these too look at $method instead of using property_exists()
-            
             // Web Service EU responses
             if (property_exists($message, "CreateOrderEuResult")) {
                 $this->response = new Svea\WebService\CreateOrderResponse($message);

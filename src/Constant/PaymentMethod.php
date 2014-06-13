@@ -6,8 +6,6 @@
  * 
  */
 abstract class PaymentMethod {
-
-    // todo check these ws ConfigProvicer::INVOICE_TYPE et al...
     
     const INVOICE = 'INVOICE';
     const PAYMENTPLAN = 'PAYMENTPLAN';

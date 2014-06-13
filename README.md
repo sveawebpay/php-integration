@@ -859,13 +859,27 @@ WebPay::getAddresses->...->doRequest() Returns a GetAddressesResponse object:
 [<< To top](https://github.com/sveawebpay/php-integration#php-integration-package-api-for-sveawebpay)
 
 ## 4. deliverOrder
-Use the WebPay::deliverOrder request to deliver to the customer invoices for fulfilled orders.
-Svea will invoice the customer upon receiving the deliverOrder request.
-A deliverOrder request may also be used to partly deliver an order on Invoice orders.
+The WebPay::deliverOrder request should generally be sent to Svea when an order 
+is fulfilled (i.e. the product is sent out or delivered).
 
-When Svea receives the deliverOrder request the status on the previous created order is set to *delivered*.
+For invoice and payment plan orders, the deliver order request should be performed 
+once the ordered items have been sent out to the customer. The deliver order request
+triggers the customer invoice being sent out to the customer by Svea. 
 
-The deliverOrder functionallity is only applicable to invoice and payment plan payment method payments.
+For card orders, the deliver order request confirms the card transaction, which in
+turn causes the card transaction to be batch processed by Svea.
+
+Set all required order attributes in a DeliverOrderBuilder instance by using the 
+OrderBuilder setAttribute() methods. Instance methods can be chained together, as 
+they return the instance itself in a fluent manner.
+
+Finish by using the delivery method matching the payment method specified in the 
+createOrder request.
+
+You can then go on specifying any payment method specific settings, using methods provided by the 
+returned deliver order request class.
+
+A deliverOrder request may also be used to partly deliver an invoice order.
 
 [<< To top](https://github.com/sveawebpay/php-integration#php-integration-package-api-for-sveawebpay)
 

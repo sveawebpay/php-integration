@@ -11,7 +11,7 @@ require_once SVEA_REQUEST_DIR . '/Includes.php';
  */
 class CreditTransactionResponse extends HostedAdminResponse{
 
-    /** string $customerrefno */
+    /** @var string $customerrefno */
     public $customerrefno;
 
     function __construct($message,$countryCode,$config) {

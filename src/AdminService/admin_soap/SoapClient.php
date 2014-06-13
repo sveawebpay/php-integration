@@ -48,7 +48,7 @@ class SoapClient {
      * 
      * @param string $action
      * @param \SoapVar $request
-     * @return StdClass $response -- @todo pass raw response through SveaResponse 
+     * @return StdClass $response
      */
     public function doSoapCall($action, $request) {
         try {

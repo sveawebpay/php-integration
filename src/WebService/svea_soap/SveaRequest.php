@@ -16,7 +16,7 @@ class SveaRequest {
      * 
      * @param mixed $request if not set, will do nothing
      */
-    function __construct( $request = NULL ) {   // TODO remove default, and update test suite
+    function __construct( $request = NULL ) {
         if( $request ) {
           $this->request = $request;  
         } 

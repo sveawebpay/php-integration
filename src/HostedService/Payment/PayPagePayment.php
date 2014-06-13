@@ -20,9 +20,6 @@ class PayPagePayment extends HostedPayment {
         parent::__construct($order);    
     }
 
-    /**
-     * @todo validate here if not set?
-     */
     public function calculateRequestValues() {
         if (isset($this->paymentMethod)) {
             $this->request['paymentMethod'] = $this->paymentMethod;
