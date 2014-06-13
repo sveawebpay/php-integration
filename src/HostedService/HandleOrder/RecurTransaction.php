@@ -11,7 +11,7 @@ require_once SVEA_REQUEST_DIR . '/Includes.php';
 class RecurTransaction extends HostedRequest {
 
     protected $subscriptionId;
-    protected $amountToLower;
+    protected $amount;
     
     function __construct($config) {
         $this->method = "recur";
@@ -19,9 +19,9 @@ class RecurTransaction extends HostedRequest {
     }
     
     /**
-     * If recur is to an international acquirer the currency for the recurring transaction must be the same as for the registration transaction.
+     * Optional
      * 
-     * Optional.
+     * If recur is to an international acquirer the currency for the recurring transaction must be the same as for the registration transaction.
      * 
      * @param string $currency
      * @return \Svea\RecurTransaction
@@ -32,10 +32,10 @@ class RecurTransaction extends HostedRequest {
     }
     
     /**
+     * Required 
+     * 
      * Note that if subscriptiontype is either RECURRING or RECURRINGCAPTURE, 
      * the amount must be given in the same currency as the initial transaction. 
-     * 
-     * Required.
      * 
      * @param int $amount  amount in minor currency
      * @return \Svea\RecurTransaction
@@ -46,9 +46,7 @@ class RecurTransaction extends HostedRequest {
     }
 
     /**
-     * The new unique customer reference number.
-     * 
-     * Required.
+     * Required - the new unique customer reference number.
      * 
      * @param string $customerRefNo
      * @return \Svea\RecurTransaction
@@ -59,9 +57,7 @@ class RecurTransaction extends HostedRequest {
     }
     
     /**
-     * The subscription id returned with the inital transaction response.
-     *
-     * Required.
+     * Required - the subscription id returned with the inital transaction response.
      *  
      * @param int $subscriptionId
      * @return \Svea\RecurTransaction

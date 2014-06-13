@@ -87,7 +87,6 @@ class HostedPaymentResponse extends HostedResponse{
 
         if (property_exists($xmlElement->transaction, "subscriptionid")) {
             $this->subscriptionId = (string)$xmlElement->transaction->subscriptionid;
-            $this->subscriptionType = (string)$xmlElement->transaction->subscriptiontype;
         }
 
         if (property_exists($xmlElement->transaction, "cardtype")) {
@@ -97,5 +96,8 @@ class HostedPaymentResponse extends HostedResponse{
            $this->expiryYear = (string)$xmlElement->transaction->expiryyear;
            $this->authCode = (string)$xmlElement->transaction->authcode;
         }
+        
+        $this->rawHostedPaymentResponse = $xmlElement;
+        
     }
 }

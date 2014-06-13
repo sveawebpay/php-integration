@@ -201,9 +201,8 @@ print_r( $myResponse->customerIdentity );
 ?>
 ```
 
-The above example can be found in the [examples/firstorder] (https://github.com/sveawebpay/php-integration/blob/develop/example/firstinvoice/firstinvoice.php) folder.
+The above example can be found in the [examples/firstorder] (https://github.com/sveawebpay/php-integration/blob/develop/example/firstorder/) folder.
 
-Additional examples can be found under ### 1.9 Additional example below. TODO
 
 ## 1.1.2 Order building -- how to specify the order items
 Order row, fee and discount items are added to the order. Together the row items amount make up the order total to pay.
@@ -436,14 +435,14 @@ $order
 
 [<< To top](https://github.com/sveawebpay/php-integration#php-integration-package-api-for-sveawebpay)
 
-## 1.2 Payment method -- choose the payment method to use for the order
+### 1.1.12 Payment method -- choose the payment method to use for the order
 Finish the order specification process by choosing a payment method with the order useXX() methods.
 
 Invoice and Payment plan payment methods will perform a synchronous request to Svea and return a response object.
 
 Hosted payment methods, like Card, Direct bank and payment methods accessed via the PayPage, are asynchronous. They will return an html form with formatted message. You then send the form to Svea, and the customer is redirected, complete the payment, and the payment response is sent back to the provided return url. The response may also be sent to the url specified with setCallbackUrl() in case the customer doesn't return to the store after the transaction has concluded at the bank/card payment page. Process the response via the SveaResponse class, and you will receive a formatted response object.
 
-### Which of the various useXX() methods should I use?
+#### Which of the various useXX() methods should I use?
 I am using the invoice and/or payment plan payment methods in my integration.
 
 >The best way is to use [`->useInvoicePayment()`] (https://github.com/sveawebpay/php-integration#154-invoicepayment) and
@@ -475,9 +474,9 @@ I am using more than one payment and want them gathered on on place.
 >You can go by *PayPage* and choose to show all your payments here, or modify to exclude or include one or more payments. Use [`->usePayPage()`] (https://github.com/sveawebpay/php-integration#153-paypagepayment) where you can custom your own *PayPage*. This introduces an additional step in the customer checkout flow, though. Note also that Invoice and Payment plan payments will return an asynchronous when used from PayPage.
 
 
-### Synchronous payments -- Invoice and Payment plan
+#### Synchronous payments -- Invoice and Payment plan
 
-### 1.5.1 InvoicePayment
+### 1.1.13 Payment method -- InvoicePayment
 Perform an invoice payment. This payment form will perform a synchronous payment request and returns a response object.
 
 ```php
@@ -495,7 +494,7 @@ $response = $request->doRequest();
 ```
 Another complete, runnable example of a synchronous (invoice) order can be found in the examples/invoiceorder folder.
 
-#### 1.5.2 PaymentPlanPayment
+### 1.1.14 Payment method -- PaymentPlanPayment
 Perform an payment plan payment. This payment form will perform a synchronous payment request and returns a response object.
 
 The Payment plan payment method is restricted to individual customers and can not be used by legal entities, i.e. companies or organisations.
@@ -528,7 +527,7 @@ $response = $request->doRequest();
 ```
 [<< To top](https://github.com/sveawebpay/php-integration#php-integration-package-api-for-sveawebpay)
 
-### Asynchronous payments -- Hosted payments
+#### Asynchronous payments -- Hosted payments
 
 Create and build the order object. Then select the payment method to use and specify the various attributes using the methods applicable to hosted payments (see below). Get an instance of PaymentForm using the getPaymentForm() method.
 
@@ -546,7 +545,7 @@ The received form is sent using a http POST to the url indicated by i.e. SveaCon
 The service response is returned as XML, use the [SveaResponse](https://github.com/sveawebpay/php-integration#6-response-handler)
 to format the response
 
-#### Response URL:s
+##### Response URL:s
 
 ->setReturnUrl() When a hosted payment transaction completes (regardless of outcome, i.e. accepted or denied), the payment service will answer with a response xml message sent to the return url specified.
 
@@ -556,7 +555,7 @@ to format the response
 
 See the HostedService\HostedPayment class.
 
-### The getPaymentForm() returned form
+#### The getPaymentForm() returned form
 
 The getPaymentForm() method returns an instance of HostedService\PaymentForm. Use the form class methods to get the form html.
 
@@ -568,7 +567,7 @@ echo $form->completeHtmlFormWithSubmitButton;   // complete html of hidden form 
 ...
 ```
 
-### 1.5.3 PayPage with card payment options
+### 1.1.15 Payment method -- PayPage with card payment options
 *PayPage* with available card payments only.
 
 ```php
@@ -586,7 +585,7 @@ $form = $order
 
 A complete, runnable example of a card order using PaymentMethodPayment can be found in the examples/cardorder folder. 
 
-### 1.5.4 PayPage with direct bank payment options
+### 1.1.16 Payment method -- PayPage with direct bank payment options
 Send user to *PayPage* to select from available banks (only), and then perform a direct bank payment at the chosen bank
 
 ```php
@@ -601,7 +600,7 @@ $form = $order
 ...
 ```
 
-### 1.5.5 PayPagePayment
+### 1.1.17 Payment method -- PayPagePayment
 Send user to *PayPage* to select from the available payment methods. You can customise which payment methods to display, using the PayPagePayment methods includePaymentMethods(), excludePaymentMethods(), excludeCardPaymentMethods() and excludeDirectPaymentMethods().
 
 ```php
@@ -616,7 +615,7 @@ $form = $order
 ...
 ```
 
-##### 1.5.5.1 Exclude specific payment methods
+### 1.1.18 Payment method -- Exclude specific payment methods
 Optional if you want to include specific payment methods for *PayPage*.
 ```php
 ...
@@ -629,7 +628,7 @@ $form = $order
 ...
 ```
 
-##### 1.5.5.2 Include specific payment methods
+### 1.1.19 Payment method -- Include specific payment methods
 Optional if you want to include specific payment methods for *PayPage*.
 ```php
 ...
@@ -641,7 +640,7 @@ $form = $order
 ...
 ```
 
-##### 1.5.5.3 Exclude Card payments
+### 1.1.20 Payment method -- Exclude Card payments
 Optional if you want to exclude all cardpayment methods from *PayPage*.
 ```php
 ...
@@ -653,7 +652,7 @@ $form = $order
 ...
 ```
 
-##### 1.5.5.4 Exclude Direct payments
+### 1.1.21 Payment method -- Exclude Direct payments
 Optional if you want to exclude all direct bank payments methods from *PayPage*.
 ```php
 ...
@@ -665,7 +664,7 @@ $form = $order
 ...
 ```
 
-### 1.5.6 PaymentMethod specified
+### 1.1.22 Payment method -- PaymentMethod specified
 Go direct to specified payment method, bypassing the *PayPage* completetly.
 
 ```php
@@ -679,14 +678,11 @@ $form = $order
 ...
 ```
 
-### 1.9 Additional examples
+### 1.1.23 Payment method -- Additional examples
 
-An example of a synchronous (invoice) order can be found in the [examples/invoiceorder] folder.
+An example of a synchronous (invoice) order can be found in the [examples/invoiceorder] (https://github.com/sveawebpay/php-integration/blob/develop/example/invoiceorder/invoiceorder.php) folder.
 
-An example of an asynchronous (card) order can be found in the [examples/cardorder] folder. 
-
-An example of how to set up a recurring card order can be found in the [TODO] (examples/recur) folder.
-
+An example of an asynchronous (card) order can be found in the [examples/cardorder] (https://github.com/sveawebpay/php-integration/blob/develop/example/cardorder/cardorder.php) folder.
 
 ## 2. WebPay::getPaymentPlanParams()
 Use getPaymentPlanParams() to fetch all campaigns associated with a given client number. Use prior to create payment plan payment.

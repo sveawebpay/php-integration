@@ -24,6 +24,11 @@ require_once SVEA_REQUEST_DIR . '/Includes.php';
  */
 
 class HostedPayment {
+    
+    const RECURRINGCAPTURE = "RECURRINGCAPTURE";
+    const ONECLICKCAPTURE = "ONECLICKCAPTURE";
+    const RECURRING = "RECURRING";
+    const ONECLICK = "ONECLICK";
 
     /** @var CreateOrderBuilder $order  holds the order information */
     public $order;
@@ -286,8 +291,60 @@ class HostedPayment {
         if (isset($this->subscriptionType)) {
              $this->request['subscriptionType'] = $this->subscriptionType;
         }                
+
+        if (isset($this->subscriptionId)) {
+             $this->request['subscriptionId'] = $this->subscriptionId;
+        }   
         
         return $this->request;
     }
         
+    /**
+     * Set subscription type for recurring payments. Subscription type may be one
+     * of HostedPayment::RECURRINGCAPTURE | HostedPayment::ONECLICKCAPTURE (all countries)
+     * or HostedPayment::RECURRING | HostedPayment::ONECLICK (Scandinavian countries only) 
+     * 
+     * The initial transaction status will either be AUTHORIZED (i.e. it may be charged
+     * after it has been confirmed) or REGISTERED (i.e. the initial amount will be
+     * reserved for a time by the bank, and then released) for RECURRING and ONECLICK.
+     * 
+     * Use of setSubscriptionType() will set the attributes subscriptionId and subscriptionType
+     * in the HostedPaymentResponse.
+     * 
+     * @param string $subscriptionType  @see CardPayment constants
+     * @return $this
+     */
+    public function setSubscriptionType( $subscriptionType ) {
+        $this->subscriptionType = $subscriptionType;
+        return $this;
+    }    
+    
+    /**
+     * Set a subscriptionId to use in a recurring payment request 
+     * 
+     * The subscriptionId should have been obtained in an earlier payment request response
+     * 
+     * @param string $subscriptionType  @see CardPayment constants
+     * @return $this
+     */
+    public function setSubscriptionId( $subscriptionId ) {
+        $this->subscriptionId = $subscriptionId;
+        return $this;
+    }   
+    
+    
+    public function doRecur() {
+        $request = new RecurTransaction( $this->order->conf );
+        $response = $request                
+            ->setSubscriptionId( $this->order->subscriptionId )
+            ->setCurrency( $$this->order->currency )
+            ->setCustomerRefNo( $this->order->customerReference ) 
+
+            ->setAmount( 99999 )
+// TODO calculate amount ->setAmount( $this->order->amount )
+            
+            ->setCountryCode( $this->order->countryCode )
+            ->doRequest()
+        ;        
+    }
 }
