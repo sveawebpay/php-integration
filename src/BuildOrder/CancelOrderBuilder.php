@@ -22,7 +22,17 @@ require_once SVEA_REQUEST_DIR . '/Includes.php';
  * The final doRequest() will send the cancelOrder request to Svea, and the 
  * resulting response code specifies the outcome of the request. 
  * 
- * @author Kristian Grossman-Madsen for Svea Webpay
+ * $request =  
+ *    WebPay::cancelOrder($config)
+ *        ->setCountryCode("SE")          // Required. Use same country code as in createOrder request.
+ *        ->setOrderId($orderId)          // Required. Use SveaOrderId recieved with createOrder response
+ *        ->cancelInvoiceOrder()          // Use the method corresponding to the original createOrder payment method.
+ *        //->cancelPaymentPlanOrder()     
+ *        //->cancelCardOrder()           
+ *             ->doRequest()
+ * ; 
+ * 
+ * @author Kristian Grossman-Madsen for Svea WebPay
  */
 class CancelOrderBuilder {
 
@@ -35,6 +45,7 @@ class CancelOrderBuilder {
 
     /**
      * Required. Use SveaOrderId recieved with createOrder response.
+     * 
      * @param string $orderIdAsString
      * @return $this
      */
@@ -46,7 +57,8 @@ class CancelOrderBuilder {
     public $orderId;
     
     /**
-     * Required. Use same countryCode as in createOrder request.
+     * Required. Use same country code as in createOrder request.
+     * 
      * @param string $countryCode
      * @return $this
      */
@@ -59,7 +71,10 @@ class CancelOrderBuilder {
         
     /**
      * Use cancelInvoiceOrder() to close an Invoice order.
-     * @return CloseOrder
+     * 
+     * Use the method corresponding to the original createOrder payment method.
+     * 
+     * @return WebService\CloseOrder
      */
     public function cancelInvoiceOrder() {
         $this->orderType = \ConfigurationProvider::INVOICE_TYPE;
@@ -68,7 +83,10 @@ class CancelOrderBuilder {
     
     /**
      * Use cancelPaymentPlanOrder() to close a PaymentPlan order.
-     * @return CloseOrder
+     * 
+     * Use the method corresponding to the original createOrder payment method.
+     * 
+     * @return WebService\CloseOrder
      */
     public function cancelPaymentPlanOrder() {
         $this->orderType = \ConfigurationProvider::PAYMENTPLAN_TYPE;
@@ -80,7 +98,10 @@ class CancelOrderBuilder {
 
     /**
      * Use cancelCardOrder() to close a Card order.
-     * @return AnnulTransaction
+     * 
+     * Use the method corresponding to the original createOrder payment method.
+     * 
+     * @return HostedService\AnnulTransaction
      */
     public function cancelCardOrder() {
         $this->orderType = \ConfigurationProvider::HOSTED_ADMIN_TYPE;

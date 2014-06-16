@@ -547,11 +547,11 @@ to format the response
 
 ##### Response URL:s
 
-->setReturnUrl() When a hosted payment transaction completes (regardless of outcome, i.e. accepted or denied), the payment service will answer with a response xml message sent to the return url specified.
+->setReturnUrl() When a hosted payment transaction completes (regardless of outcome, i.e. accepted or denied), the payment service will answer with a response xml message sent to the return url specified. This is also the return address if the user cancels at i.e. the Certitrade page.
 
 ->setCallbackUrl() In case the hosted payment transaction completes, but the service is unable to return a response to the return url, the payment service will retry several times using the callback url as a fallback, if specified. This may happen if i.e. the user closes the browser before the payment service redirects back to the shop.
 
-->setCancelUrl() In case the hosted payment service is cancelled by the user, the payment service will redirect back to the cancel url. Unless a return url is specified, no cancel button will be presented at the payment service.
+->setCancelUrl() In case the payment method selection is cancelled by the user at the PayPage, Svea will redirect back to the cancel url.
 
 See the HostedService\HostedPayment class.
 
@@ -698,22 +698,22 @@ $response =
 
 The response is an instance of WebService\PaymentPlanParamsResponse with the available campaigns in the array campaignCodes:
 ```php
-        $response->accepted                 // true iff request was accepted by the service 
-        $response->errormessage             // may be set iff accepted above is false
-        $response->resultcode               // 27xxx, reason
-        $response->campaignCodes[]          // array of all available campaign payment plans in an array
-           ->campaignCode                      // numeric campaign code identifier
-           ->description                       // localised description string
-           ->paymentPlanType                   // human readable identifier (not guaranteed unique)
-           ->contractLengthInMonths
-           ->monthlyAnnuityFactor              // pricePerMonth = price * monthlyAnnuityFactor + notificationFee
-           ->initialFee
-           ->notificationFee
-           ->interestRatePercent
-           ->numberOfInterestFreeMonths
-           ->numberOfPaymentFreeMonths
-           ->fromAmount                        // amount lower limit for plan availability
-           ->toAmount                          // amount upper limit for plan availability
+    $response->accepted                 // true iff request was accepted by the service 
+    $response->errormessage             // may be set iff accepted above is false
+    $response->resultcode               // 27xxx, reason
+    $response->campaignCodes[]          // array of all available campaign payment plans in an array
+       ->campaignCode                      // numeric campaign code identifier
+       ->description                       // localised description string
+       ->paymentPlanType                   // human readable identifier (not guaranteed unique)
+       ->contractLengthInMonths
+       ->monthlyAnnuityFactor              // pricePerMonth = price * monthlyAnnuityFactor + notificationFee
+       ->initialFee
+       ->notificationFee
+       ->interestRatePercent
+       ->numberOfInterestFreeMonths
+       ->numberOfPaymentFreeMonths
+       ->fromAmount                        // amount lower limit for plan availability
+       ->toAmount                          // amount upper limit for plan availability
 ```
 
 [<< To top](https://github.com/sveawebpay/php-integration#php-integration-package-api-for-sveawebpay)
@@ -1062,23 +1062,21 @@ Used in usePaymentMethod($paymentMethod) and in usePayPage(),
 x.1 WebPayAdmin::cancelOrder()
 
 CancelOrderBuilder is the class used to cancel an order with Svea, that has
-not yet been delivered (invoice, payment plan) or been confirmed (card).
+not yet been delivered (invoice, payment plan) or confirmed (card).
 
 Supports Invoice, Payment Plan and Card orders. For Direct Bank orders, @see
 CreditOrderBuilder instead.
 
-Use setOrderId() to specify the Svea order id, this is the order id returned 
-with the original create order request response.
+See <a href="http://htmlpreview.github.io/?https://raw.github.com/sveawebpay/php-integration/develop/apidoc/classes/Svea.CancelOrderBuilder.html" target="_blank">CancelOrderBuilder</a> class for methods used to build the order object and select the order type to cancel.
 
-Use setCountryCode() to specify the country code matching the original create
-order request.
-
-Use either cancelInvoiceOrder(), cancelPaymentPlanOrder or cancelCardOrder,
-which ever matches the payment method used in the original order request.
- 
-The final doRequest() will send the cancelOrder request to Svea, and the 
-resulting response code specifies the outcome of the request. 
-
-See [CancelOrderBuilder] (http://htmlpreview.github.io/?https://raw.github.com/sveawebpay/php-integration/develop/apidoc/classes/Svea.CancelOrderBuilder.html) class for methods used to build the order object and the order type to cancel.
-
-See <a href="http://htmlpreview.github.io/?https://raw.github.com/sveawebpay/php-integration/develop/apidoc/classes/Svea.CancelOrderBuilder.html" target="_blank">CancelOrderBuilder</a> class for methods used to build the order object and the order type to cancel.
+```php
+$request =  
+    WebPay::cancelOrder($config)
+        ->setCountryCode("SE")          // Required. Use same country code as in createOrder request.
+        ->setOrderId($orderId)          // Required. Use SveaOrderId recieved with createOrder response
+        ->cancelInvoiceOrder()          // Use the method corresponding to the original createOrder payment method.
+        //->cancelPaymentPlanOrder()     
+        //->cancelCardOrder()           
+             ->doRequest()
+;             
+```
