@@ -1057,3 +1057,27 @@ Used in usePaymentMethod($paymentMethod) and in usePayPage(),
 | PaymentMethod::PAYMENTPLAN        | PaymentPlan by PayPage.                       |
 
 [<< To top](https://github.com/sveawebpay/php-integration#php-integration-package-api-for-sveawebpay)
+
+
+x.1 WebPayAdmin::cancelOrder()
+
+CancelOrderBuilder is the class used to cancel an order with Svea, that has
+not yet been delivered (invoice, payment plan) or been confirmed (card).
+
+Supports Invoice, Payment Plan and Card orders. For Direct Bank orders, @see
+CreditOrderBuilder instead.
+
+Use setOrderId() to specify the Svea order id, this is the order id returned 
+with the original create order request response.
+
+Use setCountryCode() to specify the country code matching the original create
+order request.
+
+Use either cancelInvoiceOrder(), cancelPaymentPlanOrder or cancelCardOrder,
+which ever matches the payment method used in the original order request.
+ 
+The final doRequest() will send the cancelOrder request to Svea, and the 
+resulting response code specifies the outcome of the request. 
+
+See [CancelOrderBuilder] (http://htmlpreview.github.io/?https://raw.github.com/sveawebpay/php-integration/develop/apidoc/classes/Svea.CancelOrderBuilder.html) class for methods used to build the order object and the order type to cancel.
+
