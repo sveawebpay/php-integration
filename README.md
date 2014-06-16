@@ -1059,24 +1059,40 @@ Used in usePaymentMethod($paymentMethod) and in usePayPage(),
 [<< To top](https://github.com/sveawebpay/php-integration#php-integration-package-api-for-sveawebpay)
 
 
-x.1 WebPayAdmin::cancelOrder()
+## x.1 WebPayAdmin::cancelOrder()
 
-CancelOrderBuilder is the class used to cancel an order with Svea, that has
-not yet been delivered (invoice, payment plan) or confirmed (card).
-
-Supports Invoice, Payment Plan and Card orders. For Direct Bank orders, @see
-CreditOrderBuilder instead.
+The WebPayAdmin::cancelOrder method is used to cancel an order with Svea, that has
+not yet been delivered (invoice, payment plan) or confirmed (card). (For direct bank orders, see WebPayAdmin::creditOrder.)
 
 See <a href="http://htmlpreview.github.io/?https://raw.github.com/sveawebpay/php-integration/develop/apidoc/classes/Svea.CancelOrderBuilder.html" target="_blank">CancelOrderBuilder</a> class for methods used to build the order object and select the order type to cancel.
 
 ```php
-$request =  
+$result =                               
     WebPay::cancelOrder($config)
         ->setCountryCode("SE")          // Required. Use same country code as in createOrder request.
         ->setOrderId($orderId)          // Required. Use SveaOrderId recieved with createOrder response
         ->cancelInvoiceOrder()          // Use the method corresponding to the original createOrder payment method.
         //->cancelPaymentPlanOrder()     
         //->cancelCardOrder()           
+             ->doRequest()
+;             
+```
+
+## x.2 WebPayAdmin::creditOrder()
+
+The WebPayAdmin::creditOrder method is used to credit an order with Svea, that has been delivered (invoice, payment plan) or confirmed (card). (For direct bank orders, see WebPayAdmin::creditOrder.)
+
+See <a href="http://htmlpreview.github.io/?https://raw.github.com/sveawebpay/php-integration/develop/apidoc/classes/Svea.CancelOrderBuilder.html" target="_blank">CancelOrderBuilder</a> class for methods used to build the order object and select the order type to cancel.
+
+```php
+$result =  
+    WebPay::creditOrder($config)
+//        ->setCountryCode("SE")          // Required. Use same country code as in createOrder request.
+//        ->setOrderId($orderId)          // Required. Use SveaOrderId recieved with createOrder response
+        ->creditInvoiceOrder()          // Use the method corresponding to the original createOrder payment method.
+        //->creditPaymentPlanOrder()     
+        //->creditCardOrder()           
+        //->creditDirectBankOrder()
              ->doRequest()
 ;             
 ```
