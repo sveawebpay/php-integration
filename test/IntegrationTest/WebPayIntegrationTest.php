@@ -11,46 +11,48 @@ require_once $root . '/../TestUtil.php';
 class WebPayIntegrationTest extends PHPUnit_Framework_TestCase {
 
     /// WebPay::createOrder()
-    public function test_createOrder_Invoice_SE_Accepted() {
-        $order = WebPay::createOrder( Svea\SveaConfig::getDefaultConfig() )
-            ->addOrderRow( TestUtil::createOrderRow() )
-            ->addCustomerDetails( TestUtil::createIndividualCustomer("SE") )
-            ->setCountryCode("SE")
-            ->setCurrency("SEK")
-            ->setCustomerReference("created by TestUtil::createOrder()")
-            ->setClientOrderNumber( "clientOrderNumber:".date('c'))
-            ->setOrderDate( date('c') )
-        ;
-        $response = $order->useInvoicePayment()->doRequest();
-
-        $this->assertEquals(1, $response->accepted);
+    public function test_createOrder_useInvoicePayment_returns_InvoicePayment() {
+        $order = WebPay::createOrder( Svea\SveaConfig::getDefaultConfig() );
+        // we should set attributes here if real request
+        $request = $order->useInvoicePayment();
+        $this->assertInstanceOf("Svea\WebService\InvoicePayment", $request);
     }
     
-    public function test_createOrder_Paymentplan_SE_Accepted() {
-
-        $order = WebPay::createOrder( Svea\SveaConfig::getDefaultConfig() )
-            ->addOrderRow( WebPayItem::orderRow()
-                ->setQuantity(1)
-                ->setAmountExVat(1000.00)
-                ->setVatPercent(25)
-            )
-            ->addCustomerDetails( TestUtil::createIndividualCustomer("SE") )
-            ->setCountryCode("SE")
-            ->setCurrency("SEK")
-            ->setCustomerReference("created by TestUtil::createOrder()")
-            ->setClientOrderNumber( "clientOrderNumber:".date('c'))
-            ->setOrderDate( date('c') )
-        ;
-        $response = $order->usePaymentPlanPayment( TestUtil::getGetPaymentPlanParamsForTesting() )->doRequest();
-
-        $this->assertEquals(1, $response->accepted);
+    public function test_createOrder_usePaymentPlanPayment_returns_PaymentPlanPayment() {
+        $order = WebPay::createOrder( Svea\SveaConfig::getDefaultConfig() );
+        // we should set attributes here if real request
+        $request = $order->usePaymentPlanPayment( TestUtil::getGetPaymentPlanParamsForTesting() );
+        $this->assertInstanceOf("Svea\WebService\PaymentPlanPayment", $request);
     }    
     
-    // CreateOrderBuilder card payment method
-    // see CardPaymentURLIntegrationTest->test_manual_CardPayment_getPaymentURL()
+    public function test_createOrder_usePayPageCardOnly_returns_CardPayment() {
+        $order = WebPay::createOrder( Svea\SveaConfig::getDefaultConfig() );
+        // we should set attributes here if real request
+        $request = $order->usePayPageCardOnly();
+        $this->assertInstanceOf("Svea\HostedService\CardPayment", $request);
+    }   
+
+    public function test_createOrder_usePayPageDirectBankOnly_returns_DirectPayment() {
+        $order = WebPay::createOrder( Svea\SveaConfig::getDefaultConfig() );
+        // we should set attributes here if real request
+        $request = $order->usePayPageDirectBankOnly();
+        $this->assertInstanceOf("Svea\HostedService\DirectPayment", $request);
+    }       
+    
+    public function test_createOrder_usePaymentMethod_returns_PaymentMethodPayment() {
+        $order = WebPay::createOrder( Svea\SveaConfig::getDefaultConfig() );
+        // we should set attributes here if real request
+        $request = $order->usePaymentMethod("mocked_paymentMethod");
+        $this->assertInstanceOf("Svea\HostedService\PaymentMethodPayment", $request);
+    }  
+
+    public function test_createOrder_usePayPage_returns_PaymentMethodPayment() {
+        $order = WebPay::createOrder( Svea\SveaConfig::getDefaultConfig() );
+        // we should set attributes here if real request
+        $request = $order->usePayPage();
+        $this->assertInstanceOf("Svea\HostedService\PayPagePayment", $request);
+    }      
         
-    // CreateOrderBuilder direct bank payment method   //TODO    
-       
     /// WebPay::deliverOrder()
     public function test_deliverOrder_deliverInvoiceOrder_with_orderrows_use_DeliverOrderEU_and_is_accepted() {
         
