@@ -333,18 +333,24 @@ class HostedPayment {
     }   
     
     
+    /**
+     * perform recur card payment request
+     * 
+     * @return RecurTransactionResponse
+     */
     public function doRecur() {
         $request = new RecurTransaction( $this->order->conf );
         $response = $request                
-            ->setSubscriptionId( $this->order->subscriptionId )
-            ->setCurrency( $$this->order->currency )
-            ->setCustomerRefNo( $this->order->customerReference ) 
-
-            ->setAmount( 99999 )
-// TODO calculate amount ->setAmount( $this->order->amount )
-            
+            ->setCurrency( $this->order->currency )
+            ->setCustomerRefNo( $this->order->clientOrderNumber )   // CustomerRefNo in Hosted service equals ClientOrderNumber in order objects
             ->setCountryCode( $this->order->countryCode )
+
+            // TODO calculate amount ->setAmount( $this->order->amount )
+            ->setAmount( 99999 )
+            
+            ->setSubscriptionId( $this->subscriptionId )                
             ->doRequest()
-        ;        
+        ;         
+        return $response;
     }
 }

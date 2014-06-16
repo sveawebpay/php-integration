@@ -30,7 +30,12 @@ echo "<pre>Your request response:\n\n";
 print_r( $myResponse->getResponse() );
 
 // save the subscriptionid to a file, for use in recurorder.php
-file_put_contents("subscription.txt", $myResponse->getResponse()->subscriptionId);
+$mySubscriptionId = $myResponse->getResponse()->subscriptionId;
+file_put_contents("subscription.txt", $mySubscriptionId);
+
+$recurorderUrl = "http://localhost/".getPath()."/recurorder.php";
+
+echo "\nFollow the link to place a recur card order using subscriptionId $mySubscriptionId: <a href=\"$recurorderUrl\">$recurorderUrl</a>";
 
 echo "\n</pre><font color='blue'><pre>\n\n
 
@@ -71,4 +76,17 @@ Svea\HostedPaymentResponse Object
     [resultcode] => 127 (CUSTOMERREFNO_ALREADY_USED)
     [errormessage] => Customer reference number already used in another transaction.
 )";
+
+
+/**
+ * get the path to this file, for use in specifying the returnurl etc.
+ */
+function getPath() {
+    $myURL = $_SERVER['SCRIPT_NAME'];
+    $myPath = explode('/', $myURL);
+    unset( $myPath[count($myPath)-1]);
+    $myPath = implode( '/', $myPath);
+
+    return $myPath;
+}
 ?>

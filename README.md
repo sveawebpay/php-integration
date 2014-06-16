@@ -427,7 +427,7 @@ $order
     ->setCountryCode("SE")              // required
     ->setCurrency("SEK")                // required for card payment, direct payment and PayPage payment.
     ->setClientOrderNumber("14050626")  // required for card payment, direct payment, PaymentMethod payment and PayPage payments.
-    ->setCustomerReference("att: kgm")  // optional
+    ->setCustomerReference("att: kgm")  // optional, ignored for card and direct bank orders
     ->setOrderDate("2012-12-12")        // required for invoice and payment plan payments
 ;
 ...

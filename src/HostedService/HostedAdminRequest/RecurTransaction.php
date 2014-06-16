@@ -12,7 +12,7 @@ class RecurTransaction extends HostedRequest {
 
     protected $subscriptionId;
     protected $amount;
-    
+
     function __construct($config) {
         $this->method = "recur";
         parent::__construct($config);
@@ -118,7 +118,7 @@ class RecurTransaction extends HostedRequest {
     
     private function validateCustomerRefNo($self, $errors) {
         if (isset($self->customerRefNo) == FALSE) {                                                        
-            $errors['missing value'] = "customerRefNo is required. Use function setCustomerRefNo().";
+            $errors['missing value'] = "customerRefNo is required. Use function setCustomerRefNo (also check setClientOrderNumber in order builder).";
         }
         return $errors;
     }  
