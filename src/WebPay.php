@@ -143,7 +143,6 @@ class WebPay {
     public static function paymentPlanPricePerMonth($price, $paymentPlanParamsResponseObject) {
         return new Svea\WebService\PaymentPlanPricePerMonth($price, $paymentPlanParamsResponseObject);
     }
-
   
     /**
      * Start building Request to close orders. Only supports Invoice or Payment plan orders.

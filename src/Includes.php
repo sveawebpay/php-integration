@@ -35,7 +35,7 @@ foreach (glob(SVEA_REQUEST_DIR . "/AdminService/admin_soap/*.php") as $config)
 
 foreach (glob(SVEA_REQUEST_DIR . "/HostedService/*.php") as $config)
     include_once($config);
-foreach (glob(SVEA_REQUEST_DIR . "/HostedService/HandleOrder/*.php") as $config)
+foreach (glob(SVEA_REQUEST_DIR . "/HostedService/HostedAdminRequest/*.php") as $config)
     include_once($config);
 foreach (glob(SVEA_REQUEST_DIR . "/HostedService/Helper/*.php") as $config)
     include_once($config);

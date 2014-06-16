@@ -333,18 +333,33 @@ class HostedPayment {
     }   
     
     
+    /**
+     * Perform a recurring card payment request.
+     * 
+     * Note that the specified row information in the order is used only to calculate the
+     * recur order total amount. The order row information is not passed on in the request.
+     * Neither is vat information passed to Svea, only the total order amount.
+     * 
+     * @return RecurTransactionResponse
+     */
     public function doRecur() {
+        
+        // calculate amount from order rows   
+        $formatter = new HostedRowFormatter();
+        $formatter = new HostedRowFormatter();
+        $this->request['rows'] = $formatter->formatRows($this->order);
+        $this->request['amount'] = $formatter->formatTotalAmount($this->request['rows']);
+        $this->request['totalVat'] = $formatter->formatTotalVat( $this->request['rows']);        
+                            
         $request = new RecurTransaction( $this->order->conf );
         $response = $request                
-            ->setSubscriptionId( $this->order->subscriptionId )
-            ->setCurrency( $$this->order->currency )
-            ->setCustomerRefNo( $this->order->customerReference ) 
-
-            ->setAmount( 99999 )
-// TODO calculate amount ->setAmount( $this->order->amount )
-            
+            ->setCurrency( $this->order->currency )
+            ->setAmount( $this->request['amount'] )            
+            ->setCustomerRefNo( $this->order->clientOrderNumber )   // CustomerRefNo in Hosted service equals ClientOrderNumber in order objects
             ->setCountryCode( $this->order->countryCode )
+            ->setSubscriptionId( $this->subscriptionId )                
             ->doRequest()
-        ;        
+        ;         
+        return $response;
     }
 }

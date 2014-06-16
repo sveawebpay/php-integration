@@ -26,7 +26,7 @@ $myOrder->setClientOrderNumber( "order #".date('c') );  // required - use a not 
 // Add order item in a fluent fashion 
 $myOrder->addOrderRow( 
             WebPayItem::orderRow()
-                ->setAmountIncVat( 100.00 )
+                ->setAmountExVat( 100.00 )
                 ->setVatPercent( 25 )
                 ->setQuantity( 1 )
                 ->setDescription( "Månadsavgift via recur" )
@@ -37,7 +37,14 @@ $myOrder->addOrderRow(
 $myRecurOrderRequest = $myOrder->usePaymentMethod(PaymentMethod::KORTCERT);
 
 // For recurring card payments, use setSubscriptionType() on the request object, one of the subscription types from HostedService\HostedPayment
-$myRecurOrderRequest->setSubscriptionId( file_get_contents("subscription.txt"));
+$mySubscriptionId = file_get_contents("subscription.txt");
+if( $mySubscriptionId ) {
+    $myRecurOrderRequest->setSubscriptionId( $mySubscriptionId );
+}
+else {
+    print_r( "subscription.txt not found, run cardorder_recur.php first. aborting.");
+    die();    
+}
 
 // Then set any additional required request attributes as detailed below. (See Svea\PaymentMethodPayment and Svea\HostedPayment classes for details.)
 $myRecurOrderRequest
