@@ -26,7 +26,7 @@ $myOrder->setClientOrderNumber( "order #".date('c') );  // required - use a not 
 // Add order item in a fluent fashion 
 $myOrder->addOrderRow( 
             WebPayItem::orderRow()
-                ->setAmountIncVat( 100.00 )
+                ->setAmountExVat( 100.00 )
                 ->setVatPercent( 25 )
                 ->setQuantity( 1 )
                 ->setDescription( "Månadsavgift" )
