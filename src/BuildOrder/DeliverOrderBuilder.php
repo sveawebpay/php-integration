@@ -147,7 +147,7 @@ class DeliverOrderBuilder extends OrderBuilder {
      * @return WebService\DeliverInvoice|AdminService\DeliverOrdersRequest
      */
     public function deliverInvoiceOrder() {
-        if( count($this->orderRows) >0 ) {
+        if( count($this->orderRows) == 0 ) {
             return new WebService\DeliverInvoice($this);
         }
         else {
@@ -161,7 +161,13 @@ class DeliverOrderBuilder extends OrderBuilder {
      * @return DeliverPaymentPlan
      */
     public function deliverPaymentPlanOrder() {
-        return new WebService\DeliverPaymentPlan($this);
+        if( count($this->orderRows) == 0 ) {
+            return new WebService\DeliverPaymentPlan($this);
+        }
+        else {
+            $this->orderType = "PaymentPlan";
+            return new AdminService\DeliverOrdersRequest($this);
+        }
     }
     /** @var string orderType  one of "Invoice" or "PaymentPlan"*/
     public $orderType;
