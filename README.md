@@ -1081,3 +1081,4 @@ resulting response code specifies the outcome of the request.
 
 See [CancelOrderBuilder] (http://htmlpreview.github.io/?https://raw.github.com/sveawebpay/php-integration/develop/apidoc/classes/Svea.CancelOrderBuilder.html) class for methods used to build the order object and the order type to cancel.
 
+See <a href="http://htmlpreview.github.io/?https://raw.github.com/sveawebpay/php-integration/develop/apidoc/classes/Svea.CancelOrderBuilder.html" target="_blank">CancelOrderBuilder</a> class for methods used to build the order object and the order type to cancel.
