@@ -680,11 +680,11 @@ $form = $order
 
 #### 1.1.24 Payment method -- examples
 
-An example of a synchronous (invoice) order can be found in the<a href="https://github.com/sveawebpay/php-integration/blob/develop/example/invoiceorder/" target="_blank">examples/invoiceorder</a> folder.
+An example of a synchronous (invoice) order can be found in the <a href="https://github.com/sveawebpay/php-integration/blob/develop/example/invoiceorder/" target="_blank">examples/invoiceorder</a> folder.
 
-An example of an asynchronous (card) order can be found in the<a href="https://github.com/sveawebpay/php-integration/blob/develop/example/cardorder/" target="_blank">examples/cardorder</a> folder.
+An example of an asynchronous (card) order can be found in the <a href="https://github.com/sveawebpay/php-integration/blob/develop/example/cardorder/" target="_blank">examples/cardorder</a> folder.
 
-An example of an recurring card order, both the setup transaction and a recurring payment, can be found in the<a href="https://github.com/sveawebpay/php-integration/blob/develop/example/cardorder_recur/" target="_blank">examples/cardorder_recur</a> folder.
+An example of an recurring card order, both the setup transaction and a recurring payment, can be found in the <a href="https://github.com/sveawebpay/php-integration/blob/develop/example/cardorder_recur/" target="_blank">examples/cardorder_recur</a> folder.
 
 ### 1.2 WebPay::deliverOrder()
 The WebPay::deliverOrder request should generally be sent to Svea once the 
@@ -749,6 +749,8 @@ $myResponse = $myDeliverOrderRequest->doRequest();
 ?>
 ```
 
+The above example can be found in the <a href="https://github.com/sveawebpay/php-integration/blob/develop/example/firstdeliver/" target="_blank">examples/firstdeliver</a> folder.
+
 #### 1.2.2 Order delivery -- additional order attributes 
 ```php
 $myDeliverOrder->
@@ -761,9 +763,63 @@ $myDeliverOrder->
 ;
 ```
 
-The above example can be found in the <a href="https://github.com/sveawebpay/php-integration/blob/develop/example/firstdeliver/" target="_blank">examples/firstdeliver</a> folder.
+### 1.3 WebPay::getAddresses()
+Use getAddresses() to fetch a list of validated addresses associated with a 
+given customer identity. Used to i.e. present to the customer the invoice 
+address used by Svea, which for invoice and payment plan orders also should 
+match the order delivery address.
 
-## 1.2. WebPay::getPaymentPlanParams()
+Returns an instance of WebService\getAddressesResponse containing a list of 
+verified addresses and addressSelector strings for a given customer.
+
+The GetAddresses service is only applicable for SE, NO and DK customers and 
+accounts. In Norway, GetAddresses may only be performed on company customers.
+
+See the Svea\WebService\GetAddresses class for more information.
+
+See <a href="http://htmlpreview.github.io/?https://raw.github.com/sveawebpay/php-integration/develop/apidoc/classes/Svea.WebService.GetAddresses.html" target="_blank">GetAddresses</a> class for methods used to build and send a getAddresses request.
+
+#### 1.3.1 getAddresses request example
+
+```php
+$response = WebPay::getAddresses( $config )
+    ->setCountryCode("SE")                  // Required -- supply the country code that corresponds to the account credentials used 
+    ->setOrderTypeInvoice()                 // Required -- use invoice account credentials for getAddresses lookup
+    //->setOrderTypePaymentPlan()           // Required -- use payment account plan credentials for getAddresses lookup
+    ->setIndividual("194605092222")         // Required -- lookup the address of a private individual
+    //->setCompany("CompanyId")             // Required -- lookup the address of a legal entity (i.e. company)
+    ->doRequest();
+;
+```
+
+An complete usage example can be found in the <a href="https://github.com/sveawebpay/php-integration/blob/develop/example/config_getaddresses/" target="_blank">examples/config_getaddresses</a> folder.
+
+[<< To top](https://github.com/sveawebpay/php-integration#php-integration-package-api-for-sveawebpay)
+
+#### 1.3.2 getAddresses response format
+
+See <a href="http://htmlpreview.github.io/?https://raw.github.com/sveawebpay/php-integration/develop/apidoc/classes/Svea.WebService.GetAddressesResponse.html" target="_blank">GetAddresses</a> class for more.
+
+```php
+    $response->accepted                 // boolean, true iff Svea accepted request
+    $response->resultcode               // may contain an error code
+    $response->customerIdentity         // if accepted, may define a GetAddressIdentity object:
+        ->customerType;       // not guaranteed to be defined
+        ->nationalIdNumber;   // not guaranteed to be defined
+        ->phoneNumber;        // not guaranteed to be defined
+        ->firstName;          // not guaranteed to be defined
+        ->lastName;           // not guaranteed to be defined
+        ->fullName;           // not guaranteed to be defined
+        ->street;             // not guaranteed to be defined
+        ->coAddress;          // not guaranteed to be defined
+        ->zipCode;            // not guaranteed to be defined
+        ->locality;           // not guaranteed to be defined
+
+```
+
+[<< To top](https://github.com/sveawebpay/php-integration#php-integration-package-api-for-sveawebpay)
+
+## 1.4 WebPay::getPaymentPlanParams()
 Use getPaymentPlanParams() to fetch all campaigns associated with a given client number before creating the payment plan payment.
 
 ```php
@@ -821,60 +877,6 @@ $paymentPlanParamsResonseObject->values[0..n] (for n campaignCodes), where value
 ```
 [<< To top](https://github.com/sveawebpay/php-integration#php-integration-package-api-for-sveawebpay)
 
-## 3. WebPay::getAddresses()
-Use getAddresses() to fetch validated addresses associated with a given customer identity
-
-Returns an instance of WebService\getAddressesResponse object containing a listo of verified addresses and addressSelector strings for the customer.
-Can be used when creating an order for Company customers to set what billing address to use. 
-
-The GetAddresses service is only applicable for SE, NO and DK customers and accounts. In Norway, GetAddresses may only be performed on company customers.
-
-See the Svea\WebService\GetAddresses class for more information
-
-### 3.1 Order type
-```php
-    ->setOrderTypeInvoice()         //Required if this is an invoice order
-or
-    ->setOrderTypePaymentPlan()     //Required if this is a payment plan order
-```
-[<< To top](https://github.com/sveawebpay/php-integration#php-integration-package-api-for-sveawebpay)
-
-### 3.2 Customer type
-```php
-    ->setIndividual("194605092222")   //Required if this is an individual customer
-or
-    ->setCompany("CompanyId")       //Required if this is a company customer
-```
-[<< To top](https://github.com/sveawebpay/php-integration#php-integration-package-api-for-sveawebpay)
-
-### 3.3 Do request
-```php
-    $response = WebPay::getAddresses($config)
-        ->setOrderTypeInvoice()                                              //See 3.1
-        ->setCountryCode("SE")                                               //Required, accepts SE, DK and NO
-        ->setIndividual("194605092222")                                      //See 3.2
-        ->doRequest();
-```
-
-WebPay::getAddresses->...->doRequest() Returns a GetAddressesResponse object:
-```php
-    $response->accepted                 // boolean, true iff Svea accepted request
-    $response->resultcode               // may contain an error code
-    $response->customerIdentity         // if accepted, may define a GetAddressIdentity object:
-        ->customerType;       // not guaranteed to be defined
-        ->nationalIdNumber;   // not guaranteed to be defined
-        ->phoneNumber;        // not guaranteed to be defined
-        ->firstName;          // not guaranteed to be defined
-        ->lastName;           // not guaranteed to be defined
-        ->fullName;           // not guaranteed to be defined
-        ->street;             // not guaranteed to be defined
-        ->coAddress;          // not guaranteed to be defined
-        ->zipCode;            // not guaranteed to be defined
-        ->locality;           // not guaranteed to be defined
-
-```
-
-[<< To top](https://github.com/sveawebpay/php-integration#php-integration-package-api-for-sveawebpay)
 
 
 [<< To top](https://github.com/sveawebpay/php-integration#php-integration-package-api-for-sveawebpay)
