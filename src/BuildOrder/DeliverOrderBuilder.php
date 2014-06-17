@@ -30,9 +30,17 @@ require_once SVEA_REQUEST_DIR . '/Includes.php';
  * DeliverOrderBuilder collects and prepares order data for use in a deliver 
  * order request to Svea.
  * 
- * For invoice and payment plan orders, the deliver order request should be performed 
- * once the ordered items have been sent out to the customer. The deliver order request
- * triggers the customer invoice being sent out to the customer by Svea. 
+ * For invoice and payment plan orders, the deliver order request should 
+ * generally be sent to Svea once the ordered items have been sent out, or 
+ * otherwise delivered, to the customer.
+ * 
+ * For invoice and payment plan orders, the deliver order request triggers the 
+ * customer invoice being sent out to the customer by Svea. 
+ * 
+ * For card orders, the deliver order request confirms the card transaction, 
+ * which in turn causes the card transaction to be batch processed by Svea. An 
+ * auto-confirm account setting is also available, ask your Svea integration 
+ * manager about this.
  * 
  * For card orders, the deliver order request confirms the card transaction, which in
  * turn causes the card transaction to be batch processed by Svea.
