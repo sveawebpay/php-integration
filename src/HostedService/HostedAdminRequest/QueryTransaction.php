@@ -55,6 +55,7 @@ class QueryTransaction extends HostedRequest {
         );
         return $request_fields;
     }
+    
     public function validate($self) {
         $errors = array();
         $errors = $this->validateTransactionId($self, $errors);

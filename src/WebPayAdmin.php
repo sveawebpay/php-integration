@@ -123,26 +123,32 @@ class WebPayAdmin {
     public static function cancelOrder($config = NULL) {
         if( $config == NULL ) { WebPay::throwMissingConfigException(); }        
         return new Svea\CancelOrderBuilder($config);
-    }
-        
+    }             
+    
     /**
-     * Add order rows to an order. Supports Invoice and Payment Plan orders.
-     * (Card and Direct Bank orders are not supported.)
+     * Query information about an order. Supports all order payment methods.
      * 
-     * Provide information about the new order rows and send the request using 
-     * @see addOrderRowsBuilder methods:
+     * Use the following methods (@see QueryOrderBuilder):
      * ->setOrderId()
-     * ->setCountryCode()
-     * ->addOrderRow() (one or more)
-     * ->addOrderRows() (optional)
+     * ->setCountryCode()  
+     * 
+     * Then select the correct ordertype and perform the request:
+     * ->queryInvoiceOrder() | queryPaymentPlanOrder() | queryCardOrder() | queryDirectBankOrder()
+     *   ->doRequest()
      *  
+     * The final doRequest() returns either a GetOrdersResponse or an QueryTransactionResponse
+     * 
+     * @see \Svea\AdminService\GetOrdersResponse \Svea\AdminService\GetOrdersResponse (Invoice or PartPayment orders) or
+     * @see \Svea\HostedService\QueryTransactionResponse \Svea\HostedService\QueryTransactionResponse (Card or DirectBank orders)
+     * 
      * @param ConfigurationProvider $config  instance implementing ConfigurationProvider
-     * @return Svea\AddOrderRowsBuilder
+     * @return Svea\QueryOrderBuilder
+     * @throws Exception
      */
-    public static function addOrderRows( $config = NULL ) {
+    public static function queryOrder( $config = NULL ) {
         if( $config == NULL ) { WebPay::throwMissingConfigException(); }
-        return new Svea\AddOrderRowsBuilder($config);
-    }               
+        return new Svea\QueryOrderBuilder($config);
+    }    
     
     /**
      * Cancel order rows in an order. Supports Invoice, Payment Plan and Card orders.
@@ -200,6 +206,25 @@ class WebPayAdmin {
     }  
       
     /**
+     * Add order rows to an order. Supports Invoice and Payment Plan orders.
+     * (Card and Direct Bank orders are not supported.)
+     * 
+     * Provide information about the new order rows and send the request using 
+     * @see addOrderRowsBuilder methods:
+     * ->setOrderId()
+     * ->setCountryCode()
+     * ->addOrderRow() (one or more)
+     * ->addOrderRows() (optional)
+     *  
+     * @param ConfigurationProvider $config  instance implementing ConfigurationProvider
+     * @return Svea\AddOrderRowsBuilder
+     */
+    public static function addOrderRows( $config = NULL ) {
+        if( $config == NULL ) { WebPay::throwMissingConfigException(); }
+        return new Svea\AddOrderRowsBuilder($config);
+    }      
+    
+    /**
      * Update order rows in an non-delivered invoice or payment plan order, 
      * or lower amount to charge in non-confirmed card orders. Supports Invoice 
      * and Payment Plan orders, limited support for Card orders. (Direct Bank 
@@ -221,31 +246,6 @@ class WebPayAdmin {
         return new Svea\UpdateOrderRowsBuilder($config);
     }
     
-
-    /**
-     * Query information about an order. Supports all order payment methods.
-     * 
-     * Use the following methods (@see QueryOrderBuilder):
-     * ->setOrderId()
-     * ->setCountryCode()  
-     * 
-     * Then select the correct ordertype and perform the request:
-     * ->queryInvoiceOrder() | queryPaymentPlanOrder() | queryCardOrder() | queryDirectBankOrder()
-     *   ->doRequest()
-     *  
-     * The final doRequest() response is of one of the following types and may 
-     * contain different attributes depending on the original payment method:
-     * @see Svea\GetOrdersResponse (Invoice or PartPayment orders) or
-     * @see Svea\QueryTransactionResponse (Card or DirectBank orders)
-     * 
-     * @param ConfigurationProvider $config  instance implementing ConfigurationProvider
-     * @return Svea\QueryOrderBuilder
-     * @throws Exception
-     */
-    public static function queryOrder( $config = NULL ) {
-        if( $config == NULL ) { WebPay::throwMissingConfigException(); }
-        return new Svea\QueryOrderBuilder($config);
-    }
 
 // * updateOrderRows -- update order rows in non-delivered invoice or payment plan order, 
 //         or lower amount to charge (only) for non-confirmed card orders

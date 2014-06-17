@@ -34,7 +34,7 @@ class QueryOrderBuilder {
     /**
      * Required. Use SveaOrderId recieved with createOrder response.
      * @param string $orderIdAsString
-     * @return $this
+     * @return self
      */
     public function setOrderId($orderIdAsString) {
         $this->orderId = $orderIdAsString;
@@ -46,7 +46,7 @@ class QueryOrderBuilder {
     /**
      * Required. Use same countryCode as in createOrder request.
      * @param string $countryCode
-     * @return $this
+     * @return self
      */
     public function setCountryCode($countryCodeAsString) {
         $this->countryCode = $countryCodeAsString;
@@ -58,7 +58,7 @@ class QueryOrderBuilder {
     /**
      * Required.
      * @param string $orderType -- one of ConfigurationProvider::INVOICE_TYPE, ::PAYMENTPLAN_TYPE, ::HOSTED_TYPE
-     * @return $this
+     * @return self
      */
     public function setOrderType($orderTypeAsConst) {
         $this->orderType = $orderTypeAsConst;
@@ -69,7 +69,7 @@ class QueryOrderBuilder {
     
     /**
      * Use queryInvoiceOrder() to query an Invoice order using AdminServiceRequest GetOrders request
-     * @return GetOrdersRequest 
+     * @return AdminService\GetOrdersRequest 
      */
     public function queryInvoiceOrder() {
         $this->setOrderType(\ConfigurationProvider::INVOICE_TYPE );
@@ -78,7 +78,7 @@ class QueryOrderBuilder {
     
     /**
      * Use queryPaymentPlanOrder() to query an PaymentPlan order using AdminServiceRequest GetOrders request
-     * @return GetOrdersRequest 
+     * @return AdminService\GetOrdersRequest 
      */
     public function queryPaymentPlanOrder() {
         $this->setOrderType(\ConfigurationProvider::PAYMENTPLAN_TYPE);
@@ -87,11 +87,21 @@ class QueryOrderBuilder {
 
     /**
      * Use queryCardOrder() to query a Card order.
-     * @return QueryTransaction
+     * @return HostedService\QueryTransaction
      */
     public function queryCardOrder() {
         $this->setOrderType(\ConfigurationProvider::HOSTED_ADMIN_TYPE);
         $queryTransaction = new HostedService\QueryTransaction($this->conf);
         return $queryTransaction->setTransactionId($this->orderId)->setCountryCode($this->countryCode);
     }  
+
+    /**
+     * Use queryDirectBankOrder() to query a Direct Bank order.
+     * @return HostedService\QueryTransaction
+     */
+    public function queryDirectBankOrder() {
+        $this->setOrderType(\ConfigurationProvider::HOSTED_ADMIN_TYPE);
+        $queryTransaction = new HostedService\QueryTransaction($this->conf);
+        return $queryTransaction->setTransactionId($this->orderId)->setCountryCode($this->countryCode);
+    }          
 }

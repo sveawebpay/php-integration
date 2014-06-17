@@ -913,6 +913,10 @@ $response = $request->doRequest();      // send request and receive either WebSe
 ...
 ```
 
+### 2.2 WebPayAdmin::queryOrder()
+
+
+
 
 
 ## 9. Additional Developer Resources
