@@ -58,9 +58,9 @@ require_once SVEA_REQUEST_DIR . '/Includes.php';
 class DeliverOrderBuilder extends OrderBuilder {
 
      /**
-     * Order Id is recieved in response to ->doRequest when creating order.
+     * Order Id is recieved when creating order.
      * This is the link between deliverOrder and createOrder.
-     * @var Order id
+     * @var numeric $orderId
      */
     public $orderId;    
 

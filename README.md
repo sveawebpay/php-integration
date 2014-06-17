@@ -887,9 +887,9 @@ $paymentPlanParamsResonseObject->values[0..n] (for n campaignCodes), where value
 [<< To top](https://github.com/sveawebpay/php-integration#php-integration-package-api-for-sveawebpay)
 
 
-# 2. WebPayAdmin
+## 2. WebPayAdmin
 
-## 2.1 WebPayAdmin::cancelOrder()
+### 2.1 WebPayAdmin::cancelOrder()
 The WebPayAdmin::cancelOrder method is used to cancel an order with Svea, that has
 not yet been delivered (invoice, payment plan) or confirmed (card). 
 

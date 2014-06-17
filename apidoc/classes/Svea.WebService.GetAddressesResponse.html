@@ -139,37 +139,37 @@
                                 <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle " data-toggle="collapse" data-target="#namespace-569625830"></a>
+                                    <a class="accordion-toggle " data-toggle="collapse" data-target="#namespace-345282932"></a>
                                 <a href="../namespaces/default.html" style="margin-left: 30px; padding-left: 0">\</a>
             </div>
-            <div id="namespace-569625830" class="accordion-body collapse in">
+            <div id="namespace-345282932" class="accordion-body collapse in">
                 <div class="accordion-inner">
 
                                                     <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1245298170"></a>
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1412215386"></a>
                                 <a href="../namespaces/Svea.html" style="margin-left: 30px; padding-left: 0">Svea</a>
             </div>
-            <div id="namespace-1245298170" class="accordion-body collapse ">
+            <div id="namespace-1412215386" class="accordion-body collapse ">
                 <div class="accordion-inner">
 
                                                     <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1678577179"></a>
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-854256026"></a>
                                 <a href="../namespaces/Svea.AdminService.html" style="margin-left: 30px; padding-left: 0">AdminService</a>
             </div>
-            <div id="namespace-1678577179" class="accordion-body collapse ">
+            <div id="namespace-854256026" class="accordion-body collapse ">
                 <div class="accordion-inner">
 
                                                     <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-815438763"></a>
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-719155652"></a>
                                 <a href="../namespaces/Svea.AdminService.AdminSoap.html" style="margin-left: 30px; padding-left: 0">AdminSoap</a>
             </div>
-            <div id="namespace-815438763" class="accordion-body collapse ">
+            <div id="namespace-719155652" class="accordion-body collapse ">
                 <div class="accordion-inner">
 
                     
@@ -222,10 +222,10 @@
                                                     <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-386755559"></a>
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1301801788"></a>
                                 <a href="../namespaces/Svea.HostedService.html" style="margin-left: 30px; padding-left: 0">HostedService</a>
             </div>
-            <div id="namespace-386755559" class="accordion-body collapse ">
+            <div id="namespace-1301801788" class="accordion-body collapse ">
                 <div class="accordion-inner">
 
                     
@@ -268,19 +268,19 @@
                                                     <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1798567165"></a>
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-194796528"></a>
                                 <a href="../namespaces/Svea.WebService.html" style="margin-left: 30px; padding-left: 0">WebService</a>
             </div>
-            <div id="namespace-1798567165" class="accordion-body collapse ">
+            <div id="namespace-194796528" class="accordion-body collapse ">
                 <div class="accordion-inner">
 
                                                     <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1393234027"></a>
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-727990268"></a>
                                 <a href="../namespaces/Svea.WebService.WebServiceSoap.html" style="margin-left: 30px; padding-left: 0">WebServiceSoap</a>
             </div>
-            <div id="namespace-1393234027" class="accordion-body collapse ">
+            <div id="namespace-727990268" class="accordion-body collapse ">
                 <div class="accordion-inner">
 
                     
@@ -402,6 +402,19 @@
                     <p><em>Handles the Svea WebService GetAddresses request response.</em></p>
                     <p>(Note that this maps to the legacy Web Service, not the Europe Web Service GetAddresses request.)</p>
 <p>For attribute descriptions, see the formatObject() method documentation</p>
+<pre><code>$response-&gt;accepted                 // boolean, true iff Svea accepted request
+$response-&gt;resultcode               // may contain an error code
+$response-&gt;customerIdentity         // if accepted, may define a GetAddressIdentity object:
+    -&gt;customerType;       // not guaranteed to be defined
+    -&gt;nationalIdNumber;   // not guaranteed to be defined
+    -&gt;phoneNumber;        // not guaranteed to be defined
+   -&gt;firstName;          // not guaranteed to be defined
+    -&gt;lastName;           // not guaranteed to be defined
+    -&gt;fullName;           // not guaranteed to be defined
+    -&gt;street;             // not guaranteed to be defined
+   -&gt;coAddress;          // not guaranteed to be defined
+    -&gt;zipCode;            // not guaranteed to be defined
+    -&gt;locality;           // not guaranteed to be defined</code></pre>
 
                     <section id="summary">
                         <h2>Summary</h2>
@@ -808,7 +821,7 @@
                 <section class="span10 offset1">
                     <hr />
                     Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor </a> and authored
-                    on June 17th, 2014 at 11:30.
+                    on June 17th, 2014 at 13:22.
                 </section>
             </section>
         </section>

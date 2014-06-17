@@ -139,37 +139,37 @@
                                 <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle " data-toggle="collapse" data-target="#namespace-1641111653"></a>
+                                    <a class="accordion-toggle " data-toggle="collapse" data-target="#namespace-2098449371"></a>
                                 <a href="../namespaces/default.html" style="margin-left: 30px; padding-left: 0">\</a>
             </div>
-            <div id="namespace-1641111653" class="accordion-body collapse in">
+            <div id="namespace-2098449371" class="accordion-body collapse in">
                 <div class="accordion-inner">
 
                                                     <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1510711693"></a>
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-384391673"></a>
                                 <a href="../namespaces/Svea.html" style="margin-left: 30px; padding-left: 0">Svea</a>
             </div>
-            <div id="namespace-1510711693" class="accordion-body collapse ">
+            <div id="namespace-384391673" class="accordion-body collapse ">
                 <div class="accordion-inner">
 
                                                     <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1389512846"></a>
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1998238525"></a>
                                 <a href="../namespaces/Svea.AdminService.html" style="margin-left: 30px; padding-left: 0">AdminService</a>
             </div>
-            <div id="namespace-1389512846" class="accordion-body collapse ">
+            <div id="namespace-1998238525" class="accordion-body collapse ">
                 <div class="accordion-inner">
 
                                                     <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1462859067"></a>
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1626764280"></a>
                                 <a href="../namespaces/Svea.AdminService.AdminSoap.html" style="margin-left: 30px; padding-left: 0">AdminSoap</a>
             </div>
-            <div id="namespace-1462859067" class="accordion-body collapse ">
+            <div id="namespace-1626764280" class="accordion-body collapse ">
                 <div class="accordion-inner">
 
                     
@@ -222,10 +222,10 @@
                                                     <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1342058825"></a>
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-681833147"></a>
                                 <a href="../namespaces/Svea.HostedService.html" style="margin-left: 30px; padding-left: 0">HostedService</a>
             </div>
-            <div id="namespace-1342058825" class="accordion-body collapse ">
+            <div id="namespace-681833147" class="accordion-body collapse ">
                 <div class="accordion-inner">
 
                     
@@ -268,19 +268,19 @@
                                                     <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-531934715"></a>
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-459320409"></a>
                                 <a href="../namespaces/Svea.WebService.html" style="margin-left: 30px; padding-left: 0">WebService</a>
             </div>
-            <div id="namespace-531934715" class="accordion-body collapse ">
+            <div id="namespace-459320409" class="accordion-body collapse ">
                 <div class="accordion-inner">
 
                                                     <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1813961187"></a>
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-732099020"></a>
                                 <a href="../namespaces/Svea.WebService.WebServiceSoap.html" style="margin-left: 30px; padding-left: 0">WebServiceSoap</a>
             </div>
-            <div id="namespace-1813961187" class="accordion-body collapse ">
+            <div id="namespace-732099020" class="accordion-body collapse ">
                 <div class="accordion-inner">
 
                     
@@ -407,9 +407,14 @@ customer identity. Each address has an AddressSelector attribute that
 uniquely identifies the address.</p>
 <p>The GetAddresses service is only applicable for SE, NO and DK customers and accounts.
 In Norway, GetAddresses may only be performed on company customers.</p>
-<ul>
-<li>@author Anneli Halld'n, Daniel Brolund, Kristian Grossman-Madsen for Svea WebPay</li>
-</ul>
+<p>$response = WebPay::getAddresses( $config )</p>
+<pre><code>-&gt;setCountryCode("SE")                  // Required -- supply the country code that corresponds to the account credentials used
+-&gt;setOrderTypeInvoice()                 // Required -- use invoice account credentials for getAddresses lookup
+//-&gt;setOrderTypePaymentPlan()           // Required -- use payment account plan credentials for getAddresses lookup
+-&gt;setIndividual("194605092222")         // Required -- lookup the address of a private individual
+//-&gt;setCompany("CompanyId")             // Required -- lookup the address of a legal entity (i.e. company)</code></pre>
+<p>   ->doRequest();
+;</p>
 
                     <section id="summary">
                         <h2>Summary</h2>
@@ -491,6 +496,14 @@ In Norway, GetAddresses may only be performed on company customers.</p>
                                                                         </dl>
                     <h2>Tags</h2>
                     <table class="table table-condensed">
+                                            <tr>
+                            <th>
+                                author
+                            </th>
+                            <td>
+                                                                    <p>Anneli Halld'n, Daniel Brolund, Kristian Grossman-Madsen for Svea WebPay</p>
+                                                            </td>
+                        </tr>
                                             <tr>
                             <th>
                                 todo
@@ -1033,7 +1046,7 @@ inspect the resulting SveaRequest object.)</p>
                 <section class="span10 offset1">
                     <hr />
                     Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor </a> and authored
-                    on June 17th, 2014 at 11:30.
+                    on June 17th, 2014 at 13:22.
                 </section>
             </section>
         </section>

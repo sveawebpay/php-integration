@@ -20,7 +20,16 @@ require_once SVEA_REQUEST_DIR . '/Config/SveaConfig.php';
  * The GetAddresses service is only applicable for SE, NO and DK customers and accounts. 
  * In Norway, GetAddresses may only be performed on company customers.
  * 
- *  * @author Anneli Halld'n, Daniel Brolund, Kristian Grossman-Madsen for Svea WebPay
+ * $response = WebPay::getAddresses( $config )
+ *     ->setCountryCode("SE")                  // Required -- supply the country code that corresponds to the account credentials used 
+ *     ->setOrderTypeInvoice()                 // Required -- use invoice account credentials for getAddresses lookup
+ *     //->setOrderTypePaymentPlan()           // Required -- use payment account plan credentials for getAddresses lookup
+ *     ->setIndividual("194605092222")         // Required -- lookup the address of a private individual
+ *     //->setCompany("CompanyId")             // Required -- lookup the address of a legal entity (i.e. company)
+ *    ->doRequest();
+ * ;
+ * 
+ *  @author Anneli Halld'n, Daniel Brolund, Kristian Grossman-Madsen for Svea WebPay
  */
 class GetAddresses {
 
