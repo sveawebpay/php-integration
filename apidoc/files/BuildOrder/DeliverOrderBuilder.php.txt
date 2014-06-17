@@ -5,7 +5,36 @@ require_once 'OrderBuilder.php';
 require_once SVEA_REQUEST_DIR . '/Includes.php';
 
 /**
- * DeliverOrderBuilder
+ * DeliverOrderBuilder collects and prepares order data for use in a deliver 
+ * order request to Svea.
+ * 
+ * For invoice and payment plan orders, the deliver order request should 
+ * generally be sent to Svea once the ordered items have been sent out, or 
+ * otherwise delivered, to the customer.
+ * 
+ * For invoice and payment plan orders, the deliver order request triggers the 
+ * customer invoice being sent out to the customer by Svea. 
+ * 
+ * For card orders, the deliver order request confirms the card transaction, 
+ * which in turn causes the card transaction to be batch processed by Svea. An 
+ * auto-confirm account setting is also available, ask your Svea integration 
+ * manager about this.
+ * 
+ * For card orders, the deliver order request confirms the card transaction, which in
+ * turn causes the card transaction to be batch processed by Svea.
+ * 
+ * Generally, orders are delivered in full, and so will also be the case for orders
+ * delivered when no order rows have been added to the DeliverOrderBuilder object.
+ * 
+ * Set all required order attributes in a DeliverOrderBuilder instance by using the 
+ * OrderBuilder setAttribute() methods. Instance methods can be chained together, as 
+ * they return the instance itself in a fluent manner.
+ * 
+ * Finish by using the delivery method matching the payment method specified in the 
+ * createOrder request.
+ * 
+ * You can then go on specifying any payment method specific settings, using methods provided by the 
+ * returned deliver order request class.
  * 
  * Invoice required methods: 
  * ->addOrderRow( TestUtil::createOrderRow() )
@@ -24,32 +53,6 @@ require_once SVEA_REQUEST_DIR . '/Includes.php';
  * Card optional methods:
  * ->setCaptureDate( $orderId )
  *  
- */
-
-/**
- * DeliverOrderBuilder collects and prepares order data for use in a deliver 
- * order request to Svea.
- * 
- * For invoice and payment plan orders, the deliver order request should be performed 
- * once the ordered items have been sent out to the customer. The deliver order request
- * triggers the customer invoice being sent out to the customer by Svea. 
- * 
- * For card orders, the deliver order request confirms the card transaction, which in
- * turn causes the card transaction to be batch processed by Svea.
- * 
- * Generally, orders are delivered in full, and so will also be the case for orders
- * delivered when no order rows have been added to the DeliverOrderBuilder object.
- * 
- * Set all required order attributes in a DeliverOrderBuilder instance by using the 
- * OrderBuilder setAttribute() methods. Instance methods can be chained together, as 
- * they return the instance itself in a fluent manner.
- * 
- * Finish by using the delivery method matching the payment method specified in the 
- * createOrder request.
- * 
- * You can then go on specifying any payment method specific settings, using methods provided by the 
- * returned deliver order request class.
- * 
  * @author Kristian Grossman-Madsen, Anneli Halld'n, Daniel Brolund for Svea Webpay
  */
 class DeliverOrderBuilder extends OrderBuilder {
@@ -68,7 +71,7 @@ class DeliverOrderBuilder extends OrderBuilder {
      * the original create order request order rows will be invoiced by Svea. 
      * 
      * If not all order rows match, the order will be partially delivered/invoiced, 
-     * see the Svea Web Service EU API documentation for details.
+     * see the Svea Web Service EU API documentation for details on how this works.
      */
     public function addOrderRow($itemOrderRowObject) {
         return parent::addOrderRow($itemOrderRowObject);
@@ -147,7 +150,7 @@ class DeliverOrderBuilder extends OrderBuilder {
      * @return WebService\DeliverInvoice|AdminService\DeliverOrdersRequest
      */
     public function deliverInvoiceOrder() {
-        if( count($this->orderRows) >0 ) {
+        if( count($this->orderRows) > 0 ) {
             return new WebService\DeliverInvoice($this);
         }
         else {
@@ -161,7 +164,13 @@ class DeliverOrderBuilder extends OrderBuilder {
      * @return DeliverPaymentPlan
      */
     public function deliverPaymentPlanOrder() {
-        return new WebService\DeliverPaymentPlan($this);
+        if( count($this->orderRows) > 0 ) {
+            return new WebService\DeliverPaymentPlan($this);
+        }
+        else {
+            $this->orderType = "PaymentPlan";
+            return new AdminService\DeliverOrdersRequest($this);
+        }
     }
     /** @var string orderType  one of "Invoice" or "PaymentPlan"*/
     public $orderType;
