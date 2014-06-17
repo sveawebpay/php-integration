@@ -99,6 +99,33 @@ include_once SVEA_REQUEST_DIR . "/Includes.php";
 class WebPayAdmin {
 
     /**
+     * Cancel an undelivered/unconfirmed order. Supports Invoice, PaymentPlan 
+     * and Card orders. (For Direct Bank orders, see CreditOrder instead.)
+     *  
+     * Use the following methods to set the order attributes needed in the request: 
+     * ->setOrderId(sveaOrderId or transactionId from createOrder response)
+     * ->setCountryCode()
+     * 
+     * Then select the correct ordertype and perform the request:
+     * ->cancelInvoiceOrder() | cancelPaymentPlanOrder() | cancelCardOrder()
+     *   ->doRequest
+     * 
+     * The final doRequest() returns either a CloseOrderResult or an AnnulTransactionResponse
+     * 
+     * @see \Svea\WebService\CloseOrderResult Svea\WebService\CloseOrderResult (Invoice or PartPayment orders)
+     * 
+     * @see \Svea\HostedService\AnnulTransactionResponse \Svea\HostedService\AnnulTransactionResponse (Card orders)
+     * 
+     * @param ConfigurationProvider $config  instance implementing ConfigurationProvider
+     * @return Svea\CancelOrderBuilder
+     * @throws Exception
+     */
+    public static function cancelOrder($config = NULL) {
+        if( $config == NULL ) { WebPay::throwMissingConfigException(); }        
+        return new Svea\CancelOrderBuilder($config);
+    }
+        
+    /**
      * Add order rows to an order. Supports Invoice and Payment Plan orders.
      * (Card and Direct Bank orders are not supported.)
      * 
@@ -194,32 +221,7 @@ class WebPayAdmin {
         return new Svea\UpdateOrderRowsBuilder($config);
     }
     
-    /**
-     * Cancel an undelivered/unconfirmed order. Supports Invoice, PaymentPlan 
-     * and Card orders. (For Direct Bank orders, see CreditOrder instead.)
-     *  
-     * Use the following methods to set the order attributes needed in the request: 
-     * ->setOrderId(sveaOrderId or transactionId from createOrder response)
-     * ->setCountryCode()
-     * 
-     * Then select the correct ordertype and perform the request:
-     * ->cancelInvoiceOrder() | cancelPartPaymentOrder() | cancelCardOrder()
-     *   ->doRequest
-     * 
-     * The final doRequest() response is of one of the following types and may 
-     * contain different attributes depending on the original payment method:
-     * @see CloseOrderResult (Invoice or PartPayment orders) or
-     * @see HostedAdminResponse (Card orders)
-     * 
-     * @param ConfigurationProvider $config  instance implementing ConfigurationProvider
-     * @return Svea\CancelOrderBuilder object
-     * @throws Exception
-     */
-    public static function cancelOrder($config = NULL) {
-        if( $config == NULL ) { WebPay::throwMissingConfigException(); }        
-        return new Svea\CancelOrderBuilder($config);
-    }
-    
+
     /**
      * Query information about an order. Supports all order payment methods.
      * 

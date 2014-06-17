@@ -819,7 +819,7 @@ See <a href="http://htmlpreview.github.io/?https://raw.github.com/sveawebpay/php
 
 [<< To top](https://github.com/sveawebpay/php-integration#php-integration-package-api-for-sveawebpay)
 
-## 1.4 WebPay::getPaymentPlanParams()
+### 1.4 WebPay::getPaymentPlanParams()
 Use getPaymentPlanParams() to fetch all campaigns associated with a given client number before creating the payment plan payment.
 
 ```php
@@ -853,10 +853,19 @@ The response is an instance of WebService\PaymentPlanParamsResponse, with the av
 
 [<< To top](https://github.com/sveawebpay/php-integration#php-integration-package-api-for-sveawebpay)
 
-### 2.1 WebPay::paymentPlanPricePerMonth()
+### 1.5 WebPay::getPaymentMethods()
+Returns an array of SystemPaymentMethods available to a certain merchantId, which 
+are constants defined in class PaymentMethod.
 
-TODO check this
+See file PaymentMethodIntegrationTest.php for usage.
 
+```php
+  $fooArray = WebPay::getPaymentMethods( $config )  // optional, if no $config given, will use defaults from SveaConfig
+                    ->setContryCode("SE")           // optional, if no country given, will use default country "SE"
+                    ->doRequest();
+```
+
+### 1.6 WebPay::paymentPlanPricePerMonth()
 This is a helper function provided to calculate the monthly price for the different payment plan options for a given sum.
 This information may be used when displaying i.e. payment options to the customer by checkout, or to display the lowest
 amount due per month to display on a product level.
@@ -878,64 +887,33 @@ $paymentPlanParamsResonseObject->values[0..n] (for n campaignCodes), where value
 [<< To top](https://github.com/sveawebpay/php-integration#php-integration-package-api-for-sveawebpay)
 
 
+# 2. WebPayAdmin
 
-[<< To top](https://github.com/sveawebpay/php-integration#php-integration-package-api-for-sveawebpay)
+## 2.1 WebPayAdmin::cancelOrder()
+The WebPayAdmin::cancelOrder method is used to cancel an order with Svea, that has
+not yet been delivered (invoice, payment plan) or confirmed (card). 
 
-## 6. closeOrder
-Use when you want to cancel an undelivered order. Valid only for invoice and payment plan orders.
-Required is the order id received when creating the order.
+Direct bank orders are not supported, see WebPayAdmin::creditOrder.
 
-[<< To top](https://github.com/sveawebpay/php-integration#php-integration-package-api-for-sveawebpay)
+See <a href="http://htmlpreview.github.io/?https://raw.github.com/sveawebpay/php-integration/develop/apidoc/classes/Svea.CancelOrderBuilder.html" target="_blank">CancelOrderBuilder</a> class for methods used to build the order object and select the order type to cancel.
 
-### 6.1 Close by payment type
-```php
-    ->closeInvoiceOrder()
-or
-    ->closePaymentPlanOrder()
-```
+#### 2.1.1. cancelOrder example
 
 ```php
-    $request =  WebPay::closeOrder($config)
-        ->setOrderId($orderId)                                                  //Required, received when creating an order.
-        ->closeInvoiceOrder()
-             ->doRequest();
-```
-[<< To top](https://github.com/sveawebpay/php-integration#php-integration-package-api-for-sveawebpay)
-
-## 7. Response handler
-All synchronous responses are handled through *SveaResponse* and structured into objects.
-
-Asynchronous responses recieved after sending the values *merchantid* and *xmlMessageBase64* to
-hosted solutions can also be processed through the *SveaResponse* class. The response from server will be sent to the *returnUrl*
-with POST or GET. 
-
-The response contains the parameters: *response*, *merchantid*, and *mac*. The *response* is a Base64 encoded message. The *mac* is a calculated authorization message. Use *SveaResponse* to get a structured object similar to the synchronous answer instead.
-
-For asynchronous services, create an instance of SveaResponse, pass it the resulting xml response as part of the $_REQUEST response along with countryCode and config, then receive your HostedResponse instance by calling the getResponse() method.
-
-Params:
-* The POST or GET message as an associative array with the keys "response", "merchantid" and "mac".
-* CountryCode, i.e. "SE"
-* Config(https://github.com/sveawebpay/php-integration#configuration), an object implementing the ConfigurationProvider interface.
-
-(For synchronous services, the appropriate WebServiceResponse instance is returned when calling ->doRequest() on the order object.)
-
-```php
-  $response = (new SveaResponse($_REQUEST,$countryCode,$config))->getResponse();
+...
+$request =                               
+    WebPay::cancelOrder($config)
+        ->setCountryCode("SE")          // Required. Use same country code as in createOrder request.
+        ->setOrderId($orderId)          // Required. Use SveaOrderId recieved with createOrder response
+        ->cancelInvoiceOrder()          // Use the method corresponding to the original createOrder payment method.
+        //->cancelPaymentPlanOrder()     
+        //->cancelCardOrder()           
+;
+$response = $request->doRequest();      // send request and receive either WebService\CloseOrderResponse or HostedService\AnnulTransactionResponse
+...
 ```
 
-[<< To top](https://github.com/sveawebpay/php-integration#php-integration-package-api-for-sveawebpay)
 
-##8. GetPaymentMethods
-Returns an array of SystemPaymentMethods available to a certain merchantId, which are constants defined in class PaymentMethod. Used to i.e. determine available Banks for direct bank payments.
-
-See file PaymentMethodIntegrationTest.php for usage.
-
-```php
-  $fooArray = WebPay::getPaymentMethods( $config )  // optional, if no $config given, will use defaults from SveaConfig
-                    ->setContryCode("SE")           // optional, if no country given, will use default country "SE"
-                    ->doRequest();
-```
 
 ## 9. Additional Developer Resources
 In the Helper class we make available helper functions for i.e. bankers rounding, splitting a sum with an arbitrary tax rate over two fixed tax rates, as well as splitting street addresses into streetname and housenumber. See the Helper class definition for further information.
@@ -969,24 +947,6 @@ Used in usePaymentMethod($paymentMethod) and in usePayPage(),
 [<< To top](https://github.com/sveawebpay/php-integration#php-integration-package-api-for-sveawebpay)
 
 
-## x.1 WebPayAdmin::cancelOrder()
-
-The WebPayAdmin::cancelOrder method is used to cancel an order with Svea, that has
-not yet been delivered (invoice, payment plan) or confirmed (card). (For direct bank orders, see WebPayAdmin::creditOrder.)
-
-See <a href="http://htmlpreview.github.io/?https://raw.github.com/sveawebpay/php-integration/develop/apidoc/classes/Svea.CancelOrderBuilder.html" target="_blank">CancelOrderBuilder</a> class for methods used to build the order object and select the order type to cancel.
-
-```php
-$result =                               
-    WebPay::cancelOrder($config)
-        ->setCountryCode("SE")          // Required. Use same country code as in createOrder request.
-        ->setOrderId($orderId)          // Required. Use SveaOrderId recieved with createOrder response
-        ->cancelInvoiceOrder()          // Use the method corresponding to the original createOrder payment method.
-        //->cancelPaymentPlanOrder()     
-        //->cancelCardOrder()           
-             ->doRequest()
-;             
-```
 
 
  5. WebPayAdmin::creditInvoice
@@ -1035,3 +995,30 @@ $result =
              ->doRequest()
 ;             
 ```
+
+
+
+## 7. Response handler
+All synchronous responses are handled through *SveaResponse* and structured into objects.
+
+Asynchronous responses recieved after sending the values *merchantid* and *xmlMessageBase64* to
+hosted solutions can also be processed through the *SveaResponse* class. The response from server will be sent to the *returnUrl*
+with POST or GET. 
+
+The response contains the parameters: *response*, *merchantid*, and *mac*. The *response* is a Base64 encoded message. The *mac* is a calculated authorization message. Use *SveaResponse* to get a structured object similar to the synchronous answer instead.
+
+For asynchronous services, create an instance of SveaResponse, pass it the resulting xml response as part of the $_REQUEST response along with countryCode and config, then receive your HostedResponse instance by calling the getResponse() method.
+
+Params:
+* The POST or GET message as an associative array with the keys "response", "merchantid" and "mac".
+* CountryCode, i.e. "SE"
+* Config(https://github.com/sveawebpay/php-integration#configuration), an object implementing the ConfigurationProvider interface.
+
+(For synchronous services, the appropriate WebServiceResponse instance is returned when calling ->doRequest() on the order object.)
+
+```php
+  $response = (new SveaResponse($_REQUEST,$countryCode,$config))->getResponse();
+```
+
+[<< To top](https://github.com/sveawebpay/php-integration#php-integration-package-api-for-sveawebpay)
+
