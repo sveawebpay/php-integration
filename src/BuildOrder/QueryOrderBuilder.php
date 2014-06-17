@@ -34,7 +34,7 @@ class QueryOrderBuilder {
     /**
      * Required. Use SveaOrderId recieved with createOrder response.
      * @param string $orderIdAsString
-     * @return self
+     * @return $this
      */
     public function setOrderId($orderIdAsString) {
         $this->orderId = $orderIdAsString;
@@ -46,7 +46,7 @@ class QueryOrderBuilder {
     /**
      * Required. Use same countryCode as in createOrder request.
      * @param string $countryCode
-     * @return self
+     * @return $this
      */
     public function setCountryCode($countryCodeAsString) {
         $this->countryCode = $countryCodeAsString;
@@ -58,7 +58,7 @@ class QueryOrderBuilder {
     /**
      * Required.
      * @param string $orderType -- one of ConfigurationProvider::INVOICE_TYPE, ::PAYMENTPLAN_TYPE, ::HOSTED_TYPE
-     * @return self
+     * @return $this
      */
     public function setOrderType($orderTypeAsConst) {
         $this->orderType = $orderTypeAsConst;

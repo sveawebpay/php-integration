@@ -112,9 +112,9 @@ class WebPayAdmin {
      * 
      * The final doRequest() returns either a CloseOrderResult or an AnnulTransactionResponse
      * 
-     * @see \Svea\WebService\CloseOrderResult Svea\WebService\CloseOrderResult (Invoice or PartPayment orders)
-     * 
-     * @see \Svea\HostedService\AnnulTransactionResponse \Svea\HostedService\AnnulTransactionResponse (Card orders)
+     * @see \Svea\CancelOrderBuilder \Svea\CancelOrderBuilder
+     * @see \Svea\WebService\CloseOrderResult Svea\WebService\CloseOrderResult
+     * @see \Svea\HostedService\AnnulTransactionResponse \Svea\HostedService\AnnulTransactionResponse
      * 
      * @param ConfigurationProvider $config  instance implementing ConfigurationProvider
      * @return Svea\CancelOrderBuilder
@@ -128,7 +128,7 @@ class WebPayAdmin {
     /**
      * Query information about an order. Supports all order payment methods.
      * 
-     * Use the following methods (@see QueryOrderBuilder):
+     * Use the following methods:
      * ->setOrderId()
      * ->setCountryCode()  
      * 
@@ -138,8 +138,9 @@ class WebPayAdmin {
      *  
      * The final doRequest() returns either a GetOrdersResponse or an QueryTransactionResponse
      * 
-     * @see \Svea\AdminService\GetOrdersResponse \Svea\AdminService\GetOrdersResponse (Invoice or PartPayment orders) or
-     * @see \Svea\HostedService\QueryTransactionResponse \Svea\HostedService\QueryTransactionResponse (Card or DirectBank orders)
+     * @see \Svea\QueryOrderBuilder \Svea\QueryOrderBuilder
+     * @see \Svea\AdminService\GetOrdersResponse \Svea\AdminService\GetOrdersResponse
+     * @see \Svea\HostedService\QueryTransactionResponse \Svea\HostedService\QueryTransactionResponse
      * 
      * @param ConfigurationProvider $config  instance implementing ConfigurationProvider
      * @return Svea\QueryOrderBuilder

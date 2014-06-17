@@ -61,7 +61,7 @@ class WebPayAdminIntegrationTest extends PHPUnit_Framework_TestCase {
 
     public function test_queryOrder_queryDirectBankOrder_returns_QueryTransaction() {
         $queryOrder = WebPayAdmin::queryOrder( Svea\SveaConfig::getDefaultConfig() );
-        $request = $queryOrder->queryDirectBankOrder();        
+        $request = $queryOrder->queryDirectBankOrder();
         $this->assertInstanceOf( "Svea\HostedService\QueryTransaction", $request );
     }     
     

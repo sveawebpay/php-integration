@@ -895,7 +895,24 @@ not yet been delivered (invoice, payment plan) or confirmed (card).
 
 Direct bank orders are not supported, see WebPayAdmin::creditOrder.
 
+Cancel an undelivered/unconfirmed order. Supports Invoice, PaymentPlan 
+and Card orders. (For Direct Bank orders, see CreditOrder instead.)
+ 
+Use the following methods to set the order attributes needed in the request: 
+->setOrderId(sveaOrderId or transactionId from createOrder response)
+->setCountryCode()
+
+Then select the correct ordertype and perform the request:
+->cancelInvoiceOrder() | cancelPaymentPlanOrder() | cancelCardOrder()
+  ->doRequest
+
+The final doRequest() returns either a CloseOrderResult or an AnnulTransactionResponse:
+
 See <a href="http://htmlpreview.github.io/?https://raw.github.com/sveawebpay/php-integration/develop/apidoc/classes/Svea.CancelOrderBuilder.html" target="_blank">CancelOrderBuilder</a> class for methods used to build the order object and select the order type to cancel.
+
+See <a href="http://htmlpreview.github.io/?https://raw.github.com/sveawebpay/php-integration/develop/apidoc/classes/Svea.WebService.CloseOrderResult.html">CloseOrderResult</a> for invoice and payment plan orders response.
+
+See <a href="http://htmlpreview.github.io/?https://raw.github.com/sveawebpay/php-integration/develop/apidoc/classes/Svea.HostedService.AnnulTransactionResponse.html">AnnulTransactionResponse</a> for card orders response.
 
 #### 2.1.1. cancelOrder example
 
@@ -914,7 +931,27 @@ $response = $request->doRequest();      // send request and receive either WebSe
 ```
 
 ### 2.2 WebPayAdmin::queryOrder()
+The WebPayAdmin::queryOrder method is used get information about an order, including Svea status et al.
 
+Query information about an order. Supports all order payment methods.
+
+Use the following QueryOrderBuilder methods:
+->setOrderId()
+->setCountryCode()  
+
+Then select the correct ordertype and perform the request:
+->queryInvoiceOrder() | queryPaymentPlanOrder() | queryCardOrder() | queryDirectBankOrder()
+  ->doRequest()
+ 
+The final doRequest() returns either a GetOrdersResponse or an QueryTransactionResponse
+
+See <a href="http://htmlpreview.github.io/?https://raw.github.com/sveawebpay/php-integration/develop/apidoc/classes/Svea.QueryOrderBuilder.html" target="_blank">QueryOrderBuilder</a> method details.
+
+See <a href="http://htmlpreview.github.io/?https://raw.github.com/sveawebpay/php-integration/develop/apidoc/classes/Svea.AdminService.GetOrdersResponse.html">GetOrdersResponse</a> for invoice and payment plan orders response.
+
+See <a href="http://htmlpreview.github.io/?https://raw.github.com/sveawebpay/php-integration/develop/apidoc/classes/Svea.HostedService.QueryTransactionResponse.html">QueryTransactionResponse</a> for card and direct bank orders response.
+
+TODO example + example file
 
 
 
