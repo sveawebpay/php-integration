@@ -36,137 +36,132 @@ class GetOrdersResponse {
     /** @var Svea\OrderRow[] $numberedOrderRows  array of OrderRow objects */
     public $numberedOrderRows;
     
-    /** 
-    <pre>
-    @var StdClass $rawGetOrdersResponse  contains the raw GetOrders response:
-
-     stdClass Object
-     (
-         [ErrorMessage] => 
-         [ResultCode] => 0
-         [Orders] => stdClass Object
-             (
-                 [Order] => stdClass Object
-                     (
-                         [ChangedDate] => 
-                         [ClientId] => 79021
-                         [ClientOrderId] => 449
-                         [CreatedDate] => 2014-05-19T16:04:54.787
-                         [CreditReportStatus] => stdClass Object
-                             (
-                                 [Accepted] => true
-                                 [CreationDate] => 2014-05-19T16:04:54.893
-                             )
-
-                         [Currency] => SEK
-                         [Customer] => stdClass Object
-                             (
-                                 [CoAddress] => c/o Eriksson, Erik
-                                 [CompanyIdentity] => 
-                                 [CountryCode] => SE
-                                 [CustomerType] => Individual
-                                 [Email] => foo.bar@sveaekonomi.se
-                                 [FullName] => Persson, Tess T
-                                 [HouseNumber] => 
-                                 [IndividualIdentity] => stdClass Object
-                                     (
-                                         [BirthDate] => 
-                                         [FirstName] => 
-                                         [Initials] => 
-                                         [LastName] => 
-                                     )
-
-                                 [Locality] => Stan
-                                 [NationalIdNumber] => 194605092222
-                                 [PhoneNumber] => 08 - 111 111 11
-                                 [PublicKey] => 
-                                 [Street] => Testgatan 1
-                                 [ZipCode] => 99999
-                             )
-
-                         [CustomerId] => 1000117
-                         [CustomerReference] => 
-                         [DeliveryAddress] => 
-                         [IsPossibleToAdminister] => false
-                         [IsPossibleToCancel] => true
-                         [Notes] => 
-                         [OrderDeliveryStatus] => Created
-                         [OrderRows] => stdClass Object
-                             (
-                                 [NumberedOrderRow] => Array
-                                     (
-                                         [0] => stdClass Object
-                                             (
-                                                 [ArticleNumber] => 
-                                                 [Description] => Dyr produkt 25%
-                                                 [DiscountPercent] => 0.00
-                                                 [NumberOfUnits] => 2.00
-                                                 [PricePerUnit] => 2000.00
-                                                 [Unit] => 
-                                                 [VatPercent] => 25.00
-                                                 [CreditInvoiceId] => 
-                                                 [InvoiceId] => 
-                                                 [RowNumber] => 1
-                                                 [Status] => NotDelivered
-                                             )
-
-                                         [1] => stdClass Object
-                                             (
-                                                 [ArticleNumber] => 
-                                                 [Description] => Testprodukt 1kr 25%
-                                                 [DiscountPercent] => 0.00
-                                                 [NumberOfUnits] => 1.00
-                                                 [PricePerUnit] => 1.00
-                                                 [Unit] => 
-                                                 [VatPercent] => 25.00
-                                                 [CreditInvoiceId] => 
-                                                 [InvoiceId] => 
-                                                 [RowNumber] => 2
-                                                 [Status] => NotDelivered
-                                             )
-
-                                         [2] => stdClass Object
-                                             (
-                                                 [ArticleNumber] => 
-                                                 [Description] => Fastpris (Fast fraktpris)
-                                                 [DiscountPercent] => 0.00
-                                                 [NumberOfUnits] => 1.00
-                                                 [PricePerUnit] => 4.00
-                                                 [Unit] => 
-                                                 [VatPercent] => 25.00
-                                                 [CreditInvoiceId] => 
-                                                 [InvoiceId] => 
-                                                 [RowNumber] => 3
-                                                 [Status] => NotDelivered
-                                             )
-
-                                         [3] => stdClass Object
-                                             (
-                                                 [ArticleNumber] => 
-                                                 [Description] => Svea Fakturaavgift:: 20.00kr (SE)
-                                                 [DiscountPercent] => 0.00
-                                                 [NumberOfUnits] => 1.00
-                                                 [PricePerUnit] => 20.00
-                                                 [Unit] => 
-                                                 [VatPercent] => 0.00
-                                                 [CreditInvoiceId] => 
-                                                 [InvoiceId] => 
-                                                 [RowNumber] => 4
-                                                 [Status] => NotDelivered
-                                             )
-                                     )
-                             )
-                         [OrderStatus] => Active
-                         [OrderType] => Invoice
-                         [PaymentPlanDetails] => 
-                         [PendingReasons] => 
-                         [SveaOrderId] => 348629
-                         [SveaWillBuy] => true
-                     )
-             )
-     )
-    </pre>
-     */
+//     stdClass Object
+//     (
+//         [ErrorMessage] => 
+//         [ResultCode] => 0
+//         [Orders] => stdClass Object
+//             (
+//                 [Order] => stdClass Object
+//                     (
+//                         [ChangedDate] => 
+//                         [ClientId] => 79021
+//                         [ClientOrderId] => 449
+//                         [CreatedDate] => 2014-05-19T16:04:54.787
+//                         [CreditReportStatus] => stdClass Object
+//                             (
+//                                 [Accepted] => true
+//                                 [CreationDate] => 2014-05-19T16:04:54.893
+//                             )
+//
+//                         [Currency] => SEK
+//                         [Customer] => stdClass Object
+//                             (
+//                                 [CoAddress] => c/o Eriksson, Erik
+//                                 [CompanyIdentity] => 
+//                                 [CountryCode] => SE
+//                                 [CustomerType] => Individual
+//                                 [Email] => foo.bar@sveaekonomi.se
+//                                 [FullName] => Persson, Tess T
+//                                 [HouseNumber] => 
+//                                 [IndividualIdentity] => stdClass Object
+//                                     (
+//                                         [BirthDate] => 
+//                                         [FirstName] => 
+//                                         [Initials] => 
+//                                         [LastName] => 
+//                                     )
+//
+//                                 [Locality] => Stan
+//                                 [NationalIdNumber] => 194605092222
+//                                 [PhoneNumber] => 08 - 111 111 11
+//                                 [PublicKey] => 
+//                                 [Street] => Testgatan 1
+//                                 [ZipCode] => 99999
+//                             )
+//
+//                         [CustomerId] => 1000117
+//                         [CustomerReference] => 
+//                         [DeliveryAddress] => 
+//                         [IsPossibleToAdminister] => false
+//                         [IsPossibleToCancel] => true
+//                         [Notes] => 
+//                         [OrderDeliveryStatus] => Created
+//                         [OrderRows] => stdClass Object
+//                             (
+//                                 [NumberedOrderRow] => Array
+//                                     (
+//                                         [0] => stdClass Object
+//                                             (
+//                                                 [ArticleNumber] => 
+//                                                 [Description] => Dyr produkt 25%
+//                                                 [DiscountPercent] => 0.00
+//                                                 [NumberOfUnits] => 2.00
+//                                                 [PricePerUnit] => 2000.00
+//                                                 [Unit] => 
+//                                                 [VatPercent] => 25.00
+//                                                 [CreditInvoiceId] => 
+//                                                 [InvoiceId] => 
+//                                                 [RowNumber] => 1
+//                                                 [Status] => NotDelivered
+//                                             )
+//
+//                                         [1] => stdClass Object
+//                                             (
+//                                                 [ArticleNumber] => 
+//                                                 [Description] => Testprodukt 1kr 25%
+//                                                 [DiscountPercent] => 0.00
+//                                                 [NumberOfUnits] => 1.00
+//                                                 [PricePerUnit] => 1.00
+//                                                 [Unit] => 
+//                                                 [VatPercent] => 25.00
+//                                                 [CreditInvoiceId] => 
+//                                                 [InvoiceId] => 
+//                                                 [RowNumber] => 2
+//                                                 [Status] => NotDelivered
+//                                             )
+//
+//                                         [2] => stdClass Object
+//                                             (
+//                                                 [ArticleNumber] => 
+//                                                 [Description] => Fastpris (Fast fraktpris)
+//                                                 [DiscountPercent] => 0.00
+//                                                 [NumberOfUnits] => 1.00
+//                                                 [PricePerUnit] => 4.00
+//                                                 [Unit] => 
+//                                                 [VatPercent] => 25.00
+//                                                 [CreditInvoiceId] => 
+//                                                 [InvoiceId] => 
+//                                                 [RowNumber] => 3
+//                                                 [Status] => NotDelivered
+//                                             )
+//
+//                                         [3] => stdClass Object
+//                                             (
+//                                                 [ArticleNumber] => 
+//                                                 [Description] => Svea Fakturaavgift:: 20.00kr (SE)
+//                                                 [DiscountPercent] => 0.00
+//                                                 [NumberOfUnits] => 1.00
+//                                                 [PricePerUnit] => 20.00
+//                                                 [Unit] => 
+//                                                 [VatPercent] => 0.00
+//                                                 [CreditInvoiceId] => 
+//                                                 [InvoiceId] => 
+//                                                 [RowNumber] => 4
+//                                                 [Status] => NotDelivered
+//                                             )
+//                                     )
+//                             )
+//                         [OrderStatus] => Active
+//                         [OrderType] => Invoice
+//                         [PaymentPlanDetails] => 
+//                         [PendingReasons] => 
+//                         [SveaOrderId] => 348629
+//                         [SveaWillBuy] => true
+//                     )
+//             )
+//     )    
+    /** @var StdClass $rawGetOrdersResponse  contains the raw GetOrders response */
     public $rawGetOrdersResponse;
     
     function __construct($message) {        

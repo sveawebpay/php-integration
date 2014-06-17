@@ -65,4 +65,11 @@ class WebPayAdminIntegrationTest extends PHPUnit_Framework_TestCase {
         $this->assertInstanceOf( "Svea\HostedService\QueryTransaction", $request );
     }     
     
+    /// cancelOrderRows()
+    // invoice
+    // partpayment
+    // card
+    
+    
+    
 }

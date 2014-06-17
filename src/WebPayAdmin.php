@@ -128,7 +128,8 @@ class WebPayAdmin {
     /**
      * Query information about an order. Supports all order payment methods.
      * 
-     * Use the following methods:
+     * Provide more information about the transaction and send the request using 
+     * QueryOrderBuilder methods:
      * ->setOrderId()
      * ->setCountryCode()  
      * 
@@ -156,15 +157,27 @@ class WebPayAdmin {
      * (Direct Bank orders are not supported, see CreditOrderRows instead.)
      * 
      * Use the WebPayAdmin::queryOrder() entrypoint to get information about the order,
-     * the queryOrder response numberedOrderRows attribute contains the order rows.
+     * the queryOrder response numberedOrderRows attribute contains the order rows and
+     * their numbers.
      * 
-     * Then provide more information about the transaction and send the request using 
-     * @see cancelOrderRowsBuilder methods:
+     * Provide more information about the transaction and send the request using 
+     * cancelOrderRowsBuilder methods:
+     * 
      * ->setOrderId()
      * ->setCountryCode()
      * ->setRowToCancel() (one or more)
      * ->setRowsToCancel() (optional)
      * ->setNumberedOrderRows() (card only)
+     *  
+     * Then select the correct ordertype and perform the request:
+     * ->cancelInvoiceOrderRows() | cancelPaymentPlanOrderRows() | cancelCardOrderRows()
+     *   ->doRequest()
+     *  
+     * The final doRequest() returns either a CancelOrderRowsResponse or a LowerTransactionResponse
+     * 
+     * @see \Svea\CancelOrderRowsBuilder \Svea\CancelOrderRowsBuilder
+     * @see \Svea\AdminService\CancelOrderRowsResponse \Svea\AdminService\CancelOrderRowsResponse
+     * @see \Svea\HostedService\LowerTransactionResponse \Svea\HostedService\LowerTransactionResponse
      *  
      * @param ConfigurationProvider $config  instance implementing ConfigurationProvider
      * @return Svea\CancelOrderRowsBuilder

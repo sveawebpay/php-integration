@@ -895,6 +895,7 @@ not yet been delivered (invoice, payment plan) or confirmed (card).
 
 Direct bank orders are not supported, see WebPayAdmin::creditOrder.
 
+#### 2.1.1 Usage and return types
 Cancel an undelivered/unconfirmed order. Supports Invoice, PaymentPlan 
 and Card orders. (For Direct Bank orders, see CreditOrder instead.)
  
@@ -914,7 +915,7 @@ See <a href="http://htmlpreview.github.io/?https://raw.github.com/sveawebpay/php
 
 See <a href="http://htmlpreview.github.io/?https://raw.github.com/sveawebpay/php-integration/develop/apidoc/classes/Svea.HostedService.AnnulTransactionResponse.html">AnnulTransactionResponse</a> for card orders response.
 
-#### 2.1.1. cancelOrder example
+#### 2.1.2 example
 
 ```php
 ...
@@ -933,9 +934,11 @@ $response = $request->doRequest();      // send request and receive either WebSe
 ### 2.2 WebPayAdmin::queryOrder()
 The WebPayAdmin::queryOrder method is used get information about an order, including Svea status et al.
 
+#### 2.2.1 Usage and return types
 Query information about an order. Supports all order payment methods.
 
-Use the following QueryOrderBuilder methods:
+Provide more information about the transaction and send the request using 
+QueryOrderBuilder methods:
 ->setOrderId()
 ->setCountryCode()  
 
@@ -951,7 +954,52 @@ See <a href="http://htmlpreview.github.io/?https://raw.github.com/sveawebpay/php
 
 See <a href="http://htmlpreview.github.io/?https://raw.github.com/sveawebpay/php-integration/develop/apidoc/classes/Svea.HostedService.QueryTransactionResponse.html">QueryTransactionResponse</a> for card and direct bank orders response.
 
+#### 2.2.2 example
+
 TODO example + example file
+
+### 2.3 WebPayAdmin::cancelOrderRows
+The WebPayAdmin::cancelOrder method is used to cancel individual order rows in orders, that has
+not yet been delivered (invoice, payment plan) or confirmed (card).
+
+This method is mainly intended to cancel order rows in invoice and payment plan orders. When 
+used with card orders the following limitations apply: You need to supply the NumberedOrderRows 
+on  which to operate. These may be fetched using the queryOrder method, but if the order has 
+been edited after creation they may not be accurate. Cancelled card order rows are handled by 
+lowering the amount to charge on the card order.
+
+#### 2.3.1 Usage and return types
+Cancel order rows in an order. Supports Invoice, Payment Plan and Card orders.
+(Direct Bank orders are not supported, see CreditOrderRows instead.)
+
+Use the WebPayAdmin::queryOrder() entrypoint to get information about the order,
+the queryOrder response numberedOrderRows attribute contains the order rows and
+their numbers.
+
+Provide more information about the transaction and send the request using 
+cancelOrderRowsBuilder methods:
+
+->setOrderId()
+->setCountryCode()
+->setRowToCancel() (one or more)
+->setRowsToCancel() (optional)
+->setNumberedOrderRows() (card only)
+ 
+Then select the correct ordertype and perform the request:
+->cancelInvoiceOrderRows() | cancelPaymentPlanOrderRows() | cancelCardOrderRows()
+  ->doRequest()
+ 
+The final doRequest() returns either a CancelOrderRowsResponse or a LowerTransactionResponse
+
+See <a href="http://htmlpreview.github.io/?https://raw.github.com/sveawebpay/php-integration/develop/apidoc/classes/Svea.CancelOrderRowsBuilder.html" target="_blank">CancelOrderRowsBuilder</a> method details.
+
+See <a href="http://htmlpreview.github.io/?https://raw.github.com/sveawebpay/php-integration/develop/apidoc/classes/Svea.AdminService.CancelOrderRowsResponse.html">CancelOrderRowsResponse</a> for invoice and payment plan orders response.
+
+See <a href="http://htmlpreview.github.io/?https://raw.github.com/sveawebpay/php-integration/develop/apidoc/classes/Svea.HostedService.LowerTransactionResponse.html">LowerTransactionResponse</a> for card and direct bank orders response.
+
+#### 2.3.2 example
+
+TODO example + example files
 
 
 
