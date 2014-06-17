@@ -165,7 +165,7 @@ class CreditOrderRowsBuilder {
      * Note: the card order does not update the state of any cancelled order rows, only
      * the total order amount to be charged.     
      */
-    public function setNumberedOrderRows( $numberedOrderRows ) {
+    public function addNumberedOrderRows( $numberedOrderRows ) {
         $this->numberedOrderRows = $numberedOrderRows;
         return $this;
     }

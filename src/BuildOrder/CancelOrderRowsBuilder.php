@@ -21,7 +21,7 @@ require_once SVEA_REQUEST_DIR . '/Includes.php';
  * 
  * Use setRowToCancel or setRowsToCancel() to specify the order row(s) to cancel.
  * 
- * For card orders, use setNumberedOrderRows() to pass in order rows (from i.e. queryOrder)
+ * For card orders, use addNumberedOrderRows() to pass in order rows (from i.e. queryOrder)
  * 
  * Then use either cancelInvoiceOrderRows(), cancelPaymentPlanOrderRows or cancelCardOrderRows,
  * which ever matches the payment method used in the original order request.
@@ -113,7 +113,7 @@ class CancelOrderRowsBuilder {
      * Note: the card order does not update the state of any cancelled order rows, only
      * the total order amount to be charged.     
      */
-    public function setNumberedOrderRows( $numberedOrderRows ) {
+    public function addNumberedOrderRows( $numberedOrderRows ) {
         $this->numberedOrderRows = $numberedOrderRows;
         return $this;
     }
@@ -140,7 +140,7 @@ class CancelOrderRowsBuilder {
      * Use cancelCardOrderRows() to lower the amount of a Card order by the specified order row amounts using HostedRequests LowerTransaction request
      * 
      * @return LowerTransaction
-     * @throws ValidationException  if setNumberedOrderRows() has not been used.
+     * @throws ValidationException  if addNumberedOrderRows() has not been used.
      */
     public function cancelCardOrderRows() {
         $this->setOrderType(\ConfigurationProvider::HOSTED_ADMIN_TYPE);
@@ -160,7 +160,7 @@ class CancelOrderRowsBuilder {
     
     private function validateCancelCardOrderRows() {           
         if(count($this->numberedOrderRows) == 0) {
-            $exceptionString = "numberedOrderRows is required for cancelCardOrderRows(). Use method setNumberedOrderRows().";
+            $exceptionString = "numberedOrderRows is required for cancelCardOrderRows(). Use method addNumberedOrderRows().";
             throw new ValidationException($exceptionString);
         }
         if(count($this->rowsToCancel) == 0) {
@@ -172,7 +172,7 @@ class CancelOrderRowsBuilder {
     private function calculateSumOfRowAmounts( $rowIndexes, $numberedRows ) {
         $sum = 0.0;
         $unique_indexes = array_unique( $rowIndexes );
-        foreach( $numberedRows as $numberedRow) {            
+        foreach( $numberedRows as $numberedRow) {     
             if( in_array($numberedRow->rowNumber,$unique_indexes) ) {
                 $sum += ($numberedRow->quantity * ($numberedRow->amountExVat * (1 + ($numberedRow->vatPercent/100))));
             }

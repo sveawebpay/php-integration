@@ -182,7 +182,7 @@ class CancelOrderRowsBuilderIntegrationTest extends PHPUnit_Framework_TestCase {
             ->setCountryCode($country)
             ->setRowToCancel(1)
             ->setRowToCancel(3)
-            ->setNumberedOrderRows($queryResponse->numberedOrderRows)
+            ->addNumberedOrderRows($queryResponse->numberedOrderRows)
         ;
         $cancelOrderRowsResponse = $cancelOrderRowsBuilder->cancelCardOrderRows()->doRequest();       
         $this->assertEquals(1, $cancelOrderRowsResponse->accepted);

@@ -167,7 +167,7 @@ class WebPayAdmin {
      * ->setCountryCode()
      * ->setRowToCancel() (one or more)
      * ->setRowsToCancel() (optional)
-     * ->setNumberedOrderRows() (card only)
+     * ->addNumberedOrderRows() (card only)
      *  
      * Then select the correct ordertype and perform the request:
      * ->cancelInvoiceOrderRows() | cancelPaymentPlanOrderRows() | cancelCardOrderRows()
