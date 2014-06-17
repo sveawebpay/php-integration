@@ -53,29 +53,29 @@ class WebPayIntegrationTest extends PHPUnit_Framework_TestCase {
     public function test_deliverOrder_deliverInvoiceOrder_without_order_rows_returns_DeliverOrderEU() {
         $deliverOrder = WebPay::deliverOrder( Svea\SveaConfig::getDefaultConfig() );
         $request = $deliverOrder->deliverInvoiceOrder();        
-        $this->assertInstanceOf( "Svea\WebService\DeliverInvoice", $request );         // WebService\DeliverInvoice => soap call DeliverOrderEU  
+        $this->assertInstanceOf( "Svea\AdminService\DeliverOrdersRequest", $request ); 
+        $this->assertEquals("Invoice", $request->orderBuilder->orderType);    
     }
 
     public function test_deliverOrder_deliverPaymentPlanOrder_without_order_rows_returns_DeliverOrderEU() {
         $deliverOrder = WebPay::deliverOrder( Svea\SveaConfig::getDefaultConfig() );
         $request = $deliverOrder->deliverPaymentPlanOrder();        
-        $this->assertInstanceOf( "Svea\WebService\DeliverPaymentPlan", $request );
+        $this->assertInstanceOf( "Svea\AdminService\DeliverOrdersRequest", $request );
+        $this->assertEquals("PaymentPlan", $request->orderBuilder->orderType); 
     }
     
     public function test_deliverOrder_deliverInvoiceOrder_with_order_rows_returns_DeliverOrdersRequest() {
         $deliverOrder = WebPay::deliverOrder( Svea\SveaConfig::getDefaultConfig() );
         $deliverOrder->addOrderRow( WebPayItem::orderRow() );
-        $request = $deliverOrder->deliverInvoiceOrder();        
-        $this->assertInstanceOf( "Svea\AdminService\DeliverOrdersRequest", $request ); 
-        $this->assertEquals("Invoice", $request->orderBuilder->orderType);
+        $request = $deliverOrder->deliverInvoiceOrder();     
+        $this->assertInstanceOf( "Svea\WebService\DeliverInvoice", $request );         // WebService\DeliverInvoice => soap call DeliverOrderEU  
     }
 
     public function test_deliverOrder_deliverPaymentPlanOrder_with_order_rows_returns_DeliverOrdersRequest() {
         $deliverOrder = WebPay::deliverOrder( Svea\SveaConfig::getDefaultConfig() );
         $deliverOrder->addOrderRow( WebPayItem::orderRow() );
         $request = $deliverOrder->deliverPaymentPlanOrder();        
-        $this->assertInstanceOf( "Svea\AdminService\DeliverOrdersRequest", $request );
-        $this->assertEquals("PaymentPlan", $request->orderBuilder->orderType);       
+        $this->assertInstanceOf( "Svea\WebService\DeliverPaymentPlan", $request );      
     }
     
     public function test_deliverOrder_deliverCardOrder_returns_ConfirmTransaction() {

@@ -5,28 +5,6 @@ require_once 'OrderBuilder.php';
 require_once SVEA_REQUEST_DIR . '/Includes.php';
 
 /**
- * DeliverOrderBuilder
- * 
- * Invoice required methods: 
- * ->addOrderRow( TestUtil::createOrderRow() )
- * ->setCountryCode("SE")
- * ->setOrderId( $orderId )
- * ->setInvoiceDistributionType(\DistributionType::POST)
- *
- * PaymentPlan required methods:
- * ->addOrderRow( TestUtil::createOrderRow() )
- * ->setCountryCode("SE")
- * ->setOrderId( $orderId )
- * 
- * Card required methods:
- * ->setOrderId( $orderId )
- * ->setCountryCode("SE")
- * Card optional methods:
- * ->setCaptureDate( $orderId )
- *  
- */
-
-/**
  * DeliverOrderBuilder collects and prepares order data for use in a deliver 
  * order request to Svea.
  * 
@@ -58,6 +36,23 @@ require_once SVEA_REQUEST_DIR . '/Includes.php';
  * You can then go on specifying any payment method specific settings, using methods provided by the 
  * returned deliver order request class.
  * 
+ * Invoice required methods: 
+ * ->addOrderRow( TestUtil::createOrderRow() )
+ * ->setCountryCode("SE")
+ * ->setOrderId( $orderId )
+ * ->setInvoiceDistributionType(\DistributionType::POST)
+ *
+ * PaymentPlan required methods:
+ * ->addOrderRow( TestUtil::createOrderRow() )
+ * ->setCountryCode("SE")
+ * ->setOrderId( $orderId )
+ * 
+ * Card required methods:
+ * ->setOrderId( $orderId )
+ * ->setCountryCode("SE")
+ * Card optional methods:
+ * ->setCaptureDate( $orderId )
+ *  
  * @author Kristian Grossman-Madsen, Anneli Halld'n, Daniel Brolund for Svea Webpay
  */
 class DeliverOrderBuilder extends OrderBuilder {
@@ -76,7 +71,7 @@ class DeliverOrderBuilder extends OrderBuilder {
      * the original create order request order rows will be invoiced by Svea. 
      * 
      * If not all order rows match, the order will be partially delivered/invoiced, 
-     * see the Svea Web Service EU API documentation for details.
+     * see the Svea Web Service EU API documentation for details on how this works.
      */
     public function addOrderRow($itemOrderRowObject) {
         return parent::addOrderRow($itemOrderRowObject);
@@ -155,7 +150,7 @@ class DeliverOrderBuilder extends OrderBuilder {
      * @return WebService\DeliverInvoice|AdminService\DeliverOrdersRequest
      */
     public function deliverInvoiceOrder() {
-        if( count($this->orderRows) == 0 ) {
+        if( count($this->orderRows) > 0 ) {
             return new WebService\DeliverInvoice($this);
         }
         else {
@@ -169,7 +164,7 @@ class DeliverOrderBuilder extends OrderBuilder {
      * @return DeliverPaymentPlan
      */
     public function deliverPaymentPlanOrder() {
-        if( count($this->orderRows) == 0 ) {
+        if( count($this->orderRows) > 0 ) {
             return new WebService\DeliverPaymentPlan($this);
         }
         else {

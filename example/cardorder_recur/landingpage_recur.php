@@ -37,7 +37,7 @@ $recurorderUrl = "http://localhost/".getPath()."/recurorder.php";
 
 echo "\nFollow the link to place a recur card order using subscriptionId $mySubscriptionId: <a href=\"$recurorderUrl\">$recurorderUrl</a>";
 
-echo "\n</pre><font color='blue'><pre>\n\n
+echo "\n</pre><font color='blue'><pre>\n
 
 An example of a successful request response. The 'accepted' attribute is true (1), and resultcode/errormessage is not set.
 

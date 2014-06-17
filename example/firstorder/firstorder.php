@@ -47,12 +47,50 @@ $myOrder->addCustomerDetails( $customerInformation );
 // We have now completed specifying the order, and wish to send the payment request to Svea. To do so, we first select the invoice payment method:
 $myInvoiceOrderRequest = $myOrder->useInvoicePayment();
 
-// Then send the request to Svea using the doRequest method, and immediately receive the service response object
+// Then send the request to Svea using the doRequest method, and immediately receive a service response object back
 $myResponse = $myInvoiceOrderRequest->doRequest();
 
-// If the response attribute accepted is true, the payment succeeded.
-if( $myResponse->accepted == true ) { echo "invoice payment succeeded"; };
+// Check the response attribute 'accepted' for true to see if the request succeeded, if not, see the attributes resultcode and/or errormessage
+if( $myResponse->accepted == true ) { 
+    // save the sveaOrderId to a file, for use in firstdeliver.php
+    $myFirstOrderId = $myResponse->sveaOrderId;
+    file_put_contents("sveaorderid.txt", $myFirstOrderId);
+};
 
-// The response also contains a customerIdentity object containing the invoice address of the customer, which should match the order shipping address.
-print_r( $myResponse->customerIdentity );
+echo "<pre>Your request response (the customerIdentity contains the verified invoice address, which should match the order shipping address used):\n\n";
+
+print_r( $myResponse );
+
+echo "</pre><font color='blue'><pre>\n
+
+An example of a successful request response. The 'accepted' attribute is true (1), and resultcode/errormessage is not set.
+
+Svea\WebService\CreateOrderResponse Object
+(
+    [sveaOrderId] => 362168
+    [sveaWillBuyOrder] => 1
+    [amount] => 876.24
+    [expirationDate] => 2014-08-16T00:00:00+02:00
+    [accepted] => 1
+    [errormessage] => 
+    [resultcode] => 0
+    [orderType] => Invoice
+    [customerIdentity] => Svea\WebService\CreateOrderIdentity Object
+        (
+            [email] => 
+            [ipAddress] => 
+            [countryCode] => SE
+            [houseNumber] => 
+            [customerType] => Individual
+            [nationalIdNumber] => 194605092222
+            [phoneNumber] => 
+            [fullName] => Persson, Tess T
+            [street] => Testgatan 1
+            [coAddress] => c/o Eriksson, Erik
+            [zipCode] => 99999
+            [locality] => Stan
+        )
+
+)";
+
 ?>
