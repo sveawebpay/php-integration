@@ -3,22 +3,33 @@ namespace Svea;
 
 require_once SVEA_REQUEST_DIR . '/Includes.php';
 
-
 /**
  * CreditOrderRowsBuilder is used to credit individual order rows in an order. 
- * (I.e. partially credit an order).
  * 
- * For Invoice and Payment Plan orders, the order row status of the order is updated
- * to reflect the credited order rows.
+ * For Invoice orders, the order row status of the order is updated
+ * to reflect the new status of the order rows.
  * 
+ * For Card and Direct bank orders, individual order rows will still reflect the 
+ * status they got in order creation, even if orders have since been credited.
+ *  
+ * Use setInvoiceId() or setOrderId() to specify the Svea invoice or order id 
+ * for invoice and card/direct bank orders, respectively.
+ *
  * Use setCountryCode() to specify the country code matching the original create
  * order request.
  * 
- * Use creditOrderRow() or creditOrderRows() to specify the credit order row(s).
+ * Use setRowToCredit or setRowsToCredit() to specify the order row(s) to credit. The order numbers
+ * should correspond to those returned by i.e. WebPayAdmin::queryOrder;
  * 
- * Then use either creditInvoiceOrderRows() or creditPaymentPlanOrderRows(), or 
- * creditCardOrderRows() or creditDirectBankOrderRows(), which ever matches
- * the payment method used in the original order request.
+ * For card or direct bank orders, use addNumberedOrderRow() or addNumberedOrderRows() to pass 
+ * in order rows (from i.e. queryOrder) that will be matched with set rows to cancel.
+ *  
+ * Should you wish to add additional credit order rows not found in the original order, you may
+ * add them using addCreditOrderRow() or addCreditOrderRows(). These will be added to the rows
+ * specified using setRow(s)ToCredit.
+ *
+ * Then use either creditInvoiceOrderRows(), creditCardOrderRows() or creditDirectBankOrderRows(), 
+ * which ever matches the payment method used in the original order request.
  * 
  * The final doRequest() will send the creditOrderRows request to Svea, and the 
  * resulting response code specifies the outcome of the request. 
@@ -30,10 +41,10 @@ class CreditOrderRowsBuilder {
     /** @var ConfigurationProvider $conf  */
     public $conf;
     
-    /** @var OrderRows[] $orderRows */
-    public $orderRows;
+    /** @var OrderRows[] $creditOrderRows  any additional new order rows to credit */
+    public $creditOrderRows;
 
-    /** @var NumberedOrderRows[] $numberedOrderRows */
+    /** @var NumberedOrderRows[] $numberedOrderRows  numbered order rows passed in for hosted service orders */
     public $numberedOrderRows;
 
     public function __construct($config) {
@@ -68,7 +79,7 @@ class CreditOrderRowsBuilder {
     public $orderType;    
 
     /**
-     * CreditInvoiceOrder(). Required. Use InvoiceId recieved with deliverOrder response.
+     * Required for CreditInvoiceOrder() -- use InvoiceId recieved with deliverOrder response.
      * @param numeric $invoiceIdAsString
      * @return $this
      */
@@ -80,7 +91,7 @@ class CreditOrderRowsBuilder {
     public $invoiceId;
    
     /**
-     * CreditCardOrder(). Required. Use the order id (transaction id) received with the createOrder response.
+     * Required for CreditCardOrder() -- use the order id (transaction id) received with the createOrder response.
      * @param numeric $invoiceIdAsString
      * @return $this
      */
@@ -137,7 +148,10 @@ class CreditOrderRowsBuilder {
     } 
        
     /**
-     * Required.
+     * Optional -- add an order row to credit that was not present in the original order.
+     * 
+     * These rows will be credited in addition to the rows specified using setRow(s)ToCredit
+     * 
      * @param OrderRow $row
      * @return $this
      */
@@ -147,7 +161,10 @@ class CreditOrderRowsBuilder {
     }    
     
     /**
-     * Convenience method to credit several rows at once.
+     * Optional -- convenience method to add serveral new roes at once.
+     *  
+     * These rows will be credited in addition to the rows specified using setRow(s)ToCredit
+     * 
      * @param OrderRow[] $rows
      * @return $this
      */
@@ -155,18 +172,33 @@ class CreditOrderRowsBuilder {
         $this->creditOrderRows = array_merge( $this->creditOrderRows, $rows );
         return $this;
     }    
-
+   
     /**
-     * CreditCardOrderRows: Required
-     * When crediting card order rows, you must pass in an array of NumberedOrderRows
-     * along with the request. This array is then matched with the order rows specified
-     * with setRow(s)ToCredit.
+     * CreditCardOrderRows, CreditDirectBankOrderRows: Required - add information on a single numbered order row
      * 
-     * Note: the card order does not update the state of any cancelled order rows, only
+     * When crediting card or direct bank order rows, you must pass in information about the row
+     * along with the request. The rows are then matched with the order rows specified
+     * using setRow(s)ToCredit(). 
+     * 
+     * Note: the card or direct bank order does not update the state of any cancelled order rows, only
      * the total order amount to be charged.     
+     * 
+     * @param \Svea\NumberedOrderRow $numberedOrderRows instance of NumberedOrderRow
+     * @return $this
+     */
+    public function addNumberedOrderRow( $numberedOrderRow ) {
+        $this->numberedOrderRows[] = $numberedOrderRow;
+        return $this;
+    }       
+    
+    /**
+     * CreditCardOrderRows, CreditDirectBankOrderRows: Optional - convenience method to provide several numbered order rows at once.
+     * 
+     * @param \Svea\NumberedOrderRow[] $numberedOrderRows array of NumberedOrderRow
+     * @return $this
      */
     public function addNumberedOrderRows( $numberedOrderRows ) {
-        $this->numberedOrderRows = $numberedOrderRows;
+        $this->numberedOrderRows = array_merge( $this->numberedOrderRows, $numberedOrderRows );
         return $this;
     }
     
@@ -189,15 +221,25 @@ class CreditOrderRowsBuilder {
         $this->setOrderType(\ConfigurationProvider::HOSTED_ADMIN_TYPE);
                 
         $this->validateCreditCardOrderRows();
-        $sumOfRowAmounts = $this->calculateSumOfRowAmounts( $this->rowsToCredit, $this->numberedOrderRows );
+        $sumOfRowAmounts = $this->calculateSumOfRowAmounts( $this->rowsToCredit, $this->numberedOrderRows, $this->creditOrderRows );
         
-        $creditTransaction = new CreditTransaction($this->conf);
+        $creditTransaction = new HostedService\CreditTransaction($this->conf);
         $creditTransaction
             ->setTransactionId($this->orderId)
             ->setCountryCode($this->countryCode)
             ->setCreditAmount($sumOfRowAmounts*100) // *100, as setAmountToLower wants minor currency
         ;           
         return $creditTransaction;
+    }
+    
+    /**
+     * Use creditCardOrderRows() to credit a Direct Bank order by the specified order row amounts using HostedRequests CreditTransaction request
+     * 
+     * @return CreditTransaction
+     * @throws ValidationException  if addNumberedOrderRows() has not been used.
+     */
+    public function creditDirectBankOrderRows() {        
+        return $this->creditCardOrderRows();        
     }
     
     private function validateCreditCardOrderRows() {    
@@ -216,13 +258,18 @@ class CreditOrderRowsBuilder {
         }
     }
 
-    private function calculateSumOfRowAmounts( $rowIndexes, $numberedRows ) {
+    private function calculateSumOfRowAmounts( $rowIndexes, $numberedRows, $creditOrderRows ) {        
         $sum = 0.0;
         $unique_indexes = array_unique( $rowIndexes );
         foreach( $numberedRows as $numberedRow) {            
             if( in_array($numberedRow->rowNumber,$unique_indexes) ) {
                 $sum += ($numberedRow->quantity * ($numberedRow->amountExVat * (1 + ($numberedRow->vatPercent/100))));
             }
+        }
+        if( count($creditOrderRows) > 0 ) {
+            foreach( $creditOrderRows as $creditOrderRow) {            
+                $sum += ($creditOrderRow->quantity * ($creditOrderRow->amountExVat * (1 + ($creditOrderRow->vatPercent/100))));
+            }            
         }
         return $sum;
     }

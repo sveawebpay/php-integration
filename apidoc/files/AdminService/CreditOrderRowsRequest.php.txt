@@ -34,7 +34,7 @@ class CreditOrderRowsRequest extends AdminServiceRequest {
      * populate and return soap request contents using AdminSoap helper classes to get the correct data format
      * @return Svea\AdminSoap\CreditOrderRowsRequest
      * @throws Svea\ValidationException
-     */    
+     */
     public function prepareRequest() {        
                    
         $this->validateRequest();
@@ -51,7 +51,7 @@ class CreditOrderRowsRequest extends AdminServiceRequest {
                 $orderRow->amountExVat = WebServiceRowFormatter::convertIncVatToExVat($orderRow->amountIncVat, $orderRow->vatPercent);
             }
             // % + ex, no need to do anything
-                              
+
             $this->orderRows[] = new \SoapVar( 
                 new AdminSoap\OrderRow(
                     $orderRow->articleNumber, 
