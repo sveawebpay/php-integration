@@ -1002,7 +1002,6 @@ See <a href="http://htmlpreview.github.io/?https://raw.github.com/sveawebpay/php
 
 TODO example + example files
 
-
 ### 2.4 WebPayAdmin::creditOrderRows
 The WebPayAdmin::creditOrder method is used to credit individual order rows in delivered orders.
 
@@ -1032,6 +1031,12 @@ creditOrderRowsBuilder methods:
 ->addCreditOrderRow() (optional, use if you want to specify new credit rows)
 ->addCreditOrderRows() (optional, use if you want to specify new credit rows)
 
+Finish by selecting the correct ordertype and perform the request:
+->creditInvoiceOrderRows() | creditCardOrderRows()| creditDirectBankOrderRows()
+  ->doRequest()
+
+The final doRequest() returns either a CreditOrderRowsResponse or a CreditTransactionResponse
+
 See <a href="http://htmlpreview.github.io/?https://raw.github.com/sveawebpay/php-integration/develop/apidoc/classes/Svea.CreditOrderRowsBuilder.html" target="_blank">CreditOrderRowsBuilder</a> method details.
 
 See <a href="http://htmlpreview.github.io/?https://raw.github.com/sveawebpay/php-integration/develop/apidoc/classes/Svea.AdminService.CreditOrderRowsResponse.html">CreditOrderRowsResponse</a> for invoice and payment plan orders response.
@@ -1041,6 +1046,42 @@ See <a href="http://htmlpreview.github.io/?https://raw.github.com/sveawebpay/php
 #### 2.4.2 example
 
 TODO example + example files
+
+### 2.5 WebPayAdmin::addOrderRows
+The WebPayAdmin::addOrderRows method is used to add individual order rows to non-delivered invoice and payment plan orders.
+
+#### 2.5.1 Usage and return types
+Add order rows to an order. Supports Invoice and Payment Plan orders.
+(Card and Direct Bank orders are not supported.)
+
+Provide information about the new order rows and send the request using 
+addOrderRowsBuilder methods:
+
+->setOrderId()
+->setCountryCode()
+->addOrderRow() (one or more)
+->addOrderRows() (optional)
+ 
+Finish by selecting the correct ordertype and perform the request:
+->addInvoiceOrderRows() | addPaymentPlanOrderRows()
+  ->doRequest()
+ 
+The final doRequest() returns an AddOrderRowsResponse
+
+See <a href="http://htmlpreview.github.io/?https://raw.github.com/sveawebpay/php-integration/develop/apidoc/classes/Svea.AddOrderRowsBuilder.html" target="_blank">AddOrderRowsBuilder</a> method details.
+
+See <a href="http://htmlpreview.github.io/?https://raw.github.com/sveawebpay/php-integration/develop/apidoc/classes/Svea.AdminService.AddOrderRowsResponse.html">AddOrderRowsResponse</a> for invoice and payment plan orders response.
+
+#### 2.5.2 example
+
+TODO example + example files
+
+### 2.5 WebPayAdmin::updateOrderRows
+The WebPayAdmin::updateOrderRows method is used to update individual order rows in non-delivered invoice and payment plan orders.
+
+
+
+
 
 
 ## 9. Additional Developer Resources

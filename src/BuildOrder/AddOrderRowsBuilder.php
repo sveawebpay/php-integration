@@ -11,12 +11,15 @@ require_once SVEA_REQUEST_DIR . '/Includes.php';
  * For Invoice and Payment Plan orders, the order row status of the order is updated
  * to reflect the added order rows.
  * 
+ * Use setOrderId() to specify the Svea order id, this is the order id returned 
+ * with the original create order request response.
+ *
  * Use setCountryCode() to specify the country code matching the original create
  * order request.
  * 
  * Use addOrderRow() or addOrderRows() to specify the order row(s) to add to the order.
  * 
- * Then use either addInvoiceOrderRows() or addPaymentPlanOrderRows() which ever matches
+ * Then use either addInvoiceOrderRows() or addPaymentPlanOrderRows(), which ever matches
  * the payment method used in the original order request.
  * 
  * The final doRequest() will send the addOrderRows request to Svea, and the 
@@ -89,7 +92,7 @@ class AddOrderRowsBuilder {
      * @return $this
      */
     public function addOrderRows( $rows ) {
-        array_merge( $this->orderRows, $rows );
+        $this->orderRows = array_merge( $this->orderRows, $rows );
         return $this;
     }    
 

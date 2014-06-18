@@ -217,11 +217,12 @@ class WebPayAdmin {
      *  
      * The final doRequest() returns either a CreditOrderRowsResponse or a CreditTransactionResponse
      * 
-     * 
-     * 
+     * @see \Svea\CreditOrderRowsBuilder \Svea\CreditOrderRowsBuilder
+     * @see \Svea\AdminService\CreditOrderRowsResponse \Svea\AdminService\CreditOrderRowsResponse
+     * @see \Svea\HostedService\CreditTransactionResponse \Svea\HostedService\CreditTransactionResponse
      *  
      * @param ConfigurationProvider $config  instance implementing ConfigurationProvider
-     * @return Svea\UpdateOrderRowsBuilder
+     * @return Svea\CreditOrderRowsBuilder
      * @throws ValidationException
      */
     public static function creditOrderRows( $config = NULL ) {
@@ -234,19 +235,29 @@ class WebPayAdmin {
      * (Card and Direct Bank orders are not supported.)
      * 
      * Provide information about the new order rows and send the request using 
-     * @see addOrderRowsBuilder methods:
+     * addOrderRowsBuilder methods:
+     * 
      * ->setOrderId()
      * ->setCountryCode()
      * ->addOrderRow() (one or more)
      * ->addOrderRows() (optional)
      *  
+     * Finish by selecting the correct ordertype and perform the request:
+     * ->addInvoiceOrderRows() | addPaymentPlanOrderRows()
+     *   ->doRequest()
+     *  
+     * The final doRequest() returns an AddOrderRowsResponse
+     * 
+     * @see \Svea\AddOrderRowsBuilder \Svea\CreditOrderRowsBuilder
+     * @see \Svea\AdminService\AddOrderRowsResponse \Svea\AdminService\CreditOrderRowsResponse
+     * 
      * @param ConfigurationProvider $config  instance implementing ConfigurationProvider
      * @return Svea\AddOrderRowsBuilder
      */
     public static function addOrderRows( $config = NULL ) {
         if( $config == NULL ) { WebPay::throwMissingConfigException(); }
         return new Svea\AddOrderRowsBuilder($config);
-    }      
+    }
     
     /**
      * Update order rows in an non-delivered invoice or payment plan order, 

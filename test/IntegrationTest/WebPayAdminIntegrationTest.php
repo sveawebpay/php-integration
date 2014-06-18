@@ -109,15 +109,51 @@ class WebPayAdminIntegrationTest extends PHPUnit_Framework_TestCase {
     }    
 
     public function test_creditOrderRows_creditCardOrderRows_returns_CreditTransaction() {
+        $mockedNumberedOrderRow = new Svea\NumberedOrderRow();
+        $mockedNumberedOrderRow
+            ->setAmountExVat(100.00)                // recommended to specify price using AmountExVat & VatPercent
+            ->setVatPercent(25)                     // recommended to specify price using AmountExVat & VatPercent
+            ->setQuantity(1)                        // required
+            ->setRowNumber(1)
+        ;  
+        
         $creditOrderRowsBuilder = WebPayAdmin::creditOrderRows( Svea\SveaConfig::getDefaultConfig() );
-        $request = $creditOrderRowsBuilder->creditCardOrderRows();        
+        $creditOrderRowsBuilder->setOrderId( 123456 );
+        $creditOrderRowsBuilder->addNumberedOrderRow( $mockedNumberedOrderRow );
+        $creditOrderRowsBuilder->setRowToCredit(1);
+        $request = $creditOrderRowsBuilder->creditCardOrderRows();                
         $this->assertInstanceOf( "Svea\HostedService\CreditTransaction", $request );
     } 
     
-    public function test_creditOrderRows_creditDirectbankOrderRows_returns_CreditTransaction() {
+    public function test_creditOrderRows_creditDirectBankOrderRows_returns_CreditTransaction() {
+        $mockedNumberedOrderRow = new Svea\NumberedOrderRow();
+        $mockedNumberedOrderRow
+            ->setAmountExVat(100.00)                // recommended to specify price using AmountExVat & VatPercent
+            ->setVatPercent(25)                     // recommended to specify price using AmountExVat & VatPercent
+            ->setQuantity(1)                        // required
+            ->setRowNumber(1)
+        ;  
+        
         $creditOrderRowsBuilder = WebPayAdmin::creditOrderRows( Svea\SveaConfig::getDefaultConfig() );
-        $request = $creditOrderRowsBuilder->creditDirectBankOrderRows();        
+        $creditOrderRowsBuilder->setOrderId( 123456 );
+        $creditOrderRowsBuilder->addNumberedOrderRow( $mockedNumberedOrderRow );
+        $creditOrderRowsBuilder->setRowToCredit(1);
+        $request = $creditOrderRowsBuilder->creditDirectBankOrderRows();                
         $this->assertInstanceOf( "Svea\HostedService\CreditTransaction", $request );
     } 
     
+    /// addOrderRows()
+    // invoice
+    // card
+    public function test_addOrderRows_addInvoiceOrderRows_returns_AddOrderRowsRequest() {
+        $addOrderRowsBuilder = WebPayAdmin::addOrderRows( Svea\SveaConfig::getDefaultConfig() );
+        $request = $addOrderRowsBuilder->addInvoiceOrderRows();        
+        $this->assertInstanceOf( "Svea\AdminService\AddOrderRowsRequest", $request );
+    }
+
+    public function test_addOrderRows_addPaymentPlanOrderRows_returns_AddOrderRowsRequest() {
+        $addOrderRowsBuilder = WebPayAdmin::addOrderRows( Svea\SveaConfig::getDefaultConfig() );
+        $request = $addOrderRowsBuilder->addPaymentPlanOrderRows();        
+        $this->assertInstanceOf( "Svea\AdminService\AddOrderRowsRequest", $request );
+    }    
 }
