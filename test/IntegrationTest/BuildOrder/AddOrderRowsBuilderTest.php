@@ -74,7 +74,7 @@ class AddOrderRowsBuilderIntegrationTest extends PHPUnit_Framework_TestCase {
         $this->assertStringStartsWith( $b_name, $queryResponse->numberedOrderRows[1]->description );
         $this->assertStringEndsWith( $b_description, $queryResponse->numberedOrderRows[1]->description );
         $this->assertEquals( $b_discount, $queryResponse->numberedOrderRows[1]->discountPercent );
-        $this->assertEquals( "NotDelivered", $queryResponse->numberedOrderRows[1]->status );
+        $this->assertEquals( Svea\NumberedOrderRow::ORDERROWSTATUS_NOTDELIVERED, $queryResponse->numberedOrderRows[1]->status );
         $this->assertEquals( 2, $queryResponse->numberedOrderRows[1]->rowNumber );      
     }
         

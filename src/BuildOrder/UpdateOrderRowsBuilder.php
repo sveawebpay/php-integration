@@ -4,25 +4,21 @@ namespace Svea;
 require_once SVEA_REQUEST_DIR . '/Includes.php';
 
 /**
- * Update order rows in an non-delivered invoice or payment plan order, 
- * or lower amount to charge in non-confirmed card orders. Supports Invoice 
- * and Payment Plan orders, limited support for Card orders. (Direct Bank 
- * orders are not supported.)
+ * Update order rows in a non-delivered invoice or payment plan order. 
+ * (Card and Direct Bank orders are not supported.)
  * 
  * For Invoice and Payment Plan orders, the order row status of the order is updated
- * to reflect the added order rows. For Card orders, the original order row statuses
- * are not changed, but the order amount is lowered to the new order amount. If the
- * updated rows order total exceeds the original order total, an error is returned
- * by the service. 
+ * to reflect the added order rows. If the updated rows order total exceeds the 
+ * original order total, an error is returned by the service. 
  * 
  * Use setCountryCode() to specify the country code matching the original create
  * order request.
  * 
  * Use updateOrderRow() or updateOrderRows() to specify the order row(s) to update in the order. 
- * The order row numbers must match those in the order. 
+ * The supplied order row row numbers must match order rows in the original createOrder request. 
  * 
- * Then use either updateInvoiceOrderRows() or updatePaymentPlanOrderRows(), or
- * updateCardOrderRows(), which ever matches the payment method used in the original order request.
+ * Then use either updateInvoiceOrderRows() or updatePaymentPlanOrderRows(), 
+ * which ever matches the payment method used in the original order request.
  * 
  * The final doRequest() will send the updateOrderRows request to Svea, and the 
  * resulting response code specifies the outcome of the request. 

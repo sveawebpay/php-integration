@@ -144,7 +144,7 @@ class WebPayAdminIntegrationTest extends PHPUnit_Framework_TestCase {
     
     /// addOrderRows()
     // invoice
-    // card
+    // paymentplan
     public function test_addOrderRows_addInvoiceOrderRows_returns_AddOrderRowsRequest() {
         $addOrderRowsBuilder = WebPayAdmin::addOrderRows( Svea\SveaConfig::getDefaultConfig() );
         $request = $addOrderRowsBuilder->addInvoiceOrderRows();        
@@ -156,4 +156,20 @@ class WebPayAdminIntegrationTest extends PHPUnit_Framework_TestCase {
         $request = $addOrderRowsBuilder->addPaymentPlanOrderRows();        
         $this->assertInstanceOf( "Svea\AdminService\AddOrderRowsRequest", $request );
     }    
+    
+    /// updateOrderRows()
+    // invoice
+    // paymentplan
+    public function test_updateOrderRows_updateInvoiceOrderRows_returns_UpdateOrderRowsRequest() {
+        $updateOrderRowsBuilder = WebPayAdmin::updateOrderRows( Svea\SveaConfig::getDefaultConfig() );
+        $request = $updateOrderRowsBuilder->updateInvoiceOrderRows();        
+        $this->assertInstanceOf( "Svea\AdminService\UpdateOrderRowsRequest", $request );
+    }
+
+    public function test_updateOrderRows_updatePaymentPlanOrderRows_returns_UpdateOrderRowsRequest() {
+        $updateOrderRowsBuilder = WebPayAdmin::updateOrderRows( Svea\SveaConfig::getDefaultConfig() );
+        $request = $updateOrderRowsBuilder->updatePaymentPlanOrderRows();        
+        $this->assertInstanceOf( "Svea\AdminService\UpdateOrderRowsRequest", $request );
+    } 
+    
 }

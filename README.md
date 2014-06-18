@@ -1076,12 +1076,36 @@ See <a href="http://htmlpreview.github.io/?https://raw.github.com/sveawebpay/php
 
 TODO example + example files
 
-### 2.5 WebPayAdmin::updateOrderRows
+### 2.6 WebPayAdmin::updateOrderRows
 The WebPayAdmin::updateOrderRows method is used to update individual order rows in non-delivered invoice and payment plan orders.
 
+#### 2.6.1
+Update order rows in a non-delivered invoice or payment plan order. 
+(Card and Direct Bank orders are not supported.)
 
+Provide information about the updated order rows and send the request using 
+updateOrderRowsBuilder methods:
 
+->setOrderId()
+->setCountryCode()
+->updateOrderRow() (one or more)
+->updateOrderRows() (optional)
+ 
+Finish by selecting the correct ordertype and perform the request:
+->updateInvoiceOrderRows() | updatePaymentPlanOrderRows()
+  ->doRequest()
+ 
+The final doRequest() returns an UpdateOrderRowsResponse
 
+See <a href="http://htmlpreview.github.io/?https://raw.github.com/sveawebpay/php-integration/develop/apidoc/classes/Svea.UpdateOrderRowsBuilder.html" target="_blank">UpdateOrderRowsBuilder</a> method details.
+
+See <a href="http://htmlpreview.github.io/?https://raw.github.com/sveawebpay/php-integration/develop/apidoc/classes/Svea.AdminService.UpdateOrderRowsResponse.html">UpdateOrderRowsResponse</a> for invoice and payment plan orders response.
+
+#### 2.6.2 example
+
+TODO example + example files
+
+#### 2.7.x
 
 
 ## 9. Additional Developer Resources

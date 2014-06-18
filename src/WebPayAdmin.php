@@ -248,11 +248,12 @@ class WebPayAdmin {
      *  
      * The final doRequest() returns an AddOrderRowsResponse
      * 
-     * @see \Svea\AddOrderRowsBuilder \Svea\CreditOrderRowsBuilder
-     * @see \Svea\AdminService\AddOrderRowsResponse \Svea\AdminService\CreditOrderRowsResponse
+     * @see \Svea\AddOrderRowsBuilder \Svea\AddOrderRowsBuilder
+     * @see \Svea\AdminService\AddOrderRowsResponse \Svea\AdminService\AddOrderRowsResponse
      * 
      * @param ConfigurationProvider $config  instance implementing ConfigurationProvider
      * @return Svea\AddOrderRowsBuilder
+     * @throws ValidationException
      */
     public static function addOrderRows( $config = NULL ) {
         if( $config == NULL ) { WebPay::throwMissingConfigException(); }
@@ -260,18 +261,26 @@ class WebPayAdmin {
     }
     
     /**
-     * Update order rows in an non-delivered invoice or payment plan order, 
-     * or lower amount to charge in non-confirmed card orders. Supports Invoice 
-     * and Payment Plan orders, limited support for Card orders. (Direct Bank 
-     * orders are not supported.)
+     * Update order rows in a non-delivered invoice or payment plan order. 
+     * (Card and Direct Bank orders are not supported.)
      * 
      * Provide information about the updated order rows and send the request using 
-     * @see updateOrderRowsBuilder methods:
+     * updateOrderRowsBuilder methods:
+     * 
      * ->setOrderId()
      * ->setCountryCode()
      * ->updateOrderRow() (one or more)
      * ->updateOrderRows() (optional)
      *  
+     * Finish by selecting the correct ordertype and perform the request:
+     * ->updateInvoiceOrderRows() | updatePaymentPlanOrderRows()
+     *   ->doRequest()
+     *  
+     * The final doRequest() returns an UpdateOrderRowsResponse
+     * 
+     * @see \Svea\UpdateOrderRowsBuilder \Svea\UpdateOrderRowsBuilder
+     * @see \Svea\AdminService\UpdateOrderRowsResponse \Svea\AdminService\UpdateOrderRowsResponse
+     * 
      * @param ConfigurationProvider $config  instance implementing ConfigurationProvider
      * @return Svea\UpdateOrderRowsBuilder
      * @throws ValidationException
@@ -280,7 +289,6 @@ class WebPayAdmin {
         if( $config == NULL ) { WebPay::throwMissingConfigException(); }
         return new Svea\UpdateOrderRowsBuilder($config);
     }
-    
 
 // * updateOrderRows -- update order rows in non-delivered invoice or payment plan order, 
 //         or lower amount to charge (only) for non-confirmed card orders
