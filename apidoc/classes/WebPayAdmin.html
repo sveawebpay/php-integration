@@ -139,37 +139,37 @@
                                 <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle " data-toggle="collapse" data-target="#namespace-656348576"></a>
+                                    <a class="accordion-toggle " data-toggle="collapse" data-target="#namespace-371575135"></a>
                                 <a href="../namespaces/default.html" style="margin-left: 30px; padding-left: 0">\</a>
             </div>
-            <div id="namespace-656348576" class="accordion-body collapse in">
+            <div id="namespace-371575135" class="accordion-body collapse in">
                 <div class="accordion-inner">
 
                                                     <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1493810319"></a>
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-124424984"></a>
                                 <a href="../namespaces/Svea.html" style="margin-left: 30px; padding-left: 0">Svea</a>
             </div>
-            <div id="namespace-1493810319" class="accordion-body collapse ">
+            <div id="namespace-124424984" class="accordion-body collapse ">
                 <div class="accordion-inner">
 
                                                     <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1151037661"></a>
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1859935010"></a>
                                 <a href="../namespaces/Svea.AdminService.html" style="margin-left: 30px; padding-left: 0">AdminService</a>
             </div>
-            <div id="namespace-1151037661" class="accordion-body collapse ">
+            <div id="namespace-1859935010" class="accordion-body collapse ">
                 <div class="accordion-inner">
 
                                                     <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-838884375"></a>
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-2062038910"></a>
                                 <a href="../namespaces/Svea.AdminService.AdminSoap.html" style="margin-left: 30px; padding-left: 0">AdminSoap</a>
             </div>
-            <div id="namespace-838884375" class="accordion-body collapse ">
+            <div id="namespace-2062038910" class="accordion-body collapse ">
                 <div class="accordion-inner">
 
                     
@@ -222,19 +222,19 @@
                                                     <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1100449264"></a>
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-2129633599"></a>
                                 <a href="../namespaces/Svea.WebService.html" style="margin-left: 30px; padding-left: 0">WebService</a>
             </div>
-            <div id="namespace-1100449264" class="accordion-body collapse ">
+            <div id="namespace-2129633599" class="accordion-body collapse ">
                 <div class="accordion-inner">
 
                                                     <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-76976428"></a>
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-477668811"></a>
                                 <a href="../namespaces/Svea.WebService.WebServiceSoap.html" style="margin-left: 30px; padding-left: 0">WebServiceSoap</a>
             </div>
-            <div id="namespace-76976428" class="accordion-body collapse ">
+            <div id="namespace-477668811" class="accordion-body collapse ">
                 <div class="accordion-inner">
 
                     
@@ -292,10 +292,10 @@
                                                     <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1885719855"></a>
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1870620243"></a>
                                 <a href="../namespaces/Svea.HostedService.html" style="margin-left: 30px; padding-left: 0">HostedService</a>
             </div>
-            <div id="namespace-1885719855" class="accordion-body collapse ">
+            <div id="namespace-1870620243" class="accordion-body collapse ">
                 <div class="accordion-inner">
 
                     
@@ -585,7 +585,8 @@ and Card orders. (For Direct Bank orders, see CreditOrder instead.)</em></p>
                 <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
                 <pre class="signature" style="margin-right: 54px;">queryOrder(\ConfigurationProvider <span class="argument">$config</span>) : \Svea\QueryOrderBuilder</pre>
                 <p><em>Query information about an order. Supports all order payment methods.</em></p>
-                <p>Use the following methods:
+                <p>Provide more information about the transaction and send the request using
+QueryOrderBuilder methods:
 ->setOrderId()
 ->setCountryCode()</p>
 <p>Then select the correct ordertype and perform the request:
@@ -644,8 +645,19 @@ and Card orders. (For Direct Bank orders, see CreditOrder instead.)</em></p>
                 <p><em>Cancel order rows in an order. Supports Invoice, Payment Plan and Card orders.</em></p>
                 <p>(Direct Bank orders are not supported, see CreditOrderRows instead.)</p>
 <p>Use the WebPayAdmin::queryOrder() entrypoint to get information about the order,
-the queryOrder response numberedOrderRows attribute contains the order rows.</p>
-<p>Then provide more information about the transaction and send the request using</p>
+the queryOrder response numberedOrderRows attribute contains the order rows and
+their numbers.</p>
+<p>Provide more information about the transaction and send the request using
+cancelOrderRowsBuilder methods:</p>
+<p>->setOrderId()
+->setCountryCode()
+->setRowToCancel() (one or more)
+->setRowsToCancel() (optional)
+->addNumberedOrderRows() (card only)</p>
+<p>Then select the correct ordertype and perform the request:
+->cancelInvoiceOrderRows() | cancelPaymentPlanOrderRows() | cancelCardOrderRows()
+  ->doRequest()</p>
+<p>The final doRequest() returns either a CancelOrderRowsResponse or a LowerTransactionResponse</p>
 
                                     <h4>Parameters</h4>
                     <table class="table table-condensed table-hover">
@@ -671,12 +683,9 @@ the queryOrder response numberedOrderRows attribute contains the order rows.</p>
                             <span class="label label-info">static</span>
                                                             <dl>
                                                                                             <dt>See also</dt>
-                                                                <dd><a href=""><span class="namespace-wrapper">methods:
--&gt;setOrderId()
--&gt;setCountryCode()
--&gt;setRowToCancel() (one or more)
--&gt;setRowsToCancel() (optional)
--&gt;setNumberedOrderRows() (card only)</span></a></dd>
+                                                                <dd><a href="../classes/Svea.CancelOrderRowsBuilder.html"><span class="namespace-wrapper">\Svea\CancelOrderRowsBuilder</span></a></dd>
+                                            <dd><a href="../classes/Svea.AdminService.CancelOrderRowsResponse.html"><span class="namespace-wrapper">\Svea\AdminService\CancelOrderRowsResponse</span></a></dd>
+                                            <dd><a href="../classes/Svea.HostedService.LowerTransactionResponse.html"><span class="namespace-wrapper">\Svea\HostedService\LowerTransactionResponse</span></a></dd>
                                                                 </dl>
             <h2>Tags</h2>
             <table class="table table-condensed">
@@ -940,7 +949,7 @@ orders are not supported.)</em></p>
                 <section class="span10 offset1">
                     <hr />
                     Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor </a> and authored
-                    on June 17th, 2014 at 14:53.
+                    on June 18th, 2014 at 11:02.
                 </section>
             </section>
         </section>

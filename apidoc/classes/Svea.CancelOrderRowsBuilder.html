@@ -139,37 +139,37 @@
                                 <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle " data-toggle="collapse" data-target="#namespace-375898194"></a>
+                                    <a class="accordion-toggle " data-toggle="collapse" data-target="#namespace-1295310440"></a>
                                 <a href="../namespaces/default.html" style="margin-left: 30px; padding-left: 0">\</a>
             </div>
-            <div id="namespace-375898194" class="accordion-body collapse in">
+            <div id="namespace-1295310440" class="accordion-body collapse in">
                 <div class="accordion-inner">
 
                                                     <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-292607153"></a>
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1859896421"></a>
                                 <a href="../namespaces/Svea.html" style="margin-left: 30px; padding-left: 0">Svea</a>
             </div>
-            <div id="namespace-292607153" class="accordion-body collapse ">
+            <div id="namespace-1859896421" class="accordion-body collapse ">
                 <div class="accordion-inner">
 
                                                     <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1784823719"></a>
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-970541544"></a>
                                 <a href="../namespaces/Svea.AdminService.html" style="margin-left: 30px; padding-left: 0">AdminService</a>
             </div>
-            <div id="namespace-1784823719" class="accordion-body collapse ">
+            <div id="namespace-970541544" class="accordion-body collapse ">
                 <div class="accordion-inner">
 
                                                     <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-799251712"></a>
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-979923246"></a>
                                 <a href="../namespaces/Svea.AdminService.AdminSoap.html" style="margin-left: 30px; padding-left: 0">AdminSoap</a>
             </div>
-            <div id="namespace-799251712" class="accordion-body collapse ">
+            <div id="namespace-979923246" class="accordion-body collapse ">
                 <div class="accordion-inner">
 
                     
@@ -222,19 +222,19 @@
                                                     <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-920421528"></a>
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-962290335"></a>
                                 <a href="../namespaces/Svea.WebService.html" style="margin-left: 30px; padding-left: 0">WebService</a>
             </div>
-            <div id="namespace-920421528" class="accordion-body collapse ">
+            <div id="namespace-962290335" class="accordion-body collapse ">
                 <div class="accordion-inner">
 
                                                     <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1251210708"></a>
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1157640649"></a>
                                 <a href="../namespaces/Svea.WebService.WebServiceSoap.html" style="margin-left: 30px; padding-left: 0">WebServiceSoap</a>
             </div>
-            <div id="namespace-1251210708" class="accordion-body collapse ">
+            <div id="namespace-1157640649" class="accordion-body collapse ">
                 <div class="accordion-inner">
 
                     
@@ -292,10 +292,10 @@
                                                     <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-323067482"></a>
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-955331414"></a>
                                 <a href="../namespaces/Svea.HostedService.html" style="margin-left: 30px; padding-left: 0">HostedService</a>
             </div>
-            <div id="namespace-323067482" class="accordion-body collapse ">
+            <div id="namespace-955331414" class="accordion-body collapse ">
                 <div class="accordion-inner">
 
                     
@@ -410,7 +410,8 @@ with the original create order request response.</p>
 <p>Use setCountryCode() to specify the country code matching the original create
 order request.</p>
 <p>Use setRowToCancel or setRowsToCancel() to specify the order row(s) to cancel.</p>
-<p>For card orders, use setNumberedOrderRows() to pass in order rows (from i.e. queryOrder)</p>
+<p>For card orders, use addNumberedOrderRow() or addNumberedOrderRows() to pass
+in order rows (from i.e. queryOrder) that will be matched with set rows to cancel.</p>
 <p>Then use either cancelInvoiceOrderRows(), cancelPaymentPlanOrderRows or cancelCardOrderRows,
 which ever matches the payment method used in the original order request.</p>
 <p>The final doRequest() will send the queryOrder request to Svea, and the
@@ -437,7 +438,8 @@ resulting response code specifies the outcome of the request.</p>
                                                                     <a href="../classes/Svea.CancelOrderRowsBuilder.html#method_setOrderType" class="">setOrderType()</a><br />
                                                                     <a href="../classes/Svea.CancelOrderRowsBuilder.html#method_setRowToCancel" class="">setRowToCancel()</a><br />
                                                                     <a href="../classes/Svea.CancelOrderRowsBuilder.html#method_setRowsToCancel" class="">setRowsToCancel()</a><br />
-                                                                    <a href="../classes/Svea.CancelOrderRowsBuilder.html#method_setNumberedOrderRows" class="">setNumberedOrderRows()</a><br />
+                                                                    <a href="../classes/Svea.CancelOrderRowsBuilder.html#method_addNumberedOrderRow" class="">addNumberedOrderRow()</a><br />
+                                                                    <a href="../classes/Svea.CancelOrderRowsBuilder.html#method_addNumberedOrderRows" class="">addNumberedOrderRows()</a><br />
                                                                     <a href="../classes/Svea.CancelOrderRowsBuilder.html#method_cancelInvoiceOrderRows" class="">cancelInvoiceOrderRows()</a><br />
                                                                     <a href="../classes/Svea.CancelOrderRowsBuilder.html#method_cancelPaymentPlanOrderRows" class="">cancelPaymentPlanOrderRows()</a><br />
                                                                     <a href="../classes/Svea.CancelOrderRowsBuilder.html#method_cancelCardOrderRows" class="">cancelCardOrderRows()</a><br />
@@ -881,7 +883,7 @@ resulting response code specifies the outcome of the request.</p>
                 <h3 class="public ">setRowToCancel()</h3>
                 <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
                 <pre class="signature" style="margin-right: 54px;">setRowToCancel(\Svea\numeric <span class="argument">$rowNumber</span>) : $this</pre>
-                <p><em>Required.</em></p>
+                <p><em>Required - add a row number to cancel</em></p>
                 
 
                                     <h4>Parameters</h4>
@@ -922,7 +924,7 @@ resulting response code specifies the outcome of the request.</p>
                 <h3 class="public ">setRowsToCancel()</h3>
                 <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
                 <pre class="signature" style="margin-right: 54px;">setRowsToCancel(int[] <span class="argument">$rowNumbers</span>) : $this</pre>
-                <p><em>Convenience method to provide several row numbers at once.</em></p>
+                <p><em>Optional - convenience method to provide several row numbers at once.</em></p>
                 
 
                                     <h4>Parameters</h4>
@@ -958,29 +960,72 @@ resulting response code specifies the outcome of the request.</p>
 
                                     <div class="row-fluid">
         <div class="span8 content class">
-            <a id="method_setNumberedOrderRows" name="method_setNumberedOrderRows" class="anchor"></a>
+            <a id="method_addNumberedOrderRow" name="method_addNumberedOrderRow" class="anchor"></a>
             <article class="method">
-                <h3 class="public ">setNumberedOrderRows()</h3>
+                <h3 class="public ">addNumberedOrderRow()</h3>
                 <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">setNumberedOrderRows( <span class="argument">$numberedOrderRows</span>)</pre>
-                <p><em>CancelCardOrderRows: Required
-When cancelling card order rows, you must pass in an array of NumberedOrderRows
-along with the request. This array is then matched with the order rows specified
-with setRow(s)ToCredit().</em></p>
-                <p>Note: the card order does not update the state of any cancelled order rows, only
+                <pre class="signature" style="margin-right: 54px;">addNumberedOrderRow( <span class="argument">$rowNumber</span>) : $this</pre>
+                <p><em>Required - add information on a single numbered order row</em></p>
+                <p>When cancelling card order rows, you must pass in information about the row
+along with the request. The rows are then matched with the order rows specified
+using setRow(s)ToCredit().</p>
+<p>Note: the card order does not update the state of any cancelled order rows, only
 the total order amount to be charged.</p>
 
                                     <h4>Parameters</h4>
                     <table class="table table-condensed table-hover">
                                                     <tr>
                                 <td></td>
-                                <td>$numberedOrderRows</td>
+                                <td>$rowNumber</td>
                                 <td></td>
                             </tr>
                                             </table>
                 
                 
-                            </article>
+                                    <h4>Returns</h4>
+                    $this
+                                                </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            todo
+                        </th>
+                        <td>
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_addNumberedOrderRows" name="method_addNumberedOrderRows" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">addNumberedOrderRows()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">addNumberedOrderRows(\Svea\NumberedOrderRow[] <span class="argument">$numberedOrderRows</span>) : $this</pre>
+                <p><em>Optional - Convenience method to provide several numbered order rows at once.</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>\Svea\NumberedOrderRow[]</td>
+                                <td>$numberedOrderRows</td>
+                                <td><p>array of NumberedOrderRow</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    $this
+                                                </article>
         </div>
         <aside class="span4 detailsbar">
             <h1><i class="icon-arrow-down"></i></h1>
@@ -1079,7 +1124,7 @@ the total order amount to be charged.</p>
                                     <h4>Throws</h4>
                     <dl>
                                                     <dt>\Svea\ValidationException</dt>
-                            <dd><p>if setNumberedOrderRows() has not been used.</p></dd>
+                            <dd><p>if addNumberedOrderRows() has not been used.</p></dd>
                                                                     </dl>
                 
                                     <h4>Returns</h4>
@@ -1228,7 +1273,7 @@ the total order amount to be charged.</p>
                 <section class="span10 offset1">
                     <hr />
                     Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor </a> and authored
-                    on June 17th, 2014 at 14:53.
+                    on June 18th, 2014 at 11:02.
                 </section>
             </section>
         </section>

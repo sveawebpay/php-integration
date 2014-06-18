@@ -21,7 +21,8 @@ require_once SVEA_REQUEST_DIR . '/Includes.php';
  * 
  * Use setRowToCancel or setRowsToCancel() to specify the order row(s) to cancel.
  * 
- * For card orders, use setNumberedOrderRows() to pass in order rows (from i.e. queryOrder)
+ * For card orders, use addNumberedOrderRow() or addNumberedOrderRows() to pass 
+ * in order rows (from i.e. queryOrder) that will be matched with set rows to cancel.
  * 
  * Then use either cancelInvoiceOrderRows(), cancelPaymentPlanOrderRows or cancelCardOrderRows,
  * which ever matches the payment method used in the original order request.
@@ -85,7 +86,7 @@ class CancelOrderRowsBuilder {
     public $orderType;    
 
     /**
-     * Required.
+     * Required - add a row number to cancel
      * @param numeric $rowNumber
      * @return $this
      */
@@ -95,26 +96,41 @@ class CancelOrderRowsBuilder {
     }    
     
     /**
-     * Convenience method to provide several row numbers at once.
+     * Optional - convenience method to provide several row numbers at once.
      * @param int[] $rowNumbers
      * @return $this
      */
     public function setRowsToCancel( $rowNumbers ) {
-        array_merge( $this->rowsToCancel, $rowNumbers );
+        $this->rowsToCancel = array_merge( $this->rowsToCancel, $rowNumbers );
         return $this;
     }    
     
     /**
-     * CancelCardOrderRows: Required
-     * When cancelling card order rows, you must pass in an array of NumberedOrderRows
-     * along with the request. This array is then matched with the order rows specified
-     * with setRow(s)ToCredit(). 
+     * Required - add information on a single numbered order row
+     * 
+     * When cancelling card order rows, you must pass in information about the row
+     * along with the request. The rows are then matched with the order rows specified
+     * using setRow(s)ToCredit(). 
      * 
      * Note: the card order does not update the state of any cancelled order rows, only
      * the total order amount to be charged.     
+     * 
+     * @param \Svea\NumberedOrderRow $numberedOrderRows instance of NumberedOrderRow
+     * @return $this
      */
-    public function setNumberedOrderRows( $numberedOrderRows ) {
-        $this->numberedOrderRows = $numberedOrderRows;
+    public function addNumberedOrderRow( $rowNumber ) {
+        $this->numberedOrderRows[] = $rowNumber;
+        return $this;
+    }       
+    
+    /**
+     * Optional - Convenience method to provide several numbered order rows at once.
+     * 
+     * @param \Svea\NumberedOrderRow[] $numberedOrderRows array of NumberedOrderRow
+     * @return $this
+     */
+    public function addNumberedOrderRows( $numberedOrderRows ) {
+        $this->numberedOrderRows = array_merge( $this->numberedOrderRows, $numberedOrderRows );
         return $this;
     }
 
@@ -140,7 +156,7 @@ class CancelOrderRowsBuilder {
      * Use cancelCardOrderRows() to lower the amount of a Card order by the specified order row amounts using HostedRequests LowerTransaction request
      * 
      * @return LowerTransaction
-     * @throws ValidationException  if setNumberedOrderRows() has not been used.
+     * @throws ValidationException  if addNumberedOrderRows() has not been used.
      */
     public function cancelCardOrderRows() {
         $this->setOrderType(\ConfigurationProvider::HOSTED_ADMIN_TYPE);
@@ -148,7 +164,7 @@ class CancelOrderRowsBuilder {
         $this->validateCancelCardOrderRows();
         $sumOfRowAmounts = $this->calculateSumOfRowAmounts( $this->rowsToCancel, $this->numberedOrderRows );
         
-        $lowerTransaction = new LowerTransaction($this->conf);
+        $lowerTransaction = new HostedService\LowerTransaction($this->conf);
         $lowerTransaction
             ->setTransactionId($this->orderId)
             ->setCountryCode($this->countryCode)
@@ -158,9 +174,9 @@ class CancelOrderRowsBuilder {
         return $lowerTransaction;
     }
     
-    private function validateCancelCardOrderRows() {           
+    private function validateCancelCardOrderRows() {     
         if(count($this->numberedOrderRows) == 0) {
-            $exceptionString = "numberedOrderRows is required for cancelCardOrderRows(). Use method setNumberedOrderRows().";
+            $exceptionString = "numberedOrderRows is required for cancelCardOrderRows(). Use method addNumberedOrderRows().";
             throw new ValidationException($exceptionString);
         }
         if(count($this->rowsToCancel) == 0) {
@@ -172,7 +188,7 @@ class CancelOrderRowsBuilder {
     private function calculateSumOfRowAmounts( $rowIndexes, $numberedRows ) {
         $sum = 0.0;
         $unique_indexes = array_unique( $rowIndexes );
-        foreach( $numberedRows as $numberedRow) {            
+        foreach( $numberedRows as $numberedRow) { 
             if( in_array($numberedRow->rowNumber,$unique_indexes) ) {
                 $sum += ($numberedRow->quantity * ($numberedRow->amountExVat * (1 + ($numberedRow->vatPercent/100))));
             }
