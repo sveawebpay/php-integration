@@ -964,7 +964,7 @@ not yet been delivered (invoice, payment plan) or confirmed (card).
 
 This method is mainly intended to cancel order rows in invoice and payment plan orders. When 
 used with card orders the following limitations apply: You need to supply the NumberedOrderRows 
-on  which to operate. These may be fetched using the queryOrder method, but if the order has 
+on which to operate. These may be fetched using the queryOrder method, but if the order has 
 been edited after creation they may not be accurate. Cancelled card order rows are handled by 
 lowering the amount to charge on the card order.
 
@@ -983,7 +983,8 @@ cancelOrderRowsBuilder methods:
 ->setCountryCode()
 ->setRowToCancel() (one or more)
 ->setRowsToCancel() (optional)
-->addNumberedOrderRows() (card only)
+->addNumberedOrderRow() (card only, one or more)
+->addNumberedOrderRows() (card only, optional)
  
 Then select the correct ordertype and perform the request:
 ->cancelInvoiceOrderRows() | cancelPaymentPlanOrderRows() | cancelCardOrderRows()

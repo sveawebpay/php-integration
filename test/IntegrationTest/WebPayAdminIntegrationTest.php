@@ -82,10 +82,16 @@ class WebPayAdminIntegrationTest extends PHPUnit_Framework_TestCase {
     }          
     
     public function test_cancelOrderRows_cancelCardOrderRows_returns_LowerTransaction() {
-        $cancelOrderRowsBuilder = WebPayAdmin::cancelOrderRows( Svea\SveaConfig::getDefaultConfig() );
         $mockedNumberedOrderRow = new Svea\NumberedOrderRow();
-
-        $cancelOrderRowsBuilder->addNumberedOrderRows( $mockedNumberedOrderRow->setRowNumber(1) );
+        $mockedNumberedOrderRow
+            ->setAmountExVat(100.00)                // recommended to specify price using AmountExVat & VatPercent
+            ->setVatPercent(25)                     // recommended to specify price using AmountExVat & VatPercent
+            ->setQuantity(1)                        // required
+            ->setRowNumber(1)
+        ;   
+        
+        $cancelOrderRowsBuilder = WebPayAdmin::cancelOrderRows( Svea\SveaConfig::getDefaultConfig() );
+        $cancelOrderRowsBuilder->addNumberedOrderRow( $mockedNumberedOrderRow );
         $cancelOrderRowsBuilder->setRowToCancel(1);
         
         $request = $cancelOrderRowsBuilder->cancelCardOrderRows();        
