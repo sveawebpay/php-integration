@@ -7,7 +7,7 @@ require_once SVEA_REQUEST_DIR . '/Includes.php';
  * CancelOrderRowsBuilder is used to cancel individual order rows in a unified manner.
  * 
  * For Invoice and Payment Plan orders, the order row status of the order is updated
- * to reflect the order rows new status'.
+ * to reflect the new status of the order rows.
  * 
  * For Card orders, individual order rows will still reflect the status they got in 
  * order creation, even if orders have since been cancelled, and the order amount 
@@ -19,7 +19,8 @@ require_once SVEA_REQUEST_DIR . '/Includes.php';
  * Use setCountryCode() to specify the country code matching the original create
  * order request.
  * 
- * Use setRowToCancel or setRowsToCancel() to specify the order row(s) to cancel.
+ * Use setRowToCancel or setRowsToCancel() to specify the order row(s) to cancel. The order numbers
+ * should correspond to those returned by i.e. WebPayAdmin::queryOrder;
  * 
  * For card orders, use addNumberedOrderRow() or addNumberedOrderRows() to pass 
  * in order rows (from i.e. queryOrder) that will be matched with set rows to cancel.

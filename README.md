@@ -1003,6 +1003,44 @@ See <a href="http://htmlpreview.github.io/?https://raw.github.com/sveawebpay/php
 TODO example + example files
 
 
+### 2.4 WebPayAdmin::creditOrderRows
+The WebPayAdmin::creditOrder method is used to credit individual order rows in delivered orders.
+
+When used with card or direct bank orders the following limitations apply: You need to supply 
+the NumberedOrderRows on which to operate. These may be fetched using the queryOrder method, 
+but if the order has been edited after creation they may not be accurate.
+
+#### 2.4.1 Usage and return types
+Credit order rows in a delivered invoice order, a charged card order or 
+a direct bank order. Supports Invoice, Card and Direct Bank orders.
+(Payment Plan orders are not supported, please contact the Svea customer 
+service to credit a Payment Plan order.)
+
+Use the WebPayAdmin::queryOrder() entrypoint to get information about the order,
+the queryOrder response numberedOrderRows attribute contains the order rows and
+their numbers.
+
+Provide more information about the transaction and send the request using 
+creditOrderRowsBuilder methods:
+
+->setInvoiceId() 
+->setCountryCode()
+->setRowToCredit() (one or more)
+->setRowsToCredit() (optional)
+->addNumberedOrderRow() (card or direct bank only, one or more)
+->addNumberedOrderRows() (card or direct bank only, optional)
+->addCreditOrderRow() (optional, use if you want to specify new credit rows)
+->addCreditOrderRows() (optional, use if you want to specify new credit rows)
+
+See <a href="http://htmlpreview.github.io/?https://raw.github.com/sveawebpay/php-integration/develop/apidoc/classes/Svea.CreditOrderRowsBuilder.html" target="_blank">CreditOrderRowsBuilder</a> method details.
+
+See <a href="http://htmlpreview.github.io/?https://raw.github.com/sveawebpay/php-integration/develop/apidoc/classes/Svea.AdminService.CreditOrderRowsResponse.html">CreditOrderRowsResponse</a> for invoice and payment plan orders response.
+
+See <a href="http://htmlpreview.github.io/?https://raw.github.com/sveawebpay/php-integration/develop/apidoc/classes/Svea.HostedService.CreditTransactionResponse.html">CreditTransactionResponse</a> for card and direct bank orders response.
+
+#### 2.4.2 example
+
+TODO example + example files
 
 
 ## 9. Additional Developer Resources

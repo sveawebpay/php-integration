@@ -97,4 +97,27 @@ class WebPayAdminIntegrationTest extends PHPUnit_Framework_TestCase {
         $request = $cancelOrderRowsBuilder->cancelCardOrderRows();        
         $this->assertInstanceOf( "Svea\HostedService\LowerTransaction", $request );
     }  
+    
+    /// creditOrderRows()
+    // invoice
+    // card
+    // direct bank
+    public function test_creditOrderRows_creditInvoiceOrderRows_returns_CreditOrderRowsRequest() {
+        $creditOrderRowsBuilder = WebPayAdmin::creditOrderRows( Svea\SveaConfig::getDefaultConfig() );
+        $request = $creditOrderRowsBuilder->creditInvoiceOrderRows();        
+        $this->assertInstanceOf( "Svea\AdminService\CreditOrderRowsRequest", $request );
+    }    
+
+    public function test_creditOrderRows_creditCardOrderRows_returns_CreditTransaction() {
+        $creditOrderRowsBuilder = WebPayAdmin::creditOrderRows( Svea\SveaConfig::getDefaultConfig() );
+        $request = $creditOrderRowsBuilder->creditCardOrderRows();        
+        $this->assertInstanceOf( "Svea\HostedService\CreditTransaction", $request );
+    } 
+    
+    public function test_creditOrderRows_creditDirectbankOrderRows_returns_CreditTransaction() {
+        $creditOrderRowsBuilder = WebPayAdmin::creditOrderRows( Svea\SveaConfig::getDefaultConfig() );
+        $request = $creditOrderRowsBuilder->creditDirectBankOrderRows();        
+        $this->assertInstanceOf( "Svea\HostedService\CreditTransaction", $request );
+    } 
+    
 }

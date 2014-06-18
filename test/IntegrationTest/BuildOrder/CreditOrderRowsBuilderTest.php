@@ -15,8 +15,8 @@ class CreditOrderRowsBuilderIntegrationTest extends PHPUnit_Framework_TestCase {
     protected function setUp()
     {
         $this->country = "SE";
-        $this->invoiceIdToTest = 1027229;   // set this to the approved invoice set up by test_manual_setup_CreditOrderRows_testdata()
-        $this->successfulTransactionToTest = 583036; // set to a card transaction w/status success, see test_manual_setup_CreditCardOrderRows_testdata
+        $this->invoiceIdToTest = 1028204;   // set this to the approved invoice set up by test_manual_setup_CreditOrderRows_testdata()
+        $this->successfulTransactionToTest = 583628; // set to a card transaction w/status success, see test_manual_setup_CreditCardOrderRows_testdata
     }       
 
     // CreditCardOrderRows    
@@ -26,8 +26,9 @@ class CreditOrderRowsBuilderIntegrationTest extends PHPUnit_Framework_TestCase {
         // Stop here and mark this test as incomplete.
         $this->markTestIncomplete(
             'test_manual_setup_CreditOrderRows_testdata -- run this first to setup order for CreditOrderRows tests to work with. 
-            Run once, then make sure to log as ug 79021 and approve the invoice in the admin interface. 
-            Then uncomment and run CreditOrderRows tests.'
+            1. Run once, then make sure to log as ug 79021 and approve the invoice in the admin interface. 
+            2. Set $this->invoiceIdToTest to the approved invoice id in setUp() above.
+            3. Then uncomment and run CreditOrderRows tests below.'
         );    
                 
         // create order
@@ -100,7 +101,7 @@ class CreditOrderRowsBuilderIntegrationTest extends PHPUnit_Framework_TestCase {
         $this->markTestIncomplete(
             'first set up approved invoice and enter id in setUp()'
         );     
-              
+        
         $creditOrderRowsRequest = new Svea\CreditOrderRowsBuilder( Svea\SveaConfig::getDefaultConfig() );
         $creditOrderRowsResponse = $creditOrderRowsRequest
                 ->setInvoiceId( $this->invoiceIdToTest )
@@ -113,15 +114,15 @@ class CreditOrderRowsBuilderIntegrationTest extends PHPUnit_Framework_TestCase {
         print_r("\ntest_CreditOrderRows_creditInvoiceOrderRows_single_row_success:\n");
         print_r( $creditOrderRowsResponse );
         $this->assertEquals(1, $creditOrderRowsResponse->accepted);
-        $this->assertEquals(-125.00, $creditOrderRowsResponse->amount);
+        $this->assertEquals(-125.00, $creditOrderRowsResponse->amount);        
     }
-    
+        
     function test_CreditOrderRows_creditInvoiceOrderRows_multiple_setRowsToCredit_success() {
         // Stop here and mark this test as incomplete.
         $this->markTestIncomplete(
             'first set up approved invoice and enter id in setUp()'
-        );  
-        
+        );
+
         $creditOrderRowsRequest = new Svea\CreditOrderRowsBuilder( Svea\SveaConfig::getDefaultConfig() );
         $creditOrderRowsResponse = $creditOrderRowsRequest
                 ->setInvoiceId( $this->invoiceIdToTest )
@@ -171,8 +172,41 @@ class CreditOrderRowsBuilderIntegrationTest extends PHPUnit_Framework_TestCase {
         // Stop here and mark this test as incomplete.
         $this->markTestIncomplete(
             'first set up approved invoice and enter id in setUp()'
-        );      
-    } // todo    
+        );     
+
+        $creditOrderRowsRequest = new Svea\CreditOrderRowsBuilder( Svea\SveaConfig::getDefaultConfig() );
+        $creditOrderRowsResponse = $creditOrderRowsRequest
+                ->setInvoiceId( $this->invoiceIdToTest )
+                ->setInvoiceDistributionType( DistributionType::POST )
+                ->setCountryCode($this->country)
+                ->addCreditOrderRow( WebPayItem::orderRow()
+                    ->setArticleNumber("101")
+                    ->setQuantity( 1 )
+                    ->setAmountExVat( 10.00 )
+                    ->setVatPercent(25)
+                    ->setDescription("101 Specification")
+                    ->setName('101 Name')
+                    ->setUnit("st")
+                    ->setDiscountPercent(0)
+                ) 
+                ->addCreditOrderRow( WebPayItem::orderRow()
+                    ->setArticleNumber("101")
+                    ->setQuantity( 1 )
+                    ->setAmountExVat( 10.00 )
+                    ->setVatPercent(25)
+                    ->setDescription("101 Specification")
+                    ->setName('101 Name')
+                    ->setUnit("st")
+                    ->setDiscountPercent(0)
+                ) 
+                ->creditInvoiceOrderRows()
+                    ->doRequest();
+                
+        print_r("test_CreditOrderRows_creditInvoiceOrderRows_multiple_addCreditOrderRow_success:\n");
+        print_r( $creditOrderRowsResponse );
+        $this->assertEquals(1, $creditOrderRowsResponse->accepted);
+        $this->assertEquals(-25.00, $creditOrderRowsResponse->amount);
+    }    
     
     function test_CreditOrderRows_creditInvoiceOrderRows_addCreditOrderRow_and_setRowToCredit_success() {
         //  Stop here and mark this test as incomplete.
@@ -191,8 +225,8 @@ class CreditOrderRowsBuilderIntegrationTest extends PHPUnit_Framework_TestCase {
                     ->setQuantity( 1 )
                     ->setAmountExVat( 10.00 )
                     ->setVatPercent(25)
-                    ->setDescription("101 Specification")
-                    ->setName('101 Name')
+                    ->setDescription("104 Specification")
+                    ->setName('104 Name')
                     ->setUnit("st")
                     ->setDiscountPercent(0)
                 ) 
@@ -204,6 +238,29 @@ class CreditOrderRowsBuilderIntegrationTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(1, $creditOrderRowsResponse->accepted);
         $this->assertEquals(-112.50, $creditOrderRowsResponse->amount);
     }    
+
+    
+    function test_CreditOrderRows_creditInvoiceOrderRows_credit_amount_exceeds_original_order_fails() {
+        // Stop here and mark this test as incomplete.
+        $this->markTestIncomplete(
+            'first set up approved invoice and enter id in setUp()'
+        );  
+        
+        $creditOrderRowsRequest = new Svea\CreditOrderRowsBuilder( Svea\SveaConfig::getDefaultConfig() );
+        $creditOrderRowsResponse = $creditOrderRowsRequest
+                ->setInvoiceId( $this->invoiceIdToTest )
+                ->setInvoiceDistributionType( DistributionType::POST )
+                ->setCountryCode($this->country)
+                ->setRowToCredit( 5 ) 
+                ->creditInvoiceOrderRows()
+                    ->doRequest();
+                
+        print_r("test_CreditOrderRows_creditInvoiceOrderRows_credit_amount_exceeds_original_order_fails:\n");
+        print_r( $creditOrderRowsResponse );
+        $this->assertEquals(0, $creditOrderRowsResponse->accepted);
+        $this->assertEquals(24502, $creditOrderRowsResponse->resultcode);    
+        $this->assertEquals("Credit amount exceeds invoiced amount", $creditOrderRowsResponse->errormessage);    
+    }
 
     // CreditCardOrderRows
 
@@ -312,7 +369,7 @@ class CreditOrderRowsBuilderIntegrationTest extends PHPUnit_Framework_TestCase {
         print_r( "test_manual_setup_CreditCardOrderRows_testdata finished, now go to " . $orderResponse->testurl ." and complete payment.\n" );
     }
     
-    function test_CreditOrderRows_CreditCardOrderRows_addCreditOrderRow_setRowToCredit_success() {
+    function test_CreditOrderRows_CreditCardOrderRows_credit_single_row_using_addNumberedOrderRows_setRowToCredit_success() {
         // Stop here and mark this test as incomplete.
         $this->markTestIncomplete(
             'first set up confirmed transaction and enter id in setUp()'
@@ -326,7 +383,7 @@ class CreditOrderRowsBuilderIntegrationTest extends PHPUnit_Framework_TestCase {
                 
         $queryResponse = $queryOrderBuilder->queryCardOrder()->doRequest(); 
         
-        //print_r( $queryResponse );
+        print_r( $queryResponse );
         $this->assertEquals(1, $queryResponse->accepted);
         
         $creditOrderRowsBuilder = new Svea\CreditOrderRowsBuilder( Svea\SveaConfig::getDefaultConfig() );
@@ -334,12 +391,12 @@ class CreditOrderRowsBuilderIntegrationTest extends PHPUnit_Framework_TestCase {
             ->setOrderId( $this->successfulTransactionToTest )
             ->setCountryCode( $this->country )
             ->setRowToCredit( 1 ) 
-            ->setNumberedOrderRows( $queryResponse->numberedOrderRows ) // use the queried order rows as base for what amount to credit
+            ->addNumberedOrderRows( $queryResponse->numberedOrderRows ) // use the queried order rows as base for what amount to credit
             ->creditCardOrderRows()
         ;
         $creditOrderRowsResponse = $creditOrderRowsRequest->doRequest();
 
-        print_r("\ntest_CreditOrderRows_CreditCardOrderRows_addCreditOrderRow_setRowToCredit_success:\n");
+        print_r("test_CreditOrderRows_CreditCardOrderRows_credit_single_row_using_addNumberedOrderRows_setRowToCredit_success:\n");
         print_r( $creditOrderRowsResponse );
         
         $this->assertEquals(1, $creditOrderRowsResponse->accepted);
@@ -348,27 +405,150 @@ class CreditOrderRowsBuilderIntegrationTest extends PHPUnit_Framework_TestCase {
         $queryOrderBuilder = WebPayAdmin::queryOrder( Svea\SveaConfig::getDefaultConfig() )
             ->setOrderId( $this->successfulTransactionToTest )
             ->setCountryCode($this->country)
-        ;
-                
+        ;        
         $queryResponse = $queryOrderBuilder->queryCardOrder()->doRequest();         
+
         $this->assertEquals(1, $queryResponse->accepted);
         print_r( $queryResponse );
-        $this->assertEquals(12500, $queryResponse->creditedamount);
-        
+        // credit 100 @25 *100 = 12500 => 12500
+        $this->assertEquals(12500, $queryResponse->creditedamount);        
     }
-    
-    function test_CreditOrderRows_creditInvoiceOrderRows_addCreditOrderRow_setRowToCredit_exceeds_original_order_fails() {
+
+    function test_CreditOrderRows_CreditCardOrderRows_credit_multiple_rows_using_addNumberedOrderRows_setRowToCredit_success() {
         // Stop here and mark this test as incomplete.
         $this->markTestIncomplete(
-            'first set up approved invoice and enter id in setUp()'
-        );  
-    } // todo
+            'first set up confirmed transaction and enter id in setUp()'
+        );         
 
+        // query orderrows to pass in creditOrderRows->setNumberedOrderRows()
+        $queryOrderBuilder = WebPayAdmin::queryOrder( Svea\SveaConfig::getDefaultConfig() )
+            ->setOrderId( $this->successfulTransactionToTest )
+            ->setCountryCode($this->country)
+        ;
+                
+        $queryResponse = $queryOrderBuilder->queryCardOrder()->doRequest(); 
+        
+        print_r( $queryResponse );
+        $this->assertEquals(1, $queryResponse->accepted);
+        
+        $creditOrderRowsBuilder = new Svea\CreditOrderRowsBuilder( Svea\SveaConfig::getDefaultConfig() );
+        $creditOrderRowsRequest = $creditOrderRowsBuilder
+            ->setOrderId( $this->successfulTransactionToTest )
+            ->setCountryCode( $this->country )
+            ->setRowsToCredit( array(2,3) ) 
+            ->addNumberedOrderRows( $queryResponse->numberedOrderRows ) // use the queried order rows as base for what amount to credit
+            ->creditCardOrderRows()
+        ;
+        $creditOrderRowsResponse = $creditOrderRowsRequest->doRequest();
+
+        print_r("test_CreditOrderRows_CreditCardOrderRows_credit_multiple_rows_using_addNumberedOrderRows_setRowToCredit_success:\n");
+        print_r( $creditOrderRowsResponse );
+        
+        $this->assertEquals(1, $creditOrderRowsResponse->accepted);
+        
+        // query orderrows again
+        $queryOrderBuilder = WebPayAdmin::queryOrder( Svea\SveaConfig::getDefaultConfig() )
+            ->setOrderId( $this->successfulTransactionToTest )
+            ->setCountryCode($this->country)
+        ;        
+        $queryResponse = $queryOrderBuilder->queryCardOrder()->doRequest();         
+
+        $this->assertEquals(1, $queryResponse->accepted);
+        print_r( $queryResponse );
+        // credited               12500   
+        // credit 100 @12 *100 =  11200
+        // credit   1 @25 *100 =    125 => 23825
+        $this->assertEquals(23825, $queryResponse->creditedamount);        
+    }
+    
+    function test_CreditOrderRows_CreditCardOrderRows_credit_single_row_and_new_row_using_addNewCreditRow_success() {
+        // Stop here and mark this test as incomplete.
+        $this->markTestIncomplete(
+            'first set up confirmed transaction and enter id in setUp()'
+        );         
+
+        // query orderrows to pass in creditOrderRows->setNumberedOrderRows()
+        $queryOrderBuilder = WebPayAdmin::queryOrder( Svea\SveaConfig::getDefaultConfig() )
+            ->setOrderId( $this->successfulTransactionToTest )
+            ->setCountryCode($this->country)
+        ;
+                
+        $queryResponse = $queryOrderBuilder->queryCardOrder()->doRequest(); 
+        
+        print_r( $queryResponse );
+        $this->assertEquals(1, $queryResponse->accepted);
+        
+        $creditOrderRowsBuilder = new Svea\CreditOrderRowsBuilder( Svea\SveaConfig::getDefaultConfig() );
+        $creditOrderRowsRequest = $creditOrderRowsBuilder
+            ->setOrderId( $this->successfulTransactionToTest )
+            ->setCountryCode( $this->country )
+            ->addNumberedOrderRows( $queryResponse->numberedOrderRows ) // use the queried order rows as base for what amount to credit
+            ->setRowToCredit( 4 ) 
+                
+            ->addCreditOrderRow( WebPayItem::orderRow()
+                ->setArticleNumber("104")
+                ->setQuantity( 1 )
+                ->setAmountExVat( 10.00 )
+                ->setVatPercent(25)
+                ->setDescription("104 Specification")
+                ->setName('104 Name')
+                ->setUnit("st")
+                ->setDiscountPercent(0)
+            )                                 
+            ->creditCardOrderRows()
+        ;
+        $creditOrderRowsResponse = $creditOrderRowsRequest->doRequest();
+
+        print_r("test_CreditOrderRows_CreditCardOrderRows_credit_single_row_and_new_row_using_addNewCreditRow_success:\n");
+        print_r( $creditOrderRowsResponse );
+        
+        $this->assertEquals(1, $creditOrderRowsResponse->accepted);
+        
+        // query orderrows again
+        $queryOrderBuilder = WebPayAdmin::queryOrder( Svea\SveaConfig::getDefaultConfig() )
+            ->setOrderId( $this->successfulTransactionToTest )
+            ->setCountryCode($this->country)
+        ;        
+        $queryResponse = $queryOrderBuilder->queryCardOrder()->doRequest();         
+
+        $this->assertEquals(1, $queryResponse->accepted);
+        print_r( $queryResponse );
+        // credited               23825   
+        // credit 100 @0 *100 =   10000
+        // credit  10 @25 *100 =   1250 => 35075
+        $this->assertEquals(35075, $queryResponse->creditedamount);        
+    }
+   
     function test_CreditOrderRows_creditCardOrderRows_addCreditOrderRow_setRowToCredit_exceeds_original_order_fails() {
         // Stop here and mark this test as incomplete.
         $this->markTestIncomplete(
             'first set up approved invoice and enter id in setUp()'
         );  
-    } // todo
+
+        // query orderrows to pass in creditOrderRows->setNumberedOrderRows()
+        $queryOrderBuilder = WebPayAdmin::queryOrder( Svea\SveaConfig::getDefaultConfig() )
+            ->setOrderId( $this->successfulTransactionToTest )
+            ->setCountryCode($this->country)
+        ;                
+        $queryResponse = $queryOrderBuilder->queryCardOrder()->doRequest(); 
+        
+        print_r( $queryResponse );
+        $this->assertEquals(1, $queryResponse->accepted);
+        
+        $creditOrderRowsBuilder = new Svea\CreditOrderRowsBuilder( Svea\SveaConfig::getDefaultConfig() );
+        $creditOrderRowsRequest = $creditOrderRowsBuilder
+            ->setOrderId( $this->successfulTransactionToTest )
+            ->setCountryCode( $this->country )
+            ->addNumberedOrderRows( $queryResponse->numberedOrderRows ) // use the queried order rows as base for what amount to credit
+            ->setRowToCredit( 5 )                            
+            ->creditCardOrderRows()
+        ;
+        $creditOrderRowsResponse = $creditOrderRowsRequest->doRequest();
+
+        print_r("test_CreditOrderRows_creditCardOrderRows_addCreditOrderRow_setRowToCredit_exceeds_original_order_fails:\n");
+        print_r( $creditOrderRowsResponse );        
+        $this->assertEquals(0, $creditOrderRowsResponse->accepted);
+        $this->assertEquals("119 (ILLEGAL_CREDITED_AMOUNT)", $creditOrderRowsResponse->resultcode);
     }
+}
 ?>
