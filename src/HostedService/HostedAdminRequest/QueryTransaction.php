@@ -4,8 +4,10 @@ namespace Svea\HostedService;
 require_once SVEA_REQUEST_DIR . '/Includes.php';
 
 /**
- * Query a Card or Directbank transaction. Only supports querytransactionid request
+ * Query information about an existing card or direct bank transaction.
  * 
+ * Note that this only supports queries based on the Svea transactionId.
+ *
  * @author Kristian Grossman-Madsen
  */
 class QueryTransaction extends HostedRequest {

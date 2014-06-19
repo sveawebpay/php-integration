@@ -4,7 +4,10 @@ namespace Svea\HostedService;
 require_once SVEA_REQUEST_DIR . '/Includes.php';
 
 /**
- * Lowers the amount of a Card transaction. 
+ * lowerTransaction modifies the amount in an existing card transaction 
+ * having status AUTHORIZED or CONFIRMED. If the amount is lowered by an 
+ * amount equal to the transaction authorized amount, then after a 
+ * successful request the transaction will get the status ANNULLED.
  * 
  * @author Kristian Grossman-Madsen
  */

@@ -4,8 +4,8 @@ namespace Svea\HostedService;
 require_once SVEA_REQUEST_DIR . '/Includes.php';
 
 /**
- * List all available payment methods
- * 
+ * listPaymentMethods fetches all available payment methods
+ *
  * @author Kristian Grossman-Madsen
  */
 class ListPaymentMethods extends HostedRequest {

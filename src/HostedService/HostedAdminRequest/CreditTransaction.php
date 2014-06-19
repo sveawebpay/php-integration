@@ -4,7 +4,8 @@ namespace Svea\HostedService;
 require_once SVEA_REQUEST_DIR . '/Includes.php';
 
 /**
- * Credit a Card or Direct Bank transaction
+ * creditTransaction can be used to credit transactions. Only transactions that
+ * have reached the status SUCCESS can be credited.
  * 
  * @author Kristian Grossman-Madsen
  */

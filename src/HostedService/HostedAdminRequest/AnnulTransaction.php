@@ -4,14 +4,10 @@ namespace Svea\HostedService;
 require_once SVEA_REQUEST_DIR . '/Includes.php';
 
 /**
- * Annul an existing Card transaction.
- * The transaction must have Svea status AUTHORIZED or CONFIRMED. After a 
- * successful request the transaction will get the status ANNULLED.
- * 
- * Note that this only supports Card transactions.
- * 
- * @param ConfigurationProvider $config instance implementing ConfigurationProvider
- * 
+ * AnnulTransaction is used to cancel (annul) a card transaction. 
+ * The transaction must have status AUTHORIZED or CONFIRMED at Svea.
+ * After a successful request the transaction will get the status ANNULLED.
+ *
  * @author Kristian Grossman-Madsen
  */
 class AnnulTransaction extends HostedRequest {
@@ -20,6 +16,7 @@ class AnnulTransaction extends HostedRequest {
     
     /**
      * @param ConfigurationProvider $config instance implementing ConfigurationProvider
+     * @return \Svea\AnnulTransaction
      */
     function __construct($config) {
         $this->method = "annul";
