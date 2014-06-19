@@ -4,7 +4,11 @@ namespace Svea\HostedService;
 require_once SVEA_REQUEST_DIR . '/Includes.php';
 
 /**
- * Confirms a Card transaction. The 
+ * confirmTransaction can be performed on card transaction having the status 
+ * AUTHORIZED. This will result in a CONFIRMED transaction that will be
+ * captured on the given capturedate.
+ * 
+ * Note that this method only supports Card transactions.
  * 
  * @author Kristian Grossman-Madsen
  */

@@ -4,9 +4,9 @@
 include_once SVEA_REQUEST_DIR . "/Includes.php";
 
 /**
- * Supercedes class Item, while providing the same functionality.
- * WebPayItem is external to Svea namespace along with class WebPay.
- *  
+ * The WebPayItem class provides entrypoint methods to the different row items 
+ * that make up an order, as well as the customer identity information items.
+ * 
  * @api
  * @author Kristian Grossman-Madsen
  */
