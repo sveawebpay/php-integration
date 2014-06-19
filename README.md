@@ -659,13 +659,13 @@ An example of an recurring card order, both the setup transaction and a recurrin
 ## 6. WebPay entrypoint method reference
 The WebPay class methods contains the functions needed to create orders and perform payment requests using Svea payment methods. It contains entrypoint methods to define order contents, send order requests, as well as various support methods needed to do this.
 
-6.1 WebPay::createOrder()               create order and pay via invoice, payment plan, card, recurring card, or direct bank payment methods
-6.2 WebPay::deliverOrder()              (with orderRows) partially deliver, change or credit invoice, payment plan orders depending on set options
-6.2 WebPay::deliverOrder()              (without orderRows) deliver in full invoice, payment plan orders, confirms card orders 
-6.3 WebPay::getAddresses()              fetch addresses connected with a provided customer identity
-6.4 WebPay::getPaymentPlanParams()      fetch current campaigns (payment plan params) for a clientid, used by paymentplan orders
-6.5 WebPay::listPaymentMethods()        fetch available payment methods for a clientid
-6.6 WebPay::paymentPlanPricePerMonth()  calculates price per month over all available campaigns for a given order amount 
+ * 6.1 WebPay::createOrder()               create order and pay via invoice, payment plan, card, recurring card, or direct bank payment methods
+ * 6.2 WebPay::deliverOrder()              (with orderRows) partially deliver, change or credit invoice, payment plan orders depending on set options
+ * 6.2 WebPay::deliverOrder()              (without orderRows) deliver in full invoice, payment plan orders, confirms card orders 
+ * 6.3 WebPay::getAddresses()              fetch addresses connected with a provided customer identity
+ * 6.4 WebPay::getPaymentPlanParams()      fetch current campaigns (payment plan params) for a clientid, used by paymentplan orders
+ * 6.5 WebPay::listPaymentMethods()        fetch available payment methods for a clientid
+ * 6.6 WebPay::paymentPlanPricePerMonth()  calculates price per month over all available campaigns for a given order amount 
 
 ### 6.1 WebPay::createOrder()
 
@@ -861,12 +861,12 @@ Following the ->doRequest call you receive an instance of ListPaymentMethodsResp
 
 [<< To index](https://github.com/sveawebpay/php-integration/tree/develop#index)
 ## 7. WebPayAdmin
-7.1 WebPayAdmin::cancelOrder()
-7.2 WebPayAdmin::queryOrder()
-7.3 WebPayAdmin::cancelOrderRows
-7.4 WebPayAdmin::creditOrderRows
-7.5 WebPayAdmin::addOrderRows
-7.6 WebPayAdmin::updateOrderRows
+ * 7.1 WebPayAdmin::cancelOrder()
+ * 7.2 WebPayAdmin::queryOrder()
+ * 7.3 WebPayAdmin::cancelOrderRows
+ * 7.4 WebPayAdmin::creditOrderRows
+ * 7.5 WebPayAdmin::addOrderRows
+ * 7.6 WebPayAdmin::updateOrderRows
 
 ### 7.1 WebPayAdmin::cancelOrder()
 The WebPayAdmin::cancelOrder method is used to cancel an order with Svea, that has not yet been delivered (invoice, payment plan) or confirmed (card). 
@@ -888,9 +888,9 @@ The final doRequest() returns either a CloseOrderResult or an AnnulTransactionRe
 
 See <a href="http://htmlpreview.github.io/?https://raw.github.com/sveawebpay/php-integration/develop/apidoc/classes/Svea.CancelOrderBuilder.html" target="_blank">CancelOrderBuilder</a> class for methods used to build the order object and select the order type to cancel.
 
-See <a href="http://htmlpreview.github.io/?https://raw.github.com/sveawebpay/php-integration/develop/apidoc/classes/Svea.WebService.CloseOrderResult.html">CloseOrderResult</a> for invoice and payment plan orders response.
+See <a href="http://htmlpreview.github.io/?https://raw.github.com/sveawebpay/php-integration/develop/apidoc/classes/Svea.WebService.CloseOrderResult.html" target="_blank">CloseOrderResult</a> for invoice and payment plan orders response.
 
-See <a href="http://htmlpreview.github.io/?https://raw.github.com/sveawebpay/php-integration/develop/apidoc/classes/Svea.HostedService.AnnulTransactionResponse.html">AnnulTransactionResponse</a> for card orders response.
+See <a href="http://htmlpreview.github.io/?https://raw.github.com/sveawebpay/php-integration/develop/apidoc/classes/Svea.HostedService.AnnulTransactionResponse.html" target="_blank">AnnulTransactionResponse</a> for card orders response.
 
 #### 7.1.2 example
 ```php
@@ -926,9 +926,9 @@ The final doRequest() returns either a GetOrdersResponse or an QueryTransactionR
 
 See <a href="http://htmlpreview.github.io/?https://raw.github.com/sveawebpay/php-integration/develop/apidoc/classes/Svea.QueryOrderBuilder.html" target="_blank">QueryOrderBuilder</a> method details.
 
-See <a href="http://htmlpreview.github.io/?https://raw.github.com/sveawebpay/php-integration/develop/apidoc/classes/Svea.AdminService.GetOrdersResponse.html">GetOrdersResponse</a> for invoice and payment plan orders response.
+See <a href="http://htmlpreview.github.io/?https://raw.github.com/sveawebpay/php-integration/develop/apidoc/classes/Svea.AdminService.GetOrdersResponse.html target="_blank">GetOrdersResponse</a> for invoice and payment plan orders response.
 
-See <a href="http://htmlpreview.github.io/?https://raw.github.com/sveawebpay/php-integration/develop/apidoc/classes/Svea.HostedService.QueryTransactionResponse.html">QueryTransactionResponse</a> for card and direct bank orders response.
+See <a href="http://htmlpreview.github.io/?https://raw.github.com/sveawebpay/php-integration/develop/apidoc/classes/Svea.HostedService.QueryTransactionResponse.html" target="_blank">QueryTransactionResponse</a> for card and direct bank orders response.
 
 #### 7.2.2 example
 <example to come later>
@@ -960,9 +960,9 @@ The final doRequest() returns either a CancelOrderRowsResponse or a LowerTransac
 
 See <a href="http://htmlpreview.github.io/?https://raw.github.com/sveawebpay/php-integration/develop/apidoc/classes/Svea.CancelOrderRowsBuilder.html" target="_blank">CancelOrderRowsBuilder</a> method details.
 
-See <a href="http://htmlpreview.github.io/?https://raw.github.com/sveawebpay/php-integration/develop/apidoc/classes/Svea.AdminService.CancelOrderRowsResponse.html">CancelOrderRowsResponse</a> for invoice and payment plan orders response.
+See <a href="http://htmlpreview.github.io/?https://raw.github.com/sveawebpay/php-integration/develop/apidoc/classes/Svea.AdminService.CancelOrderRowsResponse.html" target="_blank">CancelOrderRowsResponse</a> for invoice and payment plan orders response.
 
-See <a href="http://htmlpreview.github.io/?https://raw.github.com/sveawebpay/php-integration/develop/apidoc/classes/Svea.HostedService.LowerTransactionResponse.html">LowerTransactionResponse</a> for card and direct bank orders response.
+See <a href="http://htmlpreview.github.io/?https://raw.github.com/sveawebpay/php-integration/develop/apidoc/classes/Svea.HostedService.LowerTransactionResponse.html" target="_blank">LowerTransactionResponse</a> for card and direct bank orders response.
 
 #### 7.3.2 example
 <example to come later>
@@ -996,9 +996,9 @@ The final doRequest() returns either a CreditOrderRowsResponse or a CreditTransa
 
 See <a href="http://htmlpreview.github.io/?https://raw.github.com/sveawebpay/php-integration/develop/apidoc/classes/Svea.CreditOrderRowsBuilder.html" target="_blank">CreditOrderRowsBuilder</a> method details.
 
-See <a href="http://htmlpreview.github.io/?https://raw.github.com/sveawebpay/php-integration/develop/apidoc/classes/Svea.AdminService.CreditOrderRowsResponse.html">CreditOrderRowsResponse</a> for invoice and payment plan orders response.
+See <a href="http://htmlpreview.github.io/?https://raw.github.com/sveawebpay/php-integration/develop/apidoc/classes/Svea.AdminService.CreditOrderRowsResponse.html" target="_blank">CreditOrderRowsResponse</a> for invoice and payment plan orders response.
 
-See <a href="http://htmlpreview.github.io/?https://raw.github.com/sveawebpay/php-integration/develop/apidoc/classes/Svea.HostedService.CreditTransactionResponse.html">CreditTransactionResponse</a> for card and direct bank orders response.
+See <a href="http://htmlpreview.github.io/?https://raw.github.com/sveawebpay/php-integration/develop/apidoc/classes/Svea.HostedService.CreditTransactionResponse.html" target="_blank">CreditTransactionResponse</a> for card and direct bank orders response.
 
 #### 7.4.2 example
 <example to come later>
@@ -1024,7 +1024,7 @@ The final doRequest() returns an AddOrderRowsResponse
 
 See <a href="http://htmlpreview.github.io/?https://raw.github.com/sveawebpay/php-integration/develop/apidoc/classes/Svea.AddOrderRowsBuilder.html" target="_blank">AddOrderRowsBuilder</a> method details.
 
-See <a href="http://htmlpreview.github.io/?https://raw.github.com/sveawebpay/php-integration/develop/apidoc/classes/Svea.AdminService.AddOrderRowsResponse.html">AddOrderRowsResponse</a> for invoice and payment plan orders response.
+See <a href="http://htmlpreview.github.io/?https://raw.github.com/sveawebpay/php-integration/develop/apidoc/classes/Svea.AdminService.AddOrderRowsResponse.html" target="_blank">AddOrderRowsResponse</a> for invoice and payment plan orders response.
 
 #### 7.5.2 example
 <example to come later>
@@ -1050,7 +1050,7 @@ The final doRequest() returns an UpdateOrderRowsResponse
 
 See <a href="http://htmlpreview.github.io/?https://raw.github.com/sveawebpay/php-integration/develop/apidoc/classes/Svea.UpdateOrderRowsBuilder.html" target="_blank">UpdateOrderRowsBuilder</a> method details.
 
-See <a href="http://htmlpreview.github.io/?https://raw.github.com/sveawebpay/php-integration/develop/apidoc/classes/Svea.AdminService.UpdateOrderRowsResponse.html">UpdateOrderRowsResponse</a> for invoice and payment plan orders response.
+See <a href="http://htmlpreview.github.io/?https://raw.github.com/sveawebpay/php-integration/develop/apidoc/classes/Svea.AdminService.UpdateOrderRowsResponse.html" target="_blank">UpdateOrderRowsResponse</a> for invoice and payment plan orders response.
 
 #### 7.6.2 example
 <example to come later>
