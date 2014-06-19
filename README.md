@@ -1,9 +1,4 @@
-# PHP Integration Package API for SveaWebPay
-
-## Version 2.0.0
-The Svea WebPay Integration package uses semantic versioning (http://semver.org). This means that you can expect your integrations to remain backwards compatible during a major version release cycle. 
-
-Previous versions of the package can be accessed through the github releases view (https://github.com/sveawebpay/php-integration/releases).
+# PHP Integration Package API for Svea WebPay
 
 ### Current build status
 | Branch                            | Build status                               |
@@ -11,30 +6,67 @@ Previous versions of the package can be accessed through the github releases vie
 | master (latest release)           | [![Build Status](https://travis-ci.org/sveawebpay/php-integration.png?branch=master)](https://travis-ci.org/sveawebpay/php-integration) |
 | develop                           | [![Build Status](https://travis-ci.org/sveawebpay/php-integration.png?branch=develop)](https://travis-ci.org/sveawebpay/php-integration) |
 
+## Version 2.0.0
+The Svea WebPay Integration package uses semantic versioning (http://semver.org). This means that you can expect your integrations to remain backwards compatible during a major version release cycle. 
+
+Previous versions of the package can be accessed through the github releases view (https://github.com/sveawebpay/php-integration/releases).
 
 ## Introduction
-The Svea WebPay integration package is built to help developers in the integration of the various Svea payment services. Using the integration package will aid in making your implementation maintainable and simplifies the way you consume the Svea services. 
+The WebPay and WebPayAdmin classes make up the Svea WebPay API. Together they provide unified entrypoints to the various Svea 
+web services. The API also encompass the support classes ConfigurationProvider, SveaResponse and WebPayItem, as well as various
+constant container classes.
 
-The Svea WebPay integration package provides a set of entrypoint classes and methods that unify how the various Svea payment services are accessed. 
+The WebPay class methods contains the functions needed to create orders and perform payment requests using Svea payment methods.
+It contains methods to define order contents, send order requests, as well as support methods needed to do this.
 
-Use the WebPay class methods to implement web payments using Svea services. The WebPayAdmin class can then be used to administer the orders placed using Svea payment services from within your integration. 
+The WebPayAdmin class methods are used to administrate orders after they have been accepted by Svea. It includes functions to 
+update, deliver, cancel and credit orders et.al.
 
-The package also provides service request classes to use the Svea services directly, without needing to build well-formed request data et al.
+### Package design philosophy
+In general, a request to Svea using the WebPay API starts out with you creating an instance of an order builder class, which
+is then built up with data using fluid method calls. At a certain point, a method is used to select which service the request 
+will go against. This method then returns an service request instance of a different class, which handles the request to the 
+service chosen. The service request will return a response object containing the various service responses and/or error codes.
 
-### Package design philosophy:
-In general, a service request starts out with creating an order object using one of the WebPay or WebPayAdmin class entrypoint methods. 
+The WebPay API consists of the entrypoint methods in the WebPay and WebPayAdmin classes. These instantiate order builder classes 
+in the Svea namespace, or in some cases request builder classes in the WebService, HostedService and AdminService sub-namespaces.
 
-The order is then built up with data using fluid method calls on the order object. At a certain point, a method is used to select 
-which service the request will be directed against. This method then returns an object of a different class, which handles the actual 
-request to the service chosen. 
+Given an instance, you then use method calls in the respective classes to populate the order or request instance. For orders, you
+then choose the payment method and get a request class in return. Send the request and get a service response from Svea in return. 
+In general, the request classes will validate that all required attributes are present, and if not throw an exception stating what
+is missing for the request in question. 
 
+### Synchronous and asynchronous requests
+Most service requests are synchronous and return a response immediately. For asynchronous hosted service payment requests, the 
+customer will be redirected to i.e. the selected card payment provider or bank, and you will get a callback to a return url, where
+where you receive and parse the response.
+
+### Namespaces
+The package makes use of PHP namespaces, grouping most classes under the namespace Svea. The entrypoint classes WebPay, WebPayAdmin 
+and associated support classes are excluded from the Svea namespace. See the generated documentation for available classes and methods.
+
+The underlying services and methods are contained in the Svea sub-namespaces WebService, HostedService and AdminService, and may be 
+accessed, though their api and interfaces are subject to change in the future.
+
+### Documentation
+See the provided README.md file for an overview and examples how to utilise 
+the WebPay and WebPayAdmin classes. The complete WebPay Integration package, 
+including the underlying Svea service classes, methods and structures, is 
+documented by generated documentation in the apidoc folder.   
+
+<!--- 
+the above text is taken form the WebPay/WebPayAdmin class docblock
+ -->
+
+See <a href="http://htmlpreview.github.io/?https://raw.github.com/sveawebpay/php-integration/develop/apidoc/index.html" target="_blank">WebPay API documentation</a>.
+
+### A first example
 An example of this workflow is the following invoice payment, where we wish to perform an invoice order. Assume that we have already 
 prepared objects containing the ordered items (with price, article number info, et al) and customer information (name, address, et al), 
 along with our Svea account credentials.
 
 ```php
 ...
-
 $order = WebPay::createOrder( $myConfig );  // create the order object, passing in my Svea account credentials
 
 $order->addOrderRow( $orderedItem );        // add order items objects to the order (see below for details)
@@ -50,7 +82,6 @@ $order->setOrderDate("2014-06-10")          // add various additional required i
 $request = $order->useInvoicePayment()      // we wish to place the order using the Svea Invoice payment method
 
 $response = $request->doRequest();          // send the request to Svea and receive a response object
-
 ...
 ```
 
@@ -81,16 +112,8 @@ will be thrown stating what attributes are missing for the service request in qu
 
 See further the Svea, Svea\WebService, Svea\AdminService and Svea\HostedService namespaces for further information. All service classes are documented by generated documentation included in the apidoc folder. 
 
-### Namespaces
-The package makes use of PHP namespaces, grouping most classes under the namespace Svea. The entrypoint classes WebPay, WebPayAdmin and associated support classes are excluded from the Svea namespace. See the generated documentation for available classes and methods.
-
-For compatibility with existing integrations built with version 1.x. of the package, we have provided a file "_NamespaceSvea.php" which may be included,
-which maps references to the classes now sorted under Svea\WebService and Svea\HostedService to their old location in the Svea namespace. TODO
-
-See the PHP documentation for more information on [namespaces in PHP](http://php.net/manual/en/language.namespaces.php).
-
 ### Fluidity
-The WebPay and WebPayAdmin entrypoint methods are built as a fluent API so you can use method chaining when implementing it in your code. We recommend making sure that your IDE code completion of available integration package methods is enabled to make full use of this feature.
+The WebPay and WebPayAdmin entrypoint methods are built as a fluent API so you can use method chaining when implementing it in your code. We recommend making sure that your IDE code completion is enabled to make full use of this feature.
 
 ### Development environment
 The Svea WebPay PHP integration package is developed and tested using NetBeans IDE 7.3.1 with the phpunit 3.7.24 plugin.
@@ -98,13 +121,12 @@ The Svea WebPay PHP integration package is developed and tested using NetBeans I
 ## Installing
 
 ### Requirements
-The integration package requires PHP 5.3 or higher to use. 
+The integration package requires PHP 5.3 or higher to use. See the PHP documentation for more information on [namespaces in PHP](http://php.net/manual/en/language.namespaces.php).
 
 To run the package test suite, phpunit 3.7 is needed. To regenerate the apidoc documentation, phpdocumentor 2.3 or higher is needed.
 
 ### Package installation
-The integration package files are located under the src/ folder. Copy the contents of the src/ folder to a folder in your project, we suggest the name "svea".
-Then include the package file *Includes.php* in your integration. You should now be able to access the package classes.
+The integration package files are located under the src/ folder. Copy the contents of the src/ folder to a folder in your project, we suggest the name "svea". Then include the package file *Includes.php* in your integration. You should now be able to access the package classes.
 
 ## Configuration
 In order to make use of the Svea services you need to supply your account credentials to authorize yourself against the Svea services. For the Invoice and Payment Plan payment methods, the credentials consist of a set of Username, Password and Client number (one set for each country and service type). For Card and Direct Bank payment methods, the credentials consist of a (single) set of Merchant id and Secret Word.
@@ -678,7 +700,7 @@ $form = $order
 ...
 ```
 
-#### 1.1.24 Payment method -- examples
+#### 1.1.24 Payment method examples -- invoice orders, card orders, recurring card orders
 
 An example of a synchronous (invoice) order can be found in the <a href="https://github.com/sveawebpay/php-integration/blob/develop/example/invoiceorder/" target="_blank">examples/invoiceorder</a> folder.
 
@@ -699,7 +721,6 @@ account setting is also available, ask your Svea integration manager about this.
 
 See <a href="http://htmlpreview.github.io/?https://raw.github.com/sveawebpay/php-integration/develop/apidoc/classes/Svea.DeliverOrderBuilder.html" target="_blank">DeliverOrderBuilder</a> class for methods used to build the order object and select the order type to deliver.
 
-
 #### 1.2.1 Order delivery -- deliver a sample invoice order
 The following is a minimal example of how to deliver an invoice order:
 
@@ -718,7 +739,6 @@ out items will not be invoiced by Svea.
 
 You cannot partially deliver payment plan orders. When using deliverOrder on a 
 payment plan order, all orderrows that aren’t cancelled will be delivered.
-
 
 ```php
 <?php
@@ -748,7 +768,6 @@ $myDeliverOrderRequest = $myOrder->deliverInvoiceOrder();
 $myResponse = $myDeliverOrderRequest->doRequest();
 ?>
 ```
-
 The above example can be found in the <a href="https://github.com/sveawebpay/php-integration/blob/develop/example/firstdeliver/" target="_blank">examples/firstdeliver</a> folder.
 
 #### 1.2.2 Order delivery -- additional order attributes 
@@ -886,8 +905,32 @@ $paymentPlanParamsResonseObject->values[0..n] (for n campaignCodes), where value
 ```
 [<< To top](https://github.com/sveawebpay/php-integration#php-integration-package-api-for-sveawebpay)
 
+### 1.7 WebPay::listPaymentMethods
+The WebPayAdmin::listPaymentMethods method is used to fetch all available paymentmethods 
+for a given ConfigurationProvider and country.
+
+### 1.7.1
+Use the WebPay::listPaymentMethods() entrypoint to get an instance of
+ListPaymentMethods. Then provide more information about the transaction and
+send the request using ListPaymentMethod methods. 
+
+Following the ->doRequest call you receive an instance of ListPaymentMethodsResponse.
+
+@see \Svea\HostedService\ListPaymentMethods \Svea\HostedService\ListPaymentMethods
+@see \Svea\HostedService\ListPaymentMethodsResponse \Svea\HostedService\ListPaymentMethodsResponse
+
+### 1.7.2 
+
+TODO example + example files
+
 
 ## 2. WebPayAdmin
+2.1 WebPayAdmin::cancelOrder()
+2.2 WebPayAdmin::queryOrder()
+2.3 WebPayAdmin::cancelOrderRows
+2.4 WebPayAdmin::creditOrderRows
+2.5 WebPayAdmin::addOrderRows
+2.6 WebPayAdmin::updateOrderRows
 
 ### 2.1 WebPayAdmin::cancelOrder()
 The WebPayAdmin::cancelOrder method is used to cancel an order with Svea, that has
@@ -1104,9 +1147,6 @@ See <a href="http://htmlpreview.github.io/?https://raw.github.com/sveawebpay/php
 #### 2.6.2 example
 
 TODO example + example files
-
-#### 2.7.x
-
 
 ## 9. Additional Developer Resources
 In the Helper class we make available helper functions for i.e. bankers rounding, splitting a sum with an arbitrary tax rate over two fixed tax rates, as well as splitting street addresses into streetname and housenumber. See the Helper class definition for further information.

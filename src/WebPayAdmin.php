@@ -3,98 +3,55 @@
 
 include_once SVEA_REQUEST_DIR . "/Includes.php";
 
-/* 
- *  WebPayAdmin::
- *  cancelOrder -- cancel in whole non-delivered invoice or payment plan orders, or annul non-confirmed card orders
- *  queryOrder -- get information about an order, including numbered order rows for invoice or payment plan orders
- * 
- *  cancelOrderRows -- cancel order rows in non-delivered invoice or payment plan order, or lower amount to charge (only) for non-confirmed card orders
- * 	->cancelInvoiceOrderRows(): use admin service CancelOrderRows with given numbered order rows to cancel order row
- * 	->cancelPaymentPlanOrderRows(): as for invoice
- * 	->cancelCardOrderRows: use LowerTransaction with given numbered order rows to lower the amount to charge by the order row amount; note that  * rder rows won’t change, just the order total
- * 	->cancelDirectBankOrderRows: not supported
- * 
- *  addOrderRows -- add order rows to non-delivered invoice or payment plan order
- * 	->addInvoiceOrderRows(): use admin service AddOrderRows with given Svea\OrderRow objects to add order rows
- * 	->addPaymentPlanOrderRows(): as for invoice above
- *	->addCardOrderRows(): – not supported
- * 	->addDirectBankOrderRows(): -  not supported
- * 
- * updateOrderRows -- update order rows in non-delivered invoice or payment plan order, or lower amount to charge (only) for non-confirmed card orders
- * 	->updateInvoiceOrderRows(): use admin service UpdateOrderRows with given (numbered order row, Svea\OrderRow object) pairs to update order rows
- * 	->updatePaymentPlanOrderRows(): as for invoice
- * 	->updateCardOrderRows(): -- only possible to lower the amount for an order, method should ensure this.
- * 	->updateDirectBankRows(): -- not supported
- * 
- * 	Implement admin service UpdateOrderRows
- * 	Create AdminSoap classes
- * 	Create UpdateOrderRowsResult class
- * 	Create UpdateOrderRowsBuilder class
- * 	->updateOrderRows( int:numberedOrderRow, Svea\OrderRow:updatedOrderRow)
- * 	->setOrderId()
- * 	Validation of OrderBuilder attributes needed to place request
- * 
- * 	Card: check if amount is <= current amount, or return error message
- * 	Card: do LowerTransaction request
- * 
- *  **creditOrderRows -- credit order rows in delivered invoice or payment plan order, or credit confirmed card orders
- * 	->creditInvoiceOrderRows(): use admin service CreditInvoiceRows with given numbered order rows to credit order rows, should return  * nvoicenumber of creditinvoice
- * 	->creditPaymentPlanOrderRows(): as for invoice above
- * 	->creditCardOrderRows(): use CreditTransaction with given numbered order rows to credit the order row amount; note that order rows won’t change just the order total
-* 	->creditDirectBankOrderRows: as for card above
- * 
- * 	Implement admin service CreditInvoiceRows
- * 	Create AdminSoap classes
- * 	Create CreditOrderRowsResult class
- * 	Create creditOrderRowsBuilder class
- * 	->creditOrderRows( int:numberedOrderRow )
- * 	->setOrderId()
- * 	Validation of OrderBuilder attributes needed to place request
- * 
- * 	Card: (we haven’t got state of the order, and can’t check status of individual order rows, so won’t do any validation -- document)
- * 	Card: do CreditTransaction request for the amount
- * 
- *   **listPaymentMethods -- WPA equivalent of WP::getPaymentMethods 
- * 
- *	straightforward port of existing WebPay::getPaymentMethods, but should return object instead of array
- *	create listPaymentMethodsResult class
- *
- * The following methods are provided in WebPayAdmin as a stopgap measure to perform administrative functions for card orders.
- * These entrypoints will be removed from the package in the 2.0 release, but will still be available in the Svea namespace.
- * 
- * WebPayAdmin::
- *   (annulTransaction) -- returns Svea\AnnulTransaction object, used to cancel (annul) a non-confirmed card order - use WPA::cancelOrder instead
- *   (confirmTransaction) -- returns Svea\ConfirmTransaction object, used to deliver (confirm) a non-confirmed card order - use WP::deliverOrder instead
- *   (lowerTransaction) -- returns Svea\LowerTransaction object, used to lower the amount to be charged in a non-confirmed cardOrder
- *   (creditTransaction) -- returns Svea\CreditTransaction object, used to credit confirmed card, or direct bank orders
- *   (queryTransaction) -- returns Svea\QueryTransaction object, used to get information about a card or direct bank order 
- * 
- * INNER WORKINGS (examples):
- * In general, the WebPay API starts out with creating an order object, which is then built up with data using fluid method calls. 
- * At a certain point, a method is used to select which service the order will go against. This method then returns an object of a 
- * different class, which handles the request to the service chosen. 
- * 
- * An example of this usage is the API method WebPay::createOrder()->setXX->..->useInvoicePayment(), returning an instance of the CardPayment class.
- * See the BuildOrder/CreateOrderBuilder, BuildOrder/RowBuilders/WebPayItem classes, et al.
- * 
- * It is also possible to create the service objects directly, making sure to set all relevant methods before finishing with a method to perform
- * the request to the service. In general, the objects will validate that all required attributes are present, if not, an exception will be thrown
- * stating what is missing for the service in question. 
- * 
- * Examples of these classes are HostedRequest/HandleOrder/AnnulTransaction, HostedRequest/Payment/CardPayment, 
- * WebServiceRequest/HandleOrder/CloseOrder, WebService/Payment/InvoicePayment, AdminServiceRequest/CancelOrderRequest, et al.
- * 
-*/
-
-
 /**
- * WebPayAdmin provides entrypoints to the various administrative functions 
- * provided by Svea.
+ * ## Introduction
+ * The WebPay and WebPayAdmin classes make up the Svea WebPay API. Together they provide unified entrypoints to the various Svea 
+ * web services. The API also encompass the support classes ConfigurationProvider, SveaResponse and WebPayItem, as well as various
+ * constant container classes.
  * 
- * @version 2.0b
- * @author Kristian Grossman-Madsen for Svea WebPay
- * @package WebPay
+ * The WebPay class methods contains the functions needed to create orders and perform payment requests using Svea payment methods.
+ * It contains methods to define order contents, send order requests, as well as support methods needed to do this.
+ * 
+ * The WebPayAdmin class methods are used to administrate orders after they have been accepted by Svea. It includes functions to 
+ * update, deliver, cancel and credit orders et.al.
+ * 
+ * ### Package design philosophy
+ * In general, a request to Svea using the WebPay API starts out with you creating an instance of an order builder class, which
+ * is then built up with data using fluid method calls. At a certain point, a method is used to select which service the request 
+ * will go against. This method then returns an service request instance of a different class, which handles the request to the 
+ * service chosen. The service request will return a response object containing the various service responses and/or error codes.
+ * 
+ * The WebPay API consists of the entrypoint methods in the WebPay and WebPayAdmin classes. These instantiate order builder classes 
+ * in the Svea namespace, or in some cases request builder classes in the WebService, HostedService and AdminService sub-namespaces.
+ * 
+ * Given an instance, you then use method calls in the respective classes to populate the order or request instance. For orders, you
+ * then choose the payment method and get a request class in return. Send the request and get a service response from Svea in return. 
+ * In general, the request classes will validate that all required attributes are present, and if not throw an exception stating what
+ * is missing for the request in question. 
+ * 
+ * ### Synchronous and asynchronous requests
+ * Most service requests are synchronous and return a response immediately. For asynchronous hosted service payment requests, the 
+ * customer will be redirected to i.e. the selected card payment provider or bank, and you will get a callback to a return url, where
+ * where you receive and parse the response.
+ * 
+ * ### Namespaces
+ * The package makes use of PHP namespaces, grouping most classes under the namespace Svea. The entrypoint classes WebPay, WebPayAdmin 
+ * and associated support classes are excluded from the Svea namespace. See the generated documentation for available classes and methods.
+ * 
+ * The underlying services and methods are contained in the Svea sub-namespaces WebService, HostedService and AdminService, and may be 
+ * accessed, though their api and interfaces are subject to change in the future.
+ * 
+ * ### Documentation
+ * See the provided README.md file for an overview and examples how to utilise 
+ * the WebPay and WebPayAdmin classes. The complete WebPay Integration package, 
+ * including the underlying Svea service classes, methods and structures, is 
+ * documented by generated documentation in the apidoc folder.   
+ * 
  * @api 
+ * @version 2.0.0
+ * @package WebPay
+ * 
+ * @author Anneli Halld'n, Daniel Brolund, Kristian Grossman-Madsen for Svea WebPay
  */
 class WebPayAdmin {
 
@@ -289,25 +246,6 @@ class WebPayAdmin {
         if( $config == NULL ) { WebPay::throwMissingConfigException(); }
         return new Svea\UpdateOrderRowsBuilder($config);
     }
-    
-    /**
-     * listPaymentMethods fetches all paymentmethods connected to the given 
-     * ConfigurationProvider and country.
-     *
-     * Use the WebPayAdmin::listPaymentMethods() entrypoint to get an instance of
-     * ListPaymentMethods. Then provide more information about the transaction and
-     * send the request using @see ListPaymentMethod methods. 
-     * 
-     * Following the ->doRequest call you receive a @see \Svea\ListPaymentMethodsResponse
-     * 
-     * @param ConfigurationProvider $configs
-     * @return \Svea\ListPaymentMethods
-     */
-    static function listPaymentMethods($config) {
-        return new Svea\ListPaymentMethods($config);
-    }  
-
-
       
     /** helper function, throws exception if no config is given */
     private static function throwMissingConfigException() {

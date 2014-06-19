@@ -11,7 +11,7 @@ require_once $root . '/../../../TestUtil.php';
  * @author Kristian Grossman-Madsen for Svea WebPay
  */
 class DeliverPaymentPlanIntegrationTest extends PHPUnit_Framework_TestCase {
-
+    
     /**
      * Function to use in testfunctions
      * @return SveaOrderId
@@ -36,6 +36,7 @@ class DeliverPaymentPlanIntegrationTest extends PHPUnit_Framework_TestCase {
         $orderId = $this->getPaymentPlanOrderId();
         $orderBuilder = WebPay::deliverOrder($config);
         $request = $orderBuilder
+                ->addOrderRow(TestUtil::createOrderRow(1000.00, 1))
                 ->setOrderId($orderId)
                 ->setCountryCode("SE")
                 ->deliverPaymentPlanOrder()

@@ -10,7 +10,13 @@ require_once $root . '/../TestUtil.php';
  */
 class WebPayIntegrationTest extends PHPUnit_Framework_TestCase {
 
-    // WebPay::createOrder()
+    /// WebPay::createOrder()
+    // web service eu: invoice
+    // web service eu: paymentplan
+    // bypass paypage: usepaymentmethod
+    // paypage: cardonly
+    // paypage: directbankonly
+    // paypage
     public function test_createOrder_useInvoicePayment_returns_InvoicePayment() {
         $createOrder = WebPay::createOrder( Svea\SveaConfig::getDefaultConfig() );
         // we should set attributes here if real request
@@ -48,8 +54,10 @@ class WebPayIntegrationTest extends PHPUnit_Framework_TestCase {
         $this->assertInstanceOf("Svea\HostedService\PayPagePayment", $request);
     }      
         
-    
     /// WebPay::deliverOrder()
+    // invoice
+    // paymentplan
+    // card
     public function test_deliverOrder_deliverInvoiceOrder_without_order_rows_returns_DeliverOrderEU() {
         $deliverOrder = WebPay::deliverOrder( Svea\SveaConfig::getDefaultConfig() );
         $request = $deliverOrder->deliverInvoiceOrder();        
@@ -85,7 +93,27 @@ class WebPayIntegrationTest extends PHPUnit_Framework_TestCase {
         $this->assertInstanceOf( "Svea\HostedService\ConfirmTransaction", $request );
     }
     
+    /// WebPay::getAddresses()
+    public function test_getAddresses_returns_GetAddresses() {
+        $request = WebPay::getAddresses( Svea\SveaConfig::getDefaultConfig() );
+        $this->assertInstanceOf( "Svea\WebService\GetAddresses", $request );
+    }    
+ 
+    /// WebPay::getPaymentPlanParams()
+    public function test_getPaymentPlanParams_returns_GetPaymentPlanParams() {
+        $request = WebPay::getPaymentPlanParams( Svea\SveaConfig::getDefaultConfig() );
+        $this->assertInstanceOf( "Svea\WebService\GetPaymentPlanParams", $request );
+    }    
     
-    ///
-  
+    /// WebPay::getPaymentMethods()
+    public function test_getPaymentMethods_returns_GetPaymentMethods() {
+        $request = WebPay::getPaymentMethods( Svea\SveaConfig::getDefaultConfig() );
+        $this->assertInstanceOf( "Svea\HostedService\GetPaymentMethods", $request );
+    }   
+    
+    /// listPaymentMethods()
+    public function test_listPaymentMethods_returns_ListPaymentMethods() {
+        $request = WebPay::listPaymentMethods( Svea\SveaConfig::getDefaultConfig() );
+        $this->assertInstanceOf( "Svea\HostedService\ListPaymentMethods", $request );
+    } 
 }

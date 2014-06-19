@@ -171,5 +171,5 @@ class WebPayAdminIntegrationTest extends PHPUnit_Framework_TestCase {
         $request = $updateOrderRowsBuilder->updatePaymentPlanOrderRows();        
         $this->assertInstanceOf( "Svea\AdminService\UpdateOrderRowsRequest", $request );
     } 
-    
+     
 }

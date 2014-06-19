@@ -70,5 +70,8 @@ class ListPaymentMethodsResponse extends HostedAdminResponse{
             // assumes that client configuration does not support $type PAYMENTPLAN
         }
         
+        // clean up response
+        unset( $this->config );
+        unset( $this->countryCode);   
     }
 }
