@@ -120,12 +120,12 @@ class RecurTransactionTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals((string)$currency, $xmlMessage->currency);   
         $this->assertEquals((string)$amount, $xmlMessage->amount);        
     }
-    
+        
     function test_prepareRequest_missing_customerRefNo_throws_exception() {
 
         $this->setExpectedException(
             'Svea\ValidationException', 
-            '-missing value : customerRefNo is required. Use function setCustomerRefNo().'
+            '-missing value : customerRefNo is required. Use function setCustomerRefNo (also check setClientOrderNumber in order builder).'
         );   
   
         $subscriptionId = 987654;       
