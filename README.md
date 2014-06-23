@@ -32,29 +32,29 @@ Previous versions of the package can be accessed through <a href="https://github
     * [4.7 WebPayItem::individualCustomer()](https://github.com/sveawebpay/php-integration/tree/develop#47-webpayitemindividualcustomer)
     * [4.8 WebPayItem::companyCustomer()](https://github.com/sveawebpay/php-integration/tree/develop#48-webpayitemcompanycustomer)
 * [5. Payment method overview](https://github.com/sveawebpay/php-integration/tree/develop#5-payment-method-reference)
-    * 5.1 Invoice payment method
-    * 5.2 Payment plan payment method
-    * 5.3 Using a specific payment method
-    * 5.4 PayPage payment method, card payment options only
-    * 5.5 PayPage payment method, direct bank payment options only
-    * 5.6 PayPage payment method, specified payment methods only
-    * 5.7 PayPage payment method, all payment methods
-    * 5.8 Payment method examples -- invoice orders, card orders, recurring card orders
+    * [5.1 Invoice payment method](https://github.com/sveawebpay/php-integration/tree/develop#51-invoice-payment-method)
+    * [5.2 Payment plan payment method](https://github.com/sveawebpay/php-integration/tree/develop#52-payment-plan-payment-method)
+    * [5.3 Using a specific payment method](https://github.com/sveawebpay/php-integration/tree/develop#53-using-a-specific-payment-method)
+    * [5.4 PayPage payment method, card payment options only](https://github.com/sveawebpay/php-integration/tree/develop#54-paypage-payment-method-card-payment-options-only)
+    * [5.5 PayPage payment method, direct bank payment options only](https://github.com/sveawebpay/php-integration/tree/develop#55-paypage-payment-method-direct-bank-payment-options-only)
+    * [5.6 PayPage payment method, specified payment methods only](https://github.com/sveawebpay/php-integration/tree/develop#56-paypage-payment-method-specified-payment-methods-only)
+    * [5.7 PayPage payment method, all payment methods](https://github.com/sveawebpay/php-integration/tree/develop#57-paypage-payment-method-all-payment-methods)
+    * [5.8 Payment method examples -- invoice orders, card orders, recurring card orders](https://github.com/sveawebpay/php-integration/tree/develop#58-payment-method-examples)
 * [6. WebPay entrypoint method reference](https://github.com/sveawebpay/php-integration/tree/develop#6-webpay-entrypoint-method-reference)
-    * 6.1 WebPay::createOrder()
-    * 6.2 WebPay::deliverOrder()
-    * 6.3 WebPay::getAddresses()
-    * 6.4 WebPay::getPaymentPlanParams()
-    * 6.5 WebPay::getPaymentMethods()
-    * 6.6 WebPay::paymentPlanPricePerMonth()
-    * 6.7 WebPay::listPaymentMethods
+    * [6.1 WebPay::createOrder()](https://github.com/sveawebpay/php-integration/tree/develop#61-webpaycreateorder)
+    * [6.2 WebPay::deliverOrder()](https://github.com/sveawebpay/php-integration/tree/develop#62-webpaydeliverorder)
+    * [6.3 WebPay::getAddresses()](https://github.com/sveawebpay/php-integration/tree/develop#63-webpaygetaddresses)
+    * [6.4 WebPay::getPaymentPlanParams()](https://github.com/sveawebpay/php-integration/tree/develop#64-webpaygetpaymentplanparams)
+    * [6.5 WebPay::getPaymentMethods()](https://github.com/sveawebpay/php-integration/tree/develop#65-webpaygetpaymentmethods)
+    * [6.6 WebPay::paymentPlanPricePerMonth()](https://github.com/sveawebpay/php-integration/tree/develop#66-webpaypaymentplanpricepermonth)
+    * [6.7 WebPay::listPaymentMethods](https://github.com/sveawebpay/php-integration/tree/develop#67-webpaylistpaymentmethods)
 * [7. WebPayAdmin](https://github.com/sveawebpay/php-integration/tree/develop#7-webpayadmin)
-    * 7.1 WebPayAdmin::cancelOrder()
-    * 7.2 WebPayAdmin::queryOrder()
-    * 7.3 WebPayAdmin::cancelOrderRows
-    * 7.4 WebPayAdmin::creditOrderRows
-    * 7.5 WebPayAdmin::addOrderRows
-    * 7.6 WebPayAdmin::updateOrderRows
+    * [7.1 WebPayAdmin::cancelOrder()](https://github.com/sveawebpay/php-integration/tree/develop#71-webpayadmincancelorder)
+    * [7.2 WebPayAdmin::queryOrder()](https://github.com/sveawebpay/php-integration/tree/develop#72-webpayadminqueryorder)
+    * [7.3 WebPayAdmin::cancelOrderRows()](https://github.com/sveawebpay/php-integration/tree/develop#73-webpayadmincancelorderrows)
+    * [7.4 WebPayAdmin::creditOrderRows()](https://github.com/sveawebpay/php-integration/tree/develop#74-webpayadmincreditorderrows)
+    * [7.5 WebPayAdmin::addOrderRows()](https://github.com/sveawebpay/php-integration/tree/develop#75-webpayadminaddorderrows)
+    * [7.6 WebPayAdmin::updateOrderRows()](https://github.com/sveawebpay/php-integration/tree/develop#76-webpayadminupdateorderrows)
 * [8. SveaResponse](https://github.com/sveawebpay/php-integration/tree/develop#8-svearesponse)
     * [8.1. Parsing an asynchronous service response](https://github.com/sveawebpay/php-integration/tree/develop#81-parsing-an-asynchronous-service-response)
 * [9. Additional Developer Resources and notes](https://github.com/sveawebpay/php-integration/tree/develop#9-additional-developer-resources-and-notes)
@@ -659,13 +659,13 @@ An example of an recurring card order, both the setup transaction and a recurrin
 ## 6. WebPay entrypoint method reference
 The WebPay class methods contains the functions needed to create orders and perform payment requests using Svea payment methods. It contains entrypoint methods to define order contents, send order requests, as well as various support methods needed to do this.
 
- * 6.1 WebPay::createOrder()               create order and pay via invoice, payment plan, card, recurring card, or direct bank payment methods
- * 6.2 WebPay::deliverOrder()              (with orderRows) partially deliver, change or credit invoice, payment plan orders depending on set options
- * 6.2 WebPay::deliverOrder()              (without orderRows) deliver in full invoice, payment plan orders, confirms card orders 
- * 6.3 WebPay::getAddresses()              fetch addresses connected with a provided customer identity
- * 6.4 WebPay::getPaymentPlanParams()      fetch current campaigns (payment plan params) for a clientid, used by paymentplan orders
- * 6.5 WebPay::listPaymentMethods()        fetch available payment methods for a clientid
- * 6.6 WebPay::paymentPlanPricePerMonth()  calculates price per month over all available campaigns for a given order amount 
+* [6.1 WebPay::createOrder()](https://github.com/sveawebpay/php-integration/tree/develop#61-webpaycreateorder)
+* [6.2 WebPay::deliverOrder()](https://github.com/sveawebpay/php-integration/tree/develop#62-webpaydeliverorder)
+* [6.3 WebPay::getAddresses()](https://github.com/sveawebpay/php-integration/tree/develop#63-webpaygetaddresses)
+* [6.4 WebPay::getPaymentPlanParams()](https://github.com/sveawebpay/php-integration/tree/develop#64-webpaygetpaymentplanparams)
+* [6.5 WebPay::getPaymentMethods()](https://github.com/sveawebpay/php-integration/tree/develop#65-webpaygetpaymentmethods)
+* [6.6 WebPay::paymentPlanPricePerMonth()](https://github.com/sveawebpay/php-integration/tree/develop#66-webpaypaymentplanpricepermonth)
+* [6.7 WebPay::listPaymentMethods](https://github.com/sveawebpay/php-integration/tree/develop#67-webpaylistpaymentmethods)
 
 ### 6.1 WebPay::createOrder()
 
@@ -861,12 +861,14 @@ Following the ->doRequest call you receive an instance of ListPaymentMethodsResp
 
 [<< To index](https://github.com/sveawebpay/php-integration/tree/develop#index)
 ## 7. WebPayAdmin
- * 7.1 WebPayAdmin::cancelOrder()
- * 7.2 WebPayAdmin::queryOrder()
- * 7.3 WebPayAdmin::cancelOrderRows
- * 7.4 WebPayAdmin::creditOrderRows
- * 7.5 WebPayAdmin::addOrderRows
- * 7.6 WebPayAdmin::updateOrderRows
+The WebPayAdmin class methods are used to administrate orders after they have been accepted by Svea. It includes functions to update, deliver, cancel and credit orders et.al.
+
+* [7.1 WebPayAdmin::cancelOrder()](https://github.com/sveawebpay/php-integration/tree/develop#71-webpayadmincancelorder)
+* [7.2 WebPayAdmin::queryOrder()](https://github.com/sveawebpay/php-integration/tree/develop#72-webpayadminqueryorder)
+* [7.3 WebPayAdmin::cancelOrderRows()](https://github.com/sveawebpay/php-integration/tree/develop#73-webpayadmincancelorderrows)
+* [7.4 WebPayAdmin::creditOrderRows()](https://github.com/sveawebpay/php-integration/tree/develop#74-webpayadmincreditorderrows)
+* [7.5 WebPayAdmin::addOrderRows()](https://github.com/sveawebpay/php-integration/tree/develop#75-webpayadminaddorderrows)
+* [7.6 WebPayAdmin::updateOrderRows()](https://github.com/sveawebpay/php-integration/tree/develop#76-webpayadminupdateorderrows)
 
 ### 7.1 WebPayAdmin::cancelOrder()
 The WebPayAdmin::cancelOrder method is used to cancel an order with Svea, that has not yet been delivered (invoice, payment plan) or confirmed (card). 
@@ -933,7 +935,7 @@ See <a href="http://htmlpreview.github.io/?https://raw.github.com/sveawebpay/php
 #### 7.2.2 example
 <example to come later>
 
-### 7.3 WebPayAdmin::cancelOrderRows
+### 7.3 WebPayAdmin::cancelOrderRows()
 The WebPayAdmin::cancelOrder method is used to cancel individual order rows in orders, that has not yet been delivered (invoice, payment plan) or confirmed (card).
 
 This method is mainly intended to cancel order rows in invoice and payment plan orders. When used with card orders the following limitations apply: You need to supply the NumberedOrderRows on which to operate. These may be fetched using the queryOrder method, but if the order has been edited after creation they may not be accurate. Cancelled card order rows are handled by lowering the amount to charge on the card order.
@@ -967,7 +969,7 @@ See <a href="http://htmlpreview.github.io/?https://raw.github.com/sveawebpay/php
 #### 7.3.2 example
 <example to come later>
 
-### 7.4 WebPayAdmin::creditOrderRows
+### 7.4 WebPayAdmin::creditOrderRows()
 The WebPayAdmin::creditOrder method is used to credit individual order rows in delivered orders.
 
 When used with card or direct bank orders the following limitations apply: You need to supply the NumberedOrderRows on which to operate. These may be fetched using the queryOrder method, but if the order has been edited after creation they may not be accurate.
@@ -1003,7 +1005,7 @@ See <a href="http://htmlpreview.github.io/?https://raw.github.com/sveawebpay/php
 #### 7.4.2 example
 <example to come later>
 
-### 7.5 WebPayAdmin::addOrderRows
+### 7.5 WebPayAdmin::addOrderRows()
 The WebPayAdmin::addOrderRows method is used to add individual order rows to non-delivered invoice and payment plan orders.
 
 #### 7.5.1 Usage and return types
@@ -1029,7 +1031,7 @@ See <a href="http://htmlpreview.github.io/?https://raw.github.com/sveawebpay/php
 #### 7.5.2 example
 <example to come later>
 
-### 7.6 WebPayAdmin::updateOrderRows
+### 7.6 WebPayAdmin::updateOrderRows()
 The WebPayAdmin::updateOrderRows method is used to update individual order rows in non-delivered invoice and payment plan orders.
 
 #### 7.6.1
