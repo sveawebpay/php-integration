@@ -22,19 +22,40 @@ class SoapClient {
      * @return SoapClient
      */
     public function setSoapClient( $endpoint ) {
-        $client = new \SoapClient( 
-            null,
-            array(
-                'location' => $endpoint,
-                'uri' => "http://tempuri.org/",
-                'use' => SOAP_LITERAL,    
-                'exceptions'=> 1,
-                'connection_timeout' => 60,
-                'trace' => 1,
-                'soap_version' => SOAP_1_1
-            )
-        );  
-        
+
+        // travis tests time out on php >5.4
+        if( version_compare( PHP_VERSION, '5.4.0') >= 0 )
+        {
+            ini_set('default_socket_timeout', 300);
+            $client = new \SoapClient( 
+                null,
+                array(
+                    'location' => $endpoint,
+                    'uri' => "http://tempuri.org/",
+                    'use' => SOAP_LITERAL,    
+                    'exceptions'=> 1,
+                    'keep_alive' => true,
+                    'connection_timeout' => 300,
+                    'trace' => 1,
+                    'soap_version' => SOAP_1_1
+                )
+            );  
+        }
+        // but work fine on php 5.3
+        else {
+            $client = new \SoapClient( 
+                null,
+                array(
+                    'location' => $endpoint,
+                    'uri' => "http://tempuri.org/",
+                    'use' => SOAP_LITERAL,    
+                    'exceptions'=> 1,
+                    'connection_timeout' => 300,
+                    'trace' => 1,
+                    'soap_version' => SOAP_1_1
+                )
+            );          
+        }        
         return $client;
     }
     
