@@ -23,18 +23,9 @@ class SveaDoRequest {
     }
 
     private function SetSoapClient() {
-        // travis tests time out on php >5.4
-        if( version_compare( PHP_VERSION, '5.4.0') >= 0 )
-        {
-            ini_set('default_socket_timeout', 300);        
-            return new \SoapClient($this->svea_server, array('keep_alive' => true, 'connection_timeout' => 300, 'trace' => 1));
-        }
-        // but work fine on php 5.3
-        else {
-            return new \SoapClient($this->svea_server, array('trace' => 1));
-    }   
-  }
-  
+         return new \SoapClient($this->svea_server, array('trace' => 1));
+    }
+
     /**
      * Create Invoice or Partpaymentorder
      * @param mixed $order Object containing SveaAuth and SveaCreateOrderInformation
