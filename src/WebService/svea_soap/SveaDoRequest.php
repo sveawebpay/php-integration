@@ -19,20 +19,10 @@ class SveaDoRequest {
      */
     public function __construct($serverUrl) {
         $this->svea_server = $serverUrl;
-        $this->client = $this->SetSoapClient();
     }
 
     private function SetSoapClient() {
-        // travis tests time out on php >5.4
-        if( version_compare( PHP_VERSION, '5.4.0') >= 0 )
-        {
-            ini_set('default_socket_timeout', 300);        
-            return new \SoapClient($this->svea_server, array('keep_alive' => true, 'connection_timeout' => 300, 'trace' => 1));
-        }
-        // but work fine on php 5.3
-        else {
-            return new \SoapClient($this->svea_server, array('trace' => 1));
-    }   
+        return new \SoapClient($this->svea_server, array('trace' => 1));
   }
   
     /**
@@ -42,6 +32,7 @@ class SveaDoRequest {
      */
     public function CreateOrderEu($order) {
         $builder = new SveaSoapArrayBuilder();
+        $this->client = $this->SetSoapClient();
         return $this->client->CreateOrderEu($builder->object_to_array($order)); //result of SoapClient CreateOrderEu method
 
     }
@@ -53,6 +44,7 @@ class SveaDoRequest {
 //     */
     public function GetAddresses($request) {
         $builder = new SveaSoapArrayBuilder();
+        $this->client = $this->SetSoapClient();
         return $this->client->GetAddresses($builder->object_to_array($request));
     }
 
@@ -63,6 +55,7 @@ class SveaDoRequest {
 //     */
     public function GetPaymentPlanParamsEu($auth) {
         $builder = new SveaSoapArrayBuilder();
+        $this->client = $this->SetSoapClient();        
         return $this->client->GetPaymentPlanParamsEu($builder->object_to_array($auth));
     }
 
@@ -73,11 +66,13 @@ class SveaDoRequest {
 //     */
     public function DeliverOrderEu($deliverdata) {
         $builder = new SveaSoapArrayBuilder();
+        $this->client = $this->SetSoapClient();
         return $this->client->DeliverOrderEu($builder->object_to_array($deliverdata));
     }
 
     public function CloseOrderEu($closedata) {
         $builder = new SveaSoapArrayBuilder();
+        $this->client = $this->SetSoapClient();        
         return $this->client->CloseOrderEu($builder->object_to_array($closedata));
     }
 }
