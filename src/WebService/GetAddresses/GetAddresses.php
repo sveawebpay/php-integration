@@ -139,8 +139,14 @@ class GetAddresses {
         $url = $this->conf->getEndPoint($this->orderType);
         $request = new WebServiceSoap\SveaDoRequest($url);
 
-        $svea_req = $request->GetAddresses($this->request);
-
+        try {
+            $svea_req = $request->GetAddresses($this->request);
+        }
+        catch( \SoapFault $sf ) {
+            print_r( "SOAP Fault: (faultcode: {$sf->faultcode}, faultstring: {$sf->faultstring})" );
+            trigger_error("SOAP Fault: (faultcode: {$sf->faultcode}, faultstring: {$sf->faultstring})", E_USER_ERROR);
+        }
+        
         $response = new \SveaResponse($svea_req,"");
         return $response->response;
     }
