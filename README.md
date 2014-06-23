@@ -12,7 +12,6 @@ The Svea WebPay Integration package uses semantic versioning (http://semver.org)
 Previous versions of the package can be accessed through <a href="https://github.com/sveawebpay/php-integration/releases" target="_blank">the github releases</a> view.
 
 ## Index
-                    https://github.com/sveawebpay/php-integration#introduction
 * [I. Introduction](https://github.com/sveawebpay/php-integration#i-introduction)
 * [1. Installing](https://github.com/sveawebpay/php-integration#1-installing-and-configuration)
 * [2. "Hello World"](https://github.com/sveawebpay/php-integration#2-hello-world)
