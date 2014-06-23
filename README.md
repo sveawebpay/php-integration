@@ -857,7 +857,7 @@ Following the ->doRequest call you receive an instance of ListPaymentMethodsResp
 @see \Svea\HostedService\ListPaymentMethodsResponse \Svea\HostedService\ListPaymentMethodsResponse
 
 #### 6.7.2 
-<example to come later>
+*example to come later*
 
 [<< To index](https://github.com/sveawebpay/php-integration/tree/develop#index)
 ## 7. WebPayAdmin
@@ -933,7 +933,7 @@ See <a href="http://htmlpreview.github.io/?https://raw.github.com/sveawebpay/php
 See <a href="http://htmlpreview.github.io/?https://raw.github.com/sveawebpay/php-integration/develop/apidoc/classes/Svea.HostedService.QueryTransactionResponse.html" target="_blank">QueryTransactionResponse</a> for card and direct bank orders response.
 
 #### 7.2.2 example
-<example to come later>
+*example to come later*
 
 ### 7.3 WebPayAdmin::cancelOrderRows()
 The WebPayAdmin::cancelOrder method is used to cancel individual order rows in orders, that has not yet been delivered (invoice, payment plan) or confirmed (card).
@@ -967,7 +967,7 @@ See <a href="http://htmlpreview.github.io/?https://raw.github.com/sveawebpay/php
 See <a href="http://htmlpreview.github.io/?https://raw.github.com/sveawebpay/php-integration/develop/apidoc/classes/Svea.HostedService.LowerTransactionResponse.html" target="_blank">LowerTransactionResponse</a> for card and direct bank orders response.
 
 #### 7.3.2 example
-<example to come later>
+*example to come later*
 
 ### 7.4 WebPayAdmin::creditOrderRows()
 The WebPayAdmin::creditOrder method is used to credit individual order rows in delivered orders.
@@ -1003,7 +1003,7 @@ See <a href="http://htmlpreview.github.io/?https://raw.github.com/sveawebpay/php
 See <a href="http://htmlpreview.github.io/?https://raw.github.com/sveawebpay/php-integration/develop/apidoc/classes/Svea.HostedService.CreditTransactionResponse.html" target="_blank">CreditTransactionResponse</a> for card and direct bank orders response.
 
 #### 7.4.2 example
-<example to come later>
+*example to come later*
 
 ### 7.5 WebPayAdmin::addOrderRows()
 The WebPayAdmin::addOrderRows method is used to add individual order rows to non-delivered invoice and payment plan orders.
@@ -1029,7 +1029,7 @@ See <a href="http://htmlpreview.github.io/?https://raw.github.com/sveawebpay/php
 See <a href="http://htmlpreview.github.io/?https://raw.github.com/sveawebpay/php-integration/develop/apidoc/classes/Svea.AdminService.AddOrderRowsResponse.html" target="_blank">AddOrderRowsResponse</a> for invoice and payment plan orders response.
 
 #### 7.5.2 example
-<example to come later>
+*example to come later*
 
 ### 7.6 WebPayAdmin::updateOrderRows()
 The WebPayAdmin::updateOrderRows method is used to update individual order rows in non-delivered invoice and payment plan orders.
@@ -1055,7 +1055,7 @@ See <a href="http://htmlpreview.github.io/?https://raw.github.com/sveawebpay/php
 See <a href="http://htmlpreview.github.io/?https://raw.github.com/sveawebpay/php-integration/develop/apidoc/classes/Svea.AdminService.UpdateOrderRowsResponse.html" target="_blank">UpdateOrderRowsResponse</a> for invoice and payment plan orders response.
 
 #### 7.6.2 example
-<example to come later>
+*example to come later*
 
 [<< To index](https://github.com/sveawebpay/php-integration/tree/develop#index)
 ## 8. SveaResponse 
