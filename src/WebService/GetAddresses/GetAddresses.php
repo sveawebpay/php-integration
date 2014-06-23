@@ -143,8 +143,7 @@ class GetAddresses {
             $svea_req = $request->GetAddresses($this->request);
         }
         catch( \SoapFault $sf ) {
-            print_r( "SOAP Fault: (faultcode: {$sf->faultcode}, faultstring: {$sf->faultstring})" );
-            trigger_error("SOAP Fault: (faultcode: {$sf->faultcode}, faultstring: {$sf->faultstring})", E_USER_ERROR);
+            trigger_error("SOAP Fault: (faultcode: {$sf->faultcode}, faultstring: {$sf->faultstring}, faultactor: {$sf->faultactor}, detail: {$sf->detail}, faultname: {$sf->faultname}, headerfault: {$sf->headerfault})", E_USER_ERROR);
         }
         
         $response = new \SveaResponse($svea_req,"");
