@@ -1,0 +1,80 @@
+<?php
+// WebPayItem class is not included in Svea namespace 
+
+include_once SVEA_REQUEST_DIR . "/Includes.php";
+
+/**
+ * The WebPayItem class provides entrypoint methods to the different row items 
+ * that make up an order, as well as the customer identity information items.
+ * 
+ * @api
+ * @author Kristian Grossman-Madsen
+ */
+class WebPayItem {
+
+    /**
+     * Use this to add all kinds of products and other items. An order is required to have at least one order row.
+     *
+     * @return \Svea\OrderRow
+     */
+     public static function orderRow() {
+         return new Svea\OrderRow();
+    }
+
+    /**
+     * Use this only when supplying NumberedOrderRow items for the various WebPayAdmin order row administration functions.
+     * 
+     * @return \Svea\NumberedOrderRow
+     */
+     public static function numberedOrderRow() {
+         return new Svea\NumberedOrderRow();
+    }
+    
+    
+    /**
+     * Sets shipping fee
+     * @return \Svea\ShippingFee
+     */
+    public static function shippingFee() {
+        return new Svea\ShippingFee();
+    }
+
+    /**
+     * @return \Svea\InvoiceFee
+     */
+    public static function invoiceFee() {
+        return new Svea\InvoiceFee();
+    }
+
+    /**
+     * 
+     * @return \Svea\FixedDiscount
+     */
+    public static function fixedDiscount() {
+        return new Svea\FixedDiscount();
+    }
+
+    /**
+     * 
+     * @return \Svea\RelativeDiscount
+     */
+    public static function relativeDiscount() {
+        return new Svea\RelativeDiscount();
+    }
+
+    /**
+     * 
+     * @return \Svea\IndividualCustomer
+     */
+    public static function individualCustomer() {
+        return new Svea\IndividualCustomer();
+    }
+
+    /**
+     * 
+     * @return \Svea\CompanyCustomer
+     */
+    public static function companyCustomer() {
+        return new Svea\CompanyCustomer();
+    }
+}

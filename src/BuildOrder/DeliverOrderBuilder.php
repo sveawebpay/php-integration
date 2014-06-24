@@ -1,161 +1,85 @@
 <?php
 namespace Svea;
 
+require_once 'OrderBuilder.php'; 
 require_once SVEA_REQUEST_DIR . '/Includes.php';
 
 /**
- * @author Anneli Halld'n, Daniel Brolund for Svea Webpay
+ * DeliverOrderBuilder collects and prepares order data for use in a deliver 
+ * order request to Svea.
+ * 
+ * For invoice and payment plan orders, the deliver order request should 
+ * generally be sent to Svea once the ordered items have been sent out, or 
+ * otherwise delivered, to the customer.
+ * 
+ * For invoice and payment plan orders, the deliver order request triggers the 
+ * customer invoice being sent out to the customer by Svea. 
+ * 
+ * For card orders, the deliver order request confirms the card transaction, 
+ * which in turn causes the card transaction to be batch processed by Svea. An 
+ * auto-confirm account setting is also available, ask your Svea integration 
+ * manager about this.
+ * 
+ * For card orders, the deliver order request confirms the card transaction, which in
+ * turn causes the card transaction to be batch processed by Svea.
+ * 
+ * Generally, orders are delivered in full, and so will also be the case for orders
+ * delivered when no order rows have been added to the DeliverOrderBuilder object.
+ * 
+ * Set all required order attributes in a DeliverOrderBuilder instance by using the 
+ * OrderBuilder setAttribute() methods. Instance methods can be chained together, as 
+ * they return the instance itself in a fluent manner.
+ * 
+ * Finish by using the delivery method matching the payment method specified in the 
+ * createOrder request.
+ * 
+ * You can then go on specifying any payment method specific settings, using methods provided by the 
+ * returned deliver order request class.
+ * 
+ * Invoice required methods: 
+ * ->addOrderRow( TestUtil::createOrderRow() )
+ * ->setCountryCode("SE")
+ * ->setOrderId( $orderId )
+ * ->setInvoiceDistributionType(\DistributionType::POST)
+ *
+ * PaymentPlan required methods:
+ * ->addOrderRow( TestUtil::createOrderRow() )
+ * ->setCountryCode("SE")
+ * ->setOrderId( $orderId )
+ * 
+ * Card required methods:
+ * ->setOrderId( $orderId )
+ * ->setCountryCode("SE")
+ * Card optional methods:
+ * ->setCaptureDate( $orderId )
+ *  
+ * @author Kristian Grossman-Madsen, Anneli Halld'n, Daniel Brolund for Svea Webpay
  */
-class deliverOrderBuilder {
+class DeliverOrderBuilder extends OrderBuilder {
 
-    /**
-     * @var Array Rows containing Product rows
-     */
-    public $orderRows = array();
-    /**
-     * @var Array ShippingFeeRows containing shippingFee rows
-     */
-    public $shippingFeeRows = array();
-    /**
-     * @var  Array InvoiceFeeRows containing invoiceFee rows
-     */
-    public $invoiceFeeRows = array();
-    /**
-     * @var Array FixedDiscountRows containing fixed discount rows
-     */
-    public $fixedDiscountRows = array();
-    /**
-     * @var Array RelativeDiscountRows containing relative discount rows
-     */
-    public $relativeDiscountRows = array();
-    /**
-     * @var testmode. False means in production mode
-     */
-    public $testmode = false;
-    
      /**
-     * Order Id is recieved in response to ->doRequest when creating order.
+     * Order Id is recieved when creating order.
      * This is the link between deliverOrder and createOrder.
-     * @var Order id
+     * @var numeric $orderId
      */
-    public $orderId;
-    
-    /**
-     * @var type String "Invoice" or "PaymentPlan"
-     */
-    public $orderType;
-    public $countryCode;
+    public $orderId;    
 
-    public $numberOfCreditDays;
     /**
-     * @var type String "Post" or "Email"
+     * @deprecated 2.0.0 Use WebPayAdmin::UpdateOrder to modify or partially deliver an order.
+     * 
+     * 1.x: Required. Use setOrderRos to add order rows to deliver. Rows matching 
+     * the original create order request order rows will be invoiced by Svea. 
+     * 
+     * If not all order rows match, the order will be partially delivered/invoiced, 
+     * see the Svea Web Service EU API documentation for details on how this works.
      */
-    public $distributionType;
-    /**
-     * If Invoice is to be credit Invoice
-     * @var Invoice Id
-     */
-    public $invoiceIdToCredit;
-    /**
-     * @var Instance of class SveaConfig
-     */
-    public $conf;
-
-    public function __construct($config) {
-        $this->handleValidator = new HandleOrderValidator();
-        $this->conf = $config;
+    public function addOrderRow($itemOrderRowObject) {
+        return parent::addOrderRow($itemOrderRowObject);
     }
 
-    /**
-     * New!
-     * @param type $orderRow
-     * @return \deliverOrderBuilder
-     */
-    public function addOrderRow($orderRow) {
-        if (is_array($orderRow)) {
-            foreach ($orderRow as $row) {
-                array_push($this->orderRows, $row);
-            }
-        } else {
-            array_push($this->orderRows, $orderRow);
-        }
-        
-       return $this;
-    }
-
-    /**
-     * New!
-     * @param type $itemFeeObject
-     * @return \deliverOrderBuilder
-     */
-    public function addFee($itemFeeObject) {
-        if (is_array($itemFeeObject)) {
-            foreach ($itemFeeObject as $row) {
-                if (get_class($row) == "Svea\ShippingFee") {
-                    array_push($this->shippingFeeRows, $row);
-                }
-                if (get_class($row) == "Svea\InvoiceFee") {
-                    array_push($this->invoiceFeeRows, $row);
-                }
-            }
-        } else {
-            if (get_class($itemFeeObject) == "Svea\ShippingFee") {
-                array_push($this->shippingFeeRows, $itemFeeObject);
-            }
-            if (get_class($itemFeeObject) == "Svea\InvoiceFee") {
-                array_push($this->invoiceFeeRows, $itemFeeObject);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * New!
-     * @param type $itemDiscounObject
-     * @return \deliverOrderBuilder
-     */
-    public function addDiscount($itemDiscounObject) {
-        if (is_array($itemDiscounObject)) {
-            foreach ($itemDiscounObject as $row) {
-                if (get_class($row) == "Svea\FixedDiscount") {
-                    array_push($this->fixedDiscountRows, $row);
-                }
-                if (get_class($row) == "Svea\RelativeDiscount") {
-                    array_push($this->relativeDiscountRows, $row);
-                }
-            }
-        } else {
-            if (get_class($itemDiscounObject) == "Svea\FixedDiscount") {
-                array_push($this->fixedDiscountRows, $itemDiscounObject);
-            }
-            if (get_class($itemDiscounObject) == "Svea\RelativeDiscount") {
-                array_push($this->relativeDiscountRows, $itemDiscounObject);
-            }
-        }
-        
-       return $this;
-    }
-
-    /**
-     * When function is called it turns into testmode
-     * @return \deliverOrder
-
-    public function setTestmode() {
-        $this->testmode = TRUE;
-        return $this;
-    }
-     */
-
-    public function setCountryCode($countryCodeAsString) {
-        $this->countryCode = $countryCodeAsString;
-        return $this;
-    }
-
-    /**
-     * Required
-     * @param type $orderIdAsString
-     * @return \deliverOrder
+    /* Required. Set order id of the order you wish to deliver.
+     * @param string $orderIdAsString
+     * @return $this
      */
     public function setOrderId($orderIdAsString) {
         $this->orderId = $orderIdAsString;
@@ -163,65 +87,121 @@ class deliverOrderBuilder {
     }
 
     /**
-     * Invoice payments only! Required
-     * @param type DistributionType $distributionTypeAsConst ex. DistributionType::POST or DistributionType::EMAIL
-     * @return \deliverOrder
+     * Invoice payments only! Required.
+     * @param string DistributionType $distributionTypeAsConst  i.e. DistributionType::POST|DistributionType::EMAIL
+     * @return $this
      */
     public function setInvoiceDistributionType($distributionTypeAsConst) {
-        if ($distributionTypeAsConst != \ DistributionType::EMAIL || $distributionTypeAsConst != \ DistributionType::POST) {
+        if ($distributionTypeAsConst != \DistributionType::EMAIL || $distributionTypeAsConst != \DistributionType::POST) {
             $distributionTypeAsConst = trim($distributionTypeAsConst);
             if (preg_match("/post/i", $distributionTypeAsConst)) {
-                $distributionTypeAsConst = \ DistributionType::POST;
+                $distributionTypeAsConst = \DistributionType::POST;
             } elseif (preg_match("/mail/i", $distributionTypeAsConst)) {
-                $distributionTypeAsConst = \ DistributionType::EMAIL;
+                $distributionTypeAsConst = \DistributionType::EMAIL;
             } else {
-                $distributionTypeAsConst = \ DistributionType::POST;
+                $distributionTypeAsConst = \DistributionType::POST;
             }
         }
         $this->distributionType = $distributionTypeAsConst;
-        
         return $this;
     }
-
+    /**
+     * @var string  "Post" or "Email"
+     */
+    public $distributionType;
+    
     /**
      * Invoice payments only!
      * Use if this should be a credit invoice
      * @param type $invoiceId
-     * @return \deliverOrder
+     * @return $this
      */
     public function setCreditInvoice($invoiceId) {
         $this->invoiceIdToCredit = $invoiceId;
         return $this;
-    }
+    }  
+    /**
+     * If Invoice is to be credit Invoice
+     * @var Invoice Id
+     */
+    public $invoiceIdToCredit;
 
     /**
      * Invoice payments only!
-     * @param type $numberOfDaysAsInt
-     * @return \deliverOrder
+     * @param int $numberOfDaysAsInt
+     * @return $this
      */
     public function setNumberOfCreditDays($numberOfDaysAsInt) {
         $this->numberOfCreditDays = $numberOfDaysAsInt;
         return $this;
     }
+    /** @var int $numberOfCreditDays */
+    public $numberOfCreditDays;
 
+    
     /**
-     * deliverInvoiceOrder updates the Invoice order with additional information and prepares it for delivery.
-     * The method will automatically match all order rows that are to be delivered to those rows that was sent when creating the Invoice order.
-     * @return \DeliverInvoice
+     * To ensure backwards compatibility, deliverInvoiceOrder() checks if the 
+     * order has any order rows defined, and if so performs a DeliverOrderEU 
+     * request to Svea, passing on the order rows.
+     * 
+     * If no order rows are defined, deliverInvoiceOrder() performs a 
+     * DeliverOrders request using the Admin Web Service API at Svea.
+     * 
+     * @return WebService\DeliverInvoice|AdminService\DeliverOrdersRequest
      */
     public function deliverInvoiceOrder() {
-        $this->orderType = "Invoice";
-        $this->handleValidator->validate($this);
-        return new DeliverInvoice($this);
+        if( count($this->orderRows) > 0 ) {
+            return new WebService\DeliverInvoice($this);
+        }
+        else {
+            $this->orderType = "Invoice";
+            return new AdminService\DeliverOrdersRequest($this);
+        }
     }
 
     /**
      * deliverPaymentPlanOrder prepares the PaymentPlan order for delivery.
-     * @return \DeliverPaymentPlan
+     * @return DeliverPaymentPlan
      */
     public function deliverPaymentPlanOrder() {
-        $this->orderType = "PaymentPlan";
-        $this->handleValidator->validate($this);
-        return new DeliverPaymentPlan($this);
+        if( count($this->orderRows) > 0 ) {
+            return new WebService\DeliverPaymentPlan($this);
+        }
+        else {
+            $this->orderType = "PaymentPlan";
+            return new AdminService\DeliverOrdersRequest($this);
+        }
+    }
+    /** @var string orderType  one of "Invoice" or "PaymentPlan"*/
+    public $orderType;
+
+    /**
+     * deliverCardOrder() sets the status of a card order to CONFIRMED.
+     * 
+     * A default capturedate equal to the current date will be supplied. This 
+     * may be overridden using the ConfirmTransaction setCaptureDate() method 
+     * on the returned ConfirmTransaction object.
+     * 
+     * @return DeliverPaymentPlan
+     */
+    public function deliverCardOrder() {        
+        $this->orderType = \ConfigurationProvider::HOSTED_TYPE;
+        
+        $defaultCaptureDate = explode("T", date('c')); // [0] contains date part
+
+        $confirmTransaction = new HostedService\ConfirmTransaction($this->conf);
+        $confirmTransaction
+            ->setCountryCode($this->countryCode)
+            ->setTransactionId($this->orderId)
+            ->setCaptureDate($defaultCaptureDate[0])
+        ;
+        return $confirmTransaction;
+    }    
+
+    /**  
+     * @param \ConfigurationProvider $config 
+     */
+    public function __construct($config) {
+        parent::__construct($config);
     }
 }

@@ -13,7 +13,7 @@ class OrderHandlerValidatorTest extends PHPUnit_Framework_TestCase {
 
     /**
      * @expectedException Svea\ValidationException
-     * @expectedExceptionMessage -missing value : OrderId is required. Use function setOrderId() with the id recieved when creating an order.
+     * @expectedExceptionMessage -missing value : orderId is required.
      */
     public function testFailOnMissingOrderIdOnPaymentPlanDeliver() {
         $config = Svea\SveaConfig::getDefaultConfig();
@@ -50,14 +50,20 @@ class OrderHandlerValidatorTest extends PHPUnit_Framework_TestCase {
     /**
      * @expectedException Svea\ValidationException
      * @expectedExceptionMessage No rows has been included. Use function beginOrderRow(), beginShippingfee() or beginInvoiceFee().
+     * 
+     * 2.0 goes directly to DeliverInvoice
      */
     public function testFailOnMissingOrderRowsOnInvoiceDeliver() {
         $config = Svea\SveaConfig::getDefaultConfig();
-        $builder = WebPay::deliverOrder($config);
-        $object = $builder
-                ->setOrderId('id')
-                ->setInvoiceDistributionType('Post')
-                ->deliverInvoiceOrder();
+        $builder = new \Svea\DeliverOrderBuilder($config);
+        $builder
+            ->setOrderId('id')
+            ->setInvoiceDistributionType('Post')
+        ;        
+        $object = new \Svea\WebService\DeliverInvoice( $builder );
         $object->prepareRequest();
     }
+
+    
+    
 }

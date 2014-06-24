@@ -2,20 +2,30 @@
 // ConfigurationProvider interface is not included in Svea namespace
 
 /**
- * Implementation of class gives possibility to connect the package to a
- * shop administration configuration user interface.
- * The params $type and $country can be used to organize your configuration differently for
- * different countries and paymenttypes.
- *
+ * Implement this interface to enable the integration package methods to access
+ * Svea's various services using your service account credentials.
+ * 
+ * The method params $type and $country can be used to organize your configuration 
+ * for different countries and payment types.
+ * 
  * Usage: Create one or more classes that implements the \ConfigurationProvider
- * Interface (eg. one class for testing values, one for production values).
- * The implemented functions should return the authorization values for the
- * configuration in question.
+ * Interface (eg. one class for testing values, one for production values). 
+ * The implementing class methods should return your account authorization 
+ * credentials for the configuration (test, production) in question.
  *
- * The integration package will then call these functions to get the respective
- * values from your database. When starting an WebPay action in your integration
- * file, put an instance of your class as parameter to the constructor.
+ * The integration package will use the configuration class methods to get the 
+ * respective credentials, which in turn may be fetched from i.e. your shop 
+ * database by the methods.
  *
+ * Svea provides a sample implementation in the SveaConfigurationProvider class.
+ * 
+ * Instead of writing your own class, you may copy the provided SveaConfig.php
+ * file, edit the prodConfig and testConfig arrays, and instantiate your config
+ * object from the modified class to use the package with your Svea credentials.
+ * 
+ * @see \Svea\SveaConfigurationProvider \Svea\SveaConfigurationProvider
+ * @see \Svea\SveaConfig \Svea\SveaConfig
+ * 
  * @author anne-hal
  */
 interface ConfigurationProvider {
@@ -26,44 +36,53 @@ interface ConfigurationProvider {
     const HOSTED_ADMIN_TYPE = 'HOSTED_ADMIN';
 
     /**
-     * @return Username received from Svea
-     * @param $type eg. "Invoice" or "PaymentPlan" can be used if needed to match different configuration settings
-     * @param $country iso3166 alpha-2 CountryCode, eg. SE, NO, DK, FI, NL, DE can be used if needed to match different configuration settings
-     * @throws InvalidTypeException in case of unsupported $type
-     * @throws InvalidCountryException in case of unsupported $country
+     * fetch username, used with invoice or payment plan (i.e. Svea WebService Europe API)
+     * 
+     * @return string
+     * @param string $type  eg. "Invoice" or "PaymentPlan" can be used if needed to match different configuration settings
+     * @param string $country  iso3166 alpha-2 CountryCode, eg. SE, NO, DK, FI, NL, DE can be used if needed to match different configuration settings
+     * @throws InvalidTypeException  in case of unsupported $type
+     * @throws InvalidCountryException  in case of unsupported $country
      */
     public function getUsername($type, $country);
 
     /**
-     * @return Password received from Svea
-     * @param $type eg. "Invoice" or "PaymentPlan" can be used if needed to match different configuration settings
-     * @param $country iso3166 alpha-2 CountryCode, eg. SE, NO, DK, FI, NL, DE can be used if needed to match different configuration settings
-     * @throws InvalidTypeException in case of unsupported $type
-     * @throws InvalidCountryException in case of unsupported $country
+     * fetch password, used with invoice or payment plan (i.e. Svea WebService Europe API)
+     * 
+     * @return string
+     * @param string $type  eg. "Invoice" or "PaymentPlan" can be used if needed to match different configuration settings
+     * @param string $country  iso3166 alpha-2 CountryCode, eg. SE, NO, DK, FI, NL, DE can be used if needed to match different configuration settings
+     * @throws InvalidTypeException  in case of unsupported $type
+     * @throws InvalidCountryException  in case of unsupported $country
      */
     public function getPassword($type, $country);
 
     /**
-     *
-     * @return ClientNumber received from Svea
-     * @param $type eg. "Invoice" or "PaymentPlan" can be used if needed to match different configuration settings
-     * @param $country iso3166 alpha-2 CountryCode, eg. SE, NO, DK, FI, NL, DE can be used if needed to match different configuration settings
-     * @throws InvalidTypeException in case of unsupported $type
-     * @throws InvalidCountryException in case of unsupported $country
+     * fetch client number, used with invoice or payment plan (i.e. Svea WebService Europe API)
+     * 
+     * @return ClientNumber 
+     * @param string $type  eg. "Invoice" or "PaymentPlan" can be used if needed to match different configuration settings
+     * @param string $country  iso3166 alpha-2 CountryCode, eg. SE, NO, DK, FI, NL, DE can be used if needed to match different configuration settings
+     * @throws InvalidTypeException  in case of unsupported $type
+     * @throws InvalidCountryException  in case of unsupported $country
      */
     public function getClientNumber($type, $country);
 
     /**
-     * @return MerchantId received from Svea
-     * @param $type one of ConfigurationProvider::HOSTED_TYPE can be used if needed to match different configuration settings
-     * $param $country CountryCode eg. SE, NO, DK, FI, NL, DE
+     * fetch merchant id, used with card or direct bank payments (i.e. Svea Hosted Web Service API)
+     *  
+     * @return string 
+     * @param string $type one of { ConfigurationProvider::HOSTED_TYPE, ::HOSTED_ADMIN } can be used if needed to match different configuration settings
+     * $param string $country CountryCode eg. SE, NO, DK, FI, NL, DE
      */
     public function getMerchantId($type, $country);
 
     /**
-     * @return Secret word received from Svea
-     * @param $type one of ConfigurationProvider::HOSTED_TYPE can be used if needed to match different configuration settings
-     * $param $country CountryCode eg. SE, NO, DK, FI, NL, DE
+     * fetch secret word, used with card or direct bank payments (i.e. Svea Hosted Web Service API)
+     *  
+     * @return string 
+     * @param string $type one of { ConfigurationProvider::HOSTED_TYPE, ::HOSTED_ADMIN } can be used if needed to match different configuration settings
+     * $param string $country CountryCode eg. SE, NO, DK, FI, NL, DE
      */
     public function getSecret($type, $country);
 

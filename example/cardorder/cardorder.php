@@ -35,10 +35,13 @@ $myOrder = WebPay::createOrder( $myConfig );
 // For a Card order, the following methods are required:
 $myOrder->setCountryCode("SE");                         // customer country, we recommend basing this on the customer billing address
 $myOrder->setCurrency("SEK");                           // order currency
+$myOrder->setClientOrderNumber( "order #".date('c') );  // required - use a not previously sent client side order identifier, i.e. "order #20140519-371"
+
 // You may also chain fluent methods together:
-$myOrder->setCustomerReference("customer #123")         // This should contain a customer reference, as in "customer #123".
-        ->setClientOrderNumber("order #20140519-374")   // This should contain the client side order number, i.e. "order #20140519-371"
-        ->setOrderDate("2014-05-28");                   // or use an ISO801 date as produced by i.e. date('c')
+$myOrder
+        ->setCustomerReference("customer #123")         // optional - This should contain a customer reference, as in "customer #123".
+        ->setOrderDate("2014-05-28")                    // optional - or use an ISO801 date as produced by i.e. date('c')
+;
 
 // Then specify the items bought as order rows, using the methods in the Svea\OrderRow class, and adding them to the order:
 $firstBoughtItem = WebPayItem::orderRow();
@@ -69,27 +72,36 @@ $sveaAddress = Svea\Helper::splitStreetAddress($customerAddress); // Svea requir
 $myCustomerInformation->setStreetAddress( $sveaAddress[0], $sveaAddress[1] );
 $myCustomerInformation->setZipCode( $customerZipCode )->setLocality( $customerCity );
 
+$myOrder->addCustomerDetails( $myCustomerInformation );
+
 // We have now completed specifying the order, and wish to send the payment request to Svea. To do so, we first select a payment method.
 // For card orders, we recommend using the ->usePaymentMethod(PaymentMethod::KORTCERT), which processes card orders via Certitrade.
 $myCardOrderRequest = $myOrder->usePaymentMethod(PaymentMethod::KORTCERT);
 
-$myURL = $_SERVER['SCRIPT_NAME'];
-$myPath = explode('/', $myURL);
-unset( $myPath[count($myPath)-1]);
-$myPath = implode( '/', $myPath);
 
 // Then set any additional required request attributes as detailed below. (See Svea\PaymentMethodPayment and Svea\HostedPayment classes for details.)
 $myCardOrderRequest
-    ->setCardPageLanguage("SV")                             // ISO639 language code, i.e. "SV", "EN" etc. Defaults to English.
-    ->setCancelUrl("http://localhost/".$myPath."/cardorder.php")    // The cancel url to which the user is redirected, should the payment be cancelled
-    ->setReturnUrl("http://localhost/".$myPath."/landingpage.php"); // The return url where we receive and process the finished request response
-       
-// Get a prepared payment form object which you can use to send the payment request to Svea
+    ->setCardPageLanguage("SV")                                     // ISO639 language code, i.e. "SV", "EN" etc. Defaults to English.
+    ->setReturnUrl("http://localhost/".getPath()."/landingpage.php"); // The return url where we receive and process the finished request response
+      
+// Get a payment form object which you can use to send the payment request to Svea
 $myCardOrderPaymentForm = $myCardOrderRequest->getPaymentForm();
 
 // Then send the form to Svea, and receive the response on the landingpage after the customer has completed the card checkout at certitrade
 echo "<pre>";
 print_r( "press submit to send the card payment request to Svea");
 print_r( $myCardOrderPaymentForm->completeHtmlFormWithSubmitButton );
+
+/**
+ * get the path to this file, for use in specifying the returnurl etc.
+ */
+function getPath() {
+    $myURL = $_SERVER['SCRIPT_NAME'];
+    $myPath = explode('/', $myURL);
+    unset( $myPath[count($myPath)-1]);
+    $myPath = implode( '/', $myPath);
+
+    return $myPath;
+}
 
 ?>

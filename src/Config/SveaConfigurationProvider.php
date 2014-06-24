@@ -3,6 +3,11 @@ namespace Svea;
 require_once SVEA_REQUEST_DIR . '/Includes.php';
 
 /**
+ * SveaConfigurationProvider implements the ConfigurationProvider interface.
+ * 
+ * This class expects to be initialised with an array listing the various
+ * configuration settings, see SveaConfig for details on the array structure.
+ *
  * The class is used as Default to get the settings in SveaConfig
  * The class can be used as an example when creating your own
  * class implementing the ConfigurationProvider interface.
@@ -15,15 +20,22 @@ class SveaConfigurationProvider implements \ConfigurationProvider {
 
     public $conf;
 
+    /**
+     * This class expects to be initialised with an array listing the various
+     * configuration settings, see SveaConfig for details on the array structure.
+     *
+     * @see \Svea\SveaConfig::getTestConfig() \Svea\SveaConfig::getTestConfig()
+     *  
+     * @param array $environmentConfig
+     */
     public function __construct($environmentConfig) {
         $this->conf = (array)$environmentConfig;
     }
 
     /**
-     *
-     * @param type $type eg. INVOICE, PAYMENTPLAN, HOSTED
-     * @param type $country
-     * @return Username
+     * @param string $type one of { \ConfigurationProvider::HOSTED_TYPE, ::INVOICE_TYPE, ::PAYMENTPLAN_TYPE }
+     * @param string $country
+     * @return string
      * @throws Exception
      */
     public function getUsername($type, $country) {
@@ -31,10 +43,9 @@ class SveaConfigurationProvider implements \ConfigurationProvider {
     }
 
     /**
-     *
-     * @param type $type eg. INVOICE, PAYMENTPLAN, HOSTED
-     * @param type $country
-     * @return Password
+     * @param string $type one of { \ConfigurationProvider::HOSTED_TYPE, ::INVOICE_TYPE, ::PAYMENTPLAN_TYPE }
+     * @param string $country
+     * @return string
      * @throws Exception
      */
     public function getPassword($type, $country) {
@@ -42,10 +53,9 @@ class SveaConfigurationProvider implements \ConfigurationProvider {
     }
 
     /**
-     *
-     * @param type $type eg. INVOICE, PAYMENTPLAN, HOSTED
-     * @param type $country
-     * @return ClientNumber
+     * @param string $type one of { \ConfigurationProvider::HOSTED_TYPE, ::INVOICE_TYPE, ::PAYMENTPLAN_TYPE }
+     * @param string $country
+     * @return string
      * @throws Exception
      */
     public function getClientNumber($type, $country) {
@@ -53,10 +63,9 @@ class SveaConfigurationProvider implements \ConfigurationProvider {
     }
 
     /**
-     *
-     * @param type $type eg. INVOICE, PAYMENTPLAN, HOSTED
-     * @param type $country
-     * @return MerchantId
+     * @param string $type one of { \ConfigurationProvider::HOSTED_TYPE, ::INVOICE_TYPE, ::PAYMENTPLAN_TYPE }
+     * @param string $country
+     * @return string
      * @throws Exception
      */
     public function getMerchantId($type, $country) {
@@ -64,10 +73,9 @@ class SveaConfigurationProvider implements \ConfigurationProvider {
     }
 
     /**
-     *
-     * @param type $type eg. INVOICE, PAYMENTPLAN, HOSTED
-     * @param type $country
-     * @return Secret word
+     * @param string $type one of { \ConfigurationProvider::HOSTED_TYPE, ::INVOICE_TYPE, ::PAYMENTPLAN_TYPE }
+     * @param string $country
+     * @return string
      * @throws Exception
      */
     public function getSecret($type, $country) {
@@ -75,25 +83,24 @@ class SveaConfigurationProvider implements \ConfigurationProvider {
     }
 
     /**
-     *
-     * @param type $type eg. INVOICE, PAYMENTPLAN, HOSTED, HOSTED_ADMIN
-     * @return type
+     * @param string $type one of { \ConfigurationProvider::HOSTED_TYPE, ::INVOICE_TYPE, ::PAYMENTPLAN_TYPE }
+     * @return string
      * @throws Exception
      */
     public function getEndPoint($type) {
         $uType = strtoupper($type);
         if (array_key_exists($uType,$this->conf['url']) == FALSE) {
-            $this->throwInvalidTypeException();
+            $this->throwInvalidTypeException( $type );
         }
         return $this->conf['url'][$uType];
     }
 
     /**
      * @param string $property
-     * @param string $type
+     * @param string $type one of { \ConfigurationProvider::HOSTED_TYPE, ::INVOICE_TYPE, ::PAYMENTPLAN_TYPE }
      * @param string $country
-     *
      * @return string
+     * @throws Exception
      */
     private function getCredentialsProperty($property, $type, $country)
     {
@@ -119,13 +126,16 @@ class SveaConfigurationProvider implements \ConfigurationProvider {
     /**
      * @throws InvalidTypeException
      */
-    private function throwInvalidTypeException() {
-        throw new InvalidTypeException(sprintf(
-            'Invalid type. Accepted values: %s, %s or %s',
-            \ConfigurationProvider::INVOICE_TYPE,
-            \ConfigurationProvider::PAYMENTPLAN_TYPE,
-            \ConfigurationProvider::HOSTED_TYPE,
-            \ConfigurationProvider::HOSTED_ADMIN_TYPE
-        ));
+    private function throwInvalidTypeException( $invalid_type ) {
+        throw new InvalidTypeException(
+            sprintf(
+                'Invalid service type \"%s\". Accepted values: %s, %s, %s or %s',
+                $invalid_type,
+                \ConfigurationProvider::INVOICE_TYPE,
+                \ConfigurationProvider::PAYMENTPLAN_TYPE,
+                \ConfigurationProvider::HOSTED_TYPE,
+                \ConfigurationProvider::HOSTED_ADMIN_TYPE
+            )
+        );
     }
 }

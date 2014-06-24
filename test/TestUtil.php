@@ -5,28 +5,95 @@ $root = realpath(dirname(__FILE__));
 require_once $root . '/../src/Includes.php';
 
 /**
- * @author Jonas Lith, Kristian Grossman-Madsen
+ * @author Jonas Lith, Kristian Grossman-Madsen, Anneli Halld'n for Svea WebPay
  */
 class TestUtil {
 
     /**
+     * creates a populated order object for use in tests
+     * 
+     * @return Svea\createOrderBuilder object
+     * 
+     */
+    public static function createOrder( $customer = NULL ) {
+
+        // poor man's overloading
+        if( $customer == NULL ) {
+            $customer = TestUtil::createIndividualCustomer("SE");
+        }
+        
+        $config = Svea\SveaConfig::getDefaultConfig();
+        
+        $orderObject = WebPay::createOrder($config)
+                ->addOrderRow( TestUtil::createOrderRow() )
+                ->addCustomerDetails( $customer )
+                ->setCountryCode("SE")
+                ->setCurrency("SEK")
+                ->setCustomerReference("created by TestUtil::createOrder()")
+                ->setClientOrderNumber( "clientOrderNumber:".date('c'))
+                ->setOrderDate( date('c') )
+        ;
+        
+        return $orderObject;
+    }
+    
+    /**
+     * creates a populated order object for use in tests
+     * 
+     * @return Svea\createOrderBuilder object
+     * 
+     */
+    public static function createOrderWithoutOrderRows( $customer = NULL ) {
+
+        // poor man's overloading
+        if( $customer == NULL ) {
+            $customer = TestUtil::createIndividualCustomer("SE");
+        }
+        
+        $config = Svea\SveaConfig::getDefaultConfig();
+        
+        $orderObject = WebPay::createOrder($config)
+                ->addCustomerDetails( $customer )
+                ->setCountryCode("SE")
+                ->setCurrency("SEK")
+                ->setCustomerReference("created by TestUtil::createOrder()")
+                ->setClientOrderNumber( "clientOrderNumber:".date('c'))
+                ->setOrderDate( date('c') )
+        ;
+        
+        return $orderObject;
+    }
+    
+    /**
      * Creates an OrderRow object for use in populating order objects.
+     * @param float $amount, defaults to 100
+     * @param int $amount, defaults to 2
      * 
      * @return Svea\OrderRow object
      */
-    public static function createOrderRow() {
+    public static function createOrderRow( $amount = 100.00, $quantity = 2 ) {
         return WebPayItem::orderRow()
             ->setArticleNumber("1")
-            ->setQuantity(2)
-            ->setAmountExVat(100.00)
+            ->setQuantity( $quantity )
+            ->setAmountExVat( $amount )
             ->setDescription("Specification")
-            ->setName('Prod')
+            ->setName('Product')
             ->setUnit("st")
             ->setVatPercent(25)
             ->setDiscountPercent(0);
-    }
+    }    
     
     
+    /**
+     * Returns an individual customer object.
+     * The object is populated using test customer data for the given country.
+     * 
+     * Defaults to a SE customer in good credit standing with Svea, i.e. any
+     * transaction using this customer should be accepted by Svea services.
+     * 
+     * @param country -- accepts SE (default) and NL
+     * @return Svea\IndividualCustomer
+     */
     public static function createIndividualCustomer( $country="SE" ) {
         switch( strtoupper($country) ) {
 
@@ -178,88 +245,14 @@ class TestUtil {
     }
 
     /**
-     * Returns orderrow to use as shorthand in testFunctions
-     * Use function run($functionname) to run shorthand function
-     * @return OrderBuilder
-
-      function buildRow() {
-      return function($orderBuilder) {
-      return $orderBuilder
-      ->beginOrderRow()
-      ->setArticleNumber("1")
-      ->setQuantity(2)
-      ->setAmountExVat(100.00)
-      ->setDesc("Specification")
-      ->setName('Prod')
-      ->setUnit("st")
-      ->setVatPercent(25)
-      ->setDiscountPercent(0)
-      ->endOrderRow();
-      };
-      }
-     *
+     * Use to get a campaign code to i.e. use as argument to usePaymentPlanPayment()
+     * @return string  the first available campaignCode 
      */
-    /**
-     *  Returns FixedDiscountRow to use as shorthand in testFunctions
-     * Use function run($functionname) to run shorthand function
-     * @return type
-
-      function buildFixedDiscountRow() {
-      return function ($orderbuilder) {
-      return $orderbuilder
-      ->beginFixedDiscount()
-      ->setDiscountId("1")
-      ->setAmount(100.00)
-      ->setUnit("st")
-      ->setDesc("FixedDiscount")
-      ->setName("Fixed")
-      ->endFixedDiscount(0);
-      };
-      }
-     *
-     */
-    /**
-     *  Returns RelativeDiscountRow to use as shorthand in testFunctions
-     * Use function run($functionname) to run shorthand function
-     * @return type
-
-      function buildRelativeDiscountRow() {
-      return function($orderbuilder) {
-      return $orderbuilder
-      ->beginRelativeDiscount()
-      ->setDiscountId("1")
-      ->setDiscountPercent(50)
-      ->setUnit("st")
-      ->setName('Relative')
-      ->setDesc("RelativeDiscount")
-      ->endRelativeDiscount();
-      };
-      }
-     */
-
-    /**
-     *  Returns CustomerIdentity to use as shorthand in testFunctions
-     * Use function run($functionname) to run shorthand function
-     * @return type
-
-      function buildCustomerIdentity() {
-      return function ($orderbuilder) {
-      return $orderbuilder
-      ->beginIndividualCustomerIdentity()
-      ->setNationalIdNumber(194605092222)
-      ->setInitials("SB")
-      ->setBirthDate(1923, 12, 12)
-      ->setName("Tess", "Testson")
-      ->setEmail("test@svea.com")
-      ->setPhoneNumber(999999)
-      ->setIpAddress("123.123.123")
-      ->setStreetAddress("Gatan",23)
-      ->setCoAddress("c/o Eriksson")
-      ->setZipCode(9999)
-      ->setLocality("Stan")
-      ->endIndividualCustomerIdentity();
-      };
-      }
-     */
-
+    public static function getGetPaymentPlanParamsForTesting( $country = "SE" ) {
+        $addressRequest = WebPay::getPaymentPlanParams(Svea\SveaConfig::getDefaultConfig());
+        $response = $addressRequest
+                ->setCountryCode($country)
+                ->doRequest();
+         return $response->campaignCodes[0]->campaignCode;
+    }       
 }

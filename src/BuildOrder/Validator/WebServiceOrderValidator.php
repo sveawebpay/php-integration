@@ -27,6 +27,10 @@ class WebServiceOrderValidator extends OrderValidator {
             $this->isCompany = TRUE;
         }
         
+        if( !isset($order->customerIdentity ) ) {
+            $this->errors['missing customerIdentity'] = "customerIdentity is required. Use function addCustomerDetails().";
+        }
+        
         if (isset($order->customerIdentity->orgNumber) || 
             isset($order->customerIdentity->companyVatNumber) || 
             isset($order->customerIdentity->companyName)) {

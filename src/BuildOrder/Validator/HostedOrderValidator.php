@@ -6,7 +6,6 @@ require_once 'OrderValidator.php';
 
 /**
  * @author Anneli Halld'n, Daniel Brolund for Svea Webpay
- * @package BuildOrder
  */
 class HostedOrderValidator extends OrderValidator {
 
@@ -15,7 +14,7 @@ class HostedOrderValidator extends OrderValidator {
 
     /**
      * @param type $order
-     * @return type $errors
+     * @return array $errors
      */
     public function validate($order) {
         if (isset($order->orgNumber) || isset($order->companyVatNumber) || isset($order->companyName)) {

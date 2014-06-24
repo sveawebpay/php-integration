@@ -39,7 +39,7 @@ class HelperIntegrationTest extends \PHPUnit_Framework_TestCase {
         }
 
 
-        $formatter = new Svea\WebServiceRowFormatter($order);
+        $formatter = new Svea\WebService\WebServiceRowFormatter($order);
         $newRows = $formatter->formatRows();
 
         $newRow = $newRows[2];
@@ -76,7 +76,7 @@ class HelperIntegrationTest extends \PHPUnit_Framework_TestCase {
             $order = $order->addDiscount( $row );
         }
 
-        $formatter = new Svea\WebServiceRowFormatter($order);
+        $formatter = new Svea\WebService\WebServiceRowFormatter($order);
         $newRows = $formatter->formatRows();
 
         $newRow = $newRows[1];

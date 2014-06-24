@@ -3,8 +3,8 @@ namespace Svea;
 
 $root = realpath(dirname(__FILE__));
 require_once $root . '/../../../src/Includes.php';
-require_once $root . '/../../../src/WebServiceRequests/svea_soap/SveaSoapConfig.php';
-require_once $root . '/../VoidValidator.php';
+require_once $root . '/../../../src/WebService/svea_soap/SveaSoapConfig.php';
+require_once $root . '/Validator/VoidValidator.php';
 
 $root = realpath(dirname(__FILE__));
 require_once $root . '/../../TestUtil.php';
@@ -65,7 +65,7 @@ class NewOrderBuilderTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals(1, $request->request->CreateOrderInformation->OrderRows['OrderRow'][0]->ArticleNumber);
         $this->assertEquals(2, $request->request->CreateOrderInformation->OrderRows['OrderRow'][0]->NumberOfUnits);
         $this->assertEquals(100.00, $request->request->CreateOrderInformation->OrderRows['OrderRow'][0]->PricePerUnit);
-        $this->assertEquals("Prod: Specification", $request->request->CreateOrderInformation->OrderRows['OrderRow'][0]->Description);
+        $this->assertEquals("Product: Specification", $request->request->CreateOrderInformation->OrderRows['OrderRow'][0]->Description);
         $this->assertEquals("st", $request->request->CreateOrderInformation->OrderRows['OrderRow'][0]->Unit);
         $this->assertEquals(25, $request->request->CreateOrderInformation->OrderRows['OrderRow'][0]->VatPercent);
         $this->assertEquals(0, $request->request->CreateOrderInformation->OrderRows['OrderRow'][0]->DiscountPercent);
