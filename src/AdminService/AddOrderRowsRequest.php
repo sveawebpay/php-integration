@@ -114,9 +114,11 @@ class AddOrderRowsRequest extends AdminServiceRequest {
     }
 
     private function validateRowsHasPriceAndVatInformation($errors) {
-        foreach( $this->orderBuilder->orderRows as $orderRow ) {                                                        
-            if( !isset($orderRow->vatPercent) && (!isset($orderRow->amountIncVat) && !isset($orderRow->amountExVat)) ) {            
-                $errors[] = array('missing order row vat information' => "cannot calculate orderRow vatPercent, need at least two of amountExVat, amountIncVat and vatPercent.");
+        if( isset($this->orderBuilder->orderRows) ) {
+            foreach( $this->orderBuilder->orderRows as $orderRow ) {                                                        
+                if( !isset($orderRow->vatPercent) && (!isset($orderRow->amountIncVat) && !isset($orderRow->amountExVat)) ) {            
+                    $errors[] = array('missing order row vat information' => "cannot calculate orderRow vatPercent, need at least two of amountExVat, amountIncVat and vatPercent.");
+                }
             }
         }
         return $errors;
