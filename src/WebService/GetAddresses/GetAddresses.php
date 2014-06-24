@@ -134,12 +134,6 @@ class GetAddresses {
      * @return GetAddressesResponse
      */
     public function doRequest() {
-
-        // display errors
-        error_reporting( E_ALL );
-        ini_set('display_errors', 'On');
-
-        
         $this->request = $this->prepareRequest();
         
         $url = $this->conf->getEndPoint($this->orderType);
@@ -149,14 +143,6 @@ class GetAddresses {
             $svea_req = $request->GetAddresses($this->request);
         }
         catch( \SoapFault $sf ) {
-            print_r("(faultcode: {$sf->faultcode} ");
-            print_r("(faultstring: {$sf->faultstring} ");
-            print_r("(faultactor: {$sf->faultactor} ");
-            print_r("(detail: {$sf->detail} ");
-            print_r("(faultname: {$sf->faultname} ");
-            print_r("(headerfault: {$sf->headerfault} ");
-            var_dump($sf);
-            
             trigger_error("SOAP Fault: (faultcode: {$sf->faultcode}, faultstring: {$sf->faultstring}, faultactor: {$sf->faultactor}, detail: {$sf->detail}, faultname: {$sf->faultname}, headerfault: {$sf->headerfault})", E_USER_ERROR);
         }
         
