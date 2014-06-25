@@ -177,7 +177,10 @@ class HostedPayment {
      * to get a link which the customer can use to confirm a payment at a later
      * time after having received the url via i.e. an email message.
      * 
-     * @return type
+     * Use function setIpAddress() on the order customer."; 
+     * Use function setPayPageLanguage()."; 
+     * 
+     * @return HostedPaymentResponse
      * @throws ValidationException
      */
     public function getPaymentURL() {

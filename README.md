@@ -31,23 +31,20 @@ Previous versions of the package can be accessed through <a href="https://github
     * [4.6 WebPayItem::relativeDiscount](https://github.com/sveawebpay/php-integration#46-webpayitemrelativediscount)
     * [4.7 WebPayItem::individualCustomer()](https://github.com/sveawebpay/php-integration#47-webpayitemindividualcustomer)
     * [4.8 WebPayItem::companyCustomer()](https://github.com/sveawebpay/php-integration#48-webpayitemcompanycustomer)
-* [5. Payment method overview](https://github.com/sveawebpay/php-integration#5-payment-method-reference)
-    * [5.1 Invoice payment method](https://github.com/sveawebpay/php-integration#51-invoice-payment-method)
-    * [5.2 Payment plan payment method](https://github.com/sveawebpay/php-integration#52-payment-plan-payment-method)
-    * [5.3 Using a specific payment method](https://github.com/sveawebpay/php-integration#53-using-a-specific-payment-method)
-    * [5.4 PayPage payment method, card payment options only](https://github.com/sveawebpay/php-integration#54-paypage-payment-method-card-payment-options-only)
-    * [5.5 PayPage payment method, direct bank payment options only](https://github.com/sveawebpay/php-integration#55-paypage-payment-method-direct-bank-payment-options-only)
-    * [5.6 PayPage payment method, specified payment methods only](https://github.com/sveawebpay/php-integration#56-paypage-payment-method-specified-payment-methods-only)
-    * [5.7 PayPage payment method, all payment methods](https://github.com/sveawebpay/php-integration#57-paypage-payment-method-all-payment-methods)
-    * [5.8 Payment method examples -- invoice orders, card orders, recurring card orders](https://github.com/sveawebpay/php-integration#58-payment-method-examples)
+* [5. Payment method reference](https://github.com/sveawebpay/php-integration#5-payment-method-reference)
+    * [5.1 Svea Invoice payment](https://github.com/sveawebpay/php-integration#51-svea-invoice-payment)
+    * [5.2 Svea Payment plan payment](https://github.com/sveawebpay/php-integration#52-svea-payment-plan-payment)
+    * [5.3 Card payment](https://github.com/sveawebpay/php-integration#53-card-payment)
+    * [5.4 Direct bank payment](https://github.com/sveawebpay/php-integration#54-direct-bank-payment)
+    * [5.5 Using the Svea PayPage](https://github.com/sveawebpay/php-integration#55-using-the-svea-paypage)
+    * [5.6 Examples](https://github.com/sveawebpay/php-integration#56-examples)
 * [6. WebPay entrypoint method reference](https://github.com/sveawebpay/php-integration#6-webpay-entrypoint-method-reference)
     * [6.1 WebPay::createOrder()](https://github.com/sveawebpay/php-integration#61-webpaycreateorder)
     * [6.2 WebPay::deliverOrder()](https://github.com/sveawebpay/php-integration#62-webpaydeliverorder)
     * [6.3 WebPay::getAddresses()](https://github.com/sveawebpay/php-integration#63-webpaygetaddresses)
     * [6.4 WebPay::getPaymentPlanParams()](https://github.com/sveawebpay/php-integration#64-webpaygetpaymentplanparams)
-    * [6.5 WebPay::getPaymentMethods()](https://github.com/sveawebpay/php-integration#65-webpaygetpaymentmethods)
-    * [6.6 WebPay::paymentPlanPricePerMonth()](https://github.com/sveawebpay/php-integration#66-webpaypaymentplanpricepermonth)
-    * [6.7 WebPay::listPaymentMethods](https://github.com/sveawebpay/php-integration#67-webpaylistpaymentmethods)
+    * [6.5 WebPay::paymentPlanPricePerMonth()](https://github.com/sveawebpay/php-integration#65-webpaypaymentplanpricepermonth)
+    * [6.6 WebPay::listPaymentMethods](https://github.com/sveawebpay/php-integration#66-webpaylistpaymentmethods)
 * [7. WebPayAdmin entrypoint method reference](https://github.com/sveawebpay/php-integration#7-webpayadmin-entrypoint-method-reference)
     * [7.1 WebPayAdmin::cancelOrder()](https://github.com/sveawebpay/php-integration#71-webpayadmincancelorder)
     * [7.2 WebPayAdmin::queryOrder()](https://github.com/sveawebpay/php-integration#72-webpayadminqueryorder)
@@ -240,7 +237,7 @@ $myOrder->addOrderRow( WebPayItem::orderRow()->setQuantity(1)->setAmountExVat(10
 ```
 See <a href="http://htmlpreview.github.io/?https://raw.github.com/sveawebpay/php-integration/master/apidoc/classes/WebPayItem.html" target="_blank">WebPayItem</a> class for methods used to build order row item objects.
 
-See [4.2] (https://github.com/sveawebpay/php-integration#42-webpayitemorderrow)to 4.6 in the WebPayItem class documentation below for more
+See [4.2](https://github.com/sveawebpay/php-integration#42-webpayitemorderrow) to 4.6 in the WebPayItem class documentation below for more
 ### 3.3 Customer identity
 Create a customer identity object using the WebPayItem::individualCustomer() or WebPayItem::companyCustomer() methods. Use the addCustomerDetails() method to add the customer information to the order. 
 
@@ -264,7 +261,7 @@ $order->
 ...
 ```
 
-See [4.7] (https://github.com/sveawebpay/php-integration#47-webpayitemindividualcustomer)and 4.8 in the WebPayItem class documentation below for for more information on how to specify customer identity items
+See [4.7] (https://github.com/sveawebpay/php-integration#47-webpayitemindividualcustomer)and 4.8 in the WebPayItem class documentation below for more information on how to specify customer identity items.
 
 [<< To index](https://github.com/sveawebpay/php-integration#index)
 ### 3.4 Additional order attributes
@@ -343,8 +340,6 @@ The service response received is sent as an XML message, use the SveaResponse re
 >For recurring payments, first create an order and select a card payment method with `->usePaymentMethod()`. Use the `setSubscriptionType()` method on the resulting payment request object. When the end user completes the transaction, you will receive a subscription id in the response.
 
 For the monthly subscription payments, you build the order and again select the card payment method with `->usePaymentMethod()`. Then use `setSubscriptionId()` with the above subscription id and finally send the recur payment request using the `->doRecur()` method.
-
-See [5. Payment method reference](https://github.com/sveawebpay/php-integration#5-payment-method-reference) below for details.
 
 [<< To index](https://github.com/sveawebpay/php-integration#index)
 ## 4. WebPayItem reference
@@ -539,7 +534,7 @@ $order->
 ```
 
 [<< To index](https://github.com/sveawebpay/php-integration#index)
-## 5 Payment method reference
+## 5. Payment method reference
 Select payment method to use with the CreateOrderBuilder class useXX() methods, which return an instance of the appropriate payment request class.
 
 ### 5.1 Svea Invoice payment
@@ -548,20 +543,22 @@ Select ->useInvoicePayment() to perform an invoice payment.
 ```php
 ...
 $order = WebPay::createOrder($config);
-$order
-    ->addOrderRow( ...
-    ->addCustomerDetails( ...
-    ->setCountryCode("SE")
-    ->setOrderDate("2012-12-12")
+$order                                  
+    ->addOrderRow( ...                      // required, one or more
+    ->addCustomerDetails( ...               // required, individualCustomer or companyCustomer
+    ->setCountryCode("SE")                  // required
+    ->setOrderDate("2012-12-12")            // required
 ;
-$request = $order->useInvoicePayment();
+$request = $order->useInvoicePayment();     // requires the above attributes in the order
 $response = $request->doRequest();
 ...
 ```
 
+See <a href="http://htmlpreview.github.io/?https://raw.github.com/sveawebpay/php-integration/master/apidoc/classes/Svea.CreateOrderBuilder.html" target="_blank">CreateOrderBuilder</a> class for methods used to build the order object and select the payment method type to use.
+
 Another complete, runnable example of an invoice order can be found in the <a href="https://github.com/sveawebpay/php-integration/blob/master/example/invoiceorder/" target="_blank">example/invoiceorder</a> folder.
 
-### 5.2 Svea Payment Plan payment
+### 5.2 Svea Payment plan payment
 Select ->usePaymentPlanPayment() to perform an invoice payment.
 
 The Payment plan payment method is restricted to individual customers and can not be used by legal entities, i.e. companies or organisations.
@@ -596,6 +593,9 @@ $response = $request->doRequest();
 ### 5.3 Card payment 
 Select i.e. ->usePaymentMethod(PaymentMethod::KORTCERT) to perform a card payment via the Certitrade card payment provider.
 
+#### 5.3.1 ->getPaymentForm()
+Get a html form containing the request data.
+
 ```php
 ...
 $form = $order
@@ -607,7 +607,25 @@ $form = $order
 ...
 ```
 
-### 5.4 Direct bank transfer
+#### 5.3.2 ->getPaymentUrl()
+Get an url containing a link to the prepared payment. Requires customer ip address and language.
+
+```php
+...
+$form = $order
+    ->addCustomerDetails( 
+        ...
+        ->setIpaddress()                                    // Required
+        ...
+    ->usePaymentMethod(PaymentMethod::KORTCERT)             // Card payment, get available providers using WebPay::listPaymentMethods()
+        ->setReturnUrl("http://myurl.se")                   // Required
+        ->setCancelUrl("http://myurl.se")                   // Optional
+        ->setCardPageLanguage("se")                         // Required, languageCode As ISO639, eg. "en", default english
+        ->getPaymentUrl();
+...
+```
+
+### 5.4 Direct bank payment
 Select i.e. ->usePaymentMethod(PaymentMethod::NORDEA_SE) to perform a direct bank transfer payment using the Swedish bank Nordea.
 
 ```php
@@ -621,8 +639,10 @@ $form = $order
 ...
 ```
 
-### 5.5 Using a specific payment method in general
-Go direct to specified payment method, bypassing the *PayPage* completely.
+### 5.5 Using the Svea PayPage 
+
+#### 5.5.1 Bypassing payment method selection
+Go direct to specified payment method, bypassing the *PayPage* completely. By specifying payment method you eliminate one step in the payment process.
 
 You can use WebPay::listPaymentMethods() to get the various payment methods available. 
 
@@ -636,8 +656,7 @@ $form = $order
         ->getPaymentForm();
 ...
 ```
-
-### 5.6 Select a card payment method using the Svea PayPage
+#### 5.5.2 Select a card payment method
 Send user to *PayPage* to select from available cards (only), and then perform a card payment at the card payment page
 
 ```php
@@ -655,7 +674,7 @@ $form = $order
 
 A complete, runnable example of a card order using PaymentMethodPayment can be found in the <a href="https://github.com/sveawebpay/php-integration/blob/master/example/cardorder/" target="_blank">example/cardorder</a> folder.
 
-### 5.7 Select a direct bank payment method using the Svea PayPage
+#### 5.5.3 Select a direct bank payment method
 Send user to *PayPage* to select from available banks (only), and then perform a direct bank payment at the chosen bank
 
 ```php
@@ -670,7 +689,7 @@ $form = $order
 ...
 ```
 
-### 5.8 Select a payment method using the Svea PayPage, chosing from a set of specified payment methods
+#### 5.5.4 Specifying available payment methods
 Send user to *PayPage* to select from the available payment methods. You can customise which payment methods to display, using the PayPagePayment methods includePaymentMethods(), excludePaymentMethods(), excludeCardPaymentMethods() and excludeDirectPaymentMethods().
 
 ```php
@@ -685,18 +704,18 @@ $form = $order
 ...
 ```
 
-### 5.9 Select a payment method using the Svea PayPage, chosing from all payment methods
+#### 5.5.6 Chosing from all payment methods
 Send user to *PayPage* to select from the available payment methods. You can customise which payment methods to display, using the PayPagePayment methods includePaymentMethods(), excludePaymentMethods(), excludeCardPaymentMethods() and excludeDirectPaymentMethods().
 
-### 5.10 Payment method examples
+### 5.6 Examples
 
-#### 5.10.1 Synchronous invoice order
+#### 5.6.1 Svea invoice order
 An example of a synchronous (invoice) order can be found in the <a href="https://github.com/sveawebpay/php-integration/blob/master/example/invoiceorder/" target="_blank">example/invoiceorder</a> folder.
 
-#### 5.10.2 Asynchronous card order
+#### 5.6.2 Card order
 An example of an asynchronous card order can be found in the <a href="https://github.com/sveawebpay/php-integration/blob/master/example/cardorder/" target="_blank">example/cardorder</a> folder.
 
-#### 5.10.3 Asynchronous recurring card order
+#### 5.6.3 Recurring card order
 An example of an recurring card order, both the setup transaction and a recurring payment, can be found in the <a href="https://github.com/sveawebpay/php-integration/blob/master/example/cardorder_recur/" target="_blank">example/cardorder_recur</a> folder.
 
 [<< To index](https://github.com/sveawebpay/php-integration#index)
@@ -857,19 +876,7 @@ The response is an instance of WebService\PaymentPlanParamsResponse, with the av
        ->toAmount                          // amount upper limit for plan availability
 ```
 
-### 6.5 WebPay::getPaymentMethods()
-Returns an array of SystemPaymentMethods available to a certain merchantId, which 
-are constants defined in class PaymentMethod.
-
-See file PaymentMethodIntegrationTest.php for usage.
-
-```php
-  $fooArray = WebPay::getPaymentMethods( $config )  // optional, if no $config given, will use defaults from SveaConfig
-                    ->setContryCode("SE")           // optional, if no country given, will use default country "SE"
-                    ->doRequest();
-```
-
-### 6.6 WebPay::paymentPlanPricePerMonth()
+### 6.5 WebPay::paymentPlanPricePerMonth()
 This is a helper function provided to calculate the monthly price for the different payment plan options for a given sum. This information may be used when displaying i.e. payment options to the customer by checkout, or to display the lowest amount due per month to display on a product level.
 
 The returned instance of PaymentPlanPricePerMonth contains an array "values", where each element in turn contains an array of campaign code, description and price per month:
@@ -888,19 +895,24 @@ $paymentPlanParamsResonseObject->values[0..n] (for n campaignCodes), where value
 ```
 [<< To top](https://github.com/sveawebpay/php-integration#php-integration-package-api-for-sveawebpay)
 
-### 6.7 WebPay::listPaymentMethods
+### 6.6 WebPay::listPaymentMethods
 The WebPayAdmin::listPaymentMethods method is used to fetch all available paymentmethods for a given ConfigurationProvider and country.
 
-#### 6.7.1
+#### 6.6.1
 Use the WebPay::listPaymentMethods() entrypoint to get an instance of ListPaymentMethods. Then provide more information about the transaction and
 send the request using ListPaymentMethod methods. 
 
 Following the ->doRequest call you receive an instance of ListPaymentMethodsResponse.
 
-@see \Svea\HostedService\ListPaymentMethods \Svea\HostedService\ListPaymentMethods
-@see \Svea\HostedService\ListPaymentMethodsResponse \Svea\HostedService\ListPaymentMethodsResponse
+```php
+  $fooArray = WebPay::listPaymentMethods( $config )     // optional, if no $config given, will use defaults from SveaConfig
+                    ->setContryCode("SE")               // optional, if no country given, will use default country "SE"
+                    ->doRequest();
+```
 
-#### 6.7.2 
+See <a href="http://htmlpreview.github.io/?https://raw.github.com/sveawebpay/php-integration/master/apidoc/classes/WebPay.html#method_listPaymentMethods" target="_blank">WebPay::listPaymentMethods()</a> and the <a href="http://htmlpreview.github.io/?https://raw.github.com/sveawebpay/php-integration/master/apidoc/classes/Svea.HostedService.ListPaymentMethodsResponse.html" target="_blank">ListPaymentMethodsResponse</a> class.
+
+#### 6.6.2 
 *example to come later*
 
 [<< To index](https://github.com/sveawebpay/php-integration#index)
@@ -921,14 +933,6 @@ Direct bank orders are not supported, see WebPayAdmin::creditOrder.
 
 #### 7.1.1 Usage and return types
 Cancel an undelivered/unconfirmed order. Supports Invoice, PaymentPlan and Card orders. (For Direct Bank orders, see CreditOrder instead.)
- 
-Use the following methods to set the order attributes needed in the request: 
-->setOrderId(sveaOrderId or transactionId from createOrder response)
-->setCountryCode()
-
-Then select the correct ordertype and perform the request:
-->cancelInvoiceOrder() | cancelPaymentPlanOrder() | cancelCardOrder()
-  ->doRequest
 
 The final doRequest() returns either a CloseOrderResult or an AnnulTransactionResponse:
 
