@@ -49,7 +49,7 @@ $myCardOrderPaymentForm = $myCardOrderRequest->getPaymentForm();
 
 // Then send the form to Svea, and receive the response on the landingpage after the customer has completed the card checkout at certitrade
 echo "<pre>";
-print_r( "press submit to send the recur card payment request to Svea");
+echo "Press submit to send the inital card order request to Svea, and receive a subscription id for use in future recur order requests.";
 print_r( $myCardOrderPaymentForm->completeHtmlFormWithSubmitButton );
 
 /**
