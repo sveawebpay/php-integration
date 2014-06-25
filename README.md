@@ -293,9 +293,10 @@ Invoice and Payment plan payment methods will perform a synchronous request to S
 Hosted payment methods, like Card, Direct Bank and payment methods accessed via the PayPage, are asynchronous. They will return an html form with the formatted message. You then send the form to Svea, and the customer is redirected, complete the payment, and the payment response is sent back to the provided return url. The response may also be sent to the url specified with setCallbackUrl() in case the customer doesn't return to the store after the transaction has concluded at the bank/card payment page. Process the response via the SveaResponse class, and you will receive a formatted response object.
 
 #### 3.5.2 Asynchronous payments
-All hosted payment methods, card and direct bank payment methods, along with payment methods selected through paypage, are asynchronous.
+All hosted payment methods, card and direct bank payment methods, along with any payment method selected through PayPage, are asynchronous.
 
-After selecting an asynchronous payment method you use a request class method to get an instance of PaymentForm in return. The form is sent using a http post to the service endpoint url. The PaymentForm instance also contains the complete html form as string and the html form elements as an array. 
+After selecting an asynchronous payment method you generally use a request class method to get an instance of PaymentForm in return. The form is then sent using a http post Svea. The PaymentForm instance also contains the complete html form as string and the html form elements as an array. 
+
 See <a href="http://htmlpreview.github.io/?https://raw.github.com/sveawebpay/php-integration/master/apidoc/classes/Svea.HostedService.PaymentForm.html" target="_blank">PaymentForm</a> class for for form methods and attributes.
 
 #### 3.5.3 Response URL:s
@@ -307,9 +308,9 @@ For asynchronous payment methods, you must specify where to receive the request 
 
 `->setCancelUrl()` (optional, paypage only) Presents a cancel button on the PayPage. In case the payment method selection is cancelled by the user, Svea will redirect back to the cancel url. Unless a cancel url is specified, no cancel button will be presented at the PayPage.
 
-See <a href="http://htmlpreview.github.io/?https://raw.github.com/sveawebpay/php-integration/master/apidoc/classes/Svea.HostedService.HostedPayment.html" target="_blank">HostedPayment</a> class.
+See the <a href="http://htmlpreview.github.io/?https://raw.github.com/sveawebpay/php-integration/master/apidoc/classes/Svea.HostedService.HostedPayment.html" target="_blank">HostedPayment</a> class for response url details.
 
-The service response is returned as an XML message, use the SveaResponse response handler to get a response object. For details, see [8. SveaResponse](https://github.com/sveawebpay/php-integration#8-svearesponse) below.
+The service response received is sent as an XML message, use the SveaResponse response handler to get a response object. For details, see [8. SveaResponse](https://github.com/sveawebpay/php-integration#8-svearesponse) below.
 
 ### 3.6 Recommended payment method usage
 *I am using the invoice and/or payment plan payment methods in my integration.*
@@ -317,19 +318,33 @@ The service response is returned as an XML message, use the SveaResponse respons
 >The best way is to use `->useInvoicePayment()` and `->usePaymentPlanPayment()`. These payments are synchronous and will give you an instant response.
 
 *I am using the card and/or direct bank payment methods in my integration.*
+
 >The best way if you know what specific payment you want to use, is to go direct to that specific payment, bypassing the PayPage step, by using
 `->usePaymentMethod`. You can check the optional payment methods configured on your account using the `WebPay::getPaymentMethods()` method.
 >
 >You can also use the PayPage with `->usePayPageCardOnly()` and `->usePayPageDirectBankOnly()`.
 
-*I am using all payment methods in my integration.*
->The most effective way is to use `->useInvoicePayment()` and `->usePaymentPlanPayment()` for the synchronous payments, and use the `->usePaymentMethod(PaymentMethod)` for the asynchronous requests. First use `WebPay::getPaymentMethods($config)` to fetch the different payment methods configured on you account.
+*I am using all payment methods in my integration, and wish to let the customer select which to use.*
+
+>The most effective way is to use `->useInvoicePayment()` and `->usePaymentPlanPayment()` for the synchronous payments, and use the `->usePaymentMethod()` for the asynchronous requests. First use `WebPay::getPaymentMethods()` to fetch the different payment methods configured on you account.
 >
 >Alternatively you can go by *PayPage* for the asynchronous requests by using `->usePayPageCardOnly()` and `->usePayPageDirectBankOnly()`.
 
 *I am using more than one payment and want them gathered on on place.*
+
 >You can go by *PayPage* and choose to show all your payments here, or modify to exclude or include one or more payments. Use `->usePayPage()` where you can custom your own *PayPage*. This introduces an additional step in the customer checkout flow, though. Note also that Invoice and Payment plan payments will return an asynchronous when used from PayPage.
 
+*I wish to prepare an order and receive a link that I can mail to a customer, who then will complete the order payment using their card.*
+
+>Create and build the order, then select the card payment method with the `->usePaymentMethod()`, but instead of getting a form with `->getPaymentForm()`, use `->getPaymentUrl()` to get an url to present to the user.
+
+*I wish to set up a subscription using recurring card payments, which will renew each month without further end user interaction.*
+
+>For recurring payments, first create an order and select a card payment method with `->usePaymentMethod()`. Use the `setSubscriptionType()` method on the resulting payment request object. When the end user completes the transaction, you will receive a subscription id in the response.
+
+For the monthly subscription payments, you build the order and again select the card payment method with `->usePaymentMethod()`. Then use `setSubscriptionId()` with the above subscription id and finally send the recur payment request using the `->doRecur()` method.
+
+See [5. Payment method reference](https://github.com/sveawebpay/php-integration#5-payment-method-reference) below for details.
 
 [<< To index](https://github.com/sveawebpay/php-integration#index)
 ## 4. WebPayItem reference
@@ -579,7 +594,7 @@ $response = $request->doRequest();
 ```
 
 ### 5.3 Using a specific payment method 
-Go direct to specified payment method, bypassing the *PayPage* completetly.
+Go direct to specified payment method, bypassing the *PayPage* completely.
 
 You can use WebPay::listPaymentMethods() to get the various campaigns. 
 
@@ -589,7 +604,7 @@ $form = $order
     ->usePaymentMethod(PaymentMethod::KORTCERT)             // Use WebPay::listPaymentMethods() to get available payment methods
         ->setReturnUrl("http://myurl.se")                   // Required
         ->setCancelUrl("http://myurl.se")                   // Optional
-        ->setCardPageLanguage("se")                         // Optional,@param: languageCode As ISO639, eg. "en", defalut english
+        ->setCardPageLanguage("se")                         // Optional,@param: languageCode As ISO639, eg. "en", default english
         ->getPaymentForm();
 ...
 ```
