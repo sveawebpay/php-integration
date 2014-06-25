@@ -6,7 +6,7 @@
 | master (latest release)           | [![Build Status](https://travis-ci.org/sveawebpay/php-integration.png?branch=master)](https://travis-ci.org/sveawebpay/php-integration) |
 | develop                           | [![Build Status](https://travis-ci.org/sveawebpay/php-integration.png?branch=develop)](https://travis-ci.org/sveawebpay/php-integration) |
 
-### Version 2.0.0
+### Version 2.0.1
 The Svea WebPay Integration package uses semantic versioning (http://semver.org). This means that you can expect your integrations to remain backwards compatible during a major version release cycle. 
 
 Previous versions of the package can be accessed through <a href="https://github.com/sveawebpay/php-integration/releases" target="_blank">the github releases</a> view.
@@ -299,16 +299,17 @@ After selecting an asynchronous payment method you use a request class method to
 See <a href="http://htmlpreview.github.io/?https://raw.github.com/sveawebpay/php-integration/master/apidoc/classes/Svea.HostedService.PaymentForm.html" target="_blank">PaymentForm</a> class for for form methods and attributes.
 
 #### 3.5.3 Response URL:s
-By setting the return url, you specify where you wish to receive the asynchronous request response. The service response is returned as XML, you can use the SveaResponse response handler to format the response.
+For asynchronous payment methods, you must specify where to receive the request response. Use the following methods:
 
-[`->setReturnUrl()`] When a hosted payment transaction completes (regardless of outcome, i.e. accepted or denied), the payment service will answer with a response xml message sent to the return url specified. This is also the return address if the user cancels at i.e. the Certitrade card payment page.
-[`->setCallbackUrl()`] In case the hosted payment transaction completes, but the service is unable to return a response to the return url, the payment service will retry several times using the callback url as a fallback, if specified. This may happen if i.e. the user closes the browser before the payment service redirects back to the shop.
+`->setReturnUrl()` (required) When a hosted payment transaction completes the payment service will answer with a response xml message sent to the return url. This is also the return url used if the user cancels at i.e. the Certitrade card payment page.
 
-[`->setCancelUrl()`] In case the payment method selection is cancelled by the user at the PayPage, Svea will redirect back to the cancel url.
+`->setCallbackUrl()` (optional) In case the hosted payment transaction completes, but the service is unable to return a response to the return url, Svea will retry several times using the callback url as a fallback, if specified. This may happen if i.e. the user closes the browser before the payment service redirects back to the shop, or if the transaction times out in lieu of user input. In the latter case, Svea will fail the transaction after at most 30 minutes, and will try to redirect to the callback url.
+
+`->setCancelUrl()` (optional, paypage only) Presents a cancel button on the PayPage. In case the payment method selection is cancelled by the user, Svea will redirect back to the cancel url. Unless a cancel url is specified, no cancel button will be presented at the PayPage.
 
 See <a href="http://htmlpreview.github.io/?https://raw.github.com/sveawebpay/php-integration/master/apidoc/classes/Svea.HostedService.HostedPayment.html" target="_blank">HostedPayment</a> class.
 
-See further [8. SveaResponse](https://github.com/sveawebpay/php-integration#8-svearesponse).
+The service response is returned as an XML message, use the SveaResponse response handler to get a response object. For details, see [8. SveaResponse](https://github.com/sveawebpay/php-integration#8-svearesponse) below.
 
 ### 3.6 Recommended payment method usage
 *I am using the invoice and/or payment plan payment methods in my integration.*
