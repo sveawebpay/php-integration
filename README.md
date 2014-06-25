@@ -48,7 +48,7 @@ Previous versions of the package can be accessed through <a href="https://github
     * [6.5 WebPay::getPaymentMethods()](https://github.com/sveawebpay/php-integration#65-webpaygetpaymentmethods)
     * [6.6 WebPay::paymentPlanPricePerMonth()](https://github.com/sveawebpay/php-integration#66-webpaypaymentplanpricepermonth)
     * [6.7 WebPay::listPaymentMethods](https://github.com/sveawebpay/php-integration#67-webpaylistpaymentmethods)
-* [7. WebPayAdmin](https://github.com/sveawebpay/php-integration#7-webpayadmin)
+* [7. WebPayAdmin entrypoint method reference](https://github.com/sveawebpay/php-integration#7-webpayadmin-entrypoint-method-reference)
     * [7.1 WebPayAdmin::cancelOrder()](https://github.com/sveawebpay/php-integration#71-webpayadmincancelorder)
     * [7.2 WebPayAdmin::queryOrder()](https://github.com/sveawebpay/php-integration#72-webpayadminqueryorder)
     * [7.3 WebPayAdmin::cancelOrderRows()](https://github.com/sveawebpay/php-integration#73-webpayadmincancelorderrows)
@@ -542,7 +542,7 @@ $order->
 ## 5 Payment method reference
 Select payment method to use with the CreateOrderBuilder class useXX() methods, which return an instance of the appropriate payment request class.
 
-### 5.1 Invoice payment method
+### 5.1 Svea Invoice payment
 Select ->useInvoicePayment() to perform an invoice payment.
 
 ```php
@@ -561,7 +561,7 @@ $response = $request->doRequest();
 
 Another complete, runnable example of an invoice order can be found in the <a href="https://github.com/sveawebpay/php-integration/blob/master/example/invoiceorder/" target="_blank">example/invoiceorder</a> folder.
 
-### 5.2 Payment plan payment method
+### 5.2 Svea Payment Plan payment
 Select ->usePaymentPlanPayment() to perform an invoice payment.
 
 The Payment plan payment method is restricted to individual customers and can not be used by legal entities, i.e. companies or organisations.
@@ -593,10 +593,38 @@ $response = $request->doRequest();
 ...
 ```
 
-### 5.3 Using a specific payment method 
+### 5.3 Card payment 
+Select i.e. ->usePaymentMethod(PaymentMethod::KORTCERT) to perform a card payment via the Certitrade card payment provider.
+
+```php
+...
+$form = $order
+    ->usePaymentMethod(PaymentMethod::KORTCERT)             // Card payment, get available providers using WebPay::listPaymentMethods()
+        ->setReturnUrl("http://myurl.se")                   // Required
+        ->setCancelUrl("http://myurl.se")                   // Optional
+        ->setCardPageLanguage("se")                         // Optional, languageCode As ISO639, eg. "en", default english
+        ->getPaymentForm();
+...
+```
+
+### 5.4 Direct bank transfer
+Select i.e. ->usePaymentMethod(PaymentMethod::NORDEA_SE) to perform a direct bank transfer payment using the Swedish bank Nordea.
+
+```php
+...
+$form = $order
+    ->usePaymentMethod(PaymentMethod::NORDEA_SE)            // Direct bank payment, get available banks using WebPay::listPaymentMethods()
+        ->setReturnUrl("http://myurl.se")                   // Required
+        ->setCancelUrl("http://myurl.se")                   // Optional
+        ->setCardPageLanguage("se")                         // Optional, languageCode As ISO639, eg. "en", default english
+        ->getPaymentForm();
+...
+```
+
+### 5.5 Using a specific payment method in general
 Go direct to specified payment method, bypassing the *PayPage* completely.
 
-You can use WebPay::listPaymentMethods() to get the various campaigns. 
+You can use WebPay::listPaymentMethods() to get the various payment methods available. 
 
 ```php
 ...
@@ -604,12 +632,12 @@ $form = $order
     ->usePaymentMethod(PaymentMethod::KORTCERT)             // Use WebPay::listPaymentMethods() to get available payment methods
         ->setReturnUrl("http://myurl.se")                   // Required
         ->setCancelUrl("http://myurl.se")                   // Optional
-        ->setCardPageLanguage("se")                         // Optional,@param: languageCode As ISO639, eg. "en", default english
+        ->setCardPageLanguage("se")                         // Optional, languageCode As ISO639, eg. "en", default english
         ->getPaymentForm();
 ...
 ```
 
-### 5.4 PayPage payment method, card payment options only
+### 5.6 Select a card payment method using the Svea PayPage
 Send user to *PayPage* to select from available cards (only), and then perform a card payment at the card payment page
 
 ```php
@@ -627,7 +655,7 @@ $form = $order
 
 A complete, runnable example of a card order using PaymentMethodPayment can be found in the <a href="https://github.com/sveawebpay/php-integration/blob/master/example/cardorder/" target="_blank">example/cardorder</a> folder.
 
-### 5.5 PayPage payment method, direct bank payment options only
+### 5.7 Select a direct bank payment method using the Svea PayPage
 Send user to *PayPage* to select from available banks (only), and then perform a direct bank payment at the chosen bank
 
 ```php
@@ -642,7 +670,7 @@ $form = $order
 ...
 ```
 
-### 5.6 PayPage payment method, specified payment methods only
+### 5.8 Select a payment method using the Svea PayPage, chosing from a set of specified payment methods
 Send user to *PayPage* to select from the available payment methods. You can customise which payment methods to display, using the PayPagePayment methods includePaymentMethods(), excludePaymentMethods(), excludeCardPaymentMethods() and excludeDirectPaymentMethods().
 
 ```php
@@ -657,18 +685,18 @@ $form = $order
 ...
 ```
 
-### 5.7 PayPage payment method, all payment methods
+### 5.9 Select a payment method using the Svea PayPage, chosing from all payment methods
 Send user to *PayPage* to select from the available payment methods. You can customise which payment methods to display, using the PayPagePayment methods includePaymentMethods(), excludePaymentMethods(), excludeCardPaymentMethods() and excludeDirectPaymentMethods().
 
-### 5.8 Payment method examples
+### 5.10 Payment method examples
 
-#### 5.8.1 Synchronous invoice order
+#### 5.10.1 Synchronous invoice order
 An example of a synchronous (invoice) order can be found in the <a href="https://github.com/sveawebpay/php-integration/blob/master/example/invoiceorder/" target="_blank">example/invoiceorder</a> folder.
 
-#### 5.8.2 Asynchronous card order
+#### 5.10.2 Asynchronous card order
 An example of an asynchronous card order can be found in the <a href="https://github.com/sveawebpay/php-integration/blob/master/example/cardorder/" target="_blank">example/cardorder</a> folder.
 
-#### 5.8.3 Asynchronous recurring card order
+#### 5.10.3 Asynchronous recurring card order
 An example of an recurring card order, both the setup transaction and a recurring payment, can be found in the <a href="https://github.com/sveawebpay/php-integration/blob/master/example/cardorder_recur/" target="_blank">example/cardorder_recur</a> folder.
 
 [<< To index](https://github.com/sveawebpay/php-integration#index)
@@ -876,7 +904,7 @@ Following the ->doRequest call you receive an instance of ListPaymentMethodsResp
 *example to come later*
 
 [<< To index](https://github.com/sveawebpay/php-integration#index)
-## 7. WebPayAdmin
+## 7. WebPayAdmin entrypoint method reference
 The WebPayAdmin class methods are used to administrate orders after they have been accepted by Svea. It includes functions to update, deliver, cancel and credit orders et.al.
 
 * [7.1 WebPayAdmin::cancelOrder()](https://github.com/sveawebpay/php-integration#71-webpayadmincancelorder)
