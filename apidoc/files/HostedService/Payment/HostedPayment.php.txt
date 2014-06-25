@@ -19,10 +19,12 @@ require_once SVEA_REQUEST_DIR . '/Includes.php';
  * an URL that the customer can visit later to complete the payment at a later
  * time.
  * 
- * Uses HostedXmlBuilder to turn formatted $order into xml
+ * For recurring payments, first send a payment request, using setSubscriptionType().
+ * Use the initial request response subscriptionId attribute as input to subsequent 
+ * recur orders, using setSubscriptionId() and sending the recur request with doRecur().
+ * 
  * @author Anneli Halld'n, Daniel Brolund, Kristian Grossman-Madsen for Svea Webpay
  */
-
 class HostedPayment {
     
     const RECURRINGCAPTURE = "RECURRINGCAPTURE";
@@ -65,10 +67,11 @@ class HostedPayment {
     }
 
     /**
-     * Required - setReturnUrl sets the hosted payment return url
+     * Required - sets up a return url for the hosted payment response
      * 
-     * When a hosted payment transaction completes (regardless of outcome, i.e. accepted or denied),
-     * the payment service will answer with a response xml message sent to the return url specified.
+     * When a hosted payment transaction completes the payment service will answer 
+     * with a response xml message sent to the return url. This is also the return 
+     * url used if the user cancels at i.e. the Certitrade card payment page.
      * 
      * @param string $returnUrlAsString
      * @return $this
@@ -79,12 +82,15 @@ class HostedPayment {
     }
     
     /**
-     * setCallbackUrl sets up a callback url. Optional.
+     * Optional - sets up a callback url for use if the transaction does not return correctly
      * 
-     * In case the hosted payment transaction completes, but the service is unable to return a 
-     * response to the return url, the payment service will retry several times using the callback 
-     * url as a fallback, if specified. This may happen if i.e. the user closes the browser before 
-     * the payment service redirects back to the shop.
+     * In case the hosted payment service is unable to return a response to the return url, 
+     * Svea will retry several times using the callback url as a fallback, if specified. 
+     * 
+     * This may happen if i.e. the user closes the browser before the payment service 
+     * redirects back to the shop, or if the transaction times out in lieu of user input.
+     * In the latter case, Svea will fail the transaction after at most 30 minutes, and will 
+     * try to redirect to the callback url.
      * 
      * @param string $callbackUrlAsString
      * @return $this
@@ -95,10 +101,10 @@ class HostedPayment {
     }    
     
     /**
-     * setCancelUrl sets the hosted payment cancel url and includes a cancel button on the hosted pay page. Optional.
+     * Optional - includes a cancel button on the hosted pay page and sets a cancel url for use with the cancel button
      * 
-     * In case the hosted payment service is cancelled by the user, the payment service will redirect back to the 
-     * cancel url. Unless a return url is specified, no cancel button will be presented at the payment service.
+     * In case the payment method selection is cancelled by the user, Svea will redirect back to the cancel url. 
+     * Unless a cancel url is specified, no cancel button will be presented at the PayPage.
      * 
      * @param string $cancelUrlAsString
      * @return $this
@@ -108,8 +114,10 @@ class HostedPayment {
         return $this;
     }    
     
-    /* Sets the pay page display language. Optional.
+    /* Optional - sets the pay page display language. 
+     * 
      * Default pay page language is English, unless another is specified using this method.
+     * 
      * @param string $languageCodeAsISO639
      * @return $this
      */
@@ -136,6 +144,7 @@ class HostedPayment {
     
     /**
      * getPaymentForm returns a form object containing a webservice payment request
+     * 
      * @return PaymentForm
      * @throws ValidationException
      */
@@ -168,7 +177,10 @@ class HostedPayment {
      * to get a link which the customer can use to confirm a payment at a later
      * time after having received the url via i.e. an email message.
      * 
-     * @return type
+     * Use function setIpAddress() on the order customer."; 
+     * Use function setPayPageLanguage()."; 
+     * 
+     * @return HostedPaymentResponse
      * @throws ValidationException
      */
     public function getPaymentURL() {
@@ -300,9 +312,19 @@ class HostedPayment {
     }
         
     /**
-     * Set subscription type for recurring payments. Subscription type may be one
-     * of HostedPayment::RECURRINGCAPTURE | HostedPayment::ONECLICKCAPTURE (all countries)
-     * or HostedPayment::RECURRING | HostedPayment::ONECLICK (Scandinavian countries only) 
+     * Optional - set subscription type for recurring payments. 
+     * 
+     * Subscription type may be one of 
+     * HostedPayment::RECURRINGCAPTURE | HostedPayment::ONECLICKCAPTURE (all countries) or 
+     * HostedPayment::RECURRING | HostedPayment::ONECLICK (Scandinavian countries only) 
+     * 
+     * The merchant should use RECURRINGCAPTURE if all the recurring payments are 
+     * to be scheduled by the merchant, without any action taken from the card holder.
+     * 
+     * The merchant should use ONECLICKCAPTURE if they want the initial transaction to 
+     * be captured. In this case a successful initial transaction will result in the 
+     * CONFIRMED status, which means that the transaction will be captured at night when 
+     * the daily capture job is finished.
      * 
      * The initial transaction status will either be AUTHORIZED (i.e. it may be charged
      * after it has been confirmed) or REGISTERED (i.e. the initial amount will be
@@ -322,9 +344,12 @@ class HostedPayment {
     /**
      * Set a subscriptionId to use in a recurring payment request 
      * 
-     * The subscriptionId should have been obtained in an earlier payment request response
+     * The subscriptionId should have been obtained in an earlier payment request response using
+     * setSubscriptionType()
      * 
-     * @param string $subscriptionType  @see CardPayment constants
+     * @see setSubscriptionType() setSubscriptionType()
+     * 
+     * @param string $subscriptionType
      * @return $this
      */
     public function setSubscriptionId( $subscriptionId ) {
@@ -340,12 +365,14 @@ class HostedPayment {
      * recur order total amount. The order row information is not passed on in the request.
      * Neither is vat information passed to Svea, only the total order amount.
      * 
+     * If the original request subscription type was RECURRING or RECURRINGCAPTURE the currency
+     * for the recur request must be the same as the currency in the initial transaction.
+     * 
      * @return RecurTransactionResponse
      */
     public function doRecur() {
         
         // calculate amount from order rows   
-        $formatter = new HostedRowFormatter();
         $formatter = new HostedRowFormatter();
         $this->request['rows'] = $formatter->formatRows($this->order);
         $this->request['amount'] = $formatter->formatTotalAmount($this->request['rows']);
@@ -354,7 +381,7 @@ class HostedPayment {
         $request = new RecurTransaction( $this->order->conf );
         $response = $request                
             ->setCurrency( $this->order->currency )
-            ->setAmount( $this->request['amount'] )            
+            ->setAmount( $this->request['amount'] ) // incl. vat       
             ->setCustomerRefNo( $this->order->clientOrderNumber )   // CustomerRefNo in Hosted service equals ClientOrderNumber in order objects
             ->setCountryCode( $this->order->countryCode )
             ->setSubscriptionId( $this->subscriptionId )                
