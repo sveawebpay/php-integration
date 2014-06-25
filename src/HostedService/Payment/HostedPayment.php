@@ -19,7 +19,9 @@ require_once SVEA_REQUEST_DIR . '/Includes.php';
  * an URL that the customer can visit later to complete the payment at a later
  * time.
  * 
- * Uses HostedXmlBuilder to turn formatted $order into xml
+ * For recurring payments, first send a payment request, using setSubscriptionType().
+ * Use the initial request response subscriptionId attribute as input to subsequent 
+ * recur orders, using setSubscriptionId() and sending the recur request with doRecur().
  * 
  * @author Anneli Halld'n, Daniel Brolund, Kristian Grossman-Madsen for Svea Webpay
  */
@@ -307,9 +309,19 @@ class HostedPayment {
     }
         
     /**
-     * Set subscription type for recurring payments. Subscription type may be one
-     * of HostedPayment::RECURRINGCAPTURE | HostedPayment::ONECLICKCAPTURE (all countries)
-     * or HostedPayment::RECURRING | HostedPayment::ONECLICK (Scandinavian countries only) 
+     * Optional - set subscription type for recurring payments. 
+     * 
+     * Subscription type may be one of 
+     * HostedPayment::RECURRINGCAPTURE | HostedPayment::ONECLICKCAPTURE (all countries) or 
+     * HostedPayment::RECURRING | HostedPayment::ONECLICK (Scandinavian countries only) 
+     * 
+     * The merchant should use RECURRINGCAPTURE if all the recurring payments are 
+     * to be scheduled by the merchant, without any action taken from the card holder.
+     * 
+     * The merchant should use ONECLICKCAPTURE if they want the initial transaction to 
+     * be captured. In this case a successful initial transaction will result in the 
+     * CONFIRMED status, which means that the transaction will be captured at night when 
+     * the daily capture job is finished.
      * 
      * The initial transaction status will either be AUTHORIZED (i.e. it may be charged
      * after it has been confirmed) or REGISTERED (i.e. the initial amount will be
@@ -329,9 +341,12 @@ class HostedPayment {
     /**
      * Set a subscriptionId to use in a recurring payment request 
      * 
-     * The subscriptionId should have been obtained in an earlier payment request response
+     * The subscriptionId should have been obtained in an earlier payment request response using
+     * setSubscriptionType()
      * 
-     * @param string $subscriptionType  @see CardPayment constants
+     * @see setSubscriptionType() setSubscriptionType()
+     * 
+     * @param string $subscriptionType
      * @return $this
      */
     public function setSubscriptionId( $subscriptionId ) {
@@ -347,12 +362,14 @@ class HostedPayment {
      * recur order total amount. The order row information is not passed on in the request.
      * Neither is vat information passed to Svea, only the total order amount.
      * 
+     * If the original request subscription type was RECURRING or RECURRINGCAPTURE the currency
+     * for the recur request must be the same as the currency in the initial transaction.
+     * 
      * @return RecurTransactionResponse
      */
     public function doRecur() {
         
         // calculate amount from order rows   
-        $formatter = new HostedRowFormatter();
         $formatter = new HostedRowFormatter();
         $this->request['rows'] = $formatter->formatRows($this->order);
         $this->request['amount'] = $formatter->formatTotalAmount($this->request['rows']);
@@ -361,7 +378,7 @@ class HostedPayment {
         $request = new RecurTransaction( $this->order->conf );
         $response = $request                
             ->setCurrency( $this->order->currency )
-            ->setAmount( $this->request['amount'] )            
+            ->setAmount( $this->request['amount'] ) // incl. vat       
             ->setCustomerRefNo( $this->order->clientOrderNumber )   // CustomerRefNo in Hosted service equals ClientOrderNumber in order objects
             ->setCountryCode( $this->order->countryCode )
             ->setSubscriptionId( $this->subscriptionId )                
