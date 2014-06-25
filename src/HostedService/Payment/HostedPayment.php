@@ -20,9 +20,9 @@ require_once SVEA_REQUEST_DIR . '/Includes.php';
  * time.
  * 
  * Uses HostedXmlBuilder to turn formatted $order into xml
+ * 
  * @author Anneli Halld'n, Daniel Brolund, Kristian Grossman-Madsen for Svea Webpay
  */
-
 class HostedPayment {
     
     const RECURRINGCAPTURE = "RECURRINGCAPTURE";
@@ -65,10 +65,11 @@ class HostedPayment {
     }
 
     /**
-     * Required - setReturnUrl sets the hosted payment return url
+     * Required - sets up a return url for the hosted payment response
      * 
-     * When a hosted payment transaction completes (regardless of outcome, i.e. accepted or denied),
-     * the payment service will answer with a response xml message sent to the return url specified.
+     * When a hosted payment transaction completes the payment service will answer 
+     * with a response xml message sent to the return url. This is also the return 
+     * url used if the user cancels at i.e. the Certitrade card payment page.
      * 
      * @param string $returnUrlAsString
      * @return $this
@@ -79,12 +80,15 @@ class HostedPayment {
     }
     
     /**
-     * setCallbackUrl sets up a callback url. Optional.
+     * Optional - sets up a callback url for use if the transaction does not return correctly
      * 
-     * In case the hosted payment transaction completes, but the service is unable to return a 
-     * response to the return url, the payment service will retry several times using the callback 
-     * url as a fallback, if specified. This may happen if i.e. the user closes the browser before 
-     * the payment service redirects back to the shop.
+     * In case the hosted payment service is unable to return a response to the return url, 
+     * Svea will retry several times using the callback url as a fallback, if specified. 
+     * 
+     * This may happen if i.e. the user closes the browser before the payment service 
+     * redirects back to the shop, or if the transaction times out in lieu of user input.
+     * In the latter case, Svea will fail the transaction after at most 30 minutes, and will 
+     * try to redirect to the callback url.
      * 
      * @param string $callbackUrlAsString
      * @return $this
@@ -95,10 +99,10 @@ class HostedPayment {
     }    
     
     /**
-     * setCancelUrl sets the hosted payment cancel url and includes a cancel button on the hosted pay page. Optional.
+     * Optional - includes a cancel button on the hosted pay page and sets a cancel url for use with the cancel button
      * 
-     * In case the hosted payment service is cancelled by the user, the payment service will redirect back to the 
-     * cancel url. Unless a return url is specified, no cancel button will be presented at the payment service.
+     * In case the payment method selection is cancelled by the user, Svea will redirect back to the cancel url. 
+     * Unless a cancel url is specified, no cancel button will be presented at the PayPage.
      * 
      * @param string $cancelUrlAsString
      * @return $this
@@ -108,8 +112,10 @@ class HostedPayment {
         return $this;
     }    
     
-    /* Sets the pay page display language. Optional.
+    /* Optional - sets the pay page display language. 
+     * 
      * Default pay page language is English, unless another is specified using this method.
+     * 
      * @param string $languageCodeAsISO639
      * @return $this
      */
@@ -136,6 +142,7 @@ class HostedPayment {
     
     /**
      * getPaymentForm returns a form object containing a webservice payment request
+     * 
      * @return PaymentForm
      * @throws ValidationException
      */
