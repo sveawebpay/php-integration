@@ -62,7 +62,7 @@ class HostedAdminResponse extends HostedResponse{
             $this->setErrorParams( (string)$hostedAdminResponse->statuscode ); 
         }
           
-        // getPaymentURL/preparepayment request
+        // getPaymentUrl/preparepayment request
         if( property_exists($hostedAdminResponse,"preparedpayment")) {
             $url = "https://webpay.sveaekonomi.se/webpay/preparedpayment/";
             $testurl = "https://test.sveaekonomi.se/webpay/preparedpayment/";

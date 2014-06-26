@@ -36,14 +36,16 @@ $myOrder->addOrderRow(
 // For card orders, we recommend using the ->usePaymentMethod(PaymentMethod::KORTCERT), which processes card orders via Certitrade.
 $myRecurOrderRequest = $myOrder->usePaymentMethod(PaymentMethod::KORTCERT);
 
-// For recurring card payments, use setSubscriptionType() on the request object, one of the subscription types from HostedService\HostedPayment
+// For recurring card payments, use setSubscriptionId() on the request object, using the subscription id from the initial request response
 $mySubscriptionId = file_get_contents("subscription.txt");
 if( $mySubscriptionId ) {
     $myRecurOrderRequest->setSubscriptionId( $mySubscriptionId );
 }
+
+// or, abort if subscription.txt is missing
 else {
-    print_r( "subscription.txt not found, run cardorder_recur.php first. aborting.");
-    die();    
+    echo "<pre>Error: subscription.txt not found, first run cardorder_recur.php to set up the card order subscription. aborting.";
+    die;    
 }
 
 // Then set any additional required request attributes as detailed below. (See Svea\PaymentMethodPayment and Svea\HostedPayment classes for details.)

@@ -62,7 +62,7 @@ class CreateOrderBuilder extends OrderBuilder {
      * You can use WebPay::getPaymentMethods() to get available payment methods. See also the PaymentMethod class constants.
      * 
      * Set additional attributes using PaymentMethodPayment methods.
-
+     * 
      * @see \WebPay::getPaymentMethods() WebPay::getPaymentMethods()
      * @see \PaymentMethod PaymentMethod
      * 
