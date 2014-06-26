@@ -29,7 +29,7 @@ class CardPaymentURLIntegrationTest extends \PHPUnit_Framework_TestCase {
             ->usePaymentMethod(\PaymentMethod::KORTCERT)
             ->setPayPageLanguage($orderLanguage)
             ->setReturnUrl($returnUrl)
-            ->getPaymentURL();
+            ->getPaymentUrl();
         // check that request response contains an URL
         $this->assertInstanceOf( "Svea\HostedAdminResponse", $response );     
     }
@@ -48,7 +48,7 @@ class CardPaymentURLIntegrationTest extends \PHPUnit_Framework_TestCase {
             ->usePaymentMethod(\PaymentMethod::KORTCERT)
             ->setPayPageLanguage($orderLanguage)
             ->setReturnUrl($returnUrl)
-            ->getPaymentURL();
+            ->getPaymentUrl();
   
         $this->assertInstanceOf( "Svea\HostedService\HostedAdminResponse", $response );     
     }
@@ -72,7 +72,7 @@ class CardPaymentURLIntegrationTest extends \PHPUnit_Framework_TestCase {
             ->usePaymentMethod(\PaymentMethod::KORTCERT )
             ->setPayPageLanguage($orderLanguage)
             ->setReturnUrl($returnUrl)
-            ->getPaymentURL();
+            ->getPaymentUrl();
 
         // check that request was accepted        
         //print_r($response);
@@ -90,7 +90,7 @@ class CardPaymentURLIntegrationTest extends \PHPUnit_Framework_TestCase {
    /**
      * test_manual_CardPayment_getPaymentURL 
      */  
-    public function test_manual_CardPayment_getPaymentURL() {
+    public function test_manual_CardPayment_getPaymentUrl() {
         // Stop here and mark this test as incomplete.
         $this->markTestIncomplete(
             'skeleton for manual test of card payment'
@@ -115,7 +115,7 @@ class CardPaymentURLIntegrationTest extends \PHPUnit_Framework_TestCase {
             ->usePaymentMethod(\PaymentMethod::KORTCERT )
             ->setPayPageLanguage($orderLanguage)
             ->setReturnUrl($returnUrl)
-            ->getPaymentURL();
+            ->getPaymentUrl();
 
         // check that request was accepted
         $this->assertEquals( 1, $response->accepted );                

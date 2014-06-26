@@ -175,7 +175,7 @@ class CardPaymentIntegrationTest extends \PHPUnit_Framework_TestCase {
             ->setPayPageLanguage($orderLanguage)
             ->setReturnUrl($returnUrl)
             ->setSubscriptionType( Svea\CardPayment::RECURRINGCAPTURE)
-            ->getPaymentURL();
+            ->getPaymentUrl();
 
         // check that request was accepted
         $this->assertEquals( 1, $response->accepted );                

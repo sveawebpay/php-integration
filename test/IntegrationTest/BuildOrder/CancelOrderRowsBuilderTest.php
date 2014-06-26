@@ -122,7 +122,7 @@ class CancelOrderRowsBuilderIntegrationTest extends PHPUnit_Framework_TestCase {
             ->usePayPageCardOnly()
             ->setPayPageLanguage($orderLanguage)
             ->setReturnUrl($returnUrl)
-            ->getPaymentURL();       
+            ->getPaymentUrl();       
             
         // check that request was accepted
         $this->assertEquals( 1, $response->accepted );                
@@ -246,7 +246,7 @@ class CancelOrderRowsBuilderIntegrationTest extends PHPUnit_Framework_TestCase {
             ->usePayPageCardOnly()
             ->setPayPageLanguage($orderLanguage)
             ->setReturnUrl($returnUrl)
-            ->getPaymentURL();       
+            ->getPaymentUrl();       
             
         // check that request was accepted
         $this->assertEquals( 1, $response->accepted );                

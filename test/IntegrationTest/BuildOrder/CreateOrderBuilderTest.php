@@ -48,7 +48,7 @@ class CreateOrderBuilderIntegrationTest extends PHPUnit_Framework_TestCase {
     }    
     
     // CreateOrderBuilder card payment method
-    // see CardPaymentURLIntegrationTest->test_manual_CardPayment_getPaymentURL()
+    // see CardPaymentURLIntegrationTest->test_manual_CardPayment_getPaymentUrl()
         
     // CreateOrderBuilder direct bank payment method   //TODO    
     
