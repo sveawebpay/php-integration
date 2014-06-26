@@ -81,6 +81,8 @@ The package makes use of PHP namespaces, grouping most classes under the namespa
 
 The underlying services and methods are contained in the Svea sub-namespaces WebService, HostedService and AdminService, and may be accessed, though their api and interfaces are subject to change in the future.
 
+See the PHP documentation for more information on [namespaces in PHP](http://php.net/manual/en/language.namespaces.php). 
+
 ### Documentation format
 See the provided README.md file for an overview and examples how to utilise the WebPay and WebPayAdmin classes. The complete WebPay Integration package, including the underlying Svea service classes, methods and structures, is documented by generated documentation in the apidoc folder.   
 
@@ -98,7 +100,7 @@ the above section 1.x text is taken from the WebPay/WebPayAdmin class docblock
 ## 1. Installing and configuration
 
 ### 1.1 Requirements
-The integration package requires PHP 5.3 or higher to use. See the PHP documentation for more information on [namespaces in PHP](http://php.net/manual/en/language.namespaces.php).
+The integration package requires PHP 5.3 or higher to use. You also need to have soap support enabled.
 
 To run the package test suite, phpunit 3.7 is needed. To regenerate the apidoc documentation, phpdocumentor 2.3 or higher is needed.
 
