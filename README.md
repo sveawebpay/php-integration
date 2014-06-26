@@ -38,6 +38,7 @@ Previous versions of the package can be accessed through <a href="https://github
     * [5.6 WebPayItem::relativeDiscount](https://github.com/sveawebpay/php-integration#56-webpayitemrelativediscount)
     * [5.7 WebPayItem::individualCustomer()](https://github.com/sveawebpay/php-integration#57-webpayitemindividualcustomer)
     * [5.8 WebPayItem::companyCustomer()](https://github.com/sveawebpay/php-integration#58-webpayitemcompanycustomer)
+    * [5.9 WebPayItem::numberedOrderRow()](https://github.com/sveawebpay/php-integration#59-webpayitemnumberedorderrow)
 * [6. WebPay entrypoint method reference](https://github.com/sveawebpay/php-integration#6-webpay-entrypoint-method-reference)
     * [6.1 WebPay::createOrder()](https://github.com/sveawebpay/php-integration#61-webpaycreateorder)
     * [6.2 WebPay::deliverOrder()](https://github.com/sveawebpay/php-integration#62-webpaydeliverorder)
@@ -727,6 +728,39 @@ $order->
 ;
 ...
 ```
+
+### 5.9 WebPayItem::numberedOrderRow()
+This is an extension of the orderRow class, used in the WebPayAdmin::queryOrder() response and methods that adminster individual order rows.
+
+#### 5.9.1 Usage
+```php
+...
+$myNumberedOrderRow = 
+    WebPayItem::numberedOrderRow()
+
+        //inherited from OrderRow
+        ->setAmountExVat(100.00)                // recommended to specify price using AmountExVat & VatPercent
+        ->setVatPercent(25)                     // recommended to specify price using AmountExVat & VatPercent
+        ->setAmountIncVat(125.00)               // optional, need to use two out of three of the price specification methods
+        ->setQuantity(2)                        // required
+        ->setUnit("st")                         // optional
+        ->setName('Prod')                       // optional
+        ->setDescription("Specification")       // optional
+        ->setArticleNumber("1")                 // optional
+        ->setDiscountPercent(0)                 // optional
+
+        //numberedOrderRow
+        ->setCreditInvoiceId($creditInvoiceIdAsNumeric)         //optional
+        ->setInvoiceId($invoiceIdAsNumeric)                     //optional
+        ->setRowNumber($rowNumberAsNumeric)                     //optional    
+        ->setStatus(NumberedOrderRow::ORDERROWSTATUS_DELIVERED) //optional, one of _DELIVERED, _NOTDELIVERED, _CANCELLED
+;
+...
+```
+S
+See the <a href="http://htmlpreview.github.io/?https://raw.github.com/sveawebpay/php-integration/master/apidoc/classes/Svea.NumberedOrderRow.html" target="_blank">NumberedOrderRow</a> class methods for details.
+
+
 
 See the <a href="http://htmlpreview.github.io/?https://raw.github.com/sveawebpay/php-integration/master/apidoc/classes/Svea.CompanyCustomer.html" target="_blank">CompanyCustomer</a> class methods for details on how to specify the item, including all *required* methods.
 
