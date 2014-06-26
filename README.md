@@ -739,9 +739,8 @@ The WebPay class methods contains the functions needed to create orders and perf
 * [6.2 WebPay::deliverOrder()](https://github.com/sveawebpay/php-integration#62-webpaydeliverorder)
 * [6.3 WebPay::getAddresses()](https://github.com/sveawebpay/php-integration#63-webpaygetaddresses)
 * [6.4 WebPay::getPaymentPlanParams()](https://github.com/sveawebpay/php-integration#64-webpaygetpaymentplanparams)
-* [6.5 WebPay::getPaymentMethods()](https://github.com/sveawebpay/php-integration#65-webpaygetpaymentmethods)
-* [6.6 WebPay::paymentPlanPricePerMonth()](https://github.com/sveawebpay/php-integration#66-webpaypaymentplanpricepermonth)
-* [6.7 WebPay::listPaymentMethods](https://github.com/sveawebpay/php-integration#67-webpaylistpaymentmethods)
+* [6.5 WebPay::paymentPlanPricePerMonth()](https://github.com/sveawebpay/php-integration#65-webpaypaymentplanpricepermonth)
+* [6.6 WebPay::listPaymentMethods](https://github.com/sveawebpay/php-integration#66-webpaylistpaymentmethods)
 
 ### 6.1 WebPay::createOrder()
 
@@ -819,26 +818,7 @@ Returns an instance of WebService\getAddressesResponse containing a list of veri
 
 The GetAddresses service is only applicable for SE, NO and DK customers and accounts. In Norway, GetAddresses may only be performed on company customers.
 
-See the Svea\WebService\GetAddresses class for more information.
-
-See <a href="http://htmlpreview.github.io/?https://raw.github.com/sveawebpay/php-integration/master/apidoc/classes/Svea.WebService.GetAddresses.html" target="_blank">GetAddresses</a> class for methods used to build and send a getAddresses request.
-
-#### 6.3.1 getAddresses request example
-```php
-$response = WebPay::getAddresses( $config )
-    ->setCountryCode("SE")                  // Required -- supply the country code that corresponds to the account credentials used 
-    ->setOrderTypeInvoice()                 // Required -- use invoice account credentials for getAddresses lookup
-    //->setOrderTypePaymentPlan()           // Required -- use payment account plan credentials for getAddresses lookup
-    ->setIndividual("194605092222")         // Required -- lookup the address of a private individual
-    //->setCompany("CompanyId")             // Required -- lookup the address of a legal entity (i.e. company)
-    ->doRequest();
-;
-```
-
-An complete usage example can be found in the <a href="https://github.com/sveawebpay/php-integration/blob/master/example/config_getaddresses/" target="_blank">example/config_getaddresses</a> folder.
-
-#### 6.3.2 getAddresses response format
-See <a href="http://htmlpreview.github.io/?https://raw.github.com/sveawebpay/php-integration/master/apidoc/classes/Svea.WebService.GetAddressesResponse.html" target="_blank">GetAddresses</a> class for more.
+#### 6.3.1 getAddresses response format
 
 ```php
     $response->accepted                 // boolean, true iff Svea accepted request
@@ -856,6 +836,22 @@ See <a href="http://htmlpreview.github.io/?https://raw.github.com/sveawebpay/php
         ->locality;           // not guaranteed to be defined
 
 ```
+
+See the <a href="http://htmlpreview.github.io/?https://raw.github.com/sveawebpay/php-integration/master/apidoc/classes/Svea.WebService.GetAddresses.html" target="_blank">GetAddresses</a> and <a href=http://htmlpreview.github.io/?https://raw.github.com/sveawebpay/php-integration/master/apidoc/classes/Svea.WebService.GetAddressesResponse.html" target="_blank">GetAddressesResponse</a> classes.
+
+#### 6.3.2 getAddresses request example
+```php
+$response = WebPay::getAddresses( $config )
+    ->setCountryCode("SE")                  // Required -- supply the country code that corresponds to the account credentials used 
+    ->setOrderTypeInvoice()                 // Required -- use invoice account credentials for getAddresses lookup
+    //->setOrderTypePaymentPlan()           // Required -- use payment account plan credentials for getAddresses lookup
+    ->setIndividual("194605092222")         // Required -- lookup the address of a private individual
+    //->setCompany("CompanyId")             // Required -- lookup the address of a legal entity (i.e. company)
+    ->doRequest();
+;
+```
+
+An complete usage example can be found in the <a href="https://github.com/sveawebpay/php-integration/blob/master/example/config_getaddresses/" target="_blank">example/config_getaddresses</a> folder.
 
 ### 6.4 WebPay::getPaymentPlanParams()
 Use getPaymentPlanParams() to fetch all campaigns associated with a given client number before creating the payment plan payment.
@@ -889,12 +885,14 @@ The response is an instance of WebService\PaymentPlanParamsResponse, with the av
        ->toAmount                          // amount upper limit for plan availability
 ```
 
+See the <a href="http://htmlpreview.github.io/?https://raw.github.com/sveawebpay/php-integration/master/apidoc/classes/Svea.WebService.GetPaymentPlanParams.html" target="_blank">GetPaymentPlanParams</a> and <a href="http://htmlpreview.github.io/?https://raw.github.com/sveawebpay/php-integration/master/apidoc/classes/Svea.WebService.PaymentPlanParamsResponse.html" target="_blank">PaymentPlanParamsResponse</a> classes.
+
+
 ### 6.5 WebPay::paymentPlanPricePerMonth()
 This is a helper function provided to calculate the monthly price for the different payment plan options for a given sum. This information may be used when displaying i.e. payment options to the customer by checkout, or to display the lowest amount due per month to display on a product level.
 
-The returned instance of PaymentPlanPricePerMonth contains an array "values", where each element in turn contains an array of campaign code, description and price per month:
+The returned instance of PaymentPlanPricePerMonth contains an array "values", where each element in turn contains an array of campaign code, description and price per month.
 
-$paymentPlanParamsResonseObject->values[0..n] (for n campaignCodes), where values['campaignCode' => campaignCode, 'pricePerMonth' => pricePerMonth, 'description' => description]
 
 **$paramsResonseObject** is response object from getPaymentPlanParams();
 ```php
@@ -906,7 +904,8 @@ $paymentPlanParamsResonseObject->values[0..n] (for n campaignCodes), where value
      */
    $pricePerMonthPerCampaignCode = WebPay::paymentPlanPricePerMonth($price,$paymentPlanParamsResonseObject);
 ```
-[<< To top](https://github.com/sveawebpay/php-integration#php-integration-package-api-for-sveawebpay)
+
+See <a href="http://htmlpreview.github.io/?https://raw.github.com/sveawebpay/php-integration/master/apidoc/classes/WebPay.html#method_paymentPlanPricePerMonth" target="_blank">WebPay::paymentPlanPricePerMonth()</a> and the <a href="http://htmlpreview.github.io/?https://raw.github.com/sveawebpay/php-integration/master/apidoc/classes/Svea.WebService.PaymentPlanPricePerMonth.html" target="_blank">PaymentPlanPricePerMonth</a> class.
 
 ### 6.6 WebPay::listPaymentMethods
 The WebPayAdmin::listPaymentMethods method is used to fetch all available paymentmethods for a given ConfigurationProvider and country.
