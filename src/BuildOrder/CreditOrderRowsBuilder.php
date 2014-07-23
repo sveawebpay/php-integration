@@ -288,11 +288,9 @@ class CreditOrderRowsBuilder {
         $sumOfRowAmounts = $this->calculateSumOfRowAmounts( $this->rowsToCredit, $this->numberedOrderRows, $this->creditOrderRows );
         
         $creditTransaction = new HostedService\CreditTransaction($this->conf);
-        $creditTransaction
-            ->setTransactionId($this->orderId)
-            ->setCountryCode($this->countryCode)
-            ->setCreditAmount($sumOfRowAmounts*100) // *100, as setAmountToLower wants minor currency
-        ;           
+        $creditTransaction->transactionId = $this->orderId;
+        $creditTransaction->creditAmount = $sumOfRowAmounts*100; // *100, as setAmountToLower wants minor currency
+        $creditTransaction->setCountryCode($this->countryCode);
         return $creditTransaction;
     }
     

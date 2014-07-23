@@ -92,7 +92,9 @@ class QueryOrderBuilder {
     public function queryCardOrder() {
         $this->setOrderType(\ConfigurationProvider::HOSTED_ADMIN_TYPE);
         $queryTransaction = new HostedService\QueryTransaction($this->conf);
-        return $queryTransaction->setTransactionId($this->orderId)->setCountryCode($this->countryCode);
+        $queryTransaction->transactionId = $this->orderId;
+        $queryTransaction->setCountryCode($this->countryCode);
+        return $queryTransaction;
     }  
 
     /**
@@ -102,6 +104,8 @@ class QueryOrderBuilder {
     public function queryDirectBankOrder() {
         $this->setOrderType(\ConfigurationProvider::HOSTED_ADMIN_TYPE);
         $queryTransaction = new HostedService\QueryTransaction($this->conf);
-        return $queryTransaction->setTransactionId($this->orderId)->setCountryCode($this->countryCode);
+        $queryTransaction->transactionId = $this->orderId;
+        $queryTransaction->setCountryCode($this->countryCode);
+        return $queryTransaction;
     }          
 }
