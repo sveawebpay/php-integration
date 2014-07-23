@@ -2,11 +2,12 @@
 namespace Svea\HostedService;
 
 /**
- * Rewrites formatted object to xml format to send to external service.
+ * Formats request xml in preparation of sending request to hosted webservice.
  * 
- * this file details the xml request format for the hosted payment & admin service
- * as detailed in "Technical Specification WebPay v 2.6.8" as of 140403
+ * These methods writes requests to hosted payment & hosted admin services
+ * as detailed in "Technical Specification WebPay v 2.6.8" as of 140403.
  * 
+ * @author Kristian Grossman-Madsen
  */
 class HostedXmlBuilder {
 

@@ -58,6 +58,9 @@ Previous versions of the package can be accessed through <a href="https://github
 * [9. Additional Developer Resources and notes](https://github.com/sveawebpay/php-integration#9-additional-developer-resources-and-notes)
     * [9.1 Helper class methods](https://github.com/sveawebpay/php-integration#91-helper-class-methods)
     * [9.2 Inspect prepareRequest(), validateOrder() methods](https://github.com/sveawebpay/php-integration#92-inspect-preparerequest-validateorder-methods)
+* [10. Frequently Asked Questions](https://github.com/sveawebpay/php-integration#10-frequently-asked-questions)
+    * [10.1 Supported currencies](https://github.com/sveawebpay/php-integration#101-supported-currencies)
+
 * [APPENDIX](https://github.com/sveawebpay/php-integration#appendix)
 
 ## I. Introduction
@@ -1254,6 +1257,32 @@ During module development or debugging, the `prepareRequest()` method may be of 
 `validateOrder()` validates that all required attributes are present in an order object, give the specific combination of country and payment method. It returns an array containing any discovered errors.
 
 [<< To index](https://github.com/sveawebpay/php-integration#index)
+
+
+
+[<< To index](https://github.com/sveawebpay/php-integration#index)
+## 10. Frequently Asked Questions 
+
+### 10.1 Supported currencies
+**Q**: What currencies does each payment method support?
+
+**A**: 
+*Invoice and part payment*
+For invoice and direct bank payment methods, the assumed currency is tied to the merchant account (client id), where each account in turn is tied to a specific country. This is why you as the merchant need to specify a country code in the order, and must supply the amount in the corresponding currency (i.e. an invoice order with setCountryCode('SE') is always assumed to be made out in SEK).
+
+*Credit card and direct bank transfer*
+For credit card orders, Svea accepts any currency when specifying the order, and pass the currency and amount on the card Acquirer (Svea uses Certitrade) where the end user enters their account credentials.
+
+The acquirer in turn asks (via the credit card company) the end user's Issuing bank (i.e. the bank that provides the end user their card) if the transaction is accepted. If so this information is passed on to the merchant via the Acquirer and Svea, and this is the end of the story as far as the end user is concerned.
+
+The merchant, i.e. your web shop, then receives money from their Acquiring bank. This is usually done nightly, when the acquiring bank (via the credit card company) receives a list of confirmed card transactions for the merchant in question, and pays the merchant accordingly.
+
+*Acquiring bank support*
+The key point is that the merchant must have an agreement with their acquiring bank as to which currencies they accept. Svea has no way of knowing this, so it is up to the merchant to supply the correct currency in the original request.
+
+*tl;dr*
+For invoice and part payment, the order amount is assumed to be made out in the country currency. For credit card and direct bank transfer, we honour the specified currency and amount, but you should only specify currencies that you have agreed upon with your acquiring bank.
+
 ## APPENDIX
 
 ### PaymentMethods

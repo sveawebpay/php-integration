@@ -1,4 +1,4 @@
-<?php
+<?php //
 /**
  * example file, how to create an invoice order request
  * 
@@ -61,14 +61,16 @@ $myOrder->addOrderRow(
                 ->setDescription( "Korv med bröd" )
 );
 
-// For card orders the ->addCustomerDetails() method is optional, but recommended, so we'll add what info we have
+// Next, we create a customer identity object, note that for invoice orders Svea overrides any given address w/verified credit report address in the response.
 $myCustomerInformation = WebPayItem::individualCustomer(); // there's also a ::companyCustomer() method, used for non-person entities
+$myCustomerInformation->setNationalIdNumber(194605092222); // required for invoice orders, used to determine the invoice address, see WebPay::getAddress()
+
+// Also, for card orders addCustomerDetails() is optional, but recommended -- we'll just add what info we have, but do remember to check the response address!
 
 $myCustomerInformation->setName( $customerFirstName, $customerLastName);
 $sveaAddress = Svea\Helper::splitStreetAddress($customerAddress); // Svea requires an address and a house number
 $myCustomerInformation->setStreetAddress( $sveaAddress[0], $sveaAddress[1] );
 $myCustomerInformation->setZipCode( $customerZipCode )->setLocality( $customerCity );
-$myCustomerInformation->setNationalIdNumber(194605092222); // required for invoice orders, used to determine the invoice address, see WebPay::getAddress()
 
 $myOrder->addCustomerDetails( $myCustomerInformation );
 
@@ -83,6 +85,8 @@ $myResponse = $myInvoiceOrderRequest->doRequest();
 echo "<pre>Your request response:\n\n";
 print_r( $myResponse );
 
-echo "</pre><font color='red'><pre>\n";
-echo "Note that the customerIdentity received in the response indicates the Svea invoice address, which should normally match the order shipping address.";    
-?>
+echo "</pre><font color='blue'><pre>
+An example of a successful request response. The 'accepted' attribute is true (1), and resultcode/errormessage is not set. 
+(Note that the customerIdentity received in the response indicates the Svea invoice address, which should normally match the order shipping address.)
+";
+

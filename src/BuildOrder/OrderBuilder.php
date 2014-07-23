@@ -70,6 +70,7 @@ class OrderBuilder {
     
     /**
      * Required for invoice and payment plan orders - add customer information to the order 
+     * Optional for card and direct bank orders
      * 
      * See the customer objects for information on required customer information fields for
      * invoice and payment plan orders.
