@@ -11,8 +11,8 @@ require_once SVEA_REQUEST_DIR . '/Includes.php';
  */
 class CreditTransaction extends HostedRequest {
 
-    protected $transactionId;
-    protected $creditAmount;
+    public $transactionId;
+    public $creditAmount;
     
     function __construct($config) {
         $this->method = "credit";
@@ -27,10 +27,10 @@ class CreditTransaction extends HostedRequest {
      * @param string $transactionId
      * @return $this
      */
-    function setTransactionId( $transactionId ) {
-        $this->transactionId = $transactionId;
-        return $this;
-    }
+//    function setTransactionId( $transactionId ) {
+//        $this->transactionId = $transactionId;
+//        return $this;
+//    }
     
     /**
      * Set the amount to credit.
@@ -40,10 +40,10 @@ class CreditTransaction extends HostedRequest {
      * @param int $creditAmount  amount to credit, in minor currency (i.e. 1 SEK => 100 in minor currency)
      * @return $this
      */
-    function setCreditAmount( $creditAmount ) {
-        $this->creditAmount = $creditAmount;
-        return $this;
-    }
+//    function setCreditAmount( $creditAmount ) {
+//        $this->creditAmount = $creditAmount;
+//        return $this;
+//    }
     
     public function validateRequestAttributes() {
         $errors = array();

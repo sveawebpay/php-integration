@@ -24,14 +24,14 @@ class AnnulTransaction extends HostedRequest {
         parent::__construct($config);
     }
 
-    /**
-     * @param string $transactionId
-     * @return $this
-     */
-    function setTransactionId( $transactionId ) {
-        $this->transactionId = $transactionId;
-        return $this;
-    }
+//    /**
+//     * @param string $transactionId
+//     * @return $this
+//     */
+//    function setTransactionId( $transactionId ) {
+//        $this->transactionId = $transactionId;
+//        return $this;
+//    }
      
     public function validateRequestAttributes() {
         $errors = array();

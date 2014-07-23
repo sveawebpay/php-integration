@@ -63,9 +63,10 @@ class ConfirmTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
         $captureDate = "2014-03-21";
 
         $request = new ConfirmTransaction( Svea\SveaConfig::getDefaultConfig() );
+        $request->transactionId = $transactionId;
+        $request->captureDate = $captureDate;
+        
         $response = $request
-            ->setTransactionId( $transactionId )
-            ->setCaptureDate( $captureDate )
             ->setCountryCode( "SE" )
             ->doRequest();
 
@@ -93,12 +94,12 @@ class ConfirmTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
         $customerrefno = "clientOrderNumber:2014-06-09T14:02:33 02:00";
         $transactionId = 583151;
         $captureDate = "2014-06-09";
-
                 
         $request = new ConfirmTransaction( Svea\SveaConfig::getDefaultConfig() );
+        $request->transactionId = $transactionId;
+        $request->captureDate = $captureDate;
+
         $response = $request
-            ->setTransactionId( $transactionId )
-            ->setCaptureDate( $captureDate )
             ->setCountryCode( "SE" )
             ->doRequest();        
         

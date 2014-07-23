@@ -13,8 +13,8 @@ require_once SVEA_REQUEST_DIR . '/Includes.php';
  */
 class LowerTransaction extends HostedRequest {
 
-    protected $transactionId;
-    protected $amountToLower;
+    public $transactionId;
+    public $amountToLower;
     
     function __construct($config) {
         $this->method = "loweramount";
@@ -27,10 +27,10 @@ class LowerTransaction extends HostedRequest {
      * @param numeric $transactionId
      * @return \Svea\LowerTransaction
      */
-    function setTransactionId( $transactionId ) {
-        $this->transactionId = $transactionId;
-        return $this;
-    }
+//    function setTransactionId( $transactionId ) {
+//      $this->transactionId = $transactionId;
+//      return $this;
+//  }
     
     /**
      * The amount in minor currecy (i.e. 1 SEK => 100)
@@ -38,10 +38,10 @@ class LowerTransaction extends HostedRequest {
      * @param numeric $amountInMinorCurrency
      * @return \Svea\LowerTransaction
      */
-    function setAmountToLower( $amountInMinorCurrency ) {
-        $this->amountToLower = $amountInMinorCurrency;
-        return $this;
-    }
+//    function setAmountToLower( $amountInMinorCurrency ) {
+//      $this->amountToLower = $amountInMinorCurrency;
+//      return $this;
+//  }
     
     public function validateRequestAttributes() {
         $errors = array();

@@ -10,9 +10,9 @@ require_once SVEA_REQUEST_DIR . '/Includes.php';
  */
 class RecurTransaction extends HostedRequest {
 
-    protected $subscriptionId;
-    protected $customerRefNo;
-    protected $amount;
+    public $subscriptionId;
+    public $customerRefNo;
+    public $amount;
     
     function __construct($config) {
         $this->method = "recur";
@@ -27,10 +27,10 @@ class RecurTransaction extends HostedRequest {
      * @param string $currency
      * @return \Svea\RecurTransaction
      */
-    function setCurrency( $currency ) {
-        $this->currency = $currency;
-        return $this;
-    }
+//    function setCurrency( $currency ) {
+//        $this->currency = $currency;
+//        return $this;
+//    }
     
     /**
      * Required 
@@ -41,10 +41,10 @@ class RecurTransaction extends HostedRequest {
      * @param int $amount  amount in minor currency
      * @return \Svea\RecurTransaction
      */
-    function setAmount( $amount ) {
-        $this->amount = $amount;
-        return $this;
-    }
+//    function setAmount( $amount ) {
+//        $this->amount = $amount;
+//        return $this;
+//    }
 
     /**
      * Required - the new unique customer reference number.
@@ -52,10 +52,10 @@ class RecurTransaction extends HostedRequest {
      * @param string $customerRefNo
      * @return \Svea\RecurTransaction
      */
-    function setCustomerRefNo( $customerRefNo ) {
-        $this->customerRefNo = $customerRefNo;
-        return $this;
-    }
+//    function setCustomerRefNo( $customerRefNo ) {
+//        $this->customerRefNo = $customerRefNo;
+//        return $this;
+//    }
     
     /**
      * Required - the subscription id returned with the inital transaction response.
@@ -63,10 +63,10 @@ class RecurTransaction extends HostedRequest {
      * @param int $subscriptionId
      * @return \Svea\RecurTransaction
      */
-    function setSubscriptionId( $subscriptionId ) {
-        $this->subscriptionId = $subscriptionId;
-        return $this;
-    }
+//    function setSubscriptionId( $subscriptionId ) {
+//        $this->subscriptionId = $subscriptionId;
+//        return $this;
+//    }
     
     public function validateRequestAttributes() {
         $errors = array();

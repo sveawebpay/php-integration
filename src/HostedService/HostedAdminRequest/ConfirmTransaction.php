@@ -14,8 +14,8 @@ require_once SVEA_REQUEST_DIR . '/Includes.php';
  */
 class ConfirmTransaction extends HostedRequest {
 
-    protected $transactionId;
-    protected $captureDate;
+    public $transactionId;
+    public $captureDate;
     
     function __construct($config) {
         $this->method = "confirm";
@@ -31,10 +31,10 @@ class ConfirmTransaction extends HostedRequest {
      * @param string $transactionId  
      * @return $this
      */
-    function setTransactionId( $transactionId ) {
-        $this->transactionId = $transactionId;
-        return $this;
-    }
+//    function setTransactionId( $transactionId ) {
+//        $this->transactionId = $transactionId;
+//        return $this;
+//    }
     
     /**
      * Set the date that the transaction will be captured (settled).
@@ -44,10 +44,10 @@ class ConfirmTransaction extends HostedRequest {
      * @param string $captureDate  ISO-8601 extended date format (YYYY-MM-DD)
      * @return $this
      */
-    function setCaptureDate( $captureDate ) {
-        $this->captureDate = $captureDate;
-        return $this;
-    }
+//    function setCaptureDate( $captureDate ) {
+//        $this->captureDate = $captureDate;
+//        return $this;
+//    }
     
     public function validateRequestAttributes() {
         $errors = array();

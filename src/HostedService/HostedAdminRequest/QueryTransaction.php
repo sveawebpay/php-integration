@@ -12,7 +12,7 @@ require_once SVEA_REQUEST_DIR . '/Includes.php';
  */
 class QueryTransaction extends HostedRequest {
 
-    protected $transactionId;
+    public $transactionId;
     
     function __construct($config) {
         $this->method = "querytransactionid";
@@ -23,10 +23,10 @@ class QueryTransaction extends HostedRequest {
      * @param string $transactionId
      * @return $this
      */
-    function setTransactionId( $transactionId ) {
-        $this->transactionId = $transactionId;
-        return $this;
-    }
+//    function setTransactionId( $transactionId ) {
+//        $this->transactionId = $transactionId;
+//        return $this;
+//    }
         
     public function validateRequestAttributes() {
         $errors = array();

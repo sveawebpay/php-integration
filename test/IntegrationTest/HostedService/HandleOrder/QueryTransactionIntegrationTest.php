@@ -13,45 +13,6 @@ require_once $root . '/../../../TestUtil.php';
  */
 class QueryTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
  
-   /**
-     * test_queryTransaction_card_success creates an order using card payment, 
-     * pays using card & receives a transaction id, then credits the transaction
-     * 
-     * used as acceptance criteria/smoke test for query transaction feature
-     */
-    function test_queryTransaction_card_success() {
-      
-        // not yet implemented, requires webdriver support
-
-        // Stop here and mark this test as incomplete.
-        $this->markTestIncomplete(
-          'not yet implemented, requires webdriver support'
-        );
-        
-        // also, needs to have SUCCESS status set on transaction
-
-        // set up order (from testUtil?)
-        $order = TestUtil::createOrder();
-        
-        // pay with card, receive transactionId
-        $form = $order
-            ->UsePaymentMethod( PaymentMethod::KORTCERT )
-            ->setReturnUrl("http://myurl.se")
-            //->setCancelUrl()
-            //->setCardPageLanguage("SE")
-            ->getPaymentForm();
-        
-        $url = "https://test.sveaekonomi.se/webpay/payment";    //TODO get this via ConfigurationProvider
-
-        // do request modeled on CardPymentIntegrationTest.php
-                
-        // make sure the transaction has status AUTHORIZED or CONFIRMED at Svea
-        
-        // query transcation with the above transactionId
-        
-        // assert response from queryTransaction equals success
-    }    
-    
     /**
      * test_query_card_transaction_not_found 
      * 
@@ -62,8 +23,8 @@ class QueryTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
         $transactionId = 987654;
                 
         $request = new QueryTransaction( Svea\SveaConfig::getDefaultConfig() );
+        $request->transactionId = $transactionId;
         $response = $request
-            ->setTransactionId( $transactionId )
             ->setCountryCode( "SE" )
             ->doRequest();
 
@@ -101,8 +62,8 @@ class QueryTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
         $transactionId = 580964;
 
         $request = new QueryTransaction( Svea\SveaConfig::getDefaultConfig() );
+        $request->transactionId = $transactionId;
         $response = $request
-            ->setTransactionId( $transactionId )
             ->setCountryCode( "SE" )
             ->doRequest();        
          
@@ -206,8 +167,8 @@ class QueryTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
         $transactionId = 582690;
 
         $request = new QueryTransaction( Svea\SveaConfig::getDefaultConfig() );
+        $request->transactionId = $transactionId;
         $response = $request
-            ->setTransactionId( $transactionId )
             ->setCountryCode( "SE" )
             ->doRequest();        
          

@@ -33,7 +33,8 @@ class AnnulTransactionTest extends PHPUnit_Framework_TestCase {
     
     function test_setTransactionId( ){ 
         $transactionId = 987654;       
-        $this->annulObject->setTransactionId( $transactionId );
+        $this->annulObject->transactionId = $transactionId;
+
         $this->assertEquals( $transactionId, PHPUnit_Framework_Assert::readAttribute($this->annulObject, 'transactionId') );
     }
               
@@ -41,7 +42,7 @@ class AnnulTransactionTest extends PHPUnit_Framework_TestCase {
 
         // set up annulTransaction object & get request form
         $transactionId = 987654;       
-        $this->annulObject->setTransactionId( $transactionId );
+        $this->annulObject->transactionId = $transactionId;
 
         $countryCode = "SE";
         $this->annulObject->setCountryCode($countryCode);
@@ -58,7 +59,7 @@ class AnnulTransactionTest extends PHPUnit_Framework_TestCase {
 
         // set up creditTransaction object & get request form
         $transactionId = 987654;       
-        $this->annulObject->setTransactionId( $transactionId );
+        $this->annulObject->transactionId = $transactionId;
 
         $countryCode = "SE";
         $this->annulObject->setCountryCode($countryCode);

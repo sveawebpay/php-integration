@@ -29,18 +29,12 @@ class QueryTransactionTest extends PHPUnit_Framework_TestCase {
         $this->queryObject->setCountryCode( $countryCode ); 
         $this->assertEquals( $countryCode, PHPUnit_Framework_Assert::readAttribute($this->queryObject, 'countryCode') );
     }
-    
-    function test_setTransactionId( ){
-        $transactionId = 987654;       
-        $this->queryObject->setTransactionId( $transactionId );
-        $this->assertEquals( $transactionId, PHPUnit_Framework_Assert::readAttribute($this->queryObject, 'transactionId') );
-    }
               
     function test_prepareRequest_array_contains_mac_merchantid_message() {
 
         // set up annulTransaction object & get request form
         $transactionId = 987654;       
-        $this->queryObject->setTransactionId( $transactionId );
+        $this->queryObject->transactionId = $transactionId;
 
         $countryCode = "SE";
         $this->queryObject->setCountryCode($countryCode);
@@ -57,7 +51,7 @@ class QueryTransactionTest extends PHPUnit_Framework_TestCase {
 
         // set up creditTransaction object & get request form
         $transactionId = 987654;       
-        $this->queryObject->setTransactionId( $transactionId );
+        $this->queryObject->transactionId = $transactionId;
 
         $countryCode = "SE";
         $this->queryObject->setCountryCode($countryCode);

@@ -23,7 +23,7 @@ class ListPaymentMethods extends HostedRequest {
     }
 
     private function validateMerchantId($self, $errors) {
-        if ( null == $self->config->getMerchantId( \ConfigurationProvider::HOSTED_TYPE, $this->countryCode) ) {                                                    
+        if ( null == $self->config->getMerchantId( \ConfigurationProvider::HOSTED_TYPE, $this->countryCode) ) {
             $errors['missing value'] = "merchantId is required, check your ConfigurationProvider credentials.";
         }
         return $errors;
