@@ -320,33 +320,7 @@ class HostedXmlBuilder {
         
         return $this->XMLWriter->flush();
     }
-
-    /*
-     * write xml for webservice "querytransactionid" call, used by QueryTransaction
-     *
-     * @param elements -- associative array of element names and values
-     * 
-     */
-    public function getAnnulTransactionXML( $elements ){
-        $this->setBaseXML();
-        $this->XMLWriter->startElement("annul");
-   
-        foreach( $elements as $element => $value ) {
-            $this->XMLWriter->writeElement($element,$value);
-        }
-
-        $this->XMLWriter->endElement();
-        $this->XMLWriter->endDocument();
-        
-        return $this->XMLWriter->flush();
-    }    
-    
-    /*
-     * write xml for webservice "annul" call, used by AnnulTransaction
-     *
-     * @param elements -- associative array of element names and values
-     * 
-     */
+  
     public function getQueryTransactionXML( $elements ){
         $this->setBaseXML();
         $this->XMLWriter->startElement("query");

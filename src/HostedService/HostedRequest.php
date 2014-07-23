@@ -41,6 +41,33 @@ abstract class HostedRequest {
     }
     
     /**
+     * returns the request fields to post to service
+     */
+    public function prepareRequest() {
+        $this->validateRequest();
+
+        $xmlBuilder = new HostedXmlBuilder();
+        
+        // get our merchantid & secret
+        $merchantId = $this->config->getMerchantId( \ConfigurationProvider::HOSTED_TYPE,  $this->countryCode);
+        $secret = $this->config->getSecret( \ConfigurationProvider::HOSTED_TYPE, $this->countryCode);
+        
+        $message = $this->createRequestXml();        
+        
+        // calculate mac
+        $mac = hash("sha512", base64_encode($message) . $secret);
+        
+        // encode the request elements
+        $request_fields = array( 
+            'merchantid' => urlencode($merchantId),
+            'message' => urlencode(base64_encode($message)),
+            'mac' => urlencode($mac)
+        );
+        return $request_fields;
+    }    
+    
+    
+    /**
      * Performs a request using cURL, parsing the response using SveaResponse 
      * and returning the resulting HostedAdminResponse instance.
      * 
@@ -100,4 +127,9 @@ abstract class HostedRequest {
     }       
 
     abstract function validate($self); // validate is defined by subclasses, should validate all elements required for call is present
+    
+    /**
+     * implemented by child classes, should return the request xml for the method in question (i.e. "message" in the HostedAdminRequest request wrapper)
+     */
+    abstract function createRequestXml();    
 }
