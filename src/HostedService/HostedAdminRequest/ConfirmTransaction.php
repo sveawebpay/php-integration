@@ -83,5 +83,11 @@ class ConfirmTransaction extends HostedRequest {
         $XMLWriter->endDocument();
         
         return $XMLWriter->flush();
-    }      
+    }
+    
+    public function parseResponse($message) {        
+        $countryCode = $this->countryCode;
+        $config = $this->config;
+        return new ConfirmTransactionResponse($message, $countryCode, $config);
+    }   
 }

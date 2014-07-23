@@ -62,4 +62,10 @@ class AnnulTransaction extends HostedRequest {
         
         return $XMLWriter->flush();
     }  
+    
+    public function parseResponse($message) {        
+        $countryCode = $this->countryCode;
+        $config = $this->config;
+        return new AnnulTransactionResponse($message, $countryCode, $config);
+    }    
 }

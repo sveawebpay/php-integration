@@ -96,27 +96,27 @@ class SveaResponse {
                         break;
                     
                     // $method is also set for HostedAdminRequests, indicates the request method used                    
-                    case "querytransactionid":
-                        $this->response = new Svea\HostedService\QueryTransactionResponse($message, $countryCode, $config);
-                        break;
-                    case "annul":
-                        $this->response = new Svea\HostedService\AnnulTransactionResponse($message, $countryCode, $config);
-                        break;                     
-                    case "credit":
-                        $this->response = new Svea\HostedService\CreditTransactionResponse($message, $countryCode, $config);
-                        break;                       
-                    case "confirm":
-                        $this->response = new Svea\HostedService\ConfirmTransactionResponse($message, $countryCode, $config);
-                        break;   
-                    case "loweramount":
-                        $this->response = new Svea\HostedService\LowerTransactionResponse($message, $countryCode, $config);
-                        break;    
-                    case "recur":
-                        $this->response = new Svea\HostedService\RecurTransactionResponse($message, $countryCode, $config);
-                        break;    
-                    case "getpaymentmethods":
-                        $this->response = new Svea\HostedService\ListPaymentMethodsResponse($message, $countryCode, $config);
-                        break;
+//                    case "querytransactionid":
+//                        $this->response = new Svea\HostedService\QueryTransactionResponse($message, $countryCode, $config);
+//                        break;
+//                    case "annul":
+//                        $this->response = new Svea\HostedService\AnnulTransactionResponse($message, $countryCode, $config);
+//                        break;                     
+//                    case "credit":
+//                        $this->response = new Svea\HostedService\CreditTransactionResponse($message, $countryCode, $config);
+//                        break;                       
+//                    case "confirm":
+//                        $this->response = new Svea\HostedService\ConfirmTransactionResponse($message, $countryCode, $config);
+//                        break;   
+//                    case "loweramount":
+//                        $this->response = new Svea\HostedService\LowerTransactionResponse($message, $countryCode, $config);
+//                        break;    
+//                    case "recur":
+//                        $this->response = new Svea\HostedService\RecurTransactionResponse($message, $countryCode, $config);
+//                        break;    
+//                    case "getpaymentmethods":
+//                        $this->response = new Svea\HostedService\ListPaymentMethodsResponse($message, $countryCode, $config);
+//                        break;
                     
                     default:
                         throw new Exception("unknown method: $method");

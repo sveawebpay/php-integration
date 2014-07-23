@@ -53,5 +53,10 @@ class QueryTransaction extends HostedRequest {
         $XMLWriter->endDocument();
         
         return $XMLWriter->flush();
-    }     
+    }
+    public function parseResponse($message) {        
+        $countryCode = $this->countryCode;
+        $config = $this->config;
+        return new QueryTransactionResponse($message, $countryCode, $config);
+    }   
 }

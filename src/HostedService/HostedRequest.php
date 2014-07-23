@@ -117,10 +117,8 @@ abstract class HostedRequest {
         curl_close($ch);
         
         // create SveaResponse to handle response
-        $responseObj = new \SimpleXMLElement($responseXML);        
-        $sveaResponse = new \SveaResponse($responseObj, $this->countryCode, $this->config, $this->method);
-
-        return $sveaResponse->response; 
+        $responseObj = new \SimpleXMLElement($responseXML); 
+        return $this->parseResponse( $responseObj );
     }
     
     /**
@@ -132,4 +130,9 @@ abstract class HostedRequest {
      * implemented by child classes, should return the request xml for the method (i.e. "message" in the HostedAdminRequest request wrapper)
      */
     abstract function createRequestXml();    
+    
+    /**
+     * implemented by child classes, should return the request response class for the method
+     */
+    abstract function parseResponse( $response );
 }
