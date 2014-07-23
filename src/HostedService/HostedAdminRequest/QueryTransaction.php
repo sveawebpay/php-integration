@@ -27,40 +27,10 @@ class QueryTransaction extends HostedRequest {
         $this->transactionId = $transactionId;
         return $this;
     }
-    
-    /**
-     * prepares the elements used in the request to svea
-     */
-    public function prepareRequest() {
-        $this->validateRequest();
-
-        $xmlBuilder = new HostedXmlBuilder();
         
-        // get our merchantid & secret
-        $merchantId = $this->config->getMerchantId( \ConfigurationProvider::HOSTED_TYPE,  $this->countryCode);
-        $secret = $this->config->getSecret( \ConfigurationProvider::HOSTED_TYPE, $this->countryCode);
-        
-        // message contains the credit request
-        $messageContents = array(
-            "transactionid" => $this->transactionId
-        ); 
-        $message = $xmlBuilder->getQueryTransactionXML( $messageContents );        
-        
-        // calculate mac
-        $mac = hash("sha512", base64_encode($message) . $secret);
-        
-        // encode the request elements
-        $request_fields = array( 
-            'merchantid' => urlencode($merchantId),
-            'message' => urlencode(base64_encode($message)),
-            'mac' => urlencode($mac)
-        );
-        return $request_fields;
-    }
-    
-    public function validate($self) {
+    public function validateRequestAttributes() {
         $errors = array();
-        $errors = $this->validateTransactionId($self, $errors);
+        $errors = $this->validateTransactionId($this, $errors);
         return $errors;
     }
     
@@ -70,4 +40,18 @@ class QueryTransaction extends HostedRequest {
         }
         return $errors;
     } 
+    
+    public function createRequestXml() {        
+        $XMLWriter = new \XMLWriter();
+
+        $XMLWriter->openMemory();
+        $XMLWriter->setIndent(true);
+        $XMLWriter->startDocument("1.0", "UTF-8");        
+            $XMLWriter->startElement("query");  // note, different than $this->method above   
+                $XMLWriter->writeElement("transactionid",$this->transactionId);
+            $XMLWriter->endElement();
+        $XMLWriter->endDocument();
+        
+        return $XMLWriter->flush();
+    }     
 }

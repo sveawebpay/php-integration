@@ -49,41 +49,10 @@ class ConfirmTransaction extends HostedRequest {
         return $this;
     }
     
-    /**
-     * validates presence of and prepares elements used in the request to Svea
-     */
-    public function prepareRequest() {
-        $this->validateRequest();
-        
-        $xmlBuilder = new HostedXmlBuilder();
-        
-        // get our merchantid & secret
-        $merchantId = $this->config->getMerchantId( \ConfigurationProvider::HOSTED_TYPE,  $this->countryCode);
-        $secret = $this->config->getSecret( \ConfigurationProvider::HOSTED_TYPE, $this->countryCode);
-        
-        // message contains the confirm request
-        $messageContents = array(
-            "transactionid" => $this->transactionId,
-            "capturedate" => $this->captureDate
-        ); 
-        $message = $xmlBuilder->getConfirmTransactionXML( $messageContents );        
-
-        // calculate mac
-        $mac = hash("sha512", base64_encode($message) . $secret);
-        
-        // encode the request elements
-        $request_fields = array( 
-            'merchantid' => urlencode($merchantId),
-            'message' => urlencode(base64_encode($message)),
-            'mac' => urlencode($mac)
-        );
-        return $request_fields;
-    }
-
-    public function validate($self) {
+    public function validateRequestAttributes() {
         $errors = array();
-        $errors = $this->validateTransactionId($self, $errors);
-        $errors = $this->validateCaptureDate($self, $errors);
+        $errors = $this->validateTransactionId($this, $errors);
+        $errors = $this->validateCaptureDate($this, $errors);
         return $errors;
     }
     
@@ -100,4 +69,19 @@ class ConfirmTransaction extends HostedRequest {
         }
         return $errors;
     }       
+
+    public function createRequestXml() {        
+        $XMLWriter = new \XMLWriter();
+
+        $XMLWriter->openMemory();
+        $XMLWriter->setIndent(true);
+        $XMLWriter->startDocument("1.0", "UTF-8");        
+            $XMLWriter->startElement($this->method);   
+                $XMLWriter->writeElement("transactionid",$this->transactionId);
+                $XMLWriter->writeElement("capturedate",$this->captureDate);
+            $XMLWriter->endElement();
+        $XMLWriter->endDocument();
+        
+        return $XMLWriter->flush();
+    }      
 }

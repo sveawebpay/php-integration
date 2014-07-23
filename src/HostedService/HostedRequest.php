@@ -4,7 +4,7 @@ namespace Svea\HostedService;
 require_once SVEA_REQUEST_DIR . '/Includes.php';
 
 /**
- * Hosted Request is the parent of all hosted webservice requests.
+ * HostedRequest is the parent of hosted webservice requests.
  * 
  * @author Kristian Grossman-Madsen
  */
@@ -41,6 +41,30 @@ abstract class HostedRequest {
     }
     
     /**
+     * Validates the request to make sure that all required request attributes 
+     * are present. If not, throws an exception. Actual validation is delegated 
+     * to subclass validateAttributes() implementations.
+     *
+     * @throws ValidationException
+     */
+    public function validateRequest() {
+        $errors = $this->validateRequestAttributes();
+        
+        if (isset($this->countryCode) == FALSE) {                                                        
+            $errors['missing value'] = "countryCode is required. Use function setCountryCode().";
+        }
+        
+        if (count($errors) > 0) {
+            $exceptionString = "";
+            foreach ($errors as $key => $value) {
+                $exceptionString .="-". $key. " : ".$value."\n";
+            }
+
+            throw new \Svea\ValidationException($exceptionString);
+        }    
+    }           
+    
+    /**
      * returns the request fields to post to service
      */
     public function prepareRequest() {
@@ -65,7 +89,6 @@ abstract class HostedRequest {
         );
         return $request_fields;
     }    
-    
     
     /**
      * Performs a request using cURL, parsing the response using SveaResponse 
@@ -101,35 +124,12 @@ abstract class HostedRequest {
     }
     
     /**
-     * Validates the orderBuilder object to make sure that all required settings
-     * are present. If not, throws an exception. Actual validation is delegated
-     * to subclass validate() implementations.
-     *
-     * @throws ValidationException
+     * implemented by child classes, should validate that all required attributes for the method are present
      */
-    public function validateRequest() {
-        // validate sub-class requirements by calling sub-class validate() method
-        $errors = $this->validate($this);
-        
-        // validate HostedRequest requirements
-        if (isset($this->countryCode) == FALSE) {                                                        
-            $errors['missing value'] = "countryCode is required. Use function setCountryCode().";
-        }
-        
-        if (count($errors) > 0) {
-            $exceptionString = "";
-            foreach ($errors as $key => $value) {
-                $exceptionString .="-". $key. " : ".$value."\n";
-            }
-
-            throw new \Svea\ValidationException($exceptionString);
-        }    
-    }       
-
-    abstract function validate($self); // validate is defined by subclasses, should validate all elements required for call is present
+    abstract function validateRequestAttributes();
     
     /**
-     * implemented by child classes, should return the request xml for the method in question (i.e. "message" in the HostedAdminRequest request wrapper)
+     * implemented by child classes, should return the request xml for the method (i.e. "message" in the HostedAdminRequest request wrapper)
      */
     abstract function createRequestXml();    
 }

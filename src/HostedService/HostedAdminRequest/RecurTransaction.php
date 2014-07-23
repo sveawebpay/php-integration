@@ -11,8 +11,9 @@ require_once SVEA_REQUEST_DIR . '/Includes.php';
 class RecurTransaction extends HostedRequest {
 
     protected $subscriptionId;
+    protected $customerRefNo;
     protected $amount;
-
+    
     function __construct($config) {
         $this->method = "recur";
         parent::__construct($config);
@@ -67,45 +68,11 @@ class RecurTransaction extends HostedRequest {
         return $this;
     }
     
-    /**
-     * prepares the elements used in the request to svea
-     */
-    public function prepareRequest() {
-        $this->validateRequest();
-
-        $xmlBuilder = new HostedXmlBuilder();
-        
-        // get our merchantid & secret
-        $merchantId = $this->config->getMerchantId( \ConfigurationProvider::HOSTED_TYPE,  $this->countryCode);
-        $secret = $this->config->getSecret( \ConfigurationProvider::HOSTED_TYPE, $this->countryCode);
-        
-        // message contains the confirm request
-        $messageContents = array(
-            "amount" => $this->amount,
-            "customerrefno" => $this->customerRefNo,
-            "subscriptionid" => $this->subscriptionId
-        ); 
-        if( isset( $this->currency ) ) { $messageContents["currency"] = $this->currency; }
-
-        $message = $xmlBuilder->getRecurTransactionXML( $messageContents );
-
-        // calculate mac
-        $mac = hash("sha512", base64_encode($message) . $secret);
-        
-        // encode the request elements
-        $request_fields = array( 
-            'merchantid' => urlencode($merchantId),
-            'message' => urlencode(base64_encode($message)),
-            'mac' => urlencode($mac)
-        );
-        return $request_fields;
-    }
-
-    public function validate($self) {
+    public function validateRequestAttributes() {
         $errors = array();
-        $errors = $this->validateAmount($self, $errors);
-        $errors = $this->validateCustomerRefNo($self, $errors);
-        $errors = $this->validateSubscriptionId($self, $errors);
+        $errors = $this->validateAmount($this, $errors);
+        $errors = $this->validateCustomerRefNo($this, $errors);
+        $errors = $this->validateSubscriptionId($this, $errors);
         return $errors;
     }
     
@@ -129,4 +96,21 @@ class RecurTransaction extends HostedRequest {
         }
         return $errors;
     }    
+    
+    public function createRequestXml() {        
+        $XMLWriter = new \XMLWriter();
+
+        $XMLWriter->openMemory();
+        $XMLWriter->setIndent(true);
+        $XMLWriter->startDocument("1.0", "UTF-8");        
+            $XMLWriter->startElement($this->method);   
+                $XMLWriter->writeElement("amount",$this->amount);
+                $XMLWriter->writeElement("customerrefno",$this->customerRefNo);
+                $XMLWriter->writeElement("subscriptionid",$this->subscriptionId);
+                if( isset( $this->currency ) ) { $XMLWriter->writeElement("currency",$this->currency); }                 
+            $XMLWriter->endElement();
+        $XMLWriter->endDocument();
+        
+        return $XMLWriter->flush();
+    }        
 }

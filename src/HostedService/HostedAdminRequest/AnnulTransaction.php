@@ -33,9 +33,9 @@ class AnnulTransaction extends HostedRequest {
         return $this;
     }
      
-    public function validate($self) {
+    public function validateRequestAttributes() {
         $errors = array();
-        $errors = $this->validateTransactionId($self, $errors);
+        $errors = $this->validateTransactionId($this, $errors);
         return $errors;
     }
     
@@ -55,7 +55,7 @@ class AnnulTransaction extends HostedRequest {
         $XMLWriter->openMemory();
         $XMLWriter->setIndent(true);
         $XMLWriter->startDocument("1.0", "UTF-8");        
-            $XMLWriter->startElement("annul");   
+            $XMLWriter->startElement($this->method);   
                 $XMLWriter->writeElement("transactionid",$this->transactionId);
             $XMLWriter->endElement();
         $XMLWriter->endDocument();

@@ -79,8 +79,7 @@ class AnnulTransactionTest extends PHPUnit_Framework_TestCase {
         $xmlMessage = new SimpleXMLElement( base64_decode(urldecode($form['message'])) );
 
         $this->assertEquals( "annul", $xmlMessage->getName() );   // root node        
-        $this->assertEquals((string)$transactionId, $xmlMessage->transactionid);
-        
+        $this->assertEquals((string)$transactionId, $xmlMessage->transactionid);   
     }
 
     function test_prepareRequest_missing_transactionId_throws_exception() {
