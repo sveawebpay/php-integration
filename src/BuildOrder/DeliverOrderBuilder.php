@@ -190,11 +190,9 @@ class DeliverOrderBuilder extends OrderBuilder {
         $defaultCaptureDate = explode("T", date('c')); // [0] contains date part
 
         $confirmTransaction = new HostedService\ConfirmTransaction($this->conf);
-        $confirmTransaction
-            ->setCountryCode($this->countryCode)
-            ->setTransactionId($this->orderId)
-            ->setCaptureDate($defaultCaptureDate[0])
-        ;
+        $confirmTransaction->transactionId = $this->orderId;
+        $confirmTransaction->captureDate = $defaultCaptureDate[0];
+        $confirmTransaction->setCountryCode($this->countryCode);
         return $confirmTransaction;
     }    
 

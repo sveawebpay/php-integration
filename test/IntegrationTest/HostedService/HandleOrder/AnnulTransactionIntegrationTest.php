@@ -22,8 +22,8 @@ class AnnulTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
         $transactionId = 987654;
 
         $request = new AnnulTransaction( Svea\SveaConfig::getDefaultConfig() );
+        $request->transactionId = $transactionId;
         $response = $request
-            ->setTransactionId( $transactionId )
             ->setCountryCode( "SE" )
             ->doRequest();
 
@@ -52,8 +52,8 @@ class AnnulTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
         $transactionId = 579929;
 
         $request = new AnnulTransaction( Svea\SveaConfig::getDefaultConfig() );
+        $request->transactionId = $transactionId;
         $response = $request
-            ->setTransactionId( $transactionId )
             ->setCountryCode( "SE" );
     
         $response = $request->doRequest();        

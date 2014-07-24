@@ -35,7 +35,6 @@ class ListPaymentMethodsIntegrationTest extends \PHPUnit_Framework_TestCase {
         // from ListPaymentMethods implementation, tied to clientid
         $this->assertEquals( PaymentMethod::INVOICE, $response->paymentmethods[5]);
         $this->assertEquals( PaymentMethod::PAYMENTPLAN, $response->paymentmethods[6]);                       
-
     }
 }
 ?>
