@@ -15,6 +15,7 @@ class GetPaymentMethods {
     private $config;
     private $countryCode = "SE";    //Default SE
 
+    /** @deprecated 2.0 Use class ListPaymentMethods instead.*/
     function __construct($config) {
         $this->config = $config;
     }
@@ -30,7 +31,8 @@ class GetPaymentMethods {
 
     /**
      * Wrapper for ListPaymentMethods->doRequest
-     */
+     * @deprecated 2.0 Use class ListPaymentMethods instead.
+    */
     public function doRequest() {
         $requestObject = new ListPaymentMethods($this->config);
         $response = $requestObject->setCountryCode($this->countryCode)->doRequest();

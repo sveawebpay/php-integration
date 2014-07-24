@@ -124,15 +124,15 @@ abstract class HostedRequest {
     /**
      * implemented by child classes, should validate that all required attributes for the method are present
      */
-    abstract function validateRequestAttributes();
+    abstract protected function validateRequestAttributes();
     
     /**
      * implemented by child classes, should return the request xml for the method (i.e. "message" in the HostedAdminRequest request wrapper)
      */
-    abstract function createRequestXml();    
+    abstract protected function createRequestXml();    
     
     /**
      * implemented by child classes, should return the request response class for the method
      */
-    abstract function parseResponse( $response );
+    abstract protected function parseResponse( $response );
 }

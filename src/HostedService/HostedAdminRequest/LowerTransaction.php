@@ -13,37 +13,24 @@ require_once SVEA_REQUEST_DIR . '/Includes.php';
  */
 class LowerTransaction extends HostedRequest {
 
+    /** @var string $transactionId  Required. */
     public $transactionId;
+
+    /** @var numeric $amountToLower  Required. Use minor currency (i.e. 1 SEK => 100 in minor currency) */
     public $amountToLower;
     
+    /**
+     * Usage: create an instance, set all required attributes, then call doRequest().
+     * Required: $transactionId, $amountToLower
+     * @param ConfigurationProvider $config instance implementing ConfigurationProvider
+     * @return \Svea\HostedService\LowerTransaction
+     */
     function __construct($config) {
         $this->method = "loweramount";
         parent::__construct($config);
     }
-    /**
-     * Set the id of the transaction to modify. This is received with the 
-     * response from Svea following a successful createOrder request.
-     * 
-     * @param numeric $transactionId
-     * @return \Svea\LowerTransaction
-     */
-//    function setTransactionId( $transactionId ) {
-//      $this->transactionId = $transactionId;
-//      return $this;
-//  }
-    
-    /**
-     * The amount in minor currecy (i.e. 1 SEK => 100)
-     * 
-     * @param numeric $amountInMinorCurrency
-     * @return \Svea\LowerTransaction
-     */
-//    function setAmountToLower( $amountInMinorCurrency ) {
-//      $this->amountToLower = $amountInMinorCurrency;
-//      return $this;
-//  }
-    
-    public function validateRequestAttributes() {
+       
+    protected function validateRequestAttributes() {
         $errors = array();
         $errors = $this->validateTransactionId($this, $errors);
         $errors = $this->validateAmountToLower($this, $errors);
@@ -64,7 +51,7 @@ class LowerTransaction extends HostedRequest {
         return $errors;    
     }    
     
-    public function createRequestXml() {        
+    protected function createRequestXml() {        
         $XMLWriter = new \XMLWriter();
 
         $XMLWriter->openMemory();
@@ -77,8 +64,9 @@ class LowerTransaction extends HostedRequest {
         $XMLWriter->endDocument();
         
         return $XMLWriter->flush();
-    }  
-    public function parseResponse($message) {        
+    }
+    
+    protected function parseResponse($message) {        
         $countryCode = $this->countryCode;
         $config = $this->config;
         return new LowerTransactionResponse($message, $countryCode, $config);

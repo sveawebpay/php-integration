@@ -12,28 +12,21 @@ require_once SVEA_REQUEST_DIR . '/Includes.php';
  */
 class AnnulTransaction extends HostedRequest {
 
-    /** @var String $transactionid */
+    /** @var string $transactionid */
     public $transactionId;
     
     /**
+     * Usage: create an instance, set all required attributes, then call doRequest().
+     * Required: $transactionId
      * @param ConfigurationProvider $config instance implementing ConfigurationProvider
-     * @return \Svea\AnnulTransaction
+     * @return \Svea\HostedService\AnnulTransaction
      */
     function __construct($config) {
         $this->method = "annul";
         parent::__construct($config);
     }
-
-//    /**
-//     * @param string $transactionId
-//     * @return $this
-//     */
-//    function setTransactionId( $transactionId ) {
-//        $this->transactionId = $transactionId;
-//        return $this;
-//    }
-     
-    public function validateRequestAttributes() {
+  
+    protected function validateRequestAttributes() {
         $errors = array();
         $errors = $this->validateTransactionId($this, $errors);
         return $errors;
@@ -46,10 +39,8 @@ class AnnulTransaction extends HostedRequest {
         return $errors;
     }       
 
-    /**
-     * returns xml for hosted webservice "annul" request
-     */
-    public function createRequestXml() {        
+    /** returns xml for hosted webservice "annul" request */
+    protected function createRequestXml() {        
         $XMLWriter = new \XMLWriter();
 
         $XMLWriter->openMemory();
@@ -63,7 +54,7 @@ class AnnulTransaction extends HostedRequest {
         return $XMLWriter->flush();
     }  
     
-    public function parseResponse($message) {        
+    protected function parseResponse($message) {        
         $countryCode = $this->countryCode;
         $config = $this->config;
         return new AnnulTransactionResponse($message, $countryCode, $config);

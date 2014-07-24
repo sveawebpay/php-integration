@@ -12,23 +12,21 @@ require_once SVEA_REQUEST_DIR . '/Includes.php';
  */
 class QueryTransaction extends HostedRequest {
 
+    /** @var string $transactionId  Required. */
     public $transactionId;
     
+    /**
+     * Usage: create an instance, set all required attributes, then call doRequest().
+     * Required: $transactionId
+     * @param ConfigurationProvider $config instance implementing ConfigurationProvider
+     * @return \Svea\HostedService\QueryTransaction
+     */
     function __construct($config) {
         $this->method = "querytransactionid";
         parent::__construct($config);
     }
-
-    /**
-     * @param string $transactionId
-     * @return $this
-     */
-//    function setTransactionId( $transactionId ) {
-//        $this->transactionId = $transactionId;
-//        return $this;
-//    }
         
-    public function validateRequestAttributes() {
+    protected function validateRequestAttributes() {
         $errors = array();
         $errors = $this->validateTransactionId($this, $errors);
         return $errors;
@@ -41,7 +39,7 @@ class QueryTransaction extends HostedRequest {
         return $errors;
     } 
     
-    public function createRequestXml() {        
+    protected function createRequestXml() {        
         $XMLWriter = new \XMLWriter();
 
         $XMLWriter->openMemory();
@@ -54,7 +52,8 @@ class QueryTransaction extends HostedRequest {
         
         return $XMLWriter->flush();
     }
-    public function parseResponse($message) {        
+    
+    protected function parseResponse($message) {        
         $countryCode = $this->countryCode;
         $config = $this->config;
         return new QueryTransactionResponse($message, $countryCode, $config);

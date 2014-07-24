@@ -30,14 +30,7 @@ class AnnulTransactionTest extends PHPUnit_Framework_TestCase {
         $this->annulObject->setCountryCode( $countryCode );
         $this->assertEquals( $countryCode, PHPUnit_Framework_Assert::readAttribute($this->annulObject, 'countryCode') );
     }
-    
-    function test_setTransactionId( ){ 
-        $transactionId = 987654;       
-        $this->annulObject->transactionId = $transactionId;
-
-        $this->assertEquals( $transactionId, PHPUnit_Framework_Assert::readAttribute($this->annulObject, 'transactionId') );
-    }
-              
+                  
     function test_prepareRequest_array_contains_mac_merchantid_message() {
 
         // set up annulTransaction object & get request form

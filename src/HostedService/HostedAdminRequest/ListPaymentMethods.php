@@ -11,12 +11,18 @@ require_once SVEA_REQUEST_DIR . '/Includes.php';
  */
 class ListPaymentMethods extends HostedRequest {
 
+    /**
+     * Usage: create an instance, set all required attributes, then call doRequest().
+     * Required: -
+     * @param ConfigurationProvider $config instance implementing ConfigurationProvider
+     * @return \Svea\HostedService\ListPaymentMethods
+     */
     function __construct($config) {
         $this->method = "getpaymentmethods";
         parent::__construct($config);
     }
     
-    public function validateRequestAttributes() {
+    protected function validateRequestAttributes() {
         $errors = array();
         $errors = $this->validateMerchantId($this, $errors);
         return $errors;
@@ -29,7 +35,7 @@ class ListPaymentMethods extends HostedRequest {
         return $errors;
     }     
 
-    public function createRequestXml() {        
+    protected function createRequestXml() {        
         $XMLWriter = new \XMLWriter();
 
         $XMLWriter->openMemory();
@@ -42,7 +48,8 @@ class ListPaymentMethods extends HostedRequest {
         
         return $XMLWriter->flush();
     }     
-    public function parseResponse($message) {        
+    
+    protected function parseResponse($message) {        
         $countryCode = $this->countryCode;
         $config = $this->config;
         return new ListPaymentMethodsResponse($message, $countryCode, $config);

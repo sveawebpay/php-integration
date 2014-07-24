@@ -4,52 +4,34 @@ namespace Svea\HostedService;
 require_once SVEA_REQUEST_DIR . '/Includes.php';
 
 /**
- * confirmTransaction can be performed on card transaction having the status 
- * AUTHORIZED. This will result in a CONFIRMED transaction that will be
- * captured on the given capturedate.
+ * confirmTransaction can be performed on transactions having the status 
+ * AUTHORIZED at Svea. After as successful request, the transaction will have 
+ * status CONFIRMED and that will be captured on the given capturedate.
  * 
- * Note that this method only supports Card transactions.
+ * Note that this method does not support Direct Bank transactions.
  * 
  * @author Kristian Grossman-Madsen
  */
 class ConfirmTransaction extends HostedRequest {
 
+    /** @var string $transactionId  Required. */
     public $transactionId;
+    
+    /** @var string $captureDate  Required. Use ISO-8601 extended date format (YYYY-MM-DD) */
     public $captureDate;
     
+    /**
+     * Usage: create an instance, set all required attributes, then call doRequest().
+     * Required: $transactionId, $captureDate
+     * @param ConfigurationProvider $config instance implementing ConfigurationProvider
+     * @return \Svea\HostedService\ConfirmTransaction
+     */
     function __construct($config) {
         $this->method = "confirm";
         parent::__construct($config);
     }
-    
-    /**
-     * Set the transaction id, which must have status AUTHORIZED at Svea. After
-     * the request, the transaction will have status CONFIRMED. 
-     * 
-     * Required.
-     * 
-     * @param string $transactionId  
-     * @return $this
-     */
-//    function setTransactionId( $transactionId ) {
-//        $this->transactionId = $transactionId;
-//        return $this;
-//    }
-    
-    /**
-     * Set the date that the transaction will be captured (settled).
-     * 
-     * Required. 
-     * 
-     * @param string $captureDate  ISO-8601 extended date format (YYYY-MM-DD)
-     * @return $this
-     */
-//    function setCaptureDate( $captureDate ) {
-//        $this->captureDate = $captureDate;
-//        return $this;
-//    }
-    
-    public function validateRequestAttributes() {
+        
+    protected function validateRequestAttributes() {
         $errors = array();
         $errors = $this->validateTransactionId($this, $errors);
         $errors = $this->validateCaptureDate($this, $errors);
@@ -70,7 +52,8 @@ class ConfirmTransaction extends HostedRequest {
         return $errors;
     }       
 
-    public function createRequestXml() {        
+    /** returns xml for hosted webservice "confirm" request */
+    protected function createRequestXml() {        
         $XMLWriter = new \XMLWriter();
 
         $XMLWriter->openMemory();
@@ -85,7 +68,7 @@ class ConfirmTransaction extends HostedRequest {
         return $XMLWriter->flush();
     }
     
-    public function parseResponse($message) {        
+    protected function parseResponse($message) {        
         $countryCode = $this->countryCode;
         $config = $this->config;
         return new ConfirmTransactionResponse($message, $countryCode, $config);
