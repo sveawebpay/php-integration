@@ -6,39 +6,38 @@ require_once 'WebServiceResponse.php';
 /**
  * Handles the Svea Webservice GetPyamentPlanParamsEU request response.
  * 
- * For attribute descriptions, see formatObject() method documentation
+ *  formatObject() sets the following PaymentPlanParamsResponse attributes:
+ * 
+ *      $response->accepted              // true iff request was accepted by the service 
+ *      $response->errormessage          // may be set iff accepted above is false
+ *
+ *      $response->resultcode            // 27xxx, reason
+ *      $response->campaignCodes[0..n]   // all available campaign payment plans in an array
+ *         ->campaignCode                // numeric campaign code identifier
+ *         ->description                 // localised description string
+ *         ->paymentPlanType             // human readable identifier (not guaranteed unique)
+ *         ->contractLengthInMonths
+ *         ->monthlyAnnuityFactor        // pricePerMonth = price * monthlyAnnuityFactor + notificationFee
+ *         ->initialFee
+ *         ->notificationFee
+ *         ->interestRatePercent
+ *         ->numberOfInterestFreeMonths
+ *         ->numberOfPaymentFreeMonths
+ *         ->fromAmount                  // amount lower limit for plan availability
+ *         ->toAmount                    // amount upper limit for plan availability
+ *         ->campaignCode                // numeric campaign code identifier  
+ * 
  * For possible resultcodes (27xxx), see svea webpay_eu_webservice documentation
  * 
  * @author anne-hal, Kristian Grossman-Madsen
  */
 class PaymentPlanParamsResponse extends WebServiceResponse{
     
-    /** int $resultcode  response specific result code */
+    /** @var int $resultcode  response specific result code */
     public $resultcode;    
-    /** CampaignCode[] $campaignCodes  array of CampaignCode */
-    public $campaignCodes = array();
+    /** @var \Svea\WebService\CampaignCode $campaignCodes  array of CampaignCode */
+    public $campaignCodes = array();    
 
-    /**
-     *  formatObject sets the following PaymentPlanParamsResponse atrributes:
-     * 
-     *  $response->accepted                 // true iff request was accepted by the service 
-     *  $response->errormessage             // may be set iff accepted above is false
-     *
-     *  $response->resultcode               // 27xxx, reason
-     *  $response->campaignCodes[0..n]      // all available campaign payment plans in an array
-     *     ->campaignCode                      // numeric campaign code identifier
-     *     ->description                       // localised description string
-     *     ->paymentPlanType                   // human readable identifier (not guaranteed unique)
-     *     ->contractLengthInMonths
-     *     ->monthlyAnnuityFactor              // pricePerMonth = price * monthlyAnnuityFactor + notificationFee
-     *     ->initialFee
-     *     ->notificationFee
-     *     ->interestRatePercent
-     *     ->numberOfInterestFreeMonths
-     *     ->numberOfPaymentFreeMonths
-     *     ->fromAmount                        // amount lower limit for plan availability
-     *     ->toAmount                          // amount upper limit for plan availability
-     */
     protected function formatObject($message) {
         
         // was request accepted?
