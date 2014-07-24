@@ -4,24 +4,20 @@ namespace Svea\WebService;
 require_once SVEA_REQUEST_DIR . '/Includes.php';
 
 /** 
- * Handles the various Svea WebPay WebserviceEU responses
+ * Handles the various Svea WebPay WebServiceEU request responses. The respective
+ * child response classes parses the service response and sets public attributes 
+ * that may be inspected.
  * 
- * @author Anneli Halld'n, Daniel Brolund, Kristian Grossman-Masen for Svea Webpay
+ * @author Anneli Halld'n, Daniel Brolund, Kristian Grossman-Madsen for Svea WebPay
  */
 abstract class WebServiceResponse {
 
-    /** @var bool $accepted  true iff the request succeeded */
+    /** @var bool $accepted  true if the request succeeded, else false */
     public $accepted;
     
     /** @var string $errormessage  set iff the request returned an unsuccessful response, see also the returncode attribute */
     public $errormessage;   
 
-    function __construct($message) {
-        $this->formatObject($message);  
-    }
-    
-    /**
-     * Implemented by subclasses. Parses response and sets attributes.
-     */
-    abstract protected function formatObject($message);
+    /** @var int $resultcode  response specific result code */
+    public $resultcode;    
 }
