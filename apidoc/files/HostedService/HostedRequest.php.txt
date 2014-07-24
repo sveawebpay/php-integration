@@ -4,7 +4,7 @@ namespace Svea\HostedService;
 require_once SVEA_REQUEST_DIR . '/Includes.php';
 
 /**
- * Hosted Request is the parent of all hosted webservice requests.
+ * HostedRequest is the parent of hosted webservice requests.
  * 
  * @author Kristian Grossman-Madsen
  */
@@ -41,6 +41,56 @@ abstract class HostedRequest {
     }
     
     /**
+     * Validates the request to make sure that all required request attributes 
+     * are present. If not, throws an exception. Actual validation is delegated 
+     * to subclass validateAttributes() implementations.
+     *
+     * @throws ValidationException
+     */
+    public function validateRequest() {
+        $errors = $this->validateRequestAttributes();
+        
+        if (isset($this->countryCode) == FALSE) {                                                        
+            $errors['missing value'] = "countryCode is required. Use function setCountryCode().";
+        }
+        
+        if (count($errors) > 0) {
+            $exceptionString = "";
+            foreach ($errors as $key => $value) {
+                $exceptionString .="-". $key. " : ".$value."\n";
+            }
+
+            throw new \Svea\ValidationException($exceptionString);
+        }    
+    }           
+    
+    /**
+     * returns the request fields to post to service
+     */
+    public function prepareRequest() {
+        $this->validateRequest();
+
+        $xmlBuilder = new HostedXmlBuilder();
+        
+        // get our merchantid & secret
+        $merchantId = $this->config->getMerchantId( \ConfigurationProvider::HOSTED_TYPE,  $this->countryCode);
+        $secret = $this->config->getSecret( \ConfigurationProvider::HOSTED_TYPE, $this->countryCode);
+        
+        $message = $this->createRequestXml();        
+        
+        // calculate mac
+        $mac = hash("sha512", base64_encode($message) . $secret);
+        
+        // encode the request elements
+        $request_fields = array( 
+            'merchantid' => urlencode($merchantId),
+            'message' => urlencode(base64_encode($message)),
+            'mac' => urlencode($mac)
+        );
+        return $request_fields;
+    }    
+    
+    /**
      * Performs a request using cURL, parsing the response using SveaResponse 
      * and returning the resulting HostedAdminResponse instance.
      * 
@@ -67,37 +117,22 @@ abstract class HostedRequest {
         curl_close($ch);
         
         // create SveaResponse to handle response
-        $responseObj = new \SimpleXMLElement($responseXML);        
-        $sveaResponse = new \SveaResponse($responseObj, $this->countryCode, $this->config, $this->method);
-
-        return $sveaResponse->response; 
+        $responseObj = new \SimpleXMLElement($responseXML); 
+        return $this->parseResponse( $responseObj );
     }
     
     /**
-     * Validates the orderBuilder object to make sure that all required settings
-     * are present. If not, throws an exception. Actual validation is delegated
-     * to subclass validate() implementations.
-     *
-     * @throws ValidationException
+     * implemented by child classes, should validate that all required attributes for the method are present
      */
-    public function validateRequest() {
-        // validate sub-class requirements by calling sub-class validate() method
-        $errors = $this->validate($this);
-        
-        // validate HostedRequest requirements
-        if (isset($this->countryCode) == FALSE) {                                                        
-            $errors['missing value'] = "countryCode is required. Use function setCountryCode().";
-        }
-        
-        if (count($errors) > 0) {
-            $exceptionString = "";
-            foreach ($errors as $key => $value) {
-                $exceptionString .="-". $key. " : ".$value."\n";
-            }
-
-            throw new \Svea\ValidationException($exceptionString);
-        }    
-    }       
-
-    abstract function validate($self); // validate is defined by subclasses, should validate all elements required for call is present
+    abstract protected function validateRequestAttributes();
+    
+    /**
+     * implemented by child classes, should return the request xml for the method (i.e. "message" in the HostedAdminRequest request wrapper)
+     */
+    abstract protected function createRequestXml();    
+    
+    /**
+     * implemented by child classes, should return the request response class for the method
+     */
+    abstract protected function parseResponse( $response );
 }

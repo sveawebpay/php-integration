@@ -33,23 +33,21 @@ require_once 'WebServiceResponse.php';
  */
 class PaymentPlanParamsResponse extends WebServiceResponse{
     
-    /** @var int $resultcode  response specific result code */
-    public $resultcode;    
     /** @var \Svea\WebService\CampaignCode $campaignCodes  array of CampaignCode */
     public $campaignCodes = array();    
 
-    protected function formatObject($message) {
+    public function __construct($response) {
         
         // was request accepted?
-        $this->accepted = $message->GetPaymentPlanParamsEuResult->Accepted;
-        $this->errormessage = isset($message->GetPaymentPlanParamsEuResult->ErrorMessage) ? $message->GetPaymentPlanParamsEuResult->ErrorMessage : "";
+        $this->accepted = $response->GetPaymentPlanParamsEuResult->Accepted;
 
-        // set response resultcode
-        $this->resultcode = $message->GetPaymentPlanParamsEuResult->ResultCode;
+        // set response resultcode & errormessage, if any
+        $this->resultcode = $response->GetPaymentPlanParamsEuResult->ResultCode;  
+        $this->errormessage = isset($response->GetPaymentPlanParamsEuResult->ErrorMessage) ? $response->GetPaymentPlanParamsEuResult->ErrorMessage : "";
         
         // set response attributes
         if ($this->accepted == 1) {
-            foreach ($message->GetPaymentPlanParamsEuResult->CampaignCodes->CampaignCodeInfo as $code) {
+            foreach ($response->GetPaymentPlanParamsEuResult->CampaignCodes->CampaignCodeInfo as $code) {
                 
                 $campaign = new CampaignCode();
                 $campaign->campaignCode = $code->CampaignCode;                      // numeric campaign code identifier

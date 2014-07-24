@@ -55,6 +55,7 @@ Previous versions of the package can be accessed through <a href="https://github
     * [7.6 WebPayAdmin::updateOrderRows()](https://github.com/sveawebpay/php-integration#76-webpayadminupdateorderrows)
 * [8. SveaResponse](https://github.com/sveawebpay/php-integration#8-svearesponse)
     * [8.1. Parsing an asynchronous service response](https://github.com/sveawebpay/php-integration#81-parsing-an-asynchronous-service-response)
+    * [8.2. Response accepted and result code](https://github.com/sveawebpay/php-integration#82-response-accepted-and-result-code)
 * [9. Additional Developer Resources and notes](https://github.com/sveawebpay/php-integration#9-additional-developer-resources-and-notes)
     * [9.1 Helper class methods](https://github.com/sveawebpay/php-integration#91-helper-class-methods)
     * [9.2 Inspect prepareRequest(), validateOrder() methods](https://github.com/sveawebpay/php-integration#92-inspect-preparerequest-validateorder-methods)
@@ -1221,7 +1222,7 @@ See <a href="http://htmlpreview.github.io/?https://raw.github.com/sveawebpay/php
 *example to come later*
 
 [<< To index](https://github.com/sveawebpay/php-integration#index)
-## 8. SveaResponse 
+## 8. SveaResponse and response classes
 
 ### 8.1. Parsing an asynchronous service response
 All synchronous service request responses are parsed by *SveaResponse* and structured into response objects by the request method itself. You do not need to invoke the SveaResponse object to for synchronous service requests.
@@ -1234,14 +1235,26 @@ First, create an instance of SveaResponse, pass it the resulting xml response as
 Params:
 * The POST or GET message sent to the return url is an associative array with the keys "response", "merchantid" and "mac".
 * CountryCode, i.e. "SE"
-* Config(https://github.com/sveawebpay/php-integration#configuration), an object implementing the ConfigurationProvider interface.
+* [Config](https://github.com/sveawebpay/php-integration#configuration), an object implementing the ConfigurationProvider interface.
 
+Example of how to process the service request response received in the $_REQUEST superglobal:
 ```php
   $response = (new SveaResponse($_REQUEST,$countryCode,$config))->getResponse();
 ```
 
 #### 8.1.2
 An example of an asynchronous (card) order can be found in the <a href="https://github.com/sveawebpay/php-integration/blob/master/example/cardorder/" target="_blank">example/cardorder</a> folder.
+
+### 8.2 Response accepted and result code
+In the integration package all service response objects implement the following attributes, that may be checked to determine the outcome of a request:
+
+* `accepted`      -- if set to logical true if the request was accepted by Svea
+* `resultcode`    -- if set to a value >0, indicates a problem with the service request 
+* `errormessage`  -- a human readable version of the resultcode, only set if resultcode >0
+
+As the request responses from the various Svea webservices varies in implementation, we strongly suggest i.e. checking the "accepted" attribute for logical truth instead of checking if it holds a particular value or type. I.e. use `if( $response->accepted == true )` instead of ~~`if( $response->accepted === 1)`or `if( $response->accepted > 0)`~~ etc.
+
+See the respective response classes for further information on response attributes, possible resultcodes etc.
 
 [<< To index](https://github.com/sveawebpay/php-integration#index)
 ## 9. Additional Developer Resources and notes

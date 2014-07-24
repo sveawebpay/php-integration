@@ -14,8 +14,8 @@ class SveaConfig {
     const SWP_PROD_URL = "https://webpay.sveaekonomi.se/webpay/payment";
     const SWP_TEST_WS_URL = "https://webservices.sveaekonomi.se/webpay_test/SveaWebPay.asmx?WSDL";
     const SWP_PROD_WS_URL = "https://webservices.sveaekonomi.se/webpay/SveaWebPay.asmx?WSDL";
-    const SWP_TEST_HOSTED_ADMIN_URL = "https://test.sveaekonomi.se/webpay/rest/";
-    const SWP_PROD_HOSTED_ADMIN_URL = "https://webpay.sveaekonomi.se/webpay/rest/";
+    const SWP_TEST_HOSTED_ADMIN_URL = "https://test.sveaekonomi.se/webpay/rest/"; // ends with "/" as we need to add request method
+    const SWP_PROD_HOSTED_ADMIN_URL = "https://webpay.sveaekonomi.se/webpay/rest/"; // ends with "/" as we need to add request method
     
     /** 
      * Replace the provided Svea test account credentials with your own to use
