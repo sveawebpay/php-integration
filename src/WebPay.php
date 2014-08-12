@@ -16,7 +16,7 @@ In general, a request to Svea using the WebPay API starts out with you creating 
 
 The WebPay API consists of the entrypoint methods in the WebPay and WebPayAdmin classes. These instantiate order builder classes in the Svea namespace, or in some cases request builder classes in the WebService, HostedService and AdminService sub-namespaces.
 
-Given an instance, you then use method calls in the respective classes to populate the order or request instance. For orders, you then choose the payment method and get a request class in return. Send the request and get a service response from Svea in return. In general, the request classes will validate that all required attributes are present, and if not throw an exception stating what is missing for the request in question. 
+Given an instance, you then use method calls in the respective classes to populate the order or request instance. For orders, you then choose the payment method and get a request class in return. Send the request and get a service response from Svea in return. In general, the request classes will validate that all required attributes are present, and if not throw an exception stating what is missing for the request in question.
 
 ### Synchronous and asynchronous requests
 Most service requests are synchronous and return a response immediately. For asynchronous hosted service payment requests, the customer will be redirected to i.e. the selected card payment provider or bank, and you will get a callback to a return url, where where you receive and parse the response.
@@ -27,18 +27,18 @@ The package makes use of PHP namespaces, grouping most classes under the namespa
 The underlying services and methods are contained in the Svea sub-namespaces WebService, HostedService and AdminService, and may be accessed, though their api and interfaces are subject to change in the future.
 
 ### Documentation format
-See the provided README.md file for an overview and examples how to utilise the WebPay and WebPayAdmin classes. The complete WebPay Integration package, including the underlying Svea service classes, methods and structures, is documented by generated documentation in the apidoc folder.   
+See the provided README.md file for an overview and examples how to utilise the WebPay and WebPayAdmin classes. The complete WebPay Integration package, including the underlying Svea service classes, methods and structures, is documented by generated documentation in the apidoc folder.
 
 ### Fluid API
 The WebPay and WebPayAdmin entrypoint methods are built as a fluent API so you can use method chaining when implementing it in your code. We recommend making sure that your IDE code completion is enabled to make full use of this feature.
 
 ### Development environment
 The Svea WebPay PHP integration package is developed and tested using NetBeans IDE 7.3.1 with the phpunit 3.7.24 plugin.
- * 
- * @api 
- * @version 2.0.1
+ *
+ * @api
+ * @version 2.1.0
  * @package WebPay
- * 
+ *
  * @author Anneli Halld'n, Daniel Brolund, Kristian Grossman-Madsen for Svea WebPay
  */
 class WebPay {
@@ -46,9 +46,9 @@ class WebPay {
     /**
      * createOrder  -- create order and pay via invoice, payment plan, card, or direct bank payment methods
      *
-     * See the CreateOrderBuilder class for more info on methods used to specify order contents 
+     * See the CreateOrderBuilder class for more info on methods used to specify order contents
      * and chosing payment type, followed by sending the request to Svea and parsing the response.
-     * 
+     *
      * @return Svea\CreateOrderBuilder
      * @param ConfigurationProvider $config  instance implementing ConfigurationProvider Interface
      * @throws Exception
@@ -59,19 +59,19 @@ class WebPay {
 
         return new Svea\CreateOrderBuilder($config);
     }
-    
+
     /**
      * deliverOrder (without orderRows) -- deliver in full an invoice or payment plan order, confirm a card order
-     * 
+     *
      * deliverOrder (with orderRows) -- (deprecated) partially deliver, change or credit an invoice or payment plan order, depending on set options
-     * 
-     * See the DeliverOrderBuilder class for more info on required methods used to i.e. specify order rows, 
-     * how to send the request to Svea, as well as the final response type. 
-     * 
+     *
+     * See the DeliverOrderBuilder class for more info on required methods used to i.e. specify order rows,
+     * how to send the request to Svea, as well as the final response type.
+     *
      * See also WebPayAdmin::deliverOrderRows for the preferred way to partially deliver an invoice or payment plan order.
-     * 
+     *
      * @see \WebPayAdmin::deliverOrderRows() WebPayAdmin::deliverOrderRows()
-     * 
+     *
      * @return Svea\DeliverOrderBuilder
      * @param ConfigurationProvider $config  instance implementing ConfigurationProvider Interface
      * @throws Exception
@@ -81,16 +81,16 @@ class WebPay {
 
         return new Svea\DeliverOrderBuilder($config);
     }
-          
+
     /**
      * getAddresses -- fetch validated addresses associated with a given customer identity
-     * 
-     * See the GetAddresses request class for more info on required methods, 
+     *
+     * See the GetAddresses request class for more info on required methods,
      * how to send the request to Svea, as well as the final response type.
-     * 
-     * The GetAddresses service is only applicable for SE, NO and DK customers and accounts. 
+     *
+     * The GetAddresses service is only applicable for SE, NO and DK customers and accounts.
      * In Norway, GetAddresses may only be performed on company customers.
-     * 
+     *
      * @return Svea\WebService\GetAddresses
      * @param ConfigurationProvider $config  instance implementing ConfigurationProvider Interface
      */
@@ -103,9 +103,9 @@ class WebPay {
     /**
      * getPaymentPlanParams -- fetch current campaigns (payment plans) for a given client, used by i.e. paymentplan orders
      *
-     * See the GetPaymentPlanParams request class for more info on required methods, 
+     * See the GetPaymentPlanParams request class for more info on required methods,
      * how to send the request to Svea, as well as the final response type.
-     * 
+     *
      * @return Svea\WebService\GetPaymentPlanParams
      * @param ConfigurationProvider $config  instance implementing ConfigurationProvider
      */
@@ -114,16 +114,16 @@ class WebPay {
 
         return new Svea\WebService\GetPaymentPlanParams($config);
     }
-    
+
     /**
      * getPaymentMethods -- fetch available payment methods for a given client, used to define i.e. paymentmethod in payments
-     * 
-     * See the GetPaymentMethods request class for more info on required methods, 
+     *
+     * See the GetPaymentMethods request class for more info on required methods,
      * how to send the request to Svea, as well as the final response type.
-     * 
+     *
      * @deprecated 2.0.0 use WebPayAdmin::listPaymentMethods() instead, which returns a response object instead of an array
      * @see \Svea\HostedService\ListPaymentMethods() \Svea\HostedService\ListPaymentMethods()
-     * 
+     *
      * @param ConfigurationProvider $config  instance implementing ConfigurationProvider
      * @return string[] array of available paymentmethods for this ConfigurationProvider
      */
@@ -147,13 +147,13 @@ class WebPay {
      *
      * @param float $price
      * @param object $paymentPlanParamsResonseObject
-     * @return Svea\WebService\PaymentPlanPricePerMonth 
+     * @return Svea\WebService\PaymentPlanPricePerMonth
      *
      */
     public static function paymentPlanPricePerMonth($price, $paymentPlanParamsResponseObject) {
         return new Svea\WebService\PaymentPlanPricePerMonth($price, $paymentPlanParamsResponseObject);
     }
-  
+
     /**
      * Start building Request to close orders. Only supports Invoice or Payment plan orders.
      * @deprecated 2.0.0 -- use WebPayAdmin::cancelOrder instead, which supports both synchronous and asynchronous orders
@@ -165,28 +165,28 @@ class WebPay {
 
         return new Svea\CloseOrderBuilder($config);
     }
-    
+
     /**
      * The WebPay::listPaymentMethods method is used to fetch all available paymentmethods for a given ConfigurationProvider and country.
-     * 
+     *
      * Use the WebPayAdmin::listPaymentMethods() entrypoint to get an instance of
      * ListPaymentMethods. Then provide more information about the transaction and
-     * send the request using ListPaymentMethod methods. 
-     * 
+     * send the request using ListPaymentMethod methods.
+     *
      * Following the ->doRequest call you receive an instance of ListPaymentMethodsResponse.
-     * 
+     *
      * @see \Svea\HostedService\ListPaymentMethods \Svea\HostedService\ListPaymentMethods
      * @see \Svea\HostedService\ListPaymentMethodsResponse \Svea\HostedService\ListPaymentMethodsResponse
-     * 
+     *
      * @param ConfigurationProvider $configs
      * @return Svea\HostedService\ListPaymentMethods
      */
     static function listPaymentMethods($config) {
         return new Svea\HostedService\ListPaymentMethods($config);
-    }  
-        
+    }
+
     /** helper function, throws exception if no config is given */
     private static function throwMissingConfigException() {
-        throw new Exception('-missing parameter: This method requires an ConfigurationProvider object as parameter. Create a class that implements class ConfigurationProvider. Set returnvalues to configuration values. Create an object from that class. Alternative use static function from class SveaConfig e.g. SveaConfig::getDefaultConfig(). You can replace the default config values to return your own config values.');   
+        throw new Exception('-missing parameter: This method requires an ConfigurationProvider object as parameter. Create a class that implements class ConfigurationProvider. Set returnvalues to configuration values. Create an object from that class. Alternative use static function from class SveaConfig e.g. SveaConfig::getDefaultConfig(). You can replace the default config values to return your own config values.');
     }
 }
