@@ -25,11 +25,12 @@ class RecurTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
         $amount = 100;
                 
         $request = new RecurTransaction( Svea\SveaConfig::getDefaultConfig() );
+        $request->subscriptionId = $subscriptionId;
+        $request->customerRefNo = $customerRefNo;
+        $request->amount = $amount;        
+        $request->currency = $currency;
+        
         $response = $request  
-            ->setSubscriptionId( $subscriptionId )
-            ->setCustomerRefNo( $customerRefNo )
-            ->setAmount( $amount )
-            ->setCurrency( $currency )
             ->setCountryCode( "SE" )
             ->doRequest();
 
@@ -79,11 +80,12 @@ class RecurTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
 
         // below is actual test, shouldn't need to change it
         $request = new RecurTransaction( Svea\SveaConfig::getDefaultConfig() );
+        $request->subscriptionId = $subscriptionId;
+        $request->customerRefNo = $new_customerrefno;
+        $request->amount = $new_amount;        
+        $request->currency = $currency;
+        
         $response = $request                
-            ->setSubscriptionId( $subscriptionid )
-            ->setCurrency( $currency )
-            ->setCustomerRefNo( $new_customerrefno )
-            ->setAmount( $new_amount )
             ->setCountryCode( "SE" )
             ->doRequest();        
         

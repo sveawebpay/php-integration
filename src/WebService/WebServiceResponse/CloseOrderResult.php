@@ -10,15 +10,12 @@ require_once 'WebServiceResponse.php';
  */
 class CloseOrderResult extends WebServiceResponse {
 
-    /** type $resultcode  response specific result code */
-    public $resultcode;
-
-    protected function formatObject($message) {
+    public function __construct($response) {
         // was request accepted?
-        $this->accepted = $message->CloseOrderEuResult->Accepted; // false or 1
-        $this->errormessage = isset($message->CloseOrderEuResult->ErrorMessage) ? $message->CloseOrderEuResult->ErrorMessage : "";        
+        $this->accepted = $response->CloseOrderEuResult->Accepted; // false or 1
+        $this->errormessage = isset($response->CloseOrderEuResult->ErrorMessage) ? $response->CloseOrderEuResult->ErrorMessage : "";        
 
         // set response resultcode
-        $this->resultcode = $message->CloseOrderEuResult->ResultCode;
+        $this->resultcode = $response->CloseOrderEuResult->ResultCode;
     }
 }

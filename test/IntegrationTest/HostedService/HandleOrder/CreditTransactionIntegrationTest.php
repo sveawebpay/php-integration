@@ -23,9 +23,9 @@ class CreditTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
         $amount = 100;
                 
         $request = new CreditTransaction( Svea\SveaConfig::getDefaultConfig() );
+        $request->transactionId = $transactionId;
+        $request->creditAmount = $amount;
         $response = $request
-            ->setTransactionId( $transactionId )
-            ->setCreditAmount( $amount )
             ->setCountryCode( "SE" )
             ->doRequest();
 
@@ -54,8 +54,9 @@ class CreditTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
         $amount = 100;
                 
         $request = new CreditTransaction( Svea\SveaConfig::getDefaultConfig() );
+        $request->transactionId = $transactionId;
+        $request->creditAmount = $amount;
         $response = $request
-            ->setTransactionId( $transactionId )
             ->setCreditAmount( $amount )
             ->setCountryCode( "SE" )
             ->doRequest();        

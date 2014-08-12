@@ -62,9 +62,9 @@ class LowerTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
         $amountToLower = 100;
                 
         $request = new LowerTransaction( Svea\SveaConfig::getDefaultConfig() );
+        $request->transactionId = $transactionId;
+        $request->amountToLower = $amountToLower;
         $response = $request  
-            ->setTransactionId( $transactionId )
-            ->setAmountToLower( $amountToLower )
             ->setCountryCode( "SE" )
             ->doRequest();
 
@@ -105,9 +105,9 @@ class LowerTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
         // - 3000 => success, Svea status ANNULLED
         
         $request = new LowerTransaction( Svea\SveaConfig::getDefaultConfig() );
+        $request->transactionId = $transactionId;
+        $request->amountToLower = $amountToLower;
         $response = $request                
-            ->setTransactionId( $transactionId )
-            ->setAmountToLower( $amountToLower )
             ->setCountryCode( "SE" )
             ->doRequest();        
         

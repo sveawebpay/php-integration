@@ -15,7 +15,7 @@ require_once SVEA_REQUEST_DIR . '/Includes.php';
  * hosted payment request, a response xml message is returned to the specified
  * return url, where it can be parsed using i.e. the SveaResponse class.
  * 
- * Alternatively, you can use the getPaymentURL() to get a response with
+ * Alternatively, you can use the getPaymentUrl() to get a response with
  * an URL that the customer can visit later to complete the payment at a later
  * time.
  * 
@@ -183,7 +183,7 @@ class HostedPayment {
      * @return HostedPaymentResponse
      * @throws ValidationException
      */
-    public function getPaymentURL() {
+    public function getPaymentUrl() {
         
         // follow the procedure set out in getPaymentForm, then 
         // 

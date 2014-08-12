@@ -2,11 +2,12 @@
 namespace Svea\HostedService;
 
 /**
- * Rewrites formatted object to xml format to send to external service.
+ * Formats request xml in preparation of sending request to hosted webservice.
  * 
- * this file details the xml request format for the hosted payment & admin service
- * as detailed in "Technical Specification WebPay v 2.6.8" as of 140403
+ * These methods writes requests to hosted payment & hosted admin services
+ * as detailed in "Technical Specification WebPay v 2.6.8" as of 140403.
  * 
+ * @author Kristian Grossman-Madsen
  */
 class HostedXmlBuilder {
 
@@ -298,141 +299,8 @@ class HostedXmlBuilder {
 
             $this->XMLWriter->endElement();
         }
-    }
-    
-    /*
-     * write xml for webservice "credit" call, used by CreditTransaction
-     *
-     * @param elements -- associative array of element names and values
-     * 
-     */
-    public function getCreditTransactionXML( $elements ){
-        $this->setBaseXML();
-        $this->XMLWriter->startElement("credit");
-   
-        foreach( $elements as $element => $value ) {
-            $this->XMLWriter->writeElement($element,$value);
-        }        
-
-        $this->XMLWriter->endElement();
-        $this->XMLWriter->endDocument();
+    } 
         
-        return $this->XMLWriter->flush();
-    }
-
-    /*
-     * write xml for webservice "querytransactionid" call, used by QueryTransaction
-     *
-     * @param elements -- associative array of element names and values
-     * 
-     */
-    public function getAnnulTransactionXML( $elements ){
-        $this->setBaseXML();
-        $this->XMLWriter->startElement("annul");
-   
-        foreach( $elements as $element => $value ) {
-            $this->XMLWriter->writeElement($element,$value);
-        }
-
-        $this->XMLWriter->endElement();
-        $this->XMLWriter->endDocument();
-        
-        return $this->XMLWriter->flush();
-    }    
-    
-    /*
-     * write xml for webservice "annul" call, used by AnnulTransaction
-     *
-     * @param elements -- associative array of element names and values
-     * 
-     */
-    public function getQueryTransactionXML( $elements ){
-        $this->setBaseXML();
-        $this->XMLWriter->startElement("query");
-   
-        foreach( $elements as $element => $value ) {
-            $this->XMLWriter->writeElement($element,$value);
-        }
-
-        $this->XMLWriter->endElement();
-        $this->XMLWriter->endDocument();
-        
-        return $this->XMLWriter->flush();
-    }
-    
-    /*
-     * write xml for webservice "confirm" call, used by ConfirmTransaction
-     *
-     * @param elements -- associative array of element names and values
-     * 
-     */
-    public function getConfirmTransactionXML( $elements ){
-        $this->setBaseXML();
-        $this->XMLWriter->startElement("confirm");
-   
-        foreach( $elements as $element => $value ) {
-            $this->XMLWriter->writeElement($element,$value);
-        }
-
-        $this->XMLWriter->endElement();
-        $this->XMLWriter->endDocument();
-        
-        return $this->XMLWriter->flush();
-    }
-
-    /*
-     * write xml for webservice "loweramount" call, used by LowerTransaction
-     *
-     * @param elements -- associative array of element names and values
-     * 
-     */
-    public function getLowerTransactionXML( $elements ){
-        $this->setBaseXML();
-        $this->XMLWriter->startElement("loweramount");
-   
-        foreach( $elements as $element => $value ) {
-            $this->XMLWriter->writeElement($element,$value);
-        }
-
-        $this->XMLWriter->endElement();
-        $this->XMLWriter->endDocument();
-        
-        return $this->XMLWriter->flush();
-    }
-    
-    /*
-     * write xml for webservice "recur" call, used by RecurTransaction
-     * 
-     * @param elements -- associative array of element names and values
-     */
-    public function getRecurTransactionXML( $elements ){
-        $this->setBaseXML();
-        $this->XMLWriter->startElement("recur");
-   
-        foreach( $elements as $element => $value ) {
-            $this->XMLWriter->writeElement($element,$value);
-        }
-
-        $this->XMLWriter->endElement();
-        $this->XMLWriter->endDocument();
-        
-        return $this->XMLWriter->flush();
-    }    
-
-    public function getListPaymentMethodsXML( $elements ){
-        $this->setBaseXML();
-        $this->XMLWriter->startElement("getpaymentmethods");
-   
-        foreach( $elements as $element => $value ) {
-            $this->XMLWriter->writeElement($element,$value);
-        }
-
-        $this->XMLWriter->endElement();
-        $this->XMLWriter->endDocument();
-        
-        return $this->XMLWriter->flush();
-    }    
-    
     /*
      * write xml for webservice getpaymentmethods
      */

@@ -30,18 +30,12 @@ class AnnulTransactionTest extends PHPUnit_Framework_TestCase {
         $this->annulObject->setCountryCode( $countryCode );
         $this->assertEquals( $countryCode, PHPUnit_Framework_Assert::readAttribute($this->annulObject, 'countryCode') );
     }
-    
-    function test_setTransactionId( ){ 
-        $transactionId = 987654;       
-        $this->annulObject->setTransactionId( $transactionId );
-        $this->assertEquals( $transactionId, PHPUnit_Framework_Assert::readAttribute($this->annulObject, 'transactionId') );
-    }
-              
+                  
     function test_prepareRequest_array_contains_mac_merchantid_message() {
 
         // set up annulTransaction object & get request form
         $transactionId = 987654;       
-        $this->annulObject->setTransactionId( $transactionId );
+        $this->annulObject->transactionId = $transactionId;
 
         $countryCode = "SE";
         $this->annulObject->setCountryCode($countryCode);
@@ -58,7 +52,7 @@ class AnnulTransactionTest extends PHPUnit_Framework_TestCase {
 
         // set up creditTransaction object & get request form
         $transactionId = 987654;       
-        $this->annulObject->setTransactionId( $transactionId );
+        $this->annulObject->transactionId = $transactionId;
 
         $countryCode = "SE";
         $this->annulObject->setCountryCode($countryCode);
@@ -79,8 +73,7 @@ class AnnulTransactionTest extends PHPUnit_Framework_TestCase {
         $xmlMessage = new SimpleXMLElement( base64_decode(urldecode($form['message'])) );
 
         $this->assertEquals( "annul", $xmlMessage->getName() );   // root node        
-        $this->assertEquals((string)$transactionId, $xmlMessage->transactionid);
-        
+        $this->assertEquals((string)$transactionId, $xmlMessage->transactionid);   
     }
 
     function test_prepareRequest_missing_transactionId_throws_exception() {

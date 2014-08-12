@@ -4,108 +4,44 @@ namespace Svea\HostedService;
 require_once SVEA_REQUEST_DIR . '/Includes.php';
 
 /**
- * Recur a Card transaction. 
+ * Performs a recurring card transaction, using a previously set up subscription id.
+ * 
+ * Note: If recur is to an international acquirer, the currency for the recurring transaction must be the same as for the registration transaction.
+ * Note: If subscriptiontype is either RECURRING or RECURRINGCAPTURE, the amount must be given in the same currency as the initial transaction. 
  * 
  * @author Kristian Grossman-Madsen
  */
 class RecurTransaction extends HostedRequest {
 
-    protected $subscriptionId;
-    protected $amount;
+    /** @var string $subscriptionId  Required. This is the subscription id returned with the inital transaction that set up the subscription response. */
+    public $subscriptionId;
 
+    /** @var string $customerRefNo  Required. This is the new unique customer reference number for the resulting recur transaction. */
+    public $customerRefNo;
+    
+    /** @var numeric $amount  Required. Use minor currency (i.e. 1 SEK => 100 in minor currency) */
+    public $amount;
+    
+    /** @var string $currency  Optional. */
+    public $currency;
+
+    /**
+     * Usage: create an instance, set all required attributes, then call doRequest().
+     * Required: $subscriptionId, $customerRefNo, $amount
+     * Optional: $currency
+     * @param ConfigurationProvider $config instance implementing ConfigurationProvider
+     * @return \Svea\HostedService\RecurTransaction
+     */
     function __construct($config) {
         $this->method = "recur";
         parent::__construct($config);
     }
     
-    /**
-     * Optional
-     * 
-     * If recur is to an international acquirer the currency for the recurring transaction must be the same as for the registration transaction.
-     * 
-     * @param string $currency
-     * @return \Svea\RecurTransaction
-     */
-    function setCurrency( $currency ) {
-        $this->currency = $currency;
-        return $this;
-    }
-    
-    /**
-     * Required 
-     * 
-     * Note that if subscriptiontype is either RECURRING or RECURRINGCAPTURE, 
-     * the amount must be given in the same currency as the initial transaction. 
-     * 
-     * @param int $amount  amount in minor currency
-     * @return \Svea\RecurTransaction
-     */
-    function setAmount( $amount ) {
-        $this->amount = $amount;
-        return $this;
-    }
-
-    /**
-     * Required - the new unique customer reference number.
-     * 
-     * @param string $customerRefNo
-     * @return \Svea\RecurTransaction
-     */
-    function setCustomerRefNo( $customerRefNo ) {
-        $this->customerRefNo = $customerRefNo;
-        return $this;
-    }
-    
-    /**
-     * Required - the subscription id returned with the inital transaction response.
-     *  
-     * @param int $subscriptionId
-     * @return \Svea\RecurTransaction
-     */
-    function setSubscriptionId( $subscriptionId ) {
-        $this->subscriptionId = $subscriptionId;
-        return $this;
-    }
-    
-    /**
-     * prepares the elements used in the request to svea
-     */
-    public function prepareRequest() {
-        $this->validateRequest();
-
-        $xmlBuilder = new HostedXmlBuilder();
-        
-        // get our merchantid & secret
-        $merchantId = $this->config->getMerchantId( \ConfigurationProvider::HOSTED_TYPE,  $this->countryCode);
-        $secret = $this->config->getSecret( \ConfigurationProvider::HOSTED_TYPE, $this->countryCode);
-        
-        // message contains the confirm request
-        $messageContents = array(
-            "amount" => $this->amount,
-            "customerrefno" => $this->customerRefNo,
-            "subscriptionid" => $this->subscriptionId
-        ); 
-        if( isset( $this->currency ) ) { $messageContents["currency"] = $this->currency; }
-
-        $message = $xmlBuilder->getRecurTransactionXML( $messageContents );
-
-        // calculate mac
-        $mac = hash("sha512", base64_encode($message) . $secret);
-        
-        // encode the request elements
-        $request_fields = array( 
-            'merchantid' => urlencode($merchantId),
-            'message' => urlencode(base64_encode($message)),
-            'mac' => urlencode($mac)
-        );
-        return $request_fields;
-    }
-
-    public function validate($self) {
+    protected function validateRequestAttributes() {
         $errors = array();
-        $errors = $this->validateAmount($self, $errors);
-        $errors = $this->validateCustomerRefNo($self, $errors);
-        $errors = $this->validateSubscriptionId($self, $errors);
+        $errors = $this->validateAmount($this, $errors);
+        $errors = $this->validateCustomerRefNo($this, $errors);
+        $errors = $this->validateSubscriptionId($this, $errors);
         return $errors;
     }
     
@@ -129,4 +65,27 @@ class RecurTransaction extends HostedRequest {
         }
         return $errors;
     }    
+    
+    protected function createRequestXml() {        
+        $XMLWriter = new \XMLWriter();
+
+        $XMLWriter->openMemory();
+        $XMLWriter->setIndent(true);
+        $XMLWriter->startDocument("1.0", "UTF-8");        
+            $XMLWriter->startElement($this->method);   
+                $XMLWriter->writeElement("amount",$this->amount);
+                $XMLWriter->writeElement("customerrefno",$this->customerRefNo);
+                $XMLWriter->writeElement("subscriptionid",$this->subscriptionId);
+                if( isset( $this->currency ) ) { $XMLWriter->writeElement("currency",$this->currency); }                 
+            $XMLWriter->endElement();
+        $XMLWriter->endDocument();
+        
+        return $XMLWriter->flush();
+    }
+    
+    protected function parseResponse($message) {        
+        $countryCode = $this->countryCode;
+        $config = $this->config;
+        return new RecurTransactionResponse($message, $countryCode, $config);
+    }   
 }

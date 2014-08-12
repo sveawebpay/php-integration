@@ -4,26 +4,28 @@ namespace Svea;
 /**
  * Class IndividualCustomer, a customer information container for private individuals.
  * 
- * Note that "required" below as a requirement only when the IndividualCustomer is used 
- * to identify the customer when using the invoice or payment plan payment methods. 
+ * The IndividualCustomer attributes are used by the invoice and payment plan payment methods
+ * to identify the customer. Which attributes are required varies according to country.
+ * 
  * (For card and direct bank orders, adding customer information to the order is optional.)
  * 
-$order->
-    addCustomerDetails(
-        WebPayItem::individualCustomer()
-            ->setNationalIdNumber(194605092222) // required for individual customers in SE, NO, DK, FI
-            ->setInitials("SB")                 // required for individual customers in NL
-            ->setBirthDate(1923, 12, 20)        // required for individual customers in NL and DE
-            ->setName("Tess", "Testson")        // required for individual customers in NL and DE
-            ->setStreetAddress("Gatan", 23)     // required in NL and DE
-            ->setZipCode(9999)                  // required in NL and DE
-            ->setLocality("Stan")               // required in NL and DE
-            ->setEmail("test@svea.com")         // optional but desirable
-            ->setIpAddress("123.123.123")       // optional but desirable
-            ->setCoAddress("c/o Eriksson")      // optional
-            ->setPhoneNumber(999999)            // optional
-    )
-;
+ * $order->
+ *     addCustomerDetails(
+ *         WebPayItem::individualCustomer()
+ *             ->setNationalIdNumber(194605092222) // required for individual customers in SE, NO, DK, FI
+ *             ->setInitials("SB")                 // required for individual customers in NL
+ *             ->setBirthDate(1923, 12, 20)        // required for individual customers in NL and DE
+ *             ->setName("Tess", "Testson")        // required for individual customers in NL and DE
+ *             ->setStreetAddress("Gatan", 23)     // required in NL and DE
+ *             ->setZipCode(9999)                  // required in NL and DE
+ *             ->setLocality("Stan")               // required in NL and DE
+ *             ->setEmail("test@svea.com")         // optional but desirable
+ *             ->setIpAddress("123.123.123")       // optional but desirable
+ *             ->setCoAddress("c/o Eriksson")      // optional
+ *             ->setPhoneNumber(999999)            // optional
+ *     )
+ * ;
+ * 
  * @author anne-hal, Kristian Grossman-Madsen
  */
 class IndividualCustomer {

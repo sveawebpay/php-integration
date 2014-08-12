@@ -39,12 +39,6 @@ class CreditOrderRowsBuilderTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals($country, $this->creditOrderRowsObject->countryCode);        
     }
     
-    public function test_creditOrderRowsBuilder_setOrderType() {
-        $orderType = \ConfigurationProvider::INVOICE_TYPE;
-        $this->creditOrderRowsObject->setOrderType($orderType);
-        $this->assertEquals($orderType, $this->creditOrderRowsObject->orderType);        
-    }
-    
     public function test_creditOrderRowsBuilder_setInvoiceDistributionType() {
         $distributionType = \DistributionType::POST;
         $this->creditOrderRowsObject->setInvoiceDistributionType($distributionType);

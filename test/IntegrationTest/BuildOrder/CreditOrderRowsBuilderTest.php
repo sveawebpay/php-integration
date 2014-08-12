@@ -361,7 +361,7 @@ class CreditOrderRowsBuilderIntegrationTest extends PHPUnit_Framework_TestCase {
                 ->usePaymentMethod( PaymentMethod::KORTCERT )
                     ->setPayPageLanguage($orderLanguage)
                     ->setReturnUrl($returnUrl)
-                    ->getPaymentURL();
+                    ->getPaymentUrl();
 
         print_r( $orderResponse );
         $this->assertEquals(1, $orderResponse->accepted);

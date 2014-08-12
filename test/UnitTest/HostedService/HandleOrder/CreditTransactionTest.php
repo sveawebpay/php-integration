@@ -29,27 +29,15 @@ class CreditTransactionTest extends PHPUnit_Framework_TestCase {
         $this->creditObject->setCountryCode( $countryCode );
         $this->assertEquals( $countryCode, PHPUnit_Framework_Assert::readAttribute($this->creditObject, 'countryCode') );
     }
-    
-    function test_setTransactionId( ){
-        $transactionId = 987654;       
-        $this->creditObject->setTransactionId( $transactionId );
-        $this->assertEquals( $transactionId, PHPUnit_Framework_Assert::readAttribute($this->creditObject, 'transactionId') );
-    }
-    
-    function test_setCreditAmount() {
-        $creditAmount = 100;
-        $this->creditObject->setCreditAmount( $creditAmount );
-        $this->assertEquals( $creditAmount, PHPUnit_Framework_Assert::readAttribute($this->creditObject, 'creditAmount') );
-    }
               
     function test_prepareRequest_array_contains_mac_merchantid_message() {
 
         // set up creditTransaction object & get request form
         $transactionId = 987654;       
-        $this->creditObject->setTransactionId( $transactionId );
+        $this->creditObject->transactionId = $transactionId;
 
         $creditAmount = 100;
-        $this->creditObject->setCreditAmount( $creditAmount );
+        $this->creditObject->creditAmount = $creditAmount;
         
         $countryCode = "SE";
         $this->creditObject->setCountryCode($countryCode);
@@ -66,10 +54,10 @@ class CreditTransactionTest extends PHPUnit_Framework_TestCase {
 
         // set up creditTransaction object & get request form
         $transactionId = 987654;       
-        $this->creditObject->setTransactionId( $transactionId );
+        $this->creditObject->transactionId = $transactionId;
 
         $creditAmount = 100;
-        $this->creditObject->setCreditAmount( $creditAmount );
+        $this->creditObject->creditAmount = $creditAmount;
         
         $countryCode = "SE";
         $this->creditObject->setCountryCode($countryCode);
@@ -103,7 +91,7 @@ class CreditTransactionTest extends PHPUnit_Framework_TestCase {
         );
         
         $creditAmount = 100;
-        $this->creditObject->setCreditAmount( $creditAmount );
+        $this->creditObject->creditAmount = $creditAmount;
         
         $countryCode = "SE";
         $this->creditObject->setCountryCode($countryCode);
@@ -119,7 +107,7 @@ class CreditTransactionTest extends PHPUnit_Framework_TestCase {
         );        
         
         $transactionId = 987654;       
-        $this->creditObject->setTransactionId( $transactionId );
+        $this->creditObject->transactionId = $transactionId;
 
         $countryCode = "SE";
         $this->creditObject->setCountryCode($countryCode);

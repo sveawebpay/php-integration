@@ -29,27 +29,15 @@ class LowerTransactionTest extends PHPUnit_Framework_TestCase {
         $this->lowerTransactionObject->setCountryCode( $countryCode ); 
         $this->assertEquals( $countryCode, PHPUnit_Framework_Assert::readAttribute($this->lowerTransactionObject, 'countryCode') );
     }
-    
-    function test_setTransactionId( ){
-        $transactionId = 987654;       
-        $this->lowerTransactionObject->setTransactionId( $transactionId );
-        $this->assertEquals( $transactionId, PHPUnit_Framework_Assert::readAttribute($this->lowerTransactionObject, 'transactionId') );
-    }
-    
-    function test_setAmountToLower() {
-        $amountToLower = 100;
-        $this->lowerTransactionObject->setAmountToLower( $amountToLower );
-        $this->assertEquals( $amountToLower, PHPUnit_Framework_Assert::readAttribute($this->lowerTransactionObject, 'amountToLower') );
-    }
-              
+                
     function test_prepareRequest_array_contains_mac_merchantid_message() {
 
         // set up lowerTransaction object & get request form
         $transactionId = 987654;       
-        $this->lowerTransactionObject->setTransactionId( $transactionId );
+        $this->lowerTransactionObject->transactionId = $transactionId;
 
         $amountToLower = 100;
-        $this->lowerTransactionObject->setAmountToLower( $amountToLower );
+        $this->lowerTransactionObject->amountToLower = $amountToLower;
         
         $countryCode = "SE";
         $this->lowerTransactionObject->setCountryCode($countryCode);
@@ -66,10 +54,10 @@ class LowerTransactionTest extends PHPUnit_Framework_TestCase {
 
         // set up lowerTransaction object & get request form
         $transactionId = 987654;       
-        $this->lowerTransactionObject->setTransactionId( $transactionId );
+        $this->lowerTransactionObject->transactionId = $transactionId;
 
         $amountToLower = 100;
-        $this->lowerTransactionObject->setAmountToLower( $amountToLower );
+        $this->lowerTransactionObject->amountToLower = $amountToLower;
      
         $countryCode = "SE";
         $this->lowerTransactionObject->setCountryCode($countryCode);
@@ -102,7 +90,7 @@ class LowerTransactionTest extends PHPUnit_Framework_TestCase {
         );
         
         $amountToLower = 100;
-        $this->lowerTransactionObject->setAmountToLower( $amountToLower );
+        $this->lowerTransactionObject->amountToLower = $amountToLower;
      
         $countryCode = "SE";
         $this->lowerTransactionObject->setCountryCode($countryCode);
@@ -119,7 +107,7 @@ class LowerTransactionTest extends PHPUnit_Framework_TestCase {
         );
         
         $transactionId = 987654;       
-        $this->lowerTransactionObject->setTransactionId( $transactionId );
+        $this->lowerTransactionObject->transactionId = $transactionId;
 
         $countryCode = "SE";
         $this->lowerTransactionObject->setCountryCode($countryCode);

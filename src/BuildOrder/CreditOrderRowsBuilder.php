@@ -4,35 +4,66 @@ namespace Svea;
 require_once SVEA_REQUEST_DIR . '/Includes.php';
 
 /**
- * CreditOrderRowsBuilder is used to credit individual order rows in an order. 
- * 
- * For Invoice orders, the order row status of the order is updated
- * to reflect the new status of the order rows.
- * 
- * For Card and Direct bank orders, individual order rows will still reflect the 
- * status they got in order creation, even if orders have since been credited.
+ * Credit order rows in a delivered invoice order, a charged card order or 
+ * a direct bank order. Supports Invoice, Card and Direct Bank orders.
+ * (Payment Plan orders are not supported, please contact the Svea customer 
+ * service to credit a Payment Plan order.)
+
+ * For Invoice orders, the serverside order row status of the invoice is updated
+ * to reflect the new status of the order rows. Note that for Card and Direct 
+ * bank orders the serverside order row status will not be updated.
  *  
- * Use setInvoiceId() or setOrderId() to specify the Svea invoice or order id 
- * for invoice and card/direct bank orders, respectively.
+ * Use setRowToCredit() or setRowsToCredit() to specify order rows to credit. 
+ * The given row numbers must correspond with the serverside row numbers. 
+ * 
+ * For card or direct bank orders, it is required to use addNumberedOrderRow() 
+ * or addNumberedOrderRows() to pass in a copy of the serverside order row data.
+ *  
+ * Should you wish to add additional credit order rows not found in the original 
+ * order, you may add them using addCreditOrderRow() or addCreditOrderRows(). 
+ * These rows will then be credited in addition to the rows specified using 
+ * setRowsToCredit.
+ *
+ * Use setInvoiceId() to set the invoice to credit. Use setOrderId() to set the 
+ * card or direct bank transaction to credit.
  *
  * Use setCountryCode() to specify the country code matching the original create
  * order request.
  * 
- * Use setRowToCredit or setRowsToCredit() to specify the order row(s) to credit. The order numbers
- * should correspond to those returned by i.e. WebPayAdmin::queryOrder;
+ * Then use either creditInvoiceOrderRows(), creditCardOrderRows() or 
+ * creditDirectBankOrderRows(), which ever matches the payment method used in 
+ * the original order request.
  * 
- * For card or direct bank orders, use addNumberedOrderRow() or addNumberedOrderRows() to pass 
- * in order rows (from i.e. queryOrder) that will be matched with set rows to cancel.
+ * The final doRequest() will send the request to Svea, and returns either a
+ * CreditOrderRowsResponse or a CreditTransactionResponse.
+ * 
+ * Then provide more information about the transaction and send the request using 
+ * creditOrderRowsBuilder methods:
+ * 
+ * ->setInvoiceId()                 (required for invoice orders)
+ * ->setInvoiceDistributionType()   (required for invoice orders)
+ * ->setOrderId()                   (required for card and direct bank orders)
+ * ->setCountryCode()               (required)
+ * ->setRowToCredit()               (required, one or more)
+ * ->setRowsToCredit()              (optional)
+ * ->addNumberedOrderRow()          (card and direct bank only, one or more)
+ * ->addNumberedOrderRows()         (card and direct bank only, optional)
+ * ->addCreditOrderRow()            (optional, use if you want to specify new credit rows)
+ * ->addCreditOrderRows()           (optional, use if you want to specify new credit rows)
  *  
- * Should you wish to add additional credit order rows not found in the original order, you may
- * add them using addCreditOrderRow() or addCreditOrderRows(). These will be added to the rows
- * specified using setRow(s)ToCredit.
- *
- * Then use either creditInvoiceOrderRows(), creditCardOrderRows() or creditDirectBankOrderRows(), 
- * which ever matches the payment method used in the original order request.
+ * Finish by selecting the correct ordertype and perform the request:
+ * ->creditInvoiceOrderRows() | creditCardOrderRows()| creditDirectBankOrderRows()
+ *   ->doRequest()
+ *  
+ * The final doRequest() returns either a CreditOrderRowsResponse or a CreditTransactionResponse.
  * 
- * The final doRequest() will send the creditOrderRows request to Svea, and the 
- * resulting response code specifies the outcome of the request. 
+ * @see \Svea\CreditOrderRowsBuilder \Svea\CreditOrderRowsBuilder
+ * @see \Svea\AdminService\CreditOrderRowsResponse \Svea\AdminService\CreditOrderRowsResponse
+ * @see \Svea\HostedService\CreditTransactionResponse \Svea\HostedService\CreditTransactionResponse
+ *  
+ * @param ConfigurationProvider $config  instance implementing ConfigurationProvider
+ * @return Svea\CreditOrderRowsBuilder
+ * @throws ValidationException
  * 
  * @author Kristian Grossman-Madsen for Svea WebPay
  */
@@ -40,13 +71,28 @@ class CreditOrderRowsBuilder {
 
     /** @var ConfigurationProvider $conf  */
     public $conf;
+
+    /** @var string $orderType -- one of ConfigurationProvider::INVOICE_TYPE, ::HOSTED_ADMIN_TYPE */
+    public $orderType;    
     
     /** @var OrderRows[] $creditOrderRows  any additional new order rows to credit */
     public $creditOrderRows;
 
     /** @var NumberedOrderRows[] $numberedOrderRows  numbered order rows passed in for hosted service orders */
     public $numberedOrderRows;
+    
+    /** @var numeric @invoiceId  invoice id as returned in the deliverOrder request response */
+    public $invoiceId;
+    
+    /** @var numeric $orderId  card/direct bank order transaction id as returned in the createOrder request response,  */
+    public $orderId;   
+    
+    /** @var string $countryCode */
+    public $countryCode;
 
+    /**@var string  "Post" or "Email" */
+    public $distributionType;    
+    
     public function __construct($config) {
         $this->conf = $config;
         $this->rowsToCredit = array();         
@@ -55,7 +101,11 @@ class CreditOrderRowsBuilder {
     }        
 
     /**
-     * Required. Use same countryCode as in createOrder request.
+     * Required -- use same countryCode as in createOrder request
+     * 
+     * Use setCountryCode() to specify the country code matching the original 
+     * createOrder request.
+     * 
      * @param string $countryCode
      * @return $this
      */
@@ -63,23 +113,13 @@ class CreditOrderRowsBuilder {
         $this->countryCode = $countryCodeAsString;
         return $this;
     }
-    /** @var string $countryCode */
-    public $countryCode;
 
     /**
-     * Required.
-     * @param string $orderType -- one of ConfigurationProvider::INVOICE_TYPE, ::PAYMENTPLAN_TYPE
-     * @return $this
-     */
-    public function setOrderType($orderTypeAsConst) {
-        $this->orderType = $orderTypeAsConst;
-        return $this;
-    }
-    /** @var string $orderType -- one of ConfigurationProvider::INVOICE_TYPE, ::PAYMENTPLAN_TYPE */
-    public $orderType;    
-
-    /**
-     * Required for CreditInvoiceOrder() -- use InvoiceId recieved with deliverOrder response.
+     * Required for CreditInvoiceOrder() -- use invoice id recieved with deliverOrder response.
+     * 
+     * Use setInvoiceId() to set the invoice to credit. Use setOrderId() to set the 
+     * card or direct bank transaction to credit.
+     * 
      * @param numeric $invoiceIdAsString
      * @return $this
      */
@@ -87,11 +127,10 @@ class CreditOrderRowsBuilder {
         $this->invoiceId = $invoiceIdAsString;
         return $this;
     }
-    /** numeric $orderId  Svea order id to query, as returned in the createOrder request response, either a transactionId or a SveaOrderId */
-    public $invoiceId;
    
     /**
      * Required for CreditCardOrder() -- use the order id (transaction id) received with the createOrder response.
+     * 
      * @param numeric $invoiceIdAsString
      * @return $this
      */
@@ -99,12 +138,10 @@ class CreditOrderRowsBuilder {
         $this->orderId = $invoiceIdAsString;
         return $this;
     }
-    /** numeric $orderId  Svea order id to query, as returned in the createOrder request response, either a transactionId or a SveaOrderId */
-    public $orderId;
-   
     
     /**
-     * Invoice payments only! Required.
+     * Required for CreditInvoiceOrder() -- must match the invoice distribution type for the order
+     * 
      * @param string DistributionType $distributionTypeAsConst  i.e. DistributionType::POST|DistributionType::EMAIL
      * @return $this
      */
@@ -122,13 +159,15 @@ class CreditOrderRowsBuilder {
         $this->distributionType = $distributionTypeAsConst;
         return $this;
     }
-    /**
-     * @var string  "Post" or "Email"
-     */
-    public $distributionType;    
         
     /**
-     * Required.
+     * Required -- a row number to credit
+     * 
+     * Use setRowToCredit() or setRowsToCredit() to specify order rows to credit. 
+     * The given row numbers must correspond with the serverside row numbers. 
+     * For card or direct bank orders, must match an order row specified using
+     * addNumberedOrderRow() or addNumberedOrderRows().
+     * 
      * @param numeric $rowNumber
      * @return $this
      */
@@ -138,7 +177,13 @@ class CreditOrderRowsBuilder {
     }    
     
     /**
-     * Convenience method to provide several row numbers at once.
+     * Optional -- convenience method to provide several row numbers at once.
+     * 
+     * Use setRowToCredit() or setRowsToCredit() to specify order rows to credit. 
+     * The given row numbers must correspond with the serverside row numbers. 
+     * For card or direct bank orders, must match an order row specified using
+     * addNumberedOrderRow() or addNumberedOrderRows().
+     * 
      * @param int[] $rowNumbers
      * @return $this
      */
@@ -179,9 +224,15 @@ class CreditOrderRowsBuilder {
      * When crediting card or direct bank order rows, you must pass in information about the row
      * along with the request. The rows are then matched with the order rows specified
      * using setRow(s)ToCredit(). 
+     *   
+     * Use the WebPayAdmin::queryOrder() entrypoint to get information about the order,
+     * the queryOrder response numberedOrderRows attribute contains the order rows and
+     * their numbers.
      * 
-     * Note: the card or direct bank order does not update the state of any cancelled order rows, only
-     * the total order amount to be charged.     
+     * When used with card or direct bank orders the following limitations apply: 
+     * You need to supply the NumberedOrderRows on which to operate. These may be 
+     * fetched using the queryOrder method, but if the order has been edited after 
+     * creation they may not be accurate.
      * 
      * @param \Svea\NumberedOrderRow $numberedOrderRows instance of NumberedOrderRow
      * @return $this
@@ -193,6 +244,19 @@ class CreditOrderRowsBuilder {
     
     /**
      * CreditCardOrderRows, CreditDirectBankOrderRows: Optional - convenience method to provide several numbered order rows at once.
+
+     * When crediting card or direct bank order rows, you must pass in information about the row
+     * along with the request. The rows are then matched with the order rows specified
+     * using setRow(s)ToCredit(). 
+     *   
+     * Use the WebPayAdmin::queryOrder() entrypoint to get information about the order,
+     * the queryOrder response numberedOrderRows attribute contains the order rows and
+     * their numbers.
+     * 
+     * When used with card or direct bank orders the following limitations apply: 
+     * You need to supply the NumberedOrderRows on which to operate. These may be 
+     * fetched using the queryOrder method, but if the order has been edited after 
+     * creation they may not be accurate.
      * 
      * @param \Svea\NumberedOrderRow[] $numberedOrderRows array of NumberedOrderRow
      * @return $this
@@ -207,7 +271,7 @@ class CreditOrderRowsBuilder {
      * @return CreditOrderRowsRequest 
      */
     public function creditInvoiceOrderRows() {
-        $this->setOrderType(\ConfigurationProvider::INVOICE_TYPE );
+        $this->orderType = \ConfigurationProvider::INVOICE_TYPE;
         return new AdminService\CreditOrderRowsRequest($this);
     }
     
@@ -218,17 +282,15 @@ class CreditOrderRowsBuilder {
      * @throws ValidationException  if addNumberedOrderRows() has not been used.
      */
     public function creditCardOrderRows() {
-        $this->setOrderType(\ConfigurationProvider::HOSTED_ADMIN_TYPE);
+        $this->orderType = \ConfigurationProvider::HOSTED_ADMIN_TYPE;
                 
         $this->validateCreditCardOrderRows();
         $sumOfRowAmounts = $this->calculateSumOfRowAmounts( $this->rowsToCredit, $this->numberedOrderRows, $this->creditOrderRows );
         
         $creditTransaction = new HostedService\CreditTransaction($this->conf);
-        $creditTransaction
-            ->setTransactionId($this->orderId)
-            ->setCountryCode($this->countryCode)
-            ->setCreditAmount($sumOfRowAmounts*100) // *100, as setAmountToLower wants minor currency
-        ;           
+        $creditTransaction->transactionId = $this->orderId;
+        $creditTransaction->creditAmount = $sumOfRowAmounts*100; // *100, as setAmountToLower wants minor currency
+        $creditTransaction->setCountryCode($this->countryCode);
         return $creditTransaction;
     }
     
@@ -241,7 +303,8 @@ class CreditOrderRowsBuilder {
     public function creditDirectBankOrderRows() {        
         return $this->creditCardOrderRows();        
     }
-    
+
+    /** @internal */
     private function validateCreditCardOrderRows() {    
         if( !isset($this->orderId) ) {
             $exceptionString = "orderId is required for creditCardOrderRows(). Use method setOrderId().";
@@ -258,6 +321,7 @@ class CreditOrderRowsBuilder {
         }
     }
 
+    /** @internal */
     private function calculateSumOfRowAmounts( $rowIndexes, $numberedRows, $creditOrderRows ) {        
         $sum = 0.0;
         $unique_indexes = array_unique( $rowIndexes );

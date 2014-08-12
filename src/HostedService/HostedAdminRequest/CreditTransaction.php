@@ -5,81 +5,33 @@ require_once SVEA_REQUEST_DIR . '/Includes.php';
 
 /**
  * creditTransaction can be used to credit transactions. Only transactions that
- * have reached the status SUCCESS can be credited.
+ * have reached the status SUCCESS at Svea can be credited.
  * 
  * @author Kristian Grossman-Madsen
  */
 class CreditTransaction extends HostedRequest {
 
-    protected $transactionId;
-    protected $creditAmount;
+    /** @var string $transactionId  Required. */
+    public $transactionId;
+
+    /** @var numeric $creditAmount  Required. Use minor currency (i.e. 1 SEK => 100 in minor currency) */
+    public $creditAmount;
     
+    /**
+     * Usage: create an instance, set all required attributes, then call doRequest().
+     * Required: $transactionId, $creditAmount
+     * @param ConfigurationProvider $config instance implementing ConfigurationProvider
+     * @return \Svea\HostedService\CreditTransaction
+     */
     function __construct($config) {
         $this->method = "credit";
         parent::__construct($config);
     }
-
-    /**
-     * Set the transaction id, which must have status SUCCESS at Svea.
-     * 
-     * Required.
-     * 
-     * @param string $transactionId
-     * @return $this
-     */
-    function setTransactionId( $transactionId ) {
-        $this->transactionId = $transactionId;
-        return $this;
-    }
     
-    /**
-     * Set the amount to credit.
-     * 
-     * Required.
-     * 
-     * @param int $creditAmount  amount to credit, in minor currency (i.e. 1 SEK => 100 in minor currency)
-     * @return $this
-     */
-    function setCreditAmount( $creditAmount ) {
-        $this->creditAmount = $creditAmount;
-        return $this;
-    }
-    
-    /**
-     * prepares the elements used in the request to svea
-     */
-    public function prepareRequest() {
-        $this->validateRequest();
-        
-        $xmlBuilder = new HostedXmlBuilder();
-        
-        // get our merchantid & secret
-        $merchantId = $this->config->getMerchantId( \ConfigurationProvider::HOSTED_TYPE,  $this->countryCode);
-        $secret = $this->config->getSecret( \ConfigurationProvider::HOSTED_TYPE, $this->countryCode);
-        
-        // message contains the credit request
-        $messageContents = array(
-            "transactionid" => $this->transactionId,
-            "amounttocredit" => $this->creditAmount
-        ); 
-        $message = $xmlBuilder->getCreditTransactionXML( $messageContents );        
-
-        // calculate mac
-        $mac = hash("sha512", base64_encode($message) . $secret);
-        
-        // encode the request elements
-        $request_fields = array( 
-            'merchantid' => urlencode($merchantId),
-            'message' => urlencode(base64_encode($message)),
-            'mac' => urlencode($mac)
-        );
-        return $request_fields;
-    }
-    
-    public function validate($self) {
+    protected function validateRequestAttributes() {
         $errors = array();
-        $errors = $this->validateTransactionId($self, $errors);
-        $errors = $this->validateCreditAmount($self, $errors);
+        $errors = $this->validateTransactionId($this, $errors);
+        $errors = $this->validateCreditAmount($this, $errors);
         return $errors;
     }
     
@@ -96,4 +48,25 @@ class CreditTransaction extends HostedRequest {
         }
         return $errors;    
     }
+    
+    protected function createRequestXml() {        
+        $XMLWriter = new \XMLWriter();
+
+        $XMLWriter->openMemory();
+        $XMLWriter->setIndent(true);
+        $XMLWriter->startDocument("1.0", "UTF-8");        
+            $XMLWriter->startElement($this->method);   
+                $XMLWriter->writeElement("transactionid",$this->transactionId);
+                $XMLWriter->writeElement("amounttocredit",$this->creditAmount);
+            $XMLWriter->endElement();
+        $XMLWriter->endDocument();
+        
+        return $XMLWriter->flush();
+    }    
+
+    protected function parseResponse($message) {        
+        $countryCode = $this->countryCode;
+        $config = $this->config;
+        return new CreditTransactionResponse($message, $countryCode, $config);
+    }   
 }

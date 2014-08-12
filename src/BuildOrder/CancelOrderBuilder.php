@@ -106,6 +106,8 @@ class CancelOrderBuilder {
     public function cancelCardOrder() {
         $this->orderType = \ConfigurationProvider::HOSTED_ADMIN_TYPE;
         $annulTransaction = new HostedService\AnnulTransaction($this->conf);
-        return $annulTransaction->setTransactionId($this->orderId)->setCountryCode($this->countryCode);
+        $annulTransaction->transactionId = $this->orderId;
+        $annulTransaction->setCountryCode($this->countryCode);
+        return $annulTransaction;
     }  
 }
