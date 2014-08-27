@@ -35,11 +35,11 @@ class CreditOrderRowsRequest extends AdminServiceRequest {
      * @return Svea\AdminSoap\CreditOrderRowsRequest
      * @throws Svea\ValidationException
      */
-    public function prepareRequest() {        
+    public function prepareRequest() {
                    
         $this->validateRequest();
         
-        foreach( $this->orderBuilder->creditOrderRows as $orderRow ) {      
+        foreach( $this->orderBuilder->creditOrderRows as $orderRow ) {
 
             // handle different ways to spec an orderrow            
             // inc + ex

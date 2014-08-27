@@ -6,8 +6,7 @@ require_once SVEA_REQUEST_DIR . '/Includes.php';
 /**
  * Credit order rows in a delivered invoice order, a charged card order or 
  * a direct bank order. Supports Invoice, Card and Direct Bank orders.
- * (Payment Plan orders are not supported, please contact the Svea customer 
- * service to credit a Payment Plan order.)
+
  * 
  * To credit an order row in full, you specify the index of the order row to 
  * credit (and for card orders, supply the numbered order row data itself).
@@ -27,8 +26,9 @@ require_once SVEA_REQUEST_DIR . '/Includes.php';
  * to reflect the new status of the order rows. Note that for Card and Direct 
  * bank orders the serverside order row status will not be updated.
  *
- * Use setInvoiceId() to set the invoice to credit. Use setOrderId() to set the 
- * card or direct bank transaction to credit.
+ * Use setInvoiceId() to specify the invoice (delivered order) to credit. 
+ * 
+ * Use setOrderId() to specify the card or direct bank transaction (delivered order) to credit.
  *
  * Use setCountryCode() to specify the country code matching the original create
  * order request.
@@ -61,6 +61,9 @@ class CreditOrderRowsBuilder {
     /** @var OrderRows[] $creditOrderRows  any additional new order rows to credit */
     public $creditOrderRows;
 
+    /** @var int[] $rowsToCredit  array of original order row indexes to credit
+    public $rowsToCredit;
+    
     /** @var NumberedOrderRows[] $numberedOrderRows  numbered order rows passed in for hosted service orders */
     public $numberedOrderRows;
     
@@ -78,8 +81,8 @@ class CreditOrderRowsBuilder {
     
     public function __construct($config) {
         $this->conf = $config;
-        $this->rowsToCredit = array();         
         $this->creditOrderRows = array();
+        $this->rowsToCredit = array();         
         $this->numberedOrderRows = array();
     }        
 
@@ -254,7 +257,10 @@ class CreditOrderRowsBuilder {
      * @return CreditOrderRowsRequest 
      */
     public function creditInvoiceOrderRows() {
-        $this->orderType = \ConfigurationProvider::INVOICE_TYPE;
+        $this->orderType = \ConfigurationProvider::INVOICE_TYPE; 
+        
+        // validation is done in CreditOrderRowsRequest
+      
         return new AdminService\CreditOrderRowsRequest($this);
     }
     
@@ -268,6 +274,7 @@ class CreditOrderRowsBuilder {
         $this->orderType = \ConfigurationProvider::HOSTED_ADMIN_TYPE;
                 
         $this->validateCreditCardOrderRows();
+        
         $sumOfRowAmounts = $this->calculateSumOfRowAmounts( $this->rowsToCredit, $this->numberedOrderRows, $this->creditOrderRows );
         
         $creditTransaction = new HostedService\CreditTransaction($this->conf);
@@ -278,7 +285,7 @@ class CreditOrderRowsBuilder {
     }
     
     /**
-     * Use creditCardOrderRows() to credit a Direct Bank order by the specified order row amounts using HostedRequests CreditTransaction request
+     * Use creditDirectBankOrderRows() to credit a Direct Bank order by the specified order row amounts using HostedRequests CreditTransaction request
      * 
      * @return CreditTransaction
      * @throws ValidationException  if addNumberedOrderRows() has not been used.
@@ -287,20 +294,33 @@ class CreditOrderRowsBuilder {
         return $this->creditCardOrderRows();        
     }
 
-    /** @internal */
+    /** 
+     * @internal 
+     */
     private function validateCreditCardOrderRows() {    
         if( !isset($this->orderId) ) {
             $exceptionString = "orderId is required for creditCardOrderRows(). Use method setOrderId().";
             throw new ValidationException($exceptionString);
         }
         
-        if(count($this->numberedOrderRows) == 0) {
-            $exceptionString = "numberedOrderRows is required for creditCardOrderRows(). Use method addNumberedOrderRows().";
+        if( (count($this->rowsToCredit) == 0) && (count($this->creditOrderRows) == 0) ) {
+            $exceptionString = "at least one of rowsToCredit or creditOrderRows must be set. Use setRowToCredit() or addCreditOrderRow().";
+            throw new ValidationException($exceptionString);
+        }   
+        
+        if( (count($this->rowsToCredit) > 0) && ( (count($this->rowsToCredit) != count($this->numberedOrderRows)) ) ) {
+            $exceptionString = "every entry in rowsToCredit must have a corresponding numberedOrderRows. Use setRowsToCredit() and addNumberedOrderRow().";
             throw new ValidationException($exceptionString);
         }
-        if(count($this->rowsToCredit) == 0) {
-            $exceptionString = "rowsToCredit is required for creditCardOrderRows(). Use method setRowToCredit() or setRowsToCredit().";
+        
+        // validate that indexes matches entries
+        $numberedOrderRowNumbers = array_map( function($nrow){ return $nrow->rowNumber; }, $this->numberedOrderRows );
+               
+        foreach( $this->rowsToCredit as $index ) {
+            if( !in_array($index, $numberedOrderRowNumbers) ) {
+                $exceptionString = "every entry in rowsToCredit must match a numberedOrderRows. Use setRowsToCredit() and addNumberedOrderRow().";
             throw new ValidationException($exceptionString);
+            }
         }
     }
 

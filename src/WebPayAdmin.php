@@ -136,16 +136,17 @@ class WebPayAdmin {
 
     /**
      * The WebPayAdmin::creditOrder entrypoint method is used to credit an order after it has been delivered.
+     * Supports Invoice, Card and Direct Bank orders. (To credit a Payment Plan order, contact Svea customer service.)
      * 
      * Create an credit order builder instance using this method, then provide more information and send the request using 
      * creditOrderRowsBuilder methods:
      * 
-     * ->setInvoiceId()                 (required for invoice orders)
-     * ->setInvoiceDistributionType()   (required for invoice orders)
-     * ->setOrderId()                   (required for card and direct bank orders)
+     * ->setInvoiceId()                 (invoice only, required)
+     * ->setInvoiceDistributionType()   (invoice only, required)
+     * ->setOrderId()                   (card and direct bank only, required)
      * ->setCountryCode()               (required)
      * ->addCreditOrderRow()            (optional, use if you want to specify credit a row for amounts not present in the original order)
-     * ->addCreditOrderRows()           (optional, use if you want to specify credit rows for amounts not present in the original order)
+     * ->addCreditOrderRows()           (optional)
      * ->setRowToCredit()               (optional, index of one of the original order row you wish to credit)
      * ->setRowsToCredit()              (optional)
      * ->addNumberedOrderRow()          (card and direct bank only, required with setRow(s)ToCredit())
