@@ -1044,7 +1044,7 @@ Note that for Card orders the serverside order row status will not be updated fo
 
 #### 7.3.1 Usage and return types
 
-First, get an instance of CancelOrderRowsBuilder using the WebPayAdmin::cancelOrderRows entrypoint method.
+First, get an instance of CancelOrderRowsBuilder using the WebPayAdmin::cancelOrderRows($config) entrypoint method.
 
 Then, provide more information about the transaction using the CancelOrderRowsBuilder methods:
 ```
@@ -1082,13 +1082,17 @@ See <a href="http://htmlpreview.github.io/?https://raw.github.com/sveawebpay/php
 ### 7.4 WebPayAdmin::creditOrderRows()
 The WebPayAdmin::creditOrder method is used to credit individual order rows in a delivered invoice order, a charged card order or a direct bank order. It supports Invoice, Card and Direct Bank orders. (Payment Plan orders are not supported, please contact the Svea customer service to credit a Payment Plan order.)
 
+To credit an order row, you specify the numbered order row (and for card orders, supply the numbered order row data itself).
+
+If you wish to credit an amount not present in the original order, you need supply a new order row for the amount in question.
+
 For Card and Direct bank orders the following limitations apply: You need to supply the NumberedOrderRows on which to operate using addNumberedOrderRow(s). These may be fetched using WebPayAdmin::QueryOrder, but if the order has been edited after initial creation the rows may not be accurate.
 
 Note that for Card and Direct bank orders the serverside order row status will not be updated following a successful creditOrderRows request.
 
 #### 7.4.1 Usage and return types
 
-First, get an instance of CreditOrderRowsBuilder using the WebPayAdmin::creditOrderRows entrypoint method.
+First, get an instance of CreditOrderRowsBuilder using the WebPayAdmin::creditOrderRows($config) entrypoint method.
 
 Then, provide more information about the transaction using the CreditOrderRowsBuilder methods:
 ```
@@ -1100,8 +1104,8 @@ Then, provide more information about the transaction using the CreditOrderRowsBu
 ->setRowsToCredit()              (optional)
 ->addNumberedOrderRow()          (card and direct bank only, one or more)
 ->addNumberedOrderRows()         (card and direct bank only, optional)
-->addCreditOrderRow()            (optional, use if you want to specify new credit rows)
-->addCreditOrderRows()           (optional, use if you want to specify new credit rows)
+->addCreditOrderRow()            (optional, use if you want to specify credit rows not present in the original order)
+->addCreditOrderRows()           (optional, use if you want to specify credit rows not present in the original order)
 ```
 
 Finally, select the correct ordertype and send the request:
@@ -1116,7 +1120,7 @@ For card or direct bank orders, it is required to use addNumberedOrderRow() or a
 
 (You can use the WebPayAdmin::queryOrder() entrypoint to get information about the order, the queryOrder response attribute numberedOrderRows contains the order rows and their numbers.)
 
-Should you wish to add additional credit order rows not found in the original order, you may add them using addCreditOrderRow() or addCreditOrderRows(). These rows will then be credited in addition to the rows specified using setRowsToCredit.
+If you wish to credit an amount not found in the original order, you may add the amount using addCreditOrderRow() or addCreditOrderRows(). These rows will then be credited in addition to the rows specified using setRowsToCredit.
 
 Use setInvoiceId() to set the invoice to credit. 
 
