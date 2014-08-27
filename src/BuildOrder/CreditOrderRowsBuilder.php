@@ -8,21 +8,24 @@ require_once SVEA_REQUEST_DIR . '/Includes.php';
  * a direct bank order. Supports Invoice, Card and Direct Bank orders.
  * (Payment Plan orders are not supported, please contact the Svea customer 
  * service to credit a Payment Plan order.)
-
- * For Invoice orders, the serverside order row status of the invoice is updated
- * to reflect the new status of the order rows. Note that for Card and Direct 
- * bank orders the serverside order row status will not be updated.
+ * 
+ * To credit an order row in full, you specify the index of the order row to 
+ * credit (and for card orders, supply the numbered order row data itself).
+ * 
+ * If you wish to credit an amount not present in the original order, you need 
+ * to supply new order row(s) for the credited amount using addCreditOrderRow() 
+ * or addCreditOrderRows(). These rows will then be credited in addition to any 
+ * rows specified using setRow(s)ToCredit below.
  *  
  * Use setRowToCredit() or setRowsToCredit() to specify order rows to credit. 
- * The given row numbers must correspond with the serverside row numbers. 
+ * The given row numbers must correspond with the the serverside row number. 
  * 
  * For card or direct bank orders, it is required to use addNumberedOrderRow() 
  * or addNumberedOrderRows() to pass in a copy of the serverside order row data.
  *  
- * Should you wish to add additional credit order rows not found in the original 
- * order, you may add them using addCreditOrderRow() or addCreditOrderRows(). 
- * These rows will then be credited in addition to the rows specified using 
- * setRowsToCredit.
+ * For Invoice orders, the serverside order row status of the invoice is updated
+ * to reflect the new status of the order rows. Note that for Card and Direct 
+ * bank orders the serverside order row status will not be updated.
  *
  * Use setInvoiceId() to set the invoice to credit. Use setOrderId() to set the 
  * card or direct bank transaction to credit.
@@ -31,31 +34,11 @@ require_once SVEA_REQUEST_DIR . '/Includes.php';
  * order request.
  * 
  * Then use either creditInvoiceOrderRows(), creditCardOrderRows() or 
- * creditDirectBankOrderRows(), which ever matches the payment method used in 
- * the original order request.
+ * creditDirectBankOrderRows() to get a request object, which ever matches the 
+ * payment method used in the original order.
  * 
- * The final doRequest() will send the request to Svea, and returns either a
- * CreditOrderRowsResponse or a CreditTransactionResponse.
- * 
- * Then provide more information about the transaction and send the request using 
- * creditOrderRowsBuilder methods:
- * 
- * ->setInvoiceId()                 (required for invoice orders)
- * ->setInvoiceDistributionType()   (required for invoice orders)
- * ->setOrderId()                   (required for card and direct bank orders)
- * ->setCountryCode()               (required)
- * ->setRowToCredit()               (required, one or more)
- * ->setRowsToCredit()              (optional)
- * ->addNumberedOrderRow()          (card and direct bank only, one or more)
- * ->addNumberedOrderRows()         (card and direct bank only, optional)
- * ->addCreditOrderRow()            (optional, use if you want to specify new credit rows)
- * ->addCreditOrderRows()           (optional, use if you want to specify new credit rows)
- *  
- * Finish by selecting the correct ordertype and perform the request:
- * ->creditInvoiceOrderRows() | creditCardOrderRows()| creditDirectBankOrderRows()
- *   ->doRequest()
- *  
- * The final doRequest() returns either a CreditOrderRowsResponse or a CreditTransactionResponse.
+ * Calling doRequest() on the request object will send the request to Svea and 
+ * return either a CreditOrderRowsResponse or a CreditTransactionResponse.
  * 
  * @see \Svea\CreditOrderRowsBuilder \Svea\CreditOrderRowsBuilder
  * @see \Svea\AdminService\CreditOrderRowsResponse \Svea\AdminService\CreditOrderRowsResponse
