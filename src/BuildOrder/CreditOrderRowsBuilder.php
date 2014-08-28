@@ -117,13 +117,25 @@ class CreditOrderRowsBuilder {
     /**
      * Required for CreditCardOrder() -- use the order id (transaction id) received with the createOrder response.
      * 
-     * @param numeric $invoiceIdAsString
+     * @param numeric $orderIdAsString
      * @return $this
      */
-    public function setOrderId($invoiceIdAsString) {
-        $this->orderId = $invoiceIdAsString;
+    public function setOrderId($orderIdAsString) {
+        $this->orderId = $orderIdAsString;
         return $this;
     }
+    
+    /**
+     * Optional for CreditCardOrder() -- use the order id (transaction id) received with the createOrder response.
+     * 
+     * This is an alias for setOrderId().
+     * 
+     * @param numeric $orderIdAsString
+     * @return $this
+     */
+    public function setTransactionId($orderIdAsString) {
+        return $this->setOrderId($orderIdAsString);
+    }    
     
     /**
      * Required for CreditInvoiceOrder() -- must match the invoice distribution type for the order
