@@ -44,6 +44,9 @@ class CancelOrderRowsBuilder {
     /** @var NumberedOrderRows[] $numberedOrderRows */
     public $numberedOrderRows;
 
+    /** @var string $orderId  Svea order id to query, as returned in the createOrder request response, either a transactionId or a SveaOrderId */
+    public $orderId;    
+    
     public function __construct($config) {
          $this->conf = $config;
          $this->rowsToCancel = array();
@@ -51,16 +54,26 @@ class CancelOrderRowsBuilder {
     }
 
     /**
-     * Required. Use SveaOrderId recieved with createOrder response.
-     * @param string $orderIdAsString
+     * Required for invoice or part payment orders -- use the order id (transaction id) recieved with the createOrder response.
+     * @param numeric $orderIdAsString
      * @return $this
      */
     public function setOrderId($orderIdAsString) {
         $this->orderId = $orderIdAsString;
         return $this;
     }
-    /** string $orderId  Svea order id to query, as returned in the createOrder request response, either a transactionId or a SveaOrderId */
-    public $orderId;
+
+    /**
+     * Optional for card orders -- use the order id (transaction id) received with the createOrder response.
+     * 
+     * This is an alias for setOrderId().
+     * 
+     * @param numeric $orderIdAsString
+     * @return $this
+     */
+    public function setTransactionId($orderIdAsString) {
+        return $this->setOrderId($orderIdAsString);
+    }       
     
     /**
      * Required. Use same countryCode as in createOrder request.
