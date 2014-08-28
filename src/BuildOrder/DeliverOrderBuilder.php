@@ -77,8 +77,9 @@ class DeliverOrderBuilder extends OrderBuilder {
         return parent::addOrderRow($itemOrderRowObject);
     }
 
-    /* Required. Set order id of the order you wish to deliver.
-     * @param string $orderIdAsString
+    /**
+     * Required for invoice or part payment orders -- use the order id (transaction id) recieved with the createOrder response.
+     * @param numeric $orderIdAsString
      * @return $this
      */
     public function setOrderId($orderIdAsString) {
@@ -86,6 +87,18 @@ class DeliverOrderBuilder extends OrderBuilder {
         return $this;
     }
 
+    /**
+     * Optional for card orders -- use the order id (transaction id) received with the createOrder response.
+     * 
+     * This is an alias for setOrderId().
+     * 
+     * @param numeric $orderIdAsString
+     * @return $this
+     */
+    public function setTransactionId($orderIdAsString) {
+        return $this->setOrderId($orderIdAsString);
+    }      
+      
     /**
      * Invoice payments only! Required.
      * @param string DistributionType $distributionTypeAsConst  i.e. DistributionType::POST|DistributionType::EMAIL
