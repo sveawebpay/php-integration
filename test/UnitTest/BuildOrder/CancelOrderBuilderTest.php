@@ -26,6 +26,12 @@ class CancelOrderBuilderTest extends \PHPUnit_Framework_TestCase {
         $this->cancelOrderObject->setOrderId($orderId);
         $this->assertEquals($orderId, $this->cancelOrderObject->orderId);        
     }
+
+    public function test_CancelOrderBuilder_setTransactionId() {
+        $orderId = "123456";
+        $this->cancelOrderObject->setTransactionId($orderId);
+        $this->assertEquals($orderId, $this->cancelOrderObject->orderId);        
+    }    
     
     public function test_CancelOrderBuilder_setCountryCode() {
         $country = "SE";
