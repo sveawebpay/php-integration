@@ -16,28 +16,14 @@ abstract class HostedRequest {
     /** @var string $method  set by the subclass, defines what webservice is called (including payment) */
     protected $method;
 
-    /** @var string $countryCode */
-    protected $countryCode; 
+    /** @var string $countryCode  used to disambiguate between the various credentials in ConfigurationProvider */
+    public $countryCode; 
         
     /** 
      * @param ConfigurationProvider $config
      */
     function __construct($config) {
         $this->config = $config;
-    }
-    
-    /**
-     * Set the country. Used to disambiguate between the various credentials in
-     * ConfigurationProvider.
-     * 
-     * Required.
-     * 
-     * @param string $countryCode
-     * @return $this
-     */
-    function setCountryCode( $countryCode ) {
-        $this->countryCode = $countryCode;
-        return $this;
     }
     
     /**

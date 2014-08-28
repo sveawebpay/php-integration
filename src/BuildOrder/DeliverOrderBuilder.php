@@ -202,7 +202,7 @@ class DeliverOrderBuilder extends OrderBuilder {
         $confirmTransaction = new HostedService\ConfirmTransaction($this->conf);
         $confirmTransaction->transactionId = $this->orderId;
         $confirmTransaction->captureDate = $defaultCaptureDate[0];
-        $confirmTransaction->setCountryCode($this->countryCode);
+        $confirmTransaction->countryCode = $this->countryCode;
         return $confirmTransaction;
     }    
 
