@@ -34,6 +34,7 @@ class DeliverOrderBuilderIntegrationTest extends PHPUnit_Framework_TestCase {
         $this->assertInstanceOf( "Svea\WebService\DeliverOrderResult", $response );    // deliverOrderResult => deliverOrderEU 
     }
    
+    // orderrows are ignored by the service for paymentplan orders
     public function test_deliverOrder_deliverPaymentPlanOrder_with_orderrows_use_DeliverOrderEU_and_is_accepted() {
         
         $order = WebPay::createOrder( Svea\SveaConfig::getDefaultConfig() )
@@ -71,6 +72,44 @@ class DeliverOrderBuilderIntegrationTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(1, $response->accepted);
         $this->assertInstanceOf( "Svea\WebService\DeliverOrderResult", $response );
     }
+    
+    public function test_deliverOrder_deliverPaymentPlanOrder_without_orderrows_use_DeliverOrderEU_and_is_accepted() {
+        
+        $order = WebPay::createOrder( Svea\SveaConfig::getDefaultConfig() )
+            ->addOrderRow( WebPayItem::orderRow()
+                ->setQuantity(1)
+                ->setAmountExVat(1000.00)
+                ->setVatPercent(25)
+            )
+            ->addCustomerDetails( TestUtil::createIndividualCustomer("SE") )
+            ->setCountryCode("SE")
+            ->setCurrency("SEK")
+            ->setCustomerReference("created by TestUtil::createOrder()")
+            ->setClientOrderNumber( "clientOrderNumber:".date('c'))
+            ->setOrderDate( date('c') )
+        ;
+        $response = $order->usePaymentPlanPayment( TestUtil::getGetPaymentPlanParamsForTesting() )->doRequest();
+
+        $this->assertEquals(1, $response->accepted);
+        
+        $orderId = $response->sveaOrderId;
+
+        $DeliverOrderBuilder = WebPay::deliverOrder( Svea\SveaConfig::getDefaultConfig() )
+//            ->addOrderRow( WebPayItem::orderRow()
+//                ->setQuantity(1)
+//                ->setAmountExVat(1000.00)
+//                ->setVatPercent(25)
+//            )
+            ->setCountryCode("SE")
+            ->setOrderId( $orderId )
+        ;        
+        
+        $response = $DeliverOrderBuilder->deliverPaymentPlanOrder()->doRequest();
+
+        //print_r( $response );
+        $this->assertEquals(1, $response->accepted);
+        $this->assertInstanceOf( "Svea\WebService\DeliverOrderResult", $response );
+    }    
     
     public function test_manual_deliverOrder_deliverCardOrder_use_ConfirmTransaction_and_is_accepted() {
         // Stop here and mark this test as incomplete.
@@ -116,8 +155,6 @@ class DeliverOrderBuilderIntegrationTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(1, $deliverResponse->accepted);
         $this->assertInstanceOf( "Svea\AdminService\DeliverOrdersResponse", $deliverResponse );  // deliverOrder_s_Response => Admin service deliverOrders  
     }        
- 
-    
 }
 
 
