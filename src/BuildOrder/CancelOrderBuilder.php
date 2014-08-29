@@ -119,7 +119,7 @@ class CancelOrderBuilder {
         $this->orderType = \ConfigurationProvider::HOSTED_ADMIN_TYPE;
         $annulTransaction = new HostedService\AnnulTransaction($this->conf);
         $annulTransaction->transactionId = $this->orderId;
-        $annulTransaction->setCountryCode($this->countryCode);
+        $annulTransaction->countryCode = $this->countryCode;
         return $annulTransaction;
     }  
 }

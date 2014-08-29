@@ -23,19 +23,13 @@ class ListPaymentMethodsTest extends PHPUnit_Framework_TestCase {
         $this->assertInstanceOf( "Svea\HostedService\ListPaymentMethods", $this->listpaymentmethodObject);      
         $this->assertEquals( "getpaymentmethods", PHPUnit_Framework_Assert::readAttribute($this->listpaymentmethodObject, 'method') );        
     }
-    
-    function test_setCountryCode(){
-        $countryCode = "SE";       
-        $this->listpaymentmethodObject->setCountryCode( $countryCode );
-        $this->assertEquals( $countryCode, PHPUnit_Framework_Assert::readAttribute($this->listpaymentmethodObject, 'countryCode') );
-    }
-              
+                  
     function test_prepareRequest_array_contains_mac_merchantid_message() {
 
         // set up ListPaymentMethods object & get request form
         $countryCode = "SE";
-        $this->listpaymentmethodObject->setCountryCode($countryCode);
-                
+        $this->listpaymentmethodObject->countryCode = $countryCode;   
+        
         $form = $this->listpaymentmethodObject->prepareRequest();
 
         // prepared request is message (base64 encoded), merchantid, mac
@@ -47,8 +41,8 @@ class ListPaymentMethodsTest extends PHPUnit_Framework_TestCase {
     function test_prepareRequest_request_has_correct_merchantid_mac_and_ListPaymentMethods_request_message_contents() {
 
         $countryCode = "SE";
-        $this->listpaymentmethodObject->setCountryCode($countryCode);
-                
+        $this->listpaymentmethodObject->countryCode = $countryCode;    
+        
         $form = $this->listpaymentmethodObject->prepareRequest();
         
         // get our merchantid & secret
@@ -76,8 +70,8 @@ class ListPaymentMethodsTest extends PHPUnit_Framework_TestCase {
         );        
         
         $countryCode = "SE";
-        $this->listpaymentmethodObject->setCountryCode($countryCode);
-
+        $this->listpaymentmethodObject->countryCode = $countryCode;
+        
         // hack to clear merchantid
         $this->configObject->conf['credentials'][$countryCode]['auth']['HOSTED']['merchantId'] = null;
         

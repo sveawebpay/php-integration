@@ -64,9 +64,8 @@ class LowerTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
         $request = new LowerTransaction( Svea\SveaConfig::getDefaultConfig() );
         $request->transactionId = $transactionId;
         $request->amountToLower = $amountToLower;
-        $response = $request  
-            ->setCountryCode( "SE" )
-            ->doRequest();
+        $request->countryCode = "SE";
+        $response = $request->doRequest();
 
         $this->assertInstanceOf( "Svea\HostedService\LowerTransactionResponse", $response );
         

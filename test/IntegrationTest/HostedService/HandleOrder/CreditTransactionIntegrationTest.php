@@ -25,9 +25,8 @@ class CreditTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
         $request = new CreditTransaction( Svea\SveaConfig::getDefaultConfig() );
         $request->transactionId = $transactionId;
         $request->creditAmount = $amount;
-        $response = $request
-            ->setCountryCode( "SE" )
-            ->doRequest();
+        $request->countryCode = "SE";
+        $response = $request->doRequest();
 
         $this->assertInstanceOf( "Svea\HostedService\CreditTransactionResponse", $response );
         
@@ -56,10 +55,8 @@ class CreditTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
         $request = new CreditTransaction( Svea\SveaConfig::getDefaultConfig() );
         $request->transactionId = $transactionId;
         $request->creditAmount = $amount;
-        $response = $request
-            ->setCreditAmount( $amount )
-            ->setCountryCode( "SE" )
-            ->doRequest();        
+        $request->countryCode = "SE";
+        $response = $request->doRequest();       
         
         $this->assertInstanceOf( "Svea\HostedService\CreditTransactionResponse", $response );
         

@@ -28,11 +28,10 @@ class RecurTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
         $request->subscriptionId = $subscriptionId;
         $request->customerRefNo = $customerRefNo;
         $request->amount = $amount;        
-        $request->currency = $currency;
+        $request->currency = $currency;     
         
-        $response = $request  
-            ->setCountryCode( "SE" )
-            ->doRequest();
+        $request->countryCode = "SE";
+        $response = $request->doRequest();
 
         $this->assertInstanceOf( "Svea\HostedService\RecurTransactionResponse", $response );
         
@@ -84,10 +83,9 @@ class RecurTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
         $request->customerRefNo = $new_customerrefno;
         $request->amount = $new_amount;        
         $request->currency = $currency;
-        
-        $response = $request                
-            ->setCountryCode( "SE" )
-            ->doRequest();        
+
+        $request->countryCode = "SE";
+        $response = $request->doRequest();      
         
         $this->assertInstanceOf( "Svea\HostedService\RecurTransactionResponse", $response );
         
