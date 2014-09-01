@@ -1090,7 +1090,7 @@ creditOrderRowsBuilder methods:
 ->setInvoiceDistributionType()   (invoice only, required)
 ->setOrderId()                   (card and direct bank only, required)
 ->setCountryCode()               (required)
-->addCreditOrderRow()            (optional, use if you want to specify credit a row for amounts not present in the original order)
+->addCreditOrderRow()            (optional, use if you want to specify a new credit row, i.e. for amounts not present in the original order)
 ->addCreditOrderRows()           (optional)
 ->setRowToCredit()               (optional, index of one of the original order row you wish to credit)
 ->setRowsToCredit()              (optional)
