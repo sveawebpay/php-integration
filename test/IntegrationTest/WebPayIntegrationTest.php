@@ -58,30 +58,30 @@ class WebPayIntegrationTest extends PHPUnit_Framework_TestCase {
     // invoice
     // paymentplan
     // card
-    public function test_deliverOrder_deliverInvoiceOrder_without_order_rows_returns_DeliverOrderEU() {
+    public function test_deliverOrder_deliverInvoiceOrder_without_order_rows_goes_against_adminservice_DeliverOrders() {
         $deliverOrder = WebPay::deliverOrder( Svea\SveaConfig::getDefaultConfig() );
         $request = $deliverOrder->deliverInvoiceOrder();        
         $this->assertInstanceOf( "Svea\AdminService\DeliverOrdersRequest", $request ); 
         $this->assertEquals("Invoice", $request->orderBuilder->orderType);    
     }
 
-    public function test_deliverOrder_deliverPaymentPlanOrder_without_order_rows_returns_DeliverOrderEU() {
+    public function test_deliverOrder_deliverPaymentPlanOrder_without_order_rows_goes_against_DeliverOrderEU() {
         $deliverOrder = WebPay::deliverOrder( Svea\SveaConfig::getDefaultConfig() );
         $request = $deliverOrder->deliverPaymentPlanOrder();        
-        $this->assertInstanceOf( "Svea\AdminService\DeliverOrdersRequest", $request );
+        $this->assertInstanceOf( "Svea\WebService\DeliverPaymentPlan", $request );
         $this->assertEquals("PaymentPlan", $request->orderBuilder->orderType); 
     }
     
-    public function test_deliverOrder_deliverInvoiceOrder_with_order_rows_returns_DeliverOrdersRequest() {
+    public function test_deliverOrder_deliverInvoiceOrder_with_order_rows_goes_against_DeliverOrderEU() {
         $deliverOrder = WebPay::deliverOrder( Svea\SveaConfig::getDefaultConfig() );
         $deliverOrder->addOrderRow( WebPayItem::orderRow() );
         $request = $deliverOrder->deliverInvoiceOrder();     
         $this->assertInstanceOf( "Svea\WebService\DeliverInvoice", $request );         // WebService\DeliverInvoice => soap call DeliverOrderEU  
     }
 
-    public function test_deliverOrder_deliverPaymentPlanOrder_with_order_rows_returns_DeliverOrdersRequest() {
+    public function test_deliverOrder_deliverPaymentPlanOrder_with_order_rows_goes_against_DeliverOrderEU() {
         $deliverOrder = WebPay::deliverOrder( Svea\SveaConfig::getDefaultConfig() );
-        $deliverOrder->addOrderRow( WebPayItem::orderRow() );
+        $deliverOrder->addOrderRow( WebPayItem::orderRow() );   // order rows are ignored by DeliverOrderEU, can't partially deliver PaymentPlan
         $request = $deliverOrder->deliverPaymentPlanOrder();        
         $this->assertInstanceOf( "Svea\WebService\DeliverPaymentPlan", $request );      
     }
