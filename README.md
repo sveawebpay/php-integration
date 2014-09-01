@@ -1048,11 +1048,11 @@ First, get an instance of CancelOrderRowsBuilder using the WebPayAdmin::cancelOr
 
 Then, provide more information about the transaction using the CancelOrderRowsBuilder methods:
 ```
-->setOrderId()
-->setCountryCode()
-->setRowToCancel() (one or more)
-->setRowsToCancel() (optional)
-->addNumberedOrderRow() (card only, one or more)
+->setOrderId()           (required)
+->setCountryCode()       (required)
+->setRowToCancel()       (required, index of one of the original order row you wish to credit)
+->setRowsToCancel()      (optional)
+->addNumberedOrderRow()  (card only, one or more)
 ->addNumberedOrderRows() (card only, optional)
 ```
 
