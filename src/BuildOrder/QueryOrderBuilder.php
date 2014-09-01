@@ -68,15 +68,6 @@ class QueryOrderBuilder {
     /** @var string $countryCode */
     public $countryCode;
 
-    /**
-     * Required.
-     * @param string $orderType -- one of ConfigurationProvider::INVOICE_TYPE, ::PAYMENTPLAN_TYPE, ::HOSTED_TYPE
-     * @return $this
-     */
-    public function setOrderType($orderTypeAsConst) {
-        $this->orderType = $orderTypeAsConst;
-        return $this;
-    }
     /** @var string $orderType -- one of ConfigurationProvider::INVOICE_TYPE, ::PAYMENTPLAN_TYPE, ::HOSTED_TYPE */
     public $orderType;    
     
@@ -85,7 +76,7 @@ class QueryOrderBuilder {
      * @return AdminService\GetOrdersRequest 
      */
     public function queryInvoiceOrder() {
-        $this->setOrderType(\ConfigurationProvider::INVOICE_TYPE );
+        $this->orderType = \ConfigurationProvider::INVOICE_TYPE;
         return new AdminService\GetOrdersRequest($this);
     }
     
@@ -94,7 +85,7 @@ class QueryOrderBuilder {
      * @return AdminService\GetOrdersRequest 
      */
     public function queryPaymentPlanOrder() {
-        $this->setOrderType(\ConfigurationProvider::PAYMENTPLAN_TYPE);
+        $this->orderType = \ConfigurationProvider::PAYMENTPLAN_TYPE;
         return new AdminService\GetOrdersRequest($this);    
     }
 
@@ -103,7 +94,7 @@ class QueryOrderBuilder {
      * @return HostedService\QueryTransaction
      */
     public function queryCardOrder() {
-        $this->setOrderType(\ConfigurationProvider::HOSTED_ADMIN_TYPE);
+        $this->orderType = \ConfigurationProvider::HOSTED_ADMIN_TYPE;
         $queryTransaction = new HostedService\QueryTransaction($this->conf);
         $queryTransaction->transactionId = $this->orderId;
         $queryTransaction->countryCode = $this->countryCode;
@@ -115,7 +106,7 @@ class QueryOrderBuilder {
      * @return HostedService\QueryTransaction
      */
     public function queryDirectBankOrder() {
-        $this->setOrderType(\ConfigurationProvider::HOSTED_ADMIN_TYPE);
+        $this->orderType = \ConfigurationProvider::HOSTED_ADMIN_TYPE;
         $queryTransaction = new HostedService\QueryTransaction($this->conf);
         $queryTransaction->transactionId = $this->orderId;
         $queryTransaction->countryCode = $this->countryCode;

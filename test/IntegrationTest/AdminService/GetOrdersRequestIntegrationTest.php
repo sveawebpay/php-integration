@@ -27,7 +27,7 @@ class GetOrdersRequestIntegrationTest extends PHPUnit_Framework_TestCase{
         $getOrdersBuilder = new Svea\QueryOrderBuilder( Svea\SveaConfig::getDefaultConfig() );
         $getOrdersBuilder->setOrderId($sveaOrderIdToGet);
         $getOrdersBuilder->setCountryCode($countryCode);
-        $getOrdersBuilder->setOrderType($orderType);        
+        $getOrdersBuilder->orderType = $orderType;        
 
         $request = new Svea\AdminService\GetOrdersRequest( $getOrdersBuilder );
         $response = $request-> doRequest();
