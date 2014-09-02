@@ -254,7 +254,7 @@ class HostedPayment {
         $responseXML = curl_exec($ch);
         curl_close($ch);
         
-        // create SveaResponse to handle annul response
+        // create SveaResponse to handle response
         $responseObj = new \SimpleXMLElement($responseXML);        
         $sveaResponse = new \SveaResponse($responseObj, $this->countryCode, $this->config);
 
