@@ -65,10 +65,8 @@ class ConfirmTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
         $request = new ConfirmTransaction( Svea\SveaConfig::getDefaultConfig() );
         $request->transactionId = $transactionId;
         $request->captureDate = $captureDate;
-        
-        $response = $request
-            ->setCountryCode( "SE" )
-            ->doRequest();
+        $request->countryCode = "SE";
+        $response = $request->doRequest();
 
         $this->assertInstanceOf( "Svea\HostedService\ConfirmTransactionResponse", $response );
         
@@ -98,10 +96,8 @@ class ConfirmTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
         $request = new ConfirmTransaction( Svea\SveaConfig::getDefaultConfig() );
         $request->transactionId = $transactionId;
         $request->captureDate = $captureDate;
-
-        $response = $request
-            ->setCountryCode( "SE" )
-            ->doRequest();        
+        $request->countryCode = "SE";
+        $response = $request->doRequest();     
         
         print_r( $response );
         $this->assertInstanceOf( "Svea\HostedService\ConfirmTransactionResponse", $response );

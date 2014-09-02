@@ -24,9 +24,8 @@ class QueryTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
                 
         $request = new QueryTransaction( Svea\SveaConfig::getDefaultConfig() );
         $request->transactionId = $transactionId;
-        $response = $request
-            ->setCountryCode( "SE" )
-            ->doRequest();
+        $request->countryCode = "SE";
+        $response = $request->doRequest();
 
         $this->assertInstanceOf( "Svea\HostedService\QueryTransactionResponse", $response );
         
@@ -63,9 +62,8 @@ class QueryTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
 
         $request = new QueryTransaction( Svea\SveaConfig::getDefaultConfig() );
         $request->transactionId = $transactionId;
-        $response = $request
-            ->setCountryCode( "SE" )
-            ->doRequest();        
+        $request->countryCode = "SE";
+        $response = $request->doRequest();    
          
         $this->assertInstanceOf( "Svea\HostedService\QueryTransactionResponse", $response );
         
@@ -168,9 +166,8 @@ class QueryTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
 
         $request = new QueryTransaction( Svea\SveaConfig::getDefaultConfig() );
         $request->transactionId = $transactionId;
-        $response = $request
-            ->setCountryCode( "SE" )
-            ->doRequest();        
+        $request->countryCode = "SE";
+        $response = $request->doRequest();       
          
         $this->assertInstanceOf( "Svea\HostedService\QueryTransactionResponse", $response );
         

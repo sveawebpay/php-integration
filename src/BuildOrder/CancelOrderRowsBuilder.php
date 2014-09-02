@@ -179,7 +179,7 @@ class CancelOrderRowsBuilder {
         $sumOfRowAmounts = $this->calculateSumOfRowAmounts( $this->rowsToCancel, $this->numberedOrderRows );
         
         $lowerTransaction = new HostedService\LowerTransaction($this->conf);
-        $lowerTransaction->setCountryCode($this->countryCode);
+        $lowerTransaction->countryCode = $this->countryCode;
         $lowerTransaction->transactionId = $this->orderId;
         $lowerTransaction->amountToLower = $sumOfRowAmounts*100; // *100, as setAmountToLower wants minor currency
         return $lowerTransaction;

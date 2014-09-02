@@ -24,12 +24,6 @@ class RecurTransactionTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals( "recur", PHPUnit_Framework_Assert::readAttribute($this->recurTransactionObject, 'method') );        
     }
     
-    function test_setCountryCode(){
-        $countryCode = "SE";       
-        $this->recurTransactionObject->setCountryCode( $countryCode ); 
-        $this->assertEquals( $countryCode, PHPUnit_Framework_Assert::readAttribute($this->recurTransactionObject, 'countryCode') );
-    }
-    
 //    function test_setCurrency() {
 //        $currency = "SEK";
 //        $this->recurTransactionObject->setCurrency( $currency );
@@ -70,7 +64,7 @@ class RecurTransactionTest extends PHPUnit_Framework_TestCase {
         $this->recurTransactionObject->amount = $amount;        
 
         $countryCode = "SE";
-        $this->recurTransactionObject->setCountryCode($countryCode);
+        $this->recurTransactionObject->countryCode = $countryCode;
                 
         $form = $this->recurTransactionObject->prepareRequest();
 
@@ -96,7 +90,7 @@ class RecurTransactionTest extends PHPUnit_Framework_TestCase {
         $this->recurTransactionObject->amount = $amount;        
         
         $countryCode = "SE";
-        $this->recurTransactionObject->setCountryCode($countryCode);
+        $this->recurTransactionObject->countryCode = $countryCode;
                 
         $form = $this->recurTransactionObject->prepareRequest();
 
@@ -137,7 +131,7 @@ class RecurTransactionTest extends PHPUnit_Framework_TestCase {
         $this->recurTransactionObject->amount = $amount;        
         
         $countryCode = "SE";
-        $this->recurTransactionObject->setCountryCode($countryCode);
+        $this->recurTransactionObject->countryCode = $countryCode;
                 
         $form = $this->recurTransactionObject->prepareRequest();   
     }    
@@ -159,7 +153,7 @@ class RecurTransactionTest extends PHPUnit_Framework_TestCase {
         $this->recurTransactionObject->amount = $amount;        
         
         $countryCode = "SE";
-        $this->recurTransactionObject->setCountryCode($countryCode);
+        $this->recurTransactionObject->countryCode = $countryCode;
                 
         $form = $this->recurTransactionObject->prepareRequest();   
     }   
@@ -182,7 +176,7 @@ class RecurTransactionTest extends PHPUnit_Framework_TestCase {
         $this->recurTransactionObject->currency = $currency;
 
         $countryCode = "SE";
-        $this->recurTransactionObject->setCountryCode($countryCode);
+        $this->recurTransactionObject->countryCode = $countryCode;
                 
         $form = $this->recurTransactionObject->prepareRequest();   
     }   
@@ -199,7 +193,7 @@ class RecurTransactionTest extends PHPUnit_Framework_TestCase {
         $this->recurTransactionObject->amount = $amount;        
         
         $countryCode = "SE";
-        $this->recurTransactionObject->setCountryCode($countryCode);
+        $this->recurTransactionObject->countryCode = $countryCode;
                 
         $form = $this->recurTransactionObject->prepareRequest();   
     }     

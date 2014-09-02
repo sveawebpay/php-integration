@@ -106,9 +106,9 @@ class QueryOrderBuilder {
         $this->setOrderType(\ConfigurationProvider::HOSTED_ADMIN_TYPE);
         $queryTransaction = new HostedService\QueryTransaction($this->conf);
         $queryTransaction->transactionId = $this->orderId;
-        $queryTransaction->setCountryCode($this->countryCode);
+        $queryTransaction->countryCode = $this->countryCode;
         return $queryTransaction;
-    }  
+    }
 
     /**
      * Use queryDirectBankOrder() to query a Direct Bank order.
@@ -118,7 +118,7 @@ class QueryOrderBuilder {
         $this->setOrderType(\ConfigurationProvider::HOSTED_ADMIN_TYPE);
         $queryTransaction = new HostedService\QueryTransaction($this->conf);
         $queryTransaction->transactionId = $this->orderId;
-        $queryTransaction->setCountryCode($this->countryCode);
+        $queryTransaction->countryCode = $this->countryCode;
         return $queryTransaction;
     }          
 }

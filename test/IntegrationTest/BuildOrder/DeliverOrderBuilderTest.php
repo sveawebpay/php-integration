@@ -33,7 +33,29 @@ class DeliverOrderBuilderIntegrationTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(1, $response->accepted);                
         $this->assertInstanceOf( "Svea\WebService\DeliverOrderResult", $response );    // deliverOrderResult => deliverOrderEU 
     }
-   
+
+    public function test_deliverOrder_deliverInvoiceOrder_without_orderrows_use_admin_service_deliverOrders_and_is_accepted() {
+        // create order, get orderid to deliver
+        $createOrderBuilder = TestUtil::createOrder();        
+        $createResponse = $createOrderBuilder->useInvoicePayment()->doRequest();
+
+        $this->assertEquals(1, $createResponse->accepted);
+        
+        $orderId = $createResponse->sveaOrderId;        
+        $DeliverOrderBuilder = WebPay::deliverOrder( Svea\SveaConfig::getDefaultConfig() )
+                //->addOrderRow( TestUtil::createOrderRow() )
+                ->setCountryCode("SE")
+                ->setOrderId( $orderId )
+                ->setInvoiceDistributionType(\DistributionType::POST)
+        ;
+        
+        $deliverResponse = $DeliverOrderBuilder->deliverInvoiceOrder()->doRequest();
+
+        //print_r( $deliverResponse );        
+        $this->assertEquals(1, $deliverResponse->accepted);
+        $this->assertInstanceOf( "Svea\AdminService\DeliverOrdersResponse", $deliverResponse );  // deliverOrder_s_Response => Admin service deliverOrders  
+    }       
+    
     // orderrows are ignored by the service for paymentplan orders
     public function test_deliverOrder_deliverPaymentPlanOrder_with_orderrows_use_DeliverOrderEU_and_is_accepted() {
         
@@ -120,7 +142,7 @@ class DeliverOrderBuilderIntegrationTest extends PHPUnit_Framework_TestCase {
         // 1. remove (put in a comment) the above code to enable the test
         // 2. run the test, and check status of transaction in backoffice logs
         
-        $orderId = 582406;  // pre-existing card transactionId with status AUTHORIZED  
+        $orderId = 585714;  // pre-existing card transactionId with status AUTHORIZED  
         
         $DeliverOrderBuilder = WebPay::deliverOrder( Svea\SveaConfig::getDefaultConfig() )
             ->setCountryCode("SE")
@@ -131,31 +153,7 @@ class DeliverOrderBuilderIntegrationTest extends PHPUnit_Framework_TestCase {
 
         //print_r( $response );
         $this->assertEquals(1, $response->accepted);
-        $this->assertInstanceOf( "Svea\ConfirmTransactionResponse", $response );                
-    }
-
-    public function test_deliverOrder_deliverInvoiceOrder_without_orderrows_use_admin_service_deliverOrders_and_is_accepted() {
-        // create order, get orderid to deliver
-        $createOrderBuilder = TestUtil::createOrder();        
-        $createResponse = $createOrderBuilder->useInvoicePayment()->doRequest();
-
-        $this->assertEquals(1, $createResponse->accepted);
-        
-        $orderId = $createResponse->sveaOrderId;        
-        $DeliverOrderBuilder = WebPay::deliverOrder( Svea\SveaConfig::getDefaultConfig() )
-                //->addOrderRow( TestUtil::createOrderRow() )
-                ->setCountryCode("SE")
-                ->setOrderId( $orderId )
-                ->setInvoiceDistributionType(\DistributionType::POST)
-        ;
-        
-        $deliverResponse = $DeliverOrderBuilder->deliverInvoiceOrder()->doRequest();
-
-        //print_r( $deliverResponse );        
-        $this->assertEquals(1, $deliverResponse->accepted);
-        $this->assertInstanceOf( "Svea\AdminService\DeliverOrdersResponse", $deliverResponse );  // deliverOrder_s_Response => Admin service deliverOrders  
-    }        
+        $this->assertInstanceOf( "Svea\HostedService\ConfirmTransactionResponse", $response );                
+    }     
 }
-
-
 ?>

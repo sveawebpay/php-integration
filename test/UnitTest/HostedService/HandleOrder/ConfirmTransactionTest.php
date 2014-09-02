@@ -21,12 +21,6 @@ class ConfirmTransactionTest extends PHPUnit_Framework_TestCase {
         $this->assertInstanceOf( "Svea\HostedService\ConfirmTransaction", $this->confirmObject);
         $this->assertEquals( "confirm", PHPUnit_Framework_Assert::readAttribute($this->confirmObject, 'method') );                
     }
-    
-    function test_setCountryCode(){
-        $countryCode = "SE";       
-        $this->confirmObject->setCountryCode( $countryCode );
-        $this->assertEquals( $countryCode, PHPUnit_Framework_Assert::readAttribute($this->confirmObject, 'countryCode') );
-    }
               
     function test_prepareRequest_array_contains_mac_merchantid_message() {
 
@@ -38,7 +32,7 @@ class ConfirmTransactionTest extends PHPUnit_Framework_TestCase {
         $this->confirmObject->captureDate = $captureDate;
         
         $countryCode = "SE";
-        $this->confirmObject->setCountryCode($countryCode);
+        $this->confirmObject->countryCode = $countryCode;
                 
         $form = $this->confirmObject->prepareRequest();
 
@@ -58,7 +52,7 @@ class ConfirmTransactionTest extends PHPUnit_Framework_TestCase {
         $this->confirmObject->captureDate = $captureDate;
         
         $countryCode = "SE";
-        $this->confirmObject->setCountryCode($countryCode);
+        $this->confirmObject->countryCode = $countryCode;
                 
         $form = $this->confirmObject->prepareRequest();
         
@@ -91,7 +85,7 @@ class ConfirmTransactionTest extends PHPUnit_Framework_TestCase {
         $this->confirmObject->captureDate = $captureDate;
         
         $countryCode = "SE";
-        $this->confirmObject->setCountryCode($countryCode);
+        $this->confirmObject->countryCode = $countryCode;
                 
         $form = $this->confirmObject->prepareRequest();
     }
@@ -107,7 +101,7 @@ class ConfirmTransactionTest extends PHPUnit_Framework_TestCase {
         $this->confirmObject->transactionId = $transactionId;
 
         $countryCode = "SE";
-        $this->confirmObject->setCountryCode($countryCode);
+        $this->confirmObject->countryCode = $countryCode;
                 
         $form = $this->confirmObject->prepareRequest();       
     }

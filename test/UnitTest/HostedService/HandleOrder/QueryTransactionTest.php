@@ -26,7 +26,7 @@ class QueryTransactionTest extends PHPUnit_Framework_TestCase {
     
     function test_setCountryCode(){
         $countryCode = "SE";       
-        $this->queryObject->setCountryCode( $countryCode ); 
+        $this->queryObject->countryCode = $countryCode; 
         $this->assertEquals( $countryCode, PHPUnit_Framework_Assert::readAttribute($this->queryObject, 'countryCode') );
     }
               
@@ -37,7 +37,7 @@ class QueryTransactionTest extends PHPUnit_Framework_TestCase {
         $this->queryObject->transactionId = $transactionId;
 
         $countryCode = "SE";
-        $this->queryObject->setCountryCode($countryCode);
+        $this->queryObject->countryCode = $countryCode; 
                 
         $form = $this->queryObject->prepareRequest();
 
@@ -54,7 +54,7 @@ class QueryTransactionTest extends PHPUnit_Framework_TestCase {
         $this->queryObject->transactionId = $transactionId;
 
         $countryCode = "SE";
-        $this->queryObject->setCountryCode($countryCode);
+        $this->queryObject->countryCode = $countryCode; 
                 
         $form = $this->queryObject->prepareRequest();
         
@@ -83,7 +83,7 @@ class QueryTransactionTest extends PHPUnit_Framework_TestCase {
         );        
         
         $countryCode = "SE";
-        $this->queryObject->setCountryCode($countryCode);
+        $this->queryObject->countryCode = $countryCode; 
                 
         $form = $this->queryObject->prepareRequest();     
     }
