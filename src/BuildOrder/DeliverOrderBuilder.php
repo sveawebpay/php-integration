@@ -10,21 +10,19 @@ require_once SVEA_REQUEST_DIR . '/Includes.php';
  * 
  * For invoice and payment plan orders, the deliver order request should 
  * generally be sent to Svea once the ordered items have been sent out, or 
- * otherwise delivered, to the customer.
- * 
- * For invoice and payment plan orders, the deliver order request triggers the 
- * customer invoice being sent out to the customer by Svea. 
+ * otherwise delivered, to the customer. The deliver order request triggers the 
+ * customer invoice being sent out to the customer by Svea (assuming that you 
+ * have auto-approval of invoices turned on for your account, please contact 
+ * Svea if unsure). 
  * 
  * For card orders, the deliver order request confirms the card transaction, 
- * which in turn causes the card transaction to be batch processed by Svea. An 
- * auto-confirm account setting is also available, ask your Svea integration 
- * manager about this.
+ * which in turn causes the card transaction to be batch processed by Svea 
+ * (Assuming that you have auto-confirm turned off for your account, please 
+ * contact Svea if unsure.)
  * 
- * For card orders, the deliver order request confirms the card transaction, which in
- * turn causes the card transaction to be batch processed by Svea.
- * 
- * Generally, orders are delivered in full, and so will also be the case for orders
- * delivered when no order rows have been added to the DeliverOrderBuilder object.
+ * Generally, orders are delivered in full, and so will also be the case for 
+ * deliver order requests with no order rows added to the DeliverOrderBuilder 
+ * object.
  * 
  * Set all required order attributes in a DeliverOrderBuilder instance by using the 
  * OrderBuilder setAttribute() methods. Instance methods can be chained together, as 
@@ -43,13 +41,13 @@ require_once SVEA_REQUEST_DIR . '/Includes.php';
  * ->setInvoiceDistributionType(\DistributionType::POST)
  *
  * PaymentPlan required methods:
- * ->addOrderRow( TestUtil::createOrderRow() )
  * ->setCountryCode("SE")
  * ->setOrderId( $orderId )
  * 
  * Card required methods:
  * ->setOrderId( $orderId )
  * ->setCountryCode("SE")
+ * 
  * Card optional methods:
  * ->setCaptureDate( $orderId )
  *  
@@ -65,13 +63,15 @@ class DeliverOrderBuilder extends OrderBuilder {
     public $orderId;    
 
     /**
-     * @deprecated 2.0.0 Use WebPayAdmin::UpdateOrder to modify or partially deliver an order.
+     * @deprecated 2.0.0 Use WebPayAdmin::UpdateOrderRows to modify or partially deliver an order.
      * 
-     * 1.x: Required. Use setOrderRos to add order rows to deliver. Rows matching 
-     * the original create order request order rows will be invoiced by Svea. 
+     * 1.x: Required. Use setOrderRows to add invoice order rows to deliver. 
+     * Rows matching the original create order request order rows will be 
+     * invoiced by Svea. If not all order rows match, an invoice order will be 
+     * partially delivered/invoiced, see the Svea Web Service EU API 
+     * documentation for details.
      * 
-     * If not all order rows match, the order will be partially delivered/invoiced, 
-     * see the Svea Web Service EU API documentation for details on how this works.
+     * 2.x: Optional. Use WebPayAdmin::UpdateOrderRows to modify or partially deliver an order.
      */
     public function addOrderRow($itemOrderRowObject) {
         return parent::addOrderRow($itemOrderRowObject);
@@ -177,14 +177,9 @@ class DeliverOrderBuilder extends OrderBuilder {
      * @return DeliverPaymentPlan
      */
     public function deliverPaymentPlanOrder() {
-        if( count($this->orderRows) > 0 ) {
-            return new WebService\DeliverPaymentPlan($this);
-        }
-        else {
-            $this->orderType = "PaymentPlan";
-            return new AdminService\DeliverOrdersRequest($this);
-        }
+        return new WebService\DeliverPaymentPlan($this);
     }
+
     /** @var string orderType  one of "Invoice" or "PaymentPlan"*/
     public $orderType;
 
@@ -199,6 +194,8 @@ class DeliverOrderBuilder extends OrderBuilder {
      */
     public function deliverCardOrder() {        
         $this->orderType = \ConfigurationProvider::HOSTED_TYPE;
+        
+        // validation is done in ConfirmTransaction
         
         $defaultCaptureDate = explode("T", date('c')); // [0] contains date part
 
