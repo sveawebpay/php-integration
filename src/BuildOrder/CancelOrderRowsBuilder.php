@@ -87,15 +87,6 @@ class CancelOrderRowsBuilder {
     /** @var string $countryCode */
     public $countryCode;
 
-    /**
-     * Required.
-     * @param string $orderType -- one of ConfigurationProvider::INVOICE_TYPE, ::PAYMENTPLAN_TYPE, ::HOSTED_TYPE
-     * @return $this
-     */
-    public function setOrderType($orderTypeAsConst) {
-        $this->orderType = $orderTypeAsConst;
-        return $this;
-    }
     /** @var string $orderType -- one of ConfigurationProvider::INVOICE_TYPE, ::PAYMENTPLAN_TYPE, ::HOSTED_TYPE */
     public $orderType;    
 
@@ -153,7 +144,7 @@ class CancelOrderRowsBuilder {
      * @return CancelOrderRowsRequest 
      */
     public function cancelInvoiceOrderRows() {
-        $this->setOrderType(\ConfigurationProvider::INVOICE_TYPE );
+        $this->orderType = \ConfigurationProvider::INVOICE_TYPE;
         return new AdminService\CancelOrderRowsRequest($this);
     }
     
@@ -162,7 +153,7 @@ class CancelOrderRowsBuilder {
      * @return CancelOrderRowsRequest 
      */
     public function cancelPaymentPlanOrderRows() {
-        $this->setOrderType(\ConfigurationProvider::PAYMENTPLAN_TYPE);
+        $this->orderType = \ConfigurationProvider::PAYMENTPLAN_TYPE;
         return new AdminService\CancelOrderRowsRequest($this);    
     }
 
@@ -173,7 +164,7 @@ class CancelOrderRowsBuilder {
      * @throws ValidationException  if addNumberedOrderRows() has not been used.
      */
     public function cancelCardOrderRows() {
-        $this->setOrderType(\ConfigurationProvider::HOSTED_ADMIN_TYPE);
+        $this->orderType = \ConfigurationProvider::HOSTED_ADMIN_TYPE;
                 
         $this->validateCancelCardOrderRows();
         $sumOfRowAmounts = $this->calculateSumOfRowAmounts( $this->rowsToCancel, $this->numberedOrderRows );

@@ -108,11 +108,11 @@ class WebPayAdmin {
      * Then provide more information about the transaction and send the request using
      * cancelOrderRowsBuilder methods:
      *
-     * ->setOrderId()
-     * ->setCountryCode()
-     * ->setRowToCancel() (one or more)
-     * ->setRowsToCancel() (optional)
-     * ->addNumberedOrderRow() (card only, one or more)
+     * ->setOrderId()           (required)
+     * ->setCountryCode()       (required)
+     * ->setRowToCancel()       (required, index of one of the original order row you wish to credit)
+     * ->setRowsToCancel()      (optional)
+     * ->addNumberedOrderRow()  (card only, one or more)
      * ->addNumberedOrderRows() (card only, optional)
      *
      * Finish by selecting the correct ordertype and perform the request:
@@ -145,7 +145,7 @@ class WebPayAdmin {
      * ->setInvoiceDistributionType()   (invoice only, required)
      * ->setOrderId()                   (card and direct bank only, required)
      * ->setCountryCode()               (required)
-     * ->addCreditOrderRow()            (optional, use if you want to specify credit a row for amounts not present in the original order)
+     * ->addCreditOrderRow()            (optional, use if you want to specify a new credit row, i.e. for amounts not present in the original order)
      * ->addCreditOrderRows()           (optional)
      * ->setRowToCredit()               (optional, index of one of the original order row you wish to credit)
      * ->setRowsToCredit()              (optional)
