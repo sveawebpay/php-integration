@@ -59,12 +59,12 @@ class DeliverPaymentPlan extends HandleOrder {
             $errors['missing value'] = "CountryCode is required. Use function setCountryCode().";
         }
         return $errors;
-    }       
+    }
     
     private function validateOrderId($order, $errors) {
         if (isset($order->orderId) == FALSE) {
             $errors['missing value'] = "OrderId is required. Use function setOrderId() with the SveaOrderId from the createOrder response.";
         }
         return $errors;
-    }     
+    }
 }

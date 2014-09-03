@@ -95,7 +95,7 @@ class DeliverInvoice extends HandleOrder {
 
     private function validateInvoiceDetails($order, $errors) {
         if (isset($order->orderId) && $order->orderType == "Invoice" && isset($order->distributionType) == FALSE) {
-            $errors['missing value'] = "InvoiceDistributionType is requred for deliverInvoiceOrder. Use function setInvoiceDistributionType().";
+            $errors['missing value'] = "InvoiceDistributionType is required for deliverInvoiceOrder. Use function setInvoiceDistributionType().";
         }
         return $errors;
     }
