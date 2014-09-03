@@ -100,21 +100,11 @@ class DeliverOrderBuilder extends OrderBuilder {
     }      
       
     /**
-     * Invoice payments only! Required.
+     * Invoice only, required.
      * @param string DistributionType $distributionTypeAsConst  i.e. DistributionType::POST|DistributionType::EMAIL
      * @return $this
      */
     public function setInvoiceDistributionType($distributionTypeAsConst) {
-        if ($distributionTypeAsConst != \DistributionType::EMAIL || $distributionTypeAsConst != \DistributionType::POST) {
-            $distributionTypeAsConst = trim($distributionTypeAsConst);
-            if (preg_match("/post/i", $distributionTypeAsConst)) {
-                $distributionTypeAsConst = \DistributionType::POST;
-            } elseif (preg_match("/mail/i", $distributionTypeAsConst)) {
-                $distributionTypeAsConst = \DistributionType::EMAIL;
-            } else {
-                $distributionTypeAsConst = \DistributionType::POST;
-            }
-        }
         $this->distributionType = $distributionTypeAsConst;
         return $this;
     }
@@ -124,7 +114,7 @@ class DeliverOrderBuilder extends OrderBuilder {
     public $distributionType;
     
     /**
-     * Invoice payments only!
+     * Invoice only, optional
      * Use if this should be a credit invoice
      * @param type $invoiceId
      * @return $this
@@ -140,7 +130,7 @@ class DeliverOrderBuilder extends OrderBuilder {
     public $invoiceIdToCredit;
 
     /**
-     * Invoice payments only!
+     * Invoice only, optional
      * @param int $numberOfDaysAsInt
      * @return $this
      */
@@ -177,6 +167,7 @@ class DeliverOrderBuilder extends OrderBuilder {
      * @return DeliverPaymentPlan
      */
     public function deliverPaymentPlanOrder() {
+        $this->distributionType = \DistributionType::POST;
         return new WebService\DeliverPaymentPlan($this);
     }
 
