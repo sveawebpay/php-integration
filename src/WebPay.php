@@ -80,7 +80,7 @@ class WebPay {
      * then provide more information about the transaction and send the request using
      * the DeliverOrderBuilder methods:
      * 
-     * ->setOrderId()                   (invoice or payment plan, required)
+     * ->setOrderId()                   (invoice or payment plan only, required)
      * ->setTransactionId()             (card only, required -- you can also use setOrderId)
      * ->setCountryCode()               (required)
      * ->setInvoiceDistributionType()   (invoice only, required)

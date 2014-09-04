@@ -98,6 +98,43 @@ class WebPayAdmin {
     }
 
     /**
+     * The WebPayAdmin::deliverOrderRows entrypoint method is used to deliver individual order rows.
+     * Supports Invoice and card orders. (To partially deliver a PaymentPlan order, please contact Svea.)
+     * 
+     * Get an order builder instance using the WebPayAdmin::deliverOrderRows entrypoint,
+     * then provide more information about the transaction and send the request using
+     * the cancelOrderRowsBuilder methods:
+     *
+     * ->setOrderId()           (invoice only, required)
+     * ->setTransactionId()     (card only, required -- you can also use setOrderId)
+     * ->setCountryCode()       (invoice only, required)
+     * ->setRowToCancel()       (required, index of one of the original order row you wish to cancel)
+     * ->setRowsToCancel()      (optional)
+     * ->addNumberedOrderRow()  (card only, one or more)
+     * ->addNumberedOrderRows() (card only, optional)
+     *
+     * Finish by selecting the correct ordertype and perform the request:
+     * ->deliverInvoiceOrderRows() // or deliverCardOrderRows()
+     *   ->doRequest()
+     *
+     * The final doRequest() returns either a DeliverOrderRowsResponse, a LowerTransactionResponse or a CreditTransactionResponse.
+     *
+     * @see \Svea\DeliverOrderRowsBuilder \Svea\DeliverOrderRowsBuilder
+     * @see \Svea\AdminService\CancelOrderRowsResponse \Svea\AdminService\CancelOrderRowsResponse
+     * @see \Svea\HostedService\LowerTransactionResponse \Svea\HostedService\LowerTransactionResponse
+     * @see \Svea\HostedService\CreditTransactionResponse \Svea\HostedService\CreditTransactionResponse
+     *
+     * @param ConfigurationProvider $config  instance implementing ConfigurationProvider
+     * @return Svea\DeliverOrderRowsBuilder
+     * @throws ValidationException
+     */
+    public static function deliverOrderRows( $config = NULL ) {
+        if( $config == NULL ) { WebPay::throwMissingConfigException(); }
+        return new Svea\DeliverOrderRowsBuilder($config);
+    }    
+    
+    
+    /**
      * The WebPayAdmin::cancelOrderRows entrypoint method is used to cancel rows in an order before it has been delivered.
      * Supports Invoice, Payment Plan and Card orders. (Direct Bank orders are not supported, see CreditOrderRows instead.)
      * 
