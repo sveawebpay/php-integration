@@ -12,7 +12,7 @@ The WebPay class methods contains the functions needed to create orders and perf
 The WebPayAdmin class methods are used to administrate orders after they have been accepted by Svea. It includes functions to update, deliver, cancel and credit orders et.al.
 
 ### Package design philosophy
-In general, a request to Svea using the WebPay API starts out with you creating an instance of an order builder class, which is then built up with data using fluid method calls. At a certain point, a method is used to select which service the request will go against. This method then returns an service request instance of a different class, which handles the request to the service chosen. The service request will return a response object containing the various service responses and/or error codes.
+In general, a request to Svea using the WebPay API starts out with you creating an instance of an order builder class, which is then built up with data using fluid method calls. Note that not all methods are applicable to all payment methods, see documentation. At a certain point, a method is used to select which service the request will go against. This method then returns an service request instance of a different class, which handles the request to the service chosen. The service request will return a response object containing the various service responses and/or error codes.
 
 The WebPay API consists of the entrypoint methods in the WebPay and WebPayAdmin classes. These instantiate order builder classes in the Svea namespace, or in some cases request builder classes in the WebService, HostedService and AdminService sub-namespaces.
 
@@ -61,20 +61,52 @@ class WebPay {
     }
 
     /**
-     * deliverOrder (without orderRows) -- deliver in full an invoice or payment plan order, confirm a card order
+     * Use the WebPay::deliverOrder() entrypoint when you deliver an order. 
+     * Supports Invoice, Payment Plan and Card orders. (Direct Bank orders are not supported.)
+     * 
+     * The deliver order request should generally be sent to Svea once the ordered 
+     * items have been sent out, or otherwise delivered, to the customer. 
+     * 
+     * For invoice and partpayment orders, the deliver order request triggers the 
+     * invoice being sent out to the customer by Svea. (This assumes that your account
+     * has auto-approval of invoices turned on, please contact Svea if unsure). 
+     * 
+     * For card orders, the deliver order request confirms the card transaction, 
+     * which in turn allows nightly batch processing of the transaction by Svea.  
+     * (Delivering card orders is only needed if your account has auto-confirm
+     * turned off, please contact Svea if unsure.)
+     * 
+     * Get an order builder instance using the WebPay::deliverOrder entrypoint,
+     * then provide more information about the transaction and send the request using
+     * the DeliverOrderBuilder methods:
+     * 
+     * ->setOrderId()                   (invoice or payment plan, required)
+     * ->setTransactionId()             (card only, required -- you can also use setOrderId)
+     * ->setCountryCode()               (required)
+     * ->setInvoiceDistributionType()   (invoice only, required)
+     * ->setNumberOfCreditDays()        (invoice only, optional)
+     * ->setCaptureDate()               (card only, optional)
+     * ->addOrderRow()                  (deprecated, optional -- use WebPayAdmin::deliverOrderRows instead)
+     * ->setCreditInvoice()             (deprecated, optional -- use WebPayAdmin::creditOrderRows instead)
+     * 
+     * Finish by selecting the correct ordertype and perform the request:
+     * ->deliverInvoiceOrder() // deliverPaymentPlanOrder() or deliverCardOrder()
+     *   ->doRequest()
      *
-     * deliverOrder (with orderRows) -- (deprecated) partially deliver, change or credit an invoice or payment plan order, depending on set options
-     *
+     * The final doRequest() returns either a DeliverOrderResult or a ConfirmTransactionResponse.
+     * 
      * See the DeliverOrderBuilder class for more info on required methods used to i.e. specify order rows,
      * how to send the request to Svea, as well as the final response type.
      *
      * See also WebPayAdmin::deliverOrderRows for the preferred way to partially deliver an invoice or payment plan order.
      *
-     * @see \WebPayAdmin::deliverOrderRows() WebPayAdmin::deliverOrderRows()
-     *
-     * @return Svea\DeliverOrderBuilder
+     * @see \Svea\DeliverOrderBuilder \Svea\DeliverOrderBuilder
+     * @see \Svea\WebService\DeliverOrderResult \Svea\WebService\DeliverOrderResult
+     * @see \Svea\HostedService\ConfirmTransactionResponse \Svea\HostedService\ConfirmTransactionResponse
+     * 
      * @param ConfigurationProvider $config  instance implementing ConfigurationProvider Interface
-     * @throws Exception
+     * @return Svea\DeliverOrderBuilder
+     * @throws ValidationException
      */
     public static function deliverOrder($config = NULL) {
         if( $config == NULL ) { WebPay::throwMissingConfigException(); }

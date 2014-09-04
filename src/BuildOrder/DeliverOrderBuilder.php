@@ -8,49 +8,36 @@ require_once SVEA_REQUEST_DIR . '/Includes.php';
  * DeliverOrderBuilder collects and prepares order data for use in a deliver 
  * order request to Svea.
  * 
- * For invoice and payment plan orders, the deliver order request should 
- * generally be sent to Svea once the ordered items have been sent out, or 
- * otherwise delivered, to the customer. The deliver order request triggers the 
- * customer invoice being sent out to the customer by Svea (assuming that you 
- * have auto-approval of invoices turned on for your account, please contact 
- * Svea if unsure). 
- * 
- * For card orders, the deliver order request confirms the card transaction, 
- * which in turn causes the card transaction to be batch processed by Svea 
- * (Assuming that you have auto-confirm turned off for your account, please 
- * contact Svea if unsure.)
- * 
- * Generally, orders are delivered in full, and so will also be the case for 
- * deliver order requests with no order rows added to the DeliverOrderBuilder 
- * object.
- * 
- * Set all required order attributes in a DeliverOrderBuilder instance by using the 
- * OrderBuilder setAttribute() methods. Instance methods can be chained together, as 
- * they return the instance itself in a fluent manner.
- * 
- * Finish by using the delivery method matching the payment method specified in the 
- * createOrder request.
- * 
- * You can then go on specifying any payment method specific settings, using methods provided by the 
- * returned deliver order request class.
- * 
- * Invoice required methods: 
- * ->addOrderRow( TestUtil::createOrderRow() )
- * ->setCountryCode("SE")
- * ->setOrderId( $orderId )
- * ->setInvoiceDistributionType(\DistributionType::POST)
+ * Use setOrderId() to specify the Svea order id, this is the order id returned 
+ * with the original create order request response. For card orders, you can 
+ * optionally use setTransactionId() instead.
  *
- * PaymentPlan required methods:
- * ->setCountryCode("SE")
- * ->setOrderId( $orderId )
+ * Use setCountryCode() to specify the country code matching the original create
+ * order request.
  * 
- * Card required methods:
- * ->setOrderId( $orderId )
- * ->setCountryCode("SE")
+ * Use setInvoiceDistributionType() with the DistributionType matching how your  
+ * account is configured to send out invoices. (Please contact Svea if unsure.) 
+ *
+ * Use setNumberOfCreditDays() to specify the number of credit days for an invoice.
+ *
+ * (Deprecated -- to partially deliver an invoice order, you can specify order rows to deliver
+ * using the addOrderRows() method. Use the WebPayAdmin::deliverOrderRows entrypoint instead.)
  * 
- * Card optional methods:
- * ->setCaptureDate( $orderId )
- *  
+ * (Deprecated -- to issue a credit invoice, you can specify credit order rows to deliver using 
+ * setCreditInvoice() and addOrderRows(). Use the WebPayAdmin::creditOrderRow entrypoint instead.)
+ * 
+ * To deliver an invoice, partpayment or card order in full, use the WebPay::deliverOrder
+ * entrypoint without specifying order rows.
+ * 
+ * When specifying orderrows, WebPay::deliverOrder is used in a similar way to WebPay::createOrder
+ * and makes use of the same order item information. Add order rows that you want delivered and send 
+ * the request, specified rows will automatically be matched to the rows sent when creating the order. 
+ * 
+ * We recommend storing the createOrder orderRow objects to ensure that deliverOrder order rows match.
+ * If an order row that was present in the createOrder request is not present in from the deliverOrder
+ * request, the order will be partially delivered, and any left out items will not be invoiced by Svea.
+ * You cannot partially deliver payment plan orders, where all un-cancelled order rows will be delivered.
+
  * @author Kristian Grossman-Madsen, Anneli Halld'n, Daniel Brolund for Svea Webpay
  */
 class DeliverOrderBuilder extends OrderBuilder {
@@ -63,15 +50,13 @@ class DeliverOrderBuilder extends OrderBuilder {
     public $orderId;    
 
     /**
-     * @deprecated 2.0.0 Use WebPayAdmin::UpdateOrderRows to modify or partially deliver an order.
-     * 
-     * 1.x: Required. Use setOrderRows to add invoice order rows to deliver. 
+     * @deprecated 2.0.0 -- use WebPayAdmin::updateOrderRows in order to modify an existing order.
+     *
+     * 2.x: Optional. Use setOrderRows to add invoice order rows to deliver. 
      * Rows matching the original create order request order rows will be 
      * invoiced by Svea. If not all order rows match, an invoice order will be 
      * partially delivered/invoiced, see the Svea Web Service EU API 
      * documentation for details.
-     * 
-     * 2.x: Optional. Use WebPayAdmin::UpdateOrderRows to modify or partially deliver an order.
      */
     public function addOrderRow($itemOrderRowObject) {
         return parent::addOrderRow($itemOrderRowObject);
