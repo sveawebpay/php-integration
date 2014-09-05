@@ -44,7 +44,7 @@ class DeliverOrderRowsRequestIntegrationTest extends PHPUnit_Framework_TestCase{
         $deliverOrderRowsResponse = $deliverOrderRowsRequest->deliverInvoiceOrderRows()->doRequest();
         
         print_r( $deliverOrderRowsResponse );        
-        $this->assertInstanceOf('Svea\AdminService\DeliverOrderRowsResponse', $deliverOrderRowsResponse);
+        $this->assertInstanceOf('Svea\AdminService\DeliverPartialResponse', $deliverOrderRowsResponse);
         $this->assertEquals(1, $deliverOrderRowsResponse->accepted );        
     }
 

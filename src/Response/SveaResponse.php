@@ -94,7 +94,10 @@ class SveaResponse {
                     case "CreditInvoiceRows":
                         $this->response = new Svea\AdminService\CreditInvoiceRowsResponse( $message );
                         break;
-                                       
+                    case "DeliverPartial":
+                        $this->response = new Svea\AdminService\DeliverPartialResponse( $message );
+                        break;
+                    
                     default:
                         throw new Exception("unknown method: $method");
                         break;
