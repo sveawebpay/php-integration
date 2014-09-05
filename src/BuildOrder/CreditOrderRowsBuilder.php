@@ -4,9 +4,8 @@ namespace Svea;
 require_once SVEA_REQUEST_DIR . '/Includes.php';
 
 /**
- * Credit order rows in a delivered invoice order, a charged card order or 
- * a direct bank order. Supports Invoice, Card and Direct Bank orders.
-
+ * The WebPayAdmin::creditOrderRows entrypoint method is used to credit rows in an order after it has been delivered.
+ * Supports Invoice, Card and Direct Bank orders. (To credit a Payment Plan order, contact Svea customer service.)
  * 
  * To credit an order row in full, you specify the index of the order row to 
  * credit (and for card orders, supply the numbered order row data itself).
@@ -16,16 +15,6 @@ require_once SVEA_REQUEST_DIR . '/Includes.php';
  * or addCreditOrderRows(). These rows will then be credited in addition to any 
  * rows specified using setRow(s)ToCredit below.
  *  
- * Use setRowToCredit() or setRowsToCredit() to specify order rows to credit. 
- * The given row numbers must correspond with the the serverside row number. 
- * 
- * For card or direct bank orders, it is required to use addNumberedOrderRow() 
- * or addNumberedOrderRows() to pass in a copy of the serverside order row data.
- *  
- * For Invoice orders, the serverside order row status of the invoice is updated
- * to reflect the new status of the order rows. Note that for Card and Direct 
- * bank orders the serverside order row status will not be updated.
- *
  * Use setInvoiceId() to specify the invoice (delivered order) to credit. 
  * 
  * Use setOrderId() to specify the card or direct bank transaction (delivered order) to credit.
@@ -33,20 +22,23 @@ require_once SVEA_REQUEST_DIR . '/Includes.php';
  * Use setCountryCode() to specify the country code matching the original create
  * order request.
  * 
+ * Use setRowToCredit() or setRowsToCredit() to specify order rows to credit. 
+ * The given row numbers must correspond with the the serverside row number. 
+ * 
+ * For card or direct bank orders, it is required to use addNumberedOrderRow() 
+ * or addNumberedOrderRows() to pass in a copy of the serverside order row data.
+ *
+ * You can use the WebPayAdmin::queryOrder() entrypoint to get information about the order,
+ * the queryOrder response numberedOrderRows attribute contains the order rows with numbers.
+ * For invoice orders, the serverside order rows is updated after a creditOrderRows request. 
+ * Note that for Card and Direct bank orders the serverside order rows will not be updated.
+ *  
  * Then use either creditInvoiceOrderRows(), creditCardOrderRows() or 
  * creditDirectBankOrderRows() to get a request object, which ever matches the 
  * payment method used in the original order.
  * 
  * Calling doRequest() on the request object will send the request to Svea and 
  * return either a CreditOrderRowsResponse or a CreditTransactionResponse.
- * 
- * @see \Svea\CreditOrderRowsBuilder \Svea\CreditOrderRowsBuilder
- * @see \Svea\AdminService\CreditOrderRowsResponse \Svea\AdminService\CreditOrderRowsResponse
- * @see \Svea\HostedService\CreditTransactionResponse \Svea\HostedService\CreditTransactionResponse
- *  
- * @param ConfigurationProvider $config  instance implementing ConfigurationProvider
- * @return Svea\CreditOrderRowsBuilder
- * @throws ValidationException
  * 
  * @author Kristian Grossman-Madsen for Svea WebPay
  */

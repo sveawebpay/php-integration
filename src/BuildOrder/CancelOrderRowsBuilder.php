@@ -19,12 +19,17 @@ require_once SVEA_REQUEST_DIR . '/Includes.php';
  * Use setCountryCode() to specify the country code matching the original create
  * order request.
  * 
- * Use setRowToCancel or setRowsToCancel() to specify the order row(s) to cancel. The order numbers
- * should correspond to those returned by i.e. WebPayAdmin::queryOrder;
+ * Use setRowToCancel or setRowsToCancel() to specify the order row(s) to cancel. The 
+ * order numbers should correspond to those returned by i.e. WebPayAdmin::queryOrder;
  * 
- * For card orders, use addNumberedOrderRow() or addNumberedOrderRows() to pass 
- * in order rows (from i.e. queryOrder) that will be matched with set rows to cancel.
- * 
+ * For card orders, use addNumberedOrderRow() or addNumberedOrderRows() to pass in 
+ * numbered order rows (from i.e. queryOrder) that will be matched with set rows to cancel.
+ *  
+ * (You can use the WebPayAdmin::queryOrder() entrypoint to get information about the order, the 
+ * queryOrder response attribute numberedOrderRows contains the serverside order rows w/numbers.
+ * Note: if card order rows has been changed (i.e. credited, cancelled) after initial creation, 
+ * the returned rows may not be accurate.)
+ *  
  * Then use either cancelInvoiceOrderRows(), cancelPaymentPlanOrderRows or cancelCardOrderRows,
  * which ever matches the payment method used in the original order request.
  *  
