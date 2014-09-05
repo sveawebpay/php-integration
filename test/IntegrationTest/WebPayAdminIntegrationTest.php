@@ -174,18 +174,9 @@ class WebPayAdminIntegrationTest extends PHPUnit_Framework_TestCase {
     
     // deliverOrderRows()
     // invoice
-    // card
-     
     public function test_deliverOrderRows_deliverInvoiceOrderRows_returns_DeliverOrderRowsRequest() {
         $deliverOrderRowsBuilder = WebPayAdmin::deliverOrderRows( Svea\SveaConfig::getDefaultConfig() );
         $request = $deliverOrderRowsBuilder->deliverInvoiceOrderRows();
         $this->assertInstanceOf ("Svea\AdminService\DeliverOrderRowsRequest", $request );
-    }
-    
-    public function test_deliverOrderRows_deliverCardOrderRows_returns_DeliverOrderRowsRequest() {
-        $deliverOrderRowsBuilder = WebPayAdmin::deliverOrderRows( Svea\SveaConfig::getDefaultConfig() );
-        $request = $deliverOrderRowsBuilder->deliverCardOrderRows();
-        $this->assertInstanceOf ("Svea\AdminService\DeliverOrderRowsRequest", $request );
-    }
-    
+    }    
 }
