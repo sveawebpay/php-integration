@@ -10,13 +10,15 @@ require_once 'AdminServiceResponse.php';
  */
 class DeliverPartialResponse extends AdminServiceResponse {
   
-    /** @var float $amount  (set iff accepted) the amount credited with this request (a negative amount) */
+    /** @var float $amount  (set iff accepted) the amount delivered with this request */
     public $amount;
 
     /** @var string $orderType  (set iff accepted)  one of [Invoice|PaymentPlan] */
     public $orderType;
     
-    
+    /** @var numeric $invoiceId  (set iff accepted, orderType Invoice)  the invoice id for the delivered order */
+    public $invoiceId;
+   
     function __construct($message) {
         $this->formatObject($message);  
     }    
@@ -36,9 +38,6 @@ class DeliverPartialResponse extends AdminServiceResponse {
             if( $this->orderType == "Invoice" ) {
                 $this->invoiceId = $message->OrdersDelivered->DeliverOrderResult->DeliveryReferenceNumber;
             } 
-            if( $this->orderType == "PaymentPlan" ) {
-                $this->contractNumber = $message->OrdersDelivered->DeliverOrderResult->DeliveryReferenceNumber;
-            }
         }            
     }
 }  
@@ -46,9 +45,9 @@ class DeliverPartialResponse extends AdminServiceResponse {
 // Example DeliverPartialResponse:
 //Svea\AdminService\DeliverPartialResponse Object
 //(
-//    [amount] => 
-//    [orderType] => 
-//    [creditInvoiceId] => 
+//    [amount] => 250.00
+//    [orderType] => Invoice
+//    [invoiceId] => 1033413
 //    [accepted] => 1
 //    [resultcode] => 0
 //    [errormessage] => 
@@ -62,13 +61,13 @@ class DeliverPartialResponse extends AdminServiceResponse {
 //                        (
 //                            [ClientId] => 79021
 //                            [DeliveredAmount] => 250.00
-//                            [DeliveryReferenceNumber] => 1033402
+//                            [DeliveryReferenceNumber] => 1033413
 //                            [OrderType] => Invoice
-//                            [SveaOrderId] => 410435
+//                            [SveaOrderId] => 410449
 //                        )
 //
 //                )
 //
 //        )
 //
-//)    
+//)
