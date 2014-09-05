@@ -49,7 +49,7 @@ class DeliverOrdersRequestIntegrationTest extends PHPUnit_Framework_TestCase{
         $order = TestUtil::createOrder( TestUtil::createIndividualCustomer($country) );
                 
         $orderResponse = $order->useInvoicePayment()->doRequest();
-        print_r( $orderResponse );
+        //print_r( $orderResponse );
         $this->assertEquals(1, $orderResponse->accepted);           
                
         $myOrderId = $orderResponse->sveaOrderId;
@@ -65,7 +65,7 @@ class DeliverOrdersRequestIntegrationTest extends PHPUnit_Framework_TestCase{
         $request = new Svea\AdminService\DeliverOrdersRequest( $DeliverOrderBuilder );
         $response = $request->doRequest();
                 
-        print_r( $response );        
+        //print_r( $response );        
         $this->assertInstanceOf('Svea\AdminService\DeliverordersResponse', $response);
         $this->assertEquals(true, $response->accepted );    // truth
         $this->assertEquals(1, $response->accepted );       // equals literal 1

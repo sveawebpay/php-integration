@@ -74,7 +74,7 @@ class DeliverOrderRowsRequestIntegrationTest extends PHPUnit_Framework_TestCase{
         ;
                 
         $orderResponse = $order->useInvoicePayment()->doRequest();
-        print_r( $orderResponse );
+        //print_r( $orderResponse );
         $this->assertEquals(1, $orderResponse->accepted);           
                
         $myOrderId = $orderResponse->sveaOrderId;
@@ -87,7 +87,7 @@ class DeliverOrderRowsRequestIntegrationTest extends PHPUnit_Framework_TestCase{
         $deliverOrderRowsRequest->setRowsToDeliver( array(1,2) );       
         $deliverOrderRowsResponse = $deliverOrderRowsRequest->deliverInvoiceOrderRows()->doRequest();
         
-        print_r( $deliverOrderRowsResponse );        
+        //print_r( $deliverOrderRowsResponse );        
         $this->assertInstanceOf('Svea\AdminService\DeliverPartialResponse', $deliverOrderRowsResponse);
         $this->assertEquals(true, $deliverOrderRowsResponse->accepted );    // truth
         $this->assertEquals(1, $deliverOrderRowsResponse->accepted );       // equals literal 1
