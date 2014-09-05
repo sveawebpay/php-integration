@@ -42,13 +42,12 @@ require_once SVEA_REQUEST_DIR . '/Includes.php';
  */
 class DeliverOrderBuilder extends OrderBuilder {
 
-     /**
-     * Order Id is recieved when creating order.
-     * This is the link between deliverOrder and createOrder.
-     * @var numeric $orderId
-     */
-    public $orderId;    
+    /** @var numeric $orderId  order id/transaction id as returned in the createOrder request response,  */
+    public $orderId;   
 
+    /** @var string $distributionType -- one of DistributionType::POST, ::EMAIL */
+    public $distributionType;
+       
     /**
      * @deprecated 2.0.0 -- use WebPayAdmin::updateOrderRows in order to modify an existing order.
      *
@@ -93,11 +92,7 @@ class DeliverOrderBuilder extends OrderBuilder {
         $this->distributionType = $distributionTypeAsConst;
         return $this;
     }
-    /**
-     * @var string  "Post" or "Email"
-     */
-    public $distributionType;
-    
+ 
     /**
      * Invoice only, optional
      * Use if this should be a credit invoice

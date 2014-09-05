@@ -67,9 +67,9 @@ class SoapClient {
             die;
         };
         
-//        echo "Debugging AdminService SoapCall: ";
-//        echo $this->client->__getLastRequest() . "\n";
-//        echo $this->client->__getLastRequestHeaders();             
+echo "Debugging AdminService SoapCall: ";
+echo $this->client->__getLastRequest() . "\n";
+echo $this->client->__getLastRequestHeaders();             
         return $response;
     }
 }

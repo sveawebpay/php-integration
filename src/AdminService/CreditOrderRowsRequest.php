@@ -114,8 +114,8 @@ class CreditOrderRowsRequest extends AdminServiceRequest {
             $errors[] = array('missing value' => "countryCode is required.");
         }
         return $errors;
-    }    
-    
+    }
+
 //    private function validateRowsToCredit($errors) {
 //        if (isset($this->orderBuilder->rowsToCredit) == FALSE) {                                                        
 //            $errors[] = array('missing value' => "rowsToCredit is required.");

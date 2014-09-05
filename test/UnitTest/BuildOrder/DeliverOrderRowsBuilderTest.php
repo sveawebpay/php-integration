@@ -34,23 +34,19 @@ class DeliverOrderRowsBuilderTest extends \PHPUnit_Framework_TestCase {
 //        $this->assertEquals($orderId, $this->deliverOrderRowsObject->orderId);        
 //    }  
 //    
-//    public function test_deliverOrderRowsBuilder_setInvoiceId() {
-//        $orderId = "123456";
-//        $this->deliverOrderRowsObject->setInvoiceId($orderId);
-//        $this->assertEquals($orderId, $this->deliverOrderRowsObject->invoiceId);        
-//    }
-//    public function test_deliverOrderRowsBuilder_setCountryCode() {
-//        $country = "SE";
-//        $this->deliverOrderRowsObject->setCountryCode($country);
-//        $this->assertEquals($country, $this->deliverOrderRowsObject->countryCode);        
-//    }
-//    
-//    public function test_deliverOrderRowsBuilder_setInvoiceDistributionType() {
-//        $distributionType = \DistributionType::POST;
-//        $this->deliverOrderRowsObject->setInvoiceDistributionType($distributionType);
-//        $this->assertEquals($distributionType, $this->deliverOrderRowsObject->distributionType);        
-//    }
-//    
+
+    public function test_deliverOrderRowsBuilder_setCountryCode() {
+        $country = "SE";
+        $this->deliverOrderRowsObject->setCountryCode($country);
+        $this->assertEquals($country, $this->deliverOrderRowsObject->countryCode);        
+    }
+    
+    public function test_deliverOrderRowsBuilder_setInvoiceDistributionType() {
+        $distributionType = \DistributionType::POST;
+        $this->deliverOrderRowsObject->setInvoiceDistributionType($distributionType);
+        $this->assertEquals($distributionType, $this->deliverOrderRowsObject->distributionType);        
+    }
+    
 //    public function test_addNumberedOrderRow() {
 //        $numberedOrderRow = new \Svea\NumberedOrderRow();
 //        $numberedOrderRow
@@ -84,12 +80,12 @@ class DeliverOrderRowsBuilderTest extends \PHPUnit_Framework_TestCase {
 //        $this->assertInternalType('array', $this->deliverOrderRowsObject->numberedOrderRows);     
 //    }
 //    
-//    public function test_deliverOrderRowsBuilder_deliverInvoiceOrderRowsBuilder_returns_deliverOrderRowsRequest() {
-//        $orderId = "123456";
-//        $deliverOrderRowsObject = $this->deliverOrderRowsObject->setOrderId($orderId)->deliverInvoiceOrderRows();
-//        
-//        $this->assertInstanceOf("Svea\AdminService\deliverOrderRowsRequest", $deliverOrderRowsObject);
-//    }
+    public function test_deliverOrderRowsBuilder_deliverInvoiceOrderRowsBuilder_returns_deliverOrderRowsRequest() {
+        $orderId = "123456";
+        $deliverOrderRowsObject = $this->deliverOrderRowsObject->setOrderId($orderId)->deliverInvoiceOrderRows();
+        
+        $this->assertInstanceOf("Svea\AdminService\deliverOrderRowsRequest", $deliverOrderRowsObject);
+    }
 //    
 //    public function test_deliverOrderRowsBuilder_deliverCardOrderRowsBuilder_returns_LowerTransaction() {
 //        $orderId = "123456";  

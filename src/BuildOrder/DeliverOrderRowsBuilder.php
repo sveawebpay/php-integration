@@ -15,36 +15,33 @@ class DeliverOrderRowsBuilder {
     /** @var ConfigurationProvider $conf  */
     public $conf;
 
-    /** @var numeric $orderId  card/direct bank order transaction id as returned in the createOrder request response,  */
+    /** @var numeric $orderId  order id/transaction id as returned in the createOrder request response,  */
     public $orderId;   
     
     /** @var string $countryCode */
     public $countryCode;
         
-//    /** @var string $orderType -- one of ConfigurationProvider::INVOICE_TYPE, ::HOSTED_ADMIN_TYPE */
-//    public $orderType;    
-//    
+    /** @var string $orderType -- one of ConfigurationProvider::INVOICE_TYPE, ::HOSTED_ADMIN_TYPE */
+    public $orderType;    
+
+    /** @var string $distributionType -- one of DistributionType::POST, ::EMAIL */
+    public $distributionType;
+           
+    /** @var int[] $rowsToDeliver  array of original order row indexes to deliver */
+    public $rowsToDeliver;
+    
 //    /** @var OrderRows[] $deliverOrderRows  any additional new order rows to deliver */
 //    public $deliverOrderRows;
 //
-//    /** @var int[] $rowsToDeliver  array of original order row indexes to deliver
-//    public $rowsToDeliver;
-//    
 //    /** @var NumberedOrderRows[] $numberedOrderRows  numbered order rows passed in for hosted service orders */
 //    public $numberedOrderRows;
-//    
-//    /** @var numeric @invoiceId  invoice id as returned in the deliverOrder request response */
-//    public $invoiceId;
-//    
-//
-//    /**@var string  "Post" or "Email" */
-//    public $distributionType;    
+//     
     
     public function __construct($config) {
         $this->conf = $config;
         $this->deliverOrderRows = array();
         $this->rowsToDeliver = array();         
-//        $this->numberedOrderRows = array();
+        $this->numberedOrderRows = array();
     }        
 
     /**
@@ -60,21 +57,7 @@ class DeliverOrderRowsBuilder {
         $this->countryCode = $countryCodeAsString;
         return $this;
     }
-
-//    /**
-//     * Required for DeliverInvoiceOrder() -- use invoice id recieved with deliverOrder response.
-//     * 
-//     * Use setInvoiceId() to set the invoice to deliver. Use setOrderId() to set the 
-//     * card or direct bank transaction to deliver.
-//     * 
-//     * @param numeric $invoiceIdAsString
-//     * @return $this
-//     */
-//    public function setInvoiceId($invoiceIdAsString) {
-//        $this->invoiceId = $invoiceIdAsString;
-//        return $this;
-//    }
-//   
+ 
     /**
      * Required for DeliverCardOrder() -- use the order id (transaction id) received with the createOrder response.
      * 
@@ -85,6 +68,17 @@ class DeliverOrderRowsBuilder {
         $this->orderId = $orderIdAsString;
         return $this;
     }
+    
+    /**
+     * Required for DeliverInvoiceOrder() -- must match the invoice distribution type for the order
+     * 
+     * @param string DistributionType $distributionTypeAsConst  i.e. DistributionType::POST|DistributionType::EMAIL
+     * @return $this
+     */
+    public function setInvoiceDistributionType($distributionTypeAsConst) {
+        $this->distributionType = $distributionTypeAsConst;
+        return $this;
+    }     
     
 //    /**
 //     * Optional for DeliverCardOrder() -- use the order id (transaction id) received with the createOrder response.
@@ -98,58 +92,38 @@ class DeliverOrderRowsBuilder {
 //        return $this->setOrderId($orderIdAsString);
 //    }    
 //    
-//    /**
-//     * Required for DeliverInvoiceOrder() -- must match the invoice distribution type for the order
-//     * 
-//     * @param string DistributionType $distributionTypeAsConst  i.e. DistributionType::POST|DistributionType::EMAIL
-//     * @return $this
-//     */
-//    public function setInvoiceDistributionType($distributionTypeAsConst) {
-//        if ($distributionTypeAsConst != \DistributionType::EMAIL || $distributionTypeAsConst != \DistributionType::POST) {
-//            $distributionTypeAsConst = trim($distributionTypeAsConst);
-//            if (preg_match("/post/i", $distributionTypeAsConst)) {
-//                $distributionTypeAsConst = \DistributionType::POST;
-//            } elseif (preg_match("/mail/i", $distributionTypeAsConst)) {
-//                $distributionTypeAsConst = \DistributionType::EMAIL;
-//            } else {
-//                $distributionTypeAsConst = \DistributionType::POST;
-//            }
-//        }
-//        $this->distributionType = $distributionTypeAsConst;
-//        return $this;
-//    }
-//        
-//    /**
-//     * Required -- a row number to deliver
-//     * 
-//     * Use setRowToDeliver() or setrowsToDeliver() to specify order rows to deliver. 
-//     * The given row numbers must correspond with the serverside row numbers. 
-//     * For card or direct bank orders, must match an order row specified using
-//     * addNumberedOrderRow() or addNumberedOrderRows().
-//     * 
-//     * @param numeric $rowNumber
-//     * @return $this
-//     */
-//    public function setRowToDeliver( $rowNumber ) {
-//        $this->rowsToDeliver[] = $rowNumber;
-//        return $this;
-//    }    
-//    
-//    /**
-//     * Optional -- convenience method to provide several row numbers at once.
-//     * 
-//     * Use setRowToDeliver() or setrowsToDeliver() to specify order rows to deliver. 
-//     * The given row numbers must correspond with the serverside row numbers. 
-//     * For card or direct bank orders, must match an order row specified using
-//     * addNumberedOrderRow() or addNumberedOrderRows().
-//     * 
-//     * @param int[] $rowNumbers
-//     * @return $this
-//     */
-//    public function setrowsToDeliver( $rowNumbers ) {       
-//        $this->rowsToDeliver = array_merge( $this->rowsToDeliver, $rowNumbers );     
-//        return $this;
-//    } 
+        
+    /**
+     * Required -- a row number to deliver
+     * 
+     * Use setRowToDeliver() or setRowsToDeliver() to specify order rows to deliver. 
+     * The given row numbers must correspond with the serverside row numbers. 
+     * For card or direct bank orders, must match an order row specified using
+     * addNumberedOrderRow() or addNumberedOrderRows().
+     * 
+     * @param numeric $rowNumber
+     * @return $this
+     */
+    public function setRowToDeliver( $rowNumber ) {
+        $this->rowsToDeliver[] = $rowNumber;
+        return $this;
+    }    
+    
+    /**
+     * Optional -- convenience method to provide several row numbers at once.
+     * 
+     * Use setRowToDeliver() or setRowsToDeliver() to specify order rows to deliver. 
+     * The given row numbers must correspond with the serverside row numbers. 
+     * For card or direct bank orders, must match an order row specified using
+     * addNumberedOrderRow() or addNumberedOrderRows().
+     * 
+     * @param int[] $rowNumbers
+     * @return $this
+     */
+    public function setRowsToDeliver( $rowNumbers ) {       
+        $this->rowsToDeliver = array_merge( $this->rowsToDeliver, $rowNumbers );     
+        return $this;
+    } 
 //       
 //    /**
 //     * Optional -- add an order row to deliver that was not present in the original order.
@@ -165,7 +139,7 @@ class DeliverOrderRowsBuilder {
 //    }    
 //    
 //    /**
-//     * Optional -- convenience method to add serveral new roes at once.
+//     * Optional -- convenience method to add serveral new rows at once.
 //     *  
 //     * These rows will be delivered in addition to the rows specified using setRow(s)ToDeliver
 //     * 
@@ -225,17 +199,17 @@ class DeliverOrderRowsBuilder {
 //        return $this;
 //    }
 //    
-//    /**
-//     * Use deliverInvoiceOrderRows() to deliver rows to an Invoice order using AdminServiceRequest DeliverOrderRows request
-//     * @return DeliverOrderRowsRequest 
-//     */
-//    public function deliverInvoiceOrderRows() {
-//        $this->orderType = \ConfigurationProvider::INVOICE_TYPE; 
-//        
-//        // validation is done in DeliverOrderRowsRequest
-//      
-//        return new AdminService\DeliverOrderRowsRequest($this);
-//    }
+    /**
+     * Use deliverInvoiceOrderRows() to deliver rows to an Invoice order using AdminServiceRequest DeliverOrderRows request
+     * @return DeliverOrderRowsRequest 
+     */
+    public function deliverInvoiceOrderRows() {
+        $this->orderType = \ConfigurationProvider::INVOICE_TYPE; 
+        
+        // validation is done in DeliverOrderRowsRequest
+      
+        return new AdminService\DeliverOrderRowsRequest($this);
+    }
 //    
 //    /**
 //     * Use deliverCardOrderRows() to deliver a Card order by the specified order row amounts using HostedRequests DeliverTransaction request
@@ -282,7 +256,7 @@ class DeliverOrderRowsBuilder {
 //        }   
 //        
 //        if( (count($this->rowsToDeliver) > 0) && ( (count($this->rowsToDeliver) != count($this->numberedOrderRows)) ) ) {
-//            $exceptionString = "every entry in rowsToDeliver must have a corresponding numberedOrderRows. Use setrowsToDeliver() and addNumberedOrderRow().";
+//            $exceptionString = "every entry in rowsToDeliver must have a corresponding numberedOrderRows. Use setRowsToDeliver() and addNumberedOrderRow().";
 //            throw new ValidationException($exceptionString);
 //        }
 //        
@@ -291,7 +265,7 @@ class DeliverOrderRowsBuilder {
 //               
 //        foreach( $this->rowsToDeliver as $index ) {
 //            if( !in_array($index, $numberedOrderRowNumbers) ) {
-//                $exceptionString = "every entry in rowsToDeliver must match a numberedOrderRows. Use setrowsToDeliver() and addNumberedOrderRow().";
+//                $exceptionString = "every entry in rowsToDeliver must match a numberedOrderRows. Use setRowsToDeliver() and addNumberedOrderRow().";
 //            throw new ValidationException($exceptionString);
 //            }
 //        }
