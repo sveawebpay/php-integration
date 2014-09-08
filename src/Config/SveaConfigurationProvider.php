@@ -110,7 +110,7 @@ class SveaConfigurationProvider implements \ConfigurationProvider {
 
             $this->throwInvalidCountryException();
         } elseif (array_key_exists($uType,$this->conf['credentials'][$uCountry]['auth']) == FALSE) {
-            $this->throwInvalidTypeException();
+            $this->throwInvalidTypeException( $uType );
         }
 
         return $this->conf['credentials'][$uCountry]['auth'][$uType][$property];
@@ -129,7 +129,7 @@ class SveaConfigurationProvider implements \ConfigurationProvider {
     private function throwInvalidTypeException( $invalid_type ) {
         throw new InvalidTypeException(
             sprintf(
-                'Invalid service type \"%s\". Accepted values: %s, %s, %s or %s',
+                'Invalid service type "%s". Accepted values: %s, %s, %s or %s',
                 $invalid_type,
                 \ConfigurationProvider::INVOICE_TYPE,
                 \ConfigurationProvider::PAYMENTPLAN_TYPE,

@@ -921,42 +921,97 @@ $myResponse = $myDeliverOrderRequest->doRequest();
 The above example can be found in the <a href="https://github.com/sveawebpay/php-integration/blob/master/example/firstdeliver/" target="_blank">example/firstdeliver</a> folder.
 
 ### 6.3 WebPay::getAddresses()
-Use getAddresses() to fetch a list of validated addresses associated with a given customer identity. Used to i.e. present to the customer the invoice
-address used by Svea, which for invoice and payment plan orders also should match the order delivery address.
-
-Returns an instance of WebService\getAddressesResponse containing a list of verified addresses and addressSelector strings for a given customer.
-
-The GetAddresses service is only applicable for SE, NO and DK customers and accounts. In Norway, GetAddresses may only be performed on company customers.
-
-#### 6.3.1 getAddresses response format
-
+<!-- WebPay::getAddresses() docblock below, replace @see with apidoc links -->
 ```php
-    $response->accepted                 // boolean, true iff Svea accepted request
-    $response->resultcode               // may contain an error code
-    $response->customerIdentity         // if accepted, may define a GetAddressIdentity object:
-        ->customerType;       // not guaranteed to be defined
-        ->nationalIdNumber;   // not guaranteed to be defined
-        ->phoneNumber;        // not guaranteed to be defined
-        ->firstName;          // not guaranteed to be defined
-        ->lastName;           // not guaranteed to be defined
-        ->fullName;           // not guaranteed to be defined
-        ->street;             // not guaranteed to be defined
-        ->coAddress;          // not guaranteed to be defined
-        ->zipCode;            // not guaranteed to be defined
-        ->locality;           // not guaranteed to be defined
-
+/**
+ * The WebPay::getAddresses() entrypoint is used to fetch validated addresses 
+ * associated with a given customer identity. Only applicable for SE, NO and DK 
+ * customers. Note that in Norway, company customers only are supported.
+ *
+ * Use getAddresses() to fetch a list of validated addresses associated with a given 
+ * customer identity. This list can in turn be used to i.e. verify that an order delivery 
+ * address matches the invoice address used by Svea for invoice and payment plan orders.
+ * 
+ * Get an request class instance using the WebPay::getAddresses entrypoint, then
+ * provide more information about the transaction and send the request using the
+ * request class methods:
+ * 
+ * ->setCountryCode()           (required -- supply the country code that corresponds to the account credentials used for the address lookup) 
+ * ->setIdentifier()            (required -- i.e. the social security number, company vat number et al for the country in question)
+ * 
+ * The following methods are deprecated starting with 2.2 of the package
+ * ->setIndividual()            (deprecated, -- lookup the address of a private individual, set to i.e. social security number)
+ * ->setCompany()               (deprecated -- lookup the addresses associated with a legal entity (i.e. company)
+ * ->setOrderTypeInvoice()      (deprecated -- supply the method that corresponds to the account credentials used for the address lookup)
+ * ->setOrderTypePaymentPlan()  (deprecated -- supply the method that corresponds to the account credentials used for the address lookup)
+ * 
+ * Finish by selecting the correct customer type and perform the request:
+ * ->getIndividualAddresses() // or getCompanyAddresses()
+ *   ->doRequest()
+ * 
+ * The final doRequest() returns a GetAddressesResponse.
+ *  
+ * @see \Svea\WebService\GetAddressesResponse \Svea\WebService\GetAddressesResponse
+ * 
+ * @param ConfigurationProvider $config  instance implementing ConfigurationProvider Interface
+ * @return Svea\WebService\GetAddresses
+ * @throws \Svea\ValidationException    
+ */
 ```
 
-See the <a href="http://htmlpreview.github.io/?https://raw.github.com/sveawebpay/php-integration/master/apidoc/classes/Svea.WebService.GetAddresses.html" target="_blank">GetAddresses</a> and <a href=http://htmlpreview.github.io/?https://raw.github.com/sveawebpay/php-integration/master/apidoc/classes/Svea.WebService.GetAddressesResponse.html" target="_blank">GetAddressesResponse</a> classes.
+See the <a href="http://htmlpreview.github.io/?https://raw.github.com/sveawebpay/php-integration/master/apidoc/classes/Svea.WebService.GetAddresses.html" target="_blank">GetAddresses</a> class.
 
-#### 6.3.2 getAddresses request example
+See the <a href=http://htmlpreview.github.io/?https://raw.github.com/sveawebpay/php-integration/master/apidoc/classes/Svea.WebService.GetAddressesResponse.html" target="_blank">GetAddressesResponse</a> class.
+
+#### 6.3.1 getAddresses response format
+<!-- GetAddresses class docblock below -->
+```php
+/**
+ * Returns an array of all the associated addresses for a given customer identity. 
+ * Each address has an AddressSelector attribute that uniquely identifies the address.
+ *
+ * The GetAddresses service is only applicable for SE, NO and DK customers and accounts. 
+ * In Norway, GetAddresses may only be performed on company customers.
+ * 
+ * Use setCountryCode() to supply the country code that corresponds to the account credentials used for the address lookup.
+ * Note that this means that you cannot look up a user in a foreign country, this is a consequence of the fact that the 
+ * invoice and partpayment methods don't support foreign orders.
+ * 
+ * Use setCustomerIdentifier() to provide the exact credentials needed to identify the customer according to country:
+ * SE: Personnummer (private individual) or Organisationsnummer (company or other legal entity)
+ * NO: Organisasjonsnummer (company or other legal entity)
+ * DK: Cpr.nr (private individual) or CVR-nummer (company or other legal entity)
+ * 
+ * Then use either getIndividualAddresses() or getCompanyAddresses() depending on what kind of customer you want to look up.
+ *  
+ * The final doRequest() will send the getAddresses request to Svea and return the result. 
+ * 
+ * The following methods are deprecated starting with 2.2 of the package
+ * ->setIndividual()                    (deprecated, -- lookup the address of a private individual, set to i.e. social security number)
+ * ->setCompany()                       (deprecated -- lookup the addresses associated with a legal entity (i.e. company)
+ * ->setOrderTypeInvoice()              (deprecated -- supply the method that corresponds to the account credentials used for the address lookup)
+ * ->setOrderTypePaymentPlan()          (deprecated -- supply the method that corresponds to the account credentials used for the address lookup)
+ * 
+ *  @author Anneli Halld'n, Daniel Brolund, Kristian Grossman-Madsen for Svea WebPay
+ */
+```
+
+#### 6.3.2 getAddresses request example (new style)
+```php
+$response = WebPay::getAddresses( $config )
+    ->setCountryCode("SE")                  // Required -- supply the country code that corresponds to the account credentials used
+    ->setCustomerIdentifier("194605092222") // Required -- SE individual requires a "personnummer"
+    ->getIndividualAddresses()              // Required -- lookup the address of a private individual 
+    ->doRequest();                          // Will make a best effort to use whichever is available of invoice or partpayment credentials
+;
+```
+
+#### 6.3.3 getAddresses request example (old style, deprecated)
 ```php
 $response = WebPay::getAddresses( $config )
     ->setCountryCode("SE")                  // Required -- supply the country code that corresponds to the account credentials used
     ->setOrderTypeInvoice()                 // Required -- use invoice account credentials for getAddresses lookup
-    //->setOrderTypePaymentPlan()           // Required -- use payment account plan credentials for getAddresses lookup
     ->setIndividual("194605092222")         // Required -- lookup the address of a private individual
-    //->setCompany("CompanyId")             // Required -- lookup the address of a legal entity (i.e. company)
     ->doRequest();
 ;
 ```
