@@ -93,7 +93,6 @@ class DeliverOrderRowsRequest extends AdminServiceRequest {
         $errors = $this->validateOrderType($errors);
         $errors = $this->validateCountryCode($errors);
         $errors = $this->validateRowsToDeliver($errors);     
-//        $errors = $this->validateDeliverOrderRowsHasPriceAndVatInformation($errors);
         return $errors;
     }
     
@@ -124,13 +123,4 @@ class DeliverOrderRowsRequest extends AdminServiceRequest {
         }
         return $errors;
     }
-//
-//    private function validateDeliverOrderRowsHasPriceAndVatInformation($errors) {
-//        foreach( $this->orderBuilder->deliverOrderRows as $orderRow ) {                                                        
-//            if( !isset($orderRow->vatPercent) && (!isset($orderRow->amountIncVat) && !isset($orderRow->amountExVat)) ) {            
-//                $errors[] = array('missing order row vat information' => "cannot calculate orderRow vatPercent, need at least two of amountExVat, amountIncVat and vatPercent.");
-//            }
-//        }
-//        return $errors;
-//    }
 }        
