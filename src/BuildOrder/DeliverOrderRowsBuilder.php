@@ -28,14 +28,7 @@ class DeliverOrderRowsBuilder {
     public $distributionType;
            
     /** @var int[] $rowsToDeliver  array of original order row indexes to deliver */
-    public $rowsToDeliver;
-    
-//    /** @var OrderRows[] $deliverOrderRows  any additional new order rows to deliver */
-//    public $deliverOrderRows;
-//
-//    /** @var NumberedOrderRows[] $numberedOrderRows  numbered order rows passed in for hosted service orders */
-//    public $numberedOrderRows;
-//     
+    public $rowsToDeliver;   
     
     public function __construct($config) {
         $this->conf = $config;
@@ -59,7 +52,7 @@ class DeliverOrderRowsBuilder {
     }
  
     /**
-     * Required for DeliverCardOrder() -- use the order id (transaction id) received with the createOrder response.
+     * Required -- use the order id (transaction id) received with the createOrder response.
      * 
      * @param numeric $orderIdAsString
      * @return $this
@@ -70,7 +63,7 @@ class DeliverOrderRowsBuilder {
     }
     
     /**
-     * Required for DeliverInvoiceOrder() -- must match the invoice distribution type for the order
+     * Required -- must match the invoice distribution type for the order
      * 
      * @param string DistributionType $distributionTypeAsConst  i.e. DistributionType::POST|DistributionType::EMAIL
      * @return $this
@@ -79,20 +72,7 @@ class DeliverOrderRowsBuilder {
         $this->distributionType = $distributionTypeAsConst;
         return $this;
     }     
-    
-//    /**
-//     * Optional for DeliverCardOrder() -- use the order id (transaction id) received with the createOrder response.
-//     * 
-//     * This is an alias for setOrderId().
-//     * 
-//     * @param numeric $orderIdAsString
-//     * @return $this
-//     */
-//    public function setTransactionId($orderIdAsString) {
-//        return $this->setOrderId($orderIdAsString);
-//    }    
-//    
-        
+           
     /**
      * Required -- a row number to deliver
      * 
@@ -124,81 +104,7 @@ class DeliverOrderRowsBuilder {
         $this->rowsToDeliver = array_merge( $this->rowsToDeliver, $rowNumbers );     
         return $this;
     } 
-//       
-//    /**
-//     * Optional -- add an order row to deliver that was not present in the original order.
-//     * 
-//     * These rows will be delivered in addition to the rows specified using setRow(s)ToDeliver
-//     * 
-//     * @param OrderRow $row
-//     * @return $this
-//     */
-//    public function addDeliverOrderRow( $row ) {
-//        $this->deliverOrderRows[] = $row;
-//        return $this;
-//    }    
-//    
-//    /**
-//     * Optional -- convenience method to add serveral new rows at once.
-//     *  
-//     * These rows will be delivered in addition to the rows specified using setRow(s)ToDeliver
-//     * 
-//     * @param OrderRow[] $rows
-//     * @return $this
-//     */
-//    public function addDeliverOrderRows( $rows ) {
-//        $this->deliverOrderRows = array_merge( $this->deliverOrderRows, $rows );
-//        return $this;
-//    }    
-//   
-//    /**
-//     * DeliverCardOrderRows, DeliverDirectBankOrderRows: Required - add information on a single numbered order row
-//     * 
-//     * When delivering card or direct bank order rows, you must pass in information about the row
-//     * along with the request. The rows are then matched with the order rows specified
-//     * using setRow(s)ToDeliver(). 
-//     *   
-//     * Use the WebPayAdmin::queryOrder() entrypoint to get information about the order,
-//     * the queryOrder response numberedOrderRows attribute contains the order rows and
-//     * their numbers.
-//     * 
-//     * When used with card or direct bank orders the following limitations apply: 
-//     * You need to supply the NumberedOrderRows on which to operate. These may be 
-//     * fetched using the queryOrder method, but if the order has been edited after 
-//     * creation they may not be accurate.
-//     * 
-//     * @param \Svea\NumberedOrderRow $numberedOrderRows instance of NumberedOrderRow
-//     * @return $this
-//     */
-//    public function addNumberedOrderRow( $numberedOrderRow ) {
-//        $this->numberedOrderRows[] = $numberedOrderRow;
-//        return $this;
-//    }       
-//    
-//    /**
-//     * DeliverCardOrderRows, DeliverDirectBankOrderRows: Optional - convenience method to provide several numbered order rows at once.
-//
-//     * When delivering card or direct bank order rows, you must pass in information about the row
-//     * along with the request. The rows are then matched with the order rows specified
-//     * using setRow(s)ToDeliver(). 
-//     *   
-//     * Use the WebPayAdmin::queryOrder() entrypoint to get information about the order,
-//     * the queryOrder response numberedOrderRows attribute contains the order rows and
-//     * their numbers.
-//     * 
-//     * When used with card or direct bank orders the following limitations apply: 
-//     * You need to supply the NumberedOrderRows on which to operate. These may be 
-//     * fetched using the queryOrder method, but if the order has been edited after 
-//     * creation they may not be accurate.
-//     * 
-//     * @param \Svea\NumberedOrderRow[] $numberedOrderRows array of NumberedOrderRow
-//     * @return $this
-//     */
-//    public function addNumberedOrderRows( $numberedOrderRows ) {
-//        $this->numberedOrderRows = array_merge( $this->numberedOrderRows, $numberedOrderRows );
-//        return $this;
-//    }
-//    
+
     /**
      * Use deliverInvoiceOrderRows() to deliver rows to an Invoice order using AdminServiceRequest DeliverOrderRows request
      * @return DeliverOrderRowsRequest 
@@ -210,37 +116,7 @@ class DeliverOrderRowsBuilder {
       
         return new AdminService\DeliverOrderRowsRequest($this);
     }
-//    
-//    /**
-//     * Use deliverCardOrderRows() to deliver a Card order by the specified order row amounts using HostedRequests DeliverTransaction request
-//     * 
-//     * @return DeliverTransaction
-//     * @throws ValidationException  if addNumberedOrderRows() has not been used.
-//     */
-//    public function deliverCardOrderRows() {
-//        $this->orderType = \ConfigurationProvider::HOSTED_ADMIN_TYPE;
-//                
-//        $this->validateDeliverCardOrderRows();
-//        
-//        $sumOfRowAmounts = $this->calculateSumOfRowAmounts( $this->rowsToDeliver, $this->numberedOrderRows, $this->deliverOrderRows );
-//        
-//        $deliverTransaction = new HostedService\DeliverTransaction($this->conf);
-//        $deliverTransaction->transactionId = $this->orderId;
-//        $deliverTransaction->deliverAmount = $sumOfRowAmounts*100; // *100, as setAmountToLower wants minor currency
-//        $deliverTransaction->countryCode = $this->countryCode;
-//        return $deliverTransaction;
-//    }
-//    
-//    /**
-//     * Use deliverDirectBankOrderRows() to deliver a Direct Bank order by the specified order row amounts using HostedRequests DeliverTransaction request
-//     * 
-//     * @return DeliverTransaction
-//     * @throws ValidationException  if addNumberedOrderRows() has not been used.
-//     */
-//    public function deliverDirectBankOrderRows() {        
-//        return $this->deliverCardOrderRows();        
-//    }
-//
+
 //    /** 
 //     * @internal 
 //     */

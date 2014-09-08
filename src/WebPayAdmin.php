@@ -99,30 +99,25 @@ class WebPayAdmin {
 
     /**
      * The WebPayAdmin::deliverOrderRows entrypoint method is used to deliver individual order rows.
-//     * Supports Invoice and card orders. (To partially deliver a PaymentPlan order, please contact Svea.)
+     * Supports invoice orders. (To partially deliver PaymentPlan, Card or Direct Bank orders, please contact Svea.)
      * 
      * Get an order builder instance using the WebPayAdmin::deliverOrderRows entrypoint,
      * then provide more information about the transaction and send the request using
      * the cancelOrderRowsBuilder methods:
      *
      * ->setOrderId()           (invoice only, required)
-//     * ->setTransactionId()     (card only, required -- you can also use setOrderId)
      * ->setCountryCode()       (invoice only, required)
      * ->setRowToCancel()       (required, index of one of the original order row you wish to cancel)
      * ->setRowsToCancel()      (optional)
-//     * ->addNumberedOrderRow()  (card only, one or more)
-//     * ->addNumberedOrderRows() (card only, optional)
      *
      * Finish by selecting the correct ordertype and perform the request:
-     * ->deliverInvoiceOrderRows() // or deliverCardOrderRows()
+     * ->deliverInvoiceOrderRows()
      *   ->doRequest()
      *
-     * The final doRequest() returns either a DeliverOrderRowsResponse, a LowerTransactionResponse or a CreditTransactionResponse.
+     * The final doRequest() returns a DeliverOrderRowsResponse.
      *
      * @see \Svea\DeliverOrderRowsBuilder \Svea\DeliverOrderRowsBuilder
-     * @see \Svea\AdminService\CancelOrderRowsResponse \Svea\AdminService\CancelOrderRowsResponse
-//     * @see \Svea\HostedService\LowerTransactionResponse \Svea\HostedService\LowerTransactionResponse
-//     * @see \Svea\HostedService\CreditTransactionResponse \Svea\HostedService\CreditTransactionResponse
+     * @see \Svea\AdminService\DeliverOrderRowsResponse \Svea\AdminService\DeliverOrderRowsResponse
      *
      * @param ConfigurationProvider $config  instance implementing ConfigurationProvider
      * @return Svea\DeliverOrderRowsBuilder

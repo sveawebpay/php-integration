@@ -1342,9 +1342,37 @@ See <a href="http://htmlpreview.github.io/?https://raw.github.com/sveawebpay/php
 ### 7.7 WebPayAdmin::deliverOrderRows()
 <!-- WebPayAdmin::deliverOrderRows() docblock below, replace @see with apidoc links -->
 ``` 
-TODO
+/**
+ * The WebPayAdmin::deliverOrderRows entrypoint method is used to deliver individual order rows.
+ * Supports invoice orders. (To partially deliver PaymentPlan, Card or Direct Bank orders, please contact Svea.)
+ * 
+ * Get an order builder instance using the WebPayAdmin::deliverOrderRows entrypoint,
+ * then provide more information about the transaction and send the request using
+ * the cancelOrderRowsBuilder methods:
+ *
+ * ->setOrderId()           (invoice only, required)
+ * ->setCountryCode()       (invoice only, required)
+ * ->setRowToCancel()       (required, index of one of the original order row you wish to cancel)
+ * ->setRowsToCancel()      (optional)
+ *
+ * Finish by selecting the correct ordertype and perform the request:
+ * ->deliverInvoiceOrderRows()
+ *   ->doRequest()
+ *
+ * The final doRequest() returns a DeliverOrderRowsResponse.
+ *
+ * @see \Svea\DeliverOrderRowsBuilder \Svea\DeliverOrderRowsBuilder
+ * @see \Svea\AdminService\DeliverOrderRowsResponse \Svea\AdminService\DeliverOrderRowsResponse
+ *
+ * @param ConfigurationProvider $config  instance implementing ConfigurationProvider
+ * @return Svea\DeliverOrderRowsBuilder
+ * @throws ValidationException
+ */
 ```
-See TODO
+
+See <a href="http://htmlpreview.github.io/?https://raw.github.com/sveawebpay/php-integration/master/apidoc/classes/Svea.DeliverOrderRowsBuilder.html" target="_blank">CreditOrderRowsBuilder</a> method details.
+
+See <a href="http://htmlpreview.github.io/?https://raw.github.com/sveawebpay/php-integration/master/apidoc/classes/Svea.AdminService.DeliverOrderRowsResponse.html" target="_blank">DeliverOrderRowsResponse</a> for invoice orders response.
 
 #### 7.7.1 Usage
 <!-- DeliverOrderRowsBuilder class docblock below -->
