@@ -115,16 +115,32 @@ class WebPay {
     }
 
     /**
-     * getAddresses -- fetch validated addresses associated with a given customer identity
+     * The WebPay::getAddresses() entrypoint is used to fetch validated addresses 
+     * associated with a given customer identity. Only applicable for SE, NO and DK 
+     * customers. Note that in Norway, company customers only are supported.
      *
-     * See the GetAddresses request class for more info on required methods,
-     * how to send the request to Svea, as well as the final response type.
-     *
-     * The GetAddresses service is only applicable for SE, NO and DK customers and accounts.
-     * In Norway, GetAddresses may only be performed on company customers.
-     *
-     * @return Svea\WebService\GetAddresses
+     * Use getAddresses() to fetch a list of validated addresses associated with a given 
+     * customer identity. This list can in turn be used to i.e. verify that an order delivery 
+     * address matches the invoice address used by Svea for invoice and payment plan orders.
+     * 
+     * Get an request class instance using the WebPay::getAddresses entrypoint, then
+     * provide more information about the transaction and send the request using the
+     * request class methods:
+     * 
+     * ->setCountryCode()           (required -- supply the country code that corresponds to the account credentials used) 
+     * ->setIdentifier()            (required -- i.e. the social security number, company vat number et al for the country in question)
+     * 
+     * Finish by selecting the correct customer type and perform the request:
+     * ->getIndividualAddresses() // or getCompanyAddresses()
+     *   ->doRequest()
+     * 
+     * The final doRequest() returns a GetAddressesResponse.
+     *  
+     * @see \Svea\WebService\GetAddressesResponse \Svea\WebService\GetAddressesResponse
+     * 
      * @param ConfigurationProvider $config  instance implementing ConfigurationProvider Interface
+     * @return Svea\WebService\GetAddresses
+     * @throws \Svea\ValidationException    
      */
     public static function getAddresses($config = NULL) {
         if( $config == NULL ) { WebPay::throwMissingConfigException(); }
