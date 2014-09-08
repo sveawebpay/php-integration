@@ -112,55 +112,33 @@ class DeliverOrderRowsBuilder {
     public function deliverInvoiceOrderRows() {
         $this->orderType = \ConfigurationProvider::INVOICE_TYPE; 
         
-        // validation is done in DeliverOrderRowsRequest
-      
+        $this->validateDeliverInvoiceOrderRows();
+        
         return new AdminService\DeliverOrderRowsRequest($this);
     }
 
-//    /** 
-//     * @internal 
-//     */
-//    private function validateDeliverCardOrderRows() {    
-//        if( !isset($this->orderId) ) {
-//            $exceptionString = "orderId is required for deliverCardOrderRows(). Use method setOrderId().";
-//            throw new ValidationException($exceptionString);
-//        }
-//        
-//        if( (count($this->rowsToDeliver) == 0) && (count($this->deliverOrderRows) == 0) ) {
-//            $exceptionString = "at least one of rowsToDeliver or deliverOrderRows must be set. Use setRowToDeliver() or addDeliverOrderRow().";
-//            throw new ValidationException($exceptionString);
-//        }   
-//        
-//        if( (count($this->rowsToDeliver) > 0) && ( (count($this->rowsToDeliver) != count($this->numberedOrderRows)) ) ) {
-//            $exceptionString = "every entry in rowsToDeliver must have a corresponding numberedOrderRows. Use setRowsToDeliver() and addNumberedOrderRow().";
-//            throw new ValidationException($exceptionString);
-//        }
-//        
-//        // validate that indexes matches entries
-//        $numberedOrderRowNumbers = array_map( function($nrow){ return $nrow->rowNumber; }, $this->numberedOrderRows );
-//               
-//        foreach( $this->rowsToDeliver as $index ) {
-//            if( !in_array($index, $numberedOrderRowNumbers) ) {
-//                $exceptionString = "every entry in rowsToDeliver must match a numberedOrderRows. Use setRowsToDeliver() and addNumberedOrderRow().";
-//            throw new ValidationException($exceptionString);
-//            }
-//        }
-//    }
-//
-//    /** @internal */
-//    private function calculateSumOfRowAmounts( $rowIndexes, $numberedRows, $deliverOrderRows ) {        
-//        $sum = 0.0;
-//        $unique_indexes = array_unique( $rowIndexes );
-//        foreach( $numberedRows as $numberedRow) {            
-//            if( in_array($numberedRow->rowNumber,$unique_indexes) ) {
-//                $sum += ($numberedRow->quantity * ($numberedRow->amountExVat * (1 + ($numberedRow->vatPercent/100))));
-//            }
-//        }
-//        if( count($deliverOrderRows) > 0 ) {
-//            foreach( $deliverOrderRows as $deliverOrderRow) {            
-//                $sum += ($deliverOrderRow->quantity * ($deliverOrderRow->amountExVat * (1 + ($deliverOrderRow->vatPercent/100))));
-//            }            
-//        }
-//        return $sum;
-//    }
+    /** 
+     * @internal 
+     */
+    private function validateDeliverInvoiceOrderRows() {    
+        if( !isset($this->orderId) ) {
+            $exceptionString = "orderId is required for deliverInvoiceOrderRows(). Use method setOrderId().";
+            throw new ValidationException($exceptionString);
+        }
+
+        if( !isset($this->countryCode) ) {
+            $exceptionString = "countryCode is required for deliverInvoiceOrderRows(). Use method setCountryCode().";
+            throw new ValidationException($exceptionString);
+        }        
+        
+        if( !isset($this->distributionType) ) {
+            $exceptionString = "distributionType is required for deliverInvoiceOrderRows(). Use method setInvoiceDistributionType().";
+            throw new ValidationException($exceptionString);
+        } 
+        
+        if( (count($this->rowsToDeliver) == 0) ) {
+            $exceptionString = "rowsToDeliver is required for deliverInvoiceOrderRows(). Use methods setRowToDeliver() or setRowsToDelvier().";
+            throw new ValidationException($exceptionString);
+        }           
+    }
 }

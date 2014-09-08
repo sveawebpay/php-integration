@@ -26,14 +26,7 @@ class DeliverOrderRowsBuilderTest extends \PHPUnit_Framework_TestCase {
         $orderId = "123456";
         $this->deliverOrderRowsObject->setOrderId($orderId);
         $this->assertEquals($orderId, $this->deliverOrderRowsObject->orderId);        
-    }
-
-//    public function test_deliverOrderRowsBuilder_setTransactionId() {
-//        $orderId = "123456";
-//        $this->deliverOrderRowsObject->setTransactionId($orderId);
-//        $this->assertEquals($orderId, $this->deliverOrderRowsObject->orderId);        
-//    }  
-//    
+    }  
 
     public function test_deliverOrderRowsBuilder_setCountryCode() {
         $country = "SE";
@@ -47,191 +40,76 @@ class DeliverOrderRowsBuilderTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals($distributionType, $this->deliverOrderRowsObject->distributionType);        
     }
     
-//    public function test_addNumberedOrderRow() {
-//        $numberedOrderRow = new \Svea\NumberedOrderRow();
-//        $numberedOrderRow
-//            ->setAmountExVat(100.00)                // recommended to specify price using AmountExVat & VatPercent
-//            ->setVatPercent(25)                     // recommended to specify price using AmountExVat & VatPercent
-//            ->setQuantity(1)                        // required
-//            ->setRowNumber(1)
-//        ;            
-//                
-//        $this->deliverOrderRowsObject->addNumberedOrderRow( $numberedOrderRow );
-//        $this->assertInternalType('array', $this->deliverOrderRowsObject->numberedOrderRows);     
-//    }
-//    
-//    public function test_addNumberedOrderRows() {
-//        $numberedOrderRow1 = new \Svea\NumberedOrderRow();
-//        $numberedOrderRow1
-//            ->setAmountExVat(100.00)                // recommended to specify price using AmountExVat & VatPercent
-//            ->setVatPercent(25)                     // recommended to specify price using AmountExVat & VatPercent
-//            ->setQuantity(1)                        // required
-//            ->setRowNumber(1)
-//        ;   
-//        $numberedOrderRow2 = new \Svea\NumberedOrderRow();
-//        $numberedOrderRow2
-//            ->setAmountExVat(100.00)                // recommended to specify price using AmountExVat & VatPercent
-//            ->setVatPercent(25)                     // recommended to specify price using AmountExVat & VatPercent
-//            ->setQuantity(1)                        // required
-//            ->setRowNumber(2)
-//        ;  
-//                
-//        $this->deliverOrderRowsObject->addNumberedOrderRows( array( $numberedOrderRow1, $numberedOrderRow2 ) );
-//        $this->assertInternalType('array', $this->deliverOrderRowsObject->numberedOrderRows);     
-//    }
-//    
     public function test_deliverOrderRowsBuilder_deliverInvoiceOrderRowsBuilder_returns_deliverOrderRowsRequest() {
-        $orderId = "123456";
-        $deliverOrderRowsObject = $this->deliverOrderRowsObject->setOrderId($orderId)->deliverInvoiceOrderRows();
+        $deliverOrderRowsObject = $this->deliverOrderRowsObject
+                ->setCountryCode("SE")
+                ->setOrderId(123456)
+                ->setInvoiceDistributionType( \DistributionType::POST )
+                ->setRowTodeliver(1)
+                ->deliverInvoiceOrderRows();
         
         $this->assertInstanceOf("Svea\AdminService\deliverOrderRowsRequest", $deliverOrderRowsObject);
     }
-//    
-//    public function test_deliverOrderRowsBuilder_deliverCardOrderRowsBuilder_returns_LowerTransaction() {
-//        $orderId = "123456";  
-//        $mockedNumberedOrderRow = new \Svea\NumberedOrderRow();
-//        $mockedNumberedOrderRow
-//            ->setAmountExVat(100.00)                // recommended to specify price using AmountExVat & VatPercent
-//            ->setVatPercent(25)                     // recommended to specify price using AmountExVat & VatPercent
-//            ->setQuantity(1)                        // required
-//            ->setRowNumber(1)
-//        ;            
-//        
-//        $deliverOrderRowsObject = $this->deliverOrderRowsObject
-//                ->setOrderId($orderId)
-//                ->addNumberedOrderRow( $mockedNumberedOrderRow )
-//                ->setRowTodeliver(1)
-//        ;
-//        
-//        $request = $deliverOrderRowsObject->deliverCardOrderRows();
-//        
-//        $this->assertInstanceOf("Svea\HostedService\deliverTransaction", $request);
-//    }
-//    
-//    public function test_deliverOrderRowsBuilder_deliverDirectBankOrderRowsBuilder_returns_LowerTransaction() {
-//        $orderId = "123456";  
-//        $mockedNumberedOrderRow = new \Svea\NumberedOrderRow();
-//        $mockedNumberedOrderRow
-//            ->setAmountExVat(100.00)                // recommended to specify price using AmountExVat & VatPercent
-//            ->setVatPercent(25)                     // recommended to specify price using AmountExVat & VatPercent
-//            ->setQuantity(1)                        // required
-//            ->setRowNumber(1)
-//        ;            
-//        
-//        $deliverOrderRowsObject = $this->deliverOrderRowsObject
-//                ->setOrderId($orderId)
-//                ->addNumberedOrderRow( $mockedNumberedOrderRow )
-//                ->setRowTodeliver(1)
-//        ;
-//        
-//        $request = $deliverOrderRowsObject->deliverDirectBankOrderRows();
-//        
-//        $this->assertInstanceOf("Svea\HostedService\deliverTransaction", $request);
-//    }
-//    
-//    /// validations
-//      
-//    public function test_validatedeliverCardOrder_missing_setOrderId_throws_ValidationException() {
-//        
-//        $this->setExpectedException(
-//          '\Svea\ValidationException', 'orderId is required for deliverCardOrderRows(). Use method setOrderId().'
-//        );
-//        
-//        $orderId = "123456";  
-//        $mockedNumberedOrderRow = new \Svea\NumberedOrderRow();
-//        $mockedNumberedOrderRow
-//            ->setAmountExVat(100.00)                // recommended to specify price using AmountExVat & VatPercent
-//            ->setVatPercent(25)                     // recommended to specify price using AmountExVat & VatPercent
-//            ->setQuantity(1)                        // required
-//            ->setRowNumber(1)
-//        ;            
-//        
-//        $deliverOrderRowsObject = $this->deliverOrderRowsObject
-//                //->setOrderId($orderId)
-//                ->addNumberedOrderRow( $mockedNumberedOrderRow )
-//                ->setRowTodeliver(1)
-//        ;
-//        
-//        $request = $deliverOrderRowsObject->deliverCardOrderRows();
-//        
-//        $this->assertInstanceOf("Svea\HostedService\deliverTransaction", $request);
-//    }
-//     
-//    public function test_validatedeliverCardOrder_missing_setRowTodeliver_and_adddeliverRow_throws_ValidationException() {
-//        
-//        $this->setExpectedException(
-//          '\Svea\ValidationException', 'at least one of rowsTodeliver or deliverOrderRows must be set. Use setRowTodeliver() or adddeliverOrderRow().'
-//        );
-//        
-//        $orderId = "123456";  
-//        $mockedNumberedOrderRow = new \Svea\NumberedOrderRow();
-//        $mockedNumberedOrderRow
-//            ->setAmountExVat(100.00)                // recommended to specify price using AmountExVat & VatPercent
-//            ->setVatPercent(25)                     // recommended to specify price using AmountExVat & VatPercent
-//            ->setQuantity(1)                        // required
-//            ->setRowNumber(1)
-//        ;            
-//        
-//        $deliverOrderRowsObject = $this->deliverOrderRowsObject
-//                ->setOrderId($orderId)
-//                ->addNumberedOrderRow( $mockedNumberedOrderRow )
-//        ;
-//        
-//        $request = $deliverOrderRowsObject->deliverCardOrderRows();
-//        
-//        $this->assertInstanceOf("Svea\HostedService\deliverTransaction", $request);
-//    }    
-//    
-//    public function test_validatedeliverCardOrder_with_too_few_NumberedOrderRows_throws_ValidationException() {
-//        
-//        $this->setExpectedException(
-//          '\Svea\ValidationException', 'every entry in rowsTodeliver must have a corresponding numberedOrderRows. Use setRowsTodeliver() and addNumberedOrderRow().'
-//        );
-//        
-//        $orderId = "123456";  
-//        $mockedNumberedOrderRow = new \Svea\NumberedOrderRow();
-//        $mockedNumberedOrderRow
-//            ->setAmountExVat(100.00)                // recommended to specify price using AmountExVat & VatPercent
-//            ->setVatPercent(25)                     // recommended to specify price using AmountExVat & VatPercent
-//            ->setQuantity(1)                        // required
-//            ->setRowNumber(1)
-//        ;            
-//        
-//        $deliverOrderRowsObject = $this->deliverOrderRowsObject
-//                ->setOrderId($orderId)
-//                ->addNumberedOrderRow( $mockedNumberedOrderRow )
-//                ->setRowsTodeliver(array(1,2))
-//        ;
-//        
-//        $request = $deliverOrderRowsObject->deliverCardOrderRows();
-//        
-//        $this->assertInstanceOf("Svea\HostedService\deliverTransaction", $request);
-//    }
-//    
-//    public function test_validatedeliverCardOrder_with_mismatched_NumberedOrderRows_throws_ValidationException() {
-//        
-//        $this->setExpectedException(
-//          '\Svea\ValidationException', 'every entry in rowsTodeliver must match a numberedOrderRows. Use setRowsTodeliver() and addNumberedOrderRow().'
-//        );
-//        
-//        $orderId = "123456";  
-//        $mockedNumberedOrderRow = new \Svea\NumberedOrderRow();
-//        $mockedNumberedOrderRow
-//            ->setAmountExVat(100.00)                // recommended to specify price using AmountExVat & VatPercent
-//            ->setVatPercent(25)                     // recommended to specify price using AmountExVat & VatPercent
-//            ->setQuantity(1)                        // required
-//            ->setRowNumber(1)
-//        ;            
-//        
-//        $deliverOrderRowsObject = $this->deliverOrderRowsObject
-//                ->setOrderId($orderId)
-//                ->addNumberedOrderRow( $mockedNumberedOrderRow )
-//                ->setRowTodeliver(9)
-//        ;
-//        
-//        $request = $deliverOrderRowsObject->deliverCardOrderRows();        
-//        
-//        $this->assertInstanceOf("Svea\HostedService\deliverTransaction", $request);
-//    }    
-       
+
+    /// validations
+    
+    public function test_deliverInvoiceOrderRows_throws_ValidationException_on_missing_setCountryCode() {
+        $this->setExpectedException(
+          '\Svea\ValidationException', "countryCode is required for deliverInvoiceOrderRows(). Use method setCountryCode()."
+        );         
+        
+        $deliverOrderRowsObject = $this->deliverOrderRowsObject
+                //->setCountryCode("SE")
+                ->setOrderId(123456)
+                ->setInvoiceDistributionType( \DistributionType::POST )
+                ->setRowTodeliver(1)
+        ;
+        
+        $deliverOrderRowsObject->deliverInvoiceOrderRows();
+    }
+    
+    public function test_deliverInvoiceOrderRows_throws_ValidationException_on_missing_setOrderId() {
+        $this->setExpectedException(
+          '\Svea\ValidationException', "orderId is required for deliverInvoiceOrderRows(). Use method setOrderId()."
+        );         
+        
+        $deliverOrderRowsObject = $this->deliverOrderRowsObject
+                ->setCountryCode("SE")
+                //->setOrderId(123456)
+                ->setInvoiceDistributionType( \DistributionType::POST )
+                ->setRowTodeliver(1)
+        ;
+        
+        $deliverOrderRowsObject->deliverInvoiceOrderRows();
+    }
+    
+    public function test_deliverInvoiceOrderRows_throws_ValidationException_on_missing_setInvoiceDistributionType() {
+        $this->setExpectedException(
+          '\Svea\ValidationException', "distributionType is required for deliverInvoiceOrderRows(). Use method setInvoiceDistributionType()."
+        );         
+        
+        $deliverOrderRowsObject = $this->deliverOrderRowsObject
+                ->setCountryCode("SE")
+                ->setOrderId(123456)
+                //->setInvoiceDistributionType( \DistributionType::POST )
+                ->setRowTodeliver(1)
+        ;
+     
+        $deliverOrderRowsObject->deliverInvoiceOrderRows();
+    } 
+    
+    public function test_deliverInvoiceOrderRows_throws_ValidationException_on_missing_setRowToDeliver() {
+        $this->setExpectedException(
+          '\Svea\ValidationException',"rowsToDeliver is required for deliverInvoiceOrderRows(). Use methods setRowToDeliver() or setRowsToDelvier()."
+        );         
+        
+        $deliverOrderRowsObject = $this->deliverOrderRowsObject
+                ->setCountryCode("SE")
+                ->setOrderId(123456)
+                ->setInvoiceDistributionType( \DistributionType::POST )
+                //->setRowTodeliver(1)
+        ;
+        
+        $deliverOrderRowsObject->deliverInvoiceOrderRows();
+    }   
 }
