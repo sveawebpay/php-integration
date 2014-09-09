@@ -7,7 +7,7 @@ class SveaDeliverOrderInformation {
     public $OrderType;
 
     public function __construct($orderType) {
-        if ($orderType == \Svea\AdminService\AdminServiceRequest::CamelCaseOrderType(\ConfigurationProvider::INVOICE_TYPE)) {
+        if ($orderType == \ConfigurationProvider::INVOICE_TYPE) {
             $this->DeliverInvoiceDetails = "";
         }
     }

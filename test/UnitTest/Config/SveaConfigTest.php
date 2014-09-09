@@ -13,7 +13,7 @@ class SveaConfigTest extends \PHPUnit_Framework_TestCase {
         $config = SveaConfig::getTestConfig();
         $foo = \WebPay::createOrder($config);
 
-        $this->assertEquals("sverigetest", $config->conf['credentials']['SE']['auth']['INVOICE']['username']);
+        $this->assertEquals("sverigetest", $config->conf['credentials']['SE']['auth']['Invoice']['username']);
     }
 
     public function testOrderWithSEConfigFromFunction() {

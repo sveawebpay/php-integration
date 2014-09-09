@@ -12,7 +12,7 @@ class InvoicePayment extends WebServicePayment {
     public $orderType;
 
     public function __construct($order) {
-        $this->orderType = \Svea\AdminService\AdminServiceRequest::CamelCaseOrderType(\ConfigurationProvider::INVOICE_TYPE);
+        $this->orderType = \ConfigurationProvider::INVOICE_TYPE;
         parent::__construct($order);
     }
 

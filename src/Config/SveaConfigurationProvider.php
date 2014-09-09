@@ -88,11 +88,10 @@ class SveaConfigurationProvider implements \ConfigurationProvider {
      * @throws Exception
      */
     public function getEndPoint($type) {
-        $uType = strtoupper($type);
-        if (array_key_exists($uType,$this->conf['url']) == FALSE) {
+        if (array_key_exists($type,$this->conf['url']) == FALSE) {
             $this->throwInvalidTypeException( $type );
         }
-        return $this->conf['url'][$uType];
+        return $this->conf['url'][$type];
     }
 
     /**
@@ -104,16 +103,15 @@ class SveaConfigurationProvider implements \ConfigurationProvider {
      */
     private function getCredentialsProperty($property, $type, $country)
     {
-        $uType = strtoupper($type);
         $uCountry = strtoupper($country);
         if (array_key_exists($uCountry,$this->conf['credentials']) == FALSE) {
 
             $this->throwInvalidCountryException();
-        } elseif (array_key_exists($uType,$this->conf['credentials'][$uCountry]['auth']) == FALSE) {
-            $this->throwInvalidTypeException( $uType );
+        } elseif (array_key_exists($type,$this->conf['credentials'][$uCountry]['auth']) == FALSE) {
+            $this->throwInvalidTypeException( $type );
         }
 
-        return $this->conf['credentials'][$uCountry]['auth'][$uType][$property];
+        return $this->conf['credentials'][$uCountry]['auth'][$type][$property];
     }
 
     /**
@@ -131,7 +129,7 @@ class SveaConfigurationProvider implements \ConfigurationProvider {
             sprintf(
                 'Invalid service type "%s". Accepted values: %s, %s, %s or %s',
                 $invalid_type,
-                \Svea\AdminService\AdminServiceRequest::CamelCaseOrderType(\ConfigurationProvider::INVOICE_TYPE),
+                \ConfigurationProvider::INVOICE_TYPE,
                 \ConfigurationProvider::PAYMENTPLAN_TYPE,
                 \ConfigurationProvider::HOSTED_TYPE,
                 \ConfigurationProvider::HOSTED_ADMIN_TYPE

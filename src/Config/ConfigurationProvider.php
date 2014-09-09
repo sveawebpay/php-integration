@@ -31,8 +31,8 @@
 interface ConfigurationProvider {
 
     const HOSTED_TYPE = 'HOSTED';
-    const INVOICE_TYPE = 'INVOICE';
-    const PAYMENTPLAN_TYPE = 'PAYMENTPLAN';
+    const INVOICE_TYPE = 'Invoice';
+    const PAYMENTPLAN_TYPE = 'PaymentPlan';
     const HOSTED_ADMIN_TYPE = 'HOSTED_ADMIN';
 
     /**

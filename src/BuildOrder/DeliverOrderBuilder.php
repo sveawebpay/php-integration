@@ -137,7 +137,7 @@ class DeliverOrderBuilder extends OrderBuilder {
             return new WebService\DeliverInvoice($this);
         }
         else {
-                $this->orderType = \Svea\AdminService\AdminServiceRequest::CamelCaseOrderType(\ConfigurationProvider::INVOICE_TYPE);
+                $this->orderType = \ConfigurationProvider::INVOICE_TYPE;
             return new AdminService\DeliverOrdersRequest($this);
         }
     }

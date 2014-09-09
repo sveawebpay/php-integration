@@ -11,7 +11,7 @@ class DeliverPaymentPlan extends HandleOrder {
      * @param DeliverOrderBuilder $order
      */
     public function __construct($order) {
-        $order->orderType = \Svea\AdminService\AdminServiceRequest::CamelCaseOrderType(\ConfigurationProvider::PAYMENTPLAN_TYPE);
+        $order->orderType = \ConfigurationProvider::PAYMENTPLAN_TYPE;
         parent::__construct($order);
     }
 

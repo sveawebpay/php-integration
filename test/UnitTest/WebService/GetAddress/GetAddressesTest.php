@@ -99,12 +99,12 @@ class GetAddressesTest extends PHPUnit_Framework_TestCase {
         $request = WebPay::getAddresses( Svea\SveaConfig::getDefaultConfig() );
 
         // clear both payment method credentials for SE
-        $request->conf->conf['credentials']['SE']['auth']['INVOICE']['username'] = null;        
-        $request->conf->conf['credentials']['SE']['auth']['INVOICE']['password'] = null;
-        $request->conf->conf['credentials']['SE']['auth']['INVOICE']['clientNumber'] = null;
-        $request->conf->conf['credentials']['SE']['auth']['PAYMENTPLAN']['username'] = null;        
-        $request->conf->conf['credentials']['SE']['auth']['PAYMENTPLAN']['password'] = null;
-        $request->conf->conf['credentials']['SE']['auth']['PAYMENTPLAN']['clientNumber'] = null;
+        $request->conf->conf['credentials']['SE']['auth']['Invoice']['username'] = null;        
+        $request->conf->conf['credentials']['SE']['auth']['Invoice']['password'] = null;
+        $request->conf->conf['credentials']['SE']['auth']['Invoice']['clientNumber'] = null;
+        $request->conf->conf['credentials']['SE']['auth']['PaymentPlan']['username'] = null;        
+        $request->conf->conf['credentials']['SE']['auth']['PaymentPlan']['password'] = null;
+        $request->conf->conf['credentials']['SE']['auth']['PaymentPlan']['clientNumber'] = null;
            
         $request        
             ->setCountryCode( "SE" )
@@ -118,12 +118,12 @@ class GetAddressesTest extends PHPUnit_Framework_TestCase {
         $request = WebPay::getAddresses( Svea\SveaConfig::getDefaultConfig() );
 
         // clear both payment method credentials for SE
-        $request->conf->conf['credentials']['SE']['auth']['INVOICE']['username'] = null;        
-        $request->conf->conf['credentials']['SE']['auth']['INVOICE']['password'] = null;
-        $request->conf->conf['credentials']['SE']['auth']['INVOICE']['clientNumber'] = null;
-//        $request->conf->conf['credentials']['SE']['auth']['PAYMENTPLAN']['username'] = null;        
-//        $request->conf->conf['credentials']['SE']['auth']['PAYMENTPLAN']['password'] = null;
-//        $request->conf->conf['credentials']['SE']['auth']['PAYMENTPLAN']['clientNumber'] = null;
+        $request->conf->conf['credentials']['SE']['auth']['Invoice']['username'] = null;        
+        $request->conf->conf['credentials']['SE']['auth']['Invoice']['password'] = null;
+        $request->conf->conf['credentials']['SE']['auth']['Invoice']['clientNumber'] = null;
+//        $request->conf->conf['credentials']['SE']['auth']['PaymentPlan']['username'] = null;        
+//        $request->conf->conf['credentials']['SE']['auth']['PaymentPlan']['password'] = null;
+//        $request->conf->conf['credentials']['SE']['auth']['PaymentPlan']['clientNumber'] = null;
            
         $request        
             ->setCountryCode( "SE" )
@@ -139,12 +139,12 @@ class GetAddressesTest extends PHPUnit_Framework_TestCase {
         $request = WebPay::getAddresses( Svea\SveaConfig::getDefaultConfig() );
 
         // clear both payment method credentials for SE
-//        $request->conf->conf['credentials']['SE']['auth']['INVOICE']['username'] = null;        
-//        $request->conf->conf['credentials']['SE']['auth']['INVOICE']['password'] = null;
-//        $request->conf->conf['credentials']['SE']['auth']['INVOICE']['clientNumber'] = null;
-        $request->conf->conf['credentials']['SE']['auth']['PAYMENTPLAN']['username'] = null;        
-        $request->conf->conf['credentials']['SE']['auth']['PAYMENTPLAN']['password'] = null;
-        $request->conf->conf['credentials']['SE']['auth']['PAYMENTPLAN']['clientNumber'] = null;
+//        $request->conf->conf['credentials']['SE']['auth']['Invoice']['username'] = null;        
+//        $request->conf->conf['credentials']['SE']['auth']['Invoice']['password'] = null;
+//        $request->conf->conf['credentials']['SE']['auth']['Invoice']['clientNumber'] = null;
+        $request->conf->conf['credentials']['SE']['auth']['PaymentPlan']['username'] = null;        
+        $request->conf->conf['credentials']['SE']['auth']['PaymentPlan']['password'] = null;
+        $request->conf->conf['credentials']['SE']['auth']['PaymentPlan']['clientNumber'] = null;
            
         $request        
             ->setCountryCode( "SE" )
