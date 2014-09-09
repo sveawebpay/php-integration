@@ -39,7 +39,7 @@ interface ConfigurationProvider {
      * fetch username, used with invoice or payment plan (i.e. Svea WebService Europe API)
      * 
      * @return string
-     * @param string $type  eg. "Invoice" or "PaymentPlan" can be used if needed to match different configuration settings
+     * @param string $type  ConfigurationProvider::INVOICE_TYPE, ::PAYMENTPLAN_TYPE can be used if needed to match different configuration settings
      * @param string $country  iso3166 alpha-2 CountryCode, eg. SE, NO, DK, FI, NL, DE can be used if needed to match different configuration settings
      * @throws InvalidTypeException  in case of unsupported $type
      * @throws InvalidCountryException  in case of unsupported $country
@@ -50,7 +50,7 @@ interface ConfigurationProvider {
      * fetch password, used with invoice or payment plan (i.e. Svea WebService Europe API)
      * 
      * @return string
-     * @param string $type  eg. "Invoice" or "PaymentPlan" can be used if needed to match different configuration settings
+     * @param string $type  ConfigurationProvider::INVOICE_TYPE, ::PAYMENTPLAN_TYPE can be used if needed to match different configuration settings
      * @param string $country  iso3166 alpha-2 CountryCode, eg. SE, NO, DK, FI, NL, DE can be used if needed to match different configuration settings
      * @throws InvalidTypeException  in case of unsupported $type
      * @throws InvalidCountryException  in case of unsupported $country
@@ -61,7 +61,7 @@ interface ConfigurationProvider {
      * fetch client number, used with invoice or payment plan (i.e. Svea WebService Europe API)
      * 
      * @return ClientNumber 
-     * @param string $type  eg. "Invoice" or "PaymentPlan" can be used if needed to match different configuration settings
+     * @param string $type  ConfigurationProvider::INVOICE_TYPE, ::PAYMENTPLAN_TYPE can be used if needed to match different configuration settings
      * @param string $country  iso3166 alpha-2 CountryCode, eg. SE, NO, DK, FI, NL, DE can be used if needed to match different configuration settings
      * @throws InvalidTypeException  in case of unsupported $type
      * @throws InvalidCountryException  in case of unsupported $country
@@ -72,7 +72,7 @@ interface ConfigurationProvider {
      * fetch merchant id, used with card or direct bank payments (i.e. Svea Hosted Web Service API)
      *  
      * @return string 
-     * @param string $type one of { ConfigurationProvider::HOSTED_TYPE, ::HOSTED_ADMIN } can be used if needed to match different configuration settings
+     * @param string $type  ConfigurationProvider::INVOICE_TYPE, ::PAYMENTPLAN_TYPE can be used if needed to match different configuration settings
      * $param string $country CountryCode eg. SE, NO, DK, FI, NL, DE
      */
     public function getMerchantId($type, $country);
@@ -81,7 +81,7 @@ interface ConfigurationProvider {
      * fetch secret word, used with card or direct bank payments (i.e. Svea Hosted Web Service API)
      *  
      * @return string 
-     * @param string $type one of { ConfigurationProvider::HOSTED_TYPE, ::HOSTED_ADMIN } can be used if needed to match different configuration settings
+     * @param string $type  ConfigurationProvider::INVOICE_TYPE, ::PAYMENTPLAN_TYPE can be used if needed to match different configuration settings
      * $param string $country CountryCode eg. SE, NO, DK, FI, NL, DE
      */
     public function getSecret($type, $country);
@@ -90,7 +90,7 @@ interface ConfigurationProvider {
      * Constants for the endpoint url found in the class SveaConfig.php
      * getEndPoint() should return an url corresponding to $type.
      *
-     * @param $type one of ConfigurationProvider::HOSTED_TYPE, "Invoice", "PaymentPlan", ::HOSTED_ADMIN_TYPE
+     * @param string $type one of ConfigurationProvider::HOSTED_TYPE, ::INVOICE_TYPE, ::PAYMENTPLAN_TYPE, ::HOSTED_ADMIN_TYPE
      */
     public function getEndPoint($type);
 }
