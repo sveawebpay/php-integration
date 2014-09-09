@@ -131,7 +131,7 @@ class GetAddresses {
      * @return $this
      */
     public function setOrderTypeInvoice() {
-        $this->orderType = "Invoice";
+        $this->orderType = \Svea\AdminService\AdminServiceRequest::CamelCaseOrderType(\ConfigurationProvider::INVOICE_TYPE);
         return $this;
     }
 

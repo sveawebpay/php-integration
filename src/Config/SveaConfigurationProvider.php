@@ -131,7 +131,7 @@ class SveaConfigurationProvider implements \ConfigurationProvider {
             sprintf(
                 'Invalid service type "%s". Accepted values: %s, %s, %s or %s',
                 $invalid_type,
-                \ConfigurationProvider::INVOICE_TYPE,
+                \Svea\AdminService\AdminServiceRequest::CamelCaseOrderType(\ConfigurationProvider::INVOICE_TYPE),
                 \ConfigurationProvider::PAYMENTPLAN_TYPE,
                 \ConfigurationProvider::HOSTED_TYPE,
                 \ConfigurationProvider::HOSTED_ADMIN_TYPE

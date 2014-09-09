@@ -35,7 +35,7 @@ class DeliverPartialResponse extends AdminServiceResponse {
 
             $this->amount = $message->OrdersDelivered->DeliverOrderResult->DeliveredAmount;
             $this->orderType = $message->OrdersDelivered->DeliverOrderResult->OrderType;
-            if( $this->orderType == "Invoice" ) {
+            if( $this->orderType == \Svea\AdminService\AdminServiceRequest::CamelCaseOrderType(\ConfigurationProvider::INVOICE_TYPE) ) {
                 $this->invoiceId = $message->OrdersDelivered->DeliverOrderResult->DeliveryReferenceNumber;
             } 
         }            
