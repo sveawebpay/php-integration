@@ -36,7 +36,7 @@ class DeliverOrdersResponse extends AdminServiceResponse {
             if( $this->orderType == \Svea\AdminService\AdminServiceRequest::CamelCaseOrderType(\ConfigurationProvider::INVOICE_TYPE) ) {
                 $this->invoiceId = $message->OrdersDelivered->DeliverOrderResult->DeliveryReferenceNumber;
             } 
-            if( $this->orderType == "PaymentPlan" ) {
+            if( $this->orderType == \Svea\AdminService\AdminServiceRequest::CamelCaseOrderType(\ConfigurationProvider::PAYMENTPLAN_TYPE) ) {
                 $this->contractNumber = $message->OrdersDelivered->DeliverOrderResult->DeliveryReferenceNumber;
             }     
         }

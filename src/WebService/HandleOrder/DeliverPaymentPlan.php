@@ -8,10 +8,10 @@ namespace Svea\WebService;
 class DeliverPaymentPlan extends HandleOrder {
 
     /**
-     * @param type $order
+     * @param DeliverOrderBuilder $order
      */
     public function __construct($order) {
-        $order->orderType = "PaymentPlan";
+        $order->orderType = \Svea\AdminService\AdminServiceRequest::CamelCaseOrderType(\ConfigurationProvider::PAYMENTPLAN_TYPE);
         parent::__construct($order);
     }
 
@@ -36,7 +36,7 @@ class DeliverPaymentPlan extends HandleOrder {
 
     /**
      * Prepare and sends request
-     * @return type CloseOrderEuResponse
+     * @return CloseOrderResult
      */
     public function doRequest() {
         $requestObject = $this->prepareRequest();
