@@ -7,7 +7,7 @@ class SveaDeliverOrderInformation {
     public $OrderType;
 
     public function __construct($orderType) {
-        if ($orderType == "Invoice") {
+        if ($orderType == \ConfigurationProvider::INVOICE_TYPE) {
             $this->DeliverInvoiceDetails = "";
         }
     }

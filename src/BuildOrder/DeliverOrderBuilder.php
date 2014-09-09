@@ -137,7 +137,7 @@ class DeliverOrderBuilder extends OrderBuilder {
             return new WebService\DeliverInvoice($this);
         }
         else {
-            $this->orderType = "Invoice";
+                $this->orderType = \ConfigurationProvider::INVOICE_TYPE;
             return new AdminService\DeliverOrdersRequest($this);
         }
     }
@@ -151,7 +151,7 @@ class DeliverOrderBuilder extends OrderBuilder {
         return new WebService\DeliverPaymentPlan($this);
     }
 
-    /** @var string orderType  one of "Invoice" or "PaymentPlan"*/
+    /** @var string  \ConfigurationProvider::INVOICE_TYPE, ::PAYMENTPLAN_TYPE or ::HOSTED_TYPE  */
     public $orderType;
 
     /**

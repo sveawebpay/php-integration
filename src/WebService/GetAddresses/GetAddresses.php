@@ -131,7 +131,7 @@ class GetAddresses {
      * @return $this
      */
     public function setOrderTypeInvoice() {
-        $this->orderType = "Invoice";
+        $this->orderType = \ConfigurationProvider::INVOICE_TYPE;
         return $this;
     }
 
@@ -141,7 +141,7 @@ class GetAddresses {
      * @return $this
      */
     public function setOrderTypePaymentPlan() {
-        $this->orderType = "PaymentPlan";
+        $this->orderType = \ConfigurationProvider::PAYMENTPLAN_TYPE;
         return $this;
     }
     

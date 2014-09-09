@@ -9,9 +9,10 @@ require_once 'WebServicePayment.php';
 */
 class InvoicePayment extends WebServicePayment {
 
-    public $orderType = "Invoice";
+    public $orderType;
 
     public function __construct($order) {
+        $this->orderType = \ConfigurationProvider::INVOICE_TYPE;
         parent::__construct($order);
     }
 

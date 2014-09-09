@@ -32,12 +32,12 @@ class GetOrdersRequest extends AdminServiceRequest {
         $soapRequest = array();
         $soapRequest = new AdminSoap\GetOrdersRequest( 
             new AdminSoap\Authentication( 
-                $this->orderBuilder->conf->getUsername( strtoupper($this->orderBuilder->orderType), $this->orderBuilder->countryCode ), 
-                $this->orderBuilder->conf->getPassword( strtoupper($this->orderBuilder->orderType), $this->orderBuilder->countryCode ) 
+                $this->orderBuilder->conf->getUsername( /*strtoupper*/($this->orderBuilder->orderType), $this->orderBuilder->countryCode ), 
+                $this->orderBuilder->conf->getPassword( /*strtoupper*/($this->orderBuilder->orderType), $this->orderBuilder->countryCode ) 
             ),
             new AdminSoap\OrdersToRetrieve(
                 new AdminSoap\GetOrderInformation(
-                    $this->orderBuilder->conf->getClientNumber( strtoupper($this->orderBuilder->orderType), $this->orderBuilder->countryCode ),
+                    $this->orderBuilder->conf->getClientNumber( /*strtoupper*/($this->orderBuilder->orderType), $this->orderBuilder->countryCode ),
                     $this->orderBuilder->orderId
                 )
             )

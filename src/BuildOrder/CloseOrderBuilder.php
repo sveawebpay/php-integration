@@ -55,7 +55,7 @@ class CloseOrderBuilder {
         return new WebService\CloseOrder($this);
     }
     
-    /** @var string "Invoice" or "PaymentPlan" */
+    /** @var string  \ConfigurationProvider::INVOICE_TYPE or ::PAYMENTPLAN_TYPE */
     public $orderType;
     
 }

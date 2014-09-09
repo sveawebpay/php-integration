@@ -60,7 +60,7 @@ abstract class AdminServiceRequest {
      * the integration package ConfigurationProvider::INVOICE_TYPE and ::PAYMENTPLAN_TYPE constanst are all caps, whereas the admin service
      * enumeration used in the calls are CamelCase. This function converts the package constants so they work with the admin service.
      */
-    protected static function CamelCaseOrderType( $orderTypeAsConst ) {
+    public static function CamelCaseOrderType( $orderTypeAsConst ) {
         switch( $orderTypeAsConst ) {
             case \ConfigurationProvider::INVOICE_TYPE:
                 return "Invoice";
