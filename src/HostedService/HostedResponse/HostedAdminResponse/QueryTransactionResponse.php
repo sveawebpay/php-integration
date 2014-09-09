@@ -13,39 +13,66 @@ require_once SVEA_REQUEST_DIR . '/Includes.php';
  * @author Kristian Grossman-Madsen for Svea WebPay
  */
 class QueryTransactionResponse extends HostedAdminResponse{
-
-    public $rawQueryTransactionsResponse;
     
-    /** @var string $transactionId  the queried transactionId */
-    public $transactionId;
-    /** @var string $customerrefno */
+    /** @var string $transactionId  -- the order id at Svea */
+    public $transactionId;         
+
+    /** @var string $customerrefno -- the customer reference number */
     public $customerrefno;
-    /** @var string $merchantid */
+    
+    /** @var string $merchantid -- the merchant id */
     public $merchantid;
-    /** @var string $status */
+    
+    /** @var string $status -- Latest transaction status, one of {AUTHORIZED, CONFIRMED, SUCCESS} */
     public $status;
-    /** @var string $amount  amount inc. vat in minor currency*/
+    
+    /** @var string $amount -- Total amount including VAT, in minor currency (e.g. SEK 10.50 = 1050) */
     public $amount;
-    /** @var string $currency */
+    
+    /** @var string $currency -- ISO 4217 alphabetic, e.g. SEK */
     public $currency;
-    /** @var string $vat  vat amount in minor currency */
-    public $vat ;
-    /** @var string $capturedamount */
+    
+    /** @var string $vat -- VAT, in minor currency */
+    public $vat;
+    
+    /** @var string $capturedamount -- Captured amount */
     public $capturedamount;
-    /** @var string $authorizedamount */
+    
+    /** @var string $authorizedamount -- Authorized amount */
     public $authorizedamount;
-    /** @var string $created */
+    
+    /** @var string $created -- Timestamp when transaction was created in Sveas' system, e.g. 2011-09-27 16:55:01.21 */
     public $created;
-    /** @var string $creditstatus */
+    
+    /** @var string $creditstatus -- Status of the last credit attempt */
     public $creditstatus;
-    /** @var string $creditedamount */
+    
+    /** @var string $creditedamount -- Total amount that has been credited, in minor currency */
     public $creditedamount;
-    /** @var string $merchantresponsecode */
+    
+    /** @var string $merchantresponsecode -- Last statuscode response returned to merchant */
     public $merchantresponsecode;
+    
     /** @var string $paymentmethod */
     public $paymentmethod;
+    
     /** @var NumberedOrderRow[] $numberedOrderRows  array of NumberedOrderRows w/set Name, Description, ArticleNumber, AmountExVat, VatPercent, Quantity and Unit, rowNumber */
     public $numberedOrderRows;
+    
+    /** @var string $capturedate -- The date the transaction was captured, e.g. 2011-09-27 16:55:01.21 */ 
+    public $capturedate;
+    /** @var string $eci -- Enrollment status from MPI. If the card is 3Dsecure enabled or not. */
+    public $eci;    
+    /** @var string $mdstatus -- Value calculated from eci as requested by acquiring bank. */
+    public $mdstatus;
+    /** @var string $expiryyear -- Expire year of the card */
+    public $expiryyear;
+    /** @var string $expirymonth -- Expire month of the month */
+    public $expirymonth;
+    /** @var string $ch_name -- Cardholder name as entered by cardholder */
+    public $ch_name;
+    /** @var string $authcode -- EDB authorization code */
+    public $authcode;
       
     function __construct($message,$countryCode,$config) {
         parent::__construct($message,$countryCode,$config);
@@ -69,27 +96,29 @@ class QueryTransactionResponse extends HostedAdminResponse{
             $this->setErrorParams( (string)$hostedAdminResponse->statuscode ); 
         }
        
-        //        //SimpleXMLElement Object
+        //Example QueryTransaction request response
+        //
+        //SimpleXMLElement Object
         //(
         //    [@attributes] => Array
         //        (
-        //            [id] => 579929
+        //-            [id] => 579929
         //        )
-        //    [customerrefno] => 313
-        //    [merchantid] => 1130
-        //    [status] => ANNULLED
-        //    [amount] => 13000
-        //    [currency] => SEK
-        //    [vat] => 2600
-        //    [capturedamount] => SimpleXMLElement Object
-        //    [authorizedamount] => SimpleXMLElement Object
-        //    [created] => 2014-03-17 13:08:00.897
-        //    [creditstatus] => CREDNONE
-        //    [creditedamount] => 0
-        //    [merchantresponsecode] => 0
-        //    [paymentmethod] => KORTCERT
+        //-    [customerrefno] => 313
+        //-    [merchantid] => 1130
+        //-    [status] => ANNULLED
+        //-    [amount] => 13000
+        //-    [currency] => SEK
+        //-    [vat] => 2600
+        //-    [capturedamount] => SimpleXMLElement Object
+        //-    [authorizedamount] => SimpleXMLElement Object
+        //-    [created] => 2014-03-17 13:08:00.897
+        //-    [creditstatus] => CREDNONE
+        //-    [creditedamount] => 0
+        //-    [merchantresponsecode] => 0
+        //-    [paymentmethod] => KORTCERT
         //    [callbackurl] => SimpleXMLElement Object
-        //    [capturedate] => SimpleXMLElement Object
+        //-    [capturedate] => SimpleXMLElement Object
         //    [subscriptionid] => SimpleXMLElement Object
         //    [subscriptiontype] => SimpleXMLElement Object
         //    [customer] => SimpleXMLElement Object
@@ -114,15 +143,15 @@ class QueryTransactionResponse extends HostedAdminResponse{
         //            [companyname] => SimpleXMLElement Object
         //            [fullname] => SimpleXMLElement Object
         //        )
-        //    [cardtype] => VISA
+        //-    [cardtype] => VISA
         //    [maskedcardno] => 444433xxxxxx1100
-        //    [eci] => SimpleXMLElement Object
-        //    [mdstatus] => SimpleXMLElement Object
-        //    [expiryyear] => 16
-        //    [expirymonth] => 02
-        //    [chname] => SimpleXMLElement Object
-        //    [authcode] => 340112
-        //    [orderrows] => SimpleXMLElement Object
+        //-    [eci] => SimpleXMLElement Object
+        //-    [mdstatus] => SimpleXMLElement Object
+        //-    [expiryyear] => 16
+        //-    [expirymonth] => 02
+        //-    [chname] => SimpleXMLElement Object
+        //-    [authcode] => 340112
+        //-    [orderrows] => SimpleXMLElement Object
         //        (
         //            [row] => Array
         //                (
@@ -155,8 +184,6 @@ class QueryTransactionResponse extends HostedAdminResponse{
         // queryTransaction
         if(property_exists($hostedAdminResponse->transaction,"customerrefno") && property_exists($hostedAdminResponse->transaction,"merchantid")){
                 
-            $this->rawQueryTransactionsResponse = $hostedAdminResponse; // the raw GetOrders response
-            
             $this->transactionId = (string)$hostedAdminResponse->transaction['id'];
             
             $this->customerrefno = (string)$hostedAdminResponse->transaction->customerrefno;
@@ -173,6 +200,14 @@ class QueryTransactionResponse extends HostedAdminResponse{
             $this->merchantresponsecode = (string)$hostedAdminResponse->transaction->merchantresponsecode;
             $this->paymentmethod = (string)$hostedAdminResponse->transaction->paymentmethod;
 
+            $this->capturedate = (string)$hostedAdminResponse->transaction->capturedate;
+            $this->eci = (string)$hostedAdminResponse->transaction->eci;    
+            $this->mdstatus = (string)$hostedAdminResponse->transaction->mdstatus;
+            $this->expiryyear = (string)$hostedAdminResponse->transaction->expiryyear;
+            $this->expirymonth = (string)$hostedAdminResponse->transaction->expirymonth;
+            $this->ch_name = (string)$hostedAdminResponse->transaction->ch_name;
+            $this->authcode = (string)$hostedAdminResponse->transaction->authcode;            
+                        
             $rownumber = 1;
             foreach( $hostedAdminResponse->transaction->orderrows->row as $orderrow ) {
 
@@ -205,8 +240,8 @@ class QueryTransactionResponse extends HostedAdminResponse{
                     ->setDescription( (string)$orderrow['description'] )
                     ->setQuantity( floatval((string)$orderrow['quantity']) )
                     ->setArticleNumber( (string)$orderrow['sku'] )     
-                    ->setUnit( (string)$orderrow['unit'] )
-                    ->setVatPercent( ( $orderrow['vat']/($orderrow['amount']-$orderrow['vat'])*100 ) )
+                    ->setUnit( (string)$orderrow['unit'] ) 
+                   ->setVatPercent( ( $orderrow['vat']/($orderrow['amount']-$orderrow['vat'])*100 ) )
                 ;
 
                 $newrow->creditInvoiceId = null;
