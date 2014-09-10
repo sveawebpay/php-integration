@@ -99,7 +99,7 @@ class CardPaymentURLIntegrationTest extends \PHPUnit_Framework_TestCase {
         // 1. remove (put in a comment) the above code to enable the test
         // 2. run the test, and get the subscription paymenturl from the output
         // 3. go to the paymenturl and complete the transaction.
-        // 4. go to test.sveaekonomi.se/webpay/admin/start.xhtml
+        // 4. go to https://test.sveaekonomi.se/webpay-admin/admin/start.xhtml
         // 5. retrieve the transactionid from the response in the transaction log
         
         $orderLanguage = "sv";   
