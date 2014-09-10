@@ -96,91 +96,8 @@ class QueryTransactionResponse extends HostedAdminResponse{
             $this->setErrorParams( (string)$hostedAdminResponse->statuscode ); 
         }
        
-        //Example QueryTransaction request response
-        //
-        //SimpleXMLElement Object
-        //(
-        //    [@attributes] => Array
-        //        (
-        //-            [id] => 579929
-        //        )
-        //-    [customerrefno] => 313
-        //-    [merchantid] => 1130
-        //-    [status] => ANNULLED
-        //-    [amount] => 13000
-        //-    [currency] => SEK
-        //-    [vat] => 2600
-        //-    [capturedamount] => SimpleXMLElement Object
-        //-    [authorizedamount] => SimpleXMLElement Object
-        //-    [created] => 2014-03-17 13:08:00.897
-        //-    [creditstatus] => CREDNONE
-        //-    [creditedamount] => 0
-        //-    [merchantresponsecode] => 0
-        //-    [paymentmethod] => KORTCERT
-        //    [callbackurl] => SimpleXMLElement Object
-        //-    [capturedate] => SimpleXMLElement Object
-        //    [subscriptionid] => SimpleXMLElement Object
-        //    [subscriptiontype] => SimpleXMLElement Object
-        //    [customer] => SimpleXMLElement Object
-        //        (
-        //            [@attributes] => Array
-        //                (
-        //                    [id] => 8011
-        //                )
-        //            [firstname] => SimpleXMLElement Object
-        //            [lastname] => SimpleXMLElement Object
-        //            [initials] => SimpleXMLElement Object
-        //            [email] => SimpleXMLElement Object
-        //            [ssn] => SimpleXMLElement Object
-        //            [address] => SimpleXMLElement Object
-        //            [address2] => SimpleXMLElement Object
-        //            [city] => SimpleXMLElement Object
-        //            [country] => SE
-        //            [zip] => SimpleXMLElement Object
-        //            [phone] => SimpleXMLElement Object
-        //            [vatnumber] => SimpleXMLElement Object
-        //            [housenumber] => SimpleXMLElement Object
-        //            [companyname] => SimpleXMLElement Object
-        //            [fullname] => SimpleXMLElement Object
-        //        )
-        //-    [cardtype] => VISA
-        //    [maskedcardno] => 444433xxxxxx1100
-        //-    [eci] => SimpleXMLElement Object
-        //-    [mdstatus] => SimpleXMLElement Object
-        //-    [expiryyear] => 16
-        //-    [expirymonth] => 02
-        //-    [chname] => SimpleXMLElement Object
-        //-    [authcode] => 340112
-        //-    [orderrows] => SimpleXMLElement Object
-        //        (
-        //            [row] => Array
-        //                (
-        //                    [0] => SimpleXMLElement Object
-        //                        (
-        //                            [id] => 43233
-        //                            [name] => SimpleXMLElement Object
-        //                            [amount] => 12500
-        //                            [vat] => 2500
-        //                            [description] => Testprodukt 25%
-        //                            [quantity] => 1.0
-        //                            [sku] => SimpleXMLElement Object
-        //                            [unit] => SimpleXMLElement Object
-        //
-        //                        )
-        //                    [1] => SimpleXMLElement Object
-        //                        (
-        //                            [id] => 43234
-        //                            [name] => SimpleXMLElement Object
-        //                            [amount] => 500
-        //                            [vat] => 100
-        //                            [description] => Fastpris (Fast fraktpris)
-        //                            [quantity] => 1.0
-        //                            [sku] => SimpleXMLElement Object
-        //                            [unit] => SimpleXMLElement Object
-        //                )
-        //        )
-        //)
-            
+        //print_r( $hostedAdminResponse ); // uncomment to dump raw request response
+                   
         // queryTransaction
         if(property_exists($hostedAdminResponse->transaction,"customerrefno") && property_exists($hostedAdminResponse->transaction,"merchantid")){
                 
@@ -255,4 +172,4 @@ class QueryTransactionResponse extends HostedAdminResponse{
             }
         }  
     }
-}
+}    
