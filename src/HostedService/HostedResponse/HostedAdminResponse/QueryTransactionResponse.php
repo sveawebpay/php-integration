@@ -20,6 +20,9 @@ class QueryTransactionResponse extends HostedAdminResponse{
     /** @var string $customerrefno -- the customer reference number */
     public $customerrefno;
     
+    /** @var string $customerrefno -- alias for customer reference number */    
+    public $clientOrderNumber;
+    
     /** @var string $merchantid -- the merchant id */
     public $merchantid;
     
@@ -59,21 +62,42 @@ class QueryTransactionResponse extends HostedAdminResponse{
     /** @var NumberedOrderRow[] $numberedOrderRows  array of NumberedOrderRows w/set Name, Description, ArticleNumber, AmountExVat, VatPercent, Quantity and Unit, rowNumber */
     public $numberedOrderRows;
     
+    /** @var string $callbackurl */
+    public $callbackurl;
+    
     /** @var string $capturedate -- The date the transaction was captured, e.g. 2011-09-27 16:55:01.21 */ 
     public $capturedate;
+
+    /** @var string $subscriptionid */
+    public $subscriptionid;
+    
+    /** @var string $subscriptiontype */
+    public $subscriptiontype;
+
+    /** @var string $cardtype */
+    public $cardtype;
+    
+    /** @var string $maskedcardno */
+    public $maskedcardno;
+    
     /** @var string $eci -- Enrollment status from MPI. If the card is 3Dsecure enabled or not. */
     public $eci;    
+    
     /** @var string $mdstatus -- Value calculated from eci as requested by acquiring bank. */
     public $mdstatus;
+    
     /** @var string $expiryyear -- Expire year of the card */
     public $expiryyear;
+    
     /** @var string $expirymonth -- Expire month of the month */
     public $expirymonth;
-    /** @var string $ch_name -- Cardholder name as entered by cardholder */
-    public $ch_name;
+    
+    /** @var string $chname -- Cardholder name as entered by cardholder */
+    public $chname;
+    
     /** @var string $authcode -- EDB authorization code */
-    public $authcode;
-      
+    public $authcode; 
+    
     function __construct($message,$countryCode,$config) {
         parent::__construct($message,$countryCode,$config);
     }
@@ -99,11 +123,12 @@ class QueryTransactionResponse extends HostedAdminResponse{
         //print_r( $hostedAdminResponse ); // uncomment to dump raw request response
                    
         // queryTransaction
-        if(property_exists($hostedAdminResponse->transaction,"customerrefno") && property_exists($hostedAdminResponse->transaction,"merchantid")){
+        if( property_exists($hostedAdminResponse->transaction,"customerrefno") && property_exists($hostedAdminResponse->transaction,"merchantid") ){
                 
             $this->transactionId = (string)$hostedAdminResponse->transaction['id'];
             
-            $this->customerrefno = (string)$hostedAdminResponse->transaction->customerrefno;
+            $this->customerrefno = (string)$hostedAdminResponse->transaction->customerrefno;           
+            $this->clientOrderNumber = (string)$hostedAdminResponse->transaction->customerrefno; // to confirm with HostedPaymentResponse
             $this->merchantid = (string)$hostedAdminResponse->transaction->merchantid;
             $this->status = (string)$hostedAdminResponse->transaction->status;
             $this->amount = (string)$hostedAdminResponse->transaction->amount;
@@ -116,15 +141,19 @@ class QueryTransactionResponse extends HostedAdminResponse{
             $this->creditedamount = (string)$hostedAdminResponse->transaction->creditedamount;
             $this->merchantresponsecode = (string)$hostedAdminResponse->transaction->merchantresponsecode;
             $this->paymentmethod = (string)$hostedAdminResponse->transaction->paymentmethod;
-
+            $this->callbackurl = (string)$hostedAdminResponse->transaction->callbackurl;            
             $this->capturedate = (string)$hostedAdminResponse->transaction->capturedate;
+            $this->subscriptionid = (string)$hostedAdminResponse->transaction->subscriptionid;
+            $this->subscriptiontype = (string)$hostedAdminResponse->transaction->subscriptiontype;
+            $this->cardtype = (string)$hostedAdminResponse->transaction->cardtype;
+            $this->maskedcardno = (string)$hostedAdminResponse->transaction->maskedcardno;                    
             $this->eci = (string)$hostedAdminResponse->transaction->eci;    
             $this->mdstatus = (string)$hostedAdminResponse->transaction->mdstatus;
             $this->expiryyear = (string)$hostedAdminResponse->transaction->expiryyear;
             $this->expirymonth = (string)$hostedAdminResponse->transaction->expirymonth;
-            $this->ch_name = (string)$hostedAdminResponse->transaction->ch_name;
+            $this->chname = (string)$hostedAdminResponse->transaction->chname;
             $this->authcode = (string)$hostedAdminResponse->transaction->authcode;            
-                        
+                       
             $rownumber = 1;
             foreach( $hostedAdminResponse->transaction->orderrows->row as $orderrow ) {
 
