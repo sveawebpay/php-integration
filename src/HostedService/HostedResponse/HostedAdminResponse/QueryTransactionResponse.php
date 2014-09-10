@@ -154,51 +154,87 @@ class QueryTransactionResponse extends HostedAdminResponse{
             $this->chname = (string)$hostedAdminResponse->transaction->chname;
             $this->authcode = (string)$hostedAdminResponse->transaction->authcode;            
                        
-            $rownumber = 1;
-            foreach( $hostedAdminResponse->transaction->orderrows->row as $orderrow ) {
+            //SimpleXMLElement Object
+            //(
+            //    [transaction] => SimpleXMLElement Object
+            //        (
+            //            [@attributes] => Array
+            //                (
+            //                    [id] => 581497
+            //                )
+            //
+            //            [customerrefno] => test_recur_1
+            //            [merchantid] => 1130
+            //            [status] => SUCCESS
+            //            [amount] => 500
+            //            [currency] => SEK
+            //            [vat] => 100
+            //            [capturedamount] => 500
+            //            [authorizedamount] => 500
+            //            [created] => 2014-04-16 14:51:34.917
+            //            [creditstatus] => CREDNONE
+            //            [creditedamount] => 0
+            //            [merchantresponsecode] => 0
+            //            [paymentmethod] => KORTCERT
+            //            [callbackurl] => SimpleXMLElement Object
+            //                (
+            //                )
+            //
+            //            [capturedate] => 2014-04-18 00:15:12.287
+            //            [subscriptionid] => 2922
+            //            [subscriptiontype] => RECURRINGCAPTURE
+            //        )
+            //
+            //    [statuscode] => 0
+            //)   
 
-                $orderrow = (array)$orderrow;
-                //queried orderrow:
-                // [name]
-                // [amount]
-                // [vat]
-                // [description]
-                // [quantity]
-                // [sku]
-                // [unit]
-                
-                $newrow = new \Svea\NumberedOrderRow(); // webpay orderrow
-                //WebPayItem OrderRow:          
-                // $articleNumber
-                // $quantity
-                // $unit
-                // $amountExVat
-                // $amountIncVat
-                // $vatPercent
-                // $name
-                // $description
-                // $discountPercent
-                // $vatDiscount
-                
-                $newrow
+            if( property_exists($hostedAdminResponse->transaction, "orderrows") ) {            
+                $rownumber = 1;            
+                foreach( $hostedAdminResponse->transaction->orderrows->row as $orderrow ) {
+
+                    $orderrow = (array)$orderrow;
+                    //queried orderrow:
+                    // [name]
+                    // [amount]
+                    // [vat]
+                    // [description]
+                    // [quantity]
+                    // [sku]
+                    // [unit]
+
+                    $newrow = new \Svea\NumberedOrderRow(); // webpay orderrow
+                    //WebPayItem OrderRow:          
+                    // $articleNumber
+                    // $quantity
+                    // $unit
+                    // $amountExVat
+                    // $amountIncVat
+                    // $vatPercent
+                    // $name
+                    // $description
+                    // $discountPercent
+                    // $vatDiscount
+
+                    $newrow
                     ->setName( (string)$orderrow['name'] )
                     ->setAmountExVat( floatval( ($orderrow['amount']-$orderrow['vat']) )/100 )
                     ->setDescription( (string)$orderrow['description'] )
                     ->setQuantity( floatval((string)$orderrow['quantity']) )
                     ->setArticleNumber( (string)$orderrow['sku'] )     
                     ->setUnit( (string)$orderrow['unit'] ) 
-                   ->setVatPercent( ( $orderrow['vat']/($orderrow['amount']-$orderrow['vat'])*100 ) )
-                ;
+                    ->setVatPercent( ( $orderrow['vat']/($orderrow['amount']-$orderrow['vat'])*100 ) )
+                    ;
 
-                $newrow->creditInvoiceId = null;
-                $newrow->invoiceId = null;
-                $newrow->rowNumber = $rownumber;
-                $newrow->status = null;
+                    $newrow->creditInvoiceId = null;
+                    $newrow->invoiceId = null;
+                    $newrow->rowNumber = $rownumber;
+                    $newrow->status = null;
 
-                $rownumber +=1;
-                
-                $this->numberedOrderRows[] = $newrow;
+                    $rownumber +=1;
+
+                    $this->numberedOrderRows[] = $newrow;
+                }
             }
-        }  
+        }
     }
-}    
+}

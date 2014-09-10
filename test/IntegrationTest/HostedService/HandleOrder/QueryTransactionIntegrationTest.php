@@ -43,11 +43,11 @@ class QueryTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
     function test_manual_parsing_of_queried_payment_order_works() {
 
         // Stop here and mark this test as incomplete.
-//        $this->markTestIncomplete(
-//            'test_manual_parsing_of_queried_payment_order_works'
-//        );
+        $this->markTestIncomplete(
+            'test_manual_parsing_of_queried_payment_order_works'
+        );
 
-        // 1. go to test.sveaekonomi.se/webpay/admin/start.xhtml 
+        // 1. go to https://test.sveaekonomi.se/webpay-admin/admin/start.xhtml 
         // 2. go to verktyg -> betalning
         // 3. enter our test merchantid: 1130
         // 4. use the following xml, making sure to update to a unique customerrefno:
@@ -141,7 +141,7 @@ class QueryTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
         
         $this->assertInstanceOf( "Svea\HostedService\QueryTransactionResponse", $response );
         
-        //print_r($response);  // uncomment to dump our processed request response
+        //print_r($response);  // uncomment to dump our processed request response:
         // 
         //Svea\HostedService\QueryTransactionResponse Object
         //(
@@ -260,26 +260,36 @@ class QueryTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals( "Orderrow2 description", $response->numberedOrderRows[1]->description );
         $this->assertEquals( 0, $response->numberedOrderRows[1]->vatDiscount );     
                 
-        $this->assertEquals( "", $response->callbackurl );
+        $this->assertEquals( null, $response->callbackurl );
         $this->assertEquals( "2014-04-13 00:15:14.267", $response->capturedate );
-        $this->assertEquals( "", $response->subscriptionid );
-        $this->assertEquals( "", $response->subscriptiontype );
-        $this->assertEquals( "", $response->cardtype );
-        $this->assertEquals( "", $response->maskedcardno );
-        $this->assertEquals( "", $response->eci );
-        $this->assertEquals( "", $response->mdstatus );
-        $this->assertEquals( "", $response->expiryyear );
-        $this->assertEquals( "", $response->expirymonth );
-        $this->assertEquals( "", $response->chname );
-        $this->assertEquals( "", $response->authcode );
+        $this->assertEquals( null, $response->subscriptionid );
+        $this->assertEquals( null, $response->subscriptiontype );
+        $this->assertEquals( null, $response->cardtype );
+        $this->assertEquals( null, $response->maskedcardno );
+        $this->assertEquals( null, $response->eci );
+        $this->assertEquals( null, $response->mdstatus );
+        $this->assertEquals( null, $response->expiryyear );
+        $this->assertEquals( null, $response->expirymonth );
+        $this->assertEquals( null, $response->chname );
+        $this->assertEquals( null, $response->authcode );
     }    
 
-    function test_manual_parsing_of_queried_recur_order_works() {
+    function test_manual_parsing_of_queried_recur_order_without_orderrows_works() {
 
         // Stop here and mark this test as incomplete.
         $this->markTestIncomplete(
-            'test_manual_parsing_of_queried_recur_order_works'
+            'test_manual_parsing_of_queried_recur_order_without_orderrows_works'
         );               
+
+        // 1. go to https://test.sveaekonomi.se/webpay-admin/admin/start.xhtml 
+        // 2. go to verktyg -> betalning
+        // 3. enter our test merchantid: 1130
+        // 4. use the following xml, making sure to update to a unique customerrefno:
+        // <paymentmethod>KORTCERT</paymentmethod><subscriptiontype>RECURRINGCAPTURE</subscriptiontype><currency>SEK</currency><amount>500</amount><vat>100</vat><customerrefno>test_recur_NN</customerrefno><returnurl>https://test.sveaekonomi.se/webpay-admin/admin/merchantresponsetest.xhtml</returnurl>
+        // 5. the result should be:
+        // <response><transaction id="581497"><paymentmethod>KORTCERT</paymentmethod><merchantid>1130</merchantid><customerrefno>test_recur_1</customerrefno><amount>500</amount><currency>SEK</currency><subscriptionid>2922</subscriptionid><cardtype>VISA</cardtype><maskedcardno>444433xxxxxx1100</maskedcardno><expirymonth>02</expirymonth><expiryyear>16</expiryyear><authcode>993955</authcode></transaction><statuscode>0</statuscode></response>
+
+        // 6. enter the received subscription id, etc. below and run the test
 
         // Set the below to match the transaction, then run the test.
         $transactionId = 581497;
@@ -327,13 +337,246 @@ class QueryTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
                 
         $this->assertInstanceOf( "Svea\HostedService\QueryTransactionResponse", $response );
         
-        //print_r($response);
+        //print_r($response);  // uncomment to dump our processed request response:
+        //
+        //Svea\HostedService\QueryTransactionResponse Object
+        //(
+        //    [transactionId] => 581497
+        //    [customerrefno] => test_recur_1
+        //    [clientOrderNumber] => test_recur_1
+        //    [merchantid] => 1130
+        //    [status] => SUCCESS
+        //    [amount] => 500
+        //    [currency] => SEK
+        //    [vat] => 100
+        //    [capturedamount] => 500
+        //    [authorizedamount] => 500
+        //    [created] => 2014-04-16 14:51:34.917
+        //    [creditstatus] => CREDNONE
+        //    [creditedamount] => 0
+        //    [merchantresponsecode] => 0
+        //    [paymentmethod] => KORTCERT
+        //    [numberedOrderRows] => 
+        //    [callbackurl] => 
+        //    [capturedate] => 2014-04-18 00:15:12.287
+        //    [subscriptionid] => 2922
+        //    [subscriptiontype] => RECURRINGCAPTURE
+        //    [cardtype] => 
+        //    [maskedcardno] => 
+        //    [eci] => 
+        //    [mdstatus] => 
+        //    [expiryyear] => 
+        //    [expirymonth] => 
+        //    [chname] => 
+        //    [authcode] => 
+        //    [accepted] => 1
+        //    [resultcode] => 0
+        //    [errormessage] => 
+        //)
+        
         $this->assertEquals( 1, $response->accepted );    
-        $this->assertEquals( 0, $response->resultcode );        
+        $this->assertEquals( 0, $response->resultcode );
+        $this->assertEquals( null, $response->errormessage );
+        
+        $this->assertEquals( $transactionId, $response->transactionId );
+        $this->assertEquals( "test_recur_1", $response->customerrefno );
+        $this->assertEquals( "test_recur_1", $response->clientOrderNumber ); //
+        $this->assertEquals( "1130", $response->merchantid );
+        $this->assertEquals( "SUCCESS", $response->status );    // after having been confirmed & batch process by bank
+        $this->assertEquals( "500", $response->amount );
+        $this->assertEquals( "SEK", $response->currency );
+        $this->assertEquals( "100", $response->vat );
+        $this->assertEquals( "500", $response->capturedamount ); // after having been confirmed & batch process by bank
+        $this->assertEquals( "500", $response->authorizedamount );
+        $this->assertEquals( "2014-04-16 14:51:34.917", $response->created );
+        $this->assertEquals( "CREDNONE", $response->creditstatus );
+        $this->assertEquals( "0", $response->creditedamount );
+        $this->assertEquals( "0", $response->merchantresponsecode );
+        $this->assertEquals( "KORTCERT", $response->paymentmethod );        
+        $this->assertEquals( null, $response->numberedOrderRows );                                  
+        $this->assertEquals( null, $response->callbackurl );
+        $this->assertEquals( "2014-04-18 00:15:12.287", $response->capturedate );
+        $this->assertEquals( "2922", $response->subscriptionid );
+        $this->assertEquals( "RECURRINGCAPTURE", $response->subscriptiontype );
+        $this->assertEquals( null, $response->cardtype );
+        $this->assertEquals( null, $response->maskedcardno );
+        $this->assertEquals( null, $response->eci );
+        $this->assertEquals( null, $response->mdstatus );
+        $this->assertEquals( null, $response->expiryyear );
+        $this->assertEquals( null, $response->expirymonth );
+        $this->assertEquals( null, $response->chname );
+        $this->assertEquals( null, $response->authcode );            
     }     
         
-     // TODO -- function test_manual_parsing_of_queried_preparepayment_order_works() {
-    
+    function test_manual_parsing_of_queried_preparepayment_order_works() {
+        // Stop here and mark this test as incomplete.
+//        $this->markTestIncomplete(
+//            'test_manual_parsing_of_queried_recur_order_without_orderrows_works'
+//        );               
+          
+        // 1. See CardPaymentURLIntegrationTest::test_manual_CardPayment_getPaymentUrl():
+        // 2. run the test, and get the subscription paymenturl from the output
+        // 3. go to the paymenturl and complete the transaction.
+        // 4. go to https://test.sveaekonomi.se/webpay-admin/admin/start.xhtml
+        // 5. retrieve the transactionid from the response in the transaction log
+        
+        // Set the below to match the transaction, then run the test.
+        $transactionId = 586076;
+
+        $request = new QueryTransaction( Svea\SveaConfig::getDefaultConfig() );
+        $request->transactionId = $transactionId;
+        $request->countryCode = "SE";
+        $response = $request->doRequest();    
+
+        // Example of raw recur order 586076 response (see QueryTransactionResponse class) to parse
+        //     
+        //SimpleXMLElement Object
+        //(
+        //    [transaction] => SimpleXMLElement Object
+        //        (
+        //            [@attributes] => Array
+        //                (
+        //                    [id] => 586076
+        //                )
+        //
+        //            [customerrefno] => clientOrderNumber:2014-09-10T14:27:23 02:00
+        //            [merchantid] => 1130
+        //            [status] => AUTHORIZED
+        //            [amount] => 25000
+        //            [currency] => SEK
+        //            [vat] => 5000
+        //            [capturedamount] => SimpleXMLElement Object
+        //                (
+        //                )
+        //
+        //            [authorizedamount] => 25000
+        //            [created] => 2014-09-10 14:27:23.04
+        //            [creditstatus] => CREDNONE
+        //            [creditedamount] => 0
+        //            [merchantresponsecode] => 0
+        //            [paymentmethod] => KORTCERT
+        //            [callbackurl] => SimpleXMLElement Object
+        //                (
+        //                )
+        //
+        //            [capturedate] => SimpleXMLElement Object
+        //                (
+        //                )
+        //
+        //            [subscriptionid] => SimpleXMLElement Object
+        //                (
+        //                )
+        //
+        //            [subscriptiontype] => SimpleXMLElement Object
+        //                (
+        //                )
+        //
+        //            [customer] => SimpleXMLElement Object
+        //                (
+        //                    [@attributes] => Array
+        //                        (
+        //                            [id] => 12536
+        //                        )
+        //
+        //                    [firstname] => Tess T
+        //                    [lastname] => Persson
+        //                    [initials] => SimpleXMLElement Object
+        //                        (
+        //                        )
+        //
+        //                    [email] => SimpleXMLElement Object
+        //                        (
+        //                        )
+        //
+        //                    [ssn] => 194605092222
+        //                    [address] => Testgatan
+        //                    [address2] => c/o Eriksson, Erik
+        //                    [city] => Stan
+        //                    [country] => SE
+        //                    [zip] => 99999
+        //                    [phone] => SimpleXMLElement Object
+        //                        (
+        //                        )
+        //
+        //                    [vatnumber] => SimpleXMLElement Object
+        //                        (
+        //                        )
+        //
+        //                    [housenumber] => 1
+        //                    [companyname] => SimpleXMLElement Object
+        //                        (
+        //                        )
+        //
+        //                    [fullname] => SimpleXMLElement Object
+        //                        (
+        //                        )
+        //
+        //                )
+        //
+        //            [orderrows] => SimpleXMLElement Object
+        //                (
+        //                    [row] => SimpleXMLElement Object
+        //                        (
+        //                            [id] => 53730
+        //                            [name] => Product
+        //                            [amount] => 12500
+        //                            [vat] => 2500
+        //                            [description] => Specification
+        //                            [quantity] => 2.0
+        //                            [sku] => 1
+        //                            [unit] => st
+        //                        )
+        //
+        //                )
+        //
+        //        )
+        //
+        //    [statuscode] => 0
+        //)
+        
+        $this->assertEquals( 1, $response->accepted );    
+        $this->assertEquals( 0, $response->resultcode );
+        $this->assertEquals( null, $response->errormessage );
+        
+        $this->assertEquals( $transactionId, $response->transactionId );
+        $this->assertEquals( "clientOrderNumber:2014-09-10T14:27:23 02:00", $response->customerrefno );
+        $this->assertEquals( "clientOrderNumber:2014-09-10T14:27:23 02:00", $response->clientOrderNumber ); //
+        $this->assertEquals( "1130", $response->merchantid );
+        $this->assertEquals( "AUTHORIZED", $response->status );
+        $this->assertEquals( "25000", $response->amount );
+        $this->assertEquals( "SEK", $response->currency );
+        $this->assertEquals( "5000", $response->vat );
+        $this->assertEquals( null, $response->capturedamount );
+        $this->assertEquals( "25000", $response->authorizedamount );
+        $this->assertEquals( "2014-09-10 14:27:23.04", $response->created );
+        $this->assertEquals( "CREDNONE", $response->creditstatus );
+        $this->assertEquals( "0", $response->creditedamount );
+        $this->assertEquals( "0", $response->merchantresponsecode );
+        $this->assertEquals( "KORTCERT", $response->paymentmethod );        
+                     
+        $this->assertInstanceOf( "Svea\OrderRow", $response->numberedOrderRows[0] );
+        $this->assertEquals( "1", $response->numberedOrderRows[0]->articleNumber );
+        $this->assertEquals( "2.0", $response->numberedOrderRows[0]->quantity );
+        $this->assertEquals( "st", $response->numberedOrderRows[0]->unit );
+        $this->assertEquals( 100.00, $response->numberedOrderRows[0]->amountExVat );
+        $this->assertEquals( 25.00, $response->numberedOrderRows[0]->vatPercent );
+        $this->assertEquals( "Product", $response->numberedOrderRows[0]->name );
+        $this->assertEquals( "Specification", $response->numberedOrderRows[0]->description );
+        $this->assertEquals( 0, $response->numberedOrderRows[0]->vatDiscount );           
+                                     
+        $this->assertEquals( null, $response->callbackurl );
+        $this->assertEquals( null, $response->capturedate );
+        $this->assertEquals( null, $response->subscriptionid );
+        $this->assertEquals( null, $response->subscriptiontype );
+        $this->assertEquals( null, $response->cardtype );
+        $this->assertEquals( null, $response->maskedcardno );
+        $this->assertEquals( null, $response->eci );
+        $this->assertEquals( null, $response->mdstatus );
+        $this->assertEquals( null, $response->expiryyear );
+        $this->assertEquals( null, $response->expirymonth );
+        $this->assertEquals( null, $response->chname );
+        $this->assertEquals( null, $response->authcode );            
+    }
     /**
      * test_manual_query_card_queryTransactionResponse 
      * 
@@ -347,7 +590,7 @@ class QueryTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
             'test_manual_query_card_queryTransaction_returntype'
         );
 
-        // 1. go to test.sveaekonomi.se/webpay/admin/start.xhtml 
+        // 1. go to https://test.sveaekonomi.se/webpay-admin/admin/start.xhtml 
         // 2. go to verktyg -> betalning
         // 3. enter our test merchantid: 1130
         // 4. use the following xml, making sure to update to a unique customerrefno:
