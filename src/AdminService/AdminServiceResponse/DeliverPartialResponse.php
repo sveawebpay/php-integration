@@ -33,6 +33,8 @@ class DeliverPartialResponse extends AdminServiceResponse {
 
             $this->rawDeliverPartialResponse = $message;
 
+            //print_r( $message ); die;
+            
             $this->amount = $message->OrdersDelivered->DeliverOrderResult->DeliveredAmount;
             $this->orderType = $message->OrdersDelivered->DeliverOrderResult->OrderType;
             if( $this->orderType == \ConfigurationProvider::INVOICE_TYPE ) {

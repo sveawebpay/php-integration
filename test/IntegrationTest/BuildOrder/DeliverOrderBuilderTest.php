@@ -40,7 +40,7 @@ class DeliverOrderBuilderIntegrationTest extends PHPUnit_Framework_TestCase {
         $createResponse = $createOrderBuilder->useInvoicePayment()->doRequest();
 
         $this->assertEquals(1, $createResponse->accepted);
-        
+                
         $orderId = $createResponse->sveaOrderId;        
         $DeliverOrderBuilder = WebPay::deliverOrder( Svea\SveaConfig::getDefaultConfig() )
                 //->addOrderRow( TestUtil::createOrderRow() )
@@ -49,11 +49,53 @@ class DeliverOrderBuilderIntegrationTest extends PHPUnit_Framework_TestCase {
                 ->setInvoiceDistributionType(\DistributionType::POST)
         ;
         
+        // example of raw deliver orders response to parse
+        //
+        //stdClass Object
+        //(
+        //    [ErrorMessage] => 
+        //    [ResultCode] => 0
+        //    [OrdersDelivered] => stdClass Object
+        //        (
+        //            [DeliverOrderResult] => stdClass Object
+        //                (
+        //                    [ClientId] => 79021
+        //                    [DeliveredAmount] => 250.00
+        //                    [DeliveryReferenceNumber] => 1033890
+        //                    [OrderType] => Invoice
+        //                    [SveaOrderId] => 414157
+        //                )
+        //
+        //        )
+        //
+        //)        
         $deliverResponse = $DeliverOrderBuilder->deliverInvoiceOrder()->doRequest();
-
+        
         //print_r( $deliverResponse );        
+        //Svea\AdminService\DeliverOrdersResponse Object
+        //(
+        //    [clientId] => 79021
+        //    [amount] => 250.00
+        //    [invoiceId] => 
+        //    [contractNumber] => 
+        //    [orderType] => Invoice
+        //    [orderId] => 414168
+        //    [accepted] => 1
+        //    [resultcode] => 0
+        //    [errormessage] => 
+        //)
+        
+        $this->assertInstanceOf( "Svea\AdminService\DeliverOrdersResponse", $deliverResponse );
         $this->assertEquals(1, $deliverResponse->accepted);
-        $this->assertInstanceOf( "Svea\AdminService\DeliverOrdersResponse", $deliverResponse );  // deliverOrder_s_Response => Admin service deliverOrders  
+        $this->assertEquals(0, $deliverResponse->resultcode);
+        $this->assertEquals(null, $deliverResponse->errormessage);
+ 
+        $this->assertEquals( 79021, $deliverResponse->clientId );
+        $this->assertEquals( 250.00, $deliverResponse->amount);
+        $this->assertStringMatchesFormat( "%d", $deliverResponse->invoiceId);   // %d => an unsigned integer value
+        $this->assertEquals( null, $deliverResponse->contractNumber);
+        $this->assertEquals( "Invoice", $deliverResponse->orderType);
+        $this->assertStringMatchesFormat( "%d", $deliverResponse->orderId);   // %d => an unsigned integer value
     }       
     
     // orderrows are ignored by the service for paymentplan orders
