@@ -150,10 +150,10 @@ class IndividualCustomer {
      * For other countries, you may ommit this, or let either of street and/or housenumber be empty
      * 
      * @param string $streetAsString
-     * @param int $houseNumberAsInt
+     * @param int $houseNumberAsInt  -- optional
      * @return $this
      */
-    public function setStreetAddress($streetAsString, $houseNumberAsInt) {
+    public function setStreetAddress($streetAsString, $houseNumberAsInt = null) { // = null is poor man's overloading
         $this->street = $streetAsString;
         $this->housenumber = $houseNumberAsInt;
         return $this;
