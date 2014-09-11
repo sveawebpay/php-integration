@@ -542,11 +542,13 @@ class QueryTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals( "clientOrderNumber:2014-09-10T14:27:23 02:00", $response->customerrefno );
         $this->assertEquals( "clientOrderNumber:2014-09-10T14:27:23 02:00", $response->clientOrderNumber ); //
         $this->assertEquals( "1130", $response->merchantid );
-        $this->assertEquals( "AUTHORIZED", $response->status );
+        //$this->assertEquals( "AUTHORIZED", $response->status ); // if just created
+        $this->assertEquals( "SUCCESS", $response->status );
         $this->assertEquals( "25000", $response->amount );
         $this->assertEquals( "SEK", $response->currency );
         $this->assertEquals( "5000", $response->vat );
-        $this->assertEquals( null, $response->capturedamount );
+        //$this->assertEquals( null, $response->capturedamount ); // if just created
+        $this->assertEquals( "25000", $response->capturedamount );
         $this->assertEquals( "25000", $response->authorizedamount );
         $this->assertEquals( "2014-09-10 14:27:23.04", $response->created );
         $this->assertEquals( "CREDNONE", $response->creditstatus );
@@ -565,7 +567,8 @@ class QueryTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals( 0, $response->numberedOrderRows[0]->vatDiscount );           
                                      
         $this->assertEquals( null, $response->callbackurl );
-        $this->assertEquals( null, $response->capturedate );
+        //$this->assertEquals( null, $response->capturedate ); // if just created
+        $this->assertEquals( "2014-09-11 00:15:11.313", $response->capturedate );
         $this->assertEquals( null, $response->subscriptionid );
         $this->assertEquals( null, $response->subscriptiontype );
         $this->assertEquals( null, $response->cardtype );
