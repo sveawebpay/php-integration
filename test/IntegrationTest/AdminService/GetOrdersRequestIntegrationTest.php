@@ -255,22 +255,53 @@ class GetOrdersRequestIntegrationTest extends PHPUnit_Framework_TestCase{
 //    [accepted] => 1
 //    [resultcode] => 0
 //    [errormessage] => 
-//)        
+//)
+        
         $this->assertInstanceOf('Svea\AdminService\GetOrdersResponse', $getOrdersResponse);
         $this->assertEquals(1, $getOrdersResponse->accepted );
         $this->assertEquals(0, $getOrdersResponse->resultcode);
         $this->assertEquals(null, $getOrdersResponse->errormessage);
         
+        $this->assertEquals( null, $getOrdersResponse->changedDate );  // TODO add test for changed order later
         $this->assertEquals( 79021, $getOrdersResponse->clientId );
         $this->assertEquals( 449, $getOrdersResponse->clientOrderId );
+        $this->assertEquals( "2014-05-19T16:04:54.787", $getOrdersResponse->createdDate );
+       
+        $this->assertEquals( true, $getOrdersResponse->creditReportStatusAccepted );
+        $this->assertEquals( "2014-05-19T16:04:54.893", $getOrdersResponse->creditReportStatusCreationDate );
+
         $this->assertEquals( "SEK", $getOrdersResponse->currency );
+//customer ?
+
+        $this->assertEquals( "1000117", $getOrdersResponse->customerId );   
+        $this->assertEquals( null, $getOrdersResponse->customerReference );
+        $this->assertEquals( null, $getOrdersResponse->deliveryAddress );
         $this->assertEquals( false, $getOrdersResponse->isPossibleToAdminister );
-        $this->assertEquals( true, $getOrdersResponse->isPossibleToCancel );   
-        $this->assertEquals( "Created", $getOrdersResponse->orderDeliveryStatus );   
+        $this->assertEquals( true, $getOrdersResponse->isPossibleToCancel );
+        $this->assertEquals( null, $getOrdersResponse->notes );
+        $this->assertEquals( "Created", $getOrdersResponse->orderDeliveryStatus ); 
+      
+        $this->assertInstanceOf( "Svea\NumberedOrderRow", $getOrdersResponse->numberedOrderRows[0] );
+        $this->assertEquals( 1, $getOrdersResponse->numberedOrderRows[0]->rowNumber );
+        $this->assertEquals( null, $getOrdersResponse->numberedOrderRows[0]->articleNumber );
+        $this->assertEquals( 2.00, $getOrdersResponse->numberedOrderRows[0]->quantity );
+        $this->assertEquals( null, $getOrdersResponse->numberedOrderRows[0]->unit );
+        $this->assertEquals( 2000.00, $getOrdersResponse->numberedOrderRows[0]->amountExVat );
+        $this->assertEquals( 25.00, $getOrdersResponse->numberedOrderRows[0]->vatPercent );          // TODO check -- should be int?!
+        $this->assertEquals( null, $getOrdersResponse->numberedOrderRows[0]->name );
+        $this->assertEquals( "Dyr produkt 25%", $getOrdersResponse->numberedOrderRows[0]->description );
+        $this->assertEquals( 0, $getOrdersResponse->numberedOrderRows[0]->vatDiscount );
+                        
+        // only check attributes of first row
+        $this->assertInstanceOf( "Svea\OrderRow", $getOrdersResponse->numberedOrderRows[3] );
+        $this->assertEquals( 4, $getOrdersResponse->numberedOrderRows[3]->rowNumber );
+        
         $this->assertEquals( "Active", $getOrdersResponse->orderStatus );
         $this->assertEquals( "Invoice", $getOrdersResponse->orderType );
+        $this->assertEquals( null, $getOrdersResponse->paymentPlanDetails );
+        $this->assertEquals( null, $getOrdersResponse->pendingReasons );
         $this->assertEquals( 348629, $getOrdersResponse->orderId );
-// TODO tests for rest of attributes above.        
+        $this->assertEquals( true, $getOrdersResponse->sveaWillBuy );
     }
        
         public function test_manual_GetOrdersRequest_for_paymentplan_order() {
@@ -280,7 +311,7 @@ class GetOrdersRequestIntegrationTest extends PHPUnit_Framework_TestCase{
             'skeleton for test_manual_GetOrdersRequest_for_paymentplan_order'
         );
             
-        // TODO fix for paymentplan order as well
+        // TODO run test for paymentplan order & returned raw request response attributes as well
             
         }
 }
