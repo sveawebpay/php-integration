@@ -28,6 +28,9 @@ class GetOrdersResponse extends AdminServiceResponse {
     public $currency;    
 //Customer -- skapa CustomerIdentity & returnera -- samma för HostedService queryTransaction isf??
 // ... (18 subentries)
+
+    /** @var CompanyCustomer|IndividualCustomer $customer -- customer identity as associated with the order by Svea */ // TODO write test for fake address vs. UC address
+    public $customer;
     
     /** @var numeric $customerId */
     public $customerId;
@@ -75,8 +78,6 @@ class GetOrdersResponse extends AdminServiceResponse {
         // if successful, set deliverOrderResult, using the same attributes as for DeliverOrderEU?
         if ($this->accepted == 1) {
             
-            $this->rawGetOrdersResponse = $message; // the raw GetOrders response
-
             // populate GetOrdersResponse select attributes from the raw GetOrders response
             $order = $message->Orders->Order;
 
@@ -89,8 +90,34 @@ class GetOrdersResponse extends AdminServiceResponse {
             $this->creditReportStatusCreationDate = $order->CreditReportStatus->CreationDate;
          
             $this->currency = $order->Currency;
-//Customer -- skapa CustomerIdentity & returnera -- samma för HostedService queryTransaction isf??
-// ... (18 subentries)
+//Customer -- skapa CustomerIdentity & returnera -- TODO samma för HostedService queryTransaction isf??
+            
+            //individual customer?
+            if( $order->Customer->CustomerType === "Individual" ) {
+                $this->customer = new \Svea\IndividualCustomer;
+                
+                $this->customer->setNationalIdNumber($order->Customer->NationalIdNumber);                    
+                if( isset($order->Customer->IndividualIdentity->Initials) ) { // isset() returns true if Initials is not null
+                    $this->customer->setInitials($order->Customer->IndividualIdentity->Initials);
+                }
+                 if( isset($order->Customer->IndividualIdentity->BirthDate) ) {
+                    $this->customer->setBirthDate($order->Customer->IndividualIdentity->BirthDate);
+                }
+                if( isset($order->Customer->IndividualIdentity->FirstName) &&
+                    isset($order->Customer->IndividualIdentity->LastName) ) {
+                    $this->customer->setName($order->Customer->IndividualIdentity->FirstName, $order->Customer->IndividualIdentity->LastName);                    
+                }
+                $this->customer->setEmail($order->Customer->Email);                   
+                $this->customer->setPhoneNumber($order->Customer->PhoneNumber);                               
+                $this->customer->setStreetAddress($order->Customer->Street, $order->Customer->HouseNumber);                  
+                $this->customer->setCoAddress($order->Customer->CoAddress);
+                $this->customer->setZipCode($order->Customer->ZipCode);                   
+                $this->customer->setLocality($order->Customer->Locality);                   
+            }
+            
+            if( $order->Customer->CustomerType === "Company" ) {
+                // TODO
+            }
 
             $this->customerId = $order->CustomerId;
             $this->customerReference = $order->CustomerReference;

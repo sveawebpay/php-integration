@@ -79,19 +79,30 @@ class IndividualCustomer {
     
     /**
      * Required for private customers in NL and DE
-     * @param string $yyyy
+     * @param string $yyyy or $yyyymmdd
      * @param string $mm
      * @param string $dd
      * @return $this
      */
-    public function setBirthDate($yyyy, $mm, $dd) {
+    public function setBirthDate($yyyy, $mm = null, $dd = null) {
+        if( $mm == null && $dd == null ) { // poor man's overloading
+            $yyyymmdd = $yyyy; 
+            if( strlen($yyyymmdd) != 8 ) {
+                throw new \InvalidArgumentException;
+            }
+            else {
+                $yyyy = substr($yyyymmdd,0,4);
+                $mm = substr($yyyymmdd,4,2);
+                $dd = substr($yyyymmdd,6,2);             
+            }
+        }        
         if ($mm < 10) {$mm = "0".$mm; }
         if ($dd < 10) {$dd = "0".$dd; }
 
         $this->birthDate = $yyyy . $mm . $dd;
         return $this;
     }
-
+    
     /**
      * Optional but desirable
      * @param string $emailAsString
