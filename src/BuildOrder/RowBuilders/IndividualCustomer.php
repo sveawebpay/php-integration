@@ -30,6 +30,33 @@ namespace Svea;
  */
 class IndividualCustomer {
     
+    /** @var string $ssn */
+    public $ssn;     
+    /** @var string $initials */
+    public $initials; 
+    /** @var string $birthDate  numeric string on the format yyyymmdd */
+    public $birthDate;       
+    /** @var string $email */
+    public $email;
+    /** @var int $phonenumber */
+    public $phonenumber;
+    /** @var string $ipAddress */
+    public $ipAddress;  
+    /** @var string $firstname */
+    public $firstname;    
+    /** @var string $lastname */
+    public $lastname;  
+    /** @var string $street */
+    public $street;    
+    /** @var int $housenumber */
+    public $housenumber;  
+    /** @var string $coAddress */
+    public $coAddress;  
+    /** @var string $zipCode */
+    public $zipCode;     
+    /** @var string $locality */
+    public $locality;    
+    
     /**
      * Required for private customers in SE, NO, DK, FI
      * @param string for SE, DK:  $yyyymmddxxxx, for FI:  $ddmmyyxxxx, NO:  $ddmmyyxxxxx
@@ -39,8 +66,6 @@ class IndividualCustomer {
         $this->ssn = $nationalIdNumber;
         return $this;
     }
-    /** @var string $ssn */
-    public $ssn;
 
     /**
      * Required for private customers in NL
@@ -51,8 +76,6 @@ class IndividualCustomer {
         $this->initials = $initialsAsString;
         return $this;
     }
-    /** @var string $initials */
-    public $initials;
     
     /**
      * Required for private customers in NL and DE
@@ -68,8 +91,6 @@ class IndividualCustomer {
         $this->birthDate = $yyyy . $mm . $dd;
         return $this;
     }
-    /** @var string $birthDate  numeric string on the format yyyymmdd*/
-    public $birthDate;
 
     /**
      * Optional but desirable
@@ -80,8 +101,6 @@ class IndividualCustomer {
         $this->email = $emailAsString;
         return $this;
     }
-    /** @var string $email */
-    public $email;
     
      /**
      * Optional
@@ -92,20 +111,16 @@ class IndividualCustomer {
         $this->phonenumber = $phoneNumberAsInt;
         return $this;
     }
-    /** @var int $phonenumber */
-    public $phonenumber;
     
     /**
-     * Optinal but desirable
+     * Optional but desirable
      * @param string $ipAddressAsString
      * @return $this
      */
     public function setIpAddress($ipAddressAsString) {
         $this->ipAddress = $ipAddressAsString;
         return $this;
-    }
-    /** @var string $ipAddress */
-    public $ipAddress;    
+    }  
 
     /**
      * Required for private Customers in NL and DE
@@ -117,11 +132,7 @@ class IndividualCustomer {
         $this->firstname = $firstnameAsString;
         $this->lastname = $lastnameAsString;
         return $this;
-    }
-    /** @var string $firstname */
-    public $firstname;    
-    /** @var string $lastname */
-    public $lastname;    
+    }  
 
     /**
      * Required in NL and DE
@@ -135,11 +146,7 @@ class IndividualCustomer {
         $this->street = $streetAsString;
         $this->housenumber = $houseNumberAsInt;
         return $this;
-    }
-    /** @var string $street */
-    public $street;    
-    /** @var int $housenumber */
-    public $housenumber;        
+    }      
 
     /**
      * Optional in NL and DE
@@ -149,9 +156,7 @@ class IndividualCustomer {
     public function setCoAddress($coAddressAsString) {
         $this->coAddress = $coAddressAsString;
         return $this;
-    }
-    /** @var string $coAddress */
-    public $coAddress;        
+    }      
     
     /**
      * Requuired in NL and DE
@@ -161,9 +166,7 @@ class IndividualCustomer {
     public function setZipCode($zipCodeAsString) {
         $this->zipCode = $zipCodeAsString;
         return $this;
-    }
-    /** @var string $zipCode */
-    public $zipCode;        
+    }       
         
     /**
      * Required in NL and DE
@@ -173,7 +176,5 @@ class IndividualCustomer {
     public function setLocality($cityAsString) {
         $this->locality = $cityAsString;
         return $this;
-    }
-    /** @var string $locality */
-    public $locality;       
+    }   
 }
