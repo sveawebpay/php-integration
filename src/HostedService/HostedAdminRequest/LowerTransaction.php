@@ -19,6 +19,9 @@ class LowerTransaction extends HostedRequest {
     /** @var numeric $amountToLower  Required. Use minor currency (i.e. 1 SEK => 100 in minor currency) */
     public $amountToLower;
     
+    /** @var boolean $alsoDoConfirm  Optional. Iff true, doRequest() will perform a ConfirmTransaction request following a successful doRequest */
+    public $alsoDoConfirm;
+    
     /**
      * Usage: create an instance, set all required attributes, then call doRequest().
      * Required: $transactionId, $amountToLower
@@ -71,4 +74,39 @@ class LowerTransaction extends HostedRequest {
         $config = $this->config;
         return new LowerTransactionResponse($message, $countryCode, $config);
     }    
+    
+    /**
+     * Performs a request using cURL, parsing the response using SveaResponse 
+     * and returning the resulting HostedAdminResponse instance.
+     * 
+     * Iff $alsoDoConfirm is true, LowerTransaction doRequest() will also 
+     * perform a ConfirmTransaction request following a successful doRequest
+     * @return HostedAdminResponse
+     * @override
+     */
+    public function doRequest(){
+        $fields = $this->prepareRequest();
+        
+        $fieldsString = "";
+        foreach ($fields as $key => $value) {
+            $fieldsString .= $key.'='.$value.'&';
+        }
+        rtrim($fieldsString, '&');
+
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $this->config->getEndpoint( \Svea\SveaConfigurationProvider::HOSTED_ADMIN_TYPE). $this->method);
+        curl_setopt($ch, CURLOPT_POST, count($fields));
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $fieldsString);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        //force curl to trust https
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        //returns a html page with redirecting to bank...
+        $responseXML = curl_exec($ch);
+        curl_close($ch);
+        
+        // create SveaResponse to handle response
+        $responseObj = new \SimpleXMLElement($responseXML); 
+        return $this->parseResponse( $responseObj );
+    }
+        
 }
