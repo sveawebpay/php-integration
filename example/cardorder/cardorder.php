@@ -40,7 +40,7 @@ $myOrder->setClientOrderNumber( "order #".date('c') );  // required - use a not 
 // You may also chain fluent methods together:
 $myOrder
         ->setCustomerReference("customer #123")         // optional - This should contain a customer reference, as in "customer #123".
-        ->setOrderDate("2014-05-28")                    // optional - or use an ISO801 date as produced by i.e. date('c')
+        ->setOrderDate("2014-05-28")                    // optional - or use an ISO8601 date as produced by i.e. date('c')
 ;
 
 // Then specify the items bought as order rows, using the methods in the Svea\OrderRow class, and adding them to the order:
