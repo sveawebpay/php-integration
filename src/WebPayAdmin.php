@@ -116,7 +116,7 @@ class WebPayAdmin {
      * ->deliverInvoiceOrderRows() // or ->deliverCardOrderRows()
      *   ->doRequest()
      *
-     * The final doRequest() returns a DeliverOrderRowsResponse or TODO
+     * The final doRequest() returns a DeliverOrderRowsResponse or ConfirmTransactionResponse
      *
      * @see \Svea\DeliverOrderRowsBuilder \Svea\DeliverOrderRowsBuilder
      * @see \Svea\AdminService\DeliverOrderRowsResponse \Svea\AdminService\DeliverOrderRowsResponse

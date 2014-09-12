@@ -78,7 +78,7 @@ class DeliverOrderRowsBuilder {
      * 
      * Use setRowToDeliver() or setRowsToDeliver() to specify order rows to deliver. 
      * The given row numbers must correspond with the serverside row numbers. 
-     * For card or direct bank orders, must match an order row specified using
+     * For card or direct bank orders, must also match an order row specified using
      * addNumberedOrderRow() or addNumberedOrderRows().
      * 
      * @param numeric $rowNumber
@@ -94,7 +94,7 @@ class DeliverOrderRowsBuilder {
      * 
      * Use setRowToDeliver() or setRowsToDeliver() to specify order rows to deliver. 
      * The given row numbers must correspond with the serverside row numbers. 
-     * For card or direct bank orders, must match an order row specified using
+     * For card or direct bank orders, must also match an order row specified using
      * addNumberedOrderRow() or addNumberedOrderRows().
      * 
      * @param int[] $rowNumbers
@@ -125,7 +125,7 @@ class DeliverOrderRowsBuilder {
     /**
      * Optional for card orders -- convenience method to provide several numbered order rows at once.
      * 
-     * When delivering a card order you need to supply the NumberedOrderRows on which to operate. 
+     * When delivering a card order you need to supply all order rows as NumberedOrderRows. 
      *   
      * Use the WebPayAdmin::queryOrder() entrypoint to get information about the order,
      * the queryOrder response numberedOrderRows attribute contains the order rows and
@@ -159,8 +159,20 @@ class DeliverOrderRowsBuilder {
         $this->orderType = \ConfigurationProvider::HOSTED_TYPE; 
         
         $this->validateDeliverCardOrderRows();
+              
+        $total_amount = 0;
+        foreach( $this->numberedOrderRows as $row ) {
+            $total_amount += ($row->amountExVat * (1+$row->vatPercent/100));
+        }
         
-        $amountToLower = 200; // TODO = sum of non-delivered order rows, query order amount and subtract sum of delivered rows.
+        $total_delivered = 0;
+        foreach( $this->rowsToDeliver as $row_index ) {
+            $row = $this->numberedOrderRows[$row_index-1];
+            $total_delivered += ($row->amountExVat * (1+$row->vatPercent/100));
+        }
+
+        $amountToLower = $total_amount-$total_delivered;
+        $amountToLower *=100; // minor currency
         
         $lowerTransactionRequest = new HostedService\LowerTransaction($this->conf);
         $lowerTransactionRequest->countryCode = $this->countryCode;
