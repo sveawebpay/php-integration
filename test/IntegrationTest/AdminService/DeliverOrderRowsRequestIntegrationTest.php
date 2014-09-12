@@ -135,5 +135,70 @@ class DeliverOrderRowsRequestIntegrationTest extends PHPUnit_Framework_TestCase{
         $this->assertEquals(270.00, $deliverOrderRowsResponse->amount );
         $this->assertEquals("Invoice", $deliverOrderRowsResponse->orderType );
         $this->assertNotNull($deliverOrderRowsResponse->invoiceId );
-    }                    
+    }          
+    
+    public function test_manual_deliver_single_card_orderRow_of_authorized_order_performs_loweramount_and_sets_status_confirmed() {
+
+        // Stop here and mark this test as incomplete.
+        $this->markTestIncomplete(
+            'test_manual_query_card_queryTransaction_returntype'
+        );
+
+        // 1. go to https://test.sveaekonomi.se/webpay-admin/admin/start.xhtml 
+        // 2. go to verktyg -> betalning
+        // 3. enter our test merchantid: 1130
+        // 4. use the following xml, making sure to update to a unique customerrefno:
+        //<paymentmethod>KORTCERT</paymentmethod><currency>EUR</currency><amount>600</amount><vat>120</vat><customerrefno>test_14105300920232</customerrefno><returnurl>https://test.sveaekonomi.se/webpay-admin/admin/merchantresponsetest.xhtml</returnurl><orderrows><row><name>A</name><amount>100</amount><vat>20</vat><description>rowA</description><quantity>1</quantity><sku>665</sku><unit>st</unit></row><row><name>B</name><amount>200</amount><vat>40</vat><description>rowB</description><quantity>1</quantity><sku>666</sku><unit>st</unit></row><row><name>C</name><amount>300</amount><vat>60</vat><description>rowA</description><quantity>1</quantity><sku>667</sku><unit>st</unit></row></orderrows>
+        // 5. the result should be:
+        //<response>
+        //  <transaction id="586209">
+        //    <paymentmethod>KORTCERT</paymentmethod>
+        //    <merchantid>1130</merchantid>
+        //    <customerrefno>test_1410530092038</customerrefno>
+        //    <amount>600</amount>
+        //    <currency>EUR</currency>
+        //    <cardtype>VISA</cardtype>
+        //    <maskedcardno>444433xxxxxx1100</maskedcardno>
+        //    <expirymonth>01</expirymonth>
+        //    <expiryyear>15</expiryyear>
+        //    <authcode>763907</authcode>
+        //  </transaction>
+        //  <statuscode>0</statuscode>
+        //</response>
+        // 6. enter the received transaction id below and run the test
+        
+        // Set the below to match the transaction, then run the test.
+        $transactionId = 586223;
+        
+        $queryRequest = WebPayAdmin::queryOrder(Svea\SveaConfig::getDefaultConfig());        
+        $queryResponse = $queryRequest->setCountryCode("SE")->setTransactionId($transactionId)->queryCardOrder()->doRequest();        
+
+        //print_r( $queryResponse );                   
+        $this->assertEquals(1, $queryResponse->accepted);
+        $this->assertEquals("AUTHORIZED", $queryResponse->status);
+        $this->assertEquals(600, $queryResponse->amount);
+        $this->assertEquals(600, $queryResponse->authorizedamount); // not manipulated post creation
+        $this->assertEquals(0, $queryResponse->creditedamount); // not manipulated post creation        
+        
+        $deliverRequest = WebPayAdmin::deliverOrderRows(Svea\SveaConfig::getDefaultConfig());
+        $deliverRequest->setCountryCode("SE")->setOrderId($transactionId);
+        $deliverRequest->setRowToDeliver(1)->addNumberedOrderRows($queryResponse->numberedOrderRows);
+        $deliverResponse = $deliverRequest->deliverCardOrderRows()->doRequest();
+
+        print_r( $deliverResponse );
+        $this->assertEquals(1, $deliverResponse->accepted);
+        $this->assertInstanceOf( "Svea\HostedService\ConfirmTransactionResponse", $deliverResponse );               
+
+        // query orderrows
+        $queryResponse2 = WebPayAdmin::queryOrder( Svea\SveaConfig::getDefaultConfig() )
+            ->setOrderId( $transactionId )->setCountryCode("SE")->queryCardOrder()->doRequest();         
+
+        print_r( $queryResponse2); 
+        $this->assertEquals(1, $queryResponse2->accepted);
+        $this->assertEquals( "CONFIRMED", $queryResponse2->status);
+        $this->assertEquals( 100, $queryResponse2->authorizedamount);  
+            
+   }
+    
+    
 }

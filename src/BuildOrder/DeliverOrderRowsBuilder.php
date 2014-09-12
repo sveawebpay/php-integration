@@ -78,7 +78,7 @@ class DeliverOrderRowsBuilder {
      * 
      * Use setRowToDeliver() or setRowsToDeliver() to specify order rows to deliver. 
      * The given row numbers must correspond with the serverside row numbers. 
-     * For card or direct bank orders, must match an order row specified using
+     * For card or direct bank orders, must also match an order row specified using
      * addNumberedOrderRow() or addNumberedOrderRows().
      * 
      * @param numeric $rowNumber
@@ -94,7 +94,7 @@ class DeliverOrderRowsBuilder {
      * 
      * Use setRowToDeliver() or setRowsToDeliver() to specify order rows to deliver. 
      * The given row numbers must correspond with the serverside row numbers. 
-     * For card or direct bank orders, must match an order row specified using
+     * For card or direct bank orders, must also match an order row specified using
      * addNumberedOrderRow() or addNumberedOrderRows().
      * 
      * @param int[] $rowNumbers
@@ -105,6 +105,40 @@ class DeliverOrderRowsBuilder {
         return $this;
     } 
 
+    /**
+     * Required for card orders -- add information on a single numbered order row
+     * 
+     * When delivering a card order you need to supply the NumberedOrderRows on which to operate. 
+     *   
+     * Use the WebPayAdmin::queryOrder() entrypoint to get information about the order,
+     * the queryOrder response numberedOrderRows attribute contains the order rows and
+     * their numbers, but if the order has been modified after creation they may not be accurate.
+     * 
+     * @param \Svea\NumberedOrderRow $numberedOrderRows instance of NumberedOrderRow
+     * @return $this
+     */
+    public function addNumberedOrderRow( $numberedOrderRow ) {
+        $this->numberedOrderRows[] = $numberedOrderRow;
+        return $this;
+    }       
+    
+    /**
+     * Optional for card orders -- convenience method to provide several numbered order rows at once.
+     * 
+     * When delivering a card order you need to supply all order rows as NumberedOrderRows. 
+     *   
+     * Use the WebPayAdmin::queryOrder() entrypoint to get information about the order,
+     * the queryOrder response numberedOrderRows attribute contains the order rows and
+     * their numbers, but if the order has been modified after creation they may not be accurate.
+     * 
+     * @param \Svea\NumberedOrderRow[] $numberedOrderRows array of NumberedOrderRow
+     * @return $this
+     */
+    public function addNumberedOrderRows( $numberedOrderRows ) {
+        $this->numberedOrderRows = array_merge( $this->numberedOrderRows, $numberedOrderRows );
+        return $this;
+    }
+    
     /**
      * Use deliverInvoiceOrderRows() to deliver rows to an Invoice order using AdminServiceRequest DeliverOrderRows request
      * @return DeliverOrderRowsRequest 
@@ -117,6 +151,38 @@ class DeliverOrderRowsBuilder {
         return new AdminService\DeliverOrderRowsRequest($this);
     }
 
+    /**
+     * Use deliverCardOrderRows() to deliver rows to an Card order using HostedService requests
+     * @return deliverCardOrderRows 
+     */
+    public function deliverCardOrderRows() {
+        $this->orderType = \ConfigurationProvider::HOSTED_TYPE; 
+        
+        $this->validateDeliverCardOrderRows();
+              
+        $total_amount = 0;
+        foreach( $this->numberedOrderRows as $row ) {
+            $total_amount += ($row->amountExVat * (1+$row->vatPercent/100));
+        }
+        
+        $total_delivered = 0;
+        foreach( $this->rowsToDeliver as $row_index ) {
+            $row = $this->numberedOrderRows[$row_index-1];
+            $total_delivered += ($row->amountExVat * (1+$row->vatPercent/100));
+        }
+
+        $amountToLower = $total_amount-$total_delivered;
+        $amountToLower *=100; // minor currency
+        
+        $lowerTransactionRequest = new HostedService\LowerTransaction($this->conf);
+        $lowerTransactionRequest->countryCode = $this->countryCode;
+        $lowerTransactionRequest->transactionId = $this->orderId;
+        $lowerTransactionRequest->amountToLower = $amountToLower;
+        $lowerTransactionRequest->alsoDoConfirm = true; 
+        
+        return $lowerTransactionRequest;
+    }    
+    
     /** 
      * @internal 
      */
@@ -137,8 +203,33 @@ class DeliverOrderRowsBuilder {
         } 
         
         if( (count($this->rowsToDeliver) == 0) ) {
-            $exceptionString = "rowsToDeliver is required for deliverInvoiceOrderRows(). Use methods setRowToDeliver() or setRowsToDelvier().";
+            $exceptionString = "rowsToDeliver is required for deliverInvoiceOrderRows(). Use methods setRowToDeliver() or setRowsToDeliver().";
             throw new ValidationException($exceptionString);
         }           
     }
+    
+    /** 
+     * @internal 
+     */
+    private function validateDeliverCardOrderRows() {    
+        if( !isset($this->orderId) ) {
+            $exceptionString = "orderId is required for deliverInvoiceOrderRows(). Use method setOrderId().";
+            throw new ValidationException($exceptionString);
+        }
+
+        if( !isset($this->countryCode) ) {
+            $exceptionString = "countryCode is required for deliverInvoiceOrderRows(). Use method setCountryCode().";
+            throw new ValidationException($exceptionString);
+        }        
+        
+        if( (count($this->rowsToDeliver) == 0) ) {
+            $exceptionString = "rowsToDeliver is required for deliverCardrderRows(). Use methods setRowToDeliver() or setRowsToDeliver().";
+            throw new ValidationException($exceptionString);
+        }     
+        
+        if( (count($this->numberedOrderRows) == 0) ) {
+            $exceptionString = "numberedOrderRows is required for deliverCardOrderRows(). Use setNumberedOrderRow() or setNumberedOrderRows().";
+            throw new ValidationException($exceptionString);
+        }            
+    }    
 }

@@ -1399,22 +1399,24 @@ See <a href="http://htmlpreview.github.io/?https://raw.github.com/sveawebpay/php
 ``` 
 /**
  * The WebPayAdmin::deliverOrderRows entrypoint method is used to deliver individual order rows.
- * Supports invoice orders. (To partially deliver PaymentPlan, Card or Direct Bank orders, please contact Svea.)
+ * Supports invoice and card orders. (To partially deliver PaymentPlan or Direct Bank orders, please contact Svea.)
  * 
  * Get an order builder instance using the WebPayAdmin::deliverOrderRows entrypoint,
  * then provide more information about the transaction and send the request using
  * the cancelOrderRowsBuilder methods:
  *
- * ->setOrderId()           (invoice only, required)
+ * ->setOrderId()           (invoice, card only, required)
  * ->setCountryCode()       (invoice only, required)
- * ->setRowToCancel()       (required, index of one of the original order row you wish to cancel)
- * ->setRowsToCancel()      (optional)
- *
+ * ->setRowToDeliver()      (required, index of one of the original order row you wish to cancel)
+ * ->setRowsToDeliver()     (optional)
+ * ->addNumberedOrderRow()  (card only, one or more)
+ * ->addNumberedOrderRows() (card only, optional)
+ * 
  * Finish by selecting the correct ordertype and perform the request:
- * ->deliverInvoiceOrderRows()
+ * ->deliverInvoiceOrderRows() // or ->deliverCardOrderRows()
  *   ->doRequest()
  *
- * The final doRequest() returns a DeliverOrderRowsResponse.
+ * The final doRequest() returns a DeliverOrderRowsResponse or ConfirmTransactionResponse
  *
  * @see \Svea\DeliverOrderRowsBuilder \Svea\DeliverOrderRowsBuilder
  * @see \Svea\AdminService\DeliverOrderRowsResponse \Svea\AdminService\DeliverOrderRowsResponse
@@ -1432,7 +1434,13 @@ See <a href="http://htmlpreview.github.io/?https://raw.github.com/sveawebpay/php
 #### 7.7.1 Usage
 <!-- DeliverOrderRowsBuilder class docblock below -->
 ```
-TODO
+/**
+ * The WebPayAdmin::deliverOrderRows entrypoint method is used to partially deliver an 
+ * order. Supports Invoice orders. (To partially deliver a Payment Plan order, contact 
+ * Svea customer service. Card or Direct Bank orders are not supported.)
+ * 
+ * @author Kristian Grossman-Madsen for Svea WebPay
+ */
 ```
 
 #### 7.7.2 Example

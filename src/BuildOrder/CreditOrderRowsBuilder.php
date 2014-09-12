@@ -196,7 +196,7 @@ class CreditOrderRowsBuilder {
     }    
     
     /**
-     * Optional -- convenience method to add serveral new roes at once.
+     * Optional -- convenience method to add serveral new rows at once.
      *  
      * These rows will be credited in addition to the rows specified using setRow(s)ToCredit
      * 
