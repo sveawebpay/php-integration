@@ -25,6 +25,7 @@ class LowerTransaction extends HostedRequest {
     /**
      * Usage: create an instance, set all required attributes, then call doRequest().
      * Required: $transactionId, $amountToLower
+     * Option: $alsoDoRequest
      * @param ConfigurationProvider $config instance implementing ConfigurationProvider
      * @return \Svea\HostedService\LowerTransaction
      */
@@ -106,7 +107,21 @@ class LowerTransaction extends HostedRequest {
         
         // create SveaResponse to handle response
         $responseObj = new \SimpleXMLElement($responseXML); 
-        return $this->parseResponse( $responseObj );
-    }
+        $lowerTransactionResponse = $this->parseResponse( $responseObj );
+
+        // handle alsoDoConfirm flag
+        if( $this->alsoDoConfirm != true ) {
+            return $lowerTransactionResponse;
+        }
+        else {
+            $confirmTransactionRequest = new ConfirmTransaction($this->config);
+            $confirmTransactionRequest->countryCode = $this->countryCode;
+            $confirmTransactionRequest->transactionId = $this->transactionId;
         
+            $defaultCaptureDate = explode("T", date('c')); // [0] contains date part
+            $confirmTransactionRequest->captureDate = $defaultCaptureDate[0];
+
+            return $confirmTransactionRequest->doRequest();
+        }   
+    }        
 }
