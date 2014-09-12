@@ -249,6 +249,39 @@ class LowerTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
         //    [resultcode] => 0
         //    [errormessage] => 
         //)        
-    }    
+    }
+    
+    function test_manual_alsoDoConfim_set_to_true_does_lowerTransaction_followed_by_confirmTransaction() {
+        // Stop here and mark this test as incomplete.
+        $this->markTestIncomplete(
+            'test_manual_query_card_queryTransaction_returntype'
+        );
+
+        // 1. go to https://test.sveaekonomi.se/webpay-admin/admin/start.xhtml 
+        // 2. go to verktyg -> betalning
+        // 3. enter our test merchantid: 1130
+        // 4. use the following xml, making sure to update to a unique customerrefno:
+        // <paymentmethod>KORTCERT</paymentmethod><currency>SEK</currency><amount>25500</amount><vat>600</vat><customerrefno>test_manual_query_card_2</customerrefno><returnurl>https://test.sveaekonomi.se/webpay/admin/merchantresponsetest.xhtml</returnurl><orderrows><row><name>Orderrow1</name><amount>500</amount><vat>100</vat><description>Orderrow description</description><quantity>1</quantity><sku>123</sku><unit>st</unit></row><row><name>Orderrow2</name><amount>12500</amount><vat>2500</vat><description>Orderrow2 description</description><quantity>2</quantity><sku>124</sku><unit>m2</unit></row></orderrows>
+        // 5. the result should be:
+        // <response><transaction id="580964"><paymentmethod>KORTCERT</paymentmethod><merchantid>1130</merchantid><customerrefno>test_manual_query_card_3</customerrefno><amount>25500</amount><currency>SEK</currency><cardtype>VISA</cardtype><maskedcardno>444433xxxxxx1100</maskedcardno><expirymonth>02</expirymonth><expiryyear>15</expiryyear><authcode>898924</authcode></transaction><statuscode>0</statuscode></response>
+
+        // 6. enter the received transaction id below and run the test
+        
+        // Set the below to match the transaction, then run the test.
+        $transactionId = 586184;
+        
+        $lowerTransactionRequest = new LowerTransaction(Svea\SveaConfig::getDefaultConfig());
+        $lowerTransactionRequest->countryCode = "SE";
+        $lowerTransactionRequest->transactionId = $transactionId;
+        $lowerTransactionRequest->amountToLower = "1";
+        $lowerTransactionRequest->alsoDoConfirm = true;
+        
+        $response = $lowerTransactionRequest->doRequest();
+        
+        print_r( $response);
+        
+        $this->assertEquals( 1, $response->accepted );
+        $this->assertInstanceOf( "Svea\HostedService\ConfirmTransactionResponse", $response );       
+    }
 }
 ?>
