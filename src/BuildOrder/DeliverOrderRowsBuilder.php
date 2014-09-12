@@ -160,7 +160,15 @@ class DeliverOrderRowsBuilder {
         
         $this->validateDeliverCardOrderRows();
         
-        return new HostedService\DeliverOrderRowsRequest($this);
+        $amountToLower = 200; // TODO = sum of non-delivered order rows, query order amount and subtract sum of delivered rows.
+        
+        $lowerTransactionRequest = new HostedService\LowerTransaction($this->conf);
+        $lowerTransactionRequest->countryCode = $this->countryCode;
+        $lowerTransactionRequest->transactionId = $this->orderId;
+        $lowerTransactionRequest->amountToLower = $amountToLower;
+        $lowerTransactionRequest->alsoDoConfirm = true; 
+        
+        return $lowerTransactionRequest;
     }    
     
     /** 
