@@ -736,7 +736,7 @@ class QueryTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
          
         $this->assertInstanceOf( "Svea\HostedService\QueryTransactionResponse", $response );
         
-        print_r($response);
+        //print_r($response);
         
         //Svea\HostedService\QueryTransactionResponse Object
         //(
