@@ -7,19 +7,25 @@ namespace Svea\AdminService;
  * @author Kristian Grossman-Madsen
  */
 class DeliverOrdersResponse extends AdminServiceResponse {
+ 
+    /** @var numeric $clientId */
+    public $clientId;
     
     /** @var float $amount  (set iff accepted) the amount delivered with this request */
     public $amount;
 
-    /** @var string $orderType  (set iff accepted)  one of [Invoice|PaymentPlan] */
-    public $orderType;
-    
     /** @var numeric $invoiceId  (set iff accepted, orderType Invoice)  the invoice id for the delivered order */
     public $invoiceId;
 
     /** @var numeric $contractNumber  (set iff accepted, orderType PaymentPlan)  the contract number for the delivered order */
     public $contractNumber;
-   
+    
+    /** @var string $orderType */
+    public $orderType;
+
+    /** @var numeric $orderId */
+    public $orderId;   
+    
     function __construct($message) {
         $this->formatObject($message);  
     }
@@ -28,17 +34,20 @@ class DeliverOrdersResponse extends AdminServiceResponse {
         parent::formatObject($message);
         
         if ($this->accepted == 1) {
-
-            $this->rawDeliverOrdersResponse = $message;
-
+            
+            $this->clientId = $message->OrdersDelivered->DeliverOrderResult->ClientId;            
             $this->amount = $message->OrdersDelivered->DeliverOrderResult->DeliveredAmount;
-            $this->orderType = $message->OrdersDelivered->DeliverOrderResult->OrderType;
-            if( $this->orderType == \ConfigurationProvider::INVOICE_TYPE ) {
+            
+            if( $message->OrdersDelivered->DeliverOrderResult->OrderType == \ConfigurationProvider::INVOICE_TYPE ) {
                 $this->invoiceId = $message->OrdersDelivered->DeliverOrderResult->DeliveryReferenceNumber;
             } 
-            if( $this->orderType == \ConfigurationProvider::PAYMENTPLAN_TYPE ) {
+            
+            if( $message->OrdersDelivered->DeliverOrderResult->OrderType == \ConfigurationProvider::PAYMENTPLAN_TYPE ) {
                 $this->contractNumber = $message->OrdersDelivered->DeliverOrderResult->DeliveryReferenceNumber;
             }     
+            
+            $this->orderType = $message->OrdersDelivered->DeliverOrderResult->OrderType;
+            $this->orderId = $message->OrdersDelivered->DeliverOrderResult->SveaOrderId;
         }
     }
 }

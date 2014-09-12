@@ -95,9 +95,6 @@ class HostedPaymentResponse extends HostedResponse{
            $this->expiryMonth = (string)$xmlElement->transaction->expirymonth;
            $this->expiryYear = (string)$xmlElement->transaction->expiryyear;
            $this->authCode = (string)$xmlElement->transaction->authcode;
-        }
-        
-        $this->rawHostedPaymentResponse = $xmlElement;
-        
+        }      
     }
 }

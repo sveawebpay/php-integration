@@ -53,7 +53,7 @@ class RecurTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
           'skeleton for manual test of recur transaction amount'
         );
         
-        // 1. go to test.sveaekonomi.se/webpay/admin/start.xhtml 
+        // 1. go to https://test.sveaekonomi.se/webpay-admin/admin/start.xhtml 
         // 2. go to verktyg -> betalning
         // 3. enter our test merchantid: 1130
         // 4. use the following xml, making sure to update to a unique customerrefno:
