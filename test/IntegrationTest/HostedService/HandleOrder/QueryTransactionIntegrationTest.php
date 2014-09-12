@@ -620,5 +620,335 @@ class QueryTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
 
         $this->assertEquals( 0, $response->numberedOrderRows[1]->vatDiscount );
     } 
+    
+    function test_manual_query_recur_card_initial_transaction() {
+
+        // Stop here and mark this test as incomplete.
+        $this->markTestIncomplete(
+            'test_manual_query_recur_card_initial_transaction'
+        );
+
+        // Set the below to match the transaction, then run the test.
+        $transactionId = 586159;
+
+        //SimpleXMLElement Object
+        //(
+        //    [transaction] => SimpleXMLElement Object
+        //        (
+        //            [@attributes] => Array
+        //                (
+        //                    [id] => 586159
+        //                )
+        //
+        //            [customerrefno] => clientOrderNumber:2014-09-12T11:02:50 02:00
+        //            [merchantid] => 1130
+        //            [status] => AUTHORIZED
+        //            [amount] => 25000
+        //            [currency] => SEK
+        //            [vat] => 5000
+        //            [capturedamount] => SimpleXMLElement Object
+        //                (
+        //                )
+        //
+        //            [authorizedamount] => 25000
+        //            [created] => 2014-09-12 11:04:24.347
+        //            [creditstatus] => CREDNONE
+        //            [creditedamount] => 0
+        //            [merchantresponsecode] => 0
+        //            [paymentmethod] => KORTCERT
+        //            [callbackurl] => SimpleXMLElement Object
+        //                (
+        //                )
+        //
+        //            [capturedate] => SimpleXMLElement Object
+        //                (
+        //                )
+        //
+        //            [subscriptionid] => 3050
+        //            [subscriptiontype] => RECURRINGCAPTURE
+        //            [customer] => SimpleXMLElement Object
+        //                (
+        //                    [@attributes] => Array
+        //                        (
+        //                            [id] => 12615
+        //                        )
+        //
+        //                    [firstname] => Tess T
+        //                    [lastname] => Persson
+        //                    [initials] => SimpleXMLElement Object
+        //                        (
+        //                        )
+        //
+        //                    [email] => SimpleXMLElement Object
+        //                        (
+        //                        )
+        //
+        //                    [ssn] => 194605092222
+        //                    [address] => Testgatan
+        //                    [address2] => c/o Eriksson, Erik
+        //                    [city] => Stan
+        //                    [country] => SE
+        //                    [zip] => 99999
+        //                    [phone] => SimpleXMLElement Object
+        //                        (
+        //                        )
+        //
+        //                    [vatnumber] => SimpleXMLElement Object
+        //                        (
+        //                        )
+        //
+        //                    [housenumber] => 1
+        //                    [companyname] => SimpleXMLElement Object
+        //                        (
+        //                        )
+        //
+        //                    [fullname] => SimpleXMLElement Object
+        //                        (
+        //                        )
+        //
+        //                )
+        //
+        //            [orderrows] => SimpleXMLElement Object
+        //                (
+        //                    [row] => SimpleXMLElement Object
+        //                        (
+        //                            [id] => 53878
+        //                            [name] => Product
+        //                            [amount] => 12500
+        //                            [vat] => 2500
+        //                            [description] => Specification
+        //                            [quantity] => 2.0
+        //                            [sku] => 1
+        //                            [unit] => st
+        //                        )
+        //
+        //                )
+        //
+        //        )
+        //
+        //    [statuscode] => 0
+        //)
+        
+        $request = new Svea\HostedService\QueryTransaction( Svea\SveaConfig::getDefaultConfig() );
+        $request->transactionId = $transactionId;
+        $request->countryCode = "SE";
+        $response = $request->doRequest();       
+         
+        $this->assertInstanceOf( "Svea\HostedService\QueryTransactionResponse", $response );
+        
+        //print_r($response);
+        
+        //Svea\HostedService\QueryTransactionResponse Object
+        //(
+        //    [transactionId] => 586159
+        //    [customerrefno] => clientOrderNumber:2014-09-12T11:02:50 02:00
+        //    [clientOrderNumber] => clientOrderNumber:2014-09-12T11:02:50 02:00
+        //    [merchantid] => 1130
+        //    [status] => AUTHORIZED
+        //    [amount] => 25000
+        //    [currency] => SEK
+        //    [vat] => 5000
+        //    [capturedamount] => 
+        //    [authorizedamount] => 25000
+        //    [created] => 2014-09-12 11:04:24.347
+        //    [creditstatus] => CREDNONE
+        //    [creditedamount] => 0
+        //    [merchantresponsecode] => 0
+        //    [paymentmethod] => KORTCERT
+        //    [numberedOrderRows] => Array
+        //        (
+        //            [0] => Svea\NumberedOrderRow Object
+        //                (
+        //                    [creditInvoiceId] => 
+        //                    [invoiceId] => 
+        //                    [rowNumber] => 1
+        //                    [status] => 
+        //                    [articleNumber] => 1
+        //                    [quantity] => 2
+        //                    [unit] => st
+        //                    [amountExVat] => 100
+        //                    [vatPercent] => 25
+        //                    [amountIncVat] => 
+        //                    [name] => Product
+        //                    [description] => Specification
+        //                    [discountPercent] => 
+        //                    [vatDiscount] => 0
+        //                )
+        //
+        //        )
+        //
+        //    [callbackurl] => 
+        //    [capturedate] => 
+        //    [subscriptionid] => 3050
+        //    [subscriptiontype] => RECURRINGCAPTURE
+        //    [cardtype] => 
+        //    [maskedcardno] => 
+        //    [eci] => 
+        //    [mdstatus] => 
+        //    [expiryyear] => 
+        //    [expirymonth] => 
+        //    [chname] => 
+        //    [authcode] => 
+        //    [accepted] => 1
+        //    [resultcode] => 0
+        //    [errormessage] => 
+        //)
+
+        $this->assertEquals( 1, $response->accepted );   
+        
+        $this->assertEquals( 3050, $response->subscriptionid );    
+        $this->assertEquals( "RECURRINGCAPTURE", $response->subscriptiontype );    
+    } 
+
+  
+    function test_manual_query_recur_card_recur_transaction() {
+
+        // Stop here and mark this test as incomplete.
+//        $this->markTestIncomplete(
+//            'test_manual_query_recur_card_initial_transaction'
+//        );
+
+        // 1. enter the below values from the transaction log from test_manual_recurring_payment_step_1
+        // 2. run the test and check the output for the subscriptionid and transactionid of the recur request
+        
+        // Set the below to match the original transaction, then run the test.
+        $paymentmethod = "KORTCERT";  
+        $merchantid = 1130;  
+        $currency = "SEK";  
+        $cardtype = "VISA";  
+        $maskedcardno = "444433xxxxxx1100";
+        $expirymonth = 01;  
+        $expiryyear = 15;  
+        $subscriptionid = 3050; // insert 
+
+        // the below applies to the recur request, and may differ from the original transaction
+        $new_amount = "2500"; // in minor currency  
+        $new_customerrefno = "test_manual_recurring_payment_step_1 ".date('c');  
+
+        // below is actual test, shouldn't need to change it
+        $request = new Svea\HostedService\RecurTransaction( Svea\SveaConfig::getDefaultConfig() );
+        $request->countryCode = "SE";
+        $request->subscriptionId = $subscriptionid;
+        $request->currency = $currency;
+        $request->customerRefNo = $new_customerrefno;
+        $request->amount = $new_amount;
+        $response = $request->doRequest();        
+            
+        // check that request was accepted
+        $this->assertEquals( 1, $response->accepted );
+        
+        //print_r("Recur card transaction response: "); print_r( $response );        
+        //
+        //Recur card transaction response: Svea\HostedService\RecurTransactionResponse Object
+        //(
+        //    [transactionid] => 586165
+        //    [customerrefno] => test_manual_recurring_payment_step_1 2014-09-12T11:38:30+02:00
+        //    [paymentmethod] => CARD
+        //    [merchantid] => 1130
+        //    [amount] => 2500
+        //    [currency] => SEK
+        //    [cardtype] => VISA
+        //    [maskedcardno] => 444433xxxxxx1100
+        //    [expirymonth] => 01
+        //    [expiryyear] => 15
+        //    [authcode] => 153124
+        //    [subscriptionid] => 3050
+        //    [accepted] => 1
+        //    [resultcode] => 0
+        //    [errormessage] => 
+        //)        
+                
+        // Set the below to match the transaction, then run the test.
+        $transactionId = $response->transactionid;
+
+        //SimpleXMLElement Object
+        //(
+        //    [transaction] => SimpleXMLElement Object
+        //        (
+        //            [@attributes] => Array
+        //                (
+        //                    [id] => 586165
+        //                )
+        //
+        //            [customerrefno] => test_manual_recurring_payment_step_1 2014-09-12T11:38:30+02:00
+        //            [merchantid] => 1130
+        //            [status] => AUTHORIZED
+        //            [amount] => 2500
+        //            [currency] => SEK
+        //            [vat] => SimpleXMLElement Object
+        //                (
+        //                )
+        //
+        //            [capturedamount] => SimpleXMLElement Object
+        //                (
+        //                )
+        //
+        //            [authorizedamount] => 2500
+        //            [created] => 2014-09-12 11:38:32.557
+        //            [creditstatus] => CREDNONE
+        //            [creditedamount] => 0
+        //            [merchantresponsecode] => 0
+        //            [paymentmethod] => CARD
+        //            [callbackurl] => SimpleXMLElement Object
+        //                (
+        //                )
+        //
+        //            [capturedate] => SimpleXMLElement Object
+        //                (
+        //                )
+        //
+        //            [subscriptionid] => 3050
+        //            [subscriptiontype] => RECURRINGCAPTURE
+        //        )
+        //
+        //    [statuscode] => 0
+        //)
+
+        $request = new Svea\HostedService\QueryTransaction( Svea\SveaConfig::getDefaultConfig() );
+        $request->transactionId = $transactionId;
+        $request->countryCode = "SE";
+        $queryResponse = $request->doRequest();       
+         
+        $this->assertInstanceOf( "Svea\HostedService\QueryTransactionResponse", $queryResponse );
+        
+        //print_r($queryResponse);        
+        //
+        //Svea\HostedService\QueryTransactionResponse Object
+        //(
+        //    [transactionId] => 586165
+        //    [customerrefno] => test_manual_recurring_payment_step_1 2014-09-12T11:38:30+02:00
+        //    [clientOrderNumber] => test_manual_recurring_payment_step_1 2014-09-12T11:38:30+02:00
+        //    [merchantid] => 1130
+        //    [status] => AUTHORIZED
+        //    [amount] => 2500
+        //    [currency] => SEK
+        //    [vat] => 
+        //    [capturedamount] => 
+        //    [authorizedamount] => 2500
+        //    [created] => 2014-09-12 11:38:32.557
+        //    [creditstatus] => CREDNONE
+        //    [creditedamount] => 0
+        //    [merchantresponsecode] => 0
+        //    [paymentmethod] => CARD
+        //    [numberedOrderRows] => 
+        //    [callbackurl] => 
+        //    [capturedate] => 
+        //    [subscriptionid] => 3050
+        //    [subscriptiontype] => RECURRINGCAPTURE
+        //    [cardtype] => 
+        //    [maskedcardno] => 
+        //    [eci] => 
+        //    [mdstatus] => 
+        //    [expiryyear] => 
+        //    [expirymonth] => 
+        //    [chname] => 
+        //    [authcode] => 
+        //    [accepted] => 1
+        //    [resultcode] => 0
+        //    [errormessage] => 
+        //)
+
+        $this->assertEquals( 1, $response->accepted );   
+    }         
 }
 ?>
