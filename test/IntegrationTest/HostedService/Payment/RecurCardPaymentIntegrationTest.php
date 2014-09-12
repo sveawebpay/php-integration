@@ -42,7 +42,7 @@ class RecurCardPaymentIntegrationTest extends \PHPUnit_Framework_TestCase {
             ->usePayPageCardOnly()
             ->setPayPageLanguage($orderLanguage)
             ->setReturnUrl($returnUrl)
-            ->setSubscriptionType( Svea\CardPayment::RECURRINGCAPTURE)
+            ->setSubscriptionType( Svea\HostedService\CardPayment::RECURRINGCAPTURE)
             ->getPaymentUrl();
 
         // check that request was accepted
@@ -83,14 +83,13 @@ class RecurCardPaymentIntegrationTest extends \PHPUnit_Framework_TestCase {
         $new_customerrefno = "test_manual_recurring_payment_step_1 ".date('c');  
 
         // below is actual test, shouldn't need to change it
-        $request = new Svea\RecurTransaction( Svea\SveaConfig::getDefaultConfig() );
-        $response = $request                
-            ->setSubscriptionId( $subscriptionid )
-            ->setCurrency( $currency )
-            ->setCustomerRefNo( $new_customerrefno )
-            ->setAmount( $new_amount )
-            ->setCountryCode( "SE" )
-            ->doRequest();        
+        $request = new Svea\HostedService\RecurTransaction( Svea\SveaConfig::getDefaultConfig() );
+        $request->countryCode = "SE";
+        $request->subscriptionId = $subscriptionid;
+        $request->currency = $currency;
+        $request->customerRefNo = $new_customerrefno;
+        $request->amount = $new_amount;
+        $response = $request->doRequest();       
             
         // check that request was accepted
         $this->assertEquals( 1, $response->accepted );                
@@ -98,5 +97,6 @@ class RecurCardPaymentIntegrationTest extends \PHPUnit_Framework_TestCase {
         // print the subscription id that succeeded to use to confirm the transaction
         print_r( " test_manual_recurring_payment_step_2() recur succeded using subscriptionid: " . $response->subscriptionid ." " );
         print_r( " test_manual_recurring_payment_step_2() for more info, check logs for transaction: " . $response->transactionid ." " );   
-    }            
+    }     
+    
 }
