@@ -103,13 +103,13 @@ class WebPayAdmin {
      * 
      * Get an order builder instance using the WebPayAdmin::deliverOrderRows entrypoint,
      * then provide more information about the transaction and send the request using
-     * the cancelOrderRowsBuilder methods:
+     * the deliverOrderRowsBuilder methods:
      *
      * ->setOrderId()           (invoice, card only, required)
      * ->setCountryCode()       (invoice only, required)
      * ->setRowToDeliver()      (required, index of one of the original order row you wish to cancel)
      * ->setRowsToDeliver()     (optional)
-     * ->addNumberedOrderRow()  (card only, one or more)
+     * ->addNumberedOrderRow()  (card only, one or more, required with setRow(s)ToDeliver)
      * ->addNumberedOrderRows() (card only, optional)
      * 
      * Finish by selecting the correct ordertype and perform the request:
@@ -119,6 +119,7 @@ class WebPayAdmin {
      * The final doRequest() returns a DeliverOrderRowsResponse or ConfirmTransactionResponse
      *
      * @see \Svea\DeliverOrderRowsBuilder \Svea\DeliverOrderRowsBuilder
+     * @see \Svea\HostedService\ConfirmTransactionResponse \Svea\HostedService\ConfirmTransactionResponse
      * @see \Svea\AdminService\DeliverOrderRowsResponse \Svea\AdminService\DeliverOrderRowsResponse
      *
      * @param ConfigurationProvider $config  instance implementing ConfigurationProvider
@@ -143,7 +144,7 @@ class WebPayAdmin {
      * ->setCountryCode()       (required)
      * ->setRowToCancel()       (required, index of one of the original order row you wish to cancel)
      * ->setRowsToCancel()      (optional)
-     * ->addNumberedOrderRow()  (card only, one or more)
+     * ->addNumberedOrderRow()  (card only, one or more, required with setRow(s)ToCancel)
      * ->addNumberedOrderRows() (card only, optional)
      *
      * Finish by selecting the correct ordertype and perform the request:
@@ -181,8 +182,8 @@ class WebPayAdmin {
      * ->addCreditOrderRows()           (optional)
      * ->setRowToCredit()               (optional, index of one of the original order row you wish to credit)
      * ->setRowsToCredit()              (optional)
-     * ->addNumberedOrderRow()          (card and direct bank only, required with setRow(s)ToCredit())
-     * ->addNumberedOrderRows()         (card and direct bank only, required with setRow(s)ToCredit())
+     * ->addNumberedOrderRow()          (card and direct bank only, required with setRow(s)ToCredit)
+     * ->addNumberedOrderRows()         (card and direct bank only, optional)
      *  
      * Finish by instantiating the request type and perform the request:
      * ->creditInvoiceOrderRows() // creditCardOrderRows() or creditDirectBankOrderRows()
