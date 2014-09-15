@@ -5,11 +5,42 @@ require_once SVEA_REQUEST_DIR . '/Includes.php';
 
 /**
  * The WebPayAdmin::deliverOrderRows entrypoint method is used to partially deliver an 
- * order. Supports Invoice orders. (To partially deliver a Payment Plan order, contact 
- * Svea customer service. Card or Direct Bank orders are not supported.)
+ * order. Supports Invoice and Card orders. (To partially deliver a Payment Plan or 
+ * Direct Bank order, contact Svea customer service.)
+ * 
+ * To deliver an order row in full, you specify the index of the order row to 
+ * credit (and for card orders, supply the numbered order row data itself).
+ *  
+ * Use setOrderId() to specify the card or direct bank transaction (delivered order) to credit.
+ *
+ * Use setCountryCode() to specify the country code matching the original create
+ * order request.
+ * 
+ * Use setRowToDeliver() or setRowsToDeliver() to specify order rows to deliver. 
+ * The given row numbers must correspond with the serverside row numbers. 
+ 
+ * For card orders, the rows must match order rows specified using addNumberedOrderRow() or addNumberedOrderRows().
+
+ * For invoice orders, the serverside order rows is updated after a deliverOrderRows request. 
+ * Note that for Card and  orders the serverside order rows will not be updated.
+ 
+ * For card orders, it is required to use addNumberedOrderRow() or addNumberedOrderRows() 
+ * to pass in a copy of the serverside order row data. All order rows must be supplied.
+ *
+ * You can use the WebPayAdmin::queryOrder() entrypoint to get information about the order,
+ * the QueryOrderResponse->numberedOrderRows attribute contains the order rows, but 
+ * note that if the order has been modified after creation these may not be accurate.
+ * 
+ * Then use either creditInvoiceOrderRows(), creditCardOrderRows() or 
+ * creditDirectBankOrderRows() to get a request object, which ever matches the 
+ * payment method used in the original order.
+ * 
+ * Calling doRequest() on the request object will send the request to Svea and 
+ * return either a CreditOrderRowsResponse or a CreditTransactionResponse.
  * 
  * @author Kristian Grossman-Madsen for Svea WebPay
  */
+
 class DeliverOrderRowsBuilder {
 
     /** @var ConfigurationProvider $conf  */
@@ -43,7 +74,7 @@ class DeliverOrderRowsBuilder {
      * Use setCountryCode() to specify the country code matching the original 
      * createOrder request.
      * 
-     * @param string $countryCode
+     * @param string $countryCodeAsString
      * @return $this
      */
     public function setCountryCode($countryCodeAsString) {
@@ -61,6 +92,18 @@ class DeliverOrderRowsBuilder {
         $this->orderId = $orderIdAsString;
         return $this;
     }
+
+    /**
+     * Optional for deliverCardOrder() -- use the order id (transaction id) received with the createOrder response.
+     * 
+     * This is an alias for setOrderId().
+     * 
+     * @param numeric $orderIdAsString
+     * @return $this
+     */
+    public function setTransactionId($orderIdAsString) {
+        return $this->setOrderId($orderIdAsString);
+    }        
     
     /**
      * Required -- must match the invoice distribution type for the order
@@ -78,8 +121,11 @@ class DeliverOrderRowsBuilder {
      * 
      * Use setRowToDeliver() or setRowsToDeliver() to specify order rows to deliver. 
      * The given row numbers must correspond with the serverside row numbers. 
-     * For card or direct bank orders, must also match an order row specified using
-     * addNumberedOrderRow() or addNumberedOrderRows().
+     * 
+     * For card orders, the rows must match order rows specified using addNumberedOrderRow() or addNumberedOrderRows().
+     * 
+     * For invoice orders, the serverside order rows is updated after a deliverOrderRows request. 
+     * Note that for Card and  orders the serverside order rows will not be updated.
      * 
      * @param numeric $rowNumber
      * @return $this
@@ -92,11 +138,6 @@ class DeliverOrderRowsBuilder {
     /**
      * Optional -- convenience method to provide several row numbers at once.
      * 
-     * Use setRowToDeliver() or setRowsToDeliver() to specify order rows to deliver. 
-     * The given row numbers must correspond with the serverside row numbers. 
-     * For card or direct bank orders, must also match an order row specified using
-     * addNumberedOrderRow() or addNumberedOrderRows().
-     * 
      * @param int[] $rowNumbers
      * @return $this
      */
@@ -108,11 +149,12 @@ class DeliverOrderRowsBuilder {
     /**
      * Required for card orders -- add information on a single numbered order row
      * 
-     * When delivering a card order you need to supply the NumberedOrderRows on which to operate. 
-     *   
-     * Use the WebPayAdmin::queryOrder() entrypoint to get information about the order,
-     * the queryOrder response numberedOrderRows attribute contains the order rows and
-     * their numbers, but if the order has been modified after creation they may not be accurate.
+     * For card orders, it is required to use addNumberedOrderRow() or addNumberedOrderRows() 
+     * to pass in a copy of the serverside order row data. All order rows must be supplied.
+     * 
+     * You can use the WebPayAdmin::queryOrder() entrypoint to get information about the order,
+     * the QueryOrderResponse->numberedOrderRows attribute contains the order rows, but 
+     * note that if the order has been modified after creation these may not be accurate.
      * 
      * @param \Svea\NumberedOrderRow $numberedOrderRows instance of NumberedOrderRow
      * @return $this
@@ -124,12 +166,6 @@ class DeliverOrderRowsBuilder {
     
     /**
      * Optional for card orders -- convenience method to provide several numbered order rows at once.
-     * 
-     * When delivering a card order you need to supply all order rows as NumberedOrderRows. 
-     *   
-     * Use the WebPayAdmin::queryOrder() entrypoint to get information about the order,
-     * the queryOrder response numberedOrderRows attribute contains the order rows and
-     * their numbers, but if the order has been modified after creation they may not be accurate.
      * 
      * @param \Svea\NumberedOrderRow[] $numberedOrderRows array of NumberedOrderRow
      * @return $this
@@ -152,7 +188,13 @@ class DeliverOrderRowsBuilder {
     }
 
     /**
-     * Use deliverCardOrderRows() to deliver rows to an Card order using HostedService requests
+     * Use deliverCardOrderRows() to deliver rows to an Card order using HostedService requests.
+     *
+     * Calculates the correct amount to deliver from supplied order rows and does a LowerTransaction, 
+     * followed by a ConfirmTransaction request if needed when followed by a ->doRequest() call.
+     * 
+     * Returns a lowerTransactionRequest with the alsoDoConfirm flag set. 
+     * 
      * @return deliverCardOrderRows 
      */
     public function deliverCardOrderRows() {

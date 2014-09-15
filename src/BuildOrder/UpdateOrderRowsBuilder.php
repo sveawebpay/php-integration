@@ -52,7 +52,7 @@ class UpdateOrderRowsBuilder {
     
     /**
      * Required. Use same countryCode as in createOrder request.
-     * @param string $countryCode
+     * @param string $countryCodeAsString
      * @return $this
      */
     public function setCountryCode($countryCodeAsString) {

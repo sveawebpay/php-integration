@@ -53,6 +53,7 @@ Previous versions of the package can be accessed through <a href="https://github
     * [7.4 WebPayAdmin::creditOrderRows()](https://github.com/sveawebpay/php-integration#74-webpayadmincreditorderrows)
     * [7.5 WebPayAdmin::addOrderRows()](https://github.com/sveawebpay/php-integration#75-webpayadminaddorderrows)
     * [7.6 WebPayAdmin::updateOrderRows()](https://github.com/sveawebpay/php-integration#76-webpayadminupdateorderrows)
+    * [7.7 WebPayAdmin::deliverOrderRows()](https://github.com/sveawebpay/php-integration#77-webpayadmindeliverorderrows)
 * [8. SveaResponse](https://github.com/sveawebpay/php-integration#8-svearesponse)
     * [8.1. Parsing an asynchronous service response](https://github.com/sveawebpay/php-integration#81-parsing-an-asynchronous-service-response)
     * [8.2. Response accepted and result code](https://github.com/sveawebpay/php-integration#82-response-accepted-and-result-code)
@@ -1403,13 +1404,13 @@ See <a href="http://htmlpreview.github.io/?https://raw.github.com/sveawebpay/php
  * 
  * Get an order builder instance using the WebPayAdmin::deliverOrderRows entrypoint,
  * then provide more information about the transaction and send the request using
- * the cancelOrderRowsBuilder methods:
+ * the deliverOrderRowsBuilder methods:
  *
  * ->setOrderId()           (invoice, card only, required)
  * ->setCountryCode()       (invoice only, required)
  * ->setRowToDeliver()      (required, index of one of the original order row you wish to cancel)
  * ->setRowsToDeliver()     (optional)
- * ->addNumberedOrderRow()  (card only, one or more)
+ * ->addNumberedOrderRow()  (card only, one or more, required with setRow(s)ToDeliver)
  * ->addNumberedOrderRows() (card only, optional)
  * 
  * Finish by selecting the correct ordertype and perform the request:
@@ -1419,6 +1420,7 @@ See <a href="http://htmlpreview.github.io/?https://raw.github.com/sveawebpay/php
  * The final doRequest() returns a DeliverOrderRowsResponse or ConfirmTransactionResponse
  *
  * @see \Svea\DeliverOrderRowsBuilder \Svea\DeliverOrderRowsBuilder
+ * @see \Svea\HostedService\ConfirmTransactionResponse \Svea\HostedService\ConfirmTransactionResponse
  * @see \Svea\AdminService\DeliverOrderRowsResponse \Svea\AdminService\DeliverOrderRowsResponse
  *
  * @param ConfigurationProvider $config  instance implementing ConfigurationProvider
@@ -1429,6 +1431,8 @@ See <a href="http://htmlpreview.github.io/?https://raw.github.com/sveawebpay/php
 
 See <a href="http://htmlpreview.github.io/?https://raw.github.com/sveawebpay/php-integration/master/apidoc/classes/Svea.DeliverOrderRowsBuilder.html" target="_blank">CreditOrderRowsBuilder</a> method details.
 
+See <a href="http://htmlpreview.github.io/?https://raw.github.com/sveawebpay/php-integration/master/apidoc/classes/Svea.HostedService.ConfirmTransactionResponse.html" target="_blank">ConfirmTransactionResponse</a> for card orders response.
+
 See <a href="http://htmlpreview.github.io/?https://raw.github.com/sveawebpay/php-integration/master/apidoc/classes/Svea.AdminService.DeliverOrderRowsResponse.html" target="_blank">DeliverOrderRowsResponse</a> for invoice orders response.
 
 #### 7.7.1 Usage
@@ -1436,8 +1440,38 @@ See <a href="http://htmlpreview.github.io/?https://raw.github.com/sveawebpay/php
 ```
 /**
  * The WebPayAdmin::deliverOrderRows entrypoint method is used to partially deliver an 
- * order. Supports Invoice orders. (To partially deliver a Payment Plan order, contact 
- * Svea customer service. Card or Direct Bank orders are not supported.)
+ * order. Supports Invoice and Card orders. (To partially deliver a Payment Plan or 
+ * Direct Bank order, contact Svea customer service.)
+ * 
+ * To deliver an order row in full, you specify the index of the order row to 
+ * credit (and for card orders, supply the numbered order row data itself).
+ *  
+ * Use setOrderId() to specify the card or direct bank transaction (delivered order) to credit.
+ *
+ * Use setCountryCode() to specify the country code matching the original create
+ * order request.
+ * 
+ * Use setRowToDeliver() or setRowsToDeliver() to specify order rows to deliver. 
+ * The given row numbers must correspond with the serverside row numbers. 
+ 
+ * For card orders, the rows must match order rows specified using addNumberedOrderRow() or addNumberedOrderRows().
+
+ * For invoice orders, the serverside order rows is updated after a deliverOrderRows request. 
+ * Note that for Card and  orders the serverside order rows will not be updated.
+ 
+ * For card orders, it is required to use addNumberedOrderRow() or addNumberedOrderRows() 
+ * to pass in a copy of the serverside order row data. All order rows must be supplied.
+ *
+ * You can use the WebPayAdmin::queryOrder() entrypoint to get information about the order,
+ * the QueryOrderResponse->numberedOrderRows attribute contains the order rows, but 
+ * note that if the order has been modified after creation these may not be accurate.
+ * 
+ * Then use either creditInvoiceOrderRows(), creditCardOrderRows() or 
+ * creditDirectBankOrderRows() to get a request object, which ever matches the 
+ * payment method used in the original order.
+ * 
+ * Calling doRequest() on the request object will send the request to Svea and 
+ * return either a CreditOrderRowsResponse or a CreditTransactionResponse.
  * 
  * @author Kristian Grossman-Madsen for Svea WebPay
  */
