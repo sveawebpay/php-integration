@@ -100,7 +100,7 @@ class DeliverOrderRowsBuilderTest extends \PHPUnit_Framework_TestCase {
     
     public function test_deliverInvoiceOrderRows_throws_ValidationException_on_missing_setRowToDeliver() {
         $this->setExpectedException(
-          '\Svea\ValidationException',"rowsToDeliver is required for deliverInvoiceOrderRows(). Use methods setRowToDeliver() or setRowsToDelvier()."
+          '\Svea\ValidationException',"rowsToDeliver is required for deliverInvoiceOrderRows(). Use methods setRowToDeliver() or setRowsToDeliver()."
         );         
         
         $deliverOrderRowsObject = $this->deliverOrderRowsObject
