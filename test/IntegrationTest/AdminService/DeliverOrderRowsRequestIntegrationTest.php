@@ -199,6 +199,132 @@ class DeliverOrderRowsRequestIntegrationTest extends PHPUnit_Framework_TestCase{
         $this->assertEquals( 100, $queryResponse2->authorizedamount);  
             
    }
-    
-    
+
+    public function test_manual_deliver_single_card_orderRow_of_manipulated_order_returns_error() {
+
+        // Stop here and mark this test as incomplete.
+        $this->markTestIncomplete(
+            'test_manual_deliver_single_card_orderRow_of_manipulated_order_returns_error'
+        );
+
+        // 1. go to https://test.sveaekonomi.se/webpay-admin/admin/start.xhtml 
+        // 2. go to verktyg -> betalning
+        // 3. enter our test merchantid: 1130
+        // 4. use the following xml, making sure to update to a unique customerrefno:
+        //<paymentmethod>KORTCERT</paymentmethod><currency>EUR</currency><amount>600</amount><vat>120</vat><customerrefno>test_14105300920232</customerrefno><returnurl>https://test.sveaekonomi.se/webpay-admin/admin/merchantresponsetest.xhtml</returnurl><orderrows><row><name>A</name><amount>100</amount><vat>20</vat><description>rowA</description><quantity>1</quantity><sku>665</sku><unit>st</unit></row><row><name>B</name><amount>200</amount><vat>40</vat><description>rowB</description><quantity>1</quantity><sku>666</sku><unit>st</unit></row><row><name>C</name><amount>300</amount><vat>60</vat><description>rowA</description><quantity>1</quantity><sku>667</sku><unit>st</unit></row></orderrows>
+        // 5. the result should be:
+        //<response>
+        //  <transaction id="586209">
+        //    <paymentmethod>KORTCERT</paymentmethod>
+        //    <merchantid>1130</merchantid>
+        //    <customerrefno>test_1410530092038</customerrefno>
+        //    <amount>600</amount>
+        //    <currency>EUR</currency>
+        //    <cardtype>VISA</cardtype>
+        //    <maskedcardno>444433xxxxxx1100</maskedcardno>
+        //    <expirymonth>01</expirymonth>
+        //    <expiryyear>15</expiryyear>
+        //    <authcode>763907</authcode>
+        //  </transaction>
+        //  <statuscode>0</statuscode>
+        //</response>
+        // 6. enter the received transaction id below and run the test
+        
+        // Set the below to match the transaction, then run the test.
+        $transactionId = 586256;               
+        
+        $queryRequest = WebPayAdmin::queryOrder(Svea\SveaConfig::getDefaultConfig());        
+        $queryResponse = $queryRequest->setCountryCode("SE")->setTransactionId($transactionId)->queryCardOrder()->doRequest();        
+
+        //print_r( $queryResponse );                   
+        $this->assertEquals(1, $queryResponse->accepted);
+        
+        $deliverRequest = WebPayAdmin::deliverOrderRows(Svea\SveaConfig::getDefaultConfig());
+        $deliverRequest->setCountryCode("SE")->setOrderId($transactionId);
+        $deliverRequest->setRowToDeliver(1)->addNumberedOrderRows($queryResponse->numberedOrderRows);
+        $deliverResponse = $deliverRequest->deliverCardOrderRows()->doRequest();
+
+        //print_r( $deliverResponse );
+        $this->assertInstanceOf( "Svea\HostedService\ConfirmTransactionResponse", $deliverResponse ); 
+        $this->assertEquals(1, $deliverResponse->accepted);        
+        
+        // again (i.e. lower too large an amount)
+        $deliver2Request = WebPayAdmin::deliverOrderRows(Svea\SveaConfig::getDefaultConfig());
+        $deliver2Request->setCountryCode("SE")->setOrderId($transactionId);
+        $deliver2Request->setRowToDeliver(1)->addNumberedOrderRows($queryResponse->numberedOrderRows);
+        $deliver2Response = $deliver2Request->deliverCardOrderRows()->doRequest();
+
+        //print_r( $deliver2Response );
+        $this->assertInstanceOf( "Svea\HostedService\ConfirmTransactionResponse", $deliver2Response ); 
+        $this->assertEquals(0, $deliver2Response->accepted);
+        $this->assertEquals("100", $deliver2Response->resultcode);
+        $this->assertEquals(
+                "IntegrationPackage: LowerAmount request with flag alsoDoConfirm failed:305 (BAD_AMOUNT) Invalid value for amount.", 
+                $deliver2Response->errormessage
+        );
+
+   }   
+
+    public function test_manual_deliver_single_card_orderRow_of_confirmed_order_performs_loweramount_and_returns_ConfirmTransactionError() {
+
+        // Stop here and mark this test as incomplete.
+        $this->markTestIncomplete(
+            'test_manual_deliver_single_card_orderRow_of_confirmed_order_performs_loweramount_and_returns_ConfirmTransactionError'
+        );
+
+        // 1. go to https://test.sveaekonomi.se/webpay-admin/admin/start.xhtml 
+        // 2. go to verktyg -> betalning
+        // 3. enter our test merchantid: 1130
+        // 4. use the following xml, making sure to update to a unique customerrefno:
+        //<paymentmethod>KORTCERT</paymentmethod><currency>EUR</currency><amount>600</amount><vat>120</vat><customerrefno>test_14105300920232</customerrefno><returnurl>https://test.sveaekonomi.se/webpay-admin/admin/merchantresponsetest.xhtml</returnurl><orderrows><row><name>A</name><amount>100</amount><vat>20</vat><description>rowA</description><quantity>1</quantity><sku>665</sku><unit>st</unit></row><row><name>B</name><amount>200</amount><vat>40</vat><description>rowB</description><quantity>1</quantity><sku>666</sku><unit>st</unit></row><row><name>C</name><amount>300</amount><vat>60</vat><description>rowA</description><quantity>1</quantity><sku>667</sku><unit>st</unit></row></orderrows>
+        // 5. the result should be:
+        //<response>
+        //  <transaction id="586209">
+        //    <paymentmethod>KORTCERT</paymentmethod>
+        //    <merchantid>1130</merchantid>
+        //    <customerrefno>test_1410530092038</customerrefno>
+        //    <amount>600</amount>
+        //    <currency>EUR</currency>
+        //    <cardtype>VISA</cardtype>
+        //    <maskedcardno>444433xxxxxx1100</maskedcardno>
+        //    <expirymonth>01</expirymonth>
+        //    <expiryyear>15</expiryyear>
+        //    <authcode>763907</authcode>
+        //  </transaction>
+        //  <statuscode>0</statuscode>
+        //</response>
+        // 6. enter the received transaction id below and run the test
+        
+        // Set the below to match the transaction, then run the test.
+        $transactionId = 586263;
+
+        // confirm the transaction
+        $confirmRequest = new \Svea\HostedService\ConfirmTransaction( Svea\SveaConfig::getDefaultConfig() );
+        $confirmRequest->transactionId = $transactionId;
+        $confirmRequest->captureDate = date('c');
+        $confirmRequest->countryCode = "SE";
+        $confirmResponse = $confirmRequest->doRequest();     
+        
+        //print_r( $confirmResponse );
+        $this->assertInstanceOf( "Svea\HostedService\ConfirmTransactionResponse", $confirmResponse );
+        $this->assertEquals( 1, $confirmResponse->accepted );                
+        
+        $queryRequest = WebPayAdmin::queryOrder(Svea\SveaConfig::getDefaultConfig());        
+        $queryResponse = $queryRequest->setCountryCode("SE")->setTransactionId($transactionId)->queryCardOrder()->doRequest();        
+
+        print_r( $queryResponse );                   
+        $this->assertEquals(1, $queryResponse->accepted);
+        $this->assertEquals("CONFIRMED", $queryResponse->status);
+        
+        $deliverRequest = WebPayAdmin::deliverOrderRows(Svea\SveaConfig::getDefaultConfig());
+        $deliverRequest->setCountryCode("SE")->setOrderId($transactionId);
+        $deliverRequest->setRowToDeliver(1)->addNumberedOrderRows($queryResponse->numberedOrderRows);
+        $deliverResponse = $deliverRequest->deliverCardOrderRows()->doRequest();
+
+        print_r( $deliverResponse );
+        $this->assertInstanceOf( "Svea\HostedService\ConfirmTransactionResponse", $deliverResponse ); 
+        $this->assertEquals(0, $deliverResponse->accepted);
+        $this->assertEquals("105 (ILLEGAL_TRANSACTIONSTATUS)", $deliverResponse->resultcode);   // confirm of confirmed order
+        $this->assertEquals( "Invalid transaction status.",$deliverResponse->errormessage );
+   }      
 }

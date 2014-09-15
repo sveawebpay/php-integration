@@ -31,12 +31,14 @@ require_once SVEA_REQUEST_DIR . '/Includes.php';
  * the QueryOrderResponse->numberedOrderRows attribute contains the order rows, but 
  * note that if the order has been modified after creation these may not be accurate.
  * 
- * Then use either creditInvoiceOrderRows(), creditCardOrderRows() or 
- * creditDirectBankOrderRows() to get a request object, which ever matches the 
- * payment method used in the original order.
+ * Then use deliverInvoiceOrderRows() or deliver CardOrderRows to get a request object, 
+ * which ever matches the payment method used in the original order. deliverCardOrderRows
+ * Calculates the correct amount to deliver from supplied order rows and when followed by a 
+ * a ->doRequest() call performs a LowerTransaction followed by a ConfirmTransaction. Note
+ * that the card transaction must have status AUTHORIZED at Svea in order to be delivered.
  * 
  * Calling doRequest() on the request object will send the request to Svea and 
- * return either a CreditOrderRowsResponse or a CreditTransactionResponse.
+ * return either a DeliverOrderRowsResponse or a ConfirmTransactionResponse.
  * 
  * @author Kristian Grossman-Madsen for Svea WebPay
  */
@@ -190,12 +192,13 @@ class DeliverOrderRowsBuilder {
     /**
      * Use deliverCardOrderRows() to deliver rows to an Card order using HostedService requests.
      *
-     * Calculates the correct amount to deliver from supplied order rows and does a LowerTransaction, 
-     * followed by a ConfirmTransaction request if needed when followed by a ->doRequest() call.
+     * Then use deliverInvoiceOrderRows() or deliver CardOrderRows to get a request object, 
+     * which ever matches the payment method used in the original order. deliverCardOrderRows
+     * Calculates the correct amount to deliver from supplied order rows and when followed by a 
+     * a ->doRequest() call performs a LowerTransaction followed by a ConfirmTransaction. Note
+     * that the card transaction must have status AUTHORIZED at Svea in order to be delivered.
      * 
-     * Returns a lowerTransactionRequest with the alsoDoConfirm flag set. 
-     * 
-     * @return deliverCardOrderRows 
+     * @return ConfirmTransactionResponse 
      */
     public function deliverCardOrderRows() {
         $this->orderType = \ConfigurationProvider::HOSTED_TYPE; 

@@ -1466,9 +1466,11 @@ See <a href="http://htmlpreview.github.io/?https://raw.github.com/sveawebpay/php
  * the QueryOrderResponse->numberedOrderRows attribute contains the order rows, but 
  * note that if the order has been modified after creation these may not be accurate.
  * 
- * Then use either creditInvoiceOrderRows(), creditCardOrderRows() or 
- * creditDirectBankOrderRows() to get a request object, which ever matches the 
- * payment method used in the original order.
+ * Then use deliverInvoiceOrderRows() or deliver CardOrderRows to get a request object, 
+ * which ever matches the payment method used in the original order. deliverCardOrderRows
+ * Calculates the correct amount to deliver from supplied order rows and when followed by a 
+ * a ->doRequest() call performs a LowerTransaction followed by a ConfirmTransaction. Note
+ * that the card transaction must have status AUTHORIZED at Svea in order to be delivered.
  * 
  * Calling doRequest() on the request object will send the request to Svea and 
  * return either a CreditOrderRowsResponse or a CreditTransactionResponse.

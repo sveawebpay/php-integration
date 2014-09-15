@@ -108,20 +108,35 @@ class LowerTransaction extends HostedRequest {
         // create SveaResponse to handle response
         $responseObj = new \SimpleXMLElement($responseXML); 
         $lowerTransactionResponse = $this->parseResponse( $responseObj );
+        $returnResponse = $lowerTransactionResponse;
 
         // handle alsoDoConfirm flag
-        if( $this->alsoDoConfirm != true ) {
-            return $lowerTransactionResponse;
-        }
-        else {
-            $confirmTransactionRequest = new ConfirmTransaction($this->config);
-            $confirmTransactionRequest->countryCode = $this->countryCode;
-            $confirmTransactionRequest->transactionId = $this->transactionId;
-        
-            $defaultCaptureDate = explode("T", date('c')); // [0] contains date part
-            $confirmTransactionRequest->captureDate = $defaultCaptureDate[0];
+        if( $this->alsoDoConfirm == true ) {
+            
+            // if there were an error, return a ConfirmTransactionResponse with errormessage set
+            if( $lowerTransactionResponse->accepted != true ) {
+                $confirmTransactionResponse = new ConfirmTransactionResponse( null, null, null ); // hack to get empty response
+                $confirmTransactionResponse->accepted = 0;
+                $confirmTransactionResponse->resultcode = '100';  //INTERNAL_ERROR
+                $confirmTransactionResponse->errormessage = 
+                    "IntegrationPackage: LowerAmount request with flag alsoDoConfirm failed:" .
+                    $lowerTransactionResponse->resultcode . " " . $lowerTransactionResponse->errormessage
+                ;
+                $returnResponse = $confirmTransactionResponse;
+            }
+            // lowerTransaction request went well, do confirmTransaction request
+            else {
+                $confirmTransactionRequest = new ConfirmTransaction($this->config);
+                $confirmTransactionRequest->countryCode = $this->countryCode;
+                $confirmTransactionRequest->transactionId = $this->transactionId;
 
-            return $confirmTransactionRequest->doRequest();
-        }   
+                $defaultCaptureDate = explode("T", date('c')); // [0] contains date part
+                $confirmTransactionRequest->captureDate = $defaultCaptureDate[0];
+                $confirmTransactionResponse = $confirmTransactionRequest->doRequest();
+
+                $returnResponse = $confirmTransactionResponse;
+            }            
+        }        
+        return $returnResponse;
     }        
 }
