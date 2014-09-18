@@ -21,7 +21,10 @@ abstract class AdminServiceRequest {
      * @return StdClass  raw response
      */
     public function doRequest() { 
-        $soapClient = new AdminSoap\SoapClient( \Svea\SveaConfig::SWP_TEST_ADMIN_URL ); // TODO always goes to test
+        
+        $endpoint = $this->orderBuilder->conf->getEndPoint( \ConfigurationProvider::ADMIN_TYPE );   // get test or prod using child instance data
+        
+        $soapClient = new AdminSoap\SoapClient( $endpoint );
         $soapResponse = $soapClient->doSoapCall($this->action, $this->prepareRequest() );     
         $sveaResponse = new \SveaResponse( $soapResponse, null, null, $this->action );
         return $sveaResponse->getResponse();        
