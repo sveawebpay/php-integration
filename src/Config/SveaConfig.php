@@ -99,12 +99,12 @@ class SveaConfig {
                                     )
                                 );
 
-        // don't modify $url
         $url =             array(
                                 \ConfigurationProvider::HOSTED_TYPE      => self::SWP_TEST_URL,
                                 \ConfigurationProvider::INVOICE_TYPE     => self::SWP_TEST_WS_URL,
                                 \ConfigurationProvider::PAYMENTPLAN_TYPE => self::SWP_TEST_WS_URL,
-                                \ConfigurationProvider::HOSTED_ADMIN_TYPE => self::SWP_TEST_HOSTED_ADMIN_URL
+                                \ConfigurationProvider::HOSTED_ADMIN_TYPE => self::SWP_TEST_HOSTED_ADMIN_URL,
+                                \ConfigurationProvider::ADMIN_TYPE       => self::SWP_TEST_ADMIN_URL
                             );
 
         return new SveaConfigurationProvider(array("url" => $url, "credentials" => $testConfig));
@@ -155,11 +155,12 @@ class SveaConfig {
                                     )
                                 );
         
-        // don't modify $url        
         $url =              array(
                                 \ConfigurationProvider::HOSTED_TYPE      => self::SWP_PROD_URL,
                                 \ConfigurationProvider::INVOICE_TYPE     => self::SWP_PROD_WS_URL,
-                                \ConfigurationProvider::PAYMENTPLAN_TYPE => self::SWP_PROD_WS_URL
+                                \ConfigurationProvider::PAYMENTPLAN_TYPE => self::SWP_PROD_WS_URL,
+                                \ConfigurationProvider::HOSTED_ADMIN_TYPE => self::SWP_PROD_HOSTED_ADMIN_URL,
+                                \ConfigurationProvider::ADMIN_TYPE       => self::SWP_PROD_ADMIN_URL
                             );
 
         return new SveaConfigurationProvider(array("url" => $url, "credentials" => $prodConfig));
@@ -228,13 +229,16 @@ class SveaConfig {
                        \ConfigurationProvider::HOSTED_TYPE      => self::SWP_TEST_URL,
                        \ConfigurationProvider::INVOICE_TYPE     => self::SWP_TEST_WS_URL,
                        \ConfigurationProvider::PAYMENTPLAN_TYPE => self::SWP_TEST_WS_URL,
-                       \ConfigurationProvider::HOSTED_ADMIN_TYPE => self::SWP_TEST_HOSTED_ADMIN_URL
+                       \ConfigurationProvider::HOSTED_ADMIN_TYPE => self::SWP_TEST_HOSTED_ADMIN_URL,
+                       \ConfigurationProvider::ADMIN_TYPE  => self::SWP_TEST_ADMIN_URL,
+
         );
         $produrl = array(
                        \ConfigurationProvider::HOSTED_TYPE      => self::SWP_PROD_URL,
                        \ConfigurationProvider::INVOICE_TYPE     => self::SWP_PROD_WS_URL,
                        \ConfigurationProvider::PAYMENTPLAN_TYPE => self::SWP_PROD_WS_URL,
-                       \ConfigurationProvider::HOSTED_ADMIN_TYPE => self::SWP_PROD_HOSTED_ADMIN_URL
+                       \ConfigurationProvider::HOSTED_ADMIN_TYPE => self::SWP_PROD_HOSTED_ADMIN_URL,
+                       \ConfigurationProvider::ADMIN_TYPE => self::SWP_PROD_ADMIN_URL
         );
 
         // return a ConfigurationProvider object
