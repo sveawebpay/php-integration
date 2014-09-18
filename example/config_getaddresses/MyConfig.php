@@ -9,7 +9,9 @@ class MyConfig {    // changed the class name to MyConfig
     const SWP_PROD_WS_URL = "https://webservices.sveaekonomi.se/webpay/SveaWebPay.asmx?WSDL";
     const SWP_TEST_HOSTED_ADMIN_URL = "https://test.sveaekonomi.se/webpay/rest/";
     const SWP_PROD_HOSTED_ADMIN_URL = "https://webpay.sveaekonomi.se/webpay/rest/";
-    
+    const SWP_TEST_ADMIN_URL = "https://partnerweb.sveaekonomi.se/WebPayAdminService_test/AdminService.svc/backward"; // /backward => SOAP 1.1
+    const SWP_PROD_ADMIN_URL = "https://partnerweb.sveaekonomi.se/WebPayAdminService/AdminService.svc/backward"; // /backward => SOAP 1.1
+       
     /** 
      * Replace the provided Svea test account credentials with your own to use
      * the package with your own account.
@@ -117,7 +119,8 @@ class MyConfig {    // changed the class name to MyConfig
                                 \ConfigurationProvider::HOSTED_TYPE      => self::SWP_TEST_URL,
                                 \ConfigurationProvider::INVOICE_TYPE     => self::SWP_TEST_WS_URL,
                                 \ConfigurationProvider::PAYMENTPLAN_TYPE => self::SWP_TEST_WS_URL,
-                                \ConfigurationProvider::HOSTED_ADMIN_TYPE => self::SWP_TEST_HOSTED_ADMIN_URL
+                                \ConfigurationProvider::HOSTED_ADMIN_TYPE => self::SWP_TEST_HOSTED_ADMIN_URL,
+                                \ConfigurationProvider::ADMIN_TYPE       => self::SWP_TEST_ADMIN_URL
                             );
 
         return new SveaConfigurationProvider(array("url" => $url, "credentials" => $testConfig));
@@ -224,7 +227,9 @@ class MyConfig {    // changed the class name to MyConfig
         $url =              array(
                                 \ConfigurationProvider::HOSTED_TYPE      => self::SWP_PROD_URL,
                                 \ConfigurationProvider::INVOICE_TYPE     => self::SWP_PROD_WS_URL,
-                                \ConfigurationProvider::PAYMENTPLAN_TYPE => self::SWP_PROD_WS_URL
+                                \ConfigurationProvider::PAYMENTPLAN_TYPE => self::SWP_PROD_WS_URL,
+                                \ConfigurationProvider::HOSTED_ADMIN_TYPE => self::SWP_PROD_HOSTED_ADMIN_URL,
+                                \ConfigurationProvider::ADMIN_TYPE       => self::SWP_PROD_ADMIN_URL
                             );
 
         return new SveaConfigurationProvider(array("url" => $url, "credentials" => $prodConfig));

@@ -34,6 +34,7 @@ interface ConfigurationProvider {
     const INVOICE_TYPE = 'Invoice';
     const PAYMENTPLAN_TYPE = 'PaymentPlan';
     const HOSTED_ADMIN_TYPE = 'HOSTED_ADMIN';
+    const ADMIN_TYPE = 'ADMIN';
 
     /**
      * fetch username, used with invoice or payment plan (i.e. Svea WebService Europe API)
@@ -90,7 +91,7 @@ interface ConfigurationProvider {
      * Constants for the endpoint url found in the class SveaConfig.php
      * getEndPoint() should return an url corresponding to $type.
      *
-     * @param string $type one of ConfigurationProvider::HOSTED_TYPE, ::INVOICE_TYPE, ::PAYMENTPLAN_TYPE, ::HOSTED_ADMIN_TYPE
+     * @param string $type one of ConfigurationProvider::HOSTED_TYPE, ::INVOICE_TYPE, ::PAYMENTPLAN_TYPE, ::HOSTED_ADMIN_TYPE, ::ADMIN_TYPE
      */
     public function getEndPoint($type);
 }
