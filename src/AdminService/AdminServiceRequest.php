@@ -10,8 +10,6 @@ require_once SVEA_REQUEST_DIR . '/Includes.php';
  */
 abstract class AdminServiceRequest {
     
-    const ADMIN_SERVICE_TEST = "https://partnerweb.sveaekonomi.se/WebPayAdminService_test/AdminService.svc/backward";
-
     /** @var string $action  the AdminService soap action called by this class */
     protected $action; 
 
@@ -23,7 +21,7 @@ abstract class AdminServiceRequest {
      * @return StdClass  raw response
      */
     public function doRequest() { 
-        $soapClient = new AdminSoap\SoapClient( AdminServiceRequest::ADMIN_SERVICE_TEST );
+        $soapClient = new AdminSoap\SoapClient( \Svea\SveaConfig::SWP_TEST_ADMIN_URL ); // TODO always goes to test
         $soapResponse = $soapClient->doSoapCall($this->action, $this->prepareRequest() );     
         $sveaResponse = new \SveaResponse( $soapResponse, null, null, $this->action );
         return $sveaResponse->getResponse();        
