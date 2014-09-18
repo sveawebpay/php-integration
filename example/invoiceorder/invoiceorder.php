@@ -39,7 +39,7 @@ $myOrder->setCountryCode("SE");                         // customer country, we 
 $myOrder
 //        ->setClientOrderNumber("order #20140519-375")   // optional - use a not previously sent client side order identifier, i.e. "order #20140519-371"
 //        ->setCustomerReference("customer #123")         // optional - This should contain a customer reference, as in "customer #123".
-        ->setOrderDate("2014-05-28")                    // required - or use an ISO801 date as produced by i.e. date('c')
+        ->setOrderDate("2014-05-28")                    // required - or use an ISO8601 date as produced by i.e. date('c')
 ;
 // Then specify the items bought as order rows, using the methods in the Svea\OrderRow class, and adding them to the order:
 $firstBoughtItem = WebPayItem::orderRow();

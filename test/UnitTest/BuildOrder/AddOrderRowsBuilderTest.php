@@ -31,12 +31,6 @@ class AddOrderRowsBuilderTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals($country, $this->addOrderRowsObject->countryCode);        
     }
     
-    public function test_addOrderRowsBuilder_setOrderType() {
-        $orderType = \ConfigurationProvider::INVOICE_TYPE;
-        $this->addOrderRowsObject->setOrderType($orderType);
-        $this->assertEquals($orderType, $this->addOrderRowsObject->orderType);        
-    }
-    
     public function test_addOrderRowsBuilder_addInvoiceOrderRowsBuilder_returns_AddOrderRowsRequest() {
         $orderId = "123456";
         $addOrderRowsObject = $this->addOrderRowsObject

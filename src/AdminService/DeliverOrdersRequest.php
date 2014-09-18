@@ -31,13 +31,13 @@ class DeliverOrdersRequest extends AdminServiceRequest {
         
         $soapRequest = new AdminSoap\DeliverOrdersRequest( 
             new AdminSoap\Authentication( 
-                $this->orderBuilder->conf->getUsername( strtoupper($this->orderBuilder->orderType), $this->orderBuilder->countryCode ), 
-                $this->orderBuilder->conf->getPassword( strtoupper($this->orderBuilder->orderType), $this->orderBuilder->countryCode ) 
+                $this->orderBuilder->conf->getUsername( /*strtoupper*/($this->orderBuilder->orderType), $this->orderBuilder->countryCode ), 
+                $this->orderBuilder->conf->getPassword( /*strtoupper*/($this->orderBuilder->orderType), $this->orderBuilder->countryCode ) 
             ),
             $this->orderBuilder->distributionType,
             new AdminSoap\OrdersToDeliver(
                 new AdminSoap\DeliverOrderInformation(
-                    $this->orderBuilder->conf->getClientNumber( strtoupper($this->orderBuilder->orderType), $this->orderBuilder->countryCode ),
+                    $this->orderBuilder->conf->getClientNumber( /*strtoupper*/($this->orderBuilder->orderType), $this->orderBuilder->countryCode ),
                     AdminServiceRequest::CamelCaseOrderType( $this->orderBuilder->orderType ),
                     $this->orderBuilder->orderId
                 )

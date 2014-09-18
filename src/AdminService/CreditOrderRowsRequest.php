@@ -35,20 +35,20 @@ class CreditOrderRowsRequest extends AdminServiceRequest {
      * @return Svea\AdminSoap\CreditOrderRowsRequest
      * @throws Svea\ValidationException
      */
-    public function prepareRequest() {        
+    public function prepareRequest() {
                    
         $this->validateRequest();
         
-        foreach( $this->orderBuilder->creditOrderRows as $orderRow ) {      
+        foreach( $this->orderBuilder->creditOrderRows as $orderRow ) {
 
             // handle different ways to spec an orderrow            
             // inc + ex
             if( !isset($orderRow->vatPercent) && (isset($orderRow->amountExVat) && isset($orderRow->amountIncVat)) ) {
-                $orderRow->vatPercent = WebServiceRowFormatter::calculateVatPercentFromPriceExVatAndPriceIncVat($orderRow->amountIncVat, $orderRow->amountExVat );
+                $orderRow->vatPercent = \Svea\WebService\WebServiceRowFormatter::calculateVatPercentFromPriceExVatAndPriceIncVat($orderRow->amountIncVat, $orderRow->amountExVat );
             }
             // % + inc
             elseif( (isset($orderRow->vatPercent) && isset($orderRow->amountIncVat)) && !isset($orderRow->amountExVat) ) {
-                $orderRow->amountExVat = WebServiceRowFormatter::convertIncVatToExVat($orderRow->amountIncVat, $orderRow->vatPercent);
+                $orderRow->amountExVat = \Svea\WebService\WebServiceRowFormatter::convertIncVatToExVat($orderRow->amountIncVat, $orderRow->vatPercent);
             }
             // % + ex, no need to do anything
 
@@ -72,10 +72,10 @@ class CreditOrderRowsRequest extends AdminServiceRequest {
         
         $soapRequest = new AdminSoap\CreditInvoiceRowsRequest( 
             new AdminSoap\Authentication( 
-                $this->orderBuilder->conf->getUsername( strtoupper($this->orderBuilder->orderType), $this->orderBuilder->countryCode ), 
-                $this->orderBuilder->conf->getPassword( strtoupper($this->orderBuilder->orderType), $this->orderBuilder->countryCode ) 
+                $this->orderBuilder->conf->getUsername( /*strtoupper*/($this->orderBuilder->orderType), $this->orderBuilder->countryCode ), 
+                $this->orderBuilder->conf->getPassword( /*strtoupper*/($this->orderBuilder->orderType), $this->orderBuilder->countryCode ) 
             ),
-            $this->orderBuilder->conf->getClientNumber( strtoupper($this->orderBuilder->orderType), $this->orderBuilder->countryCode ),
+            $this->orderBuilder->conf->getClientNumber( /*strtoupper*/($this->orderBuilder->orderType), $this->orderBuilder->countryCode ),
             $this->orderBuilder->distributionType,
             $this->orderBuilder->invoiceId,
                 
@@ -114,8 +114,8 @@ class CreditOrderRowsRequest extends AdminServiceRequest {
             $errors[] = array('missing value' => "countryCode is required.");
         }
         return $errors;
-    }    
-    
+    }
+
 //    private function validateRowsToCredit($errors) {
 //        if (isset($this->orderBuilder->rowsToCredit) == FALSE) {                                                        
 //            $errors[] = array('missing value' => "rowsToCredit is required.");

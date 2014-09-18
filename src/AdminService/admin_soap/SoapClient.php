@@ -51,25 +51,26 @@ class SoapClient {
      * @return StdClass $response
      */
     public function doSoapCall($action, $request) {
-        try {
-            // wrap the request
-            $wrappedRequest = new \SoapVar( $request, SOAP_ENC_OBJECT, "-", "--", "request", "http://tempuri.org/");
-            
-            // do soapcall
-            $response = $this->client->__soapCall( $action, array( $wrappedRequest ), 
-                array( "soapaction" => 'http://tempuri.org/IAdminService/'.$action )
-            );
-        }
-        catch( \SoapFault $e ) {
-            echo "AdminService SoapFault Exception: ";
-            echo $this->client->__getLastRequest() . "\n";
-            echo $this->client->__getLastRequestHeaders();
-            die;
-        };
-        
-//        echo "Debugging AdminService SoapCall: ";
-//        echo $this->client->__getLastRequest() . "\n";
-//        echo $this->client->__getLastRequestHeaders();             
+        //try { // debug
+
+        // wrap the request
+        $wrappedRequest = new \SoapVar( $request, SOAP_ENC_OBJECT, "-", "--", "request", "http://tempuri.org/");
+
+        // do soapcall
+        $response = $this->client->__soapCall( $action, array( $wrappedRequest ), 
+            array( "soapaction" => 'http://tempuri.org/IAdminService/'.$action )
+        );
+
+        //} //debug
+        //catch( \SoapFault $e ) {
+        //    echo "AdminService SoapFault Exception: ";
+        //    echo $this->client->__getLastRequest() . "\n";
+        //    echo $this->client->__getLastRequestHeaders();
+        //    die;
+        //}; 
+        //echo "Debugging AdminService SoapCall: ";
+        //echo $this->client->__getLastRequest() . "\n";
+        //echo $this->client->__getLastRequestHeaders();             
         return $response;
     }
 }

@@ -6,194 +6,129 @@ namespace Svea\AdminService;
  * 
  * @author Kristian Grossman-Madsen
  */
-class GetOrdersResponse {
-
-    /** @var int $accepted  true iff request was accepted by the service */
-    public $accepted;    
-    /** @var int $resultcode  response specific result code */
-    public $resultcode;    
-    /** @var string errormessage  may be set iff accepted above is false */
-    public $errormessage;   
-
-    /** @var numeric $clientId */
+class GetOrdersResponse extends AdminServiceResponse {
+    
+    // phpdoc attributes below takes its info from admin service api Order structure
+    /** @var string $changedDate -- Date when order status was changed, e.g when order was delivered. */
+    public $changedDate;
+    /** @var numeric $clientId -- Id that identifies a client in sveawebpay system */
     public $clientId;
-    /** @var string $clientOrderId */
+    /** @var string $clientOrderId -- Order number from client's ordersystem */
     public $clientOrderId;
-    /** @var string $currency */
-    public $currency;
+    /** @var string $createdDate -- Date when order was first created. */
+    public $createdDate;
+    
+    /** @var boolean $creditReportStatusAccepted -- Tells if credit decision is accepted or not */
+    public $creditReportStatusAccepted;
+    /** @var string $creditReportStatusCreationDate -- Date of order credit decision. */    
+    public $creditReportStatusCreationDate;
+    
+    /** @var string $currency -- Country currency */ 
+    public $currency;    
+
+    /** @var CompanyCustomer|IndividualCustomer $customer -- customer identity as associated with the order by Svea, also Shipping address. */
+    public $customer;
+    
+    /** @var numeric $customerId -- Customer id that is created by SveaWebPay system. */
+    public $customerId;
+    /** @var string $customerReference -- Customer Reference. (Gets printed on the invoice.)*/
+    public $customerReference;
     /** @var boolean $isPossibleToAdminister */
     public $isPossibleToAdminister;
-    /** @var boolean $isPossibleToCancel */
+    /** @var boolean $isPossibleToCancel -- Tells if order can be cancelled or not */
     public $isPossibleToCancel;
-    /** @var string $orderDeliveryStatus */
+    /** @var string $notes -- Text on order created by client */
+    public $notes;
+    /** @var string $orderDeliveryStatus -- one of {Created,PartiallyDelivered,Delivered,Cancelled} */
     public $orderDeliveryStatus;
-    /** @var string $orderStatus */
-    public $orderStatus;
-    /** @var string $orderType */
-    public $orderType;
-    /** @var numeric $orderId */
-    public $orderId;
-    /** @var Svea\OrderRow[] $numberedOrderRows  array of OrderRow objects */
+
+    /** @var Svea\OrderRow[] $numberedOrderRows  array of OrderRow objects for an order */
     public $numberedOrderRows;
+
+    /** @var string $orderStatus -- one of {Created,Pending,Active,Denied,Error}*/
+    public $orderStatus;
+    /** @var string $orderType -- one of {Invoice,PaymentPlan} */
+    public $orderType;
     
-//     stdClass Object
-//     (
-//         [ErrorMessage] => 
-//         [ResultCode] => 0
-//         [Orders] => stdClass Object
-//             (
-//                 [Order] => stdClass Object
-//                     (
-//                         [ChangedDate] => 
-//                         [ClientId] => 79021
-//                         [ClientOrderId] => 449
-//                         [CreatedDate] => 2014-05-19T16:04:54.787
-//                         [CreditReportStatus] => stdClass Object
-//                             (
-//                                 [Accepted] => true
-//                                 [CreationDate] => 2014-05-19T16:04:54.893
-//                             )
-//
-//                         [Currency] => SEK
-//                         [Customer] => stdClass Object
-//                             (
-//                                 [CoAddress] => c/o Eriksson, Erik
-//                                 [CompanyIdentity] => 
-//                                 [CountryCode] => SE
-//                                 [CustomerType] => Individual
-//                                 [Email] => foo.bar@sveaekonomi.se
-//                                 [FullName] => Persson, Tess T
-//                                 [HouseNumber] => 
-//                                 [IndividualIdentity] => stdClass Object
-//                                     (
-//                                         [BirthDate] => 
-//                                         [FirstName] => 
-//                                         [Initials] => 
-//                                         [LastName] => 
-//                                     )
-//
-//                                 [Locality] => Stan
-//                                 [NationalIdNumber] => 194605092222
-//                                 [PhoneNumber] => 08 - 111 111 11
-//                                 [PublicKey] => 
-//                                 [Street] => Testgatan 1
-//                                 [ZipCode] => 99999
-//                             )
-//
-//                         [CustomerId] => 1000117
-//                         [CustomerReference] => 
-//                         [DeliveryAddress] => 
-//                         [IsPossibleToAdminister] => false
-//                         [IsPossibleToCancel] => true
-//                         [Notes] => 
-//                         [OrderDeliveryStatus] => Created
-//                         [OrderRows] => stdClass Object
-//                             (
-//                                 [NumberedOrderRow] => Array
-//                                     (
-//                                         [0] => stdClass Object
-//                                             (
-//                                                 [ArticleNumber] => 
-//                                                 [Description] => Dyr produkt 25%
-//                                                 [DiscountPercent] => 0.00
-//                                                 [NumberOfUnits] => 2.00
-//                                                 [PricePerUnit] => 2000.00
-//                                                 [Unit] => 
-//                                                 [VatPercent] => 25.00
-//                                                 [CreditInvoiceId] => 
-//                                                 [InvoiceId] => 
-//                                                 [RowNumber] => 1
-//                                                 [Status] => NotDelivered
-//                                             )
-//
-//                                         [1] => stdClass Object
-//                                             (
-//                                                 [ArticleNumber] => 
-//                                                 [Description] => Testprodukt 1kr 25%
-//                                                 [DiscountPercent] => 0.00
-//                                                 [NumberOfUnits] => 1.00
-//                                                 [PricePerUnit] => 1.00
-//                                                 [Unit] => 
-//                                                 [VatPercent] => 25.00
-//                                                 [CreditInvoiceId] => 
-//                                                 [InvoiceId] => 
-//                                                 [RowNumber] => 2
-//                                                 [Status] => NotDelivered
-//                                             )
-//
-//                                         [2] => stdClass Object
-//                                             (
-//                                                 [ArticleNumber] => 
-//                                                 [Description] => Fastpris (Fast fraktpris)
-//                                                 [DiscountPercent] => 0.00
-//                                                 [NumberOfUnits] => 1.00
-//                                                 [PricePerUnit] => 4.00
-//                                                 [Unit] => 
-//                                                 [VatPercent] => 25.00
-//                                                 [CreditInvoiceId] => 
-//                                                 [InvoiceId] => 
-//                                                 [RowNumber] => 3
-//                                                 [Status] => NotDelivered
-//                                             )
-//
-//                                         [3] => stdClass Object
-//                                             (
-//                                                 [ArticleNumber] => 
-//                                                 [Description] => Svea Fakturaavgift:: 20.00kr (SE)
-//                                                 [DiscountPercent] => 0.00
-//                                                 [NumberOfUnits] => 1.00
-//                                                 [PricePerUnit] => 20.00
-//                                                 [Unit] => 
-//                                                 [VatPercent] => 0.00
-//                                                 [CreditInvoiceId] => 
-//                                                 [InvoiceId] => 
-//                                                 [RowNumber] => 4
-//                                                 [Status] => NotDelivered
-//                                             )
-//                                     )
-//                             )
-//                         [OrderStatus] => Active
-//                         [OrderType] => Invoice
-//                         [PaymentPlanDetails] => 
-//                         [PendingReasons] => 
-//                         [SveaOrderId] => 348629
-//                         [SveaWillBuy] => true
-//                     )
-//             )
-//     )    
-    /** @var StdClass $rawGetOrdersResponse  contains the raw GetOrders response */
-    public $rawGetOrdersResponse;
+    /** @var numeric $paymentPlanDetailsContractLengthMonths */
+    public $paymentPlanDetailsContractLengthMonths;
+    /** @var numeric $paymentPlanDetailsContractContractNumber -- Contract number of a specific contract. */
+    public $paymentPlanDetailsContractNumber;
+    
+    /** @var string $pendingReasonsPendingType -- one of {SMSOnHighAmount,UseOfDeliveryAddress} */
+    public $pendingReasonsPendingType;
+    /** @var string $pendingReasonsCreatedDate */
+    public $pendingReasonsCreatedDate;      
+    
+    /** @var numeric $orderId -- Unique Id for the created order. Used for any further order webservice requests. */
+    public $orderId;
+    /** @var boolean $sveaWillBuy -- Describes whether SveaWebPay will buy the order or just administrate it */
+    public $sveaWillBuy;
     
     function __construct($message) {        
         $this->formatObject($message);  
     }
     
     protected function formatObject($message) {   
-              
+   
         // was request accepted?
-        $this->accepted = ($message->ResultCode == 0) ? 1 : 0; // ResultCode of 0 means all went well.
-        $this->errormessage = isset($message->ErrorMessage) ? $message->ErrorMessage : "";
-        $this->resultcode = $message->ResultCode;
-
+        parent::formatObject($message);
+                      
         // if successful, set deliverOrderResult, using the same attributes as for DeliverOrderEU?
         if ($this->accepted == 1) {
-            
-            $this->rawGetOrdersResponse = $message; // the raw GetOrders response
-
+              
             // populate GetOrdersResponse select attributes from the raw GetOrders response
             $order = $message->Orders->Order;
-
+         
+            $this->changedDate = $order->ChangedDate;
             $this->clientId = $order->ClientId;
             $this->clientOrderId = $order->ClientOrderId;
+            $this->createdDate = $order->CreatedDate;
+            
+            $this->creditReportStatusAccepted = ($order->CreditReportStatus->Accepted === "true") ? true : false;
+            $this->creditReportStatusCreationDate = $order->CreditReportStatus->CreationDate;
+         
             $this->currency = $order->Currency;
             
-            $this->isPossibleToAdminister = $order->IsPossibleToAdminister;
-            $this->isPossibleToCancel = $order->IsPossibleToCancel;
-            $this->orderDeliveryStatus = $order->OrderDeliveryStatus;
+            //individual customer?
+            if( $order->Customer->CustomerType === "Individual" ) {
+                $this->customer = new \Svea\IndividualCustomer;
+                
+                $this->customer->setNationalIdNumber($order->Customer->NationalIdNumber);                    
+                $this->customer->setInitials($order->Customer->IndividualIdentity->Initials);
+                 if( isset($order->Customer->IndividualIdentity->BirthDate) ) { // setBirthDate is picky about the argument format
+                    $this->customer->setBirthDate($order->Customer->IndividualIdentity->BirthDate);
+                }
+                $this->customer->setName($order->Customer->IndividualIdentity->FirstName, $order->Customer->IndividualIdentity->LastName);                    
+                $this->customer->setEmail($order->Customer->Email);                   
+                $this->customer->setPhoneNumber($order->Customer->PhoneNumber);                               
+                $this->customer->setStreetAddress($order->Customer->Street, $order->Customer->HouseNumber);                  
+                $this->customer->setCoAddress($order->Customer->CoAddress);
+                $this->customer->setZipCode($order->Customer->ZipCode);                   
+                $this->customer->setLocality($order->Customer->Locality);                   
+            }
             
-            $this->orderStatus = $order->OrderStatus;
-            $this->orderType = $order->OrderType;
-            $this->orderId = $order->SveaOrderId;
+            if( $order->Customer->CustomerType === "Company" ) {
+                $this->customer = new \Svea\CompanyCustomer;
+
+                $this->customer->setNationalIdNumber($order->Customer->NationalIdNumber);             
+                $this->customer->setVatNumber($order->Customer->CompanyIdentity->CompanyVatNumber);
+                $this->customer->setCompanyName( $order->Customer->FullName);                    
+                $this->customer->setEmail($order->Customer->Email);                   
+                $this->customer->setPhoneNumber($order->Customer->PhoneNumber);                               
+                $this->customer->setStreetAddress($order->Customer->Street, $order->Customer->HouseNumber);                  
+                $this->customer->setCoAddress($order->Customer->CoAddress);
+                $this->customer->setZipCode($order->Customer->ZipCode);                   
+                $this->customer->setLocality($order->Customer->Locality);     
+            }
+
+            $this->customerId = $order->CustomerId;
+            $this->customerReference = $order->CustomerReference;
+            //$this->deliveryAddress = $order->DeliveryAddress; // not supported       
+            $this->isPossibleToAdminister = ($order->IsPossibleToAdminister === "true") ? true : false;
+            $this->isPossibleToCancel = ($order->IsPossibleToCancel === 'true') ? true : false;
+            $this->notes = $order->Notes;
+            $this->orderDeliveryStatus = $order->OrderDeliveryStatus;
 
             // for each numbered orderrow, add it to the numberedOrderRow array
             foreach( $order->OrderRows->NumberedOrderRow as $row ) {
@@ -230,7 +165,7 @@ class GetOrdersResponse {
                     ->setQuantity( $row->NumberOfUnits )
                     ->setArticleNumber( $row->ArticleNumber )     
                     ->setUnit( $row->Unit )
-                    ->setVatPercent( $row->VatPercent )
+                    ->setVatPercent( (int)$row->VatPercent )
                     ->setDiscountPercent( $row->DiscountPercent )
                 ;
                 
@@ -239,8 +174,30 @@ class GetOrdersResponse {
                 $newrow->rowNumber = $row->RowNumber;
                 $newrow->status = $row->Status;
                 
-                $this->numberedOrderRows[] = $newrow;   
-            }                
+                $this->numberedOrderRows[] = $newrow;                 
+            }
+                                    
+            $this->orderStatus = $order->OrderStatus;
+            $this->orderType = $order->OrderType;
+            
+            if( is_a($order->PaymentPlanDetails, "stdClass") && property_exists($order->PaymentPlanDetails, "ContractLengthMonths") ) {             
+                $this->paymentPlanDetailsContractLengthMonths = $order->PaymentPlanDetails->ContractLengthMonths;
+            }
+            if( is_a($order->PaymentPlanDetails, "stdClass") && property_exists($order->PaymentPlanDetails, "ContractNumber") ) {
+                $this->paymentPlanDetailsContractNumber = $order->PaymentPlanDetails->ContractNumber;      
+            }          
+
+            $this->pendingReasons = $order->PendingReasons;         
+            if( is_a($order->PendingReasons, "stdClass") && property_exists($order->PendingReasons, "PendingType") ) {             
+                $this->pendingReasonsPendingType = $order->PendingReasons->PendingType;
+            }
+            if( is_a($order->PendingReasons, "stdClass") && property_exists($order->PendingReasons, "CreatedDate") ) {
+                $this->PendingReasonsCreatedDate = $order->PendingReasons->CreatedDate;      
+            } 
+            
+            $this->orderId = $order->SveaOrderId;
+            $this->sveaWillBuy = ($order->SveaWillBuy === 'true') ? true : false;
+
         }
     }
 }

@@ -36,26 +36,38 @@ require_once SVEA_REQUEST_DIR . '/Includes.php';
  */
 class CancelOrderBuilder {
 
-    /** ConfigurationProvider $conf  */
+    /** @var ConfigurationProvider $conf  */
     public $conf;
+
+    /** @var string $orderId  Svea order id to cancel, as returned in the createOrder request response, either a transactionId or a SveaOrderId */
+    public $orderId;
     
     public function __construct($config) {
          $this->conf = $config;
     }
 
     /**
-     * Required. Use SveaOrderId recieved with createOrder response.
-     * 
-     * @param string $orderIdAsString
+     * Required for invoice or part payment orders -- use the order id (transaction id) recieved with the createOrder response.
+     * @param numeric $orderIdAsString
      * @return $this
      */
     public function setOrderId($orderIdAsString) {
         $this->orderId = $orderIdAsString;
         return $this;
     }
-    /** string $orderId  Svea order id to cancel, as returned in the createOrder request response, either a transactionId or a SveaOrderId */
-    public $orderId;
-    
+
+    /**
+     * Optional for card orders -- use the order id (transaction id) received with the createOrder response.
+     * 
+     * This is an alias for setOrderId().
+     * 
+     * @param numeric $orderIdAsString
+     * @return $this
+     */
+    public function setTransactionId($orderIdAsString) {
+        return $this->setOrderId($orderIdAsString);
+    }      
+        
     /**
      * Required. Use same country code as in createOrder request.
      * 
@@ -93,7 +105,7 @@ class CancelOrderBuilder {
         return new WebService\CloseOrder($this);    
     }
     
-    /** @var string "Invoice" or "PaymentPlan" */
+    /** @var string  \ConfigurationProvider::INVOICE_TYPE or ::PAYMENTPLAN_TYPE */
     public $orderType;  
 
     /**
@@ -107,7 +119,7 @@ class CancelOrderBuilder {
         $this->orderType = \ConfigurationProvider::HOSTED_ADMIN_TYPE;
         $annulTransaction = new HostedService\AnnulTransaction($this->conf);
         $annulTransaction->transactionId = $this->orderId;
-        $annulTransaction->setCountryCode($this->countryCode);
+        $annulTransaction->countryCode = $this->countryCode;
         return $annulTransaction;
     }  
 }

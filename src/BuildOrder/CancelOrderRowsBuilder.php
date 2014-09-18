@@ -19,12 +19,17 @@ require_once SVEA_REQUEST_DIR . '/Includes.php';
  * Use setCountryCode() to specify the country code matching the original create
  * order request.
  * 
- * Use setRowToCancel or setRowsToCancel() to specify the order row(s) to cancel. The order numbers
- * should correspond to those returned by i.e. WebPayAdmin::queryOrder;
+ * Use setRowToCancel or setRowsToCancel() to specify the order row(s) to cancel. The 
+ * order numbers should correspond to those returned by i.e. WebPayAdmin::queryOrder;
  * 
- * For card orders, use addNumberedOrderRow() or addNumberedOrderRows() to pass 
- * in order rows (from i.e. queryOrder) that will be matched with set rows to cancel.
- * 
+ * For card orders, use addNumberedOrderRow() or addNumberedOrderRows() to pass in 
+ * numbered order rows (from i.e. queryOrder) that will be matched with set rows to cancel.
+ *  
+ * (You can use the WebPayAdmin::queryOrder() entrypoint to get information about the order, the 
+ * queryOrder response attribute numberedOrderRows contains the serverside order rows w/numbers.
+ * Note: if card order rows has been changed (i.e. credited, cancelled) after initial creation, 
+ * the returned rows may not be accurate.)
+ *  
  * Then use either cancelInvoiceOrderRows(), cancelPaymentPlanOrderRows or cancelCardOrderRows,
  * which ever matches the payment method used in the original order request.
  *  
@@ -44,6 +49,9 @@ class CancelOrderRowsBuilder {
     /** @var NumberedOrderRows[] $numberedOrderRows */
     public $numberedOrderRows;
 
+    /** @var string $orderId  Svea order id to query, as returned in the createOrder request response, either a transactionId or a SveaOrderId */
+    public $orderId;    
+    
     public function __construct($config) {
          $this->conf = $config;
          $this->rowsToCancel = array();
@@ -51,20 +59,30 @@ class CancelOrderRowsBuilder {
     }
 
     /**
-     * Required. Use SveaOrderId recieved with createOrder response.
-     * @param string $orderIdAsString
+     * Required for invoice or part payment orders -- use the order id (transaction id) recieved with the createOrder response.
+     * @param numeric $orderIdAsString
      * @return $this
      */
     public function setOrderId($orderIdAsString) {
         $this->orderId = $orderIdAsString;
         return $this;
     }
-    /** string $orderId  Svea order id to query, as returned in the createOrder request response, either a transactionId or a SveaOrderId */
-    public $orderId;
+
+    /**
+     * Optional for card orders -- use the order id (transaction id) received with the createOrder response.
+     * 
+     * This is an alias for setOrderId().
+     * 
+     * @param numeric $orderIdAsString
+     * @return $this
+     */
+    public function setTransactionId($orderIdAsString) {
+        return $this->setOrderId($orderIdAsString);
+    }       
     
     /**
      * Required. Use same countryCode as in createOrder request.
-     * @param string $countryCode
+     * @param string $countryCodeAsString
      * @return $this
      */
     public function setCountryCode($countryCodeAsString) {
@@ -74,15 +92,6 @@ class CancelOrderRowsBuilder {
     /** @var string $countryCode */
     public $countryCode;
 
-    /**
-     * Required.
-     * @param string $orderType -- one of ConfigurationProvider::INVOICE_TYPE, ::PAYMENTPLAN_TYPE, ::HOSTED_TYPE
-     * @return $this
-     */
-    public function setOrderType($orderTypeAsConst) {
-        $this->orderType = $orderTypeAsConst;
-        return $this;
-    }
     /** @var string $orderType -- one of ConfigurationProvider::INVOICE_TYPE, ::PAYMENTPLAN_TYPE, ::HOSTED_TYPE */
     public $orderType;    
 
@@ -140,7 +149,7 @@ class CancelOrderRowsBuilder {
      * @return CancelOrderRowsRequest 
      */
     public function cancelInvoiceOrderRows() {
-        $this->setOrderType(\ConfigurationProvider::INVOICE_TYPE );
+        $this->orderType = \ConfigurationProvider::INVOICE_TYPE;
         return new AdminService\CancelOrderRowsRequest($this);
     }
     
@@ -149,7 +158,7 @@ class CancelOrderRowsBuilder {
      * @return CancelOrderRowsRequest 
      */
     public function cancelPaymentPlanOrderRows() {
-        $this->setOrderType(\ConfigurationProvider::PAYMENTPLAN_TYPE);
+        $this->orderType = \ConfigurationProvider::PAYMENTPLAN_TYPE;
         return new AdminService\CancelOrderRowsRequest($this);    
     }
 
@@ -160,13 +169,13 @@ class CancelOrderRowsBuilder {
      * @throws ValidationException  if addNumberedOrderRows() has not been used.
      */
     public function cancelCardOrderRows() {
-        $this->setOrderType(\ConfigurationProvider::HOSTED_ADMIN_TYPE);
+        $this->orderType = \ConfigurationProvider::HOSTED_ADMIN_TYPE;
                 
         $this->validateCancelCardOrderRows();
         $sumOfRowAmounts = $this->calculateSumOfRowAmounts( $this->rowsToCancel, $this->numberedOrderRows );
         
         $lowerTransaction = new HostedService\LowerTransaction($this->conf);
-        $lowerTransaction->setCountryCode($this->countryCode);
+        $lowerTransaction->countryCode = $this->countryCode;
         $lowerTransaction->transactionId = $this->orderId;
         $lowerTransaction->amountToLower = $sumOfRowAmounts*100; // *100, as setAmountToLower wants minor currency
         return $lowerTransaction;

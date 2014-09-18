@@ -13,9 +13,9 @@ class OrderHandlerValidatorTest extends PHPUnit_Framework_TestCase {
 
     /**
      * @expectedException Svea\ValidationException
-     * @expectedExceptionMessage -missing value : orderId is required.
+     * @expectedExceptionMessage -missing value : OrderId is required. Use function setOrderId() with the SveaOrderId from the createOrder response.
      */
-    public function testFailOnMissingOrderIdOnPaymentPlanDeliver() {
+    public function test_deliverPaymentPlanOrder_with_missing_OrderId_raises_exception() {
         $config = Svea\SveaConfig::getDefaultConfig();
         $builder = WebPay::deliverOrder($config);
         $object = $builder;
@@ -23,10 +23,36 @@ class OrderHandlerValidatorTest extends PHPUnit_Framework_TestCase {
         $object->deliverPaymentPlanOrder()
             ->prepareRequest();
     }
+    
+    public function test_deliverPaymentPlanOrder_with_missing_invoiceDistributionType_validates_OK() {
+        $config = Svea\SveaConfig::getDefaultConfig();
+        $builder = WebPay::deliverOrder($config);
+        $request = $builder
+            ->setOrderId(123456)
+            ->setCountryCode("SE")
+            ->addOrderRow(TestUtil::createOrderRow())
+            ->deliverPaymentPlanOrder()
+                ->prepareRequest();
+    }    
 
     /**
      * @expectedException Svea\ValidationException
-     * @expectedExceptionMessage -missing value : InvoiceDistributionType is requred for deliverInvoiceOrder. Use function setInvoiceDistributionType().
+     * @expectedExceptionMessage -missing value : InvoiceDistributionType is required for deliverInvoiceOrder. Use function setInvoiceDistributionType().
+     */    
+    public function test_deliverInvoiceOrder_with_missing_invoiceDistributionType_raises_exception() {
+        $config = Svea\SveaConfig::getDefaultConfig();
+        $builder = WebPay::deliverOrder($config);
+        $request = $builder
+            ->setOrderId(123456)
+            ->setCountryCode("SE")
+            ->addOrderRow(TestUtil::createOrderRow())
+            ->deliverInvoiceOrder()
+                ->prepareRequest();
+    }    
+    
+    /**
+     * @expectedException Svea\ValidationException
+     * @expectedExceptionMessage -missing value : InvoiceDistributionType is required for deliverInvoiceOrder. Use function setInvoiceDistributionType().
      */
     public function testFailOnMissingInvoiceDetailsOnInvoiceDeliver() {
         $config = Svea\SveaConfig::getDefaultConfig();
@@ -62,8 +88,5 @@ class OrderHandlerValidatorTest extends PHPUnit_Framework_TestCase {
         ;        
         $object = new \Svea\WebService\DeliverInvoice( $builder );
         $object->prepareRequest();
-    }
-
-    
-    
+    }  
 }

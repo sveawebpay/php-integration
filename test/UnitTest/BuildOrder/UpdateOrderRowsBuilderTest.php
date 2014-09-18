@@ -34,12 +34,6 @@ class UpdateOrderRowsBuilderTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals($country, $this->updateOrderRowsObject->countryCode);        
     }
     
-    public function test_updateOrderRowsBuilder_setOrderType() {
-        $orderType = \ConfigurationProvider::INVOICE_TYPE;
-        $this->updateOrderRowsObject->setOrderType($orderType);
-        $this->assertEquals($orderType, $this->updateOrderRowsObject->orderType);        
-    }
-    
     public function test_updateOrderRowsBuilder_updateInvoiceOrderRowsBuilder_returns_UpdateOrderRowsRequest() {
         $orderId = "123456";
         $updateOrderRowsObject = $this->updateOrderRowsObject->setOrderId($orderId)->updateInvoiceOrderRows();

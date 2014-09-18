@@ -28,16 +28,16 @@ class CancelOrderRowsBuilderTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals($orderId, $this->cancelOrderRowsObject->orderId);        
     }
     
+    public function test_cancelOrderRowsBuilder_setTransactionId() {
+        $orderId = "123456";
+        $this->cancelOrderRowsObject->setTransactionId($orderId);
+        $this->assertEquals($orderId, $this->cancelOrderRowsObject->orderId);        
+    }
+    
     public function test_cancelOrderRowsBuilder_setCountryCode() {
         $country = "SE";
         $this->cancelOrderRowsObject->setCountryCode($country);
         $this->assertEquals($country, $this->cancelOrderRowsObject->countryCode);        
-    }
-    
-    public function test_cancelOrderRowsBuilder_setOrderType() {
-        $orderType = \ConfigurationProvider::INVOICE_TYPE;
-        $this->cancelOrderRowsObject->setOrderType($orderType);
-        $this->assertEquals($orderType, $this->cancelOrderRowsObject->orderType);        
     }
     
     public function test_addNumberedOrderRow() {

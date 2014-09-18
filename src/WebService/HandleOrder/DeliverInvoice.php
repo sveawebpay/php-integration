@@ -18,7 +18,7 @@ class DeliverInvoice extends HandleOrder {
      * @param DeliverOrderBuilder $DeliverOrderBuilder
      */
     public function __construct($DeliverOrderBuilder) {
-        $DeliverOrderBuilder->orderType = "Invoice";
+        $DeliverOrderBuilder->orderType = \ConfigurationProvider::INVOICE_TYPE;
 
         parent::__construct($DeliverOrderBuilder);
     }
@@ -36,7 +36,7 @@ class DeliverInvoice extends HandleOrder {
         $orderInformation->SveaOrderId = $this->orderBuilder->orderId;
         $orderInformation->OrderType = $this->orderBuilder->orderType;
 
-        if ($this->orderBuilder->orderType == "Invoice") {
+        if ($this->orderBuilder->orderType == \ConfigurationProvider::INVOICE_TYPE) {
             $invoiceDetails = new WebServiceSoap\SveaDeliverInvoiceDetails();
             $invoiceDetails->InvoiceDistributionType = $this->orderBuilder->distributionType;
             $invoiceDetails->IsCreditInvoice = isset($this->orderBuilder->invoiceIdToCredit) ? TRUE : FALSE;
@@ -94,14 +94,14 @@ class DeliverInvoice extends HandleOrder {
     }
 
     private function validateInvoiceDetails($order, $errors) {
-        if (isset($order->orderId) && $order->orderType == "Invoice" && isset($order->distributionType) == FALSE) {
-            $errors['missing value'] = "InvoiceDistributionType is requred for deliverInvoiceOrder. Use function setInvoiceDistributionType().";
+        if (isset($order->orderId) && $order->orderType == \ConfigurationProvider::INVOICE_TYPE && isset($order->distributionType) == FALSE) {
+            $errors['missing value'] = "InvoiceDistributionType is required for deliverInvoiceOrder. Use function setInvoiceDistributionType().";
         }
         return $errors;
     }
 
     private function validateOrderRows($order, $errors) {
-        if ($order->orderType == "Invoice" && empty($order->orderRows) && empty($order->shippingFee) && empty($order->invoiceFee)) {
+        if ($order->orderType == \ConfigurationProvider::INVOICE_TYPE && empty($order->orderRows) && empty($order->shippingFee) && empty($order->invoiceFee)) {
             $errors['missing values'] = "No rows has been included. Use function beginOrderRow(), beginShippingfee() or beginInvoiceFee().";
         }
         return $errors;

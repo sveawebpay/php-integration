@@ -27,6 +27,12 @@ class CreditOrderRowsBuilderTest extends \PHPUnit_Framework_TestCase {
         $this->creditOrderRowsObject->setOrderId($orderId);
         $this->assertEquals($orderId, $this->creditOrderRowsObject->orderId);        
     }
+
+    public function test_creditOrderRowsBuilder_setTransactionId() {
+        $orderId = "123456";
+        $this->creditOrderRowsObject->setTransactionId($orderId);
+        $this->assertEquals($orderId, $this->creditOrderRowsObject->orderId);        
+    }  
     
     public function test_creditOrderRowsBuilder_setInvoiceId() {
         $orderId = "123456";
@@ -127,4 +133,109 @@ class CreditOrderRowsBuilderTest extends \PHPUnit_Framework_TestCase {
         $this->assertInstanceOf("Svea\HostedService\CreditTransaction", $request);
     }
     
+    /// validations
+      
+    public function test_validateCreditCardOrder_missing_setOrderId_throws_ValidationException() {
+        
+        $this->setExpectedException(
+          '\Svea\ValidationException', 'orderId is required for creditCardOrderRows(). Use method setOrderId().'
+        );
+        
+        $orderId = "123456";  
+        $mockedNumberedOrderRow = new \Svea\NumberedOrderRow();
+        $mockedNumberedOrderRow
+            ->setAmountExVat(100.00)                // recommended to specify price using AmountExVat & VatPercent
+            ->setVatPercent(25)                     // recommended to specify price using AmountExVat & VatPercent
+            ->setQuantity(1)                        // required
+            ->setRowNumber(1)
+        ;            
+        
+        $creditOrderRowsObject = $this->creditOrderRowsObject
+                //->setOrderId($orderId)
+                ->addNumberedOrderRow( $mockedNumberedOrderRow )
+                ->setRowToCredit(1)
+        ;
+        
+        $request = $creditOrderRowsObject->creditCardOrderRows();
+        
+        $this->assertInstanceOf("Svea\HostedService\CreditTransaction", $request);
+    }
+     
+    public function test_validateCreditCardOrder_missing_setRowToCredit_and_addCreditRow_throws_ValidationException() {
+        
+        $this->setExpectedException(
+          '\Svea\ValidationException', 'at least one of rowsToCredit or creditOrderRows must be set. Use setRowToCredit() or addCreditOrderRow().'
+        );
+        
+        $orderId = "123456";  
+        $mockedNumberedOrderRow = new \Svea\NumberedOrderRow();
+        $mockedNumberedOrderRow
+            ->setAmountExVat(100.00)                // recommended to specify price using AmountExVat & VatPercent
+            ->setVatPercent(25)                     // recommended to specify price using AmountExVat & VatPercent
+            ->setQuantity(1)                        // required
+            ->setRowNumber(1)
+        ;            
+        
+        $creditOrderRowsObject = $this->creditOrderRowsObject
+                ->setOrderId($orderId)
+                ->addNumberedOrderRow( $mockedNumberedOrderRow )
+        ;
+        
+        $request = $creditOrderRowsObject->creditCardOrderRows();
+        
+        $this->assertInstanceOf("Svea\HostedService\CreditTransaction", $request);
+    }    
+    
+    public function test_validateCreditCardOrder_with_too_few_NumberedOrderRows_throws_ValidationException() {
+        
+        $this->setExpectedException(
+          '\Svea\ValidationException', 'every entry in rowsToCredit must have a corresponding numberedOrderRows. Use setRowsToCredit() and addNumberedOrderRow().'
+        );
+        
+        $orderId = "123456";  
+        $mockedNumberedOrderRow = new \Svea\NumberedOrderRow();
+        $mockedNumberedOrderRow
+            ->setAmountExVat(100.00)                // recommended to specify price using AmountExVat & VatPercent
+            ->setVatPercent(25)                     // recommended to specify price using AmountExVat & VatPercent
+            ->setQuantity(1)                        // required
+            ->setRowNumber(1)
+        ;            
+        
+        $creditOrderRowsObject = $this->creditOrderRowsObject
+                ->setOrderId($orderId)
+                ->addNumberedOrderRow( $mockedNumberedOrderRow )
+                ->setRowsToCredit(array(1,2))
+        ;
+        
+        $request = $creditOrderRowsObject->creditCardOrderRows();
+        
+        $this->assertInstanceOf("Svea\HostedService\CreditTransaction", $request);
+    }
+    
+    public function test_validateCreditCardOrder_with_mismatched_NumberedOrderRows_throws_ValidationException() {
+        
+        $this->setExpectedException(
+          '\Svea\ValidationException', 'every entry in rowsToCredit must match a numberedOrderRows. Use setRowsToCredit() and addNumberedOrderRow().'
+        );
+        
+        $orderId = "123456";  
+        $mockedNumberedOrderRow = new \Svea\NumberedOrderRow();
+        $mockedNumberedOrderRow
+            ->setAmountExVat(100.00)                // recommended to specify price using AmountExVat & VatPercent
+            ->setVatPercent(25)                     // recommended to specify price using AmountExVat & VatPercent
+            ->setQuantity(1)                        // required
+            ->setRowNumber(1)
+        ;            
+        
+        $creditOrderRowsObject = $this->creditOrderRowsObject
+                ->setOrderId($orderId)
+                ->addNumberedOrderRow( $mockedNumberedOrderRow )
+                ->setRowToCredit(9)
+        ;
+        
+        $request = $creditOrderRowsObject->creditCardOrderRows();        
+        
+        $this->assertInstanceOf("Svea\HostedService\CreditTransaction", $request);
+    }    
+       
 }

@@ -24,12 +24,6 @@ class AnnulTransactionTest extends PHPUnit_Framework_TestCase {
         $this->assertInstanceOf( "Svea\HostedService\AnnulTransaction", $this->annulObject);      
         $this->assertEquals( "annul", PHPUnit_Framework_Assert::readAttribute($this->annulObject, 'method') );        
     }
-    
-    function test_setCountryCode(){
-        $countryCode = "SE";       
-        $this->annulObject->setCountryCode( $countryCode );
-        $this->assertEquals( $countryCode, PHPUnit_Framework_Assert::readAttribute($this->annulObject, 'countryCode') );
-    }
                   
     function test_prepareRequest_array_contains_mac_merchantid_message() {
 
@@ -38,7 +32,7 @@ class AnnulTransactionTest extends PHPUnit_Framework_TestCase {
         $this->annulObject->transactionId = $transactionId;
 
         $countryCode = "SE";
-        $this->annulObject->setCountryCode($countryCode);
+        $this->annulObject->countryCode = $countryCode;
                 
         $form = $this->annulObject->prepareRequest();
 
@@ -55,7 +49,7 @@ class AnnulTransactionTest extends PHPUnit_Framework_TestCase {
         $this->annulObject->transactionId = $transactionId;
 
         $countryCode = "SE";
-        $this->annulObject->setCountryCode($countryCode);
+        $this->annulObject->countryCode = $countryCode;
                 
         $form = $this->annulObject->prepareRequest();
         
@@ -84,7 +78,7 @@ class AnnulTransactionTest extends PHPUnit_Framework_TestCase {
         );        
         
         $countryCode = "SE";
-        $this->annulObject->setCountryCode($countryCode);
+        $this->annulObject->countryCode = $countryCode;
                 
         $form = $this->annulObject->prepareRequest();     
     }

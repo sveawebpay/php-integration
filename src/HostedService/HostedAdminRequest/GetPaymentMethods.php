@@ -34,8 +34,9 @@ class GetPaymentMethods {
      * @deprecated 2.0 Use class ListPaymentMethods instead.
     */
     public function doRequest() {
-        $requestObject = new ListPaymentMethods($this->config);
-        $response = $requestObject->setCountryCode($this->countryCode)->doRequest();
+        $request = new ListPaymentMethods($this->config);
+        $request->countryCode = $this->countryCode;
+        $response = $request->doRequest();
            
         return $response->paymentmethods;
     }

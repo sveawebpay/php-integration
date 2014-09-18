@@ -8,10 +8,10 @@ namespace Svea\WebService;
 class DeliverPaymentPlan extends HandleOrder {
 
     /**
-     * @param type $order
+     * @param DeliverOrderBuilder $order
      */
     public function __construct($order) {
-        $order->orderType = "PaymentPlan";
+        $order->orderType = \ConfigurationProvider::PAYMENTPLAN_TYPE;
         parent::__construct($order);
     }
 
@@ -36,7 +36,7 @@ class DeliverPaymentPlan extends HandleOrder {
 
     /**
      * Prepare and sends request
-     * @return type CloseOrderEuResponse
+     * @return CloseOrderResult
      */
     public function doRequest() {
         $requestObject = $this->prepareRequest();
@@ -59,12 +59,12 @@ class DeliverPaymentPlan extends HandleOrder {
             $errors['missing value'] = "CountryCode is required. Use function setCountryCode().";
         }
         return $errors;
-    }       
+    }
     
     private function validateOrderId($order, $errors) {
         if (isset($order->orderId) == FALSE) {
             $errors['missing value'] = "OrderId is required. Use function setOrderId() with the SveaOrderId from the createOrder response.";
         }
         return $errors;
-    }     
+    }
 }

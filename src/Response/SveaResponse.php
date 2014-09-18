@@ -69,10 +69,10 @@ class SveaResponse {
                 $this->response = new Svea\WebService\CloseOrderResult($message);
             }
             
+            // $method is set for i.e. AdminService requests               
             elseif( isset($method) ) {                
-                switch( $method ) {
 
-                    // $method is set for i.e. AdminService requests
+                switch( $method ) {
                     case "CancelOrder":
                         $this->response = new Svea\AdminService\CancelOrderResponse( $message );
                         break;                    
@@ -94,29 +94,9 @@ class SveaResponse {
                     case "CreditInvoiceRows":
                         $this->response = new Svea\AdminService\CreditInvoiceRowsResponse( $message );
                         break;
-                    
-                    // $method is also set for HostedAdminRequests, indicates the request method used                    
-//                    case "querytransactionid":
-//                        $this->response = new Svea\HostedService\QueryTransactionResponse($message, $countryCode, $config);
-//                        break;
-//                    case "annul":
-//                        $this->response = new Svea\HostedService\AnnulTransactionResponse($message, $countryCode, $config);
-//                        break;                     
-//                    case "credit":
-//                        $this->response = new Svea\HostedService\CreditTransactionResponse($message, $countryCode, $config);
-//                        break;                       
-//                    case "confirm":
-//                        $this->response = new Svea\HostedService\ConfirmTransactionResponse($message, $countryCode, $config);
-//                        break;   
-//                    case "loweramount":
-//                        $this->response = new Svea\HostedService\LowerTransactionResponse($message, $countryCode, $config);
-//                        break;    
-//                    case "recur":
-//                        $this->response = new Svea\HostedService\RecurTransactionResponse($message, $countryCode, $config);
-//                        break;    
-//                    case "getpaymentmethods":
-//                        $this->response = new Svea\HostedService\ListPaymentMethodsResponse($message, $countryCode, $config);
-//                        break;
+                    case "DeliverPartial":
+                        $this->response = new Svea\AdminService\DeliverPartialResponse( $message );
+                        break;
                     
                     default:
                         throw new Exception("unknown method: $method");
@@ -124,7 +104,7 @@ class SveaResponse {
                 }
             }
             
-            // legacy fallback -- webservice from hosted_admin -- used by preparedpayment 
+            // legacy fallback -- webservice from hosted_admin -- used by preparedpayment
             elseif (property_exists($message, "message"))   {                
                  $this->response = new Svea\HostedService\HostedAdminResponse($message,$countryCode,$config);
             }

@@ -26,7 +26,7 @@ class LowerTransactionTest extends PHPUnit_Framework_TestCase {
     
     function test_setCountryCode(){
         $countryCode = "SE";       
-        $this->lowerTransactionObject->setCountryCode( $countryCode ); 
+        $this->lowerTransactionObject->countryCode = $countryCode ; 
         $this->assertEquals( $countryCode, PHPUnit_Framework_Assert::readAttribute($this->lowerTransactionObject, 'countryCode') );
     }
                 
@@ -40,7 +40,7 @@ class LowerTransactionTest extends PHPUnit_Framework_TestCase {
         $this->lowerTransactionObject->amountToLower = $amountToLower;
         
         $countryCode = "SE";
-        $this->lowerTransactionObject->setCountryCode($countryCode);
+        $this->lowerTransactionObject->countryCode = $countryCode ; 
                 
         $form = $this->lowerTransactionObject->prepareRequest();
 
@@ -60,7 +60,7 @@ class LowerTransactionTest extends PHPUnit_Framework_TestCase {
         $this->lowerTransactionObject->amountToLower = $amountToLower;
      
         $countryCode = "SE";
-        $this->lowerTransactionObject->setCountryCode($countryCode);
+        $this->lowerTransactionObject->countryCode = $countryCode ; 
                 
         $form = $this->lowerTransactionObject->prepareRequest();
         
@@ -93,7 +93,7 @@ class LowerTransactionTest extends PHPUnit_Framework_TestCase {
         $this->lowerTransactionObject->amountToLower = $amountToLower;
      
         $countryCode = "SE";
-        $this->lowerTransactionObject->setCountryCode($countryCode);
+        $this->lowerTransactionObject->countryCode = $countryCode ; 
                 
         $form = $this->lowerTransactionObject->prepareRequest();      
     }    
@@ -110,7 +110,7 @@ class LowerTransactionTest extends PHPUnit_Framework_TestCase {
         $this->lowerTransactionObject->transactionId = $transactionId;
 
         $countryCode = "SE";
-        $this->lowerTransactionObject->setCountryCode($countryCode);
+        $this->lowerTransactionObject->countryCode = $countryCode ; 
                 
         $form = $this->lowerTransactionObject->prepareRequest();
     }    

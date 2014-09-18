@@ -40,7 +40,7 @@ class WebServiceOrderValidator extends OrderValidator {
         
         $identityValidator = new IdentityValidator($this->isCompany);
 
-        if ($order->orderType == "PaymentPlan" && $this->isCompany == TRUE) {
+        if ($order->orderType == \ConfigurationProvider::PAYMENTPLAN_TYPE && $this->isCompany == TRUE) {
             $this->errors["Wrong customer type"] = "PaymentPlanPayment not allowed for Company customer.";
         }
         

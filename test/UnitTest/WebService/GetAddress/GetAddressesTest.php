@@ -53,4 +53,106 @@ class GetAddressesTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals("SE", $request->request->CountryCode);
         $this->assertEquals(4608142222, $request->request->SecurityNumber);
     }
+    
+    /// validations
+    public function test_missing_countryCode_throws_exception() {
+        $this->setExpectedException(
+          '\Svea\ValidationException',"countryCode is required. Use function setCountryCode()."
+        );         
+ 
+        $request = WebPay::getAddresses( Svea\SveaConfig::getDefaultConfig() )
+                //->setCountryCode( "SE" )
+                ->setCustomerIdentifier("4605092222")
+                ->getIndividualAddresses()
+                    ->prepareRequest();
+    } 
+    
+    public function test_getIndividualAddresses_with_missing_customerIdentifier_throws_exception() {
+        $this->setExpectedException(
+          '\Svea\ValidationException',"customerIdentifier is required. Use function setCustomerIdentifer()."
+        );         
+    
+        $request = WebPay::getAddresses( Svea\SveaConfig::getDefaultConfig() )
+                ->setCountryCode( "SE" )
+                //->setCustomerIdentifier("4605092222")
+                ->getIndividualAddresses()
+                    ->prepareRequest();
+    }
+    
+    public function test_getCompanyAddresses_with_missing_customerIdentifier_throws_exception() {
+        $this->setExpectedException(
+          '\Svea\ValidationException',"customerIdentifier is required. Use function setCustomerIdentifer()."
+        );         
+    
+        $request = WebPay::getAddresses( Svea\SveaConfig::getDefaultConfig() )
+                ->setCountryCode( "SE" )
+                //->setCustomerIdentifier("4605092222")
+                ->getCompanyAddresses()
+                    ->prepareRequest();
+    }    
+    
+    public function test_missing_Configuration_for_CountryCode_throws_exception() {
+        $this->setExpectedException(
+          '\Svea\ValidationException',"missing authentication credentials. Check configuration."
+        );         
+    
+        $request = WebPay::getAddresses( Svea\SveaConfig::getDefaultConfig() );
+
+        // clear both payment method credentials for SE
+        $request->conf->conf['credentials']['SE']['auth']['Invoice']['username'] = null;        
+        $request->conf->conf['credentials']['SE']['auth']['Invoice']['password'] = null;
+        $request->conf->conf['credentials']['SE']['auth']['Invoice']['clientNumber'] = null;
+        $request->conf->conf['credentials']['SE']['auth']['PaymentPlan']['username'] = null;        
+        $request->conf->conf['credentials']['SE']['auth']['PaymentPlan']['password'] = null;
+        $request->conf->conf['credentials']['SE']['auth']['PaymentPlan']['clientNumber'] = null;
+           
+        $request        
+            ->setCountryCode( "SE" )
+            ->setCustomerIdentifier("4605092222")
+            ->getIndividualAddresses()
+                ->prepareRequest();
+    }
+    
+    public function test_checkAndSetConfiguredPaymentMethod_finds_invoice_configuration() {     
+    
+        $request = WebPay::getAddresses( Svea\SveaConfig::getDefaultConfig() );
+
+        // clear both payment method credentials for SE
+        $request->conf->conf['credentials']['SE']['auth']['Invoice']['username'] = null;        
+        $request->conf->conf['credentials']['SE']['auth']['Invoice']['password'] = null;
+        $request->conf->conf['credentials']['SE']['auth']['Invoice']['clientNumber'] = null;
+//        $request->conf->conf['credentials']['SE']['auth']['PaymentPlan']['username'] = null;        
+//        $request->conf->conf['credentials']['SE']['auth']['PaymentPlan']['password'] = null;
+//        $request->conf->conf['credentials']['SE']['auth']['PaymentPlan']['clientNumber'] = null;
+           
+        $request        
+            ->setCountryCode( "SE" )
+            ->setCustomerIdentifier("4605092222")
+            ->getIndividualAddresses()
+                ->prepareRequest();
+
+        $this->assertEquals( ConfigurationProvider::PAYMENTPLAN_TYPE, $request->orderType );
+    }    
+
+    public function test_checkAndSetConfiguredPaymentMethod_finds_paymentplan_configuration() {     
+    
+        $request = WebPay::getAddresses( Svea\SveaConfig::getDefaultConfig() );
+
+        // clear both payment method credentials for SE
+//        $request->conf->conf['credentials']['SE']['auth']['Invoice']['username'] = null;        
+//        $request->conf->conf['credentials']['SE']['auth']['Invoice']['password'] = null;
+//        $request->conf->conf['credentials']['SE']['auth']['Invoice']['clientNumber'] = null;
+        $request->conf->conf['credentials']['SE']['auth']['PaymentPlan']['username'] = null;        
+        $request->conf->conf['credentials']['SE']['auth']['PaymentPlan']['password'] = null;
+        $request->conf->conf['credentials']['SE']['auth']['PaymentPlan']['clientNumber'] = null;
+           
+        $request        
+            ->setCountryCode( "SE" )
+            ->setCustomerIdentifier("4605092222")
+            ->getIndividualAddresses()
+                ->prepareRequest();
+
+        $this->assertEquals( ConfigurationProvider::INVOICE_TYPE, $request->orderType );
+    }  
+
 }

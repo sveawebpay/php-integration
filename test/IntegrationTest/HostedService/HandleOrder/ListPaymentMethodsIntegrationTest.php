@@ -15,9 +15,8 @@ class ListPaymentMethodsIntegrationTest extends \PHPUnit_Framework_TestCase {
     function test_listPaymentMethods_request_success() {
              
         $request = new Svea\HostedService\ListPaymentMethods( Svea\SveaConfig::getDefaultConfig() );
-        $response = $request
-            ->setCountryCode( "SE" )
-            ->doRequest();
+        $request->countryCode = "SE";
+        $response = $request->doRequest();
 
         $this->assertInstanceOf( "Svea\HostedService\ListPaymentMethodsResponse", $response );
         

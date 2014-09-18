@@ -27,17 +27,17 @@ class QueryOrderBuilderTest extends \PHPUnit_Framework_TestCase {
         $this->queryOrderObject->setOrderId($orderId);
         $this->assertEquals($orderId, $this->queryOrderObject->orderId);        
     }
+
+    public function test_queryOrderBuilder_setTransactionId() {
+        $orderId = "123456";
+        $this->queryOrderObject->setTransactionId($orderId);
+        $this->assertEquals($orderId, $this->queryOrderObject->orderId);        
+    }
     
     public function test_queryOrderBuilder_setCountryCode() {
         $country = "SE";
         $this->queryOrderObject->setCountryCode($country);
         $this->assertEquals($country, $this->queryOrderObject->countryCode);        
-    }
-    
-    public function test_queryOrderBuilder_setOrderType() {
-        $orderType = \ConfigurationProvider::INVOICE_TYPE;
-        $this->queryOrderObject->setOrderType($orderType);
-        $this->assertEquals($orderType, $this->queryOrderObject->orderType);        
     }
     
     public function test_queryOrderBuilder_queryInvoiceOrder_returns_GetOrdersRequest_with_correct_orderType() {

@@ -30,8 +30,6 @@ class DeliverOrderResult extends WebServiceResponse{
             } elseif (property_exists($response->DeliverOrderEuResult->DeliverOrderResult, "PaymentPlanResultDetails")) {
                 $this->contractNumber = $response->DeliverOrderEuResult->DeliverOrderResult->PaymentPlanResultDetails->ContractNumber;
             }
-
-            $this->orderType = $response->DeliverOrderEuResult->DeliverOrderResult->OrderType;
         }
     }
 }
