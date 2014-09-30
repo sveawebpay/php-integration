@@ -9,8 +9,7 @@ namespace Svea;
  * 
  * (For card and direct bank orders, adding customer information to the order is optional.)
  * 
- * $order->
- *     addCustomerDetails(
+ *     $order->addCustomerDetails(
  *         WebPayItem::individualCustomer()
  *             ->setNationalIdNumber(194605092222) // required for individual customers in SE, NO, DK, FI
  *             ->setInitials("SB")                 // required for individual customers in NL
