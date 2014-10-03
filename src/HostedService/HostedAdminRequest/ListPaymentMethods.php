@@ -27,6 +27,11 @@ class ListPaymentMethods extends HostedRequest {
         parent::__construct($config);
     }
     
+    function setCountryCode( $countryCode ) {
+        $this->countryCode = $countryCode;
+        return $this;
+    }
+    
     protected function validateRequestAttributes() {
         $errors = array();
         $errors = $this->validateCountryCode($this, $errors );

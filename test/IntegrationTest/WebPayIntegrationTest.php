@@ -113,7 +113,12 @@ class WebPayIntegrationTest extends PHPUnit_Framework_TestCase {
     
     /// listPaymentMethods()
     public function test_listPaymentMethods_returns_ListPaymentMethods() {
-        $request = WebPay::listPaymentMethods( Svea\SveaConfig::getDefaultConfig() );
-        $this->assertInstanceOf( "Svea\HostedService\ListPaymentMethods", $request );
-    } 
+        $response = WebPay::listPaymentMethods( Svea\SveaConfig::getDefaultConfig() )
+                ->setCountryCode("SE")
+                ->doRequest()
+        ;
+        print_r( $response );
+        $this->assertEquals( true, $response->accepted );       
+        $this->assertInstanceOf( "Svea\HostedService\ListPaymentMethodsResponse", $response );        
+    }     
 }
