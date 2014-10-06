@@ -27,14 +27,14 @@ class ListPaymentMethods extends HostedRequest {
         parent::__construct($config);
     }
     
+    // setCountryCode needed here, as we don't come here via an OrderBuilder 
     function setCountryCode( $countryCode ) {
         $this->countryCode = $countryCode;
         return $this;
     }
-    
+
     protected function validateRequestAttributes() {
         $errors = array();
-        $errors = $this->validateCountryCode($this, $errors );
         $errors = $this->validateMerchantId($this, $errors);
         return $errors;
     }
@@ -44,14 +44,7 @@ class ListPaymentMethods extends HostedRequest {
             $errors['missing value'] = "merchantId is required, check your ConfigurationProvider credentials.";
         }
         return $errors;
-    }     
-
-    private function validateCountryCode($self, $errors) {
-        if ( null == $this->countryCode ) {
-            $errors['missing value'] = "countryCode is required, use setCountryCode().";
-        }
-        return $errors;
-    }     
+    }        
     
     protected function createRequestXml() {        
         $XMLWriter = new \XMLWriter();
