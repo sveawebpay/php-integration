@@ -45,6 +45,7 @@ class ConfirmTransaction extends HostedRequest {
         return $errors;
     }   
     
+    // this is optional coming through the api, as the orderbuilder deliverCardOrder sets a default capturedate
     private function validateCaptureDate($self, $errors) {
         if (isset($self->captureDate) == FALSE) {                                                        
             $errors['missing value'] = "captureDate is required. Use function setCaptureDate().";

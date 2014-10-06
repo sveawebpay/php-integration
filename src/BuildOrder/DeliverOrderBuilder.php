@@ -47,7 +47,10 @@ class DeliverOrderBuilder extends OrderBuilder {
 
     /** @var string $distributionType -- one of DistributionType::POST, ::EMAIL */
     public $distributionType;
-       
+
+    /** @var string $captureDate -- confirmation date on format "YYYY-MM-DD" */
+    public $captureDate;   
+    
     /**
      * @deprecated 2.0.0 -- use WebPayAdmin::updateOrderRows in order to modify an existing order.
      *
@@ -82,7 +85,20 @@ class DeliverOrderBuilder extends OrderBuilder {
     public function setTransactionId($orderIdAsString) {
         return $this->setOrderId($orderIdAsString);
     }      
-      
+
+    /**
+     * Optional for card orders -- confirmation date on format "YYYY-MM-DD"
+     * 
+     * If no date is given the current date is used per default.
+     * 
+     * @param numeric $orderIdAsString
+     * @return $this
+     */
+    public function setCaptureDate($captureDateAsString) {
+        $this->captureDate = $captureDateAsString;
+        return $this;
+    }        
+
     /**
      * Invoice only, required.
      * @param string DistributionType $distributionTypeAsConst  i.e. DistributionType::POST|DistributionType::EMAIL
@@ -167,12 +183,16 @@ class DeliverOrderBuilder extends OrderBuilder {
         $this->orderType = \ConfigurationProvider::HOSTED_TYPE;
         
         // validation is done in ConfirmTransaction
-        
-        $defaultCaptureDate = explode("T", date('c')); // [0] contains date part
 
+        // if no captureDate set, use today's date as default.
+        if( !isset( $this->captureDate ) ) {
+            $defaultCaptureDate = explode("T", date('c')); // [0] contains date part
+            $this->setCaptureDate = $defaultCaptureDate[0];
+        }
+        
         $confirmTransaction = new HostedService\ConfirmTransaction($this->conf);
         $confirmTransaction->transactionId = $this->orderId;
-        $confirmTransaction->captureDate = $defaultCaptureDate[0];
+        $confirmTransaction->captureDate = $this->captureDate;
         $confirmTransaction->countryCode = $this->countryCode;
         return $confirmTransaction;
     }    
