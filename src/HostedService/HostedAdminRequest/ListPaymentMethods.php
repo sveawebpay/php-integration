@@ -3,21 +3,26 @@ namespace Svea\HostedService;
 
 require_once SVEA_REQUEST_DIR . '/Includes.php';
 
-/**
- * ListPaymentMethods fetches all paymentmethods connected to the given 
- * ConfigurationProvider and country.
- *
+/*
  * @author Kristian Grossman-Madsen
  */
 class ListPaymentMethods extends HostedRequest {
 
-    /**
-     * Usage: create an instance, set all required attributes, then call doRequest().
-     * Required: -
+    /*
+     * Use the WebPay::listPaymentMethods() entrypoint to get an instance of ListPaymentMethods. 
+     * Then provide more information about the transaction and send the request using ListPaymentMethod methods.
+     *    
+     *       $methods = WebPay::listPaymentMethods( $config )
+     *          ->setCountryCode("SE")      // required
+     *          ->doRequest()
+     *       ;
+     *    
+     * Following the ->doRequest call you receive an instance of ListPaymentMethodsResponse.
+     *  
      * @param ConfigurationProvider $config instance implementing ConfigurationProvider
      * @return \Svea\HostedService\ListPaymentMethods
      */
-    function __construct($config) {
+     function __construct($config) {
         $this->method = "getpaymentmethods";
         parent::__construct($config);
     }
@@ -29,6 +34,7 @@ class ListPaymentMethods extends HostedRequest {
     
     protected function validateRequestAttributes() {
         $errors = array();
+        $errors = $this->validateCountryCode($this, $errors );
         $errors = $this->validateMerchantId($this, $errors);
         return $errors;
     }
@@ -40,6 +46,13 @@ class ListPaymentMethods extends HostedRequest {
         return $errors;
     }     
 
+    private function validateCountryCode($self, $errors) {
+        if ( null == $this->countryCode ) {
+            $errors['missing value'] = "countryCode is required, use setCountryCode().";
+        }
+        return $errors;
+    }     
+    
     protected function createRequestXml() {        
         $XMLWriter = new \XMLWriter();
 

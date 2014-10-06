@@ -62,7 +62,9 @@ class ListPaymentMethodsTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals((string)$merchantid, $xmlMessage->merchantid);        
     }
 
-    function test_prepareRequest_missing_merchantId_throws_exception() {
+    
+    // validation ->setCountryCode() & config/merchantId
+    function test_prepareRequest_missing_merchantId_throws_validation_exception() {
 
         $this->setExpectedException(
             'Svea\ValidationException', 
@@ -76,8 +78,19 @@ class ListPaymentMethodsTest extends PHPUnit_Framework_TestCase {
         $this->configObject->conf['credentials'][$countryCode]['auth']['HOSTED']['merchantId'] = null;
         
         $form = $this->listpaymentmethodObject->prepareRequest();       
+    }     
+    
+    function test_prepareRequest_missing_countrycode_throws_validation_exception() {
+
+        $this->setExpectedException(
+            'Svea\InvalidCountryException', 
+            'Invalid or missing Country code'
+        );        
+
+        // clear countryCode
+        $this->listpaymentmethodObject->countryCode = null;
         
-        print_r( $form );
-    }       
+        $form = $this->listpaymentmethodObject->prepareRequest();       
+    }        
 }
 ?>
