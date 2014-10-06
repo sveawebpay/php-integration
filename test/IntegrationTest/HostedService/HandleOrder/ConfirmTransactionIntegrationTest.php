@@ -89,9 +89,9 @@ class ConfirmTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
         );
         
         // Set the below to match the transaction, then run the test.
-        $customerrefno = "clientOrderNumber:2014-06-09T14:02:33 02:00";
-        $transactionId = 583151;
-        $captureDate = "2014-06-09";
+        $clientOrderNumber = "test_createOrder_usePaymentMethodPayment_KORTCERT_1412598382519";
+        $transactionId = 587390;
+        $captureDate = date('c');
                 
         $request = new ConfirmTransaction( Svea\SveaConfig::getDefaultConfig() );
         $request->transactionId = $transactionId;
@@ -100,12 +100,9 @@ class ConfirmTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
         $response = $request->doRequest();     
         
         print_r( $response );
-        $this->assertInstanceOf( "Svea\HostedService\ConfirmTransactionResponse", $response );
-     
-        // if we receive an error from the service, the integration test passes
+        $this->assertInstanceOf( "Svea\HostedService\ConfirmTransactionResponse", $response );     
         $this->assertEquals( 1, $response->accepted );        
-        $this->assertEquals( $customerrefno, $response->customerrefno );  
-
+        $this->assertEquals( $clientOrderNumber, $response->clientOrderNumber );  
     }    
 }
 ?>
