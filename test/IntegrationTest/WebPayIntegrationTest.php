@@ -117,7 +117,7 @@ class WebPayIntegrationTest extends PHPUnit_Framework_TestCase {
                 ->setCountryCode("SE")
                 ->doRequest()
         ;
-        print_r( $response );
+        //print_r( $response );
         $this->assertEquals( true, $response->accepted );       
         $this->assertInstanceOf( "Svea\HostedService\ListPaymentMethodsResponse", $response );        
     }     
