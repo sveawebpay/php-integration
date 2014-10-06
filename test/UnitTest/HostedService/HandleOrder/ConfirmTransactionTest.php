@@ -111,9 +111,9 @@ class ConfirmTransactionTest extends PHPUnit_Framework_TestCase {
 
         $this->setExpectedException(
             'Svea\ValidationException', 
-            '-missing value : countryCode is required. Use function setCountryCode().'
+            '-missing value : CountryCode is required. Use function setCountryCode().'
         );
-        
+       
         $transactionId = 987654;       
         $this->confirmObject->transactionId = $transactionId;
 

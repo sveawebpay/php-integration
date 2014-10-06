@@ -48,8 +48,8 @@ class CreditTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
         );
         
         // Set the below to match the transaction, then run the test.
-        //$customerrefno = 312;
-        $transactionId = 583151;
+        $clientOrderNumber = "test_createOrder_usePaymentMethodPayment_KORTCERT_1412598755795";
+        $transactionId = 587391;
         $amount = 100;
                 
         $request = new CreditTransaction( Svea\SveaConfig::getDefaultConfig() );
@@ -62,7 +62,7 @@ class CreditTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
         
         print_r( $response );
         $this->assertEquals( 1, $response->accepted );        
-        //$this->assertEquals( $customerrefno, $response->customerrefno );  
+        $this->assertEquals( $clientOrderNumber, $response->clientOrderNumber );  
     }    
 }
 ?>
