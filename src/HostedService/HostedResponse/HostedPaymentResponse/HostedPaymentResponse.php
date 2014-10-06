@@ -8,13 +8,18 @@ require_once SVEA_REQUEST_DIR . '/Includes.php';
  */
 class HostedPaymentResponse extends HostedResponse{
 
-    public $transactionId;
-    public $clientOrderNumber;
-    public $paymentMethod;
+    /** @var string $transactionId  -- the order id at Svea */
+    public $transactionId;         
+    /** @var string $clientOrderNumber -- the customer reference number, i.e. order number */
+    public $clientOrderNumber;    
+    /** @var string $paymentMethod */
+    public $paymentMethod;    
+    /** @var string $merchantId -- the merchant id */
     public $merchantId;
-    public $amount;
+    /** @var string $amount -- Total amount including VAT, in minor currency (e.g. SEK 10.50 = 1050) */
+    public $amount;    
+    /** @var string $currency -- ISO 4217 alphabetic, e.g. SEK */
     public $currency;
-
 
     /**
      * HostedPaymentResponse validates the hosted payment response.
