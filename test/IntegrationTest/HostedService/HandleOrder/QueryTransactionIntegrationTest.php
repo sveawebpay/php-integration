@@ -800,7 +800,7 @@ class QueryTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
         //)        
                 
         // Set the below to match the transaction, then run the test.
-        $transactionId = $response->transactionid;
+        $transactionId = $response->transactionId;
 
         //SimpleXMLElement Object
         //(
