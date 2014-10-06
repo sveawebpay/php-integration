@@ -11,8 +11,8 @@ require_once SVEA_REQUEST_DIR . '/Includes.php';
  */
 class CreditTransactionResponse extends HostedAdminResponse{
 
-    /** @var string $customerrefno */
-    public $customerrefno;
+    /** @var string $clientOrderNumber */
+    public $clientOrderNumber;
 
     function __construct($message,$countryCode,$config) {
         parent::__construct($message,$countryCode,$config);
@@ -36,6 +36,6 @@ class CreditTransactionResponse extends HostedAdminResponse{
             $this->setErrorParams( (string)$hostedAdminResponse->statuscode ); 
         }
 
-        $this->customerrefno = (string)$hostedAdminResponse->transaction->customerrefno;
+        $this->clientOrderNumber = (string)$hostedAdminResponse->transaction->customerrefno;
     }
 }

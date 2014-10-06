@@ -57,8 +57,9 @@ class ListPaymentMethodsResponse extends HostedAdminResponse{
             }
         }
         catch( InvalidTypeException $e ) {
-            // assumes that client configuration does not support $type INVOICE
+            // assumes that the client configuration does not support $type INVOICE, so we ignore the exception
         }
+        
         try {
             $clientIdPaymentPlan = $this->config->getClientNumber(\ConfigurationProvider::PAYMENTPLAN_TYPE, $this->countryCode);
             
@@ -67,7 +68,7 @@ class ListPaymentMethodsResponse extends HostedAdminResponse{
             }
         }
         catch( InvalidTypeException $e ) {
-            // assumes that client configuration does not support $type PAYMENTPLAN
+            // assumes that the client configuration does not support $type PAYMENTPLAN, so we ignore the exception
         }
         
         // clean up response

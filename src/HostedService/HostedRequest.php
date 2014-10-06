@@ -34,11 +34,12 @@ abstract class HostedRequest {
      * @throws ValidationException
      */
     public function validateRequest() {
+
+        // validate subclass request required attributes
         $errors = $this->validateRequestAttributes();
         
-        if (isset($this->countryCode) == FALSE) {                                                        
-            $errors['missing value'] = "countryCode is required. Use function setCountryCode().";
-        }
+        // validate countrycode
+        $errors = $this->validateCountryCode($this, $errors );
         
         if (count($errors) > 0) {
             $exceptionString = "";
@@ -49,6 +50,13 @@ abstract class HostedRequest {
             throw new \Svea\ValidationException($exceptionString);
         }    
     }           
+
+    private function validateCountryCode($self, $errors) {
+        if(isset($this->countryCode) == FALSE ) {
+            $errors['missing value'] = 'CountryCode is required. Use function setCountryCode().';                                    
+        }
+        return $errors;
+    }      
     
     /**
      * returns the request fields to post to service

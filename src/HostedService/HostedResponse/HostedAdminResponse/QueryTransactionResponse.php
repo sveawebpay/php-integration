@@ -10,6 +10,10 @@ require_once SVEA_REQUEST_DIR . '/Includes.php';
  * transaction result, they are not authorative after i.e. loweramount has
  * been called on a transaction, see the authorizedamount attribute.
  * 
+ * There may be inconsistencies in how class attributes are capitalized, this is
+ * due to a wish to conform with pre-existing attribute names. Please refer to 
+ * the phpdoc for an authoritative listing of all response attribute names.
+ * 
  * @author Kristian Grossman-Madsen for Svea WebPay
  */
 class QueryTransactionResponse extends HostedAdminResponse{
@@ -17,14 +21,11 @@ class QueryTransactionResponse extends HostedAdminResponse{
     /** @var string $transactionId  -- the order id at Svea */
     public $transactionId;         
 
-    /** @var string $customerrefno -- the customer reference number */
-    public $customerrefno;
-    
-    /** @var string $customerrefno -- alias for customer reference number */    
+    /** @var string $clientOrderNumber -- the customer reference number, i.e. order number */
     public $clientOrderNumber;
     
-    /** @var string $merchantid -- the merchant id */
-    public $merchantid;
+    /** @var string $merchantId -- the merchant id */
+    public $merchantId;
     
     /** @var string $status -- Latest transaction status, one of {AUTHORIZED, CONFIRMED, SUCCESS} */
     public $status;
@@ -56,8 +57,8 @@ class QueryTransactionResponse extends HostedAdminResponse{
     /** @var string $merchantresponsecode -- Last statuscode response returned to merchant */
     public $merchantresponsecode;
     
-    /** @var string $paymentmethod */
-    public $paymentmethod;
+    /** @var string $paymentMethod */
+    public $paymentMethod;
     
     /** @var NumberedOrderRow[] $numberedOrderRows  array of NumberedOrderRows w/set Name, Description, ArticleNumber, AmountExVat, VatPercent, Quantity and Unit, rowNumber */
     public $numberedOrderRows;
@@ -68,17 +69,17 @@ class QueryTransactionResponse extends HostedAdminResponse{
     /** @var string $capturedate -- The date the transaction was captured, e.g. 2011-09-27 16:55:01.21 */ 
     public $capturedate;
 
-    /** @var string $subscriptionid */
-    public $subscriptionid;
+    /** @var string $subscriptionId */
+    public $subscriptionId;
     
     /** @var string $subscriptiontype */
     public $subscriptiontype;
 
-    /** @var string $cardtype */
-    public $cardtype;
+    /** @var string $cardType */
+    public $cardType;
     
-    /** @var string $maskedcardno */
-    public $maskedcardno;
+    /** @var string $maskedCardNumber */
+    public $maskedCardNumber;
     
     /** @var string $eci -- Enrollment status from MPI. If the card is 3Dsecure enabled or not. */
     public $eci;    
@@ -86,17 +87,17 @@ class QueryTransactionResponse extends HostedAdminResponse{
     /** @var string $mdstatus -- Value calculated from eci as requested by acquiring bank. */
     public $mdstatus;
     
-    /** @var string $expiryyear -- Expire year of the card */
-    public $expiryyear;
+    /** @var string $expiryYear -- Expire year of the card */
+    public $expiryYear;
     
-    /** @var string $expirymonth -- Expire month of the month */
-    public $expirymonth;
+    /** @var string $expiryMonth -- Expire month of the month */
+    public $expiryMonth;
     
     /** @var string $chname -- Cardholder name as entered by cardholder */
     public $chname;
     
-    /** @var string $authcode -- EDB authorization code */
-    public $authcode; 
+    /** @var string $authCode -- EDB authorization code */
+    public $authCode; 
     
     function __construct($message,$countryCode,$config) {
         parent::__construct($message,$countryCode,$config);
@@ -127,9 +128,8 @@ class QueryTransactionResponse extends HostedAdminResponse{
                 
             $this->transactionId = (string)$hostedAdminResponse->transaction['id'];
             
-            $this->customerrefno = (string)$hostedAdminResponse->transaction->customerrefno;           
             $this->clientOrderNumber = (string)$hostedAdminResponse->transaction->customerrefno; // to confirm with HostedPaymentResponse
-            $this->merchantid = (string)$hostedAdminResponse->transaction->merchantid;
+            $this->merchantId = (string)$hostedAdminResponse->transaction->merchantid;
             $this->status = (string)$hostedAdminResponse->transaction->status;
             $this->amount = (string)$hostedAdminResponse->transaction->amount;
             $this->currency = (string)$hostedAdminResponse->transaction->currency;
@@ -140,19 +140,19 @@ class QueryTransactionResponse extends HostedAdminResponse{
             $this->creditstatus = (string)$hostedAdminResponse->transaction->creditstatus;
             $this->creditedamount = (string)$hostedAdminResponse->transaction->creditedamount;
             $this->merchantresponsecode = (string)$hostedAdminResponse->transaction->merchantresponsecode;
-            $this->paymentmethod = (string)$hostedAdminResponse->transaction->paymentmethod;
+            $this->paymentMethod = (string)$hostedAdminResponse->transaction->paymentmethod;
             $this->callbackurl = (string)$hostedAdminResponse->transaction->callbackurl;            
             $this->capturedate = (string)$hostedAdminResponse->transaction->capturedate;
-            $this->subscriptionid = (string)$hostedAdminResponse->transaction->subscriptionid;
+            $this->subscriptionId = (string)$hostedAdminResponse->transaction->subscriptionid;
             $this->subscriptiontype = (string)$hostedAdminResponse->transaction->subscriptiontype;
-            $this->cardtype = (string)$hostedAdminResponse->transaction->cardtype;
-            $this->maskedcardno = (string)$hostedAdminResponse->transaction->maskedcardno;                    
+            $this->cardType = (string)$hostedAdminResponse->transaction->cardtype;
+            $this->maskedCardNumber = (string)$hostedAdminResponse->transaction->maskedcardno;                    
             $this->eci = (string)$hostedAdminResponse->transaction->eci;    
             $this->mdstatus = (string)$hostedAdminResponse->transaction->mdstatus;
-            $this->expiryyear = (string)$hostedAdminResponse->transaction->expiryyear;
-            $this->expirymonth = (string)$hostedAdminResponse->transaction->expirymonth;
+            $this->expiryYear = (string)$hostedAdminResponse->transaction->expiryyear;
+            $this->expiryMonth = (string)$hostedAdminResponse->transaction->expirymonth;
             $this->chname = (string)$hostedAdminResponse->transaction->chname;
-            $this->authcode = (string)$hostedAdminResponse->transaction->authcode;            
+            $this->authCode = (string)$hostedAdminResponse->transaction->authcode;            
                        
             //SimpleXMLElement Object
             //(

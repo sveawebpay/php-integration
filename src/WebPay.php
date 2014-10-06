@@ -36,7 +36,7 @@ The WebPay and WebPayAdmin entrypoint methods are built as a fluent API so you c
 The Svea WebPay PHP integration package is developed and tested using NetBeans IDE 7.3.1 with the phpunit 3.7.24 plugin.
  *
  * @api
- * @version 2.2.1
+ * @version 2.2.2
  * @package WebPay
  *
  * @author Anneli Halld'n, Daniel Brolund, Kristian Grossman-Madsen for Svea WebPay
@@ -215,18 +215,22 @@ class WebPay {
     }
 
     /**
-     * The WebPay::listPaymentMethods method is used to fetch all available paymentmethods for a given ConfigurationProvider and country.
+     * The WebPay::listPaymentMethods method is used to fetch all available paymentmethods configured for a given country.
      *
-     * Use the WebPayAdmin::listPaymentMethods() entrypoint to get an instance of
+     * Use the WebPay::listPaymentMethods() entrypoint to get an instance of
      * ListPaymentMethods. Then provide more information about the transaction and
      * send the request using ListPaymentMethod methods.
      *
+     *   $methods = WebPay::listPaymentMethods( $config )
+     *      ->setCountryCode("SE")      // required
+     *      ->doRequest();
+     * 
      * Following the ->doRequest call you receive an instance of ListPaymentMethodsResponse.
      *
      * @see \Svea\HostedService\ListPaymentMethods \Svea\HostedService\ListPaymentMethods
      * @see \Svea\HostedService\ListPaymentMethodsResponse \Svea\HostedService\ListPaymentMethodsResponse
      *
-     * @param ConfigurationProvider $configs
+     * @param ConfigurationProvider $config
      * @return Svea\HostedService\ListPaymentMethods
      */
     static function listPaymentMethods($config) {

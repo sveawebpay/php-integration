@@ -9,10 +9,10 @@ require_once SVEA_REQUEST_DIR . '/Includes.php';
  * 
  * @author Kristian Grossman-Madsen for Svea WebPay
  */
-class AnnulTransactionResponse extends HostedAdminResponse{
+class AnnulTransactionResponse extends HostedAdminResponse {
 
-    /** @var string $customerrefno */
-    public $customerrefno;
+    /** @var string $clientOrderNumber */
+    public $clientOrderNumber;
     
     function __construct($message,$countryCode,$config) {
         parent::__construct($message,$countryCode,$config);
@@ -36,6 +36,6 @@ class AnnulTransactionResponse extends HostedAdminResponse{
             $this->setErrorParams( (string)$hostedAdminResponse->statuscode ); 
         }
 
-        $this->customerrefno = (string)$hostedAdminResponse->transaction->customerrefno;
+        $this->clientOrderNumber = (string)$hostedAdminResponse->transaction->customerrefno;    
     }
 }

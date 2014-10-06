@@ -60,24 +60,6 @@ class ListPaymentMethodsTest extends PHPUnit_Framework_TestCase {
 
         $this->assertEquals( "getpaymentmethods", $xmlMessage->getName() );   // root node        
         $this->assertEquals((string)$merchantid, $xmlMessage->merchantid);        
-    }
-
-    function test_prepareRequest_missing_merchantId_throws_exception() {
-
-        $this->setExpectedException(
-            'Svea\ValidationException', 
-            '-missing value : merchantId is required, check your ConfigurationProvider credentials.'
-        );        
-        
-        $countryCode = "SE";
-        $this->listpaymentmethodObject->countryCode = $countryCode;
-        
-        // hack to clear merchantid
-        $this->configObject->conf['credentials'][$countryCode]['auth']['HOSTED']['merchantId'] = null;
-        
-        $form = $this->listpaymentmethodObject->prepareRequest();       
-        
-        print_r( $form );
     }       
 }
 ?>

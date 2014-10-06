@@ -49,9 +49,9 @@ class RecurTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
     function test_manual_recur_transaction_amount() {
         
         // Stop here and mark this test as incomplete.
-        $this->markTestIncomplete(
-          'skeleton for manual test of recur transaction amount'
-        );
+//        $this->markTestIncomplete(
+//          'skeleton for manual test of recur transaction amount'
+//        );
         
         // 1. go to https://test.sveaekonomi.se/webpay-admin/admin/start.xhtml 
         // 2. go to verktyg -> betalning
@@ -64,23 +64,23 @@ class RecurTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
         // 6. enter the received subscription id, etc. below and run the test
 
         // Set the below to match the original transaction, then run the test.
-        $paymentmethod = "KORTCERT";  
-        $merchantid = 1130;  
+        $paymentMethod = "KORTCERT";  
+        $merchantId = 1130;  
         $currency = "SEK";  
-        $cardtype = "VISA";  
-        $maskedcardno = "444433xxxxxx1100";
-        $expirymonth = 02;  
-        $expiryyear = 15;  
-        $subscriptionid = 3036; 
+        $cardType = "VISA";  
+        $maskedCardNumber = "444433xxxxxx1100";
+        $expiryMonth = 02;  
+        $expiryYear = 15;  
+        $subscriptionId = 3036; 
 
         // the below applies to the recur request, and may differ from the original transaction
         $new_amount = "2500"; // in minor currency  
-        $new_customerrefno = "test_recur_".date('c');  
+        $new_clientOrderNumber = "test_recur_".date('c');  
 
         // below is actual test, shouldn't need to change it
         $request = new RecurTransaction( Svea\SveaConfig::getDefaultConfig() );
         $request->subscriptionId = $subscriptionId;
-        $request->customerRefNo = $new_customerrefno;
+        $request->customerRefNo = $new_clientOrderNumber;
         $request->amount = $new_amount;        
         $request->currency = $currency;
 
@@ -89,20 +89,20 @@ class RecurTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
         
         $this->assertInstanceOf( "Svea\HostedService\RecurTransactionResponse", $response );
         
-        print_r($response);                
+        //print_r($response);                
         $this->assertEquals( 1, $response->accepted );  
         
-        $this->assertEquals( "CARD", $response->paymentmethod );    // CARD is alias for KORTCERT, used by webservice...
-        $this->assertEquals( $merchantid, $response->merchantid );  
+        $this->assertEquals( "CARD", $response->paymentMethod );    // CARD is alias for KORTCERT, and this alias is returned by webservice
+        $this->assertEquals( $merchantId, $response->merchantId );  
         $this->assertEquals( $currency, $response->currency );  
-        $this->assertEquals( $cardtype, $response->cardtype );  
-        $this->assertEquals( $maskedcardno, $response->maskedcardno );  
-        $this->assertEquals( $expirymonth, $response->expirymonth );  
-        $this->assertEquals( $expiryyear, $response->expiryyear );  
-        $this->assertEquals( $subscriptionid, $response->subscriptionid );  
+        $this->assertEquals( $cardType, $response->cardType );  
+        $this->assertEquals( $maskedCardNumber, $response->maskedCardNumber );  
+        $this->assertEquals( $expiryMonth, $response->expiryMonth );  
+        $this->assertEquals( $expiryYear, $response->expiryYear );  
+        $this->assertEquals( $subscriptionId, $response->subscriptionId );  
 
-        $this->assertObjectHasAttribute( "transactionid", $response );
-        $this->assertEquals( $new_customerrefno, $response->customerrefno );  
+        $this->assertObjectHasAttribute( "transactionId", $response );
+        $this->assertEquals( $new_clientOrderNumber, $response->clientOrderNumber );  
         $this->assertEquals( $new_amount, $response->amount );         
     }    
 }
