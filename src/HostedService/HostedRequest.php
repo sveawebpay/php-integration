@@ -53,7 +53,7 @@ abstract class HostedRequest {
 
     private function validateCountryCode($self, $errors) {
         if(isset($this->countryCode) == FALSE ) {
-            $errors['missing value'] = "countryCode is required, use setCountryCode().";
+            $errors['missing value'] = 'CountryCode is required. Use function setCountryCode().';                                    
         }
         return $errors;
     }      

@@ -35,16 +35,8 @@ class ListPaymentMethods extends HostedRequest {
 
     protected function validateRequestAttributes() {
         $errors = array();
-        $errors = $this->validateMerchantId($this, $errors);
         return $errors;
-    }
-
-    private function validateMerchantId($self, $errors) {
-        if ( null == $self->config->getMerchantId( \ConfigurationProvider::HOSTED_TYPE, $this->countryCode) ) {
-            $errors['missing value'] = "merchantId is required, check your ConfigurationProvider credentials.";
-        }
-        return $errors;
-    }        
+    }      
     
     protected function createRequestXml() {        
         $XMLWriter = new \XMLWriter();

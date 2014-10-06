@@ -173,7 +173,33 @@ class WebPayUnitTest extends \PHPUnit_Framework_TestCase {
         // setCountryCode
         // setIdentifier
         
-        /// TODO listPaymentMethods
-        // setCountryCode
-        
+        /// listPaymentMethods
+        function test_validates_all_required_methods_for_listPaymentMethods() {
+            $order = WebPay::listPaymentMethods(Svea\SveaConfig::getDefaultConfig())
+                        ->setCountryCode("SE")
+            ;
+            try {
+                $order->prepareRequest();
+            }
+            catch (Exception $e){
+                // fail on validation error
+                $this->fail( "Unexpected validation exception: " . $e->getMessage() );
+            }
+        }
+
+        function test_validates_missing_required_method_for_listPaymentMethods_setCountryCode() {
+            $order = WebPay::listPaymentMethods(Svea\SveaConfig::getDefaultConfig())
+                        //->setCountryCode("SE")
+            ;
+            
+            $this->setExpectedException(
+                'Svea\ValidationException', 
+                '-missing value : CountryCode is required. Use function setCountryCode().'                
+            );   
+            
+            $order->prepareRequest();
+
+            // fail if validation passes, i.e. no exception was thrown                 
+            $this->fail( "Expected validation exception not thrown." );            
+        }             
 }
