@@ -11,21 +11,30 @@ require_once SVEA_REQUEST_DIR . '/Includes.php';
  */
 class RecurTransactionResponse extends HostedAdminResponse{
 
-    public $transactionid;
-    /** string $customerrefno */
-    public $customerrefno;
-    public $paymentmethod;
-    public $merchantid;
+    /** @var string $transactionId  -- the order id at Svea */
+    public $transactionId;
+    /** @var string $clientOrderNumber -- the customer reference number, i.e. order number */
+    public $clientOrderNumber;
+    /** @var string $paymentMethod */
+    public $paymentMethod;
+    /** @var string $merchantId -- the merchant id */
+    public $merchantId;    
     /** string $amount  total amount in minor currency */
     public $amount;
     public $currency;
-    public $cardtype;
-    public $maskedcardno;
-    public $expirymonth;
-    public $expiryyear;
-    public $authcode;
-    public $subscriptionid;
-        
+    /** @var string $cardType */
+    public $cardType;
+    /** @var string $maskedCardNumber */
+    public $maskedCardNumber;
+    /** @var string $expiryMonth -- Expire month of the month */
+    public $expiryMonth;
+    /** @var string $expiryYear -- Expire year of the card */
+    public $expiryYear;
+    /** @var string $authCode -- EDB authorization code */
+    public $authCode; 
+    /** @var string $subscriptionId */
+    public $subscriptionId;
+            
     function __construct($message,$countryCode,$config) {
         parent::__construct($message,$countryCode,$config);
     }
@@ -48,18 +57,18 @@ class RecurTransactionResponse extends HostedAdminResponse{
             $this->setErrorParams( (string)$hostedAdminResponse->statuscode ); 
         }
 
-        $this->transactionid = (string)$hostedAdminResponse->transaction['id'];
+        $this->transactionId = (string)$hostedAdminResponse->transaction['id'];
         
-        $this->customerrefno = (string)$hostedAdminResponse->transaction->customerrefno;
-        $this->paymentmethod = (string)$hostedAdminResponse->transaction->paymentmethod;
-        $this->merchantid = (string)$hostedAdminResponse->transaction->merchantid;
+        $this->clientOrderNumber = (string)$hostedAdminResponse->transaction->customerrefno;
+        $this->paymentMethod = (string)$hostedAdminResponse->transaction->paymentmethod;
+        $this->merchantId = (string)$hostedAdminResponse->transaction->merchantid;
         $this->amount = (string)$hostedAdminResponse->transaction->amount;
         $this->currency = (string)$hostedAdminResponse->transaction->currency;
-        $this->cardtype = (string)$hostedAdminResponse->transaction->cardtype;
-        $this->maskedcardno = (string)$hostedAdminResponse->transaction->maskedcardno;
-        $this->expirymonth = (string)$hostedAdminResponse->transaction->expirymonth;
-        $this->expiryyear = (string)$hostedAdminResponse->transaction->expiryyear;
-        $this->authcode = (string)$hostedAdminResponse->transaction->authcode;
-        $this->subscriptionid = (string)$hostedAdminResponse->transaction->subscriptionid;
+        $this->cardType = (string)$hostedAdminResponse->transaction->cardtype;
+        $this->maskedCardNumber = (string)$hostedAdminResponse->transaction->maskedcardno;
+        $this->expiryMonth = (string)$hostedAdminResponse->transaction->expirymonth;
+        $this->expiryYear = (string)$hostedAdminResponse->transaction->expiryyear;
+        $this->authCode = (string)$hostedAdminResponse->transaction->authcode;
+        $this->subscriptionId = (string)$hostedAdminResponse->transaction->subscriptionid;
     }
 }
