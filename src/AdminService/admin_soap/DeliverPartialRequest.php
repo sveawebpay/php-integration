@@ -13,7 +13,7 @@ class DeliverPartialRequest {
      * @param Authentication $authentication
      * @param string $invoiceDistributionType
      * @param OrderToDeliver $orderToDeliver
-     * @param numeric[] $orderRowNumbers
+     * @param string[] $orderRowNumbers
      */
     function __construct( $authentication, $invoiceDistributionType, $orderToDeliver, $orderRowNumbers ) {
         

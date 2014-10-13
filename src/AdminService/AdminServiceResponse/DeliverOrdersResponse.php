@@ -8,22 +8,22 @@ namespace Svea\AdminService;
  */
 class DeliverOrdersResponse extends AdminServiceResponse {
  
-    /** @var numeric $clientId */
+    /** @var string $clientId */
     public $clientId;
     
     /** @var float $amount  (set iff accepted) the amount delivered with this request */
     public $amount;
 
-    /** @var numeric $invoiceId  (set iff accepted, orderType Invoice)  the invoice id for the delivered order */
+    /** @var string $invoiceId  (set iff accepted, orderType Invoice)  the invoice id for the delivered order */
     public $invoiceId;
 
-    /** @var numeric $contractNumber  (set iff accepted, orderType PaymentPlan)  the contract number for the delivered order */
+    /** @var string $contractNumber  (set iff accepted, orderType PaymentPlan)  the contract number for the delivered order */
     public $contractNumber;
     
     /** @var string $orderType */
     public $orderType;
 
-    /** @var numeric $orderId */
+    /** @var string $orderId */
     public $orderId;   
     
     function __construct($message) {
