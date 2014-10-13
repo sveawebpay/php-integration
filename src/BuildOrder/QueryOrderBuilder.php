@@ -36,7 +36,7 @@ class QueryOrderBuilder {
 
     /**
      * Required for invoice or part payment orders -- use the order id (transaction id) recieved with the createOrder response.
-     * @param numeric $orderIdAsString
+     * @param string $orderIdAsString
      * @return $this
      */
     public function setOrderId($orderIdAsString) {
@@ -49,7 +49,7 @@ class QueryOrderBuilder {
      * 
      * This is an alias for setOrderId().
      * 
-     * @param numeric $orderIdAsString
+     * @param string $orderIdAsString
      * @return $this
      */
     public function setTransactionId($orderIdAsString) {

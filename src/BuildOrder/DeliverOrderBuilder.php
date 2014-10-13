@@ -42,7 +42,7 @@ require_once SVEA_REQUEST_DIR . '/Includes.php';
  */
 class DeliverOrderBuilder extends OrderBuilder {
 
-    /** @var numeric $orderId  order id/transaction id as returned in the createOrder request response,  */
+    /** @var string $orderId  order id/transaction id as returned in the createOrder request response,  */
     public $orderId;   
 
     /** @var string $distributionType -- one of DistributionType::POST, ::EMAIL */
@@ -66,7 +66,7 @@ class DeliverOrderBuilder extends OrderBuilder {
 
     /**
      * Required for invoice or part payment orders -- use the order id (transaction id) recieved with the createOrder response.
-     * @param numeric $orderIdAsString
+     * @param string $orderIdAsString
      * @return $this
      */
     public function setOrderId($orderIdAsString) {
@@ -79,7 +79,7 @@ class DeliverOrderBuilder extends OrderBuilder {
      * 
      * This is an alias for setOrderId().
      * 
-     * @param numeric $orderIdAsString
+     * @param string $orderIdAsString
      * @return $this
      */
     public function setTransactionId($orderIdAsString) {
@@ -91,7 +91,7 @@ class DeliverOrderBuilder extends OrderBuilder {
      * 
      * If no date is given the current date is used per default.
      * 
-     * @param numeric $orderIdAsString
+     * @param string $orderIdAsString
      * @return $this
      */
     public function setCaptureDate($captureDateAsString) {

@@ -19,7 +19,7 @@ class RecurTransaction extends HostedRequest {
     /** @var string $customerRefNo  Required. This is the new unique customer reference number for the resulting recur transaction. */
     public $customerRefNo;
     
-    /** @var numeric $amount  Required. Use minor currency (i.e. 1 SEK => 100 in minor currency) */
+    /** @var string $amount  Required. Use minor currency (i.e. 1 SEK => 100 in minor currency) */
     public $amount;
     
     /** @var string $currency  Optional. */

@@ -11,7 +11,7 @@ class GetOrdersResponse extends AdminServiceResponse {
     // phpdoc attributes below takes its info from admin service api Order structure
     /** @var string $changedDate -- Date when order status was changed, e.g when order was delivered. */
     public $changedDate;
-    /** @var numeric $clientId -- Id that identifies a client in sveawebpay system */
+    /** @var string $clientId -- Id that identifies a client in sveawebpay system */
     public $clientId;
     /** @var string $clientOrderId -- Order number from client's ordersystem */
     public $clientOrderId;
@@ -29,7 +29,7 @@ class GetOrdersResponse extends AdminServiceResponse {
     /** @var CompanyCustomer|IndividualCustomer $customer -- customer identity as associated with the order by Svea, also Shipping address. */
     public $customer;
     
-    /** @var numeric $customerId -- Customer id that is created by SveaWebPay system. */
+    /** @var string $customerId -- Customer id that is created by SveaWebPay system. */
     public $customerId;
     /** @var string $customerReference -- Customer Reference. (Gets printed on the invoice.)*/
     public $customerReference;
@@ -50,9 +50,9 @@ class GetOrdersResponse extends AdminServiceResponse {
     /** @var string $orderType -- one of {Invoice,PaymentPlan} */
     public $orderType;
     
-    /** @var numeric $paymentPlanDetailsContractLengthMonths */
+    /** @var string $paymentPlanDetailsContractLengthMonths */
     public $paymentPlanDetailsContractLengthMonths;
-    /** @var numeric $paymentPlanDetailsContractContractNumber -- Contract number of a specific contract. */
+    /** @var string $paymentPlanDetailsContractContractNumber -- Contract number of a specific contract. */
     public $paymentPlanDetailsContractNumber;
     
     /** @var string $pendingReasonsPendingType -- one of {SMSOnHighAmount,UseOfDeliveryAddress} */
@@ -60,7 +60,7 @@ class GetOrdersResponse extends AdminServiceResponse {
     /** @var string $pendingReasonsCreatedDate */
     public $pendingReasonsCreatedDate;      
     
-    /** @var numeric $orderId -- Unique Id for the created order. Used for any further order webservice requests. */
+    /** @var string $orderId -- Unique Id for the created order. Used for any further order webservice requests. */
     public $orderId;
     /** @var boolean $sveaWillBuy -- Describes whether SveaWebPay will buy the order or just administrate it */
     public $sveaWillBuy;

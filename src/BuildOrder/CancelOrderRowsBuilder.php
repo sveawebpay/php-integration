@@ -60,7 +60,7 @@ class CancelOrderRowsBuilder {
 
     /**
      * Required for invoice or part payment orders -- use the order id (transaction id) recieved with the createOrder response.
-     * @param numeric $orderIdAsString
+     * @param string $orderIdAsString
      * @return $this
      */
     public function setOrderId($orderIdAsString) {
@@ -73,7 +73,7 @@ class CancelOrderRowsBuilder {
      * 
      * This is an alias for setOrderId().
      * 
-     * @param numeric $orderIdAsString
+     * @param string $orderIdAsString  
      * @return $this
      */
     public function setTransactionId($orderIdAsString) {
@@ -97,7 +97,7 @@ class CancelOrderRowsBuilder {
 
     /**
      * Required - add a row number to cancel
-     * @param numeric $rowNumber
+     * @param int $rowNumber
      * @return $this
      */
     public function setRowToCancel( $rowNumber ) {

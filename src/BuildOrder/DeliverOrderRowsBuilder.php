@@ -48,7 +48,7 @@ class DeliverOrderRowsBuilder {
     /** @var ConfigurationProvider $conf  */
     public $conf;
 
-    /** @var numeric $orderId  order id/transaction id as returned in the createOrder request response,  */
+    /** @var string $orderId  order id/transaction id as returned in the createOrder request response,  */
     public $orderId;   
     
     /** @var string $countryCode */
@@ -87,7 +87,7 @@ class DeliverOrderRowsBuilder {
     /**
      * Required -- use the order id (transaction id) received with the createOrder response.
      * 
-     * @param numeric $orderIdAsString
+     * @param string $orderIdAsString
      * @return $this
      */
     public function setOrderId($orderIdAsString) {
@@ -100,7 +100,7 @@ class DeliverOrderRowsBuilder {
      * 
      * This is an alias for setOrderId().
      * 
-     * @param numeric $orderIdAsString
+     * @param string $orderIdAsString
      * @return $this
      */
     public function setTransactionId($orderIdAsString) {
@@ -129,7 +129,7 @@ class DeliverOrderRowsBuilder {
      * For invoice orders, the serverside order rows is updated after a deliverOrderRows request. 
      * Note that for Card and  orders the serverside order rows will not be updated.
      * 
-     * @param numeric $rowNumber
+     * @param string $rowNumber
      * @return $this
      */
     public function setRowToDeliver( $rowNumber ) {

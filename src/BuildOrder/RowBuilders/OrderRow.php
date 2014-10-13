@@ -49,7 +49,7 @@ class OrderRow {
      * The integration package supports fractions input at any precision, but 
      * when sending the request to Svea numbers are rounded to two decimal places.
      * 
-     * @param numeric $quantityAsFloat
+     * @param string $quantityAsFloat
      * @return $this
      */
     public function setQuantity($quantityAsNumeric) {
@@ -69,7 +69,7 @@ class OrderRow {
         $this->unit = $unitAsString;
         return $this;
     }
-    /**@var string */
+    /**@var string $unit */
     public $unit;
 
     /**
