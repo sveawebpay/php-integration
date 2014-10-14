@@ -44,12 +44,38 @@ The Svea WebPay PHP integration package is developed and tested using NetBeans I
 class WebPay {
 
     /**
-     * createOrder  -- create order and pay via invoice, payment plan, card, or direct bank payment methods
+     * Use WebPay::createOrder() to create an order using invoice, payment plan, card, or direct bank payment methods.
      *
-     * See the CreateOrderBuilder class for more info on methods used to specify order contents
-     * and chosing payment type, followed by sending the request to Svea and parsing the response.
+     * See the CreateOrderBuilder class for more info on methods used to specify the order builder contents
+     * and chosing a payment method to use, followed by sending the request to Svea and parsing the response.
      *
-     * @return Svea\CreateOrderBuilder
+     * Invoice and Payment plan orders will perform a synchronous payment on doRequest(), and will return a response 
+     * object immediately.
+     * 
+     * Card, Direct bank, and other hosted methods accessed via PayPage are asynchronous. They provide an html form 
+     * containing a formatted message to send to Svea, which in turn will send a request response to a given return url,
+     * where the response can be parsed using the SveaResponse class.
+     * 
+     *      $order = WebPay::createOrder($config)
+     *          ->addOrderRow( $orderrow )          // required, see WebPayItem::orderRow
+     *          ->addFee( $shippingfee )            // optional, see WebPayItem for invoice, shipping fee
+     *          ->addDiscount( $discount )          // optional, see WebPayItem for fixed, relative discount
+     *          ->addCustomerDetails( $customer )   // required for invoice and payment plan payments, see WebPayItem for individual, company id.
+     *          ->setCountryCode("SE")              // required
+     *          ->setOrderDate(date('c'))           // required for invoice and payment plan payments
+     *          ->setCurrency("SEK")                // required for card payment, direct payment and PayPage payment.
+     *          ->setClientOrderNumber("A123456")   // required for card payment, direct payment, PaymentMethod payment and PayPage payments.
+     *          ->setCustomerReference("att: kgm")  // optional
+     *      ;
+     * 
+     * @see \Svea\OrderRow \Svea\OrderRow
+     * @see \Svea\InvoiceFee \Svea\InvoiceFee
+     * @see \Svea\ShippingFee \Svea\ShippingFee
+     * @see \Svea\FixedDiscount \Svea\FixedDiscount
+     * @see \Svea\Relativeiscount \Svea\RelativeDiscount
+     * @see \Svea\IndividualCustomer \Svea\IndividualCustomer
+     * @see \Svea\CompanyCustomer \Svea\CompanyCustomer
+     * @return \Svea\CreateOrderBuilder
      * @param ConfigurationProvider $config  instance implementing ConfigurationProvider Interface
      * @throws Exception
      *
