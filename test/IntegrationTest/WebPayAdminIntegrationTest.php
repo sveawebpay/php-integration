@@ -185,10 +185,6 @@ class WebPayAdminIntegrationTest extends PHPUnit_Framework_TestCase {
         $this->assertInstanceOf ("Svea\AdminService\DeliverOrderRowsRequest", $request );
     }    
     
-    
-    
-    
-
     /// queryOrder
     //queryInvoiceOrder one row, two rows    
     public function test_queryOrder_queryInvoiceOrder_single_order_row_with_invoice_fee_and_shipping_fee() {
@@ -314,7 +310,7 @@ class WebPayAdminIntegrationTest extends PHPUnit_Framework_TestCase {
                 
         $queryResponse = $queryOrderBuilder->queryInvoiceOrder()->doRequest();         
         
-        print_r( $queryResponse);
+        //print_r( $queryResponse);
         $this->assertEquals(1, $queryResponse->accepted);    
                 
         // assert that order rows are the same 

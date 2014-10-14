@@ -5,7 +5,7 @@ require_once $root . '/../../../src/Includes.php';
 require_once $root . '/../../TestUtil.php';
 
 /**
- * CreateOrderBuilder test holds all tests for how to build orders for diverse
+ * CreateOrderBuilderIntegrationTest holds all tests for how to build orders for diverse
  * payment methods.
  * 
  * @author Kristian Grossman-Madsen for Svea WebPay

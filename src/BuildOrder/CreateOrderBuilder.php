@@ -7,19 +7,14 @@ require_once SVEA_REQUEST_DIR . '/Includes.php';
 /**
  * CreateOrderBuilder collects and prepares order data to be sent using one of Svea's payment methods.
  * 
- * Set all required order attributes in a CreateOrderBuilder instance by using the 
- * OrderBuilder setAttribute() methods. Instance methods can be chained together, as 
- * they return the instance itself in a fluent manner.
+ * Add order row items, fees and discounts along with customer information details to the order builder instance, 
+ * and set all required order attributes using the order builder methods. Finish by selecting which payment method
+ * to use.
  * 
- * Finish setting order attributes by chosing a payment method using one of the
- * usePaymentMethod() methods below. 
- * 
- * You can then go on specifying any payment method specific settings, using methods provided by the 
- * returned payment request class.
+ * You can then go on specifying any payment method specific settings, using the methods provided by the 
+ * payment method request class.
  *
- * The Invoice and Payment plan payment methods will perform a synchronous payment request and immediately return a response.  
- * The Card, Direct bank, and hosted methods via PayPage are asynchronous. These will return an html form containing a 
- * formatted message to send to Svea, which in turn sends a response to a given return url.
+ * The order builder and request class instance methods can be chained together in a fluent manner.
  * 
  * @author Kristian Grossman-Madsen, Anneli Halld'n, Daniel Brolund for Svea Webpay
  */

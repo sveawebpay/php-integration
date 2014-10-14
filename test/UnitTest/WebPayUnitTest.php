@@ -29,7 +29,7 @@ class WebPayUnitTest extends \PHPUnit_Framework_TestCase {
                                 ->setNationalIdNumber("4605092222")
                         )
                         ->setCountryCode("SE")
-                        ->setOrderDate('c')
+                        ->setOrderDate(date('c'))
             ;
 
             // prepareRequest() validates the order and throws SveaWebPayException on validation failure
@@ -56,7 +56,7 @@ class WebPayUnitTest extends \PHPUnit_Framework_TestCase {
                                 ->setNationalIdNumber("4605092222")
                         )
                         ->setCountryCode("SE")
-                        ->setOrderDate('c')
+                        ->setOrderDate(date('c'))
             ;
 
             // prepareRequest() validates the order and throws SveaWebPayException on validation failure
@@ -84,7 +84,7 @@ class WebPayUnitTest extends \PHPUnit_Framework_TestCase {
                         //        ->setNationalIdNumber("4605092222")
                         //)
                         ->setCountryCode("SE")
-                        ->setOrderDate('c')
+                        ->setOrderDate(date('c'))
             ;
 
             // prepareRequest() validates the order and throws SveaWebPayException on validation failure
@@ -112,7 +112,7 @@ class WebPayUnitTest extends \PHPUnit_Framework_TestCase {
                                 ->setNationalIdNumber("4605092222")
                         )
                         //->setCountryCode("SE")
-                        ->setOrderDate('c')
+                        ->setOrderDate(date('c'))
             ;
 
             // prepareRequest() validates the order and throws SveaWebPayException on validation failure
@@ -140,7 +140,7 @@ class WebPayUnitTest extends \PHPUnit_Framework_TestCase {
                                 ->setNationalIdNumber("4605092222")
                         )
                         ->setCountryCode("SE")
-                        //->setOrderDate('c')
+                        //->setOrderDate(date('c'))
             ;
 
             // prepareRequest() validates the order and throws SveaWebPayException on validation failure
