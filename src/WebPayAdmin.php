@@ -36,7 +36,7 @@ The WebPay and WebPayAdmin entrypoint methods are built as a fluent API so you c
 The Svea WebPay PHP integration package is developed and tested using NetBeans IDE 7.3.1 with the phpunit 3.7.24 plugin.
  *
  * @api
- * @version 2.2.2
+ * @version 2.2.3
  * @package WebPay
  *
  * @author Anneli Halld'n, Daniel Brolund, Kristian Grossman-Madsen for Svea WebPay
@@ -44,19 +44,24 @@ The Svea WebPay PHP integration package is developed and tested using NetBeans I
 class WebPayAdmin {
 
     /**
-     * Cancel an undelivered/unconfirmed order. Supports Invoice, PaymentPlan
-     * and Card orders. (For Direct Bank orders, see CreditOrder instead.)
+     * The WebPayAdmin::queryOrder() entrypoint method is used to cancel an order with Svea, 
+     * that has not yet been delivered (invoice, payment plan) or been confirmed (card).
+     * 
+     * Supports Invoice, Payment Plan and Card orders. For Direct Bank orders, use
+     * WebPayAdmin::creditOrder() instead.
      *
-     * Use the following methods to set the order attributes needed in the request:
-     * ->setOrderId(sveaOrderId or transactionId from createOrder response)
-     * ->setCountryCode()
-     *
-     * Then select the correct ordertype and perform the request:
-     * ->cancelInvoiceOrder() | cancelPaymentPlanOrder() | cancelCardOrder()
-     *   ->doRequest
-     *
+     *      $request = WebPay::cancelOrder($config)
+     *          ->setOrderId($orderId)          // required, use SveaOrderId recieved with createOrder response
+     *          ->setCountryCode("SE")          // required, use same country code as in createOrder request
+     *          ->cancelInvoiceOrder()          // select request class, use same order type as in createOrder request
+     *              ->doRequest()               // and perform the request, returns CloseOrderResult 
+     * 
+     *          //->cancelPaymentPlanOrder()->doRequest()   // returns CloseOrderResult 
+     *          //->cancelCardOrder()->doRequest()          // returns AnnulTransactionResponse           
+     *      ; 
+     *     
      * The final doRequest() returns either a CloseOrderResult or an AnnulTransactionResponse
-     *
+     * 
      * @see \Svea\CancelOrderBuilder \Svea\CancelOrderBuilder
      * @see \Svea\WebService\CloseOrderResult Svea\WebService\CloseOrderResult
      * @see \Svea\HostedService\AnnulTransactionResponse \Svea\HostedService\AnnulTransactionResponse
@@ -71,18 +76,26 @@ class WebPayAdmin {
     }
 
     /**
-     * Query information about an order. Supports all order payment methods.
+     * The WebPayAdmin::queryOrder entrypoint method is used to get information about an order.
      *
-     * Provide more information about the transaction and send the request using
-     * QueryOrderBuilder methods:
-     * ->setOrderId()
-     * ->setCountryCode()
-     *
-     * Then select the correct ordertype and perform the request:
-     * ->queryInvoiceOrder() | queryPaymentPlanOrder() | queryCardOrder() | queryDirectBankOrder()
-     *   ->doRequest()
-     *
-     * The final doRequest() returns either a GetOrdersResponse or an QueryTransactionResponse
+     * Note that for invoice and payment plan orders, the order rows name and description is merged
+     * into the description field in the query response.
+     * 
+     * Get an query builder instance using the WebPayAdmin::queryOrder entrypoint, then provide 
+     * more information about the order and send the request using the queryOrderBuilder methods: 
+     *  
+     *      $request = WebPay::queryOrder($config)
+     *          ->setOrderId()          // required
+     *          ->setCountryCode()      // required      
+     *          ->queryInvoiceOrder()   // select request class and
+     *              ->doRequest()       // perform the request, returns GetOrdersResponse
+     *          
+     *          //->queryPaymentPlanOrder()->doRequest() // returns GetOrdersResponse
+     *          //->queryCardOrder()->doRequest()        // returns QueryTransactionResponse
+     *          //->queryDirectBankOrder()->doRequest()  // returns QueryTransactionResponse
+     *      ;
+     * 
+     * The final doRequest() returns either a GetOrdersResponse or an QueryTransactionResponse.
      *
      * @see \Svea\QueryOrderBuilder \Svea\QueryOrderBuilder
      * @see \Svea\AdminService\GetOrdersResponse \Svea\AdminService\GetOrdersResponse
@@ -96,42 +109,7 @@ class WebPayAdmin {
         if( $config == NULL ) { WebPay::throwMissingConfigException(); }
         return new Svea\QueryOrderBuilder($config);
     }
-
-    /**
-     * The WebPayAdmin::deliverOrderRows entrypoint method is used to deliver individual order rows.
-     * Supports invoice and card orders. (To partially deliver PaymentPlan or Direct Bank orders, please contact Svea.)
-     * 
-     * Get an order builder instance using the WebPayAdmin::deliverOrderRows entrypoint,
-     * then provide more information about the transaction and send the request using
-     * the deliverOrderRowsBuilder methods:
-     *
-     * ->setOrderId()           (invoice, card only, required)
-     * ->setCountryCode()       (invoice only, required)
-     * ->setRowToDeliver()      (required, index of one of the original order row you wish to cancel)
-     * ->setRowsToDeliver()     (optional)
-     * ->addNumberedOrderRow()  (card only, one or more, required with setRow(s)ToDeliver)
-     * ->addNumberedOrderRows() (card only, optional)
-     * 
-     * Finish by selecting the correct ordertype and perform the request:
-     * ->deliverInvoiceOrderRows() // or ->deliverCardOrderRows()
-     *   ->doRequest()
-     *
-     * The final doRequest() returns a DeliverOrderRowsResponse or ConfirmTransactionResponse
-     *
-     * @see \Svea\DeliverOrderRowsBuilder \Svea\DeliverOrderRowsBuilder
-     * @see \Svea\HostedService\ConfirmTransactionResponse \Svea\HostedService\ConfirmTransactionResponse
-     * @see \Svea\AdminService\DeliverOrderRowsResponse \Svea\AdminService\DeliverOrderRowsResponse
-     *
-     * @param ConfigurationProvider $config  instance implementing ConfigurationProvider
-     * @return Svea\DeliverOrderRowsBuilder
-     * @throws ValidationException
-     */
-    public static function deliverOrderRows( $config = NULL ) {
-        if( $config == NULL ) { WebPay::throwMissingConfigException(); }
-        return new Svea\DeliverOrderRowsBuilder($config);
-    }    
-    
-    
+   
     /**
      * The WebPayAdmin::cancelOrderRows entrypoint method is used to cancel rows in an order before it has been delivered.
      * Supports Invoice, Payment Plan and Card orders. (Direct Bank orders are not supported, see CreditOrderRows instead.)
@@ -140,16 +118,16 @@ class WebPayAdmin {
      * then provide more information about the transaction and send the request using
      * the cancelOrderRowsBuilder methods:
      *
-     * ->setOrderId()           (required)
-     * ->setCountryCode()       (required)
-     * ->setRowToCancel()       (required, index of one of the original order row you wish to cancel)
-     * ->setRowsToCancel()      (optional)
-     * ->addNumberedOrderRow()  (card only, one or more, required with setRow(s)ToCancel)
-     * ->addNumberedOrderRows() (card only, optional)
+     *      ->setOrderId()           // required
+     *      ->setCountryCode()       // required
+     *      ->setRowToCancel()       // required, index of one of the original order row you wish to cancel
+     *      ->setRowsToCancel()      // optional
+     *      ->addNumberedOrderRow()  // card only, one or more, required with setRow(s)ToCancel
+     *      ->addNumberedOrderRows() // card only, optional
      *
      * Finish by selecting the correct ordertype and perform the request:
-     * ->cancelInvoiceOrderRows() // or cancelPaymentPlanOrderRows() or cancelCardOrderRows()
-     *   ->doRequest()
+     *      ->cancelInvoiceOrderRows() // or cancelPaymentPlanOrderRows() or cancelCardOrderRows()
+     *          ->doRequest()
      *
      * The final doRequest() returns either a CancelOrderRowsResponse or a LowerTransactionResponse.
      *
@@ -266,6 +244,40 @@ class WebPayAdmin {
         return new Svea\UpdateOrderRowsBuilder($config);
     }
 
+    /**
+     * The WebPayAdmin::deliverOrderRows entrypoint method is used to deliver individual order rows.
+     * Supports invoice and card orders. (To partially deliver PaymentPlan or Direct Bank orders, please contact Svea.)
+     * 
+     * Get an order builder instance using the WebPayAdmin::deliverOrderRows entrypoint,
+     * then provide more information about the transaction and send the request using
+     * the deliverOrderRowsBuilder methods:
+     *
+     * ->setOrderId()           (invoice, card only, required)
+     * ->setCountryCode()       (invoice only, required)
+     * ->setRowToDeliver()      (required, index of one of the original order row you wish to cancel)
+     * ->setRowsToDeliver()     (optional)
+     * ->addNumberedOrderRow()  (card only, one or more, required with setRow(s)ToDeliver)
+     * ->addNumberedOrderRows() (card only, optional)
+     * 
+     * Finish by selecting the correct ordertype and perform the request:
+     * ->deliverInvoiceOrderRows() // or ->deliverCardOrderRows()
+     *   ->doRequest()
+     *
+     * The final doRequest() returns a DeliverOrderRowsResponse or ConfirmTransactionResponse
+     *
+     * @see \Svea\DeliverOrderRowsBuilder \Svea\DeliverOrderRowsBuilder
+     * @see \Svea\HostedService\ConfirmTransactionResponse \Svea\HostedService\ConfirmTransactionResponse
+     * @see \Svea\AdminService\DeliverOrderRowsResponse \Svea\AdminService\DeliverOrderRowsResponse
+     *
+     * @param ConfigurationProvider $config  instance implementing ConfigurationProvider
+     * @return Svea\DeliverOrderRowsBuilder
+     * @throws ValidationException
+     */
+    public static function deliverOrderRows( $config = NULL ) {
+        if( $config == NULL ) { WebPay::throwMissingConfigException(); }
+        return new Svea\DeliverOrderRowsBuilder($config);
+    }    
+        
     /** helper function, throws exception if no config is given */
     private static function throwMissingConfigException() {
         throw new Exception('-missing parameter: This method requires an ConfigurationProvider object as parameter. Create a class that implements class ConfigurationProvider. Set returnvalues to configuration values. Create an object from that class. Alternative use static function from class SveaConfig e.g. SveaConfig::getDefaultConfig(). You can replace the default config values to return your own config values in the method.');

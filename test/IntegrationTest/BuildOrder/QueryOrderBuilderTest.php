@@ -12,7 +12,7 @@ class QueryOrderBuilderIntegrationTest extends PHPUnit_Framework_TestCase {
    /**
      *  test_queryOrder_queryInvoiceOrder_order
      */
-    function test_queryOrder_queryInvoiceOrder_order() {
+    function test_queryOrder_queryInvoiceOrder_multiple_order_rows() {
         // create invoice order w/three rows (2xA, 1xB)
         $country = "SE";
 
@@ -80,6 +80,42 @@ class QueryOrderBuilderIntegrationTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals( 2, $queryResponse->numberedOrderRows[1]->rowNumber );  // rows are 1-indexed
         $this->assertEquals( "NotDelivered", $queryResponse->numberedOrderRows[1]->status );
     }            
+    
+    function test_queryOrder_queryInvoiceOrder_single_order_row() {
+        // create invoice order w/three rows (2xA, 1xB)
+        $country = "SE";
+
+        $a_quantity = 2;
+        $a_amountExVat = 1000.00;
+        $a_vatPercent = 25;
+        
+        $order = TestUtil::createOrderWithoutOrderRows( TestUtil::createIndividualCustomer($country) )
+            ->addOrderRow( WebPayItem::orderRow()
+                
+                ->setQuantity($a_quantity)
+                ->setAmountExVat($a_amountExVat)
+                ->setVatPercent($a_vatPercent)
+            )              
+        ;
+        $orderResponse = $order->useInvoicePayment()->doRequest();
+        $this->assertEquals(1, $orderResponse->accepted);
+        
+        $createdOrderId = $orderResponse->sveaOrderId;
+        
+        // query orderrows
+        $queryOrderBuilder = WebPayAdmin::queryOrder( Svea\SveaConfig::getDefaultConfig() )
+            ->setOrderId( $createdOrderId )
+            ->setCountryCode($country)
+        ;
+                
+        $queryResponse = $queryOrderBuilder->queryInvoiceOrder()->doRequest(); 
+        
+        //print_r( $queryResponse);
+        $this->assertEquals(1, $queryResponse->accepted);
+        // assert that order rows are the same
+        $this->assertEquals( $a_quantity, $queryResponse->numberedOrderRows[0]->quantity );
+        $this->assertEquals( $a_amountExVat, $queryResponse->numberedOrderRows[0]->amountExVat );
+    }                
     
     /**
      *  test_queryOrder_queryPaymentPlanOrder_order

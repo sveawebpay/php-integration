@@ -13,11 +13,11 @@ class CreditInvoiceRowsRequest {
      * AdminService CreditInvoiceRowsRequest 
      * 
      * @param Authentication $authentication
-     * @param numeric $clientId
+     * @param string $clientId
      * @param string $invoiceDistributionType
-     * @param numeric $invoiceId
+     * @param string $invoiceId
      * @param OrderRows $newCreditInvoiceRows
-     * @param numeric[] $orderRowNumbers
+     * @param string[] $orderRowNumbers
      */
     function __construct( $authentication, $clientId, $invoiceDistributionType, $invoiceId, $newCreditInvoiceRows, $orderRowNumbers ) {
         

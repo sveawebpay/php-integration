@@ -37,12 +37,12 @@ require_once SVEA_REQUEST_DIR . '/Includes.php';
  * If an order row that was present in the createOrder request is not present in from the deliverOrder
  * request, the order will be partially delivered, and any left out items will not be invoiced by Svea.
  * You cannot partially deliver payment plan orders, where all un-cancelled order rows will be delivered.
-
+ *
  * @author Kristian Grossman-Madsen, Anneli Halld'n, Daniel Brolund for Svea Webpay
  */
 class DeliverOrderBuilder extends OrderBuilder {
 
-    /** @var numeric $orderId  order id/transaction id as returned in the createOrder request response,  */
+    /** @var string $orderId  order id/transaction id as returned in the createOrder request response,  */
     public $orderId;   
 
     /** @var string $distributionType -- one of DistributionType::POST, ::EMAIL */
@@ -66,7 +66,7 @@ class DeliverOrderBuilder extends OrderBuilder {
 
     /**
      * Required for invoice or part payment orders -- use the order id (transaction id) recieved with the createOrder response.
-     * @param numeric $orderIdAsString
+     * @param string $orderIdAsString
      * @return $this
      */
     public function setOrderId($orderIdAsString) {
@@ -75,23 +75,20 @@ class DeliverOrderBuilder extends OrderBuilder {
     }
 
     /**
-     * Optional for card orders -- use the order id (transaction id) received with the createOrder response.
-     * 
-     * This is an alias for setOrderId().
-     * 
-     * @param numeric $orderIdAsString
+     * Optional -- alias for setOrderId().
+     * @param string $transactionIdAsString
      * @return $this
      */
-    public function setTransactionId($orderIdAsString) {
-        return $this->setOrderId($orderIdAsString);
-    }      
+    public function setTransactionId($transactionIdAsString) {
+        return $this->setOrderId($transactionIdAsString);
+    }     
 
     /**
      * Optional for card orders -- confirmation date on format "YYYY-MM-DD"
      * 
      * If no date is given the current date is used per default.
      * 
-     * @param numeric $orderIdAsString
+     * @param string $orderIdAsString
      * @return $this
      */
     public function setCaptureDate($captureDateAsString) {
@@ -153,7 +150,7 @@ class DeliverOrderBuilder extends OrderBuilder {
             return new WebService\DeliverInvoice($this);
         }
         else {
-                $this->orderType = \ConfigurationProvider::INVOICE_TYPE;
+            $this->orderType = \ConfigurationProvider::INVOICE_TYPE;
             return new AdminService\DeliverOrdersRequest($this);
         }
     }

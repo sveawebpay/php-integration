@@ -7,18 +7,7 @@ require_once SVEA_REQUEST_DIR . '/Includes.php';
  * OrderBuilder collects and prepares order data to be sent to Svea. It is the
  * parent of CreateOrderBuilder and DeliverOrderBuilder.
  * 
- * Set all required order attributes in CreateOrderBuilder instance by using the 
- * instance setAttribute() methods. Instance methods can be chained together, as 
- * they return the instance itself in a fluent fashion.
- * 
-$order
-    ->setCountryCode("SE")              // required
-    ->setCurrency("SEK")                // required for card payment, direct payment and PayPage payment.
-    ->setClientOrderNumber("14050626")  // required for card payment, direct payment, PaymentMethod payment and PayPage payments.
-    ->setCustomerReference("att: kgm")  // optional
-    ->setOrderDate("2012-12-12")        // required for invoice and payment plan payments
-;
- *  * @author Kristian Grossman-Madsen, Anneli Halld'n, Daniel Brolund for Svea WebPay
+ * @author Kristian Grossman-Madsen, Anneli Halld'n, Daniel Brolund for Svea WebPay
  */
 class OrderBuilder {
 

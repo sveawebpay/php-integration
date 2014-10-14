@@ -7,9 +7,6 @@ require_once SVEA_REQUEST_DIR . '/Includes.php';
  * CancelOrderBuilder is the class used to cancel an order with Svea, that has
  * not yet been delivered (invoice, payment plan) or been confirmed (card).
  * 
- * Supports Invoice, Payment Plan and Card orders. For Direct Bank orders, @see
- * CreditOrderBuilder instead.
- * 
  * Use setOrderId() to specify the Svea order id, this is the order id returned 
  * with the original create order request response.
  *
@@ -19,19 +16,6 @@ require_once SVEA_REQUEST_DIR . '/Includes.php';
  * Use either cancelInvoiceOrder(), cancelPaymentPlanOrder or cancelCardOrder,
  * which ever matches the payment method used in the original order request.
  *  
- * The final doRequest() will send the cancelOrder request to Svea, and the 
- * resulting response code specifies the outcome of the request. 
- * 
- * $request =  
- *    WebPay::cancelOrder($config)
- *        ->setCountryCode("SE")          // Required. Use same country code as in createOrder request.
- *        ->setOrderId($orderId)          // Required. Use SveaOrderId recieved with createOrder response
- *        ->cancelInvoiceOrder()          // Use the method corresponding to the original createOrder payment method.
- *        //->cancelPaymentPlanOrder()     
- *        //->cancelCardOrder()           
- *             ->doRequest()
- * ; 
- * 
  * @author Kristian Grossman-Madsen for Svea WebPay
  */
 class CancelOrderBuilder {
@@ -48,7 +32,7 @@ class CancelOrderBuilder {
 
     /**
      * Required for invoice or part payment orders -- use the order id (transaction id) recieved with the createOrder response.
-     * @param numeric $orderIdAsString
+     * @param string $orderIdAsString
      * @return $this
      */
     public function setOrderId($orderIdAsString) {
@@ -57,16 +41,13 @@ class CancelOrderBuilder {
     }
 
     /**
-     * Optional for card orders -- use the order id (transaction id) received with the createOrder response.
-     * 
-     * This is an alias for setOrderId().
-     * 
-     * @param numeric $orderIdAsString
+     * Optional -- alias for setOrderId().
+     * @param string $transactionIdAsString
      * @return $this
      */
-    public function setTransactionId($orderIdAsString) {
-        return $this->setOrderId($orderIdAsString);
-    }      
+    public function setTransactionId($transactionIdAsString) {
+        return $this->setOrderId($transactionIdAsString);
+    }         
         
     /**
      * Required. Use same country code as in createOrder request.
