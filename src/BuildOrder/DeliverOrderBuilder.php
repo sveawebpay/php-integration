@@ -37,7 +37,7 @@ require_once SVEA_REQUEST_DIR . '/Includes.php';
  * If an order row that was present in the createOrder request is not present in from the deliverOrder
  * request, the order will be partially delivered, and any left out items will not be invoiced by Svea.
  * You cannot partially deliver payment plan orders, where all un-cancelled order rows will be delivered.
-
+ *
  * @author Kristian Grossman-Madsen, Anneli Halld'n, Daniel Brolund for Svea Webpay
  */
 class DeliverOrderBuilder extends OrderBuilder {
@@ -75,16 +75,13 @@ class DeliverOrderBuilder extends OrderBuilder {
     }
 
     /**
-     * Optional for card orders -- use the order id (transaction id) received with the createOrder response.
-     * 
-     * This is an alias for setOrderId().
-     * 
-     * @param string $orderIdAsString
+     * Optional -- alias for setOrderId().
+     * @param string $transactionIdAsString
      * @return $this
      */
-    public function setTransactionId($orderIdAsString) {
-        return $this->setOrderId($orderIdAsString);
-    }      
+    public function setTransactionId($transactionIdAsString) {
+        return $this->setOrderId($transactionIdAsString);
+    }     
 
     /**
      * Optional for card orders -- confirmation date on format "YYYY-MM-DD"
@@ -153,7 +150,7 @@ class DeliverOrderBuilder extends OrderBuilder {
             return new WebService\DeliverInvoice($this);
         }
         else {
-                $this->orderType = \ConfigurationProvider::INVOICE_TYPE;
+            $this->orderType = \ConfigurationProvider::INVOICE_TYPE;
             return new AdminService\DeliverOrdersRequest($this);
         }
     }

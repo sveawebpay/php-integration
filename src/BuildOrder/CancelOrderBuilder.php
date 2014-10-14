@@ -41,16 +41,13 @@ class CancelOrderBuilder {
     }
 
     /**
-     * Optional for card orders -- use the order id (transaction id) received with the createOrder response.
-     * 
-     * This is an alias for setOrderId().
-     * 
-     * @param string $orderIdAsString
+     * Optional -- alias for setOrderId().
+     * @param string $transactionIdAsString
      * @return $this
      */
-    public function setTransactionId($orderIdAsString) {
-        return $this->setOrderId($orderIdAsString);
-    }      
+    public function setTransactionId($transactionIdAsString) {
+        return $this->setOrderId($transactionIdAsString);
+    }         
         
     /**
      * Required. Use same country code as in createOrder request.

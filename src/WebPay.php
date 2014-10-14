@@ -61,7 +61,7 @@ class WebPay {
     }
 
     /**
-     * Use the WebPay::deliverOrder() entrypoint when you deliver an order. 
+     * Use the WebPay::deliverOrder() entrypoint when you deliver an order to the customer. 
      * Supports Invoice, Payment Plan and Card orders. (Direct Bank orders are not supported.)
      * 
      * The deliver order request should generally be sent to Svea once the ordered 
@@ -76,30 +76,28 @@ class WebPay {
      * (Delivering card orders is only needed if your account has auto-confirm
      * turned off, please contact Svea if unsure.)
      * 
-     * Get an order builder instance using the WebPay::deliverOrder entrypoint,
-     * then provide more information about the transaction and send the request using
-     * the DeliverOrderBuilder methods:
+     * To deliver an invoice, partpayment or card order in full, you do not need to 
+     * specifying order rows. To partially deliver an order, use WebPayAdmin::deliverOrderRows().
+     *  
+     * Get an order builder instance using the WebPay::deliverOrder entrypoint, then
+     * provide more information about the transaction using DeliverOrderBuilder methods. 
      * 
-     * ->setOrderId()                   (invoice or payment plan only, required)
-     * ->setTransactionId()             (card only, required -- you can also use setOrderId)
-     * ->setCountryCode()               (required)
-     * ->setInvoiceDistributionType()   (invoice only, required)
-     * ->setNumberOfCreditDays()        (invoice only, optional)
-     * ->setCaptureDate()               (card only, optional)
-     * ->addOrderRow()                  (deprecated, optional -- use WebPayAdmin::deliverOrderRows instead)
-     * ->setCreditInvoice()             (deprecated, optional -- use WebPayAdmin::creditOrderRows instead)
+     *      $request = WebPay::deliverOrder($config)
+     *          ->setOrderId()                  // invoice or payment plan only, required
+     *          ->setTransactionId()            // card only, optional -- you can also use setOrderId
+     *          ->setCountryCode()              // required
+     *          ->setInvoiceDistributionType()  // invoice only, required
+     *          ->setNumberOfCreditDays()       // invoice only, optional
+     *          ->setCaptureDate()              // card only, optional
+     *          ->addOrderRow()                 // deprecated, optional -- use WebPayAdmin::deliverOrderRows instead
+     *          ->setCreditInvoice()            // deprecated, optional -- use WebPayAdmin::creditOrderRows instead
+     *          ->deliverInvoiceOrder()         // select request class, use same order type as in createOrder request
+     *              ->doRequest()               // and perform the request, returns DeliverOrderResult 
+     *
+     *          //->deliverPaymentPlanOrder()->doRequest()  // returns DeliverOrderResult 
+     *          //->deliverCardOrder()->doRequest()         // returns ConfirmTransactionResponse 
+     *      ;
      * 
-     * Finish by selecting the correct ordertype and perform the request:
-     * ->deliverInvoiceOrder() // deliverPaymentPlanOrder() or deliverCardOrder()
-     *   ->doRequest()
-     *
-     * The final doRequest() returns either a DeliverOrderResult or a ConfirmTransactionResponse.
-     * 
-     * See the DeliverOrderBuilder class for more info on required methods used to i.e. specify order rows,
-     * how to send the request to Svea, as well as the final response type.
-     *
-     * See also WebPayAdmin::deliverOrderRows for the preferred way to partially deliver an invoice or payment plan order.
-     *
      * @see \Svea\DeliverOrderBuilder \Svea\DeliverOrderBuilder
      * @see \Svea\WebService\DeliverOrderResult \Svea\WebService\DeliverOrderResult
      * @see \Svea\HostedService\ConfirmTransactionResponse \Svea\HostedService\ConfirmTransactionResponse
