@@ -13,26 +13,59 @@ include_once SVEA_REQUEST_DIR . "/Includes.php";
 class WebPayItem {
 
     /**
-     * Use this to add all kinds of products and other items. An order is required to have at least one order row.
-     *
+     * The WebPayItem::orderRow() entrypoint method is used to specify order items like products and services. 
+     * It is required to have a minimum of one order row in an order.
+     * 
+     * Specify the item price using precisely two of these methods in order to specify the item price and tax rate: 
+     * setAmountExVat(), setAmountIncVat() and setVatPercent(). We recommend using setAmountExVat() and setVatPercentage().
+     * 
+     * If you use setAmountIncVat(), note that this may introduce a cumulative rounding error when ordering large
+     * quantities of an item, as the package bases the total order sum on a calculated price ex. vat.
+     *  
+     *      $orderrow = WebPayItem::orderRow()
+     *          ->setAmountExVat(100.00)        // optional, recommended, use precisely two of the price specification methods
+     *          ->setVatPercent(25)             // optional, recommended, use precisely two of the price specification methods
+     *          ->setAmountIncVat(125.00)       // optional, use precisely two of the price specification methods
+     *          ->setQuantity(2)                // required
+     *          ->setUnit("pcs.")               // optional
+     *          ->setName('name')               // optional, invoice & payment plan orders will merge "name" with "description" 
+     *          ->setDescription("description") // optional, invoice & payment plan orders will merge "name" with "description" 
+     *          ->setArticleNumber("1")         // optional
+     *          ->setDiscountPercent(0)         // optional
+     *      );
+     * 
      * @return \Svea\OrderRow
      */
-     public static function orderRow() {
+    public static function orderRow() {
          return new Svea\OrderRow();
     }
 
     /**
      * Use this only when supplying NumberedOrderRow items for the various WebPayAdmin order row administration functions.
-     * 
      * @return \Svea\NumberedOrderRow
      */
      public static function numberedOrderRow() {
          return new Svea\NumberedOrderRow();
     }
-    
-    
+       
     /**
-     * Sets shipping fee
+     * The WebPayItem::shippingFee() entrypoint method is used to specify order shipping fee rows.
+     * It is not required to have a shipping fee row in an order.
+     * 
+     * Specify the item price using precisely two of these methods in order to specify the item price and tax rate: 
+     * setAmountExVat(), setAmountIncVat() and setVatPercent(). We recommend using setAmountExVat() and setVatPercentage().
+     * 
+     *      $shippingFee = WebPayItem::shippingFee()
+     *          ->setAmountExVat(100.00)        // optional, recommended, use precisely two of the price specification methods
+     *          ->setVatPercent(25)             // optional, recommended, use precisely two of the price specification methods
+     *          ->setAmountIncVat(125.00)       // optional, use precisely two of the price specification methods
+     *          ->setUnit("pcs.")               // optional
+     *          ->setName('name')               // optional
+     *          ->setDescription("description") // optional
+     *          ->setShippingId('33')           // optional
+     *          ->setDiscountPercent(0)         // optional
+     *      );
+     * 
      * @return \Svea\ShippingFee
      */
     public static function shippingFee() {
@@ -47,7 +80,6 @@ class WebPayItem {
     }
 
     /**
-     * 
      * @return \Svea\FixedDiscount
      */
     public static function fixedDiscount() {
@@ -55,7 +87,6 @@ class WebPayItem {
     }
 
     /**
-     * 
      * @return \Svea\RelativeDiscount
      */
     public static function relativeDiscount() {
@@ -63,7 +94,6 @@ class WebPayItem {
     }
 
     /**
-     * 
      * @return \Svea\IndividualCustomer
      */
     public static function individualCustomer() {
@@ -71,7 +101,6 @@ class WebPayItem {
     }
 
     /**
-     * 
      * @return \Svea\CompanyCustomer
      */
     public static function companyCustomer() {
