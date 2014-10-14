@@ -42,7 +42,7 @@ class GetOrdersResponse extends AdminServiceResponse {
     /** @var string $orderDeliveryStatus -- one of {Created,PartiallyDelivered,Delivered,Cancelled} */
     public $orderDeliveryStatus;
 
-    /** @var Svea\OrderRow[] $numberedOrderRows  array of OrderRow objects for an order */
+    /** @var Svea\OrderRow[] $numberedOrderRows  array of OrderRow objects, note that invoice and payment plan order rows name attribute will be null */
     public $numberedOrderRows;
 
     /** @var string $orderStatus -- one of {Created,Pending,Active,Denied,Error}*/
