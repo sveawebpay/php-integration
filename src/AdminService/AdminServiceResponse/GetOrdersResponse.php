@@ -130,34 +130,11 @@ class GetOrdersResponse extends AdminServiceResponse {
             $this->notes = $order->Notes;
             $this->orderDeliveryStatus = $order->OrderDeliveryStatus;
 
-            // for each numbered orderrow, add it to the numberedOrderRow array
-            foreach( $order->OrderRows->NumberedOrderRow as $row ) {
-                //GetOrders NumberedOrderRow:
-                // [ArticleNumber]
-                // [Description]
-                // [DiscountPercent]
-                // [NumberOfUnits]
-                // [PricePerUnit]
-                // [Unit]
-                // [VatPercent]
-                // [CreditInvoiceId]
-                // [InvoiceId]
-                // [RowNumber]
-                // [Status]
-            
-                $newrow = new \Svea\NumberedOrderRow(); // webpay orderrow
-                //WebPayItem OrderRow:          
-                // $articleNumber   *
-                // $quantity        *
-                // $unit            *
-                // $amountExVat     *
-                // $amountIncVat    not used
-                // $vatPercent      *
-                // $name            not used
-                // $description     *
-                // $discountPercent *
-                // $vatDiscount     not used
+            // a single order row is returned as type stdClass
+            if( is_a($order->OrderRows->NumberedOrderRow, "stdClass") ) {
+                $row = $order->OrderRows->NumberedOrderRow;
                 
+                $newrow = new \Svea\NumberedOrderRow(); // webpay orderrow
                 $newrow
                     //->setName()
                     ->setAmountExVat( $row->PricePerUnit )
@@ -168,15 +145,65 @@ class GetOrdersResponse extends AdminServiceResponse {
                     ->setVatPercent( (int)$row->VatPercent )
                     ->setDiscountPercent( $row->DiscountPercent )
                 ;
-                
+
                 $newrow->creditInvoiceId = $row->CreditInvoiceId;
                 $newrow->invoiceId = $row->InvoiceId;
                 $newrow->rowNumber = $row->RowNumber;
                 $newrow->status = $row->Status;
-                
+
                 $this->numberedOrderRows[] = $newrow;                 
             }
-                                    
+            
+            // multiple order rows are returned as an array
+            elseif( is_array($order->OrderRows->NumberedOrderRow ) ) {           
+                // for each numbered orderrow, add it to the numberedOrderRow array
+                foreach( $order->OrderRows->NumberedOrderRow as $row ) {
+                    //GetOrders NumberedOrderRow:
+                    // [ArticleNumber]
+                    // [Description]
+                    // [DiscountPercent]
+                    // [NumberOfUnits]
+                    // [PricePerUnit]
+                    // [Unit]
+                    // [VatPercent]
+                    // [CreditInvoiceId]
+                    // [InvoiceId]
+                    // [RowNumber]
+                    // [Status]
+
+                    $newrow = new \Svea\NumberedOrderRow(); // webpay orderrow
+                    //WebPayItem OrderRow:          
+                    // $articleNumber   *
+                    // $quantity        *
+                    // $unit            *
+                    // $amountExVat     *
+                    // $amountIncVat    not used
+                    // $vatPercent      *
+                    // $name            not used
+                    // $description     *
+                    // $discountPercent *
+                    // $vatDiscount     not used
+
+                    $newrow
+                        //->setName()
+                        ->setAmountExVat( $row->PricePerUnit )
+                        ->setDescription( $row->Description)
+                        ->setQuantity( $row->NumberOfUnits )
+                        ->setArticleNumber( $row->ArticleNumber )     
+                        ->setUnit( $row->Unit )
+                        ->setVatPercent( (int)$row->VatPercent )
+                        ->setDiscountPercent( $row->DiscountPercent )
+                    ;
+
+                    $newrow->creditInvoiceId = $row->CreditInvoiceId;
+                    $newrow->invoiceId = $row->InvoiceId;
+                    $newrow->rowNumber = $row->RowNumber;
+                    $newrow->status = $row->Status;
+
+                    $this->numberedOrderRows[] = $newrow;                 
+                }
+            }
+            
             $this->orderStatus = $order->OrderStatus;
             $this->orderType = $order->OrderType;
             
