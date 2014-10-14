@@ -14,7 +14,7 @@ class CreditTransaction extends HostedRequest {
     /** @var string $transactionId  Required. */
     public $transactionId;
 
-    /** @var numeric $creditAmount  Required. Use minor currency (i.e. 1 SEK => 100 in minor currency) */
+    /** @var string $creditAmount  Required. Use minor currency (i.e. 1 SEK => 100 in minor currency) */
     public $creditAmount;
     
     /**

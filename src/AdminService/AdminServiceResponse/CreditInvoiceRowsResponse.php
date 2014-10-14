@@ -16,13 +16,13 @@ class CreditInvoiceRowsResponse extends AdminServiceResponse {
     /** @var string $orderType  (set iff accepted)  one of [Invoice|PaymentPlan] */
     public $orderType;
     
-    /** @var numeric $creditInvoiceId  (set iff accepted, orderType Invoice)  the $creditInvoiceId for the credit invoice issued with this request */
+    /** @var string $creditInvoiceId  (set iff accepted, orderType Invoice)  the $creditInvoiceId for the credit invoice issued with this request */
     public $creditInvoiceId;
     
-    /** @var numeric $clientId (set iff accepted) */
+    /** @var string $clientId (set iff accepted) */
     public $clientId;
     
-    /** @var numeric $orderId (set iff accepted) */
+    /** @var string $orderId (set iff accepted) */
     public $orderId;
     
     function __construct($message) {

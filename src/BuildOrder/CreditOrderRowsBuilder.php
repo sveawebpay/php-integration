@@ -59,10 +59,10 @@ class CreditOrderRowsBuilder {
     /** @var NumberedOrderRows[] $numberedOrderRows  numbered order rows passed in for hosted service orders */
     public $numberedOrderRows;
     
-    /** @var numeric @invoiceId  invoice id as returned in the deliverOrder request response */
+    /** @var string @invoiceId  invoice id as returned in the deliverOrder request response */
     public $invoiceId;
     
-    /** @var numeric $orderId  card/direct bank order transaction id as returned in the createOrder request response,  */
+    /** @var string $orderId  card/direct bank order transaction id as returned in the createOrder request response,  */
     public $orderId;   
     
     /** @var string $countryCode */
@@ -98,7 +98,7 @@ class CreditOrderRowsBuilder {
      * Use setInvoiceId() to set the invoice to credit. Use setOrderId() to set the 
      * card or direct bank transaction to credit.
      * 
-     * @param numeric $invoiceIdAsString
+     * @param string $invoiceIdAsString
      * @return $this
      */
     public function setInvoiceId($invoiceIdAsString) {
@@ -109,7 +109,7 @@ class CreditOrderRowsBuilder {
     /**
      * Required for creditCardOrder() -- use the order id (transaction id) received with the createOrder response.
      * 
-     * @param numeric $orderIdAsString
+     * @param string $orderIdAsString
      * @return $this
      */
     public function setOrderId($orderIdAsString) {
@@ -122,7 +122,7 @@ class CreditOrderRowsBuilder {
      * 
      * This is an alias for setOrderId().
      * 
-     * @param numeric $orderIdAsString
+     * @param string $orderIdAsString
      * @return $this
      */
     public function setTransactionId($orderIdAsString) {
@@ -146,7 +146,7 @@ class CreditOrderRowsBuilder {
      * Use setRowToCredit() or setRowsToCredit() to specify order rows to credit. 
      * The given row numbers must correspond with the the serverside row number. 
      * 
-     * @param numeric $rowNumber
+     * @param string $rowNumber
      * @return $this
      */
     public function setRowToCredit( $rowNumber ) {

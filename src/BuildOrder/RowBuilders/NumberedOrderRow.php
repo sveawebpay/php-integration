@@ -35,10 +35,10 @@ class NumberedOrderRow extends OrderRow {
     const ORDERROWSTATUS_DELIVERED = 'Delivered';
     const ORDERROWSTATUS_CANCELLED = 'Cancelled';
     
-    /** @var numeric $creditInvoiceId  reference to invoice to credit */
+    /** @var string $creditInvoiceId  reference to invoice to credit */
     public $creditInvoiceId;
     
-    /** @var numeric $invoiceId  if order has been delivered, reference to resulting invoice */
+    /** @var string $invoiceId  if order has been delivered, reference to resulting invoice */
     public $invoiceId;
     
     /** @var integer $rowNumber  the order row number, starting with 1 for the first order row */
@@ -49,7 +49,7 @@ class NumberedOrderRow extends OrderRow {
 
     /**
      * Optional.
-     * @param numeric $creditInvoiceIdAsNumeric
+     * @param string $creditInvoiceIdAsNumeric
      * @return $this
      */
     public function setCreditInvoiceId($creditInvoiceIdAsNumeric) {
@@ -59,7 +59,7 @@ class NumberedOrderRow extends OrderRow {
     
     /**
      * Optional.
-     * @param numeric $invoiceIdAsNumeric
+     * @param string $invoiceIdAsNumeric
      * @return $this
      */
     public function setInvoiceId($invoiceIdAsNumeric) {
@@ -69,7 +69,7 @@ class NumberedOrderRow extends OrderRow {
     
     /**
      * Optional.
-     * @param numeric $rowNumberAsNumeric
+     * @param string $rowNumberAsNumeric
      * @return $this
      */
     public function setRowNumber($rowNumberAsNumeric) {
