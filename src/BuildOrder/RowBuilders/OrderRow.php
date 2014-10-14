@@ -4,29 +4,6 @@ namespace Svea;
 /**
 * Use the OrderRow class for all kinds of products and other items. It is required to have a minimum of one order row.
 * 
-* Specify the price using precisely two of these methods in order to specify the item price and tax rate: 
-* setAmountExVat(), setAmountIncVat() and setVatPercent().
-* 
-* We recommend specifying price using setAmountExVat() and setVatPercentage(). If not, make sure not retain as much precision as
-* possible, i.e. use no premature rounding (87.4875 is a "better" PriceIncVat than 87.49).
-* 
-* If you use setAmountIncVat(), note that this may introduce a cumulative rounding error when ordering large
-* quantities of an item, as the package bases the total order sum on a calculated price ex. vat.
-*  
-$order->
-    addOrderRow(
-        WebPayItem::orderRow()
-            ->setAmountExVat(100.00)                // recommended to specify price using AmountExVat & VatPercent
-            ->setVatPercent(25)                     // recommended to specify price using AmountExVat & VatPercent
-            ->setAmountIncVat(125.00)               // optional, need to use two out of three of the price specification methods
-            ->setQuantity(2)                        // required
-            ->setUnit("st")                         // optional
-            ->setName('Prod')                       // optional
-            ->setDescription("Specification")       // optional
-            ->setArticleNumber("1")                 // optional
-            ->setDiscountPercent(0)                 // optional
-    )
-;
 * @author anne-hal, Kristian Grossman-Madsen
 */
 class OrderRow {
@@ -49,7 +26,7 @@ class OrderRow {
      * The integration package supports fractions input at any precision, but 
      * when sending the request to Svea numbers are rounded to two decimal places.
      * 
-     * @param numeric $quantityAsFloat
+     * @param string $quantityAsFloat
      * @return $this
      */
     public function setQuantity($quantityAsNumeric) {
@@ -69,7 +46,7 @@ class OrderRow {
         $this->unit = $unitAsString;
         return $this;
     }
-    /**@var string */
+    /**@var string $unit */
     public $unit;
 
     /**
@@ -81,8 +58,8 @@ class OrderRow {
      * @param float $AmountAsFloat
      * @return $this
      */
-    public function setAmountExVat($AmountAsFloat) {
-        $this->amountExVat = $AmountAsFloat;
+    public function setAmountExVat($amountAsFloat) {
+        $this->amountExVat = $amountAsFloat;
         return $this;
     }
     /** @var float $amountExVat */
@@ -124,19 +101,18 @@ class OrderRow {
      * @param float $AmountAsFloat
      * @return $this
      */
-    public function setAmountIncVat($AmountAsFloat) {
-        $this->amountIncVat = $AmountAsFloat;
+    public function setAmountIncVat($amountAsFloat) {
+        $this->amountIncVat = $amountAsFloat;
         return $this;
     }    
     /** @var float $amountIncVat */
     public $amountIncVat;
     
-    
     /**
      * Optional - short item name
-     * 
+     *
      * Note that this will be merged with the item description when the request is sent to Svea
-     * 
+     *
      * @param string $nameAsString
      * @return $this
      */
@@ -163,7 +139,8 @@ class OrderRow {
     public $description;
     
     /**
-     * Optional
+     * Optional - discount in percent, applies to this order row only
+     * 
      * @param int $discountPercentAsInteger
      * @return $this
      */
@@ -174,6 +151,6 @@ class OrderRow {
     /** @var int $discountPercent */
     public $discountPercent;    
 
-    /** @var int  contains int 0 if not set. */
+    /** @var int $vatDiscount -- defaults to zero (0) */
     public $vatDiscount = 0;    
 }

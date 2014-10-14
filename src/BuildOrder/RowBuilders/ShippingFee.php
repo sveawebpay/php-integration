@@ -4,39 +4,12 @@ namespace Svea;
 /**
  * Use this class to add shipping to the order.
  * 
-* Specify the price using precisely two of these methods in order to specify the item price and tax rate: 
-* setAmountExVat(), setAmountIncVat() and setVatPercent().
-* 
-* We recommend specifying price using setAmountExVat() and setVatPercentage(). If not, make sure not retain as much precision as
-* possible, i.e. use no premature rounding (87.4875 is a "better" PriceIncVat than 87.49).
-* 
-* If you use setAmountIncVat(), note that this may introduce a cumulative rounding error when ordering large
-* quantities of an item, as the package bases the total order sum on a calculated price ex. vat.
-*  
-$order->
-    addFee(
-        WebPayItem::shippingFee()
-            ->setShippingId('33')                   // optional
-            ->setName('shipping')                   // optional
-            ->setDescription("Specification")       // optional
-            ->setAmountExVat(50)                    // recommended to specify price using AmountExVat & VatPercent
-            ->setVatPercent(25)                     // recommended to specify price using AmountExVat & VatPercent
-            ->setAmountIncVat(62.50)                // optional, need to use two out of three of the price specification methods
-            ->setUnit("st")                         // optional
-            ->setDiscountPercent(0)                 // optional
-    )
-;
-* @author anne-hal, Kristian Grossman-Madsen
+ * @author anne-hal, Kristian Grossman-Madsen
  */
 class ShippingFee {
     
-    /**
-     * in constructor, we set quantity to 1, as this attribute is used by 
-     * WebServiceRowFormatter() and all shipping rows are for one (1) unit
-     * 
-     */
     function __construct() {
-        $this->quantity = 1;
+        $this->quantity = 1;    // set to 1, as this attribute is used by WebServiceRowFormatter() and all shipping rows are for one (1) unit
     }
     /** @var float $quantity  quantity is always 1 */
     public $quantity;
@@ -54,7 +27,10 @@ class ShippingFee {
     public $shippingId;
     
     /**
-     * Optional
+     * Optional - short item name
+     * 
+     * Note that this will be merged with the item description when the request is sent to Svea
+     * 
      * @param string $nameAsString
      * @return $this
      */
@@ -66,7 +42,10 @@ class ShippingFee {
     public $name;
     
     /**
-     * Optional
+     * Optional - long item description
+     * 
+     * Note that this will be merged with the item name when the request is sent to Svea
+     * 
      * @param string $descriptionAsString
      * @return $this
      */
@@ -78,7 +57,11 @@ class ShippingFee {
     public $description;
     
     /**
-     * Optional
+     * Recommended - precisely two of these values must be set in the WebPayItem object:  AmountExVat, AmountIncVat or VatPercent for Orderrow. 
+     * Use functions setAmountExVat(), setAmountIncVat() or setVatPercent(). The recommended is to use setAmountExVat() and setVatPercent().
+     * 
+     * Order row item price excluding taxes, expressed as a float value. 
+     *  
      * @param float $amountAsFloat
      * @return $this
      */
@@ -90,7 +73,19 @@ class ShippingFee {
     public $amountExVat;
     
     /**
-     * Optional
+     * Optional - precisely two of these values must be set in the WebPayItem object:  AmountExVat, AmountIncVat or VatPercent for Orderrow. 
+     * Use functions setAmountExVat(), setAmountIncVat() or setVatPercent(). The recommended is to use setAmountExVat() and setVatPercent().
+     * 
+     * Order row item price including tax, expressed as a float value. 
+     * 
+     * If you specify AmountIncVat, note that this may introduce a cumulative rounding error when ordering large
+     * quantities of an item, as the package bases the total order sum on a calculated price ex. vat. 
+     * 
+     * Also, Svea uses bankers rounding (half-to-even) when calculating the order total, so at times a rounding error of at most
+     * one cent/öre may show up if the implementation/shop does not use the same rounding method.
+     * 
+     * See HostedPaymentTest for examples, including sums and calculations.
+     * 
      * @param float $amountAsFloat
      * @return $this
      */
@@ -102,7 +97,23 @@ class ShippingFee {
     public $amountIncVat;
     
     /**
-    *
+     * Recommended - precisely two of these values must be set in the WebPayItem object:  AmountExVat, AmountIncVat or VatPercent for Orderrow. 
+     * Use functions setAmountExVat(), setAmountIncVat() or setVatPercent(). The recommended is to use setAmountExVat() and setVatPercent().
+     * 
+     * Order row item price vat rate in percent, expressed as an integer. 
+     *  
+     * @param int $vatPercentAsInt
+     * @return $this
+     */
+    public function setVatPercent($vatPercentAsInt) {
+        $this->vatPercent = $vatPercentAsInt;
+        return $this;
+    }
+    /** @var int $vatPercent */
+    public $vatPercent;
+    
+   /**
+    * Optional - the name of the unit used for the shipping fee. 
     * @param string $unitDescriptionAsString
     * @return $this
     */
@@ -110,31 +121,20 @@ class ShippingFee {
         $this->unit = $unitDescriptionAsString;
         return $this;
     }
-    /**@var string */
+    /**@var string $unit */
     public $unit;
 
     /**
-     *
-     * @param int $percentAsInt
-     * @return $this
-     */
-    public function setVatPercent($percentAsInt) {
-        $this->vatPercent = $percentAsInt;
-        return $this;
-    }
-    /** @var int $vatPercent */
-    public $vatPercent;
-    
-    /**
-     *
-     * @param int $discountPercentAsInt
+     * Optional - discount in percent, applies to this order row only
+     * 
+     * @param int $discountPercentAsInteger
      * @return $this
      */
     public function setDiscountPercent($discountPercentAsInt) {
         $this->discountPercent = $discountPercentAsInt;
         return $this;
     }
-    /** @var int $discountPercent */
+    /** @var int $vatDiscount -- defaults to zero (0) */
     public $discountPercent;    
     
 }

@@ -43,9 +43,9 @@ class QueryTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
     function test_manual_parsing_of_queried_payment_order_works() {
 
         // Stop here and mark this test as incomplete.
-//        $this->markTestIncomplete(
-//            'test_manual_parsing_of_queried_payment_order_works'
-//        );
+        $this->markTestIncomplete(
+            'test_manual_parsing_of_queried_payment_order_works'
+        );
 
         // 1. go to https://test.sveaekonomi.se/webpay-admin/admin/start.xhtml 
         // 2. go to verktyg -> betalning
@@ -222,13 +222,13 @@ class QueryTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals( $transactionId, $response->transactionId );
         $this->assertEquals( "test_manual_query_card_2xz", $response->clientOrderNumber ); //
         $this->assertEquals( "1130", $response->merchantId );
-        $this->assertEquals( "AUTHORIZED", $response->status );  // if just created
-        //$this->assertEquals( "SUCCESS", $response->status );    // after having been confirmed & batch process by bank
+        //$this->assertEquals( "AUTHORIZED", $response->status );  // if just created
+        $this->assertEquals( "SUCCESS", $response->status );    // after having been confirmed & batch process by bank
         $this->assertEquals( "25500", $response->amount );
         $this->assertEquals( "SEK", $response->currency );
         $this->assertEquals( "600", $response->vat );
-        $this->assertEquals( "", $response->capturedamount ); // if just created
-        //$this->assertEquals( "25500", $response->capturedamount ); // after having been confirmed & batch process by bank
+        //$this->assertEquals( "", $response->capturedamount ); // if just created
+        $this->assertEquals( "25500", $response->capturedamount ); // after having been confirmed & batch process by bank
         $this->assertEquals( "25500", $response->authorizedamount );
         $this->assertEquals( "2014-10-06 15:35:55.327", $response->created );
         $this->assertEquals( "CREDNONE", $response->creditstatus );
@@ -257,8 +257,8 @@ class QueryTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals( 0, $response->numberedOrderRows[1]->vatDiscount );     
                 
         $this->assertEquals( null, $response->callbackurl );
-        $this->assertEquals( null, $response->capturedate ); // if just created
-        //$this->assertEquals( "2014-04-13 00:15:14.267", $response->capturedate ); // after having been confirmed & batch process by bank
+        //$this->assertEquals( null, $response->capturedate ); // if just created
+        $this->assertEquals( "2014-10-07 00:15:17.857", $response->capturedate ); // after having been confirmed & batch process by bank
         $this->assertEquals( null, $response->subscriptionId );
         $this->assertEquals( null, $response->subscriptiontype );
         $this->assertEquals( null, $response->cardType );

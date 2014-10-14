@@ -14,10 +14,10 @@ class AddOrderRowsRequest {
     /**
      * AdminService AddOrderRowsRequest 
      * @param Authentication $authentication
-     * @param numeric $clientId
+     * @param string $clientId
      * @param OrderRows $orderRows
      * @param string $orderType
-     * @param numeric $sveaOrderId
+     * @param string $sveaOrderId
      */
     function __construct( $authentication, $clientId, $orderRows, $orderType, $sveaOrderId ) {
         
