@@ -73,8 +73,24 @@ class WebPayItem {
     }
 
     /**
+     * The WebPayItem::invoiceFee() entrypoint method is used to specify fees associated with a payment method (i.e. invoice fee).
+     * It is not required to have an invoice fee row in an order.
+     * 
+     * Specify the item price using precisely two of these methods in order to specify the item price and tax rate: 
+     * setAmountExVat(), setAmountIncVat() and setVatPercent(). We recommend using setAmountExVat() and setVatPercentage().
+     * 
+     *      $invoiceFee = WebPayItem::invoiceFee()
+     *          ->setAmountExVat(100.00)        // optional, recommended, use precisely two of the price specification methods
+     *          ->setVatPercent(25)             // optional, recommended, use precisely two of the price specification methods
+     *          ->setAmountIncVat(125.00)       // optional, use precisely two of the price specification methods
+     *          ->setUnit("pcs.")               // optional
+     *          ->setName('name')               // optional
+     *          ->setDescription("description") // optional
+     *          ->setDiscountPercent(0)         // optional
+     *      );
+     * 
      * @return \Svea\InvoiceFee
-     */
+     */    
     public static function invoiceFee() {
         return new Svea\InvoiceFee();
     }
