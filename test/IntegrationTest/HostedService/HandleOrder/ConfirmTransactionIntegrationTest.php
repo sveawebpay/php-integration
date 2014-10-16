@@ -99,7 +99,7 @@ class ConfirmTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
         $request->countryCode = "SE";
         $response = $request->doRequest();     
         
-        print_r( $response );
+        //print_r( $response );
         $this->assertInstanceOf( "Svea\HostedService\ConfirmTransactionResponse", $response );     
         $this->assertEquals( 1, $response->accepted );        
         $this->assertEquals( $clientOrderNumber, $response->clientOrderNumber );  

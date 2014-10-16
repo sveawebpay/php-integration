@@ -221,7 +221,7 @@ class WebServiceOrderValidatorTest extends \PHPUnit_Framework_TestCase {
                 ->setOrderDate("Mon, 15 Aug 05 15:52:01 +0000")
                 ->useInvoicePayment();
         //$errorArray = $order->validateOrder();
-        //print_r($errorArray);
+        ////print_r($errorArray);
         $order->prepareRequest(); //throws esception
     }
 

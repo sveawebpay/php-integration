@@ -30,7 +30,7 @@ class CancelOrderRowsRequestIntegrationTest extends PHPUnit_Framework_TestCase{
         ;
                 
         $orderResponse = $order->useInvoicePayment()->doRequest();
-        //print_r( $orderResponse );
+        ////print_r( $orderResponse );
         $this->assertEquals(1, $orderResponse->accepted);           
                
         $myOrderId = $orderResponse->sveaOrderId;
@@ -42,7 +42,7 @@ class CancelOrderRowsRequestIntegrationTest extends PHPUnit_Framework_TestCase{
         $cancelOrderRowsRequest->setRowToCancel(1);        
         $cancelOrderRowsResponse = $cancelOrderRowsRequest->cancelInvoiceOrderRows()->doRequest();
         
-        //print_r( $cancelOrderRowsResponse );        
+        ////print_r( $cancelOrderRowsResponse );        
         $this->assertInstanceOf('Svea\AdminService\CancelOrderRowsResponse', $cancelOrderRowsResponse);
         $this->assertEquals(1, $cancelOrderRowsResponse->accepted );        
     }
@@ -69,7 +69,7 @@ class CancelOrderRowsRequestIntegrationTest extends PHPUnit_Framework_TestCase{
         ;
                 
         $orderResponse = $order->usePaymentPlanPayment($campaigncode)->doRequest();
-        //print_r( $orderResponse );
+        ////print_r( $orderResponse );
         $this->assertEquals(1, $orderResponse->accepted);           
                
         $myOrderId = $orderResponse->sveaOrderId;
@@ -81,7 +81,7 @@ class CancelOrderRowsRequestIntegrationTest extends PHPUnit_Framework_TestCase{
         $cancelOrderRowsRequest->setRowToCancel( 1 );
         $cancelOrderRowsResponse = $cancelOrderRowsRequest->cancelPaymentPlanOrderRows()->doRequest();
         
-        //print_r( $cancelOrderRowsResponse );        
+        ////print_r( $cancelOrderRowsResponse );        
         $this->assertInstanceOf('Svea\AdminService\CancelOrderRowsResponse', $cancelOrderRowsResponse);
         $this->assertEquals(1, $cancelOrderRowsResponse->accepted );     
     }    
@@ -108,7 +108,7 @@ class CancelOrderRowsRequestIntegrationTest extends PHPUnit_Framework_TestCase{
         ;
                 
         $orderResponse = $order->usePaymentPlanPayment($campaigncode)->doRequest();
-        //print_r( $orderResponse );
+        ////print_r( $orderResponse );
         $this->assertEquals(1, $orderResponse->accepted);           
                
         $myOrderId = $orderResponse->sveaOrderId;
@@ -120,7 +120,7 @@ class CancelOrderRowsRequestIntegrationTest extends PHPUnit_Framework_TestCase{
         $cancelOrderRowsRequest->setRowsToCancel( array(1,2) );
         $cancelOrderRowsResponse = $cancelOrderRowsRequest->cancelPaymentPlanOrderRows()->doRequest();
         
-        //print_r( $cancelOrderRowsResponse );        
+        ////print_r( $cancelOrderRowsResponse );        
         $this->assertInstanceOf('Svea\AdminService\CancelOrderRowsResponse', $cancelOrderRowsResponse);
         $this->assertEquals(1, $cancelOrderRowsResponse->accepted );     
     }    

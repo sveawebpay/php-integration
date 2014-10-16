@@ -89,7 +89,7 @@ class RecurTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
         
         $this->assertInstanceOf( "Svea\HostedService\RecurTransactionResponse", $response );
         
-        //print_r($response);                
+        ////print_r($response);                
         $this->assertEquals( 1, $response->accepted );  
         
         $this->assertEquals( "CARD", $response->paymentMethod );    // CARD is alias for KORTCERT, and this alias is returned by webservice

@@ -294,7 +294,7 @@ class WebPayAdminIntegrationTest extends PHPUnit_Framework_TestCase {
         
         $createOrderResponse = $order->useInvoicePayment()->doRequest();
         
-        //print_r( $createOrderResponse );
+        ////print_r( $createOrderResponse );
         $this->assertInstanceOf ("Svea\WebService\CreateOrderResponse", $createOrderResponse );
         $this->assertTrue( $createOrderResponse->accepted );
         

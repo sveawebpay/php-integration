@@ -57,7 +57,7 @@ class AnnulTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
          
         $this->assertInstanceOf( "Svea\HostedService\AnnulTransactionResponse", $response );
         
-        print_r( $response); 
+        //print_r( $response); 
         $this->assertEquals( 1, $response->accepted );        
         $this->assertEquals( $customerrefno, $response->clientOrderNumber );  
     }    

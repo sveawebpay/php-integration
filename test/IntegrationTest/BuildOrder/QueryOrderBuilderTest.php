@@ -60,7 +60,7 @@ class QueryOrderBuilderIntegrationTest extends PHPUnit_Framework_TestCase {
                 
         $queryResponse = $queryOrderBuilder->queryInvoiceOrder()->doRequest(); 
         
-        //print_r( $queryResponse);
+        ////print_r( $queryResponse);
         $this->assertEquals(1, $queryResponse->accepted);
         // assert that order rows are the same
         $this->assertEquals( $a_quantity, $queryResponse->numberedOrderRows[0]->quantity );
@@ -110,7 +110,7 @@ class QueryOrderBuilderIntegrationTest extends PHPUnit_Framework_TestCase {
                 
         $queryResponse = $queryOrderBuilder->queryInvoiceOrder()->doRequest(); 
         
-        //print_r( $queryResponse);
+        ////print_r( $queryResponse);
         $this->assertEquals(1, $queryResponse->accepted);
         // assert that order rows are the same
         $this->assertEquals( $a_quantity, $queryResponse->numberedOrderRows[0]->quantity );
@@ -167,7 +167,7 @@ class QueryOrderBuilderIntegrationTest extends PHPUnit_Framework_TestCase {
                 
         $queryResponse = $queryOrderBuilder->queryPaymentPlanOrder()->doRequest(); 
         
-        //print_r( $queryResponse);
+        ////print_r( $queryResponse);
         $this->assertEquals(1, $queryResponse->accepted);
         // assert that order rows are the same
         $this->assertEquals( $a_quantity, $queryResponse->numberedOrderRows[0]->quantity );
@@ -257,7 +257,7 @@ class QueryOrderBuilderIntegrationTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals( 1, $response->accepted );                
 
         // print the url to use to confirm the transaction
-        print_r( " test_manual_queryOrder_queryCard_order_step_1(): " . $response->testurl ." ");
+        //print_r( " test_manual_queryOrder_queryCard_order_step_1(): " . $response->testurl ." ");
     }
     
     /**
@@ -303,7 +303,7 @@ class QueryOrderBuilderIntegrationTest extends PHPUnit_Framework_TestCase {
                 
         $queryResponse = $queryOrderBuilder->queryCardOrder()->doRequest(); 
         
-        //print_r( $queryResponse);
+        ////print_r( $queryResponse);
         $this->assertEquals(1, $queryResponse->accepted);    
                 
         // assert that order rows are the same 
@@ -389,7 +389,7 @@ class QueryOrderBuilderIntegrationTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals( 1, $response->accepted );                
 
         // print the url to use to confirm the transaction
-        print_r( " test_manual_queryOrder_queryDirectBank_order_step_1(): " . $response->testurl ." ");
+        //print_r( " test_manual_queryOrder_queryDirectBank_order_step_1(): " . $response->testurl ." ");
     }
     
     /**
@@ -434,7 +434,7 @@ class QueryOrderBuilderIntegrationTest extends PHPUnit_Framework_TestCase {
                 
         $queryResponse = $queryOrderBuilder->queryDirectBankOrder()->doRequest(); 
         
-        //print_r( $queryResponse);
+        ////print_r( $queryResponse);
         $this->assertEquals(1, $queryResponse->accepted);
 
         //Svea\QueryTransactionResponse Object

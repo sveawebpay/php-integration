@@ -20,7 +20,7 @@ class ListPaymentMethodsIntegrationTest extends \PHPUnit_Framework_TestCase {
 
         $this->assertInstanceOf( "Svea\HostedService\ListPaymentMethodsResponse", $response );
         
-        //print_r( "test_listPaymentMethods_request_success: "); print_r( $response );
+        ////print_r( "test_listPaymentMethods_request_success: "); //print_r( $response );
         $this->assertEquals( 1, $response->accepted );
         $this->assertInternalType( "array", $response->paymentmethods );
 

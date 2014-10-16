@@ -124,7 +124,7 @@ class SplitAddressTest extends \PHPUnit_Framework_TestCase {
         $address = Helper::splitStreetAddress("Ålandshav 10å");
         $this->assertEquals( "Ålandshav", $address[1]);
         $this->assertEquals( "10å", $address[2]);
-            //print_r($address);
+            ////print_r($address);
     }
     function testÅväg_änna_10(){
         $address = Helper::splitStreetAddress("Åväg änna 10");

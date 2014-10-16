@@ -60,7 +60,7 @@ class CreditTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
         
         $this->assertInstanceOf( "Svea\HostedService\CreditTransactionResponse", $response );
         
-        print_r( $response );
+        //print_r( $response );
         $this->assertEquals( 1, $response->accepted );        
         $this->assertEquals( $clientOrderNumber, $response->clientOrderNumber );  
     }    

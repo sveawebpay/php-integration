@@ -100,7 +100,7 @@ class AddOrderRowsRequestTest extends \PHPUnit_Framework_TestCase {
         $addOrderRowsRequest = new Svea\AdminService\AddOrderRowsRequest( $this->builderObject );        
         $addOrderRowsSoapRequest = $addOrderRowsRequest->prepareRequest();
 
-        //print_r( $addOrderRowsSoapRequest );
+        ////print_r( $addOrderRowsSoapRequest );
         $this->assertEquals($this->prepareRequest_addOrderRowsSoapRequest(), $addOrderRowsSoapRequest);
     }
         
@@ -121,7 +121,7 @@ class AddOrderRowsRequestTest extends \PHPUnit_Framework_TestCase {
         $addOrderRowsSoapRequest = $addOrderRowsRequest->prepareRequest();
 
         // used once to get data for addOrderRowsRequest() below
-        print_r( "\ncopy the following to prepareRequest_addOrderRowsSoapRequest:\n\n".serialize($addOrderRowsSoapRequest)."\n\n" );      
+        //print_r( "\ncopy the following to prepareRequest_addOrderRowsSoapRequest:\n\n".serialize($addOrderRowsSoapRequest)."\n\n" );      
    }
     
     private function prepareRequest_addOrderRowsSoapRequest() {
