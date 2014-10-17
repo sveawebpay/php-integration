@@ -10,15 +10,15 @@ require_once SVEA_REQUEST_DIR . '/Includes.php';
  */
 class DeliverOrdersRequest extends AdminServiceRequest {
     
-    /** @var cancelOrderBuilder $orderBuilder */
+    /** @var deliverOrderBuilder $orderBuilder */
     public $orderBuilder;    
 
     /**
-     * @param cancelOrderBuilder $orderBuilder
+     * @param deliverOrderBuilder $deliverOrderBuilder
      */
-    public function __construct($DeliverOrderBuilder) {
+    public function __construct($deliverOrderBuilder) {
         $this->action = "DeliverOrders";
-        $this->orderBuilder = $DeliverOrderBuilder;
+        $this->orderBuilder = $deliverOrderBuilder;
     }    
 
     /**
@@ -31,13 +31,13 @@ class DeliverOrdersRequest extends AdminServiceRequest {
         
         $soapRequest = new AdminSoap\DeliverOrdersRequest( 
             new AdminSoap\Authentication( 
-                $this->orderBuilder->conf->getUsername( /*strtoupper*/($this->orderBuilder->orderType), $this->orderBuilder->countryCode ), 
-                $this->orderBuilder->conf->getPassword( /*strtoupper*/($this->orderBuilder->orderType), $this->orderBuilder->countryCode ) 
+                $this->orderBuilder->conf->getUsername( $this->orderBuilder->orderType, $this->orderBuilder->countryCode ), 
+                $this->orderBuilder->conf->getPassword( $this->orderBuilder->orderType, $this->orderBuilder->countryCode ) 
             ),
             $this->orderBuilder->distributionType,
             new AdminSoap\OrdersToDeliver(
                 new AdminSoap\DeliverOrderInformation(
-                    $this->orderBuilder->conf->getClientNumber( /*strtoupper*/($this->orderBuilder->orderType), $this->orderBuilder->countryCode ),
+                    $this->orderBuilder->conf->getClientNumber( $this->orderBuilder->orderType, $this->orderBuilder->countryCode ),
                     AdminServiceRequest::CamelCaseOrderType( $this->orderBuilder->orderType ),
                     $this->orderBuilder->orderId
                 )

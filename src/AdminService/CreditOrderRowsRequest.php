@@ -72,10 +72,10 @@ class CreditOrderRowsRequest extends AdminServiceRequest {
         
         $soapRequest = new AdminSoap\CreditInvoiceRowsRequest( 
             new AdminSoap\Authentication( 
-                $this->orderBuilder->conf->getUsername( /*strtoupper*/($this->orderBuilder->orderType), $this->orderBuilder->countryCode ), 
-                $this->orderBuilder->conf->getPassword( /*strtoupper*/($this->orderBuilder->orderType), $this->orderBuilder->countryCode ) 
+                $this->orderBuilder->conf->getUsername( ($this->orderBuilder->orderType), $this->orderBuilder->countryCode ), 
+                $this->orderBuilder->conf->getPassword( ($this->orderBuilder->orderType), $this->orderBuilder->countryCode ) 
             ),
-            $this->orderBuilder->conf->getClientNumber( /*strtoupper*/($this->orderBuilder->orderType), $this->orderBuilder->countryCode ),
+            $this->orderBuilder->conf->getClientNumber( ($this->orderBuilder->orderType), $this->orderBuilder->countryCode ),
             $this->orderBuilder->distributionType,
             $this->orderBuilder->invoiceId,
                 

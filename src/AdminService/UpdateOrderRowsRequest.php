@@ -64,10 +64,10 @@ class UpdateOrderRowsRequest extends AdminServiceRequest {
         
         $soapRequest = new AdminSoap\UpdateOrderRowsRequest( 
             new AdminSoap\Authentication( 
-                $this->orderBuilder->conf->getUsername( /*strtoupper*/($this->orderBuilder->orderType), $this->orderBuilder->countryCode ), 
-                $this->orderBuilder->conf->getPassword( /*strtoupper*/($this->orderBuilder->orderType), $this->orderBuilder->countryCode ) 
+                $this->orderBuilder->conf->getUsername( ($this->orderBuilder->orderType), $this->orderBuilder->countryCode ), 
+                $this->orderBuilder->conf->getPassword( ($this->orderBuilder->orderType), $this->orderBuilder->countryCode ) 
             ),
-            $this->orderBuilder->conf->getClientNumber( /*strtoupper*/($this->orderBuilder->orderType), $this->orderBuilder->countryCode ),
+            $this->orderBuilder->conf->getClientNumber( ($this->orderBuilder->orderType), $this->orderBuilder->countryCode ),
             AdminServiceRequest::CamelCaseOrderType( $this->orderBuilder->orderType ),
             $this->orderBuilder->orderId,
             new \SoapVar($updatedOrderRows, SOAP_ENC_OBJECT)
