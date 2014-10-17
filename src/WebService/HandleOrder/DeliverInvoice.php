@@ -25,7 +25,7 @@ class DeliverInvoice extends HandleOrder {
     
     /**
      * Returns prepared request
-     * @return \SveaRequest
+     * @return WebServiceSoap\SveaRequest
      */
     public function prepareRequest() {
         $errors = $this->validateRequest();
@@ -39,9 +39,9 @@ class DeliverInvoice extends HandleOrder {
         if ($this->orderBuilder->orderType == \ConfigurationProvider::INVOICE_TYPE) {
             $invoiceDetails = new WebServiceSoap\SveaDeliverInvoiceDetails();
             $invoiceDetails->InvoiceDistributionType = $this->orderBuilder->distributionType;
-            $invoiceDetails->IsCreditInvoice = isset($this->orderBuilder->invoiceIdToCredit) ? TRUE : FALSE;
-            if (isset($this->orderBuilder->invoiceIdToCredit)) {
-                $invoiceDetails->InvoiceIdToCredit = $this->orderBuilder->invoiceIdToCredit;
+            $invoiceDetails->IsCreditInvoice = isset($this->orderBuilder->invoiceIdToCredit) ? TRUE : FALSE;    // required
+            if (isset($this->orderBuilder->invoiceIdToCredit)) {                                                
+                $invoiceDetails->InvoiceIdToCredit = $this->orderBuilder->invoiceIdToCredit;                    // optional
             }
             $invoiceDetails->NumberOfCreditDays = isset($this->orderBuilder->numberOfCreditDays) ? $this->orderBuilder->numberOfCreditDays : 0;
             $formatter = new WebServiceRowFormatter($this->orderBuilder);
@@ -58,7 +58,7 @@ class DeliverInvoice extends HandleOrder {
     
     /**
      * Prepare and sends request
-     * @return type CloseOrderEuResponse
+     * @return DeliverOrderResult
      */
     public function doRequest() {
         $requestObject = $this->prepareRequest();
@@ -68,7 +68,6 @@ class DeliverInvoice extends HandleOrder {
         $responseObject = new \SveaResponse($response,"");
         return $responseObject->response;
     }    
-
 
     public function validate($order) {
         $errors = array();
