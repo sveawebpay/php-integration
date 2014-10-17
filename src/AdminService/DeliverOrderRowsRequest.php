@@ -72,13 +72,13 @@ class DeliverOrderRowsRequest extends AdminServiceRequest {
         
         $soapRequest = new AdminSoap\DeliverPartialRequest( 
             new AdminSoap\Authentication( 
-                $this->orderBuilder->conf->getUsername( /*strtoupper*/($this->orderBuilder->orderType), $this->orderBuilder->countryCode ), 
-                $this->orderBuilder->conf->getPassword( /*strtoupper*/($this->orderBuilder->orderType), $this->orderBuilder->countryCode ) 
+                $this->orderBuilder->conf->getUsername( ($this->orderBuilder->orderType), $this->orderBuilder->countryCode ), 
+                $this->orderBuilder->conf->getPassword( ($this->orderBuilder->orderType), $this->orderBuilder->countryCode ) 
             ),
             $this->orderBuilder->distributionType,
 
             new AdminSoap\OrderToDeliver(
-                $this->orderBuilder->conf->getClientNumber( /*strtoupper*/($this->orderBuilder->orderType), $this->orderBuilder->countryCode ),
+                $this->orderBuilder->conf->getClientNumber( ($this->orderBuilder->orderType), $this->orderBuilder->countryCode ),
                 AdminServiceRequest::CamelCaseOrderType( $this->orderBuilder->orderType ),
                 $this->orderBuilder->orderId
             ),
