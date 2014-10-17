@@ -56,21 +56,13 @@ class WebPayIntegrationTest extends PHPUnit_Framework_TestCase {
         
     /// WebPay::deliverOrder()
     // invoice
-    // paymentplan
-    // card
     public function test_deliverOrder_deliverInvoiceOrder_without_order_rows_goes_against_adminservice_DeliverOrders() {
         $deliverOrder = WebPay::deliverOrder( Svea\SveaConfig::getDefaultConfig() );
         $request = $deliverOrder->deliverInvoiceOrder();        
         $this->assertInstanceOf( "Svea\AdminService\DeliverOrdersRequest", $request ); 
         $this->assertEquals("Invoice", $request->orderBuilder->orderType);    
-    }
-
-    public function test_deliverOrder_deliverPaymentPlanOrder_without_order_rows_goes_against_DeliverOrderEU() {
-        $deliverOrder = WebPay::deliverOrder( Svea\SveaConfig::getDefaultConfig() );
-        $request = $deliverOrder->deliverPaymentPlanOrder();        
-        $this->assertInstanceOf( "Svea\WebService\DeliverPaymentPlan", $request );
-        $this->assertEquals("PaymentPlan", $request->orderBuilder->orderType); 
-    }
+    }    
+    // TODO actual integration test
     
     public function test_deliverOrder_deliverInvoiceOrder_with_order_rows_goes_against_DeliverOrderEU() {
         $deliverOrder = WebPay::deliverOrder( Svea\SveaConfig::getDefaultConfig() );
@@ -78,20 +70,89 @@ class WebPayIntegrationTest extends PHPUnit_Framework_TestCase {
         $request = $deliverOrder->deliverInvoiceOrder();     
         $this->assertInstanceOf( "Svea\WebService\DeliverInvoice", $request );         // WebService\DeliverInvoice => soap call DeliverOrderEU  
     }
+    // DeliverOrderEU - deliver order and credit order
+    public function test_deliverOrder_deliverInvoiceOrder_with_order_rows_first_deliver_then_credit_order() {
+        // create order using order row specified with ->setName() and ->setDescription
+        $specifiedOrderRow = WebPayItem::orderRow()
+            ->setAmountExVat(100.00)                // recommended to specify price using AmountExVat & VatPercent
+            ->setVatPercent(25)                     // recommended to specify price using AmountExVat & VatPercent
+            ->setQuantity(1)                        // required
+        ;   
+       
+        $order = WebPay::createOrder( \Svea\SveaConfig::getTestConfig() )
+            ->addOrderRow($specifiedOrderRow)
+            ->addCustomerDetails(TestUtil::createIndividualCustomer())
+            ->setClientOrderNumber("test_deliverOrder_deliverInvoiceOrder_with_order_rows_first_deliver_then_credit_order()" )
+            ->setCountryCode("SE")
+            ->setOrderDate(date('c'))
+        ;        
+        $createOrderResponse = $order->useInvoicePayment()->doRequest();
+        
+        //print_r( $createOrderResponse );
+        $this->assertInstanceOf ("Svea\WebService\CreateOrderResponse", $createOrderResponse );
+        $this->assertTrue( $createOrderResponse->accepted );        
 
+        $createdOrderId = $createOrderResponse->sveaOrderId;        
+
+        // deliver order
+        $deliverOrderBuilder = WebPay::deliverOrder( Svea\SveaConfig::getDefaultConfig() )
+            ->setOrderId( $createdOrderId )  
+            ->setCountryCode("SE")
+            ->setInvoiceDistributionType( DistributionType::POST )   
+            ->addOrderRow($specifiedOrderRow)
+        ;
+        $deliverOrderResponse = $deliverOrderBuilder->deliverInvoiceOrder()->doRequest();        
+        
+        //print_r( $deliverOrderResponse );
+        $this->assertInstanceOf ("Svea\WebService\DeliverOrderResult", $deliverOrderResponse );
+        $this->assertTrue( $createOrderResponse->accepted );        
+        
+        $deliveredInvoiceId = $deliverOrderResponse->invoiceId;
+        
+        // credit order
+        $creditOrderBuilder = WebPay::deliverOrder( Svea\SveaConfig::getDefaultConfig() )
+            ->setOrderId( $createdOrderId )  
+            ->setCountryCode("SE")
+            ->setInvoiceDistributionType( DistributionType::POST )   
+            ->addOrderRow($specifiedOrderRow)
+            ->setCreditInvoice($deliveredInvoiceId)   
+        ;
+        $creditOrderResponse = $creditOrderBuilder->deliverInvoiceOrder()->doRequest();
+
+        //print_r( $creditOrderResponse );
+        $this->assertInstanceOf ("Svea\WebService\DeliverOrderResult", $deliverOrderResponse );
+        $this->assertTrue( $creditOrderResponse->accepted );        
+    }
+    
+    // paymentplan
+    public function test_deliverOrder_deliverPaymentPlanOrder_without_order_rows_goes_against_DeliverOrderEU() {
+        $deliverOrder = WebPay::deliverOrder( Svea\SveaConfig::getDefaultConfig() );
+        $request = $deliverOrder->deliverPaymentPlanOrder();        
+        $this->assertInstanceOf( "Svea\WebService\DeliverPaymentPlan", $request );
+        $this->assertEquals("PaymentPlan", $request->orderBuilder->orderType); 
+    }
+    // TODO actual integration test
+    
     public function test_deliverOrder_deliverPaymentPlanOrder_with_order_rows_goes_against_DeliverOrderEU() {
         $deliverOrder = WebPay::deliverOrder( Svea\SveaConfig::getDefaultConfig() );
         $deliverOrder->addOrderRow( WebPayItem::orderRow() );   // order rows are ignored by DeliverOrderEU, can't partially deliver PaymentPlan
         $request = $deliverOrder->deliverPaymentPlanOrder();        
         $this->assertInstanceOf( "Svea\WebService\DeliverPaymentPlan", $request );      
     }
+    // TODO actual integration test
+
     
+    // card
     public function test_deliverOrder_deliverCardOrder_returns_ConfirmTransaction() {
         $deliverOrder = WebPay::deliverOrder( Svea\SveaConfig::getDefaultConfig() );
         $deliverOrder->addOrderRow( WebPayItem::orderRow() );
         $request = $deliverOrder->deliverCardOrder();        
         $this->assertInstanceOf( "Svea\HostedService\ConfirmTransaction", $request );
     }
+    // TODO actual integration test
+    
+    
+    
     
     /// WebPay::getAddresses()
     public function test_getAddresses_returns_GetAddresses() {

@@ -184,7 +184,7 @@ class DeliverOrderBuilder extends OrderBuilder {
         // if no captureDate set, use today's date as default.
         if( !isset( $this->captureDate ) ) {
             $defaultCaptureDate = explode("T", date('c')); // [0] contains date part
-            $this->setCaptureDate = $defaultCaptureDate[0];
+            $this->captureDate = $defaultCaptureDate[0];
         }
         
         $confirmTransaction = new HostedService\ConfirmTransaction($this->conf);
