@@ -11,6 +11,9 @@ require_once SVEA_REQUEST_DIR . '/Includes.php';
  */
 class ConfirmTransactionResponse extends HostedAdminResponse{
 
+    /** @var string $transactionId  transaction id that uniquely identifies the order at Svea */
+    public $transactionId;          
+  
     /** @var string $clientOrderNumber */
     public $clientOrderNumber;
     
@@ -38,9 +41,9 @@ class ConfirmTransactionResponse extends HostedAdminResponse{
             $this->accepted = 0;
             $this->setErrorParams( (string)$hostedAdminResponse->statuscode ); 
         }
-
-        $this->clientOrderNumber = (string)$hostedAdminResponse->transaction->customerrefno;
+        $this->transactionId = (string)$hostedAdminResponse->transaction['id'];
         
+        $this->clientOrderNumber = (string)$hostedAdminResponse->transaction->customerrefno;
         $this->orderType = \ConfigurationProvider::HOSTED_TYPE; // c.f. corresponding attribute in DeliverOrderResult
     }
 }

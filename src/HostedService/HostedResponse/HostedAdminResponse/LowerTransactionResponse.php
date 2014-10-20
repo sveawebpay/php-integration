@@ -11,6 +11,9 @@ require_once SVEA_REQUEST_DIR . '/Includes.php';
  */
 class LowerTransactionResponse extends HostedAdminResponse{
 
+    /** @var string $transactionId  transaction id that uniquely identifies the order at Svea */
+    public $transactionId;              
+    
     /** @var string $clientOrderNumber */
     public $clientOrderNumber;
     
@@ -35,6 +38,7 @@ class LowerTransactionResponse extends HostedAdminResponse{
             $this->accepted = 0;
             $this->setErrorParams( (string)$hostedAdminResponse->statuscode ); 
         }
+        $this->transactionId = (string)$hostedAdminResponse->transaction['id'];
 
         $this->clientOrderNumber = (string)$hostedAdminResponse->transaction->customerrefno;
     }
