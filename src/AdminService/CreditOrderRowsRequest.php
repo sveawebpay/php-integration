@@ -88,20 +88,28 @@ class CreditOrderRowsRequest extends AdminServiceRequest {
     public function validate() {
         $errors = array();
         $errors = $this->validateInvoiceId($errors);
+        $errors = $this->validateInvoiceDistributionType($errors);
         $errors = $this->validateOrderType($errors);
         $errors = $this->validateCountryCode($errors);
-//        $errors = $this->validateRowsToCredit($errors);     
+        $errors = $this->validateHasRows($errors);     
         $errors = $this->validateCreditOrderRowsHasPriceAndVatInformation($errors);
         return $errors;
     }
     
     private function validateInvoiceId($errors) {
         if (isset($this->orderBuilder->invoiceId) == FALSE) {                                                        
-            $errors[] = array('missing value' => "invoiceId is required.");
+            $errors[] = array('missing value' => "invoiceId is required, use setInvoiceId().");
         }
         return $errors;
     }               
 
+    private function validateInvoiceDistributionType($errors) {
+        if (isset($this->orderBuilder->distributionType) == FALSE) {                                                        
+            $errors[] = array('missing value' => "distributionType is required, use setInvoiceDistributionType().");
+        }
+        return $errors;
+    }     
+    
     private function validateOrderType($errors) {
         if (isset($this->orderBuilder->orderType) == FALSE) {                                                        
             $errors[] = array('missing value' => "orderType is required.");
@@ -111,17 +119,19 @@ class CreditOrderRowsRequest extends AdminServiceRequest {
     
     private function validateCountryCode($errors) {
         if (isset($this->orderBuilder->countryCode) == FALSE) {                                                        
-            $errors[] = array('missing value' => "countryCode is required.");
+            $errors[] = array('missing value' => "countryCode is required, use setCountryCode().");
         }
         return $errors;
     }
 
-//    private function validateRowsToCredit($errors) {
-//        if (isset($this->orderBuilder->rowsToCredit) == FALSE) {                                                        
-//            $errors[] = array('missing value' => "rowsToCredit is required.");
-//        }
-//        return $errors;
-//    }
+    private function validateHasRows($errors) {
+        if( (count($this->orderBuilder->rowsToCredit) == 0) &&
+            (count($this->orderBuilder->creditOrderRows) == 0) )
+        {                                                        
+            $errors[] = array('missing value' => "no rows to credit, use setRow(s)ToCredit() or addCreditOrderRow(s)().");
+        }
+        return $errors;
+    }
 
     private function validateCreditOrderRowsHasPriceAndVatInformation($errors) {
         foreach( $this->orderBuilder->creditOrderRows as $orderRow ) {                                                        

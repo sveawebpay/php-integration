@@ -83,6 +83,24 @@ class TestUtil {
             ->setDiscountPercent(0);
     }    
     
+    /**
+     * Creates an NumberedOrderRow object for use in populating order objects.
+     * @param float $amount, defaults to 100
+     * @param int $amount, defaults to 2
+     * 
+     * @return Svea\OrderRow object
+     */
+    public static function createNumberedOrderRow( $amount = 100.00, $quantity = 2 ) {
+        return WebPayItem::numberedOrderRow()
+            ->setArticleNumber("1")
+            ->setQuantity( $quantity )
+            ->setAmountExVat( $amount )
+            ->setDescription("Specification")
+            ->setName('Product')
+            ->setUnit("st")
+            ->setVatPercent(25)
+            ->setDiscountPercent(0);
+    }      
     
     /**
      * Returns an individual customer object.

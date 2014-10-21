@@ -76,7 +76,7 @@ class CreditOrderRowsBuilder {
         $this->creditOrderRows = array();
         $this->rowsToCredit = array();         
         $this->numberedOrderRows = array();
-    }        
+    }
 
     /**
      * Required -- use same countryCode as in createOrder request
@@ -226,7 +226,7 @@ class CreditOrderRowsBuilder {
     
     /**
      * Use creditInvoiceOrderRows() to credit rows to an Invoice order using AdminServiceRequest CreditOrderRows request
-     * @return CreditOrderRowsRequest 
+     * @return \Svea\AdminService\CreditOrderRowsRequest
      */
     public function creditInvoiceOrderRows() {
         $this->orderType = \ConfigurationProvider::INVOICE_TYPE; 
@@ -239,7 +239,7 @@ class CreditOrderRowsBuilder {
     /**
      * Use creditCardOrderRows() to credit a Card order by the specified order row amounts using HostedRequests CreditTransaction request
      * 
-     * @return CreditTransaction
+     * @return \Svea\HostedService\CreditTransaction
      * @throws ValidationException  if addNumberedOrderRows() has not been used.
      */
     public function creditCardOrderRows() {
@@ -259,7 +259,7 @@ class CreditOrderRowsBuilder {
     /**
      * Use creditDirectBankOrderRows() to credit a Direct Bank order by the specified order row amounts using HostedRequests CreditTransaction request
      * 
-     * @return CreditTransaction
+     * @return \Svea\HostedService\CreditTransaction
      * @throws ValidationException  if addNumberedOrderRows() has not been used.
      */
     public function creditDirectBankOrderRows() {        
