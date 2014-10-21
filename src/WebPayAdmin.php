@@ -146,29 +146,34 @@ class WebPayAdmin {
 
     /**
      * The WebPayAdmin::creditOrderRows entrypoint method is used to credit rows in an order after it has been delivered.
-     * Supports Invoice, Card and Direct Bank orders. (To credit a Payment Plan order, contact Svea customer service.)
+     * Supports invoice, card and direct bank orders. (To credit a payment plan order, please contact Svea customer service.)
      * 
-     * Get an order builder instance using the WebPayAdmin::creditOrderRows entrypoint,
-     * then provide more information about the transaction and send the request using
-     * the creditOrderRowsBuilder methods:
+     * Following this call Svea will issue a credit invoice including the original order rows specified using setRow(s)ToCredit(), 
+     * as well as any new credit order rows specified using addCreditOrderRows(). 
      * 
-     * ->setInvoiceId()                 (invoice only, required)
-     * ->setInvoiceDistributionType()   (invoice only, required)
-     * ->setOrderId()                   (card and direct bank only, required)
-     * ->setCountryCode()               (required)
-     * ->addCreditOrderRow()            (optional, use if you want to specify a new credit row, i.e. for amounts not present in the original order)
-     * ->addCreditOrderRows()           (optional)
-     * ->setRowToCredit()               (optional, index of one of the original order row you wish to credit)
-     * ->setRowsToCredit()              (optional)
-     * ->addNumberedOrderRow()          (card and direct bank only, required with setRow(s)ToCredit)
-     * ->addNumberedOrderRows()         (card and direct bank only, optional)
-     *  
-     * Finish by instantiating the request type and perform the request:
-     * ->creditInvoiceOrderRows() // creditCardOrderRows() or creditDirectBankOrderRows()
-     *   ->doRequest()
-     *  
-     * The final doRequest() returns either a CreditOrderRowsResponse or a CreditTransactionResponse.
-     *
+     * For invoice orders the order row numbers specified using setRow(s)ToCredit are mapped the the current order rows at Svea, 
+     * but for card orders, you need to first query and then supply the original order rows using addNumberedOrderRows().
+     * 
+     * Get an order builder instance using the WebPayAdmin::creditOrderRows entrypoint, then provide more information about the 
+     * transaction and send the request using the creditOrderRowsBuilder methods:
+     * 
+     *      $request = WebPay::queryOrder($config)
+     *          ->setInvoiceId()                // invoice only, required
+     *          ->setInvoiceDistributionType()  // invoice only, required
+     *          ->setOrderId()                  // card and direct bank only, required
+     *          ->setCountryCode()              // required
+     *          ->addCreditOrderRow()           // optional, use to specify a new credit row, i.e. for amounts not present in the original order
+     *          ->addCreditOrderRows()          // optional
+     *          ->setRowToCredit()              // optional, index of one of the original order row you wish to credit
+     *          ->setRowsToCredit()             // optional
+     *          ->addNumberedOrderRow()         // card and direct bank only, required with setRow(s)ToCredit
+     *          ->addNumberedOrderRows()        // card and direct bank only, optional
+     *      ;
+     *      // then select the corresponding request class and send request
+     *      $response = $request->creditInvoiceOrderRows()->doRequest()     // returns CreditOrderRowsResponse
+     *      $response = $request->creditCardOrderRows()->doRequest()        // returns CreditTransactionResponse
+     *      $response = $request->creditDirectBankOrderRows()->doRequest()  // returns CreditTransactionResponse
+     * 
      * @param ConfigurationProvider $config
      * @return Svea\CreditOrderRowsBuilder
      * @throws ValidationException
