@@ -225,6 +225,21 @@ class WebPayAdminUnitTest extends \PHPUnit_Framework_TestCase {
         $request->creditCardOrderRows()->prepareRequest();
         $this->fail( "Expected validation exception not thrown." ); // fail if validation passes, i.e. no exception was thrown                 
     }        
+        
+    function test_validates_missing_required_method_for_creditOrderRows_creditCardOrderRows__mismatched_numberedOrderRows() {        
+        $this->setExpectedException(
+          '\Svea\ValidationException', 'every entry in rowsToCredit must match a numberedOrderRows. Use setRowsToCredit() and addNumberedOrderRow().'
+        );            
+        $creditOrderRowsObject = WebPayAdmin::creditOrderRows( Svea\SveaConfig::getDefaultConfig() )
+                ->setOrderId("123456")
+                ->setCountryCode("SE")              
+                ->addNumberedOrderRow( TestUtil::createNumberedOrderRow( 100.00, 1, 1 ) )
+                ->setRowToCredit(9)
+        ;
+        $request = $creditOrderRowsObject->creditCardOrderRows();        
+        $this->fail( "Expected validation exception not thrown." ); // fail if validation passes, i.e. no exception was thrown                         
+    }        
+    
     // creditDirectBankOrderRows
     function test_no_separate_validation_tests_for_creditOrderRows_creditDirectBankOrderRows() {
         // creditDirectBankOrderRows is an alias of creditCardOrderRows, so no separate tests are needed
