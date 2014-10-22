@@ -76,7 +76,7 @@ class CreditOrderRowsBuilder {
         $this->creditOrderRows = array();
         $this->rowsToCredit = array();         
         $this->numberedOrderRows = array();
-    }        
+    }
 
     /**
      * Required -- use same countryCode as in createOrder request
@@ -226,7 +226,7 @@ class CreditOrderRowsBuilder {
     
     /**
      * Use creditInvoiceOrderRows() to credit rows to an Invoice order using AdminServiceRequest CreditOrderRows request
-     * @return CreditOrderRowsRequest 
+     * @return \Svea\AdminService\CreditOrderRowsRequest
      */
     public function creditInvoiceOrderRows() {
         $this->orderType = \ConfigurationProvider::INVOICE_TYPE; 
@@ -239,12 +239,13 @@ class CreditOrderRowsBuilder {
     /**
      * Use creditCardOrderRows() to credit a Card order by the specified order row amounts using HostedRequests CreditTransaction request
      * 
-     * @return CreditTransaction
+     * @return \Svea\HostedService\CreditTransaction
      * @throws ValidationException  if addNumberedOrderRows() has not been used.
      */
     public function creditCardOrderRows() {
         $this->orderType = \ConfigurationProvider::HOSTED_ADMIN_TYPE;
                 
+        // we need to validate card on this level before translating attributes to those relevant to hosted admin functions
         $this->validateCreditCardOrderRows();
         
         $sumOfRowAmounts = $this->calculateSumOfRowAmounts( $this->rowsToCredit, $this->numberedOrderRows, $this->creditOrderRows );
@@ -259,7 +260,7 @@ class CreditOrderRowsBuilder {
     /**
      * Use creditDirectBankOrderRows() to credit a Direct Bank order by the specified order row amounts using HostedRequests CreditTransaction request
      * 
-     * @return CreditTransaction
+     * @return \Svea\HostedService\CreditTransaction
      * @throws ValidationException  if addNumberedOrderRows() has not been used.
      */
     public function creditDirectBankOrderRows() {        
@@ -272,6 +273,11 @@ class CreditOrderRowsBuilder {
     private function validateCreditCardOrderRows() {    
         if( !isset($this->orderId) ) {
             $exceptionString = "orderId is required for creditCardOrderRows(). Use method setOrderId().";
+            throw new ValidationException($exceptionString);
+        }
+        
+        if( !isset($this->countryCode) ) {
+            $exceptionString = "countryCode is required for creditCardOrderRows(). Use method setCountryCode().";
             throw new ValidationException($exceptionString);
         }
         

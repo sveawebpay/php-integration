@@ -82,18 +82,10 @@ class WebPayAdminIntegrationTest extends PHPUnit_Framework_TestCase {
     }          
     
     public function test_cancelOrderRows_cancelCardOrderRows_returns_LowerTransaction() {
-        $mockedNumberedOrderRow = new Svea\NumberedOrderRow();
-        $mockedNumberedOrderRow
-            ->setAmountExVat(100.00)                // recommended to specify price using AmountExVat & VatPercent
-            ->setVatPercent(25)                     // recommended to specify price using AmountExVat & VatPercent
-            ->setQuantity(1)                        // required
-            ->setRowNumber(1)
-        ;   
-        
-        $cancelOrderRowsBuilder = WebPayAdmin::cancelOrderRows( Svea\SveaConfig::getDefaultConfig() );
-        $cancelOrderRowsBuilder->addNumberedOrderRow( $mockedNumberedOrderRow );
-        $cancelOrderRowsBuilder->setRowToCancel(1);
-        
+        $cancelOrderRowsBuilder = WebPayAdmin::cancelOrderRows( Svea\SveaConfig::getDefaultConfig() )
+            ->addNumberedOrderRow( TestUtil::createNumberedOrderRow( 100.00, 1, 1 ) )
+            ->setRowToCancel(1)
+        ;
         $request = $cancelOrderRowsBuilder->cancelCardOrderRows();        
         $this->assertInstanceOf( "Svea\HostedService\LowerTransaction", $request );
     }  
@@ -109,35 +101,23 @@ class WebPayAdminIntegrationTest extends PHPUnit_Framework_TestCase {
     }    
 
     public function test_creditOrderRows_creditCardOrderRows_returns_CreditTransaction() {
-        $mockedNumberedOrderRow = new Svea\NumberedOrderRow();
-        $mockedNumberedOrderRow
-            ->setAmountExVat(100.00)                // recommended to specify price using AmountExVat & VatPercent
-            ->setVatPercent(25)                     // recommended to specify price using AmountExVat & VatPercent
-            ->setQuantity(1)                        // required
-            ->setRowNumber(1)
-        ;  
-        
-        $creditOrderRowsBuilder = WebPayAdmin::creditOrderRows( Svea\SveaConfig::getDefaultConfig() );
-        $creditOrderRowsBuilder->setOrderId( 123456 );
-        $creditOrderRowsBuilder->addNumberedOrderRow( $mockedNumberedOrderRow );
-        $creditOrderRowsBuilder->setRowToCredit(1);
+        $creditOrderRowsBuilder = WebPayAdmin::creditOrderRows( Svea\SveaConfig::getDefaultConfig() )
+            ->setCountryCode("SE")
+            ->setOrderId( 123456 )
+            ->addNumberedOrderRow( TestUtil::createNumberedOrderRow( 100.00, 1, 1 ) )
+            ->setRowToCredit(1)
+        ;
         $request = $creditOrderRowsBuilder->creditCardOrderRows();                
         $this->assertInstanceOf( "Svea\HostedService\CreditTransaction", $request );
     } 
     
     public function test_creditOrderRows_creditDirectBankOrderRows_returns_CreditTransaction() {
-        $mockedNumberedOrderRow = new Svea\NumberedOrderRow();
-        $mockedNumberedOrderRow
-            ->setAmountExVat(100.00)                // recommended to specify price using AmountExVat & VatPercent
-            ->setVatPercent(25)                     // recommended to specify price using AmountExVat & VatPercent
-            ->setQuantity(1)                        // required
-            ->setRowNumber(1)
-        ;  
-        
-        $creditOrderRowsBuilder = WebPayAdmin::creditOrderRows( Svea\SveaConfig::getDefaultConfig() );
-        $creditOrderRowsBuilder->setOrderId( 123456 );
-        $creditOrderRowsBuilder->addNumberedOrderRow( $mockedNumberedOrderRow );
-        $creditOrderRowsBuilder->setRowToCredit(1);
+        $creditOrderRowsBuilder = WebPayAdmin::creditOrderRows( Svea\SveaConfig::getDefaultConfig() )
+            ->setCountryCode("SE")
+            ->setOrderId( 123456 )
+            ->addNumberedOrderRow( TestUtil::createNumberedOrderRow( 100.00, 1, 1 ) )
+            ->setRowToCredit(1)
+        ;
         $request = $creditOrderRowsBuilder->creditDirectBankOrderRows();                
         $this->assertInstanceOf( "Svea\HostedService\CreditTransaction", $request );
     } 
@@ -175,13 +155,13 @@ class WebPayAdminIntegrationTest extends PHPUnit_Framework_TestCase {
     // deliverOrderRows()
     // invoice
     public function test_deliverOrderRows_deliverInvoiceOrderRows_returns_DeliverOrderRowsRequest() {
-        $deliverOrderRowsBuilder = WebPayAdmin::deliverOrderRows( Svea\SveaConfig::getDefaultConfig() );
-        $request = $deliverOrderRowsBuilder
+        $request = WebPayAdmin::deliverOrderRows( Svea\SveaConfig::getDefaultConfig() )
             ->setCountryCode("SE")
             ->setOrderId(123456)
             ->setInvoiceDistributionType( \DistributionType::POST )
             ->setRowTodeliver(1)
-            ->deliverInvoiceOrderRows();
+            ->deliverInvoiceOrderRows()
+        ;
         $this->assertInstanceOf ("Svea\AdminService\DeliverOrderRowsRequest", $request );
     }    
     
