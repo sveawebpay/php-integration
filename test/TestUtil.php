@@ -90,7 +90,7 @@ class TestUtil {
      * 
      * @return Svea\OrderRow object
      */
-    public static function createNumberedOrderRow( $amount = 100.00, $quantity = 2 ) {
+    public static function createNumberedOrderRow( $amount = 100.00, $quantity = 1, $number = 1 ) {
         return WebPayItem::numberedOrderRow()
             ->setArticleNumber("1")
             ->setQuantity( $quantity )
@@ -99,7 +99,9 @@ class TestUtil {
             ->setName('Product')
             ->setUnit("st")
             ->setVatPercent(25)
-            ->setDiscountPercent(0);
+            ->setDiscountPercent(0)
+            ->setRowNumber( $number )
+        ;
     }      
     
     /**

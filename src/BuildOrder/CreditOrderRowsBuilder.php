@@ -245,6 +245,7 @@ class CreditOrderRowsBuilder {
     public function creditCardOrderRows() {
         $this->orderType = \ConfigurationProvider::HOSTED_ADMIN_TYPE;
                 
+        // we need to validate card on this level before translating attributes to those relevant to hosted admin functions
         $this->validateCreditCardOrderRows();
         
         $sumOfRowAmounts = $this->calculateSumOfRowAmounts( $this->rowsToCredit, $this->numberedOrderRows, $this->creditOrderRows );
@@ -272,6 +273,11 @@ class CreditOrderRowsBuilder {
     private function validateCreditCardOrderRows() {    
         if( !isset($this->orderId) ) {
             $exceptionString = "orderId is required for creditCardOrderRows(). Use method setOrderId().";
+            throw new ValidationException($exceptionString);
+        }
+        
+        if( !isset($this->countryCode) ) {
+            $exceptionString = "countryCode is required for creditCardOrderRows(). Use method setCountryCode().";
             throw new ValidationException($exceptionString);
         }
         
