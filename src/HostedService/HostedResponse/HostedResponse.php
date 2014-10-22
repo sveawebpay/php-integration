@@ -6,14 +6,14 @@ require_once SVEA_REQUEST_DIR . '/Includes.php';
  * @author anne-hal, Kristian Grossman-Madsen for Svea WebPay
  */
 class HostedResponse {
-    
-    /** int $accepted  Set to 1 iff transaction was accepted by Svea. A value of 0 may indicate that the request failed, see $resultcode. */
+
+    /** @var int $accepted  Set to 1 iff transaction was accepted by Svea. A value of 0 may indicate that the request failed, see $resultcode. */
     public $accepted;
-    /** string $resultcode  A value >0 indicates that the service request failed at Svea, see $errormessage. 0 indicates a malformed message.  */
+    /** @var string $resultcode  A value >0 indicates that the service request failed at Svea, see $errormessage. 0 indicates a malformed message.  */
     public $resultcode;    
-    /** string $errormessage  Human readable explanation of the service resultcode. */
+    /** @var string $errormessage  Human readable explanation of the service resultcode. */
     public $errormessage;
-    
+  
     protected function setErrorParams($resultcode) {
         switch ($resultcode) {
 
@@ -379,7 +379,7 @@ class HostedResponse {
      * @param string $messageEncoded
      * @param string $mac
      * @param string $secret
-     * @return boolean true iff the mac can be validated
+     * @return boolean  true iff the mac can be validated
      */
     public function validateMac($messageEncoded,$mac,$secret) {
 

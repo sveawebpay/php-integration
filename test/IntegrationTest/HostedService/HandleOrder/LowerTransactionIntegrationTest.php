@@ -11,47 +11,7 @@ require_once $root . '/../../../TestUtil.php';
  * @author Kristian Grossman-Madsen for Svea WebPay
  */
 class LowerTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
- 
-   // TODO implement and move to WebPayAdminIntegrationTest as acceptance webdriver test
-   /**
-     * test_lowerTransaction_card_success creates an order using card payment, 
-     * pays using card & receives a transaction id, then credits the transaction
-     * 
-     * used as acceptance criteria/smoke test for credit transaction feature
-     */
-    function test_lowerTransaction_card_success() { 
-      
-        // not yet implemented, requires webdriver support
-
-        // Stop here and mark this test as incomplete.
-        $this->markTestIncomplete(
-          'not yet implemented, requires webdriver support' // TODO
-        );
-        
-        // also, needs to have SUCCESS status set on transaction
-
-        // set up order (from testUtil?)
-        $order = TestUtil::createOrder();
-        
-        // pay with card, receive transactionId
-        $form = $order
-            ->UsePaymentMethod( PaymentMethod::KORTCERT )
-            ->setReturnUrl("http://myurl.se")
-            //->setCancelUrl()
-            //->setCardPageLanguage("SE")
-            ->getPaymentForm();
-        
-        $url = "https://test.sveaekonomi.se/webpay/payment";
-
-        // do request modeled on CardPymentIntegrationTest.php
-                
-        // make sure the transaction has status SUCCESS at Svea
-        
-        // credit transcation using above the transaction transactionId
-        
-        // assert response from lowerTransactionAmount equals success
-    }
-        
+         
     /**
      * test_lower_transaction_transaction_not_found 
      * 
@@ -101,8 +61,8 @@ class LowerTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
         );
         
         // Set the below to match the transaction, then run the test.
-        $clientOrderNumber = "test_manual_recurring_payment_step_1 2014-10-06T14:17:36+02:00";
-        $transactionId = 587386;
+        $clientOrderNumber = "800";
+        $transactionId = 587951;
         $amountToLower = 100;   // TODO also check that status if lower by entire amount == ANNULLED
         
         $request = new LowerTransaction( Svea\SveaConfig::getDefaultConfig() );
@@ -111,10 +71,11 @@ class LowerTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
         $request->countryCode = "SE";
         $response = $request->doRequest();        
         
-        $this->assertInstanceOf( "Svea\HostedService\LowerTransactionResponse", $response );
         
-        //print_r($response);                
+        print_r($response);                
+        $this->assertInstanceOf( "Svea\HostedService\LowerTransactionResponse", $response );
         $this->assertEquals( 1, $response->accepted );        
+        $this->assertStringMatchesFormat( "%d", $response->transactionId);   // %d => an unsigned integer value
         $this->assertEquals( $clientOrderNumber, $response->clientOrderNumber );  
  
     }
