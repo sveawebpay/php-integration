@@ -72,7 +72,6 @@ class WebPayAdminUnitTest extends \PHPUnit_Framework_TestCase {
             '-missing value : no rows to credit, use setRow(s)ToCredit() or addCreditOrderRow(s)().'
         );   
         $request->creditInvoiceOrderRows()->prepareRequest();
-        $this->fail( "Expected validation exception not thrown." ); // fail if validation passes, i.e. no exception was thrown                 
     }
     
     function test_validates_missing_required_method_for_creditOrderRows_creditInvoiceOrderRows_missing_setCountryCode() {
@@ -90,7 +89,6 @@ class WebPayAdminUnitTest extends \PHPUnit_Framework_TestCase {
             '-missing value : countryCode is required, use setCountryCode().'
         );   
         $request->creditInvoiceOrderRows()->prepareRequest();
-        $this->fail( "Expected validation exception not thrown." ); // fail if validation passes, i.e. no exception was thrown                 
     }    
 
     function test_validates_missing_required_method_for_creditOrderRows_creditInvoiceOrderRows_missing_setInvoiceDistributionType() {
@@ -108,7 +106,6 @@ class WebPayAdminUnitTest extends \PHPUnit_Framework_TestCase {
             '-missing value : distributionType is required, use setInvoiceDistributionType().'
         );   
         $request->creditInvoiceOrderRows()->prepareRequest();
-        $this->fail( "Expected validation exception not thrown." ); // fail if validation passes, i.e. no exception was thrown                 
     }     
 
     function test_validates_missing_required_method_for_creditOrderRows_creditInvoiceOrderRows_missing_setInvoiceId() {
@@ -126,7 +123,6 @@ class WebPayAdminUnitTest extends \PHPUnit_Framework_TestCase {
             '-missing value : invoiceId is required, use setInvoiceId().'
         );   
         $request->creditInvoiceOrderRows()->prepareRequest();
-        $this->fail( "Expected validation exception not thrown." ); // fail if validation passes, i.e. no exception was thrown                 
     }       
     
     // creditCardOrderRows
@@ -166,7 +162,6 @@ class WebPayAdminUnitTest extends \PHPUnit_Framework_TestCase {
             'orderId is required for creditCardOrderRows(). Use method setOrderId()'
         );   
         $request->creditCardOrderRows()->prepareRequest();
-        $this->fail( "Expected validation exception not thrown." ); // fail if validation passes, i.e. no exception was thrown                 
     }    
     
     function test_validates_missing_required_method_for_creditOrderRows_creditCardOrderRows_missing_setCountryCode() {
@@ -185,7 +180,6 @@ class WebPayAdminUnitTest extends \PHPUnit_Framework_TestCase {
             'countryCode is required for creditCardOrderRows(). Use method setCountryCode().'
         );   
         $request->creditCardOrderRows()->prepareRequest();
-        $this->fail( "Expected validation exception not thrown." ); // fail if validation passes, i.e. no exception was thrown                 
     }    
 
     function test_validates_missing_required_method_for_creditOrderRows_creditCardOrderRows_missing_rows_to_credit() {
@@ -204,7 +198,6 @@ class WebPayAdminUnitTest extends \PHPUnit_Framework_TestCase {
             'at least one of rowsToCredit or creditOrderRows must be set. Use setRowToCredit() or addCreditOrderRow().'
         );   
         $request->creditCardOrderRows()->prepareRequest();
-        $this->fail( "Expected validation exception not thrown." ); // fail if validation passes, i.e. no exception was thrown                 
     }    
 
     function test_validates_missing_required_method_for_creditOrderRows_creditCardOrderRows_missing_numberedOrderRows() {
@@ -223,21 +216,19 @@ class WebPayAdminUnitTest extends \PHPUnit_Framework_TestCase {
             'every entry in rowsToCredit must have a corresponding numberedOrderRows. Use setRowsToCredit() and addNumberedOrderRow()'
         );   
         $request->creditCardOrderRows()->prepareRequest();
-        $this->fail( "Expected validation exception not thrown." ); // fail if validation passes, i.e. no exception was thrown                 
     }        
         
-    function test_validates_missing_required_method_for_creditOrderRows_creditCardOrderRows__mismatched_numberedOrderRows() {        
-        $this->setExpectedException(
-          '\Svea\ValidationException', 'every entry in rowsToCredit must match a numberedOrderRows. Use setRowsToCredit() and addNumberedOrderRow().'
-        );            
+    function test_validates_missing_required_method_for_creditOrderRows_creditCardOrderRows__mismatched_numberedOrderRows() {              
         $creditOrderRowsObject = WebPayAdmin::creditOrderRows( Svea\SveaConfig::getDefaultConfig() )
                 ->setOrderId("123456")
                 ->setCountryCode("SE")              
                 ->addNumberedOrderRow( TestUtil::createNumberedOrderRow( 100.00, 1, 1 ) )
                 ->setRowToCredit(9)
         ;
-        $request = $creditOrderRowsObject->creditCardOrderRows();        
-        $this->fail( "Expected validation exception not thrown." ); // fail if validation passes, i.e. no exception was thrown                         
+        $this->setExpectedException(
+          '\Svea\ValidationException', 'every entry in rowsToCredit must match a numberedOrderRows. Use setRowsToCredit() and addNumberedOrderRow().'
+        );      
+        $request = $creditOrderRowsObject->creditCardOrderRows(); // exception thrown in builder when selecting request class   
     }        
     
     // creditDirectBankOrderRows
