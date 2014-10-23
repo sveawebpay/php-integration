@@ -31,15 +31,13 @@ class WebPayUnitTest extends \PHPUnit_Framework_TestCase {
                         ->setCountryCode("SE")
                         ->setOrderDate(date('c'))
             ;
-
             // prepareRequest() validates the order and throws SveaWebPayException on validation failure
             try {
                 $order->useInvoicePayment()->prepareRequest();
             }
             catch (Exception $e){
-
-                    // fail on validation error
-                    $this->fail( "Unexpected validation exception: " . $e->getMessage() );
+                // fail on validation error
+                $this->fail( "Unexpected validation exception: " . $e->getMessage() );
             }
         }
         
@@ -64,11 +62,7 @@ class WebPayUnitTest extends \PHPUnit_Framework_TestCase {
                 'Svea\ValidationException', 
                 '-missing values : OrderRows are required. Use function addOrderRow(WebPayItem::orderRow) to get orderrow setters.'
             );   
-            
-            $order->useInvoicePayment()->prepareRequest();
-
-            // fail if validation passes, i.e. no exception was thrown                 
-            $this->fail( "Expected validation exception not thrown." );            
+            $order->useInvoicePayment()->prepareRequest();               
         }   
         
 	function test_validates_missing_required_method_for_useInvoicePayment_IndividualCustomer_SE_addCustomerDetails() {
@@ -92,11 +86,7 @@ class WebPayUnitTest extends \PHPUnit_Framework_TestCase {
                 'Svea\ValidationException', 
                 '-missing customerIdentity : customerIdentity is required. Use function addCustomerDetails().'
             );   
-            
-            $order->useInvoicePayment()->prepareRequest();
-
-            // fail if validation passes, i.e. no exception was thrown                 
-            $this->fail( "Expected validation exception not thrown." );            
+            $order->useInvoicePayment()->prepareRequest();               
         }          
         
 	function test_validates_missing_required_method_for_useInvoicePayment_IndividualCustomer_SE_setCountryCode() {
@@ -119,12 +109,8 @@ class WebPayUnitTest extends \PHPUnit_Framework_TestCase {
             $this->setExpectedException(
                 'Svea\ValidationException', 
                 '-missing value : CountryCode is required. Use function setCountryCode().'
-            );   
-            
-            $order->useInvoicePayment()->prepareRequest();
-
-            // fail if validation passes, i.e. no exception was thrown                 
-            $this->fail( "Expected validation exception not thrown." );            
+            );      
+            $order->useInvoicePayment()->prepareRequest();       
         }  
         
 	function test_validates_missing_required_method_for_useInvoicePayment_IndividualCustomer_SE_setOrderDate() {
@@ -148,13 +134,36 @@ class WebPayUnitTest extends \PHPUnit_Framework_TestCase {
                 'Svea\ValidationException', 
                 '-missing value : OrderDate is Required. Use function setOrderDate().'
             );   
-            
-            $order->useInvoicePayment()->prepareRequest();
-
-            // fail if validation passes, i.e. no exception was thrown                 
-            $this->fail( "Expected validation exception not thrown." );            
+            $order->useInvoicePayment()->prepareRequest(); 
         } 
-        
+
+        // test individualCustomer()
+        function test_validates_missing_required_method_for_useInvoicePayment_IndividualCustomer_missing_setNationalIdNumber() {
+            $order = WebPay::createOrder(Svea\SveaConfig::getDefaultConfig())
+                        ->addOrderRow( 
+                            WebPayItem::orderRow()
+                                ->setQuantity(1.0)
+                                ->setAmountExVat(4.0)
+                                ->setAmountIncVat(5.0)
+                        )
+                        ->addCustomerDetails(
+                            WebPayItem::individualCustomer()
+                                //missing ->setNationalIdNumber("4605092222")
+                                //or if we use ->setNationalIdNumber("")
+                                //or if we use ->setNationalIdNumber(null)
+                        )
+                        ->setCountryCode("SE")
+                        ->setOrderDate(date('c'))
+            ;
+
+            // prepareRequest() validates the order and throws SveaWebPayException on validation failure
+            $this->setExpectedException(
+                'Svea\ValidationException', 
+                '-missing value : NationalIdNumber is required for individual customers when countrycode is SE, NO, DK or FI. Use function setNationalIdNumber().'
+            );   
+            $order->useInvoicePayment()->prepareRequest();      
+        }      
+                      
         // TODO createOrder -- other payment methods, countries, companycustomer, validate order rows et al.
         
         /// TODO deliverOrder
@@ -196,10 +205,6 @@ class WebPayUnitTest extends \PHPUnit_Framework_TestCase {
                 'Svea\ValidationException', 
                 '-missing value : CountryCode is required. Use function setCountryCode().'                
             );   
-            
-            $order->prepareRequest();
-
-            // fail if validation passes, i.e. no exception was thrown                 
-            $this->fail( "Expected validation exception not thrown." );            
+            $order->prepareRequest();         
         }             
 }
