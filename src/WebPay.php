@@ -103,10 +103,11 @@ class WebPay {
      * turned off, please contact Svea if unsure.)
      * 
      * To deliver an invoice, partpayment or card order in full, you do not need to 
-     * specifying order rows. To partially deliver an order, use WebPayAdmin::deliverOrderRows().
+     * specify order rows. To partially deliver an order, the recommended way is to
+     * use WebPayAdmin::deliverOrderRows().
      *  
      * Get an order builder instance using the WebPay::deliverOrder entrypoint, then
-     * provide more information about the transaction using DeliverOrderBuilder methods. 
+     * provide more information about the transaction using DeliverOrderBuilder methods: 
      * 
      *      $request = WebPay::deliverOrder($config)
      *          ->setOrderId()                  // invoice or payment plan only, required
@@ -117,12 +118,11 @@ class WebPay {
      *          ->setCaptureDate()              // card only, optional
      *          ->addOrderRow()                 // deprecated, optional -- use WebPayAdmin::deliverOrderRows instead
      *          ->setCreditInvoice()            // deprecated, optional -- use WebPayAdmin::creditOrderRows instead
-     *          ->deliverInvoiceOrder()         // select request class, use same order type as in createOrder request
-     *              ->doRequest()               // and perform the request, returns DeliverOrderResult 
-     *
-     *          //->deliverPaymentPlanOrder()->doRequest()  // returns DeliverOrderResult 
-     *          //->deliverCardOrder()->doRequest()         // returns ConfirmTransactionResponse 
      *      ;
+     *      // then select the corresponding request class and send request
+     *      $response = $request->deliverInvoiceOrder()->doRequest();       // returns DeliverOrderResult
+     *      $response = $request->deliverPaymentPlanOrder()->doRequest();   // returns DeliverOrderResult
+     *      $response = $request->deliverCardOrder()->doRequest();          // returns ConfirmTransactionResponse
      * 
      * @see \Svea\DeliverOrderBuilder \Svea\DeliverOrderBuilder
      * @see \Svea\WebService\DeliverOrderResult \Svea\WebService\DeliverOrderResult
