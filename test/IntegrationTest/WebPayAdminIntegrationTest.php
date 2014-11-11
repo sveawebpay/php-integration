@@ -191,16 +191,12 @@ class WebPayAdminIntegrationTest extends PHPUnit_Framework_TestCase {
             ->setName("shippingfee 1")              
             ->setDescription("shippingfee description 1")
         ;         
-        
-        $order = WebPay::createOrder( \Svea\SveaConfig::getTestConfig() )
+         
+        $order = TestUtil::createOrderWithoutOrderRows()
             ->addOrderRow($specifiedOrderRow)
             ->addOrderRow($invoiceFeeOrderRow)               
-            ->addOrderRow($shippingFeeOrderRow)               
-            ->addCustomerDetails(TestUtil::createIndividualCustomer())
-            ->setClientOrderNumber("test_queryOrder_queryInvoiceOrder_single_order_row_with_invoice_fee()" )
-            ->setCountryCode("SE")
-            ->setOrderDate(date('c'))
-        ;
+            ->addOrderRow($shippingFeeOrderRow)
+        ;                
         
         $createOrderResponse = $order->useInvoicePayment()->doRequest();
         
@@ -262,16 +258,11 @@ class WebPayAdminIntegrationTest extends PHPUnit_Framework_TestCase {
             ->setName("orderrow 2")                 // optional
             ->setDescription("description 2")       // optional
         ;         
-                
-        $order = WebPay::createOrder( \Svea\SveaConfig::getTestConfig() )
-            ->addOrderRow($specifiedOrderRow)
-            ->addOrderRow($specifiedOrderRow2)
-            ->addCustomerDetails(TestUtil::createIndividualCustomer())
-            ->setClientOrderNumber("test_queryOrder_queryInvoiceOrder_multiple_order_rows()" )
-            ->setCountryCode("SE")
-            ->setOrderDate(date('c'))
-        ;
         
+        $order = TestUtil::createOrderWithoutOrderRows()
+            ->addOrderRow($specifiedOrderRow)  
+            ->addOrderRow($specifiedOrderRow2);
+         
         $createOrderResponse = $order->useInvoicePayment()->doRequest();
         
         ////print_r( $createOrderResponse );
