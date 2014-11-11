@@ -169,7 +169,9 @@ class OrderBuilder {
     }
 
     /**
-     * Required for Card, Direct Bank and PayPage orders - set the order currency
+     * Required for card payment, direct bank & PayPage payments. Ignored for invoice and payment plan.
+     *
+     * Ignored for invoice and payment plan orders, which use the selected client id currency, as determined by ConfigurationProvider and setCountryCode.
      * 
      * @param string $currencyAsString in ISO 4217 three-letter format, ex. "SEK", "EUR"
      * @return $this
@@ -182,6 +184,7 @@ class OrderBuilder {
 
     /**
      * Optional - set a client side customer reference, i.e. customer number etc.
+     * Max length 30 characters.
      * 
      * @param string  $customerReferenceAsString needs to be unique to the order for card and direct bank orders
      * @return $this
@@ -192,7 +195,8 @@ class OrderBuilder {
     }
 
     /**
-     * Required for Card, Direct Bank and pay page orders - set a client side order identifier, i.e. the webshop order number etc.
+     * Required for Card, Direct Bank and PaymentMethod and PayPage orders - set a client side order identifier, i.e. the webshop order number etc.
+     * Max length 30 characters.
      * 
      * Note that for Card and Direct Bank orders, you may not reuse a previously sent client order number, or you'll get error 127 from the service. 
      * 
