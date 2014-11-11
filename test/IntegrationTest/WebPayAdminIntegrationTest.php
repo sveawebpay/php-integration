@@ -308,7 +308,7 @@ class WebPayAdminIntegrationTest extends PHPUnit_Framework_TestCase {
                 
         $queryResponse = $queryOrderBuilder->queryCardOrder()->doRequest();         
         
-        print_r( $queryResponse);
+        //print_r( $queryResponse);
         $this->assertEquals( 1, $queryResponse->accepted); 
         
         $this->assertEquals( 1, $queryResponse->numberedOrderRows[0]->rowNumber );
@@ -332,7 +332,7 @@ class WebPayAdminIntegrationTest extends PHPUnit_Framework_TestCase {
                 
         $queryResponse = $queryOrderBuilder->queryCardOrder()->doRequest();         
         
-        print_r( $queryResponse);
+        //print_r( $queryResponse);
         $this->assertEquals( 1, $queryResponse->accepted); 
         
         $this->assertEquals( 1, $queryResponse->numberedOrderRows[0]->rowNumber );
