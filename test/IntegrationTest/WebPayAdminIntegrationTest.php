@@ -197,19 +197,13 @@ class WebPayAdminIntegrationTest extends PHPUnit_Framework_TestCase {
             ->setName("orderrow 1")                 // optional
             ->setDescription("description 1")       // optional
         ;   
-
-       
-        $order = WebPay::createOrder( \Svea\SveaConfig::getTestConfig() )
-            ->addOrderRow($specifiedOrderRow)
-            ->addCustomerDetails(TestUtil::createIndividualCustomer())
-            ->setClientOrderNumber("test_queryOrder_queryInvoiceOrder_single_order_row()" )
-            ->setCountryCode("SE")
-            ->setOrderDate(date('c'))
-        ;
+        
+        $order = TestUtil::createOrderWithoutOrderRows()
+            ->addOrderRow($specifiedOrderRow);                
         
         $createOrderResponse = $order->useInvoicePayment()->doRequest();
         
-        print_r( $createOrderResponse );
+        //print_r( $createOrderResponse );
         $this->assertInstanceOf ("Svea\WebService\CreateOrderResponse", $createOrderResponse );
         $this->assertTrue( $createOrderResponse->accepted );
         
@@ -223,7 +217,7 @@ class WebPayAdminIntegrationTest extends PHPUnit_Framework_TestCase {
                 
         $queryResponse = $queryOrderBuilder->queryInvoiceOrder()->doRequest();         
         
-        print_r( $queryResponse);
+        //print_r( $queryResponse);
         $this->assertEquals( 1, $queryResponse->accepted); 
         
         $this->assertEquals( 1, $queryResponse->numberedOrderRows[0]->rowNumber );
@@ -252,16 +246,11 @@ class WebPayAdminIntegrationTest extends PHPUnit_Framework_TestCase {
             ->setName("orderrow 2")                 // optional
             ->setDescription("description 2")       // optional
         ;         
-                
-        $order = WebPay::createOrder( \Svea\SveaConfig::getTestConfig() )
-            ->addOrderRow($specifiedOrderRow)
-            ->addOrderRow($specifiedOrderRow2)
-            ->addCustomerDetails(TestUtil::createIndividualCustomer())
-            ->setClientOrderNumber("test_queryOrder_queryInvoiceOrder_multiple_order_rows()" )
-            ->setCountryCode("SE")
-            ->setOrderDate(date('c'))
-        ;
         
+        $order = TestUtil::createOrderWithoutOrderRows()
+            ->addOrderRow($specifiedOrderRow)  
+            ->addOrderRow($specifiedOrderRow2);
+         
         $createOrderResponse = $order->useInvoicePayment()->doRequest();
         
         //print_r( $createOrderResponse );
@@ -280,7 +269,7 @@ class WebPayAdminIntegrationTest extends PHPUnit_Framework_TestCase {
                 
         $queryResponse = $queryOrderBuilder->queryInvoiceOrder()->doRequest();         
         
-        print_r( $queryResponse);
+        //print_r( $queryResponse);
         $this->assertEquals(1, $queryResponse->accepted);    
                 
         // assert that order rows are the same 
