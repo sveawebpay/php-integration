@@ -30,7 +30,6 @@ class CancelOrderRowsRequestIntegrationTest extends PHPUnit_Framework_TestCase{
         ;
                 
         $orderResponse = $order->useInvoicePayment()->doRequest();
-        //print_r( $orderResponse );
         $this->assertEquals(1, $orderResponse->accepted);           
                
         $myOrderId = $orderResponse->sveaOrderId;

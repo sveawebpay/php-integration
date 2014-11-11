@@ -78,14 +78,10 @@ class WebPayIntegrationTest extends PHPUnit_Framework_TestCase {
             ->setVatPercent(25)                     // recommended to specify price using AmountExVat & VatPercent
             ->setQuantity(1)                        // required
         ;   
-       
-        $order = WebPay::createOrder( \Svea\SveaConfig::getTestConfig() )
-            ->addOrderRow($specifiedOrderRow)
-            ->addCustomerDetails(TestUtil::createIndividualCustomer())
-            ->setClientOrderNumber("test_deliverOrder_deliverInvoiceOrder_with_order_rows_first_deliver_then_credit_order()" )
-            ->setCountryCode("SE")
-            ->setOrderDate(date('c'))
-        ;        
+             
+        $order = TestUtil::createOrderWithoutOrderRows()
+            ->addOrderRow($specifiedOrderRow);
+        
         $createOrderResponse = $order->useInvoicePayment()->doRequest();
         
         //print_r( $createOrderResponse );
@@ -141,7 +137,6 @@ class WebPayIntegrationTest extends PHPUnit_Framework_TestCase {
     }
     // TODO actual integration test
 
-    
     // card
     public function test_deliverOrder_deliverCardOrder_returns_ConfirmTransaction() {
         $deliverOrder = WebPay::deliverOrder( Svea\SveaConfig::getDefaultConfig() );
@@ -150,9 +145,6 @@ class WebPayIntegrationTest extends PHPUnit_Framework_TestCase {
         $this->assertInstanceOf( "Svea\HostedService\ConfirmTransaction", $request );
     }
     // TODO actual integration test
-    
-    
-    
     
     /// WebPay::getAddresses()
     public function test_getAddresses_returns_GetAddresses() {
