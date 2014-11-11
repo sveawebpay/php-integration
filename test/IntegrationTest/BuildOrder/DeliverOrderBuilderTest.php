@@ -110,8 +110,6 @@ class DeliverOrderBuilderIntegrationTest extends PHPUnit_Framework_TestCase {
             ->addCustomerDetails( TestUtil::createIndividualCustomer("SE") )
             ->setCountryCode("SE")
             ->setCurrency("SEK")
-            ->setCustomerReference("created by TestUtil::createOrder()")
-            ->setClientOrderNumber( "clientOrderNumber:".date('c'))
             ->setOrderDate( date('c') )
         ;
         $response = $order->usePaymentPlanPayment( TestUtil::getGetPaymentPlanParamsForTesting() )->doRequest();
@@ -148,8 +146,6 @@ class DeliverOrderBuilderIntegrationTest extends PHPUnit_Framework_TestCase {
             ->addCustomerDetails( TestUtil::createIndividualCustomer("SE") )
             ->setCountryCode("SE")
             ->setCurrency("SEK")
-            ->setCustomerReference("created by TestUtil::createOrder()")
-            ->setClientOrderNumber( "clientOrderNumber:".date('c'))
             ->setOrderDate( date('c') )
         ;
         $response = $order->usePaymentPlanPayment( TestUtil::getGetPaymentPlanParamsForTesting() )->doRequest();
@@ -159,11 +155,11 @@ class DeliverOrderBuilderIntegrationTest extends PHPUnit_Framework_TestCase {
         $orderId = $response->sveaOrderId;
 
         $DeliverOrderBuilder = WebPay::deliverOrder( Svea\SveaConfig::getDefaultConfig() )
-//            ->addOrderRow( WebPayItem::orderRow()
-//                ->setQuantity(1)
-//                ->setAmountExVat(1000.00)
-//                ->setVatPercent(25)
-//            )
+            //->addOrderRow( WebPayItem::orderRow()
+            //    ->setQuantity(1)
+            //    ->setAmountExVat(1000.00)
+            //    ->setVatPercent(25)
+            //)
             ->setCountryCode("SE")
             ->setOrderId( $orderId )
         ;        

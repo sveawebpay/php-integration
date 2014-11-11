@@ -13,15 +13,7 @@ require_once $root . '/../../TestUtil.php';
 class CreateOrderBuilderIntegrationTest extends PHPUnit_Framework_TestCase {
 
     public function test_createOrder_Invoice_SE_Accepted() {
-        $order = WebPay::createOrder( Svea\SveaConfig::getDefaultConfig() )
-            ->addOrderRow( TestUtil::createOrderRow() )
-            ->addCustomerDetails( TestUtil::createIndividualCustomer("SE") )
-            ->setCountryCode("SE")
-            ->setCurrency("SEK")
-            ->setCustomerReference("created by TestUtil::createOrder()")
-            ->setClientOrderNumber( "clientOrderNumber:".date('c'))
-            ->setOrderDate( date('c') )
-        ;
+        $order = TestUtil::createOrder();
         $response = $order->useInvoicePayment()->doRequest();
 
         $this->assertEquals(1, $response->accepted);
@@ -38,8 +30,6 @@ class CreateOrderBuilderIntegrationTest extends PHPUnit_Framework_TestCase {
             ->addCustomerDetails( TestUtil::createIndividualCustomer("SE") )
             ->setCountryCode("SE")
             ->setCurrency("SEK")
-            ->setCustomerReference("created by TestUtil::createOrder()")
-            ->setClientOrderNumber( "clientOrderNumber:".date('c'))
             ->setOrderDate( date('c') )
         ;
         $response = $order->usePaymentPlanPayment( TestUtil::getGetPaymentPlanParamsForTesting() )->doRequest();
