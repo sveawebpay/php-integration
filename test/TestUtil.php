@@ -29,8 +29,8 @@ class TestUtil {
                 ->addCustomerDetails( $customer )
                 ->setCountryCode("SE")
                 ->setCurrency("SEK")
-                ->setCustomerReference("created by TestUtil::createOrder()")
-                ->setClientOrderNumber( "clientOrderNumber:".date('c'))
+                //->setCustomerReference("created by TestUtil::createOrder()")
+                //->setClientOrderNumber( "clientOrderNumber:".date('c'))
                 ->setOrderDate( date('c') )
         ;
         
