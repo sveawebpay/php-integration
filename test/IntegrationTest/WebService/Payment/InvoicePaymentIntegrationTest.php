@@ -26,8 +26,8 @@ class InvoicePaymentIntegrationTest extends PHPUnit_Framework_TestCase {
 
         $this->assertEquals(1, $request->accepted);
     }
-    
-    
+
+
     public function testInvoiceRequestNLAcceptedWithDoubleHousenumber() {
         $config = Svea\SveaConfig::getDefaultConfig();
         $request = WebPay::createOrder($config)
@@ -50,7 +50,7 @@ class InvoicePaymentIntegrationTest extends PHPUnit_Framework_TestCase {
 
         $this->assertEquals(1, $request->accepted);
     }
-    
+
 
     public function testInvoiceRequestUsingISO8601dateAccepted() {
         $config = Svea\SveaConfig::getDefaultConfig();
@@ -509,11 +509,11 @@ class InvoicePaymentIntegrationTest extends PHPUnit_Framework_TestCase {
                     ->useInvoicePayment()
                         ->doRequest();
 
-        $this->assertEquals(1, $request->accepted);        
-        $this->assertEquals(true, isset($request->clientOrderNumber) );  
+        $this->assertEquals(1, $request->accepted);
+        $this->assertEquals(true, isset($request->clientOrderNumber) );
         $this->assertEquals("I_exist!", $request->clientOrderNumber);
     }
-    
+
     public function testInvoiceRequest_optional_clientOrderNumber_not_present_in_response_if_not_sent() {
         $config = Svea\SveaConfig::getDefaultConfig();
         $request = WebPay::createOrder($config)
@@ -529,9 +529,9 @@ class InvoicePaymentIntegrationTest extends PHPUnit_Framework_TestCase {
                         ->doRequest();
 
         $this->assertEquals(1, $request->accepted);
-        $this->assertEquals(false, isset($request->clientOrderNumber) );  
+        $this->assertEquals(false, isset($request->clientOrderNumber) );
     }
-    
+
     public function testInvoiceRequest_OrderType_set_in_response_if_useInvoicePayment_set() {
         $config = Svea\SveaConfig::getDefaultConfig();
         $request = WebPay::createOrder($config)
@@ -543,6 +543,54 @@ class InvoicePaymentIntegrationTest extends PHPUnit_Framework_TestCase {
                         ->doRequest();
 
         $this->assertEquals(1, $request->accepted);
-        $this->assertEquals("Invoice", $request->orderType);                               
-    }   
+        $this->assertEquals("Invoice", $request->orderType);
+    }
+
+    /**
+     * Tests for rounding**
+     */
+
+    public function testPriceSetAsExVatAndVatPercent(){
+        $config = Svea\SveaConfig::getDefaultConfig();
+        $request = WebPay::createOrder($config)
+                    ->addOrderRow(
+                            WebPayItem::orderRow()
+                                ->setAmountExVat(80.00)
+                                ->setVatPercent(24)
+                                ->setQuantity(1)
+                            )
+                    ->addCustomerDetails(TestUtil::createIndividualCustomer("SE"))
+                    ->setCountryCode("SE")
+                    ->setOrderDate("2012-12-12")
+                    ->useInvoicePayment()
+                        ->doRequest();
+
+         $this->assertEquals(1, $request->accepted);
+
+    }
+    public function testFixedDiscountSetAsExVat(){
+        $config = Svea\SveaConfig::getDefaultConfig();
+              $request = WebPay::createOrder($config)
+                    ->addOrderRow(
+                            WebPayItem::orderRow()
+                                ->setAmountExVat(80.00)
+                                ->setVatPercent(24)
+                                ->setQuantity(1)
+                            )
+                    ->addDiscount(WebPayItem::fixedDiscount()
+                            ->setAmountExVat(8)
+                            ->setVatPercent(0))
+                     ->addFee(WebPayItem::shippingFee()
+                                ->setAmountExVat(80.00)
+                                ->setVatPercent(24)
+                            )
+                    ->addCustomerDetails(TestUtil::createIndividualCustomer("SE"))
+                    ->setCountryCode("SE")
+                    ->setOrderDate("2012-12-12")
+                    ->useInvoicePayment()
+                        ->doRequest();
+
+         $this->assertEquals(1, $request->accepted);
+
+    }
 }

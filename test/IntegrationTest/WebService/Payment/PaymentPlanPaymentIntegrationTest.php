@@ -47,4 +47,54 @@ class PaymentPlanPaymentIntegrationTest extends PHPUnit_Framework_TestCase {
 
         $this->assertEquals(1, $request->accepted);
     }
+
+    /**
+     * Rounding **
+     */
+
+      public function testPriceSetAsExVatAndVatPercent(){
+        $config = Svea\SveaConfig::getDefaultConfig();
+        $campaigncode = TestUtil::getGetPaymentPlanParamsForTesting();
+        $request = WebPay::createOrder($config)
+                    ->addOrderRow(
+                            WebPayItem::orderRow()
+                                ->setAmountExVat(1000.00)
+                                ->setVatPercent(24)
+                                ->setQuantity(1)
+                            )
+                    ->addCustomerDetails(TestUtil::createIndividualCustomer("SE"))
+                    ->setCountryCode("SE")
+                    ->setOrderDate("2012-12-12")
+                    ->usePaymentPlanPayment($campaigncode)
+                        ->doRequest();
+
+         $this->assertEquals(1, $request->accepted);
+
+    }
+    public function testFixedDiscountSetAsExVat(){
+        $config = Svea\SveaConfig::getDefaultConfig();
+        $campaigncode = TestUtil::getGetPaymentPlanParamsForTesting();
+              $request = WebPay::createOrder($config)
+                    ->addOrderRow(
+                            WebPayItem::orderRow()
+                                ->setAmountExVat(800.00)
+                                ->setVatPercent(24)
+                                ->setQuantity(1)
+                            )
+                    ->addDiscount(WebPayItem::fixedDiscount()
+                            ->setAmountExVat(8)
+                            ->setVatPercent(0))
+                     ->addFee(WebPayItem::shippingFee()
+                                ->setAmountExVat(80.00)
+                                ->setVatPercent(24)
+                            )
+                    ->addCustomerDetails(TestUtil::createIndividualCustomer("SE"))
+                    ->setCountryCode("SE")
+                    ->setOrderDate("2012-12-12")
+                    ->usePaymentPlanPayment($campaigncode)
+                        ->doRequest();
+
+         $this->assertEquals(1, $request->accepted);
+
+    }
 }
