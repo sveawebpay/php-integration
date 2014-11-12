@@ -41,7 +41,7 @@ class CardPaymentURLIntegrationTest extends \PHPUnit_Framework_TestCase {
         
         // create order
         $order = \TestUtil::createOrder( TestUtil::createIndividualCustomer("SE")->setIpAddress($ipAddress) );
-        $order->setCustomerReference("foobar".date('c'));
+        $order->setClientOrderNumber("foobar".date('c'));
         // set payment method
         // call getPaymentURL
         $response = $order
@@ -65,7 +65,7 @@ class CardPaymentURLIntegrationTest extends \PHPUnit_Framework_TestCase {
         
         // create order
         $order = \TestUtil::createOrder( TestUtil::createIndividualCustomer("SE")->setIpAddress($ipAddress) );
-        $order->setCustomerReference("foobar".date('c'));
+        $order->setClientOrderNumber("foobar".date('c'));
         // set payment method
         // call getPaymentURL
         $response = $order
@@ -111,7 +111,7 @@ class CardPaymentURLIntegrationTest extends \PHPUnit_Framework_TestCase {
         // set payment method
         // call getPaymentURL
         $response = $order
-            ->setCustomerReference("created by test_manual_CardPayment_getPaymentURL") //override
+            ->setClientOrderNumber("foobar".date('c'))
             ->usePaymentMethod(\PaymentMethod::KORTCERT )
             ->setPayPageLanguage($orderLanguage)
             ->setReturnUrl($returnUrl)

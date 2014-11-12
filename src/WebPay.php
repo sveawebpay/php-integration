@@ -36,7 +36,7 @@ The WebPay and WebPayAdmin entrypoint methods are built as a fluent API so you c
 The Svea WebPay PHP integration package is developed and tested using NetBeans IDE 7.3.1 with the phpunit 3.7.24 plugin.
  *
  * @api
- * @version 2.2.3
+ * @version 2.2.4
  * @package WebPay
  *
  * @author Anneli Halld'n, Daniel Brolund, Kristian Grossman-Madsen for Svea WebPay
@@ -63,9 +63,9 @@ class WebPay {
      *          ->addCustomerDetails( $customer )   // required for invoice and payment plan payments, see WebPayItem for individual, company id.
      *          ->setCountryCode("SE")              // required
      *          ->setOrderDate(date('c'))           // required for invoice and payment plan payments
-     *          ->setCurrency("SEK")                // required for card payment, direct payment and PayPage payment.
-     *          ->setClientOrderNumber("A123456")   // required for card payment, direct payment, PaymentMethod payment and PayPage payments.
-     *          ->setCustomerReference("att: kgm")  // optional
+     *          ->setCurrency("SEK")                // required for card payment, direct bank & PayPage payments. Ignored for invoice and payment plan.
+     *          ->setClientOrderNumber("A123456")   // required for card payment, direct payment, PaymentMethod & PayPage payments, max length 30 chars.
+     *          ->setCustomerReference("att: kgm")  // optional, ignored for card & direct bank orders, max length 30 chars.
      *      ;
      * 
      * @see \Svea\OrderRow \Svea\OrderRow
