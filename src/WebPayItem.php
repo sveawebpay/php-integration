@@ -87,6 +87,26 @@ class WebPayItem {
     }
 
     /**
+     * Use WebPayItem::relativeDiscount() when the discount or coupon is expressed as a percentage of the total product amount.
+     * 
+     * The discount will be calculated based on the total sum of all order rows specified using addOrderRow(), it does not 
+     * apply to invoice or shipping fees. 
+     * 
+     * If there are several vat rates present in the order, the discount will be split proportionally across the order row vat 
+     * rates. For examples, including the resulting discount rows, see the test suite file UnitTest/InvoicePaymentTest.php.
+     *
+     * Specify the discount using RelativeDiscount methods:
+     *
+     *      $relativeDiscount = WebPayItem::relativeDiscount()
+     *          ->setDiscountPercent(10.0)          // required, 
+     *          ->setDiscountId("1")                // optional
+     *          ->setUnit("st.")                    // optional
+     *          ->setName("DiscountName")           // optional
+     *          ->setDescription("DiscountDesc.")   // optional
+     *      );
+     *      
+     * @see \Svea\RelativeDiscount
+     * 
      * @return \Svea\RelativeDiscount
      */
     public static function relativeDiscount() {
