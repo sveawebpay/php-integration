@@ -97,4 +97,52 @@ class PaymentPlanPaymentIntegrationTest extends PHPUnit_Framework_TestCase {
          $this->assertEquals(1, $request->accepted);
 
     }
+
+    public function testResponseOrderRowPriceSetAsInkVatAndVatPercentSetAmountAsIncVat(){
+        $config = Svea\SveaConfig::getDefaultConfig();
+         $campaigncode = TestUtil::getGetPaymentPlanParamsForTesting();
+        $request = WebPay::createOrder($config)
+                    ->addOrderRow(
+                            WebPayItem::orderRow()
+                                ->setAmountIncVat(1123.9876)
+                                ->setVatPercent(24)
+                                ->setQuantity(1)
+                            )
+                    ->addCustomerDetails(TestUtil::createIndividualCustomer("SE"))
+                    ->setCountryCode("SE")
+                    ->setOrderDate("2012-12-12")
+                     ->usePaymentPlanPayment($campaigncode)
+                        ->doRequest();
+          $this->assertEquals(1, $request->accepted);
+
+    }
+
+    public function testResponseFeeSetAsIncVatAndVatPercentWhenPriceSetAsIncVatAndVatPercent(){
+        $config = Svea\SveaConfig::getDefaultConfig();
+         $campaigncode = TestUtil::getGetPaymentPlanParamsForTesting();
+        $request = WebPay::createOrder($config)
+                    ->addOrderRow(
+                            WebPayItem::orderRow()
+                                ->setAmountIncVat(1123.9876)
+                                ->setVatPercent(24)
+                                ->setQuantity(1)
+                            )
+                    ->addFee(WebPayItem::shippingFee()
+                                ->setAmountIncVat(100.00)
+                                ->setVatPercent(24)
+                            )
+                    ->addFee(WebPayItem::invoiceFee()
+                                ->setAmountIncVat(100.00)
+                                ->setVatPercent(24)
+                            )
+                    ->addCustomerDetails(TestUtil::createIndividualCustomer("SE"))
+                    ->setCountryCode("SE")
+                    ->setOrderDate("2012-12-12")
+                    ->usePaymentPlanPayment($campaigncode)
+                        ->doRequest();
+
+        $this->assertEquals(1, $request->accepted);
+
+    }
+    
 }
