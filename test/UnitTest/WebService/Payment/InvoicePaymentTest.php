@@ -615,4 +615,62 @@ class InvoicePaymentTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals('sverigetest', $request->request->Auth->Password);
         $this->assertEquals(79021, $request->request->Auth->ClientNumber);
     }
+    
+    public function test_relativeDiscount_amount() {
+        $order = WebPay::createOrder(Svea\SveaConfig::getDefaultConfig())
+            ->addCustomerDetails(WebPayItem::individualCustomer()->setNationalIdNumber(194605092222))
+            ->setCountryCode("SE")
+            ->setCustomerReference("33")
+            ->setOrderDate("2012-12-12")
+            ->setCurrency("SEK")
+            ->addOrderRow( 
+                WebPayItem::orderRow()
+                ->setAmountExVat(80.00)
+                ->setVatPercent(25)
+                ->setQuantity(1)
+                ->setName("exvatRow")
+            )
+            ->addOrderRow( 
+                WebPayItem::orderRow()
+                ->setAmountExVat(80.00)
+                ->setVatPercent(25)
+                ->setQuantity(1)
+                ->setName("exvatRow2")
+            )
+            ->addFee( 
+                WebPayItem::invoiceFee()
+                ->setAmountExVat(8.00)
+                ->setVatPercent(25)
+                ->setName("exvatInvoiceFee")
+            )
+            ->addFee( 
+                WebPayItem::shippingFee()
+                ->setAmountExVat(16.00)
+                ->setVatPercent(25)
+                ->setName("exvatShippingFee")
+            )                
+            ->addDiscount(
+                WebPayItem::relativeDiscount()
+                ->setDiscountPercent(10.0)
+                ->setDiscountId("TenPercentOff")
+                ->setName("relativeDiscount")
+            )
+        ;
+        $request = $order->useInvoicePayment()->prepareRequest();
+        // all order rows
+        $this->assertEquals(80.00, $request->request->CreateOrderInformation->OrderRows['OrderRow'][0]->PricePerUnit);
+        $this->assertEquals(25, $request->request->CreateOrderInformation->OrderRows['OrderRow'][0]->VatPercent);
+        $this->assertEquals(80.00, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->PricePerUnit);
+        $this->assertEquals(25, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->VatPercent);
+        // all shipping fee rows
+        $this->assertEquals(16.00, $request->request->CreateOrderInformation->OrderRows['OrderRow'][2]->PricePerUnit);
+        $this->assertEquals(25, $request->request->CreateOrderInformation->OrderRows['OrderRow'][2]->VatPercent);
+        // all invoice fee rows		
+        $this->assertEquals(8.00, $request->request->CreateOrderInformation->OrderRows['OrderRow'][3]->PricePerUnit);
+        $this->assertEquals(25, $request->request->CreateOrderInformation->OrderRows['OrderRow'][3]->VatPercent);
+        // all discount rows
+        // expected: 10% off orderRow rows: 2x 80.00 @25% => -16.00 @25% discount
+        $this->assertEquals(-16.00, $request->request->CreateOrderInformation->OrderRows['OrderRow'][4]->PricePerUnit);
+        $this->assertEquals(25, $request->request->CreateOrderInformation->OrderRows['OrderRow'][4]->VatPercent);
+    }   
 }
