@@ -2,18 +2,7 @@
 namespace Svea;
 
 /**
-Use this method when the discount or coupon is expressed as a percentage of the total product amount.
-
-$order->
-    addDiscount(
-        WebPayItem::relativeDiscount()
-        ->setDiscountPercent(50.5)              // required
-        ->setDiscountId("1")                    // optional
-        ->setUnit("st")                         // optional
-        ->setName('Relative')                   // optional
-        ->setDescription("RelativeDiscount")    // optional
-    )
-;
+ * Use RelativeDiscount() when the discount or coupon is expressed as a percentage of the total product amount.
  */
 class RelativeDiscount {
     
@@ -32,9 +21,6 @@ class RelativeDiscount {
     /**
      * Required
      * The percentage of the discount, either a float or a real number
-     * 
-     * Unittest/OrderBuilderTest, InvoicePaymentTest, 
-     * Integrationtest/CardPaymentIntegrationTest
      * 
      * @param number $discountPercentOnTotalAmountAsNumber
      * @return $this
