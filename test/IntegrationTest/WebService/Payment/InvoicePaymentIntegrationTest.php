@@ -702,4 +702,26 @@ class InvoicePaymentIntegrationTest extends PHPUnit_Framework_TestCase {
 
     }
 
+     public function testResponseOrderSetAsIncVatAndExVatAndRelativeDiscount(){
+        $config = Svea\SveaConfig::getDefaultConfig();
+        $request = WebPay::createOrder($config)
+                    ->addOrderRow(
+                            WebPayItem::orderRow()
+                                ->setAmountIncVat(123.9876)
+                                ->setAmountExVat(99.99)
+                                ->setQuantity(1)
+                            )
+                    ->addDiscount(WebPayItem::relativeDiscount()
+                            ->setDiscountPercent(10)
+                            )
+                    ->addCustomerDetails(TestUtil::createIndividualCustomer("SE"))
+                    ->setCountryCode("SE")
+                    ->setOrderDate("2012-12-12")
+                    ->useInvoicePayment()
+                        ->doRequest();
+
+        $this->assertEquals(1, $request->accepted);
+
+    }
+
 }

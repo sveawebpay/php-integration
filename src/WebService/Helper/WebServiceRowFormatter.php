@@ -168,8 +168,10 @@ class WebServiceRowFormatter {
             }
             // no vatPercent given
             else {
-                $orderRow->PricePerUnit = \Svea\Helper::bround($row->amountExVat,2);
+                $orderRow->PricePerUnit = $row->amountIncVat;
                 $orderRow->VatPercent = $this->calculateVatPercentFromPriceExVatAndPriceIncVat( $row->amountIncVat, $row->amountExVat );
+                $orderRow->PriceIncludingVat = TRUE;
+                $this->priceIncludingVat = TRUE;//to use in discount
             }
 
             $this->newRows[] = $orderRow;
@@ -240,8 +242,9 @@ class WebServiceRowFormatter {
             }
             // no vatPercent given
             else {
-                $orderRow->PricePerUnit = \Svea\Helper::bround($row->amountExVat,2);
+                $orderRow->PricePerUnit = $row->amountIncVat;
                 $orderRow->VatPercent = $this->calculateVatPercentFromPriceExVatAndPriceIncVat( $row->amountIncVat, $row->amountExVat );
+                $orderRow->PriceIncludingVat = TRUE;
             }
             $this->newRows[] = $orderRow;
         }
@@ -282,9 +285,9 @@ class WebServiceRowFormatter {
             }
             // no vatPercent given
             else {
-                $orderRow->PricePerUnit = \Svea\Helper::bround($row->amountExVat,2);
+                $orderRow->PricePerUnit = $row->amountIncVat;
                 $orderRow->VatPercent = $this->calculateVatPercentFromPriceExVatAndPriceIncVat( $row->amountIncVat, $row->amountExVat );
-
+                $orderRow->PriceIncludingVat = TRUE;
             }
             $this->newRows[] = $orderRow;
         }
@@ -366,8 +369,9 @@ class WebServiceRowFormatter {
             //calculate discount
             $discountAtThisVatRateExVat = $discountRow->amountExVat * ($amountAtThisVatRateExVat / $this->totalAmountExVat );
 
-            $orderRow->PricePerUnit = (-1) * \Svea\Helper::bround($discountAtThisVatRateExVat,2);
+            $orderRow->PricePerUnit = (-1) * $discountAtThisVatRateExVat;
             $orderRow->VatPercent = $vatRate;
+            $orderRow->PriceIncludingVat = FALSE;
             $splitRows[] = $orderRow;
         }
 
