@@ -113,7 +113,7 @@ class DeliverInvoiceIntegrationTest extends PHPUnit_Framework_TestCase {
      * rounding**
      */
 
-        public function testDeliverOrderWithAmountExVatAndVatPercent() {
+    public function testDeliverOrderWithAmountExVatAndVatPercent() {
         $config = Svea\SveaConfig::getDefaultConfig();
          $order = WebPay::createOrder($config)
                     ->addOrderRow(
@@ -121,6 +121,21 @@ class DeliverInvoiceIntegrationTest extends PHPUnit_Framework_TestCase {
                                 ->setAmountExVat(80.00)
                                 ->setVatPercent(24)
                                 ->setQuantity(1)
+                            )
+                    ->addFee(WebPayItem::shippingFee()
+                                ->setAmountExVat(80.00)
+                                ->setVatPercent(24)
+                            )
+                    ->addFee(WebPayItem::invoiceFee()
+                                ->setAmountExVat(80.00)
+                                ->setVatPercent(24)
+                            )
+                  ->addDiscount(WebPayItem::fixedDiscount()
+                            ->setAmountExVat(8)
+                            ->setVatPercent(24)
+                            )
+                  ->addDiscount(WebPayItem::relativeDiscount()
+                                ->setDiscountPercent(10)
                             )
                     ->addCustomerDetails(TestUtil::createIndividualCustomer("SE"))
                     ->setCountryCode("SE")
@@ -135,6 +150,21 @@ class DeliverInvoiceIntegrationTest extends PHPUnit_Framework_TestCase {
                                 ->setVatPercent(24)
                                 ->setQuantity(1)
                             )
+                 ->addFee(WebPayItem::shippingFee()
+                                ->setAmountExVat(80.00)
+                                ->setVatPercent(24)
+                            )
+                ->addFee(WebPayItem::invoiceFee()
+                                ->setAmountExVat(80.00)
+                                ->setVatPercent(24)
+                            )
+                 ->addDiscount(WebPayItem::fixedDiscount()
+                            ->setAmountExVat(8)
+                            ->setVatPercent(24)
+                            )
+                 ->addDiscount(WebPayItem::relativeDiscount()
+                                ->setDiscountPercent(10)
+                            )
 
                 ->setOrderId($order->sveaOrderId)
                 ->setInvoiceDistributionType(DistributionType::POST)//Post or Email
@@ -142,6 +172,68 @@ class DeliverInvoiceIntegrationTest extends PHPUnit_Framework_TestCase {
                 ->deliverInvoiceOrder()
                     ->doRequest();
 
+        $this->assertEquals(1, $request->accepted);
+
+    }
+    public function testDeliverOrderWithAmountIncVatAndVatPercent() {
+        $config = Svea\SveaConfig::getDefaultConfig();
+         $order = WebPay::createOrder($config)
+                    ->addOrderRow(
+                            WebPayItem::orderRow()
+                                ->setAmountIncVat(80.00)
+                                ->setVatPercent(24)
+                                ->setQuantity(1)
+                            )
+                    ->addFee(WebPayItem::shippingFee()
+                                ->setAmountIncVat(80.00)
+                                ->setVatPercent(24)
+                            )
+                    ->addFee(WebPayItem::invoiceFee()
+                                ->setAmountIncVat(80.00)
+                                ->setVatPercent(24)
+                            )
+                  ->addDiscount(WebPayItem::fixedDiscount()
+                            ->setAmountIncVat(8)
+                            ->setVatPercent(24)
+                            )
+                  ->addDiscount(WebPayItem::relativeDiscount()
+                                ->setDiscountPercent(10)
+                            )
+                    ->addCustomerDetails(TestUtil::createIndividualCustomer("SE"))
+                    ->setCountryCode("SE")
+                    ->setOrderDate("2012-12-12")
+                    ->useInvoicePayment()
+                        ->doRequest();
+        $request = WebPay::deliverOrder($config);
+        $request = $request
+                 ->addOrderRow(
+                            WebPayItem::orderRow()
+                                ->setAmountIncVat(80.00)
+                                ->setVatPercent(24)
+                                ->setQuantity(1)
+                            )
+                 ->addFee(WebPayItem::shippingFee()
+                                ->setAmountIncVat(80.00)
+                                ->setVatPercent(24)
+                            )
+                ->addFee(WebPayItem::invoiceFee()
+                                ->setAmountIncVat(80.00)
+                                ->setVatPercent(24)
+                            )
+                 ->addDiscount(WebPayItem::fixedDiscount()
+                                ->setAmountIncVat(8)
+                                ->setVatPercent(24)
+                            )
+                 ->addDiscount(WebPayItem::relativeDiscount()
+                                ->setDiscountPercent(10)
+                            )
+
+                ->setOrderId($order->sveaOrderId)
+                ->setInvoiceDistributionType(DistributionType::POST)//Post or Email
+                ->setCountryCode("SE")
+                ->deliverInvoiceOrder()
+                    ->doRequest();
+        
         $this->assertEquals(1, $request->accepted);
 
     }
