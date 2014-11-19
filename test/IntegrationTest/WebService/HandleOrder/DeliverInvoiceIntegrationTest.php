@@ -55,10 +55,10 @@ class DeliverInvoiceIntegrationTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals('Post', $request->invoiceDistributionType);
         //$this->assertEquals('Invoice', $request->contractNumber); //for paymentplan
     }
-    
+
     /**
      * @expectedException Svea\ValidationException
-     */ 
+     */
     public function testDeliverInvoiceOrder_missing_setOrderId_throws_ValidationException() {
         $config = Svea\SveaConfig::getDefaultConfig();
         $orderId = $this->getInvoiceOrderId();
@@ -71,13 +71,13 @@ class DeliverInvoiceIntegrationTest extends PHPUnit_Framework_TestCase {
                 ->setInvoiceDistributionType('Post')//Post or Email
                 ->deliverInvoiceOrder()
                     ->doRequest();
-    }     
+    }
 
     /**
      * @expectedException Svea\ValidationException
-     * 
+     *
      * bypasses WebPay::deliverOrders, as 2.0 allows deliverOrder w/o orderRows
-     */ 
+     */
     public function test_DeliverInvoice_missing_addOrderRow_throws_ValidationException() {
         $config = Svea\SveaConfig::getDefaultConfig();
         $orderId = $this->getInvoiceOrderId();
@@ -90,11 +90,11 @@ class DeliverInvoiceIntegrationTest extends PHPUnit_Framework_TestCase {
                 ->setInvoiceDistributionType('Post')//Post or Email
         ;
         $deliverInvoiceObject = new Svea\WebService\DeliverInvoice( $orderBuilder );
-        $response = $deliverInvoiceObject->doRequest();                
+        $response = $deliverInvoiceObject->doRequest();
     }
     /**
      * @expectedException Svea\ValidationException
-     */ 
+     */
     public function testDeliverInvoiceOrder_missing_setInvoiceDistributionType_throws_ValidationException() {
         $config = Svea\SveaConfig::getDefaultConfig();
         $orderId = $this->getInvoiceOrderId();
@@ -107,5 +107,42 @@ class DeliverInvoiceIntegrationTest extends PHPUnit_Framework_TestCase {
                 //->setInvoiceDistributionType('Post')//Post or Email
                 ->deliverInvoiceOrder()
                     ->doRequest();
-    }    
+    }
+
+    /**
+     * rounding**
+     */
+
+        public function testDeliverOrderWithAmountExVatAndVatPercent() {
+        $config = Svea\SveaConfig::getDefaultConfig();
+         $order = WebPay::createOrder($config)
+                    ->addOrderRow(
+                            WebPayItem::orderRow()
+                                ->setAmountExVat(80.00)
+                                ->setVatPercent(24)
+                                ->setQuantity(1)
+                            )
+                    ->addCustomerDetails(TestUtil::createIndividualCustomer("SE"))
+                    ->setCountryCode("SE")
+                    ->setOrderDate("2012-12-12")
+                    ->useInvoicePayment()
+                        ->doRequest();
+        $request = WebPay::deliverOrder($config);
+        $request = $request
+                 ->addOrderRow(
+                            WebPayItem::orderRow()
+                                ->setAmountExVat(80.00)
+                                ->setVatPercent(24)
+                                ->setQuantity(1)
+                            )
+
+                ->setOrderId($order->sveaOrderId)
+                ->setInvoiceDistributionType(DistributionType::POST)//Post or Email
+                ->setCountryCode("SE")
+                ->deliverInvoiceOrder()
+                    ->doRequest();
+
+        $this->assertEquals(1, $request->accepted);
+
+    }
 }
