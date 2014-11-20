@@ -24,23 +24,31 @@ $myOrder->setCurrency("SEK");                           // order currency
 $myOrder->setClientOrderNumber( "order #".date('c') );  // required - use a not previously sent client side order identifier, i.e. "order #20140519-371"
 
 // Then specify the items bought as order rows, using the methods in the Svea\OrderRow class, and adding them to the order:
-$myOrder->addOrderRow( 
+$myOrder
+        ->addOrderRow( 
             WebPayItem::orderRow()
                 ->setAmountExVat( 100.00 )
                 ->setVatPercent( 25 )
                 ->setQuantity( 1 )
-                ->setDescription( "Ivar" )
+                ->setDescription( "A" )
         )
-        ->addOrderRow(
+        ->addOrderRow( 
             WebPayItem::orderRow()
-                ->setAmountExVat( 5.00 )
-                ->setVatPercent( 12 )
-                ->setQuantity( 2 )
-                ->setDescription( "Korv med bröd" )
+                ->setAmountExVat( 100.00 )
+                ->setVatPercent( 25 )
+                ->setQuantity( 1 )
+                ->setDescription( "B" )
+        )
+        ->addOrderRow( 
+            WebPayItem::orderRow()
+                ->setAmountExVat( 100.00 )
+                ->setVatPercent( 25 )
+                ->setQuantity( 1 )
+                ->setDescription( "C" )
         )
 ;
 
-// The order total amount equals 1*(100*1.25) + 2*(5.00*1.12) = 125+11.2 = SEK 136.2 (incl. VAT 26.2)
+// The order total amount equals 1*(100*1.25) + 1*(100*1.25) + 1*(100*1.25) = SEK 375.00 (incl. vat 75.00)
 
 // We have now completed specifying the order, and wish to send the payment request to Svea. To do so, we first select a payment method.
 // For card orders, we recommend using the ->usePaymentMethod(PaymentMethod::KORTCERT), which processes card orders via Certitrade.
