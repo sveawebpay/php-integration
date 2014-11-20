@@ -17,7 +17,7 @@ $myConfig = Svea\SveaConfig::getTestConfig(); //replace with class holding your 
 // We wish to credit the entire card order. To do so, we need to credit the order with an amount equal to the original order total.
 // This can be done by either :
 // 1) specifying a new credit row for the entire original order total amount and passing in the new row to credit, or
-// 2) specifying that all of the original order rows are to be credited, passing in their number and the order rows themselves
+// 2) specifying that all of the original order rows are to be credited, passing in their number and, as this is a card order, the order rows themselves
 
 // 1) Using the first method:
 
@@ -38,12 +38,11 @@ $firstCreditOrderRowsBuilder
 // Assume that we know that the original order total amount was 1*(100*1.25) + 2*(5.00*1.12) = 125+11.2 = SEK 136.2 (incl. VAT 26.2)
 // Create a new OrderRow for the credited amount and add it to the builder object using addCreditOrderRow():
 $myCreditRow =  WebPayItem::orderRow()
-                ->setAmountExVat( 110.00 )
-                ->setAmountIncVat( 136.20 )
+                ->setAmountExVat( 300 )
+                ->setVatPercent( 25 )
                 ->setQuantity( 1 )
-                ->setDescription( "Credited in full")
+                ->setDescription( "Credited order #".$myTransactionId )
 ;
-
 // Add the new order row to credit to the builder object.
 $firstCreditOrderRowsBuilder->addCreditOrderRow($myCreditRow);
 
@@ -133,71 +132,101 @@ the creditCardOrderRows() response:Svea\HostedService\CreditTransactionResponse 
     [errormessage] => 
 )
 
-The following is the raw result of a queryOrder for the above order, as you can see the entire authorized/captured amount has been credited:
+The following is the result of a WebPayAdmin::queryOrder for the above order, as you can see the entire authorized/captured amount has been credited:
 
-</pre><font color='black'><xmp>
-<?xml version=\"1.0\" encoding=\"UTF-8\"?><response>
-  <transaction id=\"585602\">
-    <customerrefno>order #2014-08-26T14:28:33 02:00</customerrefno>
-    <merchantid>1130</merchantid>
-    <status>SUCCESS</status>
-    <amount>13620</amount>
-    <currency>SEK</currency>
-    <vat>2620</vat>
-    <capturedamount>13620</capturedamount>
-    <authorizedamount>13620</authorizedamount>
-    <created>2014-08-26 14:28:34.937</created>
-    <creditstatus>CREDSUCCESS</creditstatus>
-    <creditedamount>13620</creditedamount>
-    <merchantresponsecode>0</merchantresponsecode>
-    <paymentmethod>KORTCERT</paymentmethod>
-    <callbackurl/>
-    <capturedate>2014-08-26 14:35:10.807</capturedate>
-    <subscriptionid/>
-    <subscriptiontype/>
-    <customer id=\"12171\">
-      <firstname/>
-      <lastname/>
-      <initials/>
-      <email/>
-      <ssn/>
-      <address/>
-      <address2/>
-      <city/>
-      <country>SE</country>
-      <zip/>
-      <phone/>
-      <vatnumber/>
-      <housenumber/>
-      <companyname/>
-      <fullname/>
-    </customer>
-    <orderrows>
-      <row>
-        <id>53037</id>
-        <name/>
-        <amount>12500</amount>
-        <vat>2500</vat>
-        <description>Ivar</description>
-        <quantity>1.0</quantity>
-        <sku/>
-        <unit/>
-      </row>
-      <row>
-        <id>53038</id>
-        <name/>
-        <amount>560</amount>
-        <vat>60</vat>
-        <description>Korv med brÃ¶d</description>
-        <quantity>2.0</quantity>
-        <sku/>
-        <unit/>
-      </row>
-    </orderrows>
-  </transaction>
-  <statuscode>0</statuscode>
-</response>
-";
+</pre>
+<pre><font color='black'>
+Svea\HostedService\QueryTransactionResponse Object
+(
+    [transactionId] => 589747
+    [clientOrderNumber] => order #2014-11-20T15:26:33 01:00
+    [merchantId] => 1130
+    [status] => SUCCESS
+    [amount] => 37500
+    [currency] => SEK
+    [vat] => 7500
+    [capturedamount] => 37500
+    [authorizedamount] => 37500
+    [created] => 2014-11-20 15:26:35.09
+    <font color='blue'>[creditstatus] => CREDSUCCESS
+    [creditedamount] => 37500<font color='black'>
+    [merchantresponsecode] => 0
+    [paymentMethod] => KORTCERT
+    [numberedOrderRows] => Array
+        (
+            [0] => Svea\NumberedOrderRow Object
+                (
+                    [creditInvoiceId] => 
+                    [invoiceId] => 
+                    [rowNumber] => 1
+                    [status] => 
+                    [articleNumber] => 
+                    [quantity] => 1
+                    [unit] => 
+                    [amountExVat] => 100
+                    [vatPercent] => 25
+                    [amountIncVat] => 
+                    [name] => 
+                    [description] => A
+                    [discountPercent] => 
+                    [vatDiscount] => 0
+                )
+
+            [1] => Svea\NumberedOrderRow Object
+                (
+                    [creditInvoiceId] => 
+                    [invoiceId] => 
+                    [rowNumber] => 2
+                    [status] => 
+                    [articleNumber] => 
+                    [quantity] => 1
+                    [unit] => 
+                    [amountExVat] => 100
+                    [vatPercent] => 25
+                    [amountIncVat] => 
+                    [name] => 
+                    [description] => B
+                    [discountPercent] => 
+                    [vatDiscount] => 0
+                )
+
+            [2] => Svea\NumberedOrderRow Object
+                (
+                    [creditInvoiceId] => 
+                    [invoiceId] => 
+                    [rowNumber] => 3
+                    [status] => 
+                    [articleNumber] => 
+                    [quantity] => 1
+                    [unit] => 
+                    [amountExVat] => 100
+                    [vatPercent] => 25
+                    [amountIncVat] => 
+                    [name] => 
+                    [description] => C
+                    [discountPercent] => 
+                    [vatDiscount] => 0
+                )
+
+        )
+
+    [callbackurl] => 
+    [capturedate] => 2014-11-20 15:36:12.607
+    [subscriptionId] => 
+    [subscriptiontype] => 
+    [cardType] => 
+    [maskedCardNumber] => 
+    [eci] => 
+    [mdstatus] => 
+    [expiryYear] => 
+    [expiryMonth] => 
+    [chname] => 
+    [authCode] => 
+    [accepted] => 1
+    [resultcode] => 0
+    [errormessage] => 
+)
+</pre>";
 
 /**
  * get the path to this file, for use in specifying the returnurl etc.

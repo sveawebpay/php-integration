@@ -51,22 +51,20 @@ An example of a successful request response. The 'accepted' attribute is true (1
 
 Svea\HostedService\HostedPaymentResponse Object
 (
-    [transactionId] => 585588
-    [clientOrderNumber] => order #2014-08-26T13:49:48 02:00
+    [transactionId] => 589739
+    [clientOrderNumber] => order #2014-11-20T14:48:28 01:00
     [paymentMethod] => KORTCERT
     [merchantId] => 1130
-    [amount] => 136.2
+    [amount] => 375
     [currency] => SEK
     [accepted] => 1
     [resultcode] => 
     [errormessage] => 
     [cardType] => VISA
     [maskedCardNumber] => 444433xxxxxx1100
-    [expiryMonth] => 02
+    [expiryMonth] => 01
     [expiryYear] => 15
-    [authCode] => 104747
-    [rawHostedPaymentResponse] => SimpleXMLElement Object 
-        /.../
+    [authCode] => 204374
 )";
 
 /**
