@@ -24,7 +24,7 @@ class WebServiceRowFormatterTest extends PHPUnit_Framework_TestCase {
     public function test_convertExVatToIncVat() {
 
         $this->assertEquals( 10.00, WebServiceRowFormatter::convertExVatToIncVat( 8.00, 25 ) );
-        $this->assertEquals( 69.99*1.25,2, WebServiceRowFormatter::convertExVatToIncVat( 69.99, 25 ) );
+        $this->assertEquals( 69.99*1.25, WebServiceRowFormatter::convertExVatToIncVat( 69.99, 25 ) );
 
         $this->assertEquals( 0, WebServiceRowFormatter::convertExVatToIncVat( 0, 0 ) );
         $this->assertEquals( 1, WebServiceRowFormatter::convertExVatToIncVat( 1, 0 ) );
@@ -181,12 +181,11 @@ class WebServiceRowFormatterTest extends PHPUnit_Framework_TestCase {
 
         $formatter = new WebServiceRowFormatter($order);
         $resultRows = $formatter->formatRows();
-
         // 100*200/300 = 66.66 ex. 25% vat => discount 83.33 (incl. 16.67 vat @25%)
         $testedRow = $resultRows[2];
         $this->assertEquals("f100e", $testedRow->ArticleNumber);
         $this->assertEquals("couponName: couponDesc (25%)", $testedRow->Description);
-        $this->assertEquals(-(200/300)*100,2, $testedRow->PricePerUnit); //-66.67
+        $this->assertEquals(-(200/300)*100, $testedRow->PricePerUnit); //-66.67
         //$this->assertEquals(-66.67, $testedRow->PricePerUnit);
         $this->assertEquals(25, $testedRow->VatPercent);
 
@@ -194,7 +193,7 @@ class WebServiceRowFormatterTest extends PHPUnit_Framework_TestCase {
         $testedRow = $resultRows[3];
         $this->assertEquals("f100e", $testedRow->ArticleNumber);
         $this->assertEquals("couponName: couponDesc (6%)", $testedRow->Description);
-        $this->assertEquals(-round((100/300)*100,2,PHP_ROUND_HALF_EVEN), $testedRow->PricePerUnit); //-33.33
+        $this->assertEquals(-(100/300)*100, $testedRow->PricePerUnit); //-33.33
         //$this->assertEquals(-33.33, $testedRow->PricePerUnit);
         $this->assertEquals(6, $testedRow->VatPercent);
 
@@ -203,7 +202,7 @@ class WebServiceRowFormatterTest extends PHPUnit_Framework_TestCase {
                 WebServiceRowFormatter::convertExVatToIncVat( $resultRows[1]->PricePerUnit, $resultRows[1]->VatPercent )  * $resultRows[1]->NumberOfUnits +
                 WebServiceRowFormatter::convertExVatToIncVat( $resultRows[2]->PricePerUnit, $resultRows[2]->VatPercent )  * $resultRows[2]->NumberOfUnits +
                 WebServiceRowFormatter::convertExVatToIncVat( $resultRows[3]->PricePerUnit, $resultRows[3]->VatPercent ) * $resultRows[3]->NumberOfUnits;
-        $this->assertEquals(237.33, $total);
+        $this->assertEquals(237.33333333333, $total);
    }
 
     // FixedDiscountRow specified using only amountIncVat => split discount incl. vat over the diffrent tax rates present in order
@@ -423,7 +422,7 @@ class WebServiceRowFormatterTest extends PHPUnit_Framework_TestCase {
         $testedRow = $resultRows[4];
         $this->assertEquals("f100e", $testedRow->ArticleNumber);
         $this->assertEquals("couponName: couponDesc (6%)", $testedRow->Description);
-        $this->assertEquals(-(100/300)*100,2, $testedRow->PricePerUnit);
+        $this->assertEquals(-(100/300)*100, $testedRow->PricePerUnit);
         $this->assertEquals(6, $testedRow->VatPercent);
 
         // order total should be 166.67+70.67 +53 = 237.34 +53
@@ -432,7 +431,7 @@ class WebServiceRowFormatterTest extends PHPUnit_Framework_TestCase {
                 WebServiceRowFormatter::convertExVatToIncVat( $resultRows[2]->PricePerUnit, $resultRows[2]->VatPercent )  * $resultRows[2]->NumberOfUnits +
                 WebServiceRowFormatter::convertExVatToIncVat( $resultRows[3]->PricePerUnit, $resultRows[3]->VatPercent )  * $resultRows[3]->NumberOfUnits +
                 WebServiceRowFormatter::convertExVatToIncVat( $resultRows[4]->PricePerUnit, $resultRows[4]->VatPercent ) * $resultRows[4]->NumberOfUnits;
-        $this->assertEquals(237.33+53, $total);
+        $this->assertEquals(237.33333333333+53, $total);
    }
 
     public function test_FixedDiscount_specified_using_amountIncVat_are_calculated_from_order_item_rows_only_multiple_vat_rates() {
