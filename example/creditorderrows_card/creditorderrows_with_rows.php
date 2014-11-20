@@ -1,6 +1,6 @@
 <?php
 /**
- * example file, how to credit an existing card order by specifying a new credit order row for the entire row amount
+ * example file, how to credit an existing card order using the queried original order rows 
  * 
  * @author Kristian Grossman-Madsen for Svea WebPay
  */
@@ -19,8 +19,8 @@ $myConfig = Svea\SveaConfig::getTestConfig(); //replace with class holding your 
 // 1) (recommended) specifying a new credit row for the entire original order total amount and passing in the new row to credit, or
 // 2) specifying that all of the original order rows are to be credited, passing in their number and, as this is a card order, the order rows themselves
 
-// 1) Using the first method (for 2), see file creditorderrows_with_rows.php:
-
+// 2) instead credit specific order rows, 2):
+// 
 // First we create a builder object and populate them with the required fields.
 $firstCreditOrderRowsBuilder = WebPayAdmin::creditOrderRows( $myConfig );
 
@@ -34,21 +34,47 @@ $firstCreditOrderRowsBuilder
     ->setOrderId( $myTransactionId )
     ->setCountryCode( "SE" )
 ;
- 
-// Assume that we know that the original order total amount was 1*(100*1.25) + 2*(5.00*1.12) = 125+11.2 = SEK 136.2 (incl. VAT 26.2)
-// Create a new OrderRow for the credited amount and add it to the builder object using addCreditOrderRow():
-$myCreditRow =  WebPayItem::orderRow()
-                ->setAmountExVat( 300 )
-                ->setVatPercent( 25 )
-                ->setQuantity( 1 )
-                ->setDescription( "Credited order #".$myTransactionId )
+
+$secondCreditOrderRowsBuilder = WebPayAdmin::creditOrderRows( $myConfig );
+
+$secondCreditOrderRowsBuilder
+    ->setOrderId( $myTransactionId )
+    ->setCountryCode( "SE" )
 ;
-// Add the new order row to credit to the builder object.
-$firstCreditOrderRowsBuilder->addCreditOrderRow($myCreditRow);
 
-// Then we can send the credit request to Svea:
+// To credit specific order rows, you pass the order rows numbers you wish to credit using setRowsToCredit().
+// For card orders, you also need to pass in the numbered order rows themselves using addNumberedOrderRows(). 
 
-$myCreditRequest = $firstCreditOrderRowsBuilder->creditCardOrderRows();        
+// You can use the WebPayAdmin::queryCardOrder() entrypoint method to get a copy of the original order rows sent to Svea.
+// Note that these order rows does not update following a successful credit order rows request, even though the
+// QueryTransactionResponse field creditedamount returned by a queryOrder request will reflect the current credit status.  
+//
+$queryOrderBuilder = WebPayAdmin::queryOrder( $myConfig )
+    ->setOrderId( $myTransactionId )
+    ->setCountryCode( "SE" )
+;
+
+// query orderrows to pass in creditOrderRows->setNumberedOrderRows()
+$queryResponse = $queryOrderBuilder->queryCardOrder()->doRequest(); 
+if( ! $queryResponse->accepted ) {
+    echo "<pre>Error: queryOrder failed. aborting.";
+    die;    
+}
+
+// The query response holds an array of NumberedOrderRow containing the order rows as sent in the createOrder request
+$myOriginalOrderRows = $queryResponse->numberedOrderRows;
+
+// Put the numbered order row indexes into an array to pass to setRowsToCredit()
+$myRowIndexesToCredit = range( 1, count($myOriginalOrderRows) ); // original order rows are 1-indexed and contains no gaps
+
+// Add the indexes to credit and the order row data to the builder object.
+$secondCreditOrderRowsBuilder
+    ->addNumberedOrderRows( $myOriginalOrderRows )
+    ->setRowsToCredit( $myRowIndexesToCredit )
+;
+
+// Send the credit request to Svea:
+$myCreditRequest = $secondCreditOrderRowsBuilder->creditCardOrderRows();        
 $myCreditResponse = $myCreditRequest->doRequest();
 
 
@@ -95,8 +121,8 @@ The following is the result of a WebPayAdmin::queryOrder for the above order, as
 <pre><font color='black'>
 Svea\HostedService\QueryTransactionResponse Object
 (
-    [transactionId] => 589747
-    [clientOrderNumber] => order #2014-11-20T15:26:33 01:00
+    [transactionId] => 589756
+    [clientOrderNumber] => order #2014-11-20T16:00:34 01:00
     [merchantId] => 1130
     [status] => SUCCESS
     [amount] => 37500
@@ -104,7 +130,7 @@ Svea\HostedService\QueryTransactionResponse Object
     [vat] => 7500
     [capturedamount] => 37500
     [authorizedamount] => 37500
-    [created] => 2014-11-20 15:26:35.09
+    [created] => 2014-11-20 16:00:35.737
     <font color='blue'>[creditstatus] => CREDSUCCESS
     [creditedamount] => 37500<font color='black'>
     [merchantresponsecode] => 0
@@ -168,7 +194,7 @@ Svea\HostedService\QueryTransactionResponse Object
         )
 
     [callbackurl] => 
-    [capturedate] => 2014-11-20 15:36:12.607
+    [capturedate] => 2014-11-20 16:02:20.26
     [subscriptionId] => 
     [subscriptiontype] => 
     [cardType] => 
