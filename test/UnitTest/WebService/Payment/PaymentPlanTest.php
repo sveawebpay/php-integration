@@ -68,7 +68,7 @@ class PaymentPlanTest extends PHPUnit_Framework_TestCase {
         //couponrow
         $this->assertEquals('1', $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->ArticleNumber);
         $this->assertEquals('RelativeDiscount', $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->Description);
-        $this->assertEquals(-48.00, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->PricePerUnit);
+        $this->assertEquals(-60.00, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->PricePerUnit);
         $this->assertEquals(1, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->NumberOfUnits);
         $this->assertEquals('', $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->Unit);
         $this->assertEquals(25, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->VatPercent);
@@ -95,7 +95,7 @@ class PaymentPlanTest extends PHPUnit_Framework_TestCase {
                         ->prepareRequest();
         //couponrow
 
-        $this->assertEquals(240.00, $request->request->CreateOrderInformation->OrderRows['OrderRow'][0]->PricePerUnit);
+        $this->assertEquals(300.00, $request->request->CreateOrderInformation->OrderRows['OrderRow'][0]->PricePerUnit);
         $this->assertEquals(2, $request->request->CreateOrderInformation->OrderRows['OrderRow'][0]->NumberOfUnits);
         $this->assertEquals(25, $request->request->CreateOrderInformation->OrderRows['OrderRow'][0]->VatPercent);
     }

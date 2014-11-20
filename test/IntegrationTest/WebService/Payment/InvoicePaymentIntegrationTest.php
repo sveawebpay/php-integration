@@ -788,4 +788,67 @@ class InvoicePaymentIntegrationTest extends PHPUnit_Framework_TestCase {
 
     }
 
+    public function testTaloonRoundingExVat(){
+         $config = Svea\SveaConfig::getDefaultConfig();
+        $request = WebPay::createOrder($config)
+                    ->addOrderRow(
+                            WebPayItem::orderRow()
+                                ->setAmountExVat(116.94)
+                                ->setVatPercent(24)
+                                ->setQuantity(1)
+                            )
+                    ->addOrderRow(
+                            WebPayItem::orderRow()
+                                ->setAmountExVat(7.26)
+                                ->setVatPercent(24)
+                                ->setQuantity(1)
+                            )
+                    ->addOrderRow(
+                            WebPayItem::orderRow()
+                                ->setAmountExVat(4.03)
+                                ->setVatPercent(24)
+                                ->setQuantity(1)
+                            )
+                    ->addCustomerDetails(TestUtil::createIndividualCustomer("FI"))
+                    ->setCountryCode("FI")
+                ->setCurrency("EUR")
+                    ->setOrderDate("2012-12-12")
+                    ->useInvoicePayment()
+                        ->doRequest();
+          $this->assertEquals(1, $request->accepted);
+          $this->assertEquals(159.01, $request->amount);//sends the old way, so still wrong rounding
+
+    }
+    public function testTaloonRoundingIncVat(){
+         $config = Svea\SveaConfig::getDefaultConfig();
+        $request = WebPay::createOrder($config)
+                    ->addOrderRow(
+                            WebPayItem::orderRow()
+                                ->setAmountIncVat(145.00)
+                                ->setVatPercent(24)
+                                ->setQuantity(1)
+                            )
+                    ->addOrderRow(
+                            WebPayItem::orderRow()
+                                ->setAmountIncVat(9.00)
+                                ->setVatPercent(24)
+                                ->setQuantity(1)
+                            )
+                    ->addOrderRow(
+                            WebPayItem::orderRow()
+                                ->setAmountIncVat(5.00)
+                                ->setVatPercent(24)
+                                ->setQuantity(1)
+                            )
+                    ->addCustomerDetails(TestUtil::createIndividualCustomer("FI"))
+                    ->setCountryCode("FI")
+                ->setCurrency("EUR")
+                    ->setOrderDate("2012-12-12")
+                    ->useInvoicePayment()
+                        ->doRequest();
+          $this->assertEquals(1, $request->accepted);
+        $this->assertEquals(159.0, $request->amount);
+
+    }
+
 }

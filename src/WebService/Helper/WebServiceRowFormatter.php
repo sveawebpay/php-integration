@@ -19,12 +19,14 @@ class WebServiceRowFormatter {
 
     private $newRows;
     private $priceIncludingVat = false;
+    private $resendOrderVat;
 
     /**
      * @param type $order
      */
-    public function __construct($order) {
+    public function __construct($order,$priceIncludingVat = NULL) {
         $this->order = $order;
+        $this->resendOrderVat = $priceIncludingVat;
 
         $this->totalAmountPerVatRateIncVat = array();
         $this->totalAmountPerVatRateExVat = array();
@@ -69,8 +71,14 @@ class WebServiceRowFormatter {
 
         $this->calculateTotals();
 
-        //check if rows are set in mixed form inc and exl vat. Set flag.
-        $this->determineVatFlag();
+        if($this->resendOrderVat === NULL){
+             $this->determineVatFlag();
+        }  else {
+            $this->priceIncludingVat = $this->resendOrderVat ? FALSE : TRUE;
+        }
+
+
+
 
         $this->formatOrderRows();
         $this->formatShippingFeeRows();
@@ -157,9 +165,9 @@ class WebServiceRowFormatter {
 
             // amountExVat & vatPercent used to specify product price
             if (isset($row->vatPercent) && isset($row->amountExVat)) {
-                $orderRow->PricePerUnit = $row->amountExVat;
+                $orderRow->PricePerUnit = $this->priceIncludingVat ? WebServiceRowFormatter::convertExVatToIncVat($row->amountExVat, round($row->vatPercent)) : $row->amountExVat;
                 $orderRow->VatPercent = round($row->vatPercent);
-                $orderRow->PriceIncludingVat = FALSE;
+                $orderRow->PriceIncludingVat = $this->priceIncludingVat ? TRUE : FALSE;
             }
             // amountIncVat & vatPercent used to specify product price
             elseif (isset($row->vatPercent) && isset($row->amountIncVat)) {
@@ -228,9 +236,9 @@ class WebServiceRowFormatter {
 
             // amountExVat & vatPercent used to specify product price
             if (isset($row->vatPercent) && isset($row->amountExVat)) {
-                $orderRow->PricePerUnit = $row->amountExVat;
+                $orderRow->PricePerUnit = $this->priceIncludingVat ? WebServiceRowFormatter::convertExVatToIncVat($row->amountExVat, round($row->vatPercent)) : $row->amountExVat;
                 $orderRow->VatPercent = round($row->vatPercent);
-                $orderRow->PriceIncludingVat = FALSE;
+                $orderRow->PriceIncludingVat = $this->priceIncludingVat ? TRUE : FALSE;
             }
             // amountIncVat & vatPercent used to specify product price
             elseif (isset($row->vatPercent) && isset($row->amountIncVat)) {
@@ -271,9 +279,9 @@ class WebServiceRowFormatter {
 
             // amountExVat & vatPercent used to specify product price
             if (isset($row->vatPercent) && isset($row->amountExVat)) {
-                $orderRow->PricePerUnit = $row->amountExVat;
+                $orderRow->PricePerUnit = $this->priceIncludingVat ? WebServiceRowFormatter::convertExVatToIncVat($row->amountExVat, round($row->vatPercent)) : $row->amountExVat;
                 $orderRow->VatPercent = round($row->vatPercent);
-                $orderRow->PriceIncludingVat = FALSE;
+                $orderRow->PriceIncludingVat = $this->priceIncludingVat ? TRUE : FALSE;
             }
             // amountIncVat & vatPercent used to specify product price
             elseif (isset($row->vatPercent) && isset($row->amountIncVat)) {
@@ -444,11 +452,11 @@ class WebServiceRowFormatter {
 
                     //calculate discount
                     $vatRate = $row->vatPercent;
-                    $discountAtThisVatRateExVat = $row->amountExVat;
+                    $discountAtThisVatRate = $this->priceIncludingVat ? WebServiceRowFormatter::convertExVatToIncVat($row->amountExVat, round($row->vatPercent)) : $row->amountExVat;
 
-                    $orderRow->PricePerUnit = (-1) * $discountAtThisVatRateExVat;
+                    $orderRow->PricePerUnit = (-1) * $discountAtThisVatRate;
                     $orderRow->VatPercent = $vatRate;
-                     $orderRow->PriceIncludingVat = FALSE;
+                     $orderRow->PriceIncludingVat = $this->priceIncludingVat ? TRUE : FALSE;
 
                     $this->newRows[] = $orderRow;
             }
@@ -486,7 +494,7 @@ class WebServiceRowFormatter {
                 $orderRow->NumberOfUnits = 1; //only one discount per row
                 $orderRow->PricePerUnit = $this->priceIncludingVat ? - number_format($discountIncVat,5,'.','') : - number_format($discountExVat,5,'.',''); //Discountpercent on total price inc vat.
                 $orderRow->VatPercent = $vatRate;
-                $orderRow->PriceIncludingVat = $this->priceIncludingVat;
+                $orderRow->PriceIncludingVat = $this->priceIncludingVat ? TRUE : FALSE;
 
                 $this->newRows[] = $orderRow;
             }
