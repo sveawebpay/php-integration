@@ -148,38 +148,45 @@ class WebPayAdmin {
      * The WebPayAdmin::creditOrderRows entrypoint method is used to credit rows in an order after it has been delivered.
      * Supports invoice, card and direct bank orders. (To credit a payment plan order, please contact Svea customer service.)
      * 
-     * Following this call Svea will issue a credit invoice including the original order rows specified using setRow(s)ToCredit(), 
-     * as well as any new credit order rows specified using addCreditOrderRows(). 
+     * If you wish to credit an amount not present in the original order, use addCreditOrderRow() or addCreditOrderRows() 
+     * and supply a new order row for the amount to credit. This is the recommended way to credit a card or direct bank order.
      * 
-     * For invoice orders the order row numbers specified using setRow(s)ToCredit are mapped the the current order rows at Svea, 
-     * but for card orders, you need to first query and then supply the original order rows using addNumberedOrderRows().
+     * If you wish to credit an invoice order row in full, you can specify the index of the order row to credit using setRowToCredit(). 
+     * The corresponding order row at Svea will then be credited. (For card or direct bank orders you need to first query and then 
+     * supply the corresponding numbered order rows using the addNumberedOrderRows() method.)
+     * 
+     * Following the request Svea will issue a credit invoice including the original order rows specified using setRowToCredit(), 
+     * as well as any new credit order rows specified using addCreditOrderRow(). For card or direct bank orders, the order row amount
+     * will be credited to the customer. 
+     * 
+     * Note: when using addCreditOrderRows, you may only use WebPayItem::orderRow with price specified as amountExVat and vatPercent.
      * 
      * Get an order builder instance using the WebPayAdmin::creditOrderRows entrypoint, then provide more information about the 
      * transaction and send the request using the creditOrderRowsBuilder methods:
      * 
-     *      $request = WebPay::queryOrder($config)
-     *          ->setInvoiceId()                // invoice only, required
-     *          ->setInvoiceDistributionType()  // invoice only, required
-     *          ->setOrderId()                  // card and direct bank only, required
-     *          ->setCountryCode()              // required
-     *          ->addCreditOrderRow()           // optional, use to specify a new credit row, i.e. for amounts not present in the original order
-     *          ->addCreditOrderRows()          // optional
-     *          ->setRowToCredit()              // optional, index of one of the original order row you wish to credit
-     *          ->setRowsToCredit()             // optional
-     *          ->addNumberedOrderRow()         // card and direct bank only, required with setRow(s)ToCredit
-     *          ->addNumberedOrderRows()        // card and direct bank only, optional
-     *      ;
-     *      // then select the corresponding request class and send request
-     *      $response = $request->creditInvoiceOrderRows()->doRequest()     // returns CreditOrderRowsResponse
-     *      $response = $request->creditCardOrderRows()->doRequest()        // returns CreditTransactionResponse
-     *      $response = $request->creditDirectBankOrderRows()->doRequest()  // returns CreditTransactionResponse
+     *     $request = WebPay::creditOrder($config)
+     *         ->setInvoiceId()                // invoice only, required
+     *         ->setInvoiceDistributionType()  // invoice only, required
+     *         ->setOrderId()                  // card and direct bank only, required
+     *         ->setCountryCode()              // required
+     *         ->addCreditOrderRow()           // optional, use to specify a new credit row, i.e. for amounts not present in the original order
+     *         ->addCreditOrderRows()          // optional
+     *         ->setRowToCredit()              // optional, index of one of the original order row you wish to credit
+     *         ->setRowsToCredit()             // optional
+     *         ->addNumberedOrderRow()         // card and direct bank only, required with setRowToCredit(), recommended to use addCreditOrderRow()
+     *         ->addNumberedOrderRows()        // card and direct bank only, optional
+     *     ;
+     *     // then select the corresponding request class and send request
+     *     $response = $request->creditInvoiceOrderRows()->doRequest();    // returns CreditInvoiceRowsResponse
+     *     $response = $request->creditCardOrderRows()->doRequest();       // returns CreditTransactionResponse
+     *     $response = $request->creditDirectBankOrderRows()->doRequest(); // returns CreditTransactionResponse
      * 
      * @param ConfigurationProvider $config
      * @return Svea\CreditOrderRowsBuilder
      * @throws ValidationException
      *
      * @see \Svea\CreditOrderRowsBuilder \Svea\CreditOrderRowsBuilder
-     * @see \Svea\AdminService\CreditOrderRowsResponse \Svea\AdminService\CreditOrderRowsResponse
+     * @see \Svea\AdminService\CreditInvoiceRowsResponse \Svea\AdminService\CreditInvoiceRowsResponse
      * @see \Svea\HostedService\CreditTransactionResponse \Svea\HostedService\CreditTransactionResponse
      *
      * @author Kristian Grossman-Madsen for Svea WebPay
