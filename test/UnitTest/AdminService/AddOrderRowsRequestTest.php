@@ -465,4 +465,45 @@ class AddOrderRowsRequestTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals(12.39876, $request->OrderRows->enc_value->enc_value[1]->enc_value->PricePerUnit->enc_value);
         $this->assertTrue($request->OrderRows->enc_value->enc_value[1]->enc_value->PriceIncludingVat->enc_value);
     }
+      public function test_add_single_orderRow_as_incvat_and_exvat() {
+        $config = Svea\SveaConfig::getDefaultConfig();
+
+        $request = WebPayAdmin::addOrderRows($config)
+                ->setOrderId('sveaOrderId')
+                ->setCountryCode('SE')
+                ->addOrderRow(
+                WebPayItem::orderRow()
+                        ->setAmountExVat(99.99)
+                        ->setAmountIncVat(123.9876)
+                        ->setQuantity(1)
+                    )
+                ->addInvoiceOrderRows()
+                    ->prepareRequest();
+
+        $this->assertEquals(123.9876, $request->OrderRows->enc_value->enc_value[0]->enc_value->PricePerUnit->enc_value);
+        $this->assertTrue($request->OrderRows->enc_value->enc_value[0]->enc_value->PriceIncludingVat->enc_value);
+    }
+      public function test_add_rows_as_incvat_and_exvat() {
+          $orderrowArray[] =  WebPayItem::orderRow()
+                        ->setAmountExVat(99.99)
+                        ->setAmountIncVat(123.9876)
+                        ->setQuantity(1);
+          $orderrowArray[] =  WebPayItem::orderRow()
+                       ->setAmountExVat(9.999)
+                        ->setAmountIncVat(12.39876)
+                        ->setQuantity(1);
+        $config = Svea\SveaConfig::getDefaultConfig();
+
+        $request = WebPayAdmin::addOrderRows($config)
+                ->setOrderId('sveaOrderId')
+                ->setCountryCode('SE')
+               ->addOrderRows($orderrowArray)
+                ->addInvoiceOrderRows()
+                    ->prepareRequest();
+
+        $this->assertEquals(123.9876, $request->OrderRows->enc_value->enc_value[0]->enc_value->PricePerUnit->enc_value);
+        $this->assertTrue($request->OrderRows->enc_value->enc_value[0]->enc_value->PriceIncludingVat->enc_value);
+        $this->assertEquals(12.39876, $request->OrderRows->enc_value->enc_value[1]->enc_value->PricePerUnit->enc_value);
+        $this->assertTrue($request->OrderRows->enc_value->enc_value[1]->enc_value->PriceIncludingVat->enc_value);
+    }
 }
