@@ -16,6 +16,8 @@ class AddOrderRowsRequest extends AdminServiceRequest {
 
     /** @var AddOrderRowBuilder $orderBuilder */
     public $orderBuilder;
+    private $amount;
+    private $priceIncludingVat;
 
     /**
      * @param addOrderRowsBuilder $orderBuilder
@@ -37,16 +39,25 @@ class AddOrderRowsRequest extends AdminServiceRequest {
         $orderRowNumbers = array();
         foreach( $this->orderBuilder->orderRows as $orderRow ) {
 
-            // handle different ways to spec an orderrow
-            // inc + ex
-            if( !isset($orderRow->vatPercent) && (isset($orderRow->amountExVat) && isset($orderRow->amountIncVat)) ) {
-                $orderRow->vatPercent = \Svea\WebService\WebServiceRowFormatter::calculateVatPercentFromPriceExVatAndPriceIncVat($orderRow->amountIncVat, $orderRow->amountExVat );
-            }
-            // % + inc
-            elseif( (isset($orderRow->vatPercent) && isset($orderRow->amountIncVat)) && !isset($orderRow->amountExVat) ) {
-                $orderRow->amountExVat = \Svea\WebService\WebServiceRowFormatter::convertIncVatToExVat($orderRow->amountIncVat, $orderRow->vatPercent);
-            }
-            // % + ex, no need to do anything
+             if (isset($orderRow->vatPercent) && isset($orderRow->amountExVat)) {
+                 $this->amount = $orderRow->amountExVat;
+                 $this->priceIncludingVat = FALSE;
+
+               // amountIncVat & vatPercent used to specify product price
+             }elseif (isset($orderRow->vatPercent) && isset($orderRow->amountIncVat)) {
+                 $this->amount = $orderRow->amountIncVat;
+                 $this->priceIncludingVat = TRUE;
+             }
+//            // handle different ways to spec an orderrow
+//            // inc + ex
+//            if( !isset($orderRow->vatPercent) && (isset($orderRow->amountExVat) && isset($orderRow->amountIncVat)) ) {
+//                $orderRow->vatPercent = \Svea\WebService\WebServiceRowFormatter::calculateVatPercentFromPriceExVatAndPriceIncVat($orderRow->amountIncVat, $orderRow->amountExVat );
+//            }
+//            // % + inc
+//            elseif( (isset($orderRow->vatPercent) && isset($orderRow->amountIncVat)) && !isset($orderRow->amountExVat) ) {
+//                $this->amount = \Svea\WebService\WebServiceRowFormatter::convertIncVatToExVat($orderRow->amountIncVat, $orderRow->vatPercent);
+//            }
+//            // % + ex, no need to do anything
 
             //discountPercent must be 0 or an int
             if(!isset($orderRow->discountPercent)) {
@@ -59,9 +70,10 @@ class AddOrderRowsRequest extends AdminServiceRequest {
                     $orderRow->name.": ".$orderRow->description,
                     $orderRow->discountPercent,
                     $orderRow->quantity,
-                    $orderRow->amountExVat,
+                    $this->amount,
                     $orderRow->unit,
-                    $orderRow->vatPercent
+                    $orderRow->vatPercent,
+                    $this->priceIncludingVat
                 ),
                 SOAP_ENC_OBJECT, null, null, 'OrderRow', "http://schemas.datacontract.org/2004/07/DataObjects.Webservice"
             );
