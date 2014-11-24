@@ -34,7 +34,7 @@ class HostedPaymentResponse extends HostedResponse{
      * 
      * @param string $response  hosted request response xml message
      * @param string $countryCode  two-letter country code
-     * @param ConfigurationProveder  $config
+     * @param ConfigurationProvider $config
      */
     function __construct($response,$countryCode,$config) {
         if (is_array($response)) {

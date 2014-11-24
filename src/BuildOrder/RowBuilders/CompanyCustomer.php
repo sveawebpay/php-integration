@@ -5,25 +5,26 @@ namespace Svea;
  * Class CompanyCustomer, a customer information container for legal entities.
  * 
  * Note that "required" below as a requirement only when the IndividualCustomer is used 
- * to identify the customer when using the invoice or payment plan payment methods. 
+ * to identify the customer when using the invoice or payment plan payment methods.
+ *  
  * (For card and direct bank orders, adding customer information to the order is optional.)
  * 
-$order->
-    addCustomerDetails(
-        WebPayItem::companyCustomer()
-            ->setNationalIdNumber(2345234)      // required in SE, NO, DK, FI
-            ->setVatNumber("NL2345234")         // required in NL and DE
-            ->setCompanyName("TestCompagniet")  // required in NL and DE
-            ->setStreetAddress("Gatan", 23)     // required in NL and DE
-            ->setZipCode(9999)                  // required in NL and DE
-            ->setLocality("Stan")               // required in NL and DE
-            ->setEmail("test@svea.com")         // optional but desirable
-            ->setIpAddress("123.123.123")       // optional but desirable
-            ->setCoAddress("c/o Eriksson")      // optional
-            ->setPhoneNumber(999999)            // optional
-            ->setAddressSelector("7fd7768")     // optional, string recieved from WebPay::getAddress() request
-    )
-;
+ *     $order->addCustomerDetails(
+ *         WebPayItem::companyCustomer()
+ *             ->setNationalIdNumber(2345234)      // required in SE, NO, DK, FI
+ *             ->setVatNumber("NL2345234")         // required in NL and DE
+ *             ->setCompanyName("TestCompagniet")  // required in NL and DE
+ *             ->setStreetAddress("Gatan", 23)     // required in NL and DE
+ *             ->setZipCode(9999)                  // required in NL and DE
+ *             ->setLocality("Stan")               // required in NL and DE
+ *             ->setEmail("test@svea.com")         // optional but desirable
+ *             ->setIpAddress("123.123.123")       // optional but desirable
+ *             ->setCoAddress("c/o Eriksson")      // optional
+ *             ->setPhoneNumber(999999)            // optional
+ *             ->setAddressSelector("7fd7768")     // optional, string recieved from WebPay::getAddress() request
+ *     )
+ * ;
+ * 
  * @author anne-hal, Kristian Grossman-Madsen
  */
 class CompanyCustomer {

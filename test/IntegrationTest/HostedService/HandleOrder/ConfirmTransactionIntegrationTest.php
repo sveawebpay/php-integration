@@ -89,8 +89,8 @@ class ConfirmTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
         );
         
         // Set the below to match the transaction, then run the test.
-        $clientOrderNumber = "test_createOrder_usePaymentMethodPayment_KORTCERT_1412598382519";
-        $transactionId = 587390;
+        $clientOrderNumber = "798";
+        $transactionId = 587950;
         $captureDate = date('c');
                 
         $request = new ConfirmTransaction( Svea\SveaConfig::getDefaultConfig() );
@@ -99,9 +99,11 @@ class ConfirmTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
         $request->countryCode = "SE";
         $response = $request->doRequest();     
         
-        print_r( $response );
+        //print_r( $response );
         $this->assertInstanceOf( "Svea\HostedService\ConfirmTransactionResponse", $response );     
         $this->assertEquals( 1, $response->accepted );        
+        $this->assertStringMatchesFormat( "%d", $response->transactionId);   // %d => an unsigned integer value
+        
         $this->assertEquals( $clientOrderNumber, $response->clientOrderNumber );  
     }    
 }

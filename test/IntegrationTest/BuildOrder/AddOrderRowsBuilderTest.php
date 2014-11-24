@@ -53,7 +53,7 @@ class AddOrderRowsBuilderIntegrationTest extends PHPUnit_Framework_TestCase {
         
         $this->assertEquals(1, $addOrderRowsResponse->accepted);        
         $createdOrderId = $orderResponse->sveaOrderId;
-        //print_r("test_AddOrderRows_addInvoiceOrderRows_single_row_success: "); print_r( $createdOrderId );
+        ////print_r("test_AddOrderRows_addInvoiceOrderRows_single_row_success: "); //print_r( $createdOrderId );
         
         // query orderrows
         $queryOrderBuilder = WebPayAdmin::queryOrder( Svea\SveaConfig::getDefaultConfig() )
@@ -63,7 +63,7 @@ class AddOrderRowsBuilderIntegrationTest extends PHPUnit_Framework_TestCase {
           
         $queryResponse = $queryOrderBuilder->queryInvoiceOrder()->doRequest(); 
         
-        //print_r( $queryResponse);
+        ////print_r( $queryResponse);
         $this->assertEquals(1, $queryResponse->accepted);
         // assert that order rows are the same
         $this->assertEquals( $b_quantity, $queryResponse->numberedOrderRows[1]->quantity );
@@ -114,7 +114,7 @@ class AddOrderRowsBuilderIntegrationTest extends PHPUnit_Framework_TestCase {
         
         $this->assertEquals(1, $addOrderRowsResponse->accepted);        
         $createdOrderId = $orderResponse->sveaOrderId;
-        //print_r("test_AddOrderRows_addInvoiceOrderRows_multiple_rows_success: "); print_r( $createdOrderId );
+        ////print_r("test_AddOrderRows_addInvoiceOrderRows_multiple_rows_success: "); //print_r( $createdOrderId );
         
         // query orderrows
         $queryOrderBuilder = WebPayAdmin::queryOrder( Svea\SveaConfig::getDefaultConfig() )
@@ -124,7 +124,7 @@ class AddOrderRowsBuilderIntegrationTest extends PHPUnit_Framework_TestCase {
           
         $queryResponse = $queryOrderBuilder->queryInvoiceOrder()->doRequest(); 
         
-        //print_r( $queryResponse);
+        ////print_r( $queryResponse);
         $this->assertEquals(1, $queryResponse->accepted);
         // assert that order rows are the same
         $this->assertEquals( $b_quantity, $queryResponse->numberedOrderRows[2]->quantity );
@@ -175,7 +175,7 @@ class AddOrderRowsBuilderIntegrationTest extends PHPUnit_Framework_TestCase {
         
         $this->assertEquals(1, $addOrderRowsResponse->accepted);        
         $createdOrderId = $orderResponse->sveaOrderId;
-        //print_r("test_AddOrderRows_addPaymentPlanOrderRows_multiple_rows_success: "); print_r( $createdOrderId );
+        ////print_r("test_AddOrderRows_addPaymentPlanOrderRows_multiple_rows_success: "); //print_r( $createdOrderId );
         
         // query orderrows
         $queryOrderBuilder = WebPayAdmin::queryOrder( Svea\SveaConfig::getDefaultConfig() )
@@ -185,7 +185,7 @@ class AddOrderRowsBuilderIntegrationTest extends PHPUnit_Framework_TestCase {
           
         $queryResponse = $queryOrderBuilder->queryPaymentPlanOrder()->doRequest(); 
         
-        //print_r( $queryResponse);
+        ////print_r( $queryResponse);
         $this->assertEquals(1, $queryResponse->accepted);
         // assert that order rows are the same
         $this->assertEquals( $b_quantity, $queryResponse->numberedOrderRows[2]->quantity );

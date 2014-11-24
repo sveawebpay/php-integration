@@ -165,7 +165,7 @@ class GetOrdersRequestIntegrationTest extends PHPUnit_Framework_TestCase{
         $request = new Svea\AdminService\GetOrdersRequest( $getOrdersBuilder );
         $getOrdersResponse = $request->doRequest();
 
-        //print_r( $getOrdersResponse );        
+        ////print_r( $getOrdersResponse );        
         
         $this->assertInstanceOf('Svea\AdminService\GetOrdersResponse', $getOrdersResponse);
         $this->assertEquals(1, $getOrdersResponse->accepted );
@@ -289,7 +289,7 @@ class GetOrdersRequestIntegrationTest extends PHPUnit_Framework_TestCase{
         //      /.../
         // )
         
-        //print_r( $getOrdersResponse );                
+        ////print_r( $getOrdersResponse );                
         $this->assertInstanceOf('Svea\AdminService\GetOrdersResponse', $getOrdersResponse);
         $this->assertEquals(1, $getOrdersResponse->accepted );
         $this->assertEquals(0, $getOrdersResponse->resultcode);
@@ -368,7 +368,7 @@ class GetOrdersRequestIntegrationTest extends PHPUnit_Framework_TestCase{
         //      /.../
         // )
         
-        //print_r( $getOrdersResponse );                
+        ////print_r( $getOrdersResponse );                
         $this->assertInstanceOf('Svea\AdminService\GetOrdersResponse', $getOrdersResponse);
         $this->assertEquals(1, $getOrdersResponse->accepted );
         $this->assertEquals(0, $getOrdersResponse->resultcode);
@@ -517,7 +517,7 @@ class GetOrdersRequestIntegrationTest extends PHPUnit_Framework_TestCase{
         //
         //)
         
-        //print_r( $getOrdersResponse );                
+        ////print_r( $getOrdersResponse );                
         $this->assertInstanceOf('Svea\AdminService\GetOrdersResponse', $getOrdersResponse);
         $this->assertEquals(1, $getOrdersResponse->accepted );
         $this->assertEquals(0, $getOrdersResponse->resultcode);

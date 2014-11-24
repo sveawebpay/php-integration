@@ -49,7 +49,7 @@ class RecurCardPaymentIntegrationTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals( 1, $response->accepted );                
 
         // print the url to use to confirm the transaction
-        print_r( " test_manual_recurring_payment_step_1(): " . $response->testurl ." ");
+        //print_r( " test_manual_recurring_payment_step_1(): " . $response->testurl ." ");
     }
     
     /**
@@ -95,8 +95,8 @@ class RecurCardPaymentIntegrationTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals( 1, $response->accepted );                
 
         // print the subscription id that succeeded to use to confirm the transaction
-        print_r( " test_manual_recurring_payment_step_2() recur succeded using subscriptionid: " . $response->subscriptionid ." " );
-        print_r( " test_manual_recurring_payment_step_2() for more info, check logs for transaction: " . $response->transactionid ." " );   
+        //print_r( " test_manual_recurring_payment_step_2() recur succeded using subscriptionid: " . $response->subscriptionid ." " );
+        //print_r( " test_manual_recurring_payment_step_2() for more info, check logs for transaction: " . $response->transactionid ." " );   
     }     
     
 }

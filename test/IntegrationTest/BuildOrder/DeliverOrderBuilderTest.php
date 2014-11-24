@@ -29,7 +29,7 @@ class DeliverOrderBuilderIntegrationTest extends PHPUnit_Framework_TestCase {
         
         $response = $DeliverOrderBuilder->deliverInvoiceOrder()->doRequest();
 
-        //print_r( $response );
+        ////print_r( $response );
         $this->assertEquals(1, $response->accepted);                
         $this->assertInstanceOf( "Svea\WebService\DeliverOrderResult", $response );    // deliverOrderResult => deliverOrderEU 
     }
@@ -71,7 +71,7 @@ class DeliverOrderBuilderIntegrationTest extends PHPUnit_Framework_TestCase {
         //)        
         $deliverResponse = $DeliverOrderBuilder->deliverInvoiceOrder()->doRequest();
         
-        //print_r( $deliverResponse );        
+        ////print_r( $deliverResponse );        
         //Svea\AdminService\DeliverOrdersResponse Object
         //(
         //    [clientId] => 79021
@@ -130,7 +130,7 @@ class DeliverOrderBuilderIntegrationTest extends PHPUnit_Framework_TestCase {
         
         $response = $DeliverOrderBuilder->deliverPaymentPlanOrder()->doRequest();
 
-        //print_r( $response );
+        ////print_r( $response );
         $this->assertEquals(1, $response->accepted);
         $this->assertInstanceOf( "Svea\WebService\DeliverOrderResult", $response );
     }
@@ -166,7 +166,7 @@ class DeliverOrderBuilderIntegrationTest extends PHPUnit_Framework_TestCase {
         
         $response = $DeliverOrderBuilder->deliverPaymentPlanOrder()->doRequest();
 
-        //print_r( $response );
+        ////print_r( $response );
         $this->assertEquals(1, $response->accepted);
         $this->assertInstanceOf( "Svea\WebService\DeliverOrderResult", $response );
     }    
@@ -189,7 +189,7 @@ class DeliverOrderBuilderIntegrationTest extends PHPUnit_Framework_TestCase {
         
         $response = $DeliverOrderBuilder->deliverCardOrder()->doRequest();
 
-        //print_r( $response );
+        ////print_r( $response );
         $this->assertEquals(1, $response->accepted);
         $this->assertInstanceOf( "Svea\HostedService\ConfirmTransactionResponse", $response );                
     }     

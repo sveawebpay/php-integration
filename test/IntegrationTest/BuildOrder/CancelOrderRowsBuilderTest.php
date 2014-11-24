@@ -128,7 +128,7 @@ class CancelOrderRowsBuilderIntegrationTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals( 1, $response->accepted );                
 
         // print the url to use to confirm the transaction
-        print_r( "\n test_manual_CancelOrderBuilderRows_Card_single_row_success_step_1(): " . $response->testurl ."\n ");
+        //print_r( "\n test_manual_CancelOrderBuilderRows_Card_single_row_success_step_1(): " . $response->testurl ."\n ");
     }
 
     /**
@@ -157,7 +157,7 @@ class CancelOrderRowsBuilderIntegrationTest extends PHPUnit_Framework_TestCase {
         ;     
         $queryResponse = $queryOrderBuilder->queryCardOrder()->doRequest(); 
 
-        print_r( $queryResponse);
+        //print_r( $queryResponse);
         // 2x100 @25 = 25000 (5000)
         // amount = 25000, vat = 5000
         $this->assertEquals(1, $queryResponse->accepted);
@@ -184,7 +184,7 @@ class CancelOrderRowsBuilderIntegrationTest extends PHPUnit_Framework_TestCase {
                 
         $query2Response = $queryOrderBuilder->queryCardOrder()->doRequest(); 
         
-        print_r( $query2Response);
+        //print_r( $query2Response);
         // 2x100 @25 = 25000 (5000)     <- credited
         // amount = 25000 -25000, vat = 5000 
         $this->assertEquals(1, $query2Response->accepted);
@@ -252,7 +252,7 @@ class CancelOrderRowsBuilderIntegrationTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals( 1, $response->accepted );                
 
         // print the url to use to confirm the transaction
-        print_r( "\n test_manual_CancelOrderBuilderRows_Card_single_row_success_step_1(): " . $response->testurl ."\n ");
+        //print_r( "\n test_manual_CancelOrderBuilderRows_Card_single_row_success_step_1(): " . $response->testurl ."\n ");
     }
 
     /**
@@ -281,7 +281,7 @@ class CancelOrderRowsBuilderIntegrationTest extends PHPUnit_Framework_TestCase {
         ;     
         $queryResponse = $queryOrderBuilder->queryCardOrder()->doRequest(); 
 
-        print_r( $queryResponse);
+        //print_r( $queryResponse);
         // 2x100 @25 = 25000 (5000)
         // 1x100 @25 = 12500 (2500)
         // 1x100 @12 = 11200 (1200)
@@ -310,7 +310,7 @@ class CancelOrderRowsBuilderIntegrationTest extends PHPUnit_Framework_TestCase {
                 
         $query2Response = $queryOrderBuilder->queryCardOrder()->doRequest(); 
         
-        print_r( $query2Response);
+        //print_r( $query2Response);
         // 2x100 @25 = 25000 (5000)
         // 1x100 @25 = 12500 (2500)     <- credited
         // 1x100 @12 = 11200 (1200)     <- credited

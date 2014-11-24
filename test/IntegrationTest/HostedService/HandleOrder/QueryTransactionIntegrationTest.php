@@ -141,7 +141,7 @@ class QueryTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
         
         $this->assertInstanceOf( "Svea\HostedService\QueryTransactionResponse", $response );
         
-        //print_r($response);  // uncomment to dump our processed request response:
+        ////print_r($response);  // uncomment to dump our processed request response:
         //Svea\HostedService\QueryTransactionResponse Object
         //(
         //    [transactionId] => 587401
@@ -334,7 +334,7 @@ class QueryTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
                 
         $this->assertInstanceOf( "Svea\HostedService\QueryTransactionResponse", $response );
         
-        //print_r($response);  // uncomment to dump our processed request response:
+        ////print_r($response);  // uncomment to dump our processed request response:
         //Svea\HostedService\QueryTransactionResponse Object
         //(
         //    [transactionId] => 581497
@@ -608,7 +608,7 @@ class QueryTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
          
         $this->assertInstanceOf( "Svea\HostedService\QueryTransactionResponse", $response );
         
-        //print_r($response);
+        ////print_r($response);
         $this->assertEquals( 1, $response->accepted );    
         $this->assertInstanceOf( "Svea\NumberedOrderRow", $response->numberedOrderRows[0] );              
         $this->assertInstanceOf( "Svea\NumberedOrderRow", $response->numberedOrderRows[1] );
@@ -733,7 +733,7 @@ class QueryTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
          
         $this->assertInstanceOf( "Svea\HostedService\QueryTransactionResponse", $response );
         
-        //print_r($response);
+        ////print_r($response);
 
         $this->assertEquals( 1, $response->accepted );   
         
@@ -778,7 +778,7 @@ class QueryTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
         // check that request was accepted
         $this->assertEquals( 1, $response->accepted );
         
-        //print_r("Recur card transaction response: "); print_r( $response );        
+        ////print_r("Recur card transaction response: "); //print_r( $response );        
         //
         //Recur card transaction response: Svea\HostedService\RecurTransactionResponse Object
         //(
@@ -852,7 +852,7 @@ class QueryTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
          
         $this->assertInstanceOf( "Svea\HostedService\QueryTransactionResponse", $queryResponse );
         
-        //print_r($queryResponse);        
+        ////print_r($queryResponse);        
         //
         //Svea\HostedService\QueryTransactionResponse Object
         //(

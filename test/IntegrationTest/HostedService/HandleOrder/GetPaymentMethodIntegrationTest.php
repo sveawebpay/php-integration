@@ -17,7 +17,7 @@ class GetPaymentMethodIntegrationTest extends \PHPUnit_Framework_TestCase {
                 ->setCountryCode("SE")
                 ->doRequest();
          
-        //print_r( "testGetAllPaymentMethods: "); print_r( $response );        
+        ////print_r( "testGetAllPaymentMethods: "); //print_r( $response );        
         $this->assertEquals(PaymentMethod::NORDEA_SE, $response[0]);
         $this->assertEquals(PaymentMethod::SEB_SE, $response[1]);
         $this->assertEquals(PaymentMethod::KORTCERT, $response[2]);

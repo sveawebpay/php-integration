@@ -1,27 +1,9 @@
 <?php
 namespace Svea;
 /**
- * Use this class when the discount or coupon is expressed as a percentage of the total product amount.
- * 
-If only AmountIncVat is given, we calculate the discount split across the tax (vat) rates present in the order. This will
-ensure that the correct discount vat is applied to the order.
-
-Otherwise, it is required to use at least two of the functions setAmountExVat(), setAmountIncVat() and setVatPercent().
-If two of these three attributes are specified, we respect the amount indicated and include a discount with the appropriate tax rate.
-
-$order->
-    addDiscount(
-        WebPayItem::fixedDiscount()
-            ->setAmountIncVat(100.00)               // recommended, see info above
-            ->setAmountExVat(1.0)                   // optional, see info above
-            ->setVatPercent(25)                     // optional, see info above
-            ->setDiscountId("1")                    // optional
-            ->setUnit("st")                         // optional
-            ->setDescription("FixedDiscount")       // optional
-            ->setName("Fixed")                      // optional
-    )
-;
-* @author anne-hal, Kristian Grossman-Madsen
+ * Use WebPayItem::fixedDiscount() when the discount or coupon is expressed as a fixed discount amount.
+ *  
+ * @author anne-hal, Kristian Grossman-Madsen
  */
 class FixedDiscount {
     

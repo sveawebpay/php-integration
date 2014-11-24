@@ -47,18 +47,19 @@ class AnnulTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
         );
         
         // Set the below to match the transaction, then run the test.
-        $customerrefno = "test_cancelOrder_cancelCardOrder1412596998758";
-        $transactionId = 587385;
+        $customerrefno = "794";
+        $transactionId = 587947;
 
         $request = new AnnulTransaction( Svea\SveaConfig::getDefaultConfig() );
         $request->transactionId = $transactionId;
         $request->countryCode = "SE";
         $response = $request->doRequest();   
-         
+              
+        //print_r( $response); 
         $this->assertInstanceOf( "Svea\HostedService\AnnulTransactionResponse", $response );
-        
-        print_r( $response); 
         $this->assertEquals( 1, $response->accepted );        
+        $this->assertStringMatchesFormat( "%d", $response->transactionId);   // %d => an unsigned integer value
+        
         $this->assertEquals( $customerrefno, $response->clientOrderNumber );  
     }    
 }

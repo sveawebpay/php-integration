@@ -460,7 +460,7 @@ class CardPaymentTest extends \PHPUnit_Framework_TestCase {
         $subscriptiontype = "<subscriptiontype>RECURRINGCAPTURE<\/subscriptiontype>"; // remember to escape <_/_subscriptiontype>
         //$this->assertRegExp("/[a-zA-Z0-9<>]*".$subscriptiontype."[a-zA-Z0-9<>]*/","foo<subscriptiontype>RECURRINGCAPTURE</subscriptiontype>bar");
         
-        //print_r($paymentForm->xmlMessage);        
+        ////print_r($paymentForm->xmlMessage);        
         $this->assertRegExp("/[a-zA-Z0-9<>]*".$subscriptiontype."[a-zA-Z0-9<>]*/", $paymentForm->xmlMessage );
     }    
 }

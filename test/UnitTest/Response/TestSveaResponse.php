@@ -78,11 +78,11 @@ class SveaResponseTest extends \PHPUnit_Framework_TestCase {
         $response = $sveaResponse->getResponse();
         
         // uncomment the following to see the resulting response 
-//        print_r( $response ); // accepted is show as having value of 1
+//        //print_r( $response ); // accepted is show as having value of 1
 //        var_dump( $response );  // note that var_dump lists accepted as 'int(1)' meaning an int with value 1 (in contrast to 'string(3) "SEK"')
 //        
-//        if( empty($response->accepted) ) { print_r( "test accepted is empty" ); }
-//        if( !empty($response->accepted) ) { print_r( "test accepted not empty" ); }
+//        if( empty($response->accepted) ) { //print_r( "test accepted is empty" ); }
+//        if( !empty($response->accepted) ) { //print_r( "test accepted not empty" ); }
       
         $this->assertInstanceOf('Svea\HostedPaymentResponse', $response );
         $this->assertEquals(1, $response->accepted );

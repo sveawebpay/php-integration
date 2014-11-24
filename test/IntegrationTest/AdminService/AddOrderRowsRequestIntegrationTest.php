@@ -48,7 +48,7 @@ class AddOrderRowsRequestIntegrationTest extends PHPUnit_Framework_TestCase{
         $addOrderRowsRequest = new Svea\AdminService\AddOrderRowsRequest( $this->builderObject );        
         $addOrderRowsResponse = $addOrderRowsRequest->doRequest();
         
-        //print_r( $addOrderRowsResponse );        
+        ////print_r( $addOrderRowsResponse );        
         $this->assertInstanceOf('Svea\AdminService\AddOrderRowsResponse', $addOrderRowsResponse);
         $this->assertEquals(1, $addOrderRowsResponse->accepted );
     }
