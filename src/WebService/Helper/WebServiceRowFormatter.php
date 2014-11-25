@@ -501,7 +501,7 @@ class WebServiceRowFormatter {
         }
     }
 
-    public function determineVatFlag() {
+    private function determineVatFlag() {
         $exVat = 0;
         $incVat = 0;
 

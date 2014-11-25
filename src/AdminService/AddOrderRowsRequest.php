@@ -35,21 +35,21 @@ class AddOrderRowsRequest extends AdminServiceRequest {
     public function prepareRequest() {
 
         $this->validateRequest();
-
-        $orderRowNumbers = array();
+        $this->determineVatFlag();
+        print_r('--'.$this->priceIncludingVat.'--');
+//        $orderRowNumbers = array();
         foreach( $this->orderBuilder->orderRows as $orderRow ) {
-
              if (isset($orderRow->vatPercent) && isset($orderRow->amountExVat)) {
                  $this->amount = $orderRow->amountExVat;
                  $this->priceIncludingVat = FALSE;
 
                // amountIncVat & vatPercent used to specify product price
              }elseif (isset($orderRow->vatPercent) && isset($orderRow->amountIncVat)) {
-                 $this->amount = $orderRow->amountIncVat;
-                 $this->priceIncludingVat = TRUE;
+                 $this->amount = $this->priceIncludingVat ? $orderRow->amountIncVat : \Svea\WebService\WebServiceRowFormatter::convertIncVatToExVat($orderRow->amountIncVat, $orderRow->vatPercent);
+                 $this->priceIncludingVat =$this->priceIncludingVat ? TRUE : FALSE;
              }else{
-                 $this->amount = $orderRow->amountIncVat;
-                 $this->priceIncludingVat = TRUE;
+                 $this->amount = $this->priceIncludingVat ? $orderRow->amountIncVat : $orderRow->amountExVat;
+                 $this->priceIncludingVat = $this->priceIncludingVat ? TRUE : FALSE;
                 $orderRow->vatPercent = \Svea\WebService\WebServiceRowFormatter::calculateVatPercentFromPriceExVatAndPriceIncVat($orderRow->amountIncVat, $orderRow->amountExVat );
 
              }
@@ -144,5 +144,27 @@ class AddOrderRowsRequest extends AdminServiceRequest {
             }
         }
         return $errors;
+    }
+
+    private function determineVatFlag() {
+        $exVat = 0;
+        $incVat = 0;
+
+        //check first if there is a mix of orderrows
+        foreach ($this->orderBuilder->orderRows as $row) {
+            if(isset($row->amountExVat) && isset($row->amountIncVat)){
+                $incVat++;
+            }elseif (isset($row->amountExVat) && isset ($row->vatPercent)) {
+                $exVat++;
+            }else {
+                $incVat++;
+            }
+        }
+          //if atleast one of the rows are set as exVat
+          if ($exVat >= 1) {
+              $this->priceIncludingVat = FALSE;
+          }  else {
+              $this->priceIncludingVat = TRUE;
+          }
     }
 }
