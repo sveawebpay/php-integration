@@ -65,7 +65,6 @@ class DeliverOrderRowsBuilder {
     
     public function __construct($config) {
         $this->conf = $config;
-        $this->deliverOrderRows = array();
         $this->rowsToDeliver = array();         
         $this->numberedOrderRows = array();
     }        

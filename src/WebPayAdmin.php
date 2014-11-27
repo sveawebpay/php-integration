@@ -264,12 +264,13 @@ class WebPayAdmin {
      * then provide more information about the transaction and send the request using
      * the deliverOrderRowsBuilder methods:
      *
-     * ->setOrderId()           (invoice, card only, required)
-     * ->setCountryCode()       (invoice only, required)
-     * ->setRowToDeliver()      (required, index of one of the original order row you wish to cancel)
-     * ->setRowsToDeliver()     (optional)
-     * ->addNumberedOrderRow()  (card only, one or more, required with setRow(s)ToDeliver)
-     * ->addNumberedOrderRows() (card only, optional)
+     * ->setOrderId()                   (invoice, card only, required)
+     * ->setCountryCode()               (invoice only, required)
+     * ->setInvoiceDistributionType()   (invoice only, required)
+     * ->setRowToDeliver()              (required, index of one of the original order row you wish to cancel)
+     * ->setRowsToDeliver()             (optional)
+     * ->addNumberedOrderRow()          (card only, one or more, required with setRow(s)ToDeliver)
+     * ->addNumberedOrderRows()         (card only, optional)
      * 
      * Finish by selecting the correct ordertype and perform the request:
      * ->deliverInvoiceOrderRows() // or ->deliverCardOrderRows()
