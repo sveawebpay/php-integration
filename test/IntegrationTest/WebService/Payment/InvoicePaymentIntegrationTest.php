@@ -26,8 +26,8 @@ class InvoicePaymentIntegrationTest extends PHPUnit_Framework_TestCase {
 
         $this->assertEquals(1, $request->accepted);
     }
-    
-    
+
+
     public function testInvoiceRequestNLAcceptedWithDoubleHousenumber() {
         $config = Svea\SveaConfig::getDefaultConfig();
         $request = WebPay::createOrder($config)
@@ -50,7 +50,7 @@ class InvoicePaymentIntegrationTest extends PHPUnit_Framework_TestCase {
 
         $this->assertEquals(1, $request->accepted);
     }
-    
+
 
     public function testInvoiceRequestUsingISO8601dateAccepted() {
         $config = Svea\SveaConfig::getDefaultConfig();
@@ -509,11 +509,11 @@ class InvoicePaymentIntegrationTest extends PHPUnit_Framework_TestCase {
                     ->useInvoicePayment()
                         ->doRequest();
 
-        $this->assertEquals(1, $request->accepted);        
-        $this->assertEquals(true, isset($request->clientOrderNumber) );  
+        $this->assertEquals(1, $request->accepted);
+        $this->assertEquals(true, isset($request->clientOrderNumber) );
         $this->assertEquals("I_exist!", $request->clientOrderNumber);
     }
-    
+
     public function testInvoiceRequest_optional_clientOrderNumber_not_present_in_response_if_not_sent() {
         $config = Svea\SveaConfig::getDefaultConfig();
         $request = WebPay::createOrder($config)
@@ -529,9 +529,9 @@ class InvoicePaymentIntegrationTest extends PHPUnit_Framework_TestCase {
                         ->doRequest();
 
         $this->assertEquals(1, $request->accepted);
-        $this->assertEquals(false, isset($request->clientOrderNumber) );  
+        $this->assertEquals(false, isset($request->clientOrderNumber) );
     }
-    
+
     public function testInvoiceRequest_OrderType_set_in_response_if_useInvoicePayment_set() {
         $config = Svea\SveaConfig::getDefaultConfig();
         $request = WebPay::createOrder($config)
@@ -543,6 +543,312 @@ class InvoicePaymentIntegrationTest extends PHPUnit_Framework_TestCase {
                         ->doRequest();
 
         $this->assertEquals(1, $request->accepted);
-        $this->assertEquals("Invoice", $request->orderType);                               
-    }   
+        $this->assertEquals("Invoice", $request->orderType);
+    }
+
+    /**
+     * Tests for rounding**
+     */
+
+    public function testPriceSetAsExVatAndVatPercent(){
+        $config = Svea\SveaConfig::getDefaultConfig();
+        $request = WebPay::createOrder($config)
+                    ->addOrderRow(
+                            WebPayItem::orderRow()
+                                ->setAmountExVat(80.00)
+                                ->setVatPercent(24)
+                                ->setQuantity(1)
+                            )
+                    ->addCustomerDetails(TestUtil::createIndividualCustomer("SE"))
+                    ->setCountryCode("SE")
+                    ->setOrderDate("2012-12-12")
+                    ->useInvoicePayment()
+                        ->doRequest();
+        $this->assertEquals(1, $request->accepted);
+
+    }
+    public function testFixedDiscountSetAsExVat(){
+        $config = Svea\SveaConfig::getDefaultConfig();
+              $request = WebPay::createOrder($config)
+                    ->addOrderRow(
+                            WebPayItem::orderRow()
+                                ->setAmountExVat(80.00)
+                                ->setVatPercent(24)
+                                ->setQuantity(1)
+                            )
+                    ->addDiscount(WebPayItem::fixedDiscount()
+                            ->setAmountExVat(8)
+                            ->setVatPercent(0))
+                     ->addFee(WebPayItem::shippingFee()
+                                ->setAmountExVat(80.00)
+                                ->setVatPercent(24)
+                            )
+                    ->addCustomerDetails(TestUtil::createIndividualCustomer("SE"))
+                    ->setCountryCode("SE")
+                    ->setOrderDate("2012-12-12")
+                    ->useInvoicePayment()
+                        ->doRequest();
+        $this->assertEquals(1, $request->accepted);
+
+    }
+
+     public function testResponseOrderRowPriceSetAsInkVatAndVatPercentSetAmountAsIncVat(){
+        $config = Svea\SveaConfig::getDefaultConfig();
+        $request = WebPay::createOrder($config)
+                    ->addOrderRow(
+                            WebPayItem::orderRow()
+                                ->setAmountIncVat(123.9876)
+                                ->setVatPercent(24)
+                                ->setQuantity(1)
+                            )
+                    ->addCustomerDetails(TestUtil::createIndividualCustomer("SE"))
+                    ->setCountryCode("SE")
+                    ->setOrderDate("2012-12-12")
+                    ->useInvoicePayment()
+                        ->doRequest();
+          $this->assertEquals(1, $request->accepted);
+
+    }
+
+      public function testResponseFeeSetAsIncVatAndVatPercentWhenPriceSetAsIncVatAndVatPercent(){
+        $config = Svea\SveaConfig::getDefaultConfig();
+        $request = WebPay::createOrder($config)
+                    ->addOrderRow(
+                            WebPayItem::orderRow()
+                                ->setAmountIncVat(123.9876)
+                                ->setVatPercent(24)
+                                ->setQuantity(1)
+                            )
+                    ->addFee(WebPayItem::shippingFee()
+                                ->setAmountIncVat(100.00)
+                                ->setVatPercent(24)
+                            )
+                    ->addFee(WebPayItem::invoiceFee()
+                                ->setAmountIncVat(100.00)
+                                ->setVatPercent(24)
+                            )
+                    ->addCustomerDetails(TestUtil::createIndividualCustomer("SE"))
+                    ->setCountryCode("SE")
+                    ->setOrderDate("2012-12-12")
+                    ->useInvoicePayment()
+                        ->doRequest();
+
+        $this->assertEquals(1, $request->accepted);
+
+    }
+
+      public function testResponseDiscountSetAsIncVatWhenPriceSetAsIncVatAndVatPercent(){
+        $config = Svea\SveaConfig::getDefaultConfig();
+        $request = WebPay::createOrder($config)
+                    ->addOrderRow(
+                            WebPayItem::orderRow()
+                                ->setAmountIncVat(123.9876)
+                                ->setVatPercent(24)
+                                ->setQuantity(1)
+                            )
+                    ->addDiscount(WebPayItem::fixedDiscount()->setAmountIncVat(10))
+                    ->addCustomerDetails(TestUtil::createIndividualCustomer("SE"))
+                    ->setCountryCode("SE")
+                    ->setOrderDate("2012-12-12")
+                    ->useInvoicePayment()
+                        ->doRequest();
+         $this->assertEquals(1, $request->accepted);
+
+
+    }
+
+     public function testResponseDiscountSetAsExVatAndVatPercentWhenPriceSetAsIncVatAndVatPercent(){
+        $config = Svea\SveaConfig::getDefaultConfig();
+        $request = WebPay::createOrder($config)
+                    ->addOrderRow(
+                            WebPayItem::orderRow()
+                                ->setAmountIncVat(123.9876)
+                                ->setVatPercent(24)
+                                ->setQuantity(1)
+                            )
+                    ->addDiscount(WebPayItem::fixedDiscount()
+                            ->setAmountIncVat(10)
+                            ->setVatPercent(0))
+                    ->addCustomerDetails(TestUtil::createIndividualCustomer("SE"))
+                    ->setCountryCode("SE")
+                    ->setOrderDate("2012-12-12")
+                    ->useInvoicePayment()
+                        ->doRequest();
+
+         $this->assertEquals(1, $request->accepted);
+
+    }
+
+
+    public function testResponseDiscountPercentAndVatPercentWhenPriceSetAsIncVatAndVatPercent(){
+        $config = Svea\SveaConfig::getDefaultConfig();
+        $request = WebPay::createOrder($config)
+                    ->addOrderRow(
+                            WebPayItem::orderRow()
+                                ->setAmountIncVat(123.9876)
+                                ->setVatPercent(24)
+                                ->setQuantity(1)
+                            )
+                    ->addDiscount(WebPayItem::relativeDiscount()
+                                    ->setDiscountPercent(10)
+                            )
+                    ->addCustomerDetails(TestUtil::createIndividualCustomer("SE"))
+                    ->setCountryCode("SE")
+                    ->setOrderDate("2012-12-12")
+                    ->useInvoicePayment()
+                        ->doRequest();
+
+         $this->assertEquals(1, $request->accepted);
+
+    }
+
+     public function testResponseOrderSetAsIncVatAndExVatAndRelativeDiscount(){
+        $config = Svea\SveaConfig::getDefaultConfig();
+        $request = WebPay::createOrder($config)
+                    ->addOrderRow(
+                            WebPayItem::orderRow()
+                                ->setAmountIncVat(123.9876)
+                                ->setAmountExVat(99.99)
+                                ->setQuantity(1)
+                            )
+                    ->addDiscount(WebPayItem::relativeDiscount()
+                            ->setDiscountPercent(10)
+                            )
+                    ->addCustomerDetails(TestUtil::createIndividualCustomer("SE"))
+                    ->setCountryCode("SE")
+                    ->setOrderDate("2012-12-12")
+                    ->useInvoicePayment()
+                        ->doRequest();
+
+        $this->assertEquals(1, $request->accepted);
+
+    }
+
+    public function testResponseOrderAndFixedDiscountSetWithMixedVat(){
+        $config = Svea\SveaConfig::getDefaultConfig();
+        $request = WebPay::createOrder($config)
+                    ->addOrderRow(
+                            WebPayItem::orderRow()
+                                ->setAmountIncVat(123.9876)
+                                ->setVatPercent(24)
+                                ->setQuantity(1)
+                            )
+                    ->addDiscount(WebPayItem::fixedDiscount()
+                            ->setAmountExVat(9.999)
+                            )
+                    ->addCustomerDetails(TestUtil::createIndividualCustomer("SE"))
+                    ->setCountryCode("SE")
+                    ->setOrderDate("2012-12-12")
+                    ->useInvoicePayment()
+                        ->doRequest();
+
+        $this->assertEquals(1, $request->accepted);
+
+    }
+      public function testResponseOrderAndFixedDiscountSetWithMixedVat2(){
+        $config = Svea\SveaConfig::getDefaultConfig();
+        $request = WebPay::createOrder($config)
+                    ->addOrderRow(
+                            WebPayItem::orderRow()
+                                ->setAmountExVat(99.99)
+                                ->setVatPercent(24)
+                                ->setQuantity(1)
+                            )
+                    ->addDiscount(WebPayItem::fixedDiscount()
+                            ->setAmountIncVat(12.39876)
+                            )
+                    ->addCustomerDetails(TestUtil::createIndividualCustomer("SE"))
+                    ->setCountryCode("SE")
+                    ->setOrderDate("2012-12-12")
+                    ->useInvoicePayment()
+                        ->doRequest();
+
+         $this->assertEquals(1, $request->accepted);
+
+    }
+      public function testResponseOrderAndFixedDiscountSetWithMixedVat3(){
+        $config = Svea\SveaConfig::getDefaultConfig();
+        $request = WebPay::createOrder($config)
+                    ->addOrderRow(
+                            WebPayItem::orderRow()
+                                ->setAmountIncVat(123.9876)
+                                ->setAmountExVat(99.99)
+                                ->setQuantity(1)
+                            )
+                    ->addDiscount(WebPayItem::fixedDiscount()
+                            ->setAmountExVat(9.999)
+                            )
+                    ->addCustomerDetails(TestUtil::createIndividualCustomer("SE"))
+                    ->setCountryCode("SE")
+                    ->setOrderDate("2012-12-12")
+                    ->useInvoicePayment()
+                        ->doRequest();
+
+        $this->assertEquals(1, $request->accepted);
+
+    }
+
+    public function testTaloonRoundingExVat(){
+         $config = Svea\SveaConfig::getDefaultConfig();
+        $request = WebPay::createOrder($config)
+                    ->addOrderRow(
+                            WebPayItem::orderRow()
+                                ->setAmountExVat(116.94)
+                                ->setVatPercent(24)
+                                ->setQuantity(1)
+                            )
+                    ->addOrderRow(
+                            WebPayItem::orderRow()
+                                ->setAmountExVat(7.26)
+                                ->setVatPercent(24)
+                                ->setQuantity(1)
+                            )
+                    ->addOrderRow(
+                            WebPayItem::orderRow()
+                                ->setAmountExVat(4.03)
+                                ->setVatPercent(24)
+                                ->setQuantity(1)
+                            )
+                    ->addCustomerDetails(TestUtil::createIndividualCustomer("FI"))
+                    ->setCountryCode("FI")
+                ->setCurrency("EUR")
+                    ->setOrderDate("2012-12-12")
+                    ->useInvoicePayment()
+                        ->doRequest();
+          $this->assertEquals(1, $request->accepted);
+          $this->assertEquals(159.01, $request->amount);//sends the old way, so still wrong rounding
+
+    }
+    public function testTaloonRoundingIncVat(){
+         $config = Svea\SveaConfig::getDefaultConfig();
+        $request = WebPay::createOrder($config)
+                    ->addOrderRow(
+                            WebPayItem::orderRow()
+                                ->setAmountIncVat(145.00)
+                                ->setVatPercent(24)
+                                ->setQuantity(1)
+                            )
+                    ->addOrderRow(
+                            WebPayItem::orderRow()
+                                ->setAmountIncVat(9.00)
+                                ->setVatPercent(24)
+                                ->setQuantity(1)
+                            )
+                    ->addOrderRow(
+                            WebPayItem::orderRow()
+                                ->setAmountIncVat(5.00)
+                                ->setVatPercent(24)
+                                ->setQuantity(1)
+                            )
+                    ->addCustomerDetails(TestUtil::createIndividualCustomer("FI"))
+                    ->setCountryCode("FI")
+                ->setCurrency("EUR")
+                    ->setOrderDate("2012-12-12")
+                    ->useInvoicePayment()
+                        ->doRequest();
+          $this->assertEquals(1, $request->accepted);
+        $this->assertEquals(159.0, $request->amount);
+
+    }
+
 }

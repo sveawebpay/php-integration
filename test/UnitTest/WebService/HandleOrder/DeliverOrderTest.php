@@ -229,5 +229,694 @@ class DeliverOrderTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(25, $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][2]->VatPercent);
         $this->assertEquals(0, $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][2]->DiscountPercent);
     }
-    
+
+     /**
+     * Tests for rounding**
+     */
+
+    public function testDeliverOrderWithAmountExVatAndVatPercent() {
+        $config = Svea\SveaConfig::getDefaultConfig();
+        $request = WebPay::deliverOrder($config);
+        $request = $request
+                 ->addOrderRow(
+                            WebPayItem::orderRow()
+                                ->setAmountExVat(80.00)
+                                ->setVatPercent(24)
+                                ->setQuantity(1)
+                            )
+                 ->addOrderRow(
+                            WebPayItem::orderRow()
+                                ->setAmountExVat(80.00)
+                                ->setVatPercent(24)
+                                ->setQuantity(1)
+                            )
+                ->setOrderId("id")
+                ->setInvoiceDistributionType(DistributionType::POST)//Post or Email
+                ->setCreditInvoice("id")
+                ->setCountryCode("SE")
+                ->deliverInvoiceOrder()
+                    ->prepareRequest();
+
+        $this->assertEquals(80.00, $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][0]->PricePerUnit);
+        $this->assertEquals(24, $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][0]->VatPercent);
+        $this->assertFalse($request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][0]->PriceIncludingVat);
+
+        $this->assertEquals(80.00, $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][1]->PricePerUnit);
+        $this->assertEquals(24, $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][1]->VatPercent);
+        $this->assertFalse($request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][1]->PriceIncludingVat);
+
+    }
+    public function testDeliverFeeSetAsExVatAndVatPercentWhenPriceSetAsExVatAndVatPercent() {
+        $config = Svea\SveaConfig::getDefaultConfig();
+        $request = WebPay::deliverOrder($config);
+        $request = $request
+                 ->addOrderRow(
+                            WebPayItem::orderRow()
+                                ->setAmountExVat(80.00)
+                                ->setVatPercent(24)
+                                ->setQuantity(1)
+                            )
+                    ->addFee(WebPayItem::shippingFee()
+                                ->setAmountExVat(80.00)
+                                ->setVatPercent(24)
+                            )
+                    ->addFee(WebPayItem::invoiceFee()
+                                ->setAmountExVat(80.00)
+                                ->setVatPercent(24)
+                            )
+                ->setOrderId("id")
+                ->setInvoiceDistributionType(DistributionType::POST)//Post or Email
+                ->setCreditInvoice("id")
+                ->setCountryCode("SE")
+                ->deliverInvoiceOrder()
+                    ->prepareRequest();
+
+        $this->assertEquals(80.00, $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][0]->PricePerUnit);
+        $this->assertEquals(24, $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][0]->VatPercent);
+        $this->assertFalse($request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][0]->PriceIncludingVat);
+
+        $this->assertEquals(80.00, $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][1]->PricePerUnit);
+        $this->assertEquals(24, $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][1]->VatPercent);
+        $this->assertFalse($request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][1]->PriceIncludingVat);
+
+        $this->assertEquals(80.00, $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][2]->PricePerUnit);
+        $this->assertEquals(24, $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][2]->VatPercent);
+        $this->assertFalse($request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][2]->PriceIncludingVat);
+
+    }
+    public function testDeliverDiscountSetAsExVatWhenPriceSetAsExVatAndVatPercent() {
+        $config = Svea\SveaConfig::getDefaultConfig();
+        $request = WebPay::deliverOrder($config);
+        $request = $request
+                ->addOrderRow(
+                            WebPayItem::orderRow()
+                                ->setAmountExVat(80.00)
+                                ->setVatPercent(24)
+                                ->setQuantity(1)
+                            )
+                    ->addDiscount(WebPayItem::fixedDiscount()
+                            ->setAmountExVat(8)
+                            ->setVatPercent(24)
+                            )
+                ->setOrderId("id")
+                ->setInvoiceDistributionType(DistributionType::POST)//Post or Email
+                ->setCreditInvoice("id")
+                ->setCountryCode("SE")
+                ->deliverInvoiceOrder()
+                    ->prepareRequest();
+
+        $this->assertEquals(80.00, $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][0]->PricePerUnit);
+        $this->assertEquals(24, $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][0]->VatPercent);
+        $this->assertFalse($request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][0]->PriceIncludingVat);
+
+        $this->assertEquals(-8, $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][1]->PricePerUnit);
+        $this->assertEquals(24, $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][1]->VatPercent);
+        $this->assertFalse($request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][1]->PriceIncludingVat);
+
+    }
+    public function testDeliverDiscountSetAsExVatAndVatPercentWhenPriceSetAsExVatAndVatPercent() {
+        $config = Svea\SveaConfig::getDefaultConfig();
+        $request = WebPay::deliverOrder($config);
+        $request = $request
+                ->addOrderRow(
+                            WebPayItem::orderRow()
+                                ->setAmountExVat(80.00)
+                                ->setVatPercent(24)
+                                ->setQuantity(1)
+                            )
+                    ->addDiscount(WebPayItem::fixedDiscount()
+                            ->setAmountExVat(8)
+                            ->setVatPercent(0))
+                ->setOrderId("id")
+                ->setInvoiceDistributionType(DistributionType::POST)//Post or Email
+                ->setCreditInvoice("id")
+                ->setCountryCode("SE")
+                ->deliverInvoiceOrder()
+                    ->prepareRequest();
+
+        $this->assertEquals(80.00, $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][0]->PricePerUnit);
+        $this->assertEquals(24, $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][0]->VatPercent);
+        $this->assertFalse($request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][0]->PriceIncludingVat);
+
+        $this->assertEquals(-8, $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][1]->PricePerUnit);
+        $this->assertEquals(0, $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][1]->VatPercent);
+        $this->assertFalse($request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][1]->PriceIncludingVat);
+
+    }
+    public function testDeliverDiscountPercentAndVatPercentWhenPriceSetAsExVatAndVatPercent() {
+        $config = Svea\SveaConfig::getDefaultConfig();
+        $request = WebPay::deliverOrder($config);
+        $request = $request
+               ->addOrderRow(
+                            WebPayItem::orderRow()
+                                ->setAmountExVat(99.99)
+                                ->setVatPercent(24)
+                                ->setQuantity(1)
+                            )
+                        ->addDiscount(WebPayItem::relativeDiscount()
+                                ->setDiscountPercent(10)
+                            )
+                ->setOrderId("id")
+                ->setInvoiceDistributionType(DistributionType::POST)//Post or Email
+                ->setCreditInvoice("id")
+                ->setCountryCode("SE")
+                ->deliverInvoiceOrder()
+                    ->prepareRequest();
+
+        $this->assertEquals(99.99, $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][0]->PricePerUnit);
+        $this->assertEquals(24, $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][0]->VatPercent);
+        $this->assertFalse($request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][0]->PriceIncludingVat);
+
+        $this->assertEquals(-9.999, $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][1]->PricePerUnit);
+        $this->assertEquals(24, $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][1]->VatPercent);
+        $this->assertFalse($request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][1]->PriceIncludingVat);
+
+    }
+    public function testDeliverOrderRowPriceSetAsInkVatAndVatPercentSetAmountAsIncVat() {
+        $config = Svea\SveaConfig::getDefaultConfig();
+        $request = WebPay::deliverOrder($config);
+        $request = $request
+                ->addOrderRow(
+                            WebPayItem::orderRow()
+                                ->setAmountIncVat(123.9876)
+                                ->setVatPercent(24)
+                                ->setQuantity(1)
+                            )
+                ->setOrderId("id")
+                ->setInvoiceDistributionType(DistributionType::POST)//Post or Email
+                ->setCreditInvoice("id")
+                ->setCountryCode("SE")
+                ->deliverInvoiceOrder()
+                    ->prepareRequest();
+
+        $this->assertEquals(123.9876, $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][0]->PricePerUnit);
+        $this->assertEquals(24, $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][0]->VatPercent);
+        $this->assertTrue($request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][0]->PriceIncludingVat);
+
+    }
+    public function testDeliverFeeSetAsIncVatAndVatPercentWhenPriceSetAsIncVatAndVatPercent() {
+        $config = Svea\SveaConfig::getDefaultConfig();
+        $request = WebPay::deliverOrder($config);
+        $request = $request
+                ->addOrderRow(
+                            WebPayItem::orderRow()
+                                ->setAmountIncVat(123.9876)
+                                ->setVatPercent(24)
+                                ->setQuantity(1)
+                            )
+                    ->addFee(WebPayItem::shippingFee()
+                                ->setAmountIncVat(100.00)
+                                ->setVatPercent(24)
+                            )
+                    ->addFee(WebPayItem::invoiceFee()
+                                ->setAmountIncVat(100.00)
+                                ->setVatPercent(24)
+                            )
+                ->setOrderId("id")
+                ->setInvoiceDistributionType(DistributionType::POST)//Post or Email
+                ->setCreditInvoice("id")
+                ->setCountryCode("SE")
+                ->deliverInvoiceOrder()
+                    ->prepareRequest();
+
+        $this->assertEquals(123.9876, $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][0]->PricePerUnit);
+        $this->assertEquals(24, $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][0]->VatPercent);
+        $this->assertTrue($request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][0]->PriceIncludingVat);
+
+        $this->assertEquals(100, $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][1]->PricePerUnit);
+        $this->assertEquals(24, $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][1]->VatPercent);
+        $this->assertTrue($request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][1]->PriceIncludingVat);
+
+        $this->assertEquals(100, $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][2]->PricePerUnit);
+        $this->assertEquals(24, $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][2]->VatPercent);
+        $this->assertTrue($request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][2]->PriceIncludingVat);
+
+    }
+    public function testDeliverDiscountSetAsIncVatWhenPriceSetAsIncVatAndVatPercent() {
+        $config = Svea\SveaConfig::getDefaultConfig();
+        $request = WebPay::deliverOrder($config);
+        $request = $request
+              ->addOrderRow(
+                            WebPayItem::orderRow()
+                                ->setAmountIncVat(123.9876)
+                                ->setVatPercent(24)
+                                ->setQuantity(1)
+                            )
+                    ->addDiscount(WebPayItem::fixedDiscount()
+                            ->setAmountIncVat(10)
+                            ->setVatPercent(0))
+                ->setOrderId("id")
+                ->setInvoiceDistributionType(DistributionType::POST)//Post or Email
+                ->setCreditInvoice("id")
+                ->setCountryCode("SE")
+                ->deliverInvoiceOrder()
+                    ->prepareRequest();
+
+        $this->assertEquals(123.9876, $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][0]->PricePerUnit);
+        $this->assertEquals(24, $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][0]->VatPercent);
+        $this->assertTrue($request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][0]->PriceIncludingVat);
+
+        $this->assertEquals(-10, $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][1]->PricePerUnit);
+        $this->assertEquals(0, $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][1]->VatPercent);
+        $this->assertTrue($request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][1]->PriceIncludingVat);
+
+    }
+    public function testDiscountPercentAndVatPercentWhenPriceSetAsIncVatAndVatPercent() {
+        $config = Svea\SveaConfig::getDefaultConfig();
+        $request = WebPay::deliverOrder($config);
+        $request = $request
+               ->addOrderRow(
+                            WebPayItem::orderRow()
+                                ->setAmountIncVat(123.9876)
+                                ->setVatPercent(24)
+                                ->setQuantity(1)
+                            )
+                    ->addDiscount(WebPayItem::relativeDiscount()
+                                ->setDiscountPercent(10)
+                            )
+                ->setOrderId("id")
+                ->setInvoiceDistributionType(DistributionType::POST)//Post or Email
+                ->setCreditInvoice("id")
+                ->setCountryCode("SE")
+                ->deliverInvoiceOrder()
+                    ->prepareRequest();
+
+        $this->assertEquals(123.9876, $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][0]->PricePerUnit);
+        $this->assertEquals(24, $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][0]->VatPercent);
+        $this->assertTrue($request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][0]->PriceIncludingVat);
+
+        $this->assertEquals(-12.39876, $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][1]->PricePerUnit);
+        $this->assertEquals(24, $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][1]->VatPercent);
+        $this->assertTrue($request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][1]->PriceIncludingVat);
+
+    }
+    public function testDeliverOrderSetAsIncVatAndExVat() {
+        $config = Svea\SveaConfig::getDefaultConfig();
+        $request = WebPay::deliverOrder($config);
+        $request = $request
+               ->addOrderRow(
+                            WebPayItem::orderRow()
+                                ->setAmountIncVat(123.9876)
+                                ->setAmountExVat(99.99)
+                                ->setQuantity(1)
+                            )
+                ->setOrderId("id")
+                ->setInvoiceDistributionType(DistributionType::POST)//Post or Email
+                ->setCreditInvoice("id")
+                ->setCountryCode("SE")
+                ->deliverInvoiceOrder()
+                    ->prepareRequest();
+
+        $this->assertEquals(123.9876, $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][0]->PricePerUnit);
+        $this->assertEquals(24, $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][0]->VatPercent);
+        $this->assertTrue($request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][0]->PriceIncludingVat);
+
+    }
+    public function testOrderAndFeesSetAsIncVatAndExVat() {
+        $config = Svea\SveaConfig::getDefaultConfig();
+        $request = WebPay::deliverOrder($config);
+        $request = $request
+               ->addOrderRow(
+                            WebPayItem::orderRow()
+                                ->setAmountIncVat(1230.9876)
+                                ->setAmountExVat(990.99)
+                                ->setQuantity(1)
+                            )
+                   ->addFee(WebPayItem::shippingFee()
+                                ->setAmountIncVat(123.9876)->setAmountExVat(99.99)
+                            )
+                    ->addFee(WebPayItem::invoiceFee()
+                                  ->setAmountIncVat(123.9876)->setAmountExVat(99.99)
+                            )
+                ->setOrderId("id")
+                ->setInvoiceDistributionType(DistributionType::POST)//Post or Email
+                ->setCreditInvoice("id")
+                ->setCountryCode("SE")
+                ->deliverInvoiceOrder()
+                    ->prepareRequest();
+
+        $this->assertEquals(123.9876, $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][1]->PricePerUnit);
+        $this->assertEquals(24, $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][1]->VatPercent);
+        $this->assertTrue($request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][1]->PriceIncludingVat);
+
+        $this->assertEquals(123.9876, $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][2]->PricePerUnit);
+        $this->assertEquals(24, $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][2]->VatPercent);
+        $this->assertTrue($request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][2]->PriceIncludingVat);
+
+    }
+    public function testDeliverOrderAndFixedDiscountSetAsIncVat() {
+        $config = Svea\SveaConfig::getDefaultConfig();
+        $request = WebPay::deliverOrder($config);
+        $request = $request
+               ->addOrderRow(
+                            WebPayItem::orderRow()
+                                ->setAmountIncVat(123.9876)
+                                ->setAmountExVat(99.99)
+                                ->setQuantity(1)
+                            )
+                    ->addDiscount(WebPayItem::fixedDiscount()
+                            ->setAmountIncVat(12.39876)
+                            ->setVatPercent(24)
+                            )
+                ->setOrderId("id")
+                ->setInvoiceDistributionType(DistributionType::POST)//Post or Email
+                ->setCreditInvoice("id")
+                ->setCountryCode("SE")
+                ->deliverInvoiceOrder()
+                    ->prepareRequest();
+
+        $this->assertEquals(123.9876, $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][0]->PricePerUnit);
+        $this->assertEquals(24, $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][0]->VatPercent);
+        $this->assertTrue($request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][0]->PriceIncludingVat);
+
+        $this->assertEquals(-12.39876, $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][1]->PricePerUnit);
+        $this->assertEquals(24, $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][1]->VatPercent);
+        $this->assertTrue($request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][1]->PriceIncludingVat);
+
+    }
+    public function testDeliverOrderSetAsIncVatAndExVatAndRelativeDiscount() {
+        $config = Svea\SveaConfig::getDefaultConfig();
+        $request = WebPay::deliverOrder($config);
+        $request = $request
+               ->addOrderRow(
+                            WebPayItem::orderRow()
+                                ->setAmountIncVat(123.9876)
+                                ->setAmountExVat(99.99)
+                                ->setQuantity(1)
+                            )
+                    ->addDiscount(WebPayItem::relativeDiscount()
+                            ->setDiscountPercent(10)
+                            )
+                ->setOrderId("id")
+                ->setInvoiceDistributionType(DistributionType::POST)//Post or Email
+                ->setCreditInvoice("id")
+                ->setCountryCode("SE")
+                ->deliverInvoiceOrder()
+                    ->prepareRequest();
+
+        $this->assertEquals(123.9876, $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][0]->PricePerUnit);
+        $this->assertEquals(24, $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][0]->VatPercent);
+        $this->assertTrue($request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][0]->PriceIncludingVat);
+
+        $this->assertEquals(-12.39876, $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][1]->PricePerUnit);
+        $this->assertEquals(24, $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][1]->VatPercent);
+        $this->assertTrue($request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][1]->PriceIncludingVat);
+
+    }
+    public function testDeliverOrderSetWithMixedMethods1() {
+        $config = Svea\SveaConfig::getDefaultConfig();
+        $request = WebPay::deliverOrder($config);
+        $request = $request
+                    ->addOrderRow(
+                            WebPayItem::orderRow()
+                                ->setAmountIncVat(123.9876)
+                                ->setVatPercent(24)
+                                ->setQuantity(1)
+                            )
+                    ->addOrderRow(
+                            WebPayItem::orderRow()
+                                ->setAmountExVat(99.99)
+                                ->setVatPercent(24)
+                                ->setQuantity(1)
+                            )
+                    ->addOrderRow(
+                            WebPayItem::orderRow()
+                                ->setAmountExVat(99.99)
+                               ->setAmountIncVat(123.9876)
+                                ->setQuantity(1)
+                            )
+                ->setOrderId("id")
+                ->setInvoiceDistributionType(DistributionType::POST)//Post or Email
+                ->setCreditInvoice("id")
+                ->setCountryCode("SE")
+                ->deliverInvoiceOrder()
+                    ->prepareRequest();
+
+        $this->assertEquals(99.99, $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][0]->PricePerUnit);
+        $this->assertEquals(24, $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][0]->VatPercent);
+        $this->assertFalse($request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][0]->PriceIncludingVat);
+
+        $this->assertEquals(99.99, $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][1]->PricePerUnit);
+        $this->assertEquals(24, $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][1]->VatPercent);
+        $this->assertFalse($request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][1]->PriceIncludingVat);
+
+        $this->assertEquals(99.99, $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][2]->PricePerUnit);
+        $this->assertEquals(24, $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][2]->VatPercent);
+        $this->assertFalse($request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][2]->PriceIncludingVat);
+
+    }
+    public function testDeliverOrderSetWithMixedMethods2() {
+        $config = Svea\SveaConfig::getDefaultConfig();
+        $request = WebPay::deliverOrder($config);
+        $request = $request
+                  ->addOrderRow(
+                            WebPayItem::orderRow()
+                                ->setName('incvat')
+                                ->setAmountIncVat(123.9876)
+                                ->setVatPercent(24)
+                                ->setQuantity(1)
+                            )
+                    ->addOrderRow(
+                            WebPayItem::orderRow()
+                                ->setName('exvat')
+                                ->setAmountExVat(99.99)
+                                ->setVatPercent(24)
+                                ->setQuantity(1)
+                            )
+                    ->addOrderRow(
+                            WebPayItem::orderRow()
+                                ->setName('exvat')
+                                ->setAmountExVat(99.99)
+                                ->setVatPercent(24)
+                                ->setQuantity(1)
+                            )
+
+                ->setOrderId("id")
+                ->setInvoiceDistributionType(DistributionType::POST)//Post or Email
+                ->setCreditInvoice("id")
+                ->setCountryCode("SE")
+                ->deliverInvoiceOrder()
+                    ->prepareRequest();
+
+        $this->assertEquals(99.99, $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][0]->PricePerUnit);
+        $this->assertEquals(24, $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][0]->VatPercent);
+        $this->assertFalse($request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][0]->PriceIncludingVat);
+
+        $this->assertEquals(99.99, $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][1]->PricePerUnit);
+        $this->assertEquals(24, $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][1]->VatPercent);
+        $this->assertFalse($request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][1]->PriceIncludingVat);
+
+        $this->assertEquals(99.99, $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][2]->PricePerUnit);
+        $this->assertEquals(24, $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][2]->VatPercent);
+        $this->assertFalse($request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][2]->PriceIncludingVat);
+
+    }
+    public function testDeliverOrderSetWithMixedOrderRowAndFee() {
+        $config = Svea\SveaConfig::getDefaultConfig();
+        $request = WebPay::deliverOrder($config);
+        $request = $request
+                   ->addOrderRow(
+                            WebPayItem::orderRow()
+                                ->setAmountIncVat(123.9876)
+                                ->setVatPercent(24)
+                                ->setQuantity(1)
+                            )
+                    ->addFee(
+                    WebPayItem::invoiceFee()
+                                ->setAmountExVat(99.99)
+                                ->setVatPercent(24)
+                            )
+                    ->addFee(WebPayItem::shippingFee()
+                                ->setAmountExVat(99.99)
+                                ->setVatPercent(24)
+                            )
+                ->setOrderId("id")
+                ->setInvoiceDistributionType(DistributionType::POST)//Post or Email
+                ->setCreditInvoice("id")
+                ->setCountryCode("SE")
+                ->deliverInvoiceOrder()
+                    ->prepareRequest();
+
+        $this->assertEquals(99.99, $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][0]->PricePerUnit);
+        $this->assertEquals(24, $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][0]->VatPercent);
+        $this->assertFalse($request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][0]->PriceIncludingVat);
+
+        $this->assertEquals(99.99, $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][1]->PricePerUnit);
+        $this->assertEquals(24, $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][1]->VatPercent);
+        $this->assertFalse($request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][1]->PriceIncludingVat);
+
+        $this->assertEquals(99.99, $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][2]->PricePerUnit);
+        $this->assertEquals(24, $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][2]->VatPercent);
+        $this->assertFalse($request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][2]->PriceIncludingVat);
+
+    }
+    public function testDeliverOrderSetWithMixedOrderRowAndFeeAndVatPercentSet() {
+        $config = Svea\SveaConfig::getDefaultConfig();
+        $request = WebPay::deliverOrder($config);
+        $request = $request
+                    ->addOrderRow(
+                            WebPayItem::orderRow()
+                                ->setAmountIncVat(123.9876)
+                                ->setVatPercent(24)
+                                ->setQuantity(1)
+                            )
+                    ->addFee(
+                    WebPayItem::invoiceFee()
+                                ->setAmountExVat(99.99)
+                                ->setVatPercent(24)
+                            )
+                    ->addFee(WebPayItem::shippingFee()
+                                ->setAmountIncVat(123.9876)
+                                ->setVatPercent(24)
+                            )
+                ->setOrderId("id")
+                ->setInvoiceDistributionType(DistributionType::POST)//Post or Email
+                ->setCreditInvoice("id")
+                ->setCountryCode("SE")
+                ->deliverInvoiceOrder()
+                    ->prepareRequest();
+
+        $this->assertEquals(99.99, $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][0]->PricePerUnit);
+        $this->assertEquals(24, $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][0]->VatPercent);
+        $this->assertFalse($request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][0]->PriceIncludingVat);
+
+        $this->assertEquals(99.99, $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][1]->PricePerUnit);
+        $this->assertEquals(24, $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][1]->VatPercent);
+        $this->assertFalse($request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][1]->PriceIncludingVat);
+
+        $this->assertEquals(99.99, $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][2]->PricePerUnit);
+        $this->assertEquals(24, $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][2]->VatPercent);
+        $this->assertFalse($request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][2]->PriceIncludingVat);
+
+    }
+    public function testDeliverOrderAndFixedDiscountSetWithMixedVat() {
+        $config = Svea\SveaConfig::getDefaultConfig();
+        $request = WebPay::deliverOrder($config);
+        $request = $request
+                    ->addOrderRow(
+                            WebPayItem::orderRow()
+                                ->setAmountIncVat(123.9876)
+                                ->setVatPercent(24)
+                                ->setQuantity(1)
+                            )
+                    ->addDiscount(WebPayItem::fixedDiscount()
+                            ->setAmountExVat(9.999)
+                            ->setVatPercent(24)
+                            )
+                ->setOrderId("id")
+                ->setInvoiceDistributionType(DistributionType::POST)//Post or Email
+                ->setCreditInvoice("id")
+                ->setCountryCode("SE")
+                ->deliverInvoiceOrder()
+                    ->prepareRequest();
+
+        $this->assertEquals(99.99, $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][0]->PricePerUnit);
+        $this->assertEquals(24, $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][0]->VatPercent);
+        $this->assertFalse($request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][0]->PriceIncludingVat);
+
+        $this->assertEquals(-9.999, $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][1]->PricePerUnit);
+        $this->assertEquals(24, $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][1]->VatPercent);
+        $this->assertFalse($request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][1]->PriceIncludingVat);
+
+    }
+    public function testDeliverOrderAndFixedDiscountSetWithMixedVat2() {
+        $config = Svea\SveaConfig::getDefaultConfig();
+        $request = WebPay::deliverOrder($config);
+        $request = $request
+                     ->addOrderRow(
+                            WebPayItem::orderRow()
+                                ->setAmountExVat(99.99)
+                                ->setVatPercent(24)
+                                ->setQuantity(1)
+                            )
+                    ->addDiscount(WebPayItem::fixedDiscount()
+                            ->setAmountIncVat(12.39876)
+                            ->setVatPercent(24)
+                            )
+                ->setOrderId("id")
+                ->setInvoiceDistributionType(DistributionType::POST)//Post or Email
+                ->setCreditInvoice("id")
+                ->setCountryCode("SE")
+                ->deliverInvoiceOrder()
+                    ->prepareRequest();
+
+        $this->assertEquals(99.99, $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][0]->PricePerUnit);
+        $this->assertEquals(24, $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][0]->VatPercent);
+        $this->assertFalse($request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][0]->PriceIncludingVat);
+
+        $this->assertEquals(-9.999, $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][1]->PricePerUnit);
+        $this->assertEquals(24, $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][1]->VatPercent);
+        $this->assertFalse($request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][1]->PriceIncludingVat);
+
+    }
+    public function testDeliverOrderAndFixedDiscountSetWithMixedVat3() {
+        $config = Svea\SveaConfig::getDefaultConfig();
+        $request = WebPay::deliverOrder($config);
+        $request = $request
+                     ->addOrderRow(
+                            WebPayItem::orderRow()
+                                ->setAmountIncVat(123.9876)
+                                ->setAmountExVat(99.99)
+                                ->setQuantity(1)
+                            )
+                    ->addDiscount(WebPayItem::fixedDiscount()
+                            ->setAmountExVat(9.999)
+                            ->setVatPercent(24)
+                            )
+                ->setOrderId("id")
+                ->setInvoiceDistributionType(DistributionType::POST)//Post or Email
+                ->setCreditInvoice("id")
+                ->setCountryCode("SE")
+                ->deliverInvoiceOrder()
+                    ->prepareRequest();
+
+        $this->assertEquals(99.99, $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][0]->PricePerUnit);
+        $this->assertEquals(24, $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][0]->VatPercent);
+        $this->assertFalse($request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][0]->PriceIncludingVat);
+
+        $this->assertEquals(-9.999, $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][1]->PricePerUnit);
+        $this->assertEquals(24, $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][1]->VatPercent);
+        $this->assertFalse($request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][1]->PriceIncludingVat);
+
+    }
+    public function testDeliverOrderSetAsMixedVatAndRelativeDiscount() {
+        $config = Svea\SveaConfig::getDefaultConfig();
+        $request = WebPay::deliverOrder($config);
+        $request = $request
+                    ->addOrderRow(
+                            WebPayItem::orderRow()
+                                ->setAmountIncVat(123.9876)
+                                ->setVatPercent(24)
+                                ->setQuantity(1)
+                            )
+                    ->addOrderRow(
+                            WebPayItem::orderRow()
+                                ->setAmountExVat(99.99)
+                                ->setVatPercent(24)
+                                ->setQuantity(1)
+                            )
+                    ->addDiscount(WebPayItem::relativeDiscount()
+                            ->setDiscountPercent(5)
+                            )
+                ->setOrderId("id")
+                ->setInvoiceDistributionType(DistributionType::POST)//Post or Email
+                ->setCreditInvoice("id")
+                ->setCountryCode("SE")
+                ->deliverInvoiceOrder()
+                    ->prepareRequest();
+
+        $this->assertEquals(99.99, $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][0]->PricePerUnit);
+        $this->assertEquals(24, $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][0]->VatPercent);
+        $this->assertFalse($request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][0]->PriceIncludingVat);
+
+        $this->assertEquals(99.99, $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][1]->PricePerUnit);
+        $this->assertEquals(24, $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][1]->VatPercent);
+        $this->assertFalse($request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][1]->PriceIncludingVat);
+
+        $this->assertEquals(-9.999, $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][2]->PricePerUnit);
+        $this->assertEquals(24, $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][2]->VatPercent);
+        $this->assertFalse($request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][2]->PriceIncludingVat);
+
+    }
+
 }
