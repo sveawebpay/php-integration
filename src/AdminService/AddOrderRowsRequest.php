@@ -17,7 +17,6 @@ class AddOrderRowsRequest extends AdminServiceRequest {
     /** @var AddOrderRowBuilder $orderBuilder */
     public $orderBuilder;
     private $amount;
-    private $priceIncludingVat;
 
     /**
      * @param addOrderRowsBuilder $orderBuilder
@@ -33,20 +32,20 @@ class AddOrderRowsRequest extends AdminServiceRequest {
      * @throws \Svea\ValidationException
      */
     public function prepareRequest() {
-
         $this->validateRequest();
-        $this->determineVatFlag();
-        print_r('--'.$this->priceIncludingVat.'--');
+        if($this->resendOrderVat === NULL){
+             $this->determineVatFlag();
+        }
 //        $orderRowNumbers = array();
         foreach( $this->orderBuilder->orderRows as $orderRow ) {
              if (isset($orderRow->vatPercent) && isset($orderRow->amountExVat)) {
-                 $this->amount = $orderRow->amountExVat;
-                 $this->priceIncludingVat = FALSE;
+                 $this->amount = $this->priceIncludingVat ? \Svea\WebService\WebServiceRowFormatter::convertExVatToIncVat($orderRow->amountExVat, $orderRow->vatPercent) : $orderRow->amountExVat;
+                 $this->priceIncludingVat = $this->priceIncludingVat ? TRUE : FALSE;
 
                // amountIncVat & vatPercent used to specify product price
              }elseif (isset($orderRow->vatPercent) && isset($orderRow->amountIncVat)) {
                  $this->amount = $this->priceIncludingVat ? $orderRow->amountIncVat : \Svea\WebService\WebServiceRowFormatter::convertIncVatToExVat($orderRow->amountIncVat, $orderRow->vatPercent);
-                 $this->priceIncludingVat =$this->priceIncludingVat ? TRUE : FALSE;
+                 $this->priceIncludingVat = $this->priceIncludingVat ? TRUE : FALSE;
              }else{
                  $this->amount = $this->priceIncludingVat ? $orderRow->amountIncVat : $orderRow->amountExVat;
                  $this->priceIncludingVat = $this->priceIncludingVat ? TRUE : FALSE;
@@ -160,6 +159,7 @@ class AddOrderRowsRequest extends AdminServiceRequest {
                 $incVat++;
             }
         }
+
           //if atleast one of the rows are set as exVat
           if ($exVat >= 1) {
               $this->priceIncludingVat = FALSE;

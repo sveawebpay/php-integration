@@ -536,5 +536,52 @@ class AddOrderRowsRequestTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals(99.99, $request->OrderRows->enc_value->enc_value[2]->enc_value->PricePerUnit->enc_value);
         $this->assertFalse($request->OrderRows->enc_value->enc_value[2]->enc_value->PriceIncludingVat->enc_value);
     }
+      public function test_add_row_multiple_times_as_incvat_mixed_with_exvat() {
+          $orderrowArray[] =  WebPayItem::orderRow()
+                        ->setAmountExVat(99.99)
+                        ->setVatPercent(24)
+                        ->setQuantity(1);
+          $orderrowArray[] =  WebPayItem::orderRow()
+                        ->setAmountExVat(99.99)
+                        ->setVatPercent(24)
+                        ->setQuantity(1);
+          $orderrowArray[] =  WebPayItem::orderRow()
+                        ->setAmountIncVat(123.9876)
+                        ->setVatPercent(24)
+                        ->setQuantity(1);
+
+        $config = Svea\SveaConfig::getDefaultConfig();
+
+        $request = WebPayAdmin::addOrderRows($config)
+                ->setOrderId('sveaOrderId')
+                ->setCountryCode('SE')
+                ->addOrderRow(
+                WebPayItem::orderRow()
+                        ->setAmountExVat(99.99)
+                        ->setVatPercent(24)
+                        ->setQuantity(1)
+                    )
+                 ->addOrderRow(
+                WebPayItem::orderRow()
+                        ->setAmountExVat(99.99)
+                        ->setAmountIncVat(123.9876)
+                        ->setQuantity(1)
+                    )
+                 ->addOrderRow(
+                WebPayItem::orderRow()
+                        ->setVatPercent(24)
+                        ->setAmountIncVat(123.9876)
+                        ->setQuantity(1)
+                    )
+                ->addInvoiceOrderRows()
+                    ->prepareRequest();
+
+        $this->assertEquals(99.99, $request->OrderRows->enc_value->enc_value[0]->enc_value->PricePerUnit->enc_value);
+        $this->assertFalse($request->OrderRows->enc_value->enc_value[0]->enc_value->PriceIncludingVat->enc_value);
+        $this->assertEquals(99.99, $request->OrderRows->enc_value->enc_value[1]->enc_value->PricePerUnit->enc_value);
+        $this->assertFalse($request->OrderRows->enc_value->enc_value[1]->enc_value->PriceIncludingVat->enc_value);
+        $this->assertEquals(99.99, $request->OrderRows->enc_value->enc_value[2]->enc_value->PricePerUnit->enc_value);
+        $this->assertFalse($request->OrderRows->enc_value->enc_value[2]->enc_value->PriceIncludingVat->enc_value);
+    }
 
 }

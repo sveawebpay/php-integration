@@ -16,6 +16,11 @@ abstract class AdminServiceRequest {
     /** @var string $countryCode */
     protected $countryCode;
 
+    /** @var boolean $priceIncludingVat */
+    protected $priceIncludingVat;
+
+    protected $resendOrderVat = NULL;
+
     /**
      * Set up the soap client and perform the soap call, with the soap action and prepared request from the relevant subclass
      * @return StdClass  raw response
@@ -23,10 +28,23 @@ abstract class AdminServiceRequest {
     public function doRequest() {
 
         $endpoint = $this->orderBuilder->conf->getEndPoint( \ConfigurationProvider::ADMIN_TYPE );   // get test or prod using child instance data
-
+        $requestObject = $this->prepareRequest();
+        $priceIncludingVat =  $requestObject->OrderRows->enc_value->enc_value[0]->enc_value->PriceIncludingVat->enc_value;
         $soapClient = new AdminSoap\SoapClient( $endpoint );
-        $soapResponse = $soapClient->doSoapCall($this->action, $this->prepareRequest() );     
+        $soapResponse = $soapClient->doSoapCall($this->action, $requestObject );
         $sveaResponse = new \SveaResponse( $soapResponse, null, null, $this->action );
+        $response = $sveaResponse->getResponse();
+        if ($response->resultcode == "50036") {
+            $this->resendOrderVat = TRUE;
+            $this->priceIncludingVat = $priceIncludingVat ? FALSE : TRUE;
+            $requestObject = $this->prepareRequest();
+//            print_r($requestObject);
+            $soapClient = new AdminSoap\SoapClient( $endpoint );
+            $soapResponse = $soapClient->doSoapCall($this->action, $requestObject );
+            $sveaResponse = new \SveaResponse( $soapResponse, null, null, $this->action );
+
+        }
+
         return $sveaResponse->getResponse();
     }
 
