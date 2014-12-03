@@ -29,7 +29,14 @@ abstract class AdminServiceRequest {
 
         $endpoint = $this->orderBuilder->conf->getEndPoint( \ConfigurationProvider::ADMIN_TYPE );   // get test or prod using child instance data
         $requestObject = $this->prepareRequest();
-        $priceIncludingVat =  $requestObject->OrderRows->enc_value->enc_value[0]->enc_value->PriceIncludingVat->enc_value;
+        if(property_exists($requestObject, 'OrderRows')) {
+             $priceIncludingVat =  $requestObject->OrderRows->enc_value->enc_value[0]->enc_value->PriceIncludingVat->enc_value;
+        }  elseif (property_exists($requestObject, 'UpdatedOrderRows')) {
+             $priceIncludingVat =  $requestObject->UpdatedOrderRows->enc_value->enc_value[0]->enc_value->PriceIncludingVat->enc_value;
+        } else {
+            $priceIncludingVat = $this->priceIncludingVat;
+        }
+
         $soapClient = new AdminSoap\SoapClient( $endpoint );
         $soapResponse = $soapClient->doSoapCall($this->action, $requestObject );
         $sveaResponse = new \SveaResponse( $soapResponse, null, null, $this->action );
