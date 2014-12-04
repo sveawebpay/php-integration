@@ -12,6 +12,7 @@ class UpdateOrderRowsRequest extends AdminServiceRequest {
 
     /** @var UpdateOrderRowBuilder $orderBuilder */
     public $orderBuilder;
+    private $amount;
 
     /**
      * @param updateOrderRowsBuilder $orderBuilder
@@ -30,22 +31,28 @@ class UpdateOrderRowsRequest extends AdminServiceRequest {
 
         $this->validateRequest();
 
-        //temp
-        $this->priceIncludingVat = FALSE;
+       $this->determineVatFlag();
 
         $updatedOrderRows = array();
         foreach( $this->orderBuilder->numberedOrderRows as $orderRow ) {
-
-            // handle different ways to spec an orderrow
-            // inc + ex
-            if( !isset($orderRow->vatPercent) && (isset($orderRow->amountExVat) && isset($orderRow->amountIncVat)) ) {
-                $orderRow->vatPercent = \Svea\WebService\WebServiceRowFormatter::calculateVatPercentFromPriceExVatAndPriceIncVat($orderRow->amountIncVat, $orderRow->amountExVat );
-            }
-            // % + inc
-            elseif( (isset($orderRow->vatPercent) && isset($orderRow->amountIncVat)) && !isset($orderRow->amountExVat) ) {
-                $orderRow->amountExVat = \Svea\WebService\WebServiceRowFormatter::convertIncVatToExVat($orderRow->amountIncVat, $orderRow->vatPercent);
-            }
-            // % + ex, no need to do anything
+             if (isset($orderRow->vatPercent) && isset($orderRow->amountExVat)) {
+                $this->amount = $this->priceIncludingVat ? \Svea\WebService\WebServiceRowFormatter::convertExVatToIncVat($orderRow->amountExVat, $orderRow->vatPercent) : $orderRow->amountExVat;
+                $this->priceIncludingVat = $this->priceIncludingVat ? TRUE : FALSE;
+            // amountIncVat & vatPercent used to specify product price
+             }elseif (isset($orderRow->vatPercent) && isset($orderRow->amountIncVat)) {
+                 $this->amount = $this->priceIncludingVat ? $orderRow->amountIncVat : \Svea\WebService\WebServiceRowFormatter::convertIncVatToExVat($orderRow->amountIncVat, $orderRow->vatPercent);
+                 $this->priceIncludingVat = $this->priceIncludingVat ? TRUE : FALSE;
+             }
+//            // handle different ways to spec an orderrow
+//            // inc + ex
+//            if( !isset($orderRow->vatPercent) && (isset($orderRow->amountExVat) && isset($orderRow->amountIncVat)) ) {
+//                $orderRow->vatPercent = \Svea\WebService\WebServiceRowFormatter::calculateVatPercentFromPriceExVatAndPriceIncVat($orderRow->amountIncVat, $orderRow->amountExVat );
+//            }
+//            // % + inc
+//            elseif( (isset($orderRow->vatPercent) && isset($orderRow->amountIncVat)) && !isset($orderRow->amountExVat) ) {
+//                $orderRow->amountExVat = \Svea\WebService\WebServiceRowFormatter::convertIncVatToExVat($orderRow->amountIncVat, $orderRow->vatPercent);
+//            }
+//            // % + ex, no need to do anything
 
             //discountPercent must be 0 or an int
             if(!isset( $orderRow->discountPercent)) {
@@ -59,7 +66,7 @@ class UpdateOrderRowsRequest extends AdminServiceRequest {
                     $orderRow->name.": ".$orderRow->description,
                     $orderRow->discountPercent,
                     $orderRow->quantity,
-                    $orderRow->amountExVat,
+                     $this->amount,
                     $orderRow->unit,
                     $orderRow->vatPercent,
                     $orderRow->creditInvoiceId,
@@ -130,5 +137,28 @@ class UpdateOrderRowsRequest extends AdminServiceRequest {
             }
         }
         return $errors;
+    }
+
+        private function determineVatFlag() {
+        $exVat = 0;
+        $incVat = 0;
+
+        //check first if there is a mix of orderrows
+        foreach( $this->orderBuilder->numberedOrderRows as $row ) {
+            if(isset($row->amountExVat) && isset($row->amountIncVat)){
+                $incVat++;
+            }elseif (isset($row->amountExVat) && isset ($row->vatPercent)) {
+                $exVat++;
+            }else {
+                $incVat++;
+            }
+        }
+
+          //if atleast one of the rows are set as exVat
+          if ($exVat >= 1) {
+              $this->priceIncludingVat = FALSE;
+          }  else {
+              $this->priceIncludingVat = TRUE;
+          }
     }
 }
