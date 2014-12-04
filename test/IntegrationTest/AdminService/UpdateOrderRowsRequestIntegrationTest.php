@@ -9,7 +9,7 @@ require_once $root . '/../../TestUtil.php';
  */
 class UpdateOrderRowsRequestIntegrationTest extends PHPUnit_Framework_TestCase{
 
-        public function test_add_single_orderRow() {
+    public function test_add_single_orderRow() {
         $config = Svea\SveaConfig::getDefaultConfig();
         $orderResponse = WebPay::createOrder($config)
                     ->addOrderRow(
@@ -40,4 +40,6 @@ class UpdateOrderRowsRequestIntegrationTest extends PHPUnit_Framework_TestCase{
 
         $this->assertEquals(1, $response->accepted );
     }
+
+
 }
