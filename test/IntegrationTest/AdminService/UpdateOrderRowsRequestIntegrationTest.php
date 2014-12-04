@@ -1,5 +1,4 @@
 <?php
-
 $root = realpath(dirname(__FILE__));
 require_once $root . '/../../../src/Includes.php';
 require_once $root . '/../../TestUtil.php';
@@ -95,6 +94,100 @@ class UpdateOrderRowsRequestIntegrationTest extends PHPUnit_Framework_TestCase{
                         ->setRowNumber(1)
                         ->setAmountExVat(99.99)
                         ->setAmountIncVat(123.9876)
+                        ->setQuantity(1)
+                   )
+              ->updateInvoiceOrderRows()
+              ->doRequest();
+
+        $this->assertEquals(1, $response->accepted );
+    }
+    public function test_add_single_orderRow_type_missmatch() {
+        $config = Svea\SveaConfig::getDefaultConfig();
+        $orderResponse = WebPay::createOrder($config)
+                    ->addOrderRow(
+                            WebPayItem::orderRow()
+                                ->setAmountIncVat(123.9876)
+                                ->setVatPercent(24)
+                                ->setQuantity(1)
+                            )
+                    ->addCustomerDetails(TestUtil::createIndividualCustomer("SE"))
+                    ->setCountryCode("SE")
+                ->setCurrency("SEK")
+                    ->setOrderDate("2012-12-12")
+                    ->useInvoicePayment()
+                        ->doRequest();
+        $this->assertEquals(1, $orderResponse->accepted);
+
+      $response = WebPayAdmin::updateOrderRows($config)
+              ->setCountryCode('SE')
+              ->setOrderId($orderResponse->sveaOrderId)
+              ->updateOrderRow(    WebPayItem::numberedOrderRow()
+                        ->setRowNumber(1)
+                        ->setAmountExVat(99.99)
+                        ->setVatPercent(24)
+                        ->setQuantity(1)
+                   )
+              ->updateInvoiceOrderRows()
+              ->doRequest();
+
+        $this->assertEquals(1, $response->accepted );
+    }
+    public function test_add_single_orderRow_type_missmatch_2() {
+        $config = Svea\SveaConfig::getDefaultConfig();
+        $orderResponse = WebPay::createOrder($config)
+                    ->addOrderRow(
+                            WebPayItem::orderRow()
+                               ->setAmountExVat(99.99)
+                                ->setVatPercent(24)
+                                ->setQuantity(1)
+                            )
+                    ->addCustomerDetails(TestUtil::createIndividualCustomer("SE"))
+                    ->setCountryCode("SE")
+                ->setCurrency("SEK")
+                    ->setOrderDate("2012-12-12")
+                    ->useInvoicePayment()
+                        ->doRequest();
+        $this->assertEquals(1, $orderResponse->accepted);
+
+      $response = WebPayAdmin::updateOrderRows($config)
+              ->setCountryCode('SE')
+              ->setOrderId($orderResponse->sveaOrderId)
+              ->updateOrderRow(    WebPayItem::numberedOrderRow()
+                        ->setRowNumber(1)
+                       ->setAmountIncVat(123.9876)
+
+                        ->setVatPercent(24)
+                        ->setQuantity(1)
+                   )
+              ->updateInvoiceOrderRows()
+              ->doRequest();
+
+        $this->assertEquals(1, $response->accepted );
+    }
+    public function test_add_single_orderRow_type_missmatch_3() {
+        $config = Svea\SveaConfig::getDefaultConfig();
+        $orderResponse = WebPay::createOrder($config)
+                    ->addOrderRow(
+                            WebPayItem::orderRow()
+                                ->setAmountExVat(99.99)
+                                ->setAmountIncVat(123.9876)
+                                ->setQuantity(1)
+                            )
+                    ->addCustomerDetails(TestUtil::createIndividualCustomer("SE"))
+                    ->setCountryCode("SE")
+                ->setCurrency("SEK")
+                    ->setOrderDate("2012-12-12")
+                    ->useInvoicePayment()
+                        ->doRequest();
+        $this->assertEquals(1, $orderResponse->accepted);
+
+      $response = WebPayAdmin::updateOrderRows($config)
+              ->setCountryCode('SE')
+              ->setOrderId($orderResponse->sveaOrderId)
+              ->updateOrderRow(    WebPayItem::numberedOrderRow()
+                        ->setRowNumber(1)
+                       ->setAmountExVat(99.99)
+                        ->setVatPercent(24)
                         ->setQuantity(1)
                    )
               ->updateInvoiceOrderRows()

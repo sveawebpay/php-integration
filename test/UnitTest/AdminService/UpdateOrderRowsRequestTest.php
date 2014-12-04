@@ -100,7 +100,7 @@ class AddOrderRowsRequestTest extends \PHPUnit_Framework_TestCase {
                    )
               ->updateOrderRow(    WebPayItem::numberedOrderRow()
                         ->setRowNumber(1)
-                        ->setAmountIncVat(123.9876)
+                        ->setAmountExVat(99.99)
                         ->setVatPercent(24)
                         ->setQuantity(1)
                    )
@@ -145,4 +145,25 @@ class AddOrderRowsRequestTest extends \PHPUnit_Framework_TestCase {
          $this->assertEquals(99.99, $request->UpdatedOrderRows->enc_value->enc_value[2]->enc_value->PricePerUnit->enc_value);
         $this->assertFalse($request->UpdatedOrderRows->enc_value->enc_value[2]->enc_value->PriceIncludingVat->enc_value);
     }
+
+    /**
+     * @expectedException Svea\ValidationException
+     * @expectedExceptionMessage -missing value : rowNumber is required
+     */
+    public function test_add_single_orderRow_missing_rownumber() {
+        $config = Svea\SveaConfig::getDefaultConfig();
+        $request = WebPayAdmin::updateOrderRows($config)
+              ->setCountryCode('SE')
+              ->setOrderId('test')
+              ->updateOrderRow(    WebPayItem::numberedOrderRow()
+//                        ->setRowNumber(1)
+                        ->setAmountExVat(99.99)
+                        ->setAmountIncVat(123.9876)
+                        ->setQuantity(1)
+                   )
+              ->updateInvoiceOrderRows()
+              ->prepareRequest();
+//      print_r($request);
+    }
+
 }

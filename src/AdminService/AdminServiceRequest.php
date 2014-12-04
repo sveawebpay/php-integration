@@ -45,7 +45,6 @@ abstract class AdminServiceRequest {
             $this->resendOrderVat = TRUE;
             $this->priceIncludingVat = $priceIncludingVat ? FALSE : TRUE;
             $requestObject = $this->prepareRequest();
-//            print_r($requestObject);
             $soapClient = new AdminSoap\SoapClient( $endpoint );
             $soapResponse = $soapClient->doSoapCall($this->action, $requestObject );
             $sveaResponse = new \SveaResponse( $soapResponse, null, null, $this->action );

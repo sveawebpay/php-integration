@@ -28,11 +28,10 @@ class UpdateOrderRowsRequest extends AdminServiceRequest {
      * @throws Svea\ValidationException
      */
     public function prepareRequest() {
-
         $this->validateRequest();
-
-       $this->determineVatFlag();
-
+        if($this->resendOrderVat === NULL){
+             $this->determineVatFlag();
+        }
         $updatedOrderRows = array();
         foreach( $this->orderBuilder->numberedOrderRows as $orderRow ) {
              if (isset($orderRow->vatPercent) && isset($orderRow->amountExVat)) {
@@ -47,22 +46,11 @@ class UpdateOrderRowsRequest extends AdminServiceRequest {
                  $this->priceIncludingVat = $this->priceIncludingVat ? TRUE : FALSE;
                 $orderRow->vatPercent = \Svea\WebService\WebServiceRowFormatter::calculateVatPercentFromPriceExVatAndPriceIncVat($orderRow->amountIncVat, $orderRow->amountExVat );
              }
-//            // handle different ways to spec an orderrow
-//            // inc + ex
-//            if( !isset($orderRow->vatPercent) && (isset($orderRow->amountExVat) && isset($orderRow->amountIncVat)) ) {
-//                $orderRow->vatPercent = \Svea\WebService\WebServiceRowFormatter::calculateVatPercentFromPriceExVatAndPriceIncVat($orderRow->amountIncVat, $orderRow->amountExVat );
-//            }
-//            // % + inc
-//            elseif( (isset($orderRow->vatPercent) && isset($orderRow->amountIncVat)) && !isset($orderRow->amountExVat) ) {
-//                $orderRow->amountExVat = \Svea\WebService\WebServiceRowFormatter::convertIncVatToExVat($orderRow->amountIncVat, $orderRow->vatPercent);
-//            }
-//            // % + ex, no need to do anything
 
             //discountPercent must be 0 or an int
             if(!isset( $orderRow->discountPercent)) {
                  $orderRow->discountPercent = 0;
             }
-
 
             $updatedOrderRows[] = new \SoapVar(
                 new AdminSoap\NumberedOrderRow(
@@ -99,6 +87,7 @@ class UpdateOrderRowsRequest extends AdminServiceRequest {
     public function validate() {
         $errors = array();
         $errors = $this->validateOrderId($errors);
+        $errors = $this->validateRowNumber($errors);
         $errors = $this->validateOrderType($errors);
         $errors = $this->validateCountryCode($errors);
         $errors = $this->validateNumberedOrderRowsExist($errors);
@@ -109,6 +98,14 @@ class UpdateOrderRowsRequest extends AdminServiceRequest {
     private function validateOrderId($errors) {
         if (isset($this->orderBuilder->orderId) == FALSE) {
             $errors[] = array('missing value' => "orderId is required.");
+        }
+        return $errors;
+    }
+    private function validateRowNumber($errors) {
+        foreach( $this->orderBuilder->numberedOrderRows as $orderRow ) {
+            if (isset($orderRow->rowNumber) == FALSE) {
+                $errors[] = array('missing value' => "rowNumber is required.");
+            }
         }
         return $errors;
     }
