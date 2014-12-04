@@ -71,6 +71,37 @@ class UpdateOrderRowsRequestIntegrationTest extends PHPUnit_Framework_TestCase{
 
         $this->assertEquals(1, $response->accepted );
     }
+    public function test_add_single_orderRow_as_incvat_anv_exvat() {
+        $config = Svea\SveaConfig::getDefaultConfig();
+        $orderResponse = WebPay::createOrder($config)
+                    ->addOrderRow(
+                            WebPayItem::orderRow()
+                                ->setAmountIncVat(123.9876)
+                                ->setAmountExVat(99.99)
+                                ->setQuantity(1)
+                            )
+                    ->addCustomerDetails(TestUtil::createIndividualCustomer("SE"))
+                    ->setCountryCode("SE")
+                ->setCurrency("SEK")
+                    ->setOrderDate("2012-12-12")
+                    ->useInvoicePayment()
+                        ->doRequest();
+        $this->assertEquals(1, $orderResponse->accepted);
+
+      $response = WebPayAdmin::updateOrderRows($config)
+              ->setCountryCode('SE')
+              ->setOrderId($orderResponse->sveaOrderId)
+              ->updateOrderRow(    WebPayItem::numberedOrderRow()
+                        ->setRowNumber(1)
+                        ->setAmountExVat(99.99)
+                        ->setAmountIncVat(123.9876)
+                        ->setQuantity(1)
+                   )
+              ->updateInvoiceOrderRows()
+              ->doRequest();
+
+        $this->assertEquals(1, $response->accepted );
+    }
 
 
 }

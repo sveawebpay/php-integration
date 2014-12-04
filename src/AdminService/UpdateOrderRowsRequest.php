@@ -42,6 +42,10 @@ class UpdateOrderRowsRequest extends AdminServiceRequest {
              }elseif (isset($orderRow->vatPercent) && isset($orderRow->amountIncVat)) {
                  $this->amount = $this->priceIncludingVat ? $orderRow->amountIncVat : \Svea\WebService\WebServiceRowFormatter::convertIncVatToExVat($orderRow->amountIncVat, $orderRow->vatPercent);
                  $this->priceIncludingVat = $this->priceIncludingVat ? TRUE : FALSE;
+             }else{
+                 $this->amount = $this->priceIncludingVat ? $orderRow->amountIncVat : $orderRow->amountExVat;
+                 $this->priceIncludingVat = $this->priceIncludingVat ? TRUE : FALSE;
+                $orderRow->vatPercent = \Svea\WebService\WebServiceRowFormatter::calculateVatPercentFromPriceExVatAndPriceIncVat($orderRow->amountIncVat, $orderRow->amountExVat );
              }
 //            // handle different ways to spec an orderrow
 //            // inc + ex

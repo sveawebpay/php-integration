@@ -50,19 +50,7 @@ class AddOrderRowsRequest extends AdminServiceRequest {
                  $this->amount = $this->priceIncludingVat ? $orderRow->amountIncVat : $orderRow->amountExVat;
                  $this->priceIncludingVat = $this->priceIncludingVat ? TRUE : FALSE;
                 $orderRow->vatPercent = \Svea\WebService\WebServiceRowFormatter::calculateVatPercentFromPriceExVatAndPriceIncVat($orderRow->amountIncVat, $orderRow->amountExVat );
-
              }
-//            // handle different ways to spec an orderrow
-//            // inc + ex
-//            if( !isset($orderRow->vatPercent) && (isset($orderRow->amountExVat) && isset($orderRow->amountIncVat)) ) {
-//                $orderRow->vatPercent = \Svea\WebService\WebServiceRowFormatter::calculateVatPercentFromPriceExVatAndPriceIncVat($orderRow->amountIncVat, $orderRow->amountExVat );
-//            }
-//            // % + inc
-//            elseif( (isset($orderRow->vatPercent) && isset($orderRow->amountIncVat)) && !isset($orderRow->amountExVat) ) {
-//                $this->amount = \Svea\WebService\WebServiceRowFormatter::convertIncVatToExVat($orderRow->amountIncVat, $orderRow->vatPercent);
-//            }
-//            // % + ex, no need to do anything
-
             //discountPercent must be 0 or an int
             if(!isset($orderRow->discountPercent)) {
                 $orderRow->discountPercent = 0;
