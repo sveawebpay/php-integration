@@ -9,7 +9,7 @@ require_once $root . '/../../TestUtil.php';
 /**
  * @author Kristian Grossman-Madsen for Svea Webpay
  */
-class AddOrderRowsRequestTest extends \PHPUnit_Framework_TestCase {
+class UpdateOrderRowsRequestTest extends \PHPUnit_Framework_TestCase {
 
     public function test_add_single_orderRow_as_exvat() {
         $config = Svea\SveaConfig::getDefaultConfig();
