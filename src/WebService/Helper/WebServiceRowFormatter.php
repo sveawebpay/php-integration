@@ -77,9 +77,6 @@ class WebServiceRowFormatter {
             $this->priceIncludingVat = $this->resendOrderVat ? FALSE : TRUE;
         }
 
-
-
-
         $this->formatOrderRows();
         $this->formatShippingFeeRows();
         $this->formatInvoiceFeeRows();
@@ -146,7 +143,6 @@ class WebServiceRowFormatter {
     }
 
     private function formatOrderRows() {
-//        print_r($this->priceIncludingVat);
         foreach ($this->order->orderRows as $row) {
 
             $orderRow = new WebServiceSoap\SveaOrderRow();
@@ -501,7 +497,7 @@ class WebServiceRowFormatter {
         }
     }
 
-    public function determineVatFlag() {
+    private function determineVatFlag() {
         $exVat = 0;
         $incVat = 0;
 
