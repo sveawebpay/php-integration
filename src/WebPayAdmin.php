@@ -44,7 +44,7 @@ The Svea WebPay PHP integration package is developed and tested using NetBeans I
 class WebPayAdmin {
 
     /**
-     * The WebPayAdmin::cancelOrder() entrypoint method is used to cancel an order with Svea, 
+     * The WebPayAdmin::cancelOrder() entrypoint method is used to cancel an order with Svea,
      * that has not yet been delivered (invoice, payment plan) or confirmed (card).
      * 
      * Supports Invoice, Payment Plan and Card orders. For Direct Bank orders, use WebPayAdmin.creditOrderRows() instead.
@@ -179,6 +179,7 @@ class WebPayAdmin {
      * Get an order builder instance using the WebPayAdmin::creditOrderRows entrypoint, then provide more information about the 
      * transaction and send the request using the creditOrderRowsBuilder methods:
      * 
+     * ...
      *     $request = WebPay::creditOrder($config)
      *         ->setInvoiceId()                // invoice only, required
      *         ->setInvoiceDistributionType()  // invoice only, required
@@ -195,6 +196,7 @@ class WebPayAdmin {
      *     $response = $request->creditInvoiceOrderRows()->doRequest();    // returns CreditInvoiceRowsResponse
      *     $response = $request->creditCardOrderRows()->doRequest();       // returns CreditTransactionResponse
      *     $response = $request->creditDirectBankOrderRows()->doRequest(); // returns CreditTransactionResponse
+     * ...
      * 
      * @param ConfigurationProvider $config
      * @return Svea\CreditOrderRowsBuilder
@@ -212,8 +214,7 @@ class WebPayAdmin {
     }
 
     /**
-     * Add order rows to an order. Supports Invoice and Payment Plan orders.
-     * (Card and Direct Bank orders are not supported.)
+     * Add order rows to an order. 
      *
      * Provide information about the new order rows and send the request using
      * addOrderRowsBuilder methods:
