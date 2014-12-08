@@ -32,7 +32,7 @@ class QueryOrderRowsRequestTest extends \PHPUnit_Framework_TestCase {
               ->setOrderId($orderResponse->sveaOrderId)
               ->queryInvoiceOrder()
                 ->doRequest();
-        print_r($response);
+        //print_r($response);
         $this->assertEquals(1, $response->accepted);
        $this->assertEquals(145.00, $response->numberedOrderRows[0]->amountIncVat);
        $this->assertEquals(null, $response->numberedOrderRows[0]->amountExVat);
