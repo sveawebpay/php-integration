@@ -25,7 +25,7 @@ class SveaResponseTest extends \PHPUnit_Framework_TestCase {
         $message = "string_that_pretends_to_be_an_encoded_xml_response";
                 
         $response = new \SveaResponse( $message, "SE", $config );
-        $this->assertInstanceOf('Svea\HostedPaymentResponse', $response->getResponse() );
+        $this->assertInstanceOf('Svea\HostedService\HostedPaymentResponse', $response->getResponse() );
         
     }
     
@@ -37,7 +37,7 @@ class SveaResponseTest extends \PHPUnit_Framework_TestCase {
         $this->assertTrue( \is_object($message) ); 
                      
         $response = new \SveaResponse( $message, "SE", $config );
-        $this->assertInstanceOf('Svea\CloseOrderResult', $response->getResponse() );
+        $this->assertInstanceOf('Svea\WebService\CloseOrderResult', $response->getResponse() );
     }
 
     /**
@@ -84,7 +84,7 @@ class SveaResponseTest extends \PHPUnit_Framework_TestCase {
 //        if( empty($response->accepted) ) { //print_r( "test accepted is empty" ); }
 //        if( !empty($response->accepted) ) { //print_r( "test accepted not empty" ); }
       
-        $this->assertInstanceOf('Svea\HostedPaymentResponse', $response );
+        $this->assertInstanceOf('Svea\HostedService\HostedPaymentResponse', $response );
         $this->assertEquals(1, $response->accepted );
         
     }    

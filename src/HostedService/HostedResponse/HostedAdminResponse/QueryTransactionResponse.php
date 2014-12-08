@@ -222,7 +222,7 @@ class QueryTransactionResponse extends HostedAdminResponse{
                     ->setQuantity( floatval((string)$orderrow['quantity']) )
                     ->setArticleNumber( (string)$orderrow['sku'] )     
                     ->setUnit( (string)$orderrow['unit'] ) 
-                    ->setVatPercent( ( $orderrow['vat']/($orderrow['amount']-$orderrow['vat'])*100 ) )
+                    ->setVatPercent( $this->calculateVatPercentFromVatAndAmount( $orderrow['vat'],$orderrow['amount'] ) )
                     ;
 
                     $newrow->creditInvoiceId = null;
@@ -236,5 +236,12 @@ class QueryTransactionResponse extends HostedAdminResponse{
                 }
             }
         }
+    }
+    
+    function calculateVatPercentFromVatAndAmount( $vat, $amount ) {
+        $amountExVat = ($amount-$vat);
+        $unroundedVatPercent = ($amountExVat > 0) ? ($vat/$amountExVat) : 0.00; // catch potential divide by zero
+        $vatPercent = round($unroundedVatPercent,2,PHP_ROUND_HALF_EVEN) *100; // OrderRow has vatpercent as int.
+        return $vatPercent;
     }
 }
