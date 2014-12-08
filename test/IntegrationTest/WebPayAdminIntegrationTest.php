@@ -17,6 +17,51 @@ class WebPayAdminIntegrationTest extends PHPUnit_Framework_TestCase {
     // invoice
     // partpayment
     // card
+    function test_queryOrder_queryCardOrder() {
+        // Set the below to match the transaction, then run the test.
+        $transactionId = 590177;
+
+        $request = WebPayAdmin::queryOrder( 
+                Svea\SveaConfig::getSingleCountryConfig(
+                    "SE", 
+                    "foo", "bar", "123456", // invoice
+                    "foo", "bar", "123456", // paymentplan
+                    "1200", // merchantid, secret
+                    "27f18bfcbe4d7f39971cb3460fbe7234a82fb48f985cf22a068fa1a685fe7e6f93c7d0d92fee4e8fd7dc0c9f11e2507300e675220ee85679afa681407ee2416d",
+                    false // prod = false
+                )
+            )    
+            ->setTransactionId( strval($transactionId) )
+            ->setCountryCode("SE")
+        ;
+        $response = $request->queryCardOrder()->doRequest();            
+//        echo "foo: ";
+//        var_dump($response); die;
+        
+        $this->assertEquals( 1, $response->accepted );    
+        
+        $this->assertEquals( $transactionId, $response->transactionId );                            
+        $this->assertInstanceOf( "Svea\NumberedOrderRow", $response->numberedOrderRows[0] );
+        $this->assertEquals( "Soft213s", $response->numberedOrderRows[0]->articleNumber );
+        $this->assertEquals( "1.0", $response->numberedOrderRows[0]->quantity );
+        $this->assertEquals( "st", $response->numberedOrderRows[0]->unit );
+        $this->assertEquals( 3212.00, $response->numberedOrderRows[0]->amountExVat );   // amount = 401500, vat = 80300 => 3212.00 @25%
+        $this->assertEquals( 25, $response->numberedOrderRows[0]->vatPercent );
+        $this->assertEquals( "Soft", $response->numberedOrderRows[0]->name );
+//        $this->assertEquals( "Specification", $response->numberedOrderRows[1]->description );
+        $this->assertEquals( 0, $response->numberedOrderRows[0]->vatDiscount );                      
+
+        $this->assertInstanceOf( "Svea\NumberedOrderRow", $response->numberedOrderRows[1] );
+        $this->assertEquals( "07", $response->numberedOrderRows[1]->articleNumber );
+        $this->assertEquals( "1.0", $response->numberedOrderRows[1]->quantity );
+        $this->assertEquals( "st", $response->numberedOrderRows[1]->unit );
+        $this->assertEquals( 0, $response->numberedOrderRows[1]->amountExVat );   // amount = 401500, vat = 80300 => 3212.00 @25%
+        $this->assertEquals( 0, $response->numberedOrderRows[1]->vatPercent );
+        $this->assertEquals( "Sits: Hatfield Beige 6", $response->numberedOrderRows[1]->name );
+//        $this->assertEquals( "Specification", $response->numberedOrderRows[1]->description );
+        $this->assertEquals( 0, $response->numberedOrderRows[1]->vatDiscount );                      
+    }
+    
     // direct bank
     public function test_queryOrder_queryInvoiceOrder_returns_GetOrdersRequest() {
         $queryOrder = WebPayAdmin::queryOrder( Svea\SveaConfig::getDefaultConfig() );
