@@ -267,7 +267,7 @@ class DeliverOrderRowsBuilder {
         }        
         
         if( (count($this->rowsToDeliver) == 0) ) {
-            $exceptionString = "rowsToDeliver is required for deliverCardrderRows(). Use methods setRowToDeliver() or setRowsToDeliver().";
+            $exceptionString = "rowsToDeliver is required for deliverCardOrderRows(). Use methods setRowToDeliver() or setRowsToDeliver().";
             throw new ValidationException($exceptionString);
         }     
         
