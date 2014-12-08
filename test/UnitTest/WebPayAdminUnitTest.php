@@ -19,6 +19,75 @@ class WebPayAdminUnitTest extends \PHPUnit_Framework_TestCase {
         $this->assertInstanceOf( "Svea\CancelOrderBuilder", $builderObject );
     }
     // TODO add validation unit tests
+
+    
+    // WebPayAdmin::cancelOrder() -------------------------------------------------------------------------------------	
+    // returned request class
+    public function test_cancelOrder_cancelInvoiceOrder_returns_CloseOrder() {
+        $cancelOrder = WebPayAdmin::cancelOrder( Svea\SveaConfig::getDefaultConfig() );
+        $request = $cancelOrder->cancelInvoiceOrder();        
+        $this->assertInstanceOf( "Svea\WebService\CloseOrder", $request );
+        $this->assertEquals(\ConfigurationProvider::INVOICE_TYPE, $request->orderBuilder->orderType); 
+    }
+    
+    public function test_cancelOrder_cancelPaymentPlanOrder_returns_CloseOrder() {
+        $cancelOrder = WebPayAdmin::cancelOrder( Svea\SveaConfig::getDefaultConfig() );
+        $request = $cancelOrder->cancelPaymentPlanOrder();        
+        $this->assertInstanceOf( "Svea\WebService\CloseOrder", $request );
+        $this->assertEquals(\ConfigurationProvider::PAYMENTPLAN_TYPE, $request->orderBuilder->orderType); 
+    }
+
+    public function test_cancelOrder_cancelCardOrder_returns_AnnulTransaction() {
+        $cancelOrder = WebPayAdmin::cancelOrder( Svea\SveaConfig::getDefaultConfig() );
+        $request = $cancelOrder->cancelCardOrder();        
+        $this->assertInstanceOf( "Svea\HostedService\AnnulTransaction", $request );
+    }
+    /// validators
+    // invoice
+//    public void test_validates_all_required_methods_for_cancelOrder_cancelInvoiceOrder() {
+//    public void test_missing_required_method_for_cancelOrder_cancelInvoiceOrder_setOrderId() {
+//    public void test_missing_required_method_for_cancelOrder_cancelInvoiceOrder_setCountryCode() {
+//    public void test_validates_all_required_methods_for_cancelOrder_cancelPaymentPlanOrder() {
+//    public void test_missing_required_method_for_cancelOrder_cancelPaymentPlanOrder_setOrderId() {
+//    public void test_missing_required_method_for_cancelOrder_cancelPaymentPlanOrder_setCountryCode() {
+    // card
+    function test_validates_all_required_methods_for_cancelOrder_cancelCardOrder() {
+        $request = WebPayAdmin::cancelOrder(Svea\SveaConfig::getDefaultConfig())
+            ->setOrderId("123456789")                
+            ->setCountryCode("SE")            
+        ;
+        try {
+            $request->cancelCardOrder()->prepareRequest();
+        }
+        catch (Exception $e){
+            // fail on validation error
+            $this->fail( "Unexpected validation exception: " . $e->getMessage() );
+        }
+    }  
+
+    function test_missing_required_method_for_cancelOrder_cancelCardOrder_setOrderId() {
+        $request = WebPayAdmin::cancelOrder(Svea\SveaConfig::getDefaultConfig())
+            //->setOrderId("123456789")                
+            ->setCountryCode("SE")            
+        ;       
+        $this->setExpectedException(
+            'Svea\ValidationException', 
+            '-missing value : transactionId is required. Use function setTransactionId() with the SveaOrderId from the createOrder response'
+        );   
+        $request->cancelCardOrder()->prepareRequest();
+    } 
+    
+    function test_missing_required_method_for_cancelOrder_cancelCardOrder_setCountryCode() {
+        $request = WebPayAdmin::cancelOrder(Svea\SveaConfig::getDefaultConfig())
+            ->setOrderId("123456789")                
+            //->setCountryCode("SE")            
+        ;       
+        $this->setExpectedException(
+            'Svea\ValidationException', 
+            '-missing value : CountryCode is required. Use function setCountryCode().'
+        );   
+        $request->cancelCardOrder()->prepareRequest();
+    }  
     
     // WebPayAdmin::queryOrder() -----------------------------------------------
     // TODO add validation unit tests
@@ -28,7 +97,28 @@ class WebPayAdminUnitTest extends \PHPUnit_Framework_TestCase {
         $builderObject = WebPayAdmin::cancelOrderRows( Svea\SveaConfig::getDefaultConfig() );        
         $this->assertInstanceOf( "Svea\CancelOrderRowsBuilder", $builderObject );
     }
-    // TODO add validation unit tests
+    // invoice
+    public function test_cancelOrderRows_cancelInvoiceOrderRows_returns_CancelOrderRowsRequest() {
+        $cancelOrderRowsBuilder = WebPayAdmin::cancelOrderRows( Svea\SveaConfig::getDefaultConfig() );
+        $request = $cancelOrderRowsBuilder->cancelInvoiceOrderRows();        
+        $this->assertInstanceOf( "Svea\AdminService\CancelOrderRowsRequest", $request );
+    }      
+    // partpayment
+    public function test_cancelOrderRows_cancelPaymentPlanOrderRows_returns_CancelOrderRowsRequest() {
+        $cancelOrderRowsBuilder = WebPayAdmin::cancelOrderRows( Svea\SveaConfig::getDefaultConfig() );
+        $request = $cancelOrderRowsBuilder->cancelPaymentPlanOrderRows();        
+        $this->assertInstanceOf( "Svea\AdminService\CancelOrderRowsRequest", $request );
+    }              
+    // card
+    public function test_cancelOrderRows_cancelCardOrderRows_returns_LowerTransaction() {
+        $cancelOrderRowsBuilder = WebPayAdmin::cancelOrderRows( Svea\SveaConfig::getDefaultConfig() )
+            ->addNumberedOrderRow( TestUtil::createNumberedOrderRow( 100.00, 1, 1 ) )
+            ->setRowToCancel(1)
+        ;
+        $request = $cancelOrderRowsBuilder->cancelCardOrderRows();        
+        $this->assertInstanceOf( "Svea\HostedService\LowerTransaction", $request );
+    }  
+    // TODO add validation tests here
     
     // WebPayAdmin::creditOrderRows --------------------------------------------    
     public function test_creditOrderRows_returns_CreditOrderRowsBuilder() {
