@@ -11,28 +11,7 @@ require_once $root . '/../TestUtil.php';
 class WebPayAdminIntegrationTest extends PHPUnit_Framework_TestCase {
 
     /// cancelOrder()
-    // invoice
-    // partpayment
-    // card
-    public function test_cancelOrder_cancelInvoiceOrder_returns_CloseOrder() {
-        $cancelOrder = WebPayAdmin::cancelOrder( Svea\SveaConfig::getDefaultConfig() );
-        $request = $cancelOrder->cancelInvoiceOrder();        
-        $this->assertInstanceOf( "Svea\WebService\CloseOrder", $request );
-        $this->assertEquals(\ConfigurationProvider::INVOICE_TYPE, $request->orderBuilder->orderType); 
-    }
-    
-    public function test_cancelOrder_cancelPaymentPlanOrder_returns_CloseOrder() {
-        $cancelOrder = WebPayAdmin::cancelOrder( Svea\SveaConfig::getDefaultConfig() );
-        $request = $cancelOrder->cancelPaymentPlanOrder();        
-        $this->assertInstanceOf( "Svea\WebService\CloseOrder", $request );
-        $this->assertEquals(\ConfigurationProvider::PAYMENTPLAN_TYPE, $request->orderBuilder->orderType); 
-    }
-
-    public function test_cancelOrder_cancelCardOrder_returns_AnnulTransaction() {
-        $cancelOrder = WebPayAdmin::cancelOrder( Svea\SveaConfig::getDefaultConfig() );
-        $request = $cancelOrder->cancelCardOrder();        
-        $this->assertInstanceOf( "Svea\HostedService\AnnulTransaction", $request );
-    }
+    // TODO
 
     /// queryOrder()
     // invoice
@@ -69,26 +48,6 @@ class WebPayAdminIntegrationTest extends PHPUnit_Framework_TestCase {
     // invoice
     // partpayment
     // card
-    public function test_cancelOrderRows_cancelInvoiceOrderRows_returns_CancelOrderRowsRequest() {
-        $cancelOrderRowsBuilder = WebPayAdmin::cancelOrderRows( Svea\SveaConfig::getDefaultConfig() );
-        $request = $cancelOrderRowsBuilder->cancelInvoiceOrderRows();        
-        $this->assertInstanceOf( "Svea\AdminService\CancelOrderRowsRequest", $request );
-    }      
-    
-    public function test_cancelOrderRows_cancelPaymentPlanOrderRows_returns_CancelOrderRowsRequest() {
-        $cancelOrderRowsBuilder = WebPayAdmin::cancelOrderRows( Svea\SveaConfig::getDefaultConfig() );
-        $request = $cancelOrderRowsBuilder->cancelPaymentPlanOrderRows();        
-        $this->assertInstanceOf( "Svea\AdminService\CancelOrderRowsRequest", $request );
-    }          
-    
-    public function test_cancelOrderRows_cancelCardOrderRows_returns_LowerTransaction() {
-        $cancelOrderRowsBuilder = WebPayAdmin::cancelOrderRows( Svea\SveaConfig::getDefaultConfig() )
-            ->addNumberedOrderRow( TestUtil::createNumberedOrderRow( 100.00, 1, 1 ) )
-            ->setRowToCancel(1)
-        ;
-        $request = $cancelOrderRowsBuilder->cancelCardOrderRows();        
-        $this->assertInstanceOf( "Svea\HostedService\LowerTransaction", $request );
-    }  
     
     /// creditOrderRows()
     // invoice
