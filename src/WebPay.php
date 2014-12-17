@@ -120,11 +120,12 @@ class WebPay {
      *          ->setCreditInvoice()            // deprecated, optional -- use WebPayAdmin::creditOrderRows instead
      *      ;
      *      // then select the corresponding request class and send request
-     *      $response = $request->deliverInvoiceOrder()->doRequest();       // returns DeliverOrderResult
-     *      $response = $request->deliverPaymentPlanOrder()->doRequest();   // returns DeliverOrderResult
+     *      $response = $request->deliverInvoiceOrder()->doRequest();       // returns DeliverOrdersResponse (no rows) or DeliverOrderResult (with rows)
+     *      $response = $request->deliverPaymentPlanOrder()->doRequest();   // returns DeliverOrdersResponse (no rows) or DeliverOrderResult (with rows)
      *      $response = $request->deliverCardOrder()->doRequest();          // returns ConfirmTransactionResponse
      * 
      * @see \Svea\DeliverOrderBuilder \Svea\DeliverOrderBuilder
+     * @see \Svea\AdminService\DeliverOrdersResponse \Svea\AdminService\DeliverOrdersResponse
      * @see \Svea\WebService\DeliverOrderResult \Svea\WebService\DeliverOrderResult
      * @see \Svea\HostedService\ConfirmTransactionResponse \Svea\HostedService\ConfirmTransactionResponse
      * 
