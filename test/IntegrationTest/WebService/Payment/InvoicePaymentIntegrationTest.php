@@ -159,7 +159,6 @@ class InvoicePaymentIntegrationTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(100, $request->amount);
     }
 
-    // TODO make corresponding tests for other country tax rates
     /**
      * NL vat rates are 6%, 21% (as of 131018, see http://www.government.nl/issues/taxation/vat-and-excise-duty)
      */
@@ -853,6 +852,192 @@ class InvoicePaymentIntegrationTest extends PHPUnit_Framework_TestCase {
     }
 
     
+    // Test that test suite returns complete address in each country
+    // SE
+    // IndividualCustomer validation
+    function test_validates_all_required_methods_for_createOrder_useInvoicePayment_IndividualCustomer_SE() {
+        $order = WebPay::createOrder(Svea\SveaConfig::getDefaultConfig())
+                    ->addOrderRow( 
+                        WebPayItem::orderRow()
+                            ->setQuantity(1.0)
+                            ->setAmountExVat(4.0)
+                            ->setAmountIncVat(5.0)
+                    )
+                    ->addCustomerDetails(
+                        WebPayItem::individualCustomer()
+                            ->setNationalIdNumber("4605092222")
+                    )
+                    ->setCountryCode("SE")
+                    ->setOrderDate(date('c'))
+        ;
+        $response = $order->useInvoicePayment()->doRequest();
+        print_r($response);
+        $this->assertEquals(1, $response->accepted);
+        $this->assertTrue( $response->customerIdentity instanceof Svea\WebService\CreateOrderIdentity );
+        // verify returned address
+        $this->assertEquals( "Persson, Tess T", $response->customerIdentity->fullName );    // Note: order may vary between countries, given by UC
+        $this->assertEquals( "Testgatan 1", $response->customerIdentity->street );
+        $this->assertEquals( "c/o Eriksson, Erik", $response->customerIdentity->coAddress );
+        $this->assertEquals( "99999", $response->customerIdentity->zipCode );
+        $this->assertEquals( "Stan", $response->customerIdentity->locality );
+    }
+
+    // NO
+    // IndividualCustomer validation
+    function test_validates_all_required_methods_for_createOrder_useInvoicePayment_IndividualCustomer_NO() {
+        $order = WebPay::createOrder(Svea\SveaConfig::getDefaultConfig())
+                    ->addOrderRow( 
+                        WebPayItem::orderRow()
+                            ->setQuantity(1.0)
+                            ->setAmountExVat(4.0)
+                            ->setAmountIncVat(5.0)
+                    )
+                    ->addCustomerDetails(
+                        WebPayItem::individualCustomer()
+                            ->setNationalIdNumber("17054512066")
+                    )
+                    ->setCountryCode("NO")
+                    ->setOrderDate(date('c'))
+        ;
+        $response = $order->useInvoicePayment()->doRequest();
+        print_r($response);
+        $this->assertEquals(1, $response->accepted);
+        $this->assertTrue( $response->customerIdentity instanceof Svea\WebService\CreateOrderIdentity );
+        // verify returned address
+        $this->assertEquals( "Normann Ola", $response->customerIdentity->fullName );    // Note: order may vary between countries, given by UC
+        $this->assertEquals( "Testveien 2", $response->customerIdentity->street );
+        $this->assertEquals( "", $response->customerIdentity->coAddress );
+        $this->assertEquals( "359", $response->customerIdentity->zipCode );
+        $this->assertEquals( "Oslo", $response->customerIdentity->locality );
+    }
+
+    // DK
+    // IndividualCustomer validation
+    function test_validates_all_required_methods_for_createOrder_useInvoicePayment_IndividualCustomer_DK() {
+        $order = WebPay::createOrder(Svea\SveaConfig::getDefaultConfig())
+                    ->addOrderRow( 
+                        WebPayItem::orderRow()
+                            ->setQuantity(1.0)
+                            ->setAmountExVat(4.0)
+                            ->setAmountIncVat(5.0)
+                    )
+                    ->addCustomerDetails(
+                        WebPayItem::individualCustomer()
+                            ->setNationalIdNumber("2603692503")
+                    )
+                    ->setCountryCode("DK")
+                    ->setOrderDate(date('c'))
+        ;
+        $response = $order->useInvoicePayment()->doRequest();        
+        print_r($response);
+        $this->assertEquals(1, $response->accepted);
+        $this->assertTrue( $response->customerIdentity instanceof Svea\WebService\CreateOrderIdentity );
+        // verify returned address
+        $this->assertEquals( "Jensen Hanne", $response->customerIdentity->fullName );    // Note: order may vary between countries, given by UC
+        $this->assertEquals( "Testvejen 42", $response->customerIdentity->street );
+        $this->assertEquals( "c/o Test A/S", $response->customerIdentity->coAddress );
+        $this->assertEquals( "2100", $response->customerIdentity->zipCode );
+        $this->assertEquals( "KØBENHVN Ø", $response->customerIdentity->locality );
+    }
+
+    // FI
+    // IndividualCustomer validation
+    function test_validates_all_required_methods_for_createOrder_useInvoicePayment_IndividualCustomer_FI() {
+        $order = WebPay::createOrder(Svea\SveaConfig::getDefaultConfig())
+                    ->addOrderRow( 
+                        WebPayItem::orderRow()
+                            ->setQuantity(1.0)
+                            ->setAmountExVat(4.0)
+                            ->setAmountIncVat(5.0)
+                    )
+                    ->addCustomerDetails(
+                        WebPayItem::individualCustomer()
+                            ->setNationalIdNumber("160264-999N")
+                    )
+                    ->setCountryCode("FI")
+                    ->setOrderDate(date('c'))
+        ;
+        $response = $order->useInvoicePayment()->doRequest();
+        print_r($response);
+        $this->assertEquals(1, $response->accepted);
+        $this->assertTrue( $response->customerIdentity instanceof Svea\WebService\CreateOrderIdentity );
+        // verify returned address
+        $this->assertEquals( "Kanerva Haapakoski, Kukka-Maaria", $response->customerIdentity->fullName );    // Note: order may vary between countries, given by UC
+        $this->assertEquals( "Atomitie 2 C", $response->customerIdentity->street );
+        $this->assertEquals( "", $response->customerIdentity->coAddress );
+        $this->assertEquals( "00370", $response->customerIdentity->zipCode );
+        $this->assertEquals( "Helsinki", $response->customerIdentity->locality );
+    }
+
+    // DE
+    // IndividualCustomer validation
+    function test_validates_all_required_methods_for_createOrder_useInvoicePayment_IndividualCustomer_DE() {
+        $order = WebPay::createOrder(Svea\SveaConfig::getDefaultConfig())
+                    ->addOrderRow( 
+                        WebPayItem::orderRow()
+                            ->setQuantity(1.0)
+                            ->setAmountExVat(4.0)
+                            ->setAmountIncVat(5.0)
+                    )
+                    ->addCustomerDetails(
+                        WebPayItem::individualCustomer()
+                            ->setBirthDate("19680403")
+                            ->setName("Theo", "Giebel")
+                            ->setStreetAddress("Zörgiebelweg", 21)
+                            ->setZipCode("13591")
+                            ->setLocality("BERLIN")                                
+                    )
+                    ->setCountryCode("DE")
+                    ->setOrderDate(date('c'))
+        ;
+        $response = $order->useInvoicePayment()->doRequest();
+        print_r($response);
+        $this->assertEquals(1, $response->accepted);
+        $this->assertTrue( $response->customerIdentity instanceof Svea\WebService\CreateOrderIdentity );
+        // verify returned address
+        $this->assertEquals( "Theo Giebel", $response->customerIdentity->fullName );    // Note: order may vary between countries, given by UC
+        $this->assertEquals( "Zörgiebelweg", $response->customerIdentity->street );
+        $this->assertEquals( "21", $response->customerIdentity->houseNumber );        
+        $this->assertEquals( "", $response->customerIdentity->coAddress );
+        $this->assertEquals( "13591", $response->customerIdentity->zipCode );
+        $this->assertEquals( "BERLIN", $response->customerIdentity->locality );
+    }
+
+    // NL
+    // IndividualCustomer validation
+    function test_validates_all_required_methods_for_createOrder_useInvoicePayment_IndividualCustomer_NL() {
+        $order = WebPay::createOrder(Svea\SveaConfig::getDefaultConfig())
+                    ->addOrderRow( 
+                        WebPayItem::orderRow()
+                            ->setQuantity(1.0)
+                            ->setAmountExVat(4.0)
+                            ->setAmountIncVat(5.0)
+                    )
+                    ->addCustomerDetails(
+                        WebPayItem::individualCustomer()
+                            ->setBirthDate("19550307")
+                            ->setInitials("SB")
+                            ->setName("Sneider", "Boasman")
+                            ->setStreetAddress("Gate 42", 23)
+                            ->setZipCode("1102 HG")
+                            ->setLocality("BARENDRECHT")                                
+                    )
+                    ->setCountryCode("NL")
+                    ->setOrderDate(date('c'))
+        ;
+        $response = $order->useInvoicePayment()->doRequest();
+        print_r($response);
+        $this->assertEquals(1, $response->accepted);
+        $this->assertTrue( $response->customerIdentity instanceof Svea\WebService\CreateOrderIdentity );
+        // verify returned address
+        $this->assertEquals( "Sneider Boasman", $response->customerIdentity->fullName );    // Note: order may vary between countries, given by UC
+        $this->assertEquals( "Gate 42", $response->customerIdentity->street );
+        $this->assertEquals( "23", $response->customerIdentity->houseNumber );        
+        $this->assertEquals( "", $response->customerIdentity->coAddress );
+        $this->assertEquals( "1102 HG", $response->customerIdentity->zipCode );
+        $this->assertEquals( "BARENDRECHT", $response->customerIdentity->locality );
+    }
+    
     public function testInvoiceRequestNLReturnsSameAddress() {
         $config = Svea\SveaConfig::getDefaultConfig();
         $request = WebPay::createOrder($config)
@@ -993,7 +1178,7 @@ class InvoicePaymentIntegrationTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(1, $request->accepted);        
         $this->assertTrue( $request->customerIdentity instanceof Svea\WebService\CreateOrderIdentity );
 
-        print_r( $request->sveaOrderId);
+        //print_r( $request->sveaOrderId);
         // verify returned address is wrong        
         $this->assertNotEquals( "Sneider Boasman", $request->customerIdentity->fullName );
         $this->assertNotEquals( "Gate 42", $request->customerIdentity->street );
