@@ -39,6 +39,10 @@ class CompanyCustomer {
     public $phonenumber;
     /** @var string $ipAddress */
     public $ipAddress;  
+    /** @var string $firstname */
+    public $firstname;
+    /** @var string $lastname */ 
+    public $lastname;
     /** @var string $street */
     public $street;    
     /** @var int $housenumber */
@@ -53,7 +57,10 @@ class CompanyCustomer {
     public $companyName; 
     /** @var string $addressSelector */
     public $addressSelector;
-    
+
+    // set in GetOrdersResponse
+    public $streetAddress;          // compounds street + housenumber,fullName, may be set by CreateOrder for i.e. orders where identify customer via ssn
+            
     /**
      * Example: 4608142222
      * Required for company customers in SE, NO, DK, FI
@@ -111,18 +118,24 @@ class CompanyCustomer {
     }  
          
     /**
-     * Required in NL and DE
-     * For other countries, you may ommit this, or let either of street and/or housenumber be empty
-     * 
-     * @param string $streetAsString
-     * @param int $houseNumberAsInt  -- optional
+     * Required to set street and houseNumber in NL and DE
+     * @param string $streetAsString, or $streetAddressAsString iff sole argument
+     * @param int $houseNumberAsInt, or omitted if setting streetAddress
      * @return $this
      */
     public function setStreetAddress($streetAsString, $houseNumberAsInt = null) { // = null is poor man's overloading
-        $this->street = $streetAsString;
-        $this->housenumber = $houseNumberAsInt;
+        // only one name given, assume streetName;
+        if( $houseNumberAsInt == null) {
+            $streetAddressAsString = $streetAsString;
+            $this->streetAddress = $streetAddressAsString;
+            $this->street = $streetAsString;    // preserve old behaviour if only street given (assume contains compounded street + housenumber)
+        }
+        else {
+            $this->street = $streetAsString;
+            $this->housenumber = $houseNumberAsInt;
+        }
         return $this;
-    }     
+    }   
     /**
      * Optional in NL and DE
      * @param type $coAddressAsString
@@ -162,7 +175,7 @@ class CompanyCustomer {
         $this->companyName = $nameAsString;
         return $this;
     }   
-    
+
     /**
     * Optional. If not set, the invoice/partpayment orders will use the first registered address as invoice address.
     * Recieve string param from getAddresses
