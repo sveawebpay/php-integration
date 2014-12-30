@@ -8,25 +8,6 @@ require_once SVEA_REQUEST_DIR . '/WebService/svea_soap/SveaSoapConfig.php';
 require_once SVEA_REQUEST_DIR . '/Config/SveaConfig.php';
 
 /**
- * Returns an array of all the associated addresses for a given customer identity. 
- * Each address has an AddressSelector attribute that uniquely identifies the address.
- *
- * The GetAddresses service is only applicable for SE, NO and DK customers and accounts. 
- * In Norway, GetAddresses may only be performed on company customers.
- * 
- * Use setCountryCode() to supply the country code that corresponds to the account credentials used for the address lookup.
- * Note that this means that you cannot look up a user in a foreign country, this is a consequence of the fact that the 
- * invoice and partpayment methods don't support foreign orders.
- * 
- * Use setCustomerIdentifier() to provide the exact credentials needed to identify the customer according to country:
- * SE: Personnummer (private individual) or Organisationsnummer (company or other legal entity)
- * NO: Organisasjonsnummer (company or other legal entity)
- * DK: Cpr.nr (private individual) or CVR-nummer (company or other legal entity)
- * 
- * Then use either getIndividualAddresses() or getCompanyAddresses() depending on what kind of customer you want to look up.
- *  
- * The final doRequest() will send the getAddresses request to Svea and return the result. 
- * 
  * The following methods are deprecated starting with 2.2 of the package
  * ->setIndividual()                    (deprecated, -- lookup the address of a private individual, set to i.e. social security number)
  * ->setCompany()                       (deprecated -- lookup the addresses associated with a legal entity (i.e. company)
@@ -163,10 +144,10 @@ class GetAddresses {
         
         // countrycode -> ssn/companyid -> check credentials
         $errors = $this->validateCountryCode($getaddressesrequest, $errors);        
+        $errors = $this->validateCustomerIdentifier($getaddressesrequest, $errors);
         if(count($errors) == 0) {
             $this->orderType = $this->checkAndSetConfiguredPaymentMethod();                
         }
-        $errors = $this->validateCustomerIdentifier($getaddressesrequest, $errors);
         $errors = $this->validateCountryCodeConfigurationExists($getaddressesrequest, $errors);
         return $errors;
     }    
@@ -193,34 +174,39 @@ class GetAddresses {
         return $errors;
     }   
 
-    private function checkAndSetConfiguredPaymentMethod() {
-        $orderType = \ConfigurationProvider::INVOICE_TYPE;                
-        try {
-            $u = $this->conf->getUsername($orderType, $this->countryCode);
-            $p = $this->conf->getPassword($orderType, $this->countryCode);
-            $c = $this->conf->getClientNumber($orderType, $this->countryCode);    
-        }
-        catch( Svea\InvalidTypeException $e ) {         // thrown if no config found
-            // go on
-        }
-        if( isset($u) && isset($p) && isset($c) ) {
-            return \ConfigurationProvider::INVOICE_TYPE;
-        }
-        
-        $orderType = \ConfigurationProvider::PAYMENTPLAN_TYPE;            
-        try {
-            $u = $this->conf->getUsername($orderType, $this->countryCode);
-            $p = $this->conf->getPassword($orderType, $this->countryCode);
-            $c = $this->conf->getClientNumber($orderType, $this->countryCode);    
-        }
-        catch( Svea\InvalidTypeException $e ) {
-            return null;                                // i.e. will throw exception in validation
-        }
-        if( isset($u) && isset($p) && isset($c) ) {  // i.e. not set or null
-            return \ConfigurationProvider::PAYMENTPLAN_TYPE;
+    private function checkAndSetConfiguredPaymentMethod() {  
+        if( $this->orderType == null) { // no order type set, so try and determine which configuration provider order type to use
+            $orderType = \ConfigurationProvider::INVOICE_TYPE;                
+            try {
+                $u = $this->conf->getUsername($orderType, $this->countryCode);
+                $p = $this->conf->getPassword($orderType, $this->countryCode);
+                $c = $this->conf->getClientNumber($orderType, $this->countryCode);    
+            }
+            catch( Svea\InvalidTypeException $e ) {         // thrown if no config found
+                // go on
+            }
+            if( isset($u) && isset($p) && isset($c) ) {
+                return \ConfigurationProvider::INVOICE_TYPE;
+            }
+
+            $orderType = \ConfigurationProvider::PAYMENTPLAN_TYPE;            
+            try {
+                $u = $this->conf->getUsername($orderType, $this->countryCode);
+                $p = $this->conf->getPassword($orderType, $this->countryCode);
+                $c = $this->conf->getClientNumber($orderType, $this->countryCode);    
+            }
+            catch( Svea\InvalidTypeException $e ) {
+                return null;                                // i.e. will throw exception in validation
+            }
+            if( isset($u) && isset($p) && isset($c) ) {  // i.e. not set or null
+                return \ConfigurationProvider::PAYMENTPLAN_TYPE;
+            }
+            else {
+                return null;
+            }
         }
         else {
-            return null;
+            return $this->orderType; // if set, honour given order type
         }
     }
     

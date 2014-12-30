@@ -120,11 +120,12 @@ class WebPay {
      *          ->setCreditInvoice()            // deprecated, optional -- use WebPayAdmin::creditOrderRows instead
      *      ;
      *      // then select the corresponding request class and send request
-     *      $response = $request->deliverInvoiceOrder()->doRequest();       // returns DeliverOrderResult
-     *      $response = $request->deliverPaymentPlanOrder()->doRequest();   // returns DeliverOrderResult
+     *      $response = $request->deliverInvoiceOrder()->doRequest();       // returns DeliverOrdersResponse (no rows) or DeliverOrderResult (with rows)
+     *      $response = $request->deliverPaymentPlanOrder()->doRequest();   // returns DeliverOrdersResponse (no rows) or DeliverOrderResult (with rows)
      *      $response = $request->deliverCardOrder()->doRequest();          // returns ConfirmTransactionResponse
      * 
      * @see \Svea\DeliverOrderBuilder \Svea\DeliverOrderBuilder
+     * @see \Svea\AdminService\DeliverOrdersResponse \Svea\AdminService\DeliverOrdersResponse
      * @see \Svea\WebService\DeliverOrderResult \Svea\WebService\DeliverOrderResult
      * @see \Svea\HostedService\ConfirmTransactionResponse \Svea\HostedService\ConfirmTransactionResponse
      * 
@@ -137,35 +138,54 @@ class WebPay {
 
         return new Svea\DeliverOrderBuilder($config);
     }
-
+  
     /**
-     * The WebPay::getAddresses() entrypoint is used to fetch validated addresses 
-     * associated with a given customer identity. Only applicable for SE, NO and DK 
-     * customers. Note that in Norway, company customers only are supported.
-     *
-     * Use getAddresses() to fetch a list of validated addresses associated with a given 
-     * customer identity. This list can in turn be used to i.e. verify that an order delivery 
-     * address matches the invoice address used by Svea for invoice and payment plan orders.
+     * The WebPay::getAddresses() entrypoint is used to fetch a list validated addresses 
+     * associated with a given customer identity. This list can in turn be used to i.e. 
+     * verify that an order delivery address matches the invoice address used by Svea for 
+     * invoice and payment plan orders. Only applicable for SE, NO and DK customers. 
+     * Note that in Norway, company customers only are supported.
      * 
      * Get an request class instance using the WebPay::getAddresses entrypoint, then
      * provide more information about the transaction and send the request using the
      * request class methods:
      * 
-     * ->setCountryCode()           (required -- supply the country code that corresponds to the account credentials used) 
-     * ->setIdentifier()            (required -- i.e. the social security number, company vat number et al for the country in question)
+     * Use setCountryCode() to supply the country code that corresponds to the account 
+     * credentials used for the address lookup. Note that this means that you cannot 
+     * look up a user in a foreign country, this is a consequence of the fact that the 
+     * invoice and partpayment methods don't support foreign orders.
+     *
+     * Use setCustomerIdentifier() to provide the exact credentials needed to identify 
+     * the customer according to country:
+     *      SE: Personnummer (private individual) or Organisationsnummer (company/legal entity)
+     *      NO: Organisasjonsnummer (company or other legal entity)
+     *      DK: Cpr.nr (private individual) or CVR-nummer (company or other legal entity)
      * 
-     * Finish by selecting the correct customer type and perform the request:
-     * ->getIndividualAddresses() // or getCompanyAddresses()
-     *   ->doRequest()
-     * 
-     * The final doRequest() returns a GetAddressesResponse.
+     * Then use either getIndividualAddresses() or getCompanyAddresses() depending on what kind of customer you want to look up.
      *  
-     * @see \Svea\WebService\GetAddressesResponse \Svea\WebService\GetAddressesResponse
+     * The final doRequest() will send the getAddresses request to Svea and return the result. 
+     *
+     * The doRequest() method will then check if there exists credentials to use for the request in the given configurationProvider.
      * 
+     * (Note that this behaviour may cause problems if your integration is set to use different (test/production) credentials 
+     * for invoice and payment plan -- if you get an error and this is the case, you may use one of the deprecated methods 
+     * setOrderTypeInvoice() or setOrderTupePaymentPlan() to explicity state which method credentials to use.)
+     *
+     *      $request = WebPay::getAddresses($config)
+     *          ->setCountryCode()                  // required -- the country to perform the customer address lookup in
+     *          ->setCustomerIdentifier()           // required -- social security number, company vat number etc. used to identify customer
+     *          ->setOrderTypeInvoice()             // deprecated -- method that corresponds to the ConfigurationProvider account credentials used 
+     *          ->setOrderTypePaymentPlan()         // deprecated -- method that corresponds to the ConfigurationProvider account credentials used 
+     *      ;
+     *      // then select the corresponding request class and send request
+     *      $response = $request->getIndividualAddresses()->doRequest();    // returns GetAddressesResponse
+     *      $response = $request->getCompanyAddresses()->doRequest();       // returns GetAddressesResponse
+     *
+     * @see Svea\WebService\GetAddresses Svea\WebService\GetAddresses
+     * @return Svea\WebService\GetAddressesResponse Svea\WebService\GetAddressesResponse
      * @param ConfigurationProvider $config  instance implementing ConfigurationProvider Interface
-     * @return Svea\WebService\GetAddresses
-     * @throws \Svea\ValidationException    
-     */
+     * @throws \Svea\ValidationException        
+     */    
     public static function getAddresses($config = NULL) {
         if( $config == NULL ) { WebPay::throwMissingConfigException(); }
 
