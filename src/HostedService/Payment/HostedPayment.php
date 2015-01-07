@@ -371,7 +371,7 @@ class HostedPayment {
      * @return RecurTransactionResponse
      */
     public function doRecur() {
-        
+                
         // calculate amount from order rows   
         $formatter = new HostedRowFormatter();
         $this->request['rows'] = $formatter->formatRows($this->order);
@@ -379,14 +379,13 @@ class HostedPayment {
         $this->request['totalVat'] = $formatter->formatTotalVat( $this->request['rows']);        
                             
         $request = new RecurTransaction( $this->order->conf );
-        $response = $request                
-            ->setCurrency( $this->order->currency )
-            ->setAmount( $this->request['amount'] ) // incl. vat       
-            ->setCustomerRefNo( $this->order->clientOrderNumber )   // CustomerRefNo in Hosted service equals ClientOrderNumber in order objects
-            ->setCountryCode( $this->order->countryCode )
-            ->setSubscriptionId( $this->subscriptionId )                
-            ->doRequest()
-        ;         
+        $request->currency = $this->order->currency;
+        $request->amount = $this->request['amount'];       
+        $request->customerRefNo = $this->order->clientOrderNumber;
+        $request->countryCode = $this->order->countryCode;
+        $request->subscriptionId = $this->subscriptionId;
+        $response = $request->doRequest();   
+            
         return $response;
     }
 }
