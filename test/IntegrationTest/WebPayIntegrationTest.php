@@ -12,11 +12,6 @@ class WebPayIntegrationTest extends PHPUnit_Framework_TestCase {
 
     /// WebPay::createOrder()
     // web service eu: invoice
-    // web service eu: paymentplan
-    // bypass paypage: usepaymentmethod
-    // paypage: cardonly
-    // paypage: directbankonly
-    // paypage
     public function test_createOrder_useInvoicePayment_returns_InvoicePayment() {
         $createOrder = WebPay::createOrder( Svea\SveaConfig::getDefaultConfig() );
         // we should set attributes here if real request
@@ -24,30 +19,38 @@ class WebPayIntegrationTest extends PHPUnit_Framework_TestCase {
         $this->assertInstanceOf("Svea\WebService\InvoicePayment", $request);
     }
     
+    // web service eu: paymentplan
     public function test_createOrder_usePaymentPlanPayment_returns_PaymentPlanPayment() {
         $createOrder = WebPay::createOrder( Svea\SveaConfig::getDefaultConfig() );
         $request = $createOrder->usePaymentPlanPayment( TestUtil::getGetPaymentPlanParamsForTesting() );
         $this->assertInstanceOf("Svea\WebService\PaymentPlanPayment", $request);
     }    
     
+    // paypage: cardonly
     public function test_createOrder_usePayPageCardOnly_returns_CardPayment() {
         $createOrder = WebPay::createOrder( Svea\SveaConfig::getDefaultConfig() );
         $request = $createOrder->usePayPageCardOnly();
         $this->assertInstanceOf("Svea\HostedService\CardPayment", $request);
     }   
 
+    // paypage: directbankonly
     public function test_createOrder_usePayPageDirectBankOnly_returns_DirectPayment() {
         $createOrder = WebPay::createOrder( Svea\SveaConfig::getDefaultConfig() );
         $request = $createOrder->usePayPageDirectBankOnly();
         $this->assertInstanceOf("Svea\HostedService\DirectPayment", $request);
     }       
     
+    // bypass paypage: usepaymentmethod
     public function test_createOrder_usePaymentMethod_returns_PaymentMethodPayment() {
         $createOrder = WebPay::createOrder( Svea\SveaConfig::getDefaultConfig() );
         $request = $createOrder->usePaymentMethod("mocked_paymentMethod");
         $this->assertInstanceOf("Svea\HostedService\PaymentMethodPayment", $request);
     }  
 
+    // usepaymentmethod KORTCERT with recurring payment
+    // TODO add recur example when implementing webdriver integration tests
+    
+    // paypage
     public function test_createOrder_usePayPage_returns_PayPagePayment() {
         $createOrder = WebPay::createOrder( Svea\SveaConfig::getDefaultConfig() );
         $request = $createOrder->usePayPage();
