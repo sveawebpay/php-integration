@@ -87,6 +87,35 @@ print_r( $myResponse );
 
 echo "</pre><font color='blue'><pre>
 An example of a successful request response. The 'accepted' attribute is true (1), and resultcode/errormessage is not set. 
-(Note that the customerIdentity received in the response indicates the Svea invoice address, which should normally match the order shipping address.)
-";
+(Note that the customerIdentity received in the response indicates the Svea invoice address, which should normally match the order shipping address.):
+
+Svea\WebService\CreateOrderResponse Object
+(
+    [sveaOrderId] => 503312
+    [sveaWillBuyOrder] => 1
+    [amount] => 23.73
+    [expirationDate] => 2015-03-10T00:00:00+01:00
+    [clientOrderNumber] => 
+    [orderType] => Invoice
+    [customerIdentity] => Svea\WebService\CreateOrderIdentity Object
+        (
+            [email] => 
+            [ipAddress] => 
+            [countryCode] => SE
+            [houseNumber] => 
+            [customerType] => Individual
+            [nationalIdNumber] => 194605092222
+            [phoneNumber] => 
+            [fullName] => Persson, Tess T
+            [street] => Testgatan 1
+            [coAddress] => c/o Eriksson, Erik
+            [zipCode] => 99999
+            [locality] => Stan
+        )
+
+    [accepted] => 1
+    [errormessage] => 
+    [resultcode] => 0
+)
+</pre>";
 
