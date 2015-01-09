@@ -19,8 +19,9 @@ class RecurTransactionResponse extends HostedAdminResponse{
     public $paymentMethod;
     /** @var string $merchantId -- the merchant id */
     public $merchantId;    
-    /** string $amount  total amount in minor currency */
+    /** @var string $amount The total amount in minor currency (e.g. SEK 10.50 => 1050). */
     public $amount;
+    /** @var string $currency -- ISO 4217 alphabetic, e.g. SEK */
     public $currency;
     /** @var string $cardType */
     public $cardType;
@@ -34,7 +35,9 @@ class RecurTransactionResponse extends HostedAdminResponse{
     public $authCode; 
     /** @var string $subscriptionId */
     public $subscriptionId;
-            
+    /** @var $decimalamount The total amount including VAT, presented as a decimal number. */
+    public $decimalamount;
+    
     function __construct($message,$countryCode,$config) {
         parent::__construct($message,$countryCode,$config);
     }
@@ -70,5 +73,6 @@ class RecurTransactionResponse extends HostedAdminResponse{
         $this->expiryYear = (string)$hostedAdminResponse->transaction->expiryyear;
         $this->authCode = (string)$hostedAdminResponse->transaction->authcode;
         $this->subscriptionId = (string)$hostedAdminResponse->transaction->subscriptionid;
+        $this->decimalamount = number_format( ($hostedAdminResponse->transaction->amount * 0.01), 2, ".", "" );
     }
 }
