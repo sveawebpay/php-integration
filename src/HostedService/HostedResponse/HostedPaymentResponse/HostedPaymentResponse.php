@@ -16,8 +16,8 @@ class HostedPaymentResponse extends HostedResponse{
     public $paymentMethod;    
     /** @var string $merchantId -- the merchant id */
     public $merchantId;
-    /** @var string $amount -- Total amount including VAT, in minor currency (e.g. SEK 10.50 = 1050) */
-    public $amount;    
+    /** @var string $amount The total amount including VAT, presented as a decimal number */
+    public $amount;
     /** @var string $currency -- ISO 4217 alphabetic, e.g. SEK */
     public $currency;
 
@@ -87,7 +87,7 @@ class HostedPaymentResponse extends HostedResponse{
         $this->merchantId = (string)$xmlElement->transaction->merchantid;
         $this->clientOrderNumber = (string)$xmlElement->transaction->customerrefno;
         $minorAmount = (int)($xmlElement->transaction->amount);
-        $this->amount = $minorAmount * 0.01;
+        $this->amount = number_format( ($minorAmount * 0.01), 2, ".", "" );
         $this->currency = (string)$xmlElement->transaction->currency;
 
         if (property_exists($xmlElement->transaction, "subscriptionid")) {
