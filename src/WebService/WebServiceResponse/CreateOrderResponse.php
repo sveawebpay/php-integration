@@ -19,7 +19,7 @@ class CreateOrderResponse extends WebServiceResponse {
     public $sveaOrderId;
     /** @var string $sveaWillBuyOrder  Always present. */
     public $sveaWillBuyOrder;
-    /** @var string $amount  Always present. */
+    /** @var string $amount  Always present. The total amount including VAT, presented as a decimal number. */
     public $amount;
     /** @var string $expirationDate  Always present. Order expiration date. If the order isn’t delivered before this date the order is automatically closed. */
     public $expirationDate;
