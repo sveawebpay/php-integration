@@ -32,8 +32,7 @@ class AddOrderRowsRequestIntegrationTest extends PHPUnit_Framework_TestCase {
                 ->setCountryCode("SE")
                 ->setCurrency("SEK")
                 ->setOrderDate("2012-12-12")
-                ->useInvoicePayment()
-                ->doRequest();
+                ->useInvoicePayment()->doRequest();
         $this->assertEquals(1, $orderResponse->accepted);
 
         // add order rows to builderobject
@@ -60,10 +59,9 @@ class AddOrderRowsRequestIntegrationTest extends PHPUnit_Framework_TestCase {
                 ->setCountryCode("SE")
                 ->setCurrency("SEK")
                 ->setOrderDate("2012-12-12")
-                ->useInvoicePayment()
-                ->doRequest();
+                ->useInvoicePayment()->doRequest();
+        $this->assertEquals(1, $orderResponse->accepted);
 
-        //print_r( "\n\ntest_dd_single_orderRow_with_vat_match: created w/ 145 ex @24% = 179,80 for " .$orderResponse->sveaOrderId );
         // add order rows to builderobject
         $response = WebPayAdmin::addOrderRows($config)
                 ->setOrderId($orderResponse->sveaOrderId)
@@ -74,13 +72,22 @@ class AddOrderRowsRequestIntegrationTest extends PHPUnit_Framework_TestCase {
                         ->setAmountExVat(80.00)
                         ->setQuantity(1)
                 )
-                ->addInvoiceOrderRows()
-                ->doRequest();
+                ->addInvoiceOrderRows()->doRequest();        
+        $this->assertEquals(1, $response->accepted);
 
+        // query order and assert row totals
+        $query = WebPayAdmin::queryOrder($config)
+                ->setOrderId($orderResponse->sveaOrderId)
+                ->setCountryCode('SE')
+                ->queryInvoiceOrder()->doRequest();       
+        $this->assertEquals(1, $query->accepted);                
+        //print_r( "\n\ntest_dd_single_orderRow_with_vat_match: created w/ 145 ex @24% = 179,80 for " .$orderResponse->sveaOrderId );
         //print_r( "\ntest_dd_single_orderRow_with_vat_match: added w/ 80 ex @24% = +99,2" );
         //print_r( "\ntest_dd_single_orderRow_with_vat_match: total amount 179,80 +99,2 = 279,00 for ".$orderResponse->sveaOrderId );
-
-        $this->assertEquals(1, $response->accepted);
+        $this->assertEquals("145.00", $query->numberedOrderRows[0]->amountExVat);   // => 179,80
+        $this->assertEquals("24", $query->numberedOrderRows[0]->vatPercent);
+        $this->assertEquals("80.00", $query->numberedOrderRows[1]->amountExVat);    // => 99,20
+        $this->assertEquals("24", $query->numberedOrderRows[1]->vatPercent);        
     }
 
     public function test_add_single_orderRow_with_vat_missmatch1() {
@@ -96,10 +103,9 @@ class AddOrderRowsRequestIntegrationTest extends PHPUnit_Framework_TestCase {
                 ->setCountryCode("SE")
                 ->setCurrency("SEK")
                 ->setOrderDate("2012-12-12")
-                ->useInvoicePayment()
-                ->doRequest();
-//        $this->assertEquals(1, $orderResponse->accepted);
-        //print_r( "\n\ntest_add_single_orderRow_with_vat_missmatch1: created w/ 145 ex @24% = 179,80 for " .$orderResponse->sveaOrderId );
+                ->useInvoicePayment()->doRequest();
+        $this->assertEquals(1, $orderResponse->accepted);
+
         // add order rows to
         $response = WebPayAdmin::addOrderRows($config)
                 ->setOrderId($orderResponse->sveaOrderId)
@@ -110,13 +116,23 @@ class AddOrderRowsRequestIntegrationTest extends PHPUnit_Framework_TestCase {
                         ->setAmountIncVat(80.00)
                         ->setQuantity(1)
                 )
-                ->addInvoiceOrderRows()
-                ->doRequest();
-
+                ->addInvoiceOrderRows()->doRequest();
+        $this->assertEquals(1, $response->accepted);
+        
+        // query order and assert row totals
+        $query = WebPayAdmin::queryOrder($config)
+                ->setOrderId($orderResponse->sveaOrderId)
+                ->setCountryCode('SE')
+                ->queryInvoiceOrder()->doRequest();       
+        $this->assertEquals(1, $query->accepted);
+        //print_r( "\n\ntest_add_single_orderRow_with_vat_missmatch1: created w/ 145 ex @24% = 179,80 for " .$orderResponse->sveaOrderId );
         //print_r( "\ntest_add_single_orderRow_with_vat_missmatch1: added w/ 80 inc @24% = 80" );
         //print_r( "\ntest_add_single_orderRow_with_vat_missmatch1: total amount 179,80 +80 = 259,80 for ".$orderResponse->sveaOrderId );
-
-        $this->assertEquals(1, $response->accepted);
+        $this->assertEquals("145.00", $query->numberedOrderRows[0]->amountExVat);   // => 179,80        
+        $this->assertEquals("24", $query->numberedOrderRows[0]->vatPercent); 
+        $this->assertEquals("64.51", $query->numberedOrderRows[1]->amountExVat);    // => 79.99 // öresavrundningsfel pga exvat in till Svea
+        $this->assertEquals("24", $query->numberedOrderRows[1]->vatPercent);            
+        //print_r( $orderResponse->sveaOrderId );
     }
 
     public function test_add_single_orderRow_with_vat_missmatch2() {
@@ -134,11 +150,9 @@ class AddOrderRowsRequestIntegrationTest extends PHPUnit_Framework_TestCase {
                 ->setOrderDate("2012-12-12")
                 ->useInvoicePayment()
                 ->doRequest();
-//                print_r($orderResponse->sveaOrderId);
-//        $this->assertEquals(1, $orderResponse->accepted);
-        //print_r( "\n\ntest_add_single_orderRow_with_vat_missmatch2: created w/ 145 inc @24% = 145,00 for " .$orderResponse->sveaOrderId );
-        // add order rows to builderobject
+        $this->assertEquals(1, $orderResponse->accepted);
 
+        // add order rows to builderobject
         $response = WebPayAdmin::addOrderRows($config)
                 ->setOrderId($orderResponse->sveaOrderId)
                 ->setCountryCode('SE')
@@ -150,11 +164,119 @@ class AddOrderRowsRequestIntegrationTest extends PHPUnit_Framework_TestCase {
                 )
                 ->addInvoiceOrderRows()
                 ->doRequest();
-
+        $this->assertEquals(1, $response->accepted);        
+        
+        // query order and assert row totals
+        $query = WebPayAdmin::queryOrder($config)
+                ->setOrderId($orderResponse->sveaOrderId)
+                ->setCountryCode('SE')
+                ->queryInvoiceOrder()->doRequest();       
+        $this->assertEquals(1, $query->accepted);
+        //print_r( "\n\ntest_add_single_orderRow_with_vat_missmatch2: created w/ 145 inc @24% = 145,00 for " .$orderResponse->sveaOrderId );
         //print_r( "\ntest_add_single_orderRow_with_vat_missmatch2: added w/ 80 ex @24% = +99,2");
         //print_r( "\ntest_add_single_orderRow_with_vat_missmatch2: total amount 145 +99,2 = 244,2 for ".$orderResponse->sveaOrderId );
-
-        $this->assertEquals(1, $response->accepted);
+        $this->assertEquals("145.00", $query->numberedOrderRows[0]->amountIncVat);     
+        $this->assertEquals("24", $query->numberedOrderRows[0]->vatPercent); 
+        $this->assertEquals("24", $query->numberedOrderRows[1]->vatPercent);            
+        //print_r( $orderResponse->sveaOrderId );        
     }
+ 
+    //--------------------------------------------------------------------------------------------------
+    
+    public function test_add_single_orderRow_sent_with_ex_vat_may_have_rounding_errors_example() {
+        $config = Svea\SveaConfig::getDefaultConfig();
+        $orderResponse = WebPay::createOrder($config)
+                ->addOrderRow(
+                        WebPayItem::orderRow()
+                        ->setAmountExVat(145.00)
+                        ->setVatPercent(24)
+                        ->setQuantity(1)
+                )
+                ->addCustomerDetails(TestUtil::createIndividualCustomer("SE"))
+                ->setCountryCode("SE")
+                ->setCurrency("SEK")
+                ->setOrderDate("2012-12-12")
+                ->useInvoicePayment()->doRequest();
+        $this->assertEquals(1, $orderResponse->accepted);
 
+        // add order rows to
+        $response = WebPayAdmin::addOrderRows($config)
+                ->setOrderId($orderResponse->sveaOrderId)
+                ->setCountryCode('SE')
+                ->addOrderRow(
+                        WebPayItem::orderRow()
+                        ->setVatPercent(24)
+                        ->setAmountIncVat(80.00)
+                        ->setQuantity(1)
+                )
+                ->addInvoiceOrderRows()->doRequest();
+        $this->assertEquals(1, $response->accepted);
+        // first sent as incvat, will cause error and resend:
+            //<ns3:PriceIncludingVat>true</ns3:PriceIncludingVat>
+            //<ns3:PricePerUnit>80</ns3:PricePerUnit>            
+        // resent as exvat:
+            //<ns3:PriceIncludingVat>false</ns3:PriceIncludingVat>
+            //<ns3:PricePerUnit>64.516129032258</ns3:PricePerUnit>
+                
+        // query order and assert row totals
+        $query = WebPayAdmin::queryOrder($config)
+                ->setOrderId($orderResponse->sveaOrderId)
+                ->setCountryCode('SE')
+                ->queryInvoiceOrder()->doRequest();       
+        $this->assertEquals(1, $query->accepted);
+        //print_r( "\n\ntest_add_single_orderRow_with_vat_missmatch1: created w/ 145 ex @24% = 179,80 for " .$orderResponse->sveaOrderId );
+        //print_r( "\ntest_add_single_orderRow_with_vat_missmatch1: added w/ 80 inc @24% = 80" );
+        //print_r( "\ntest_add_single_orderRow_with_vat_missmatch1: total amount 179,80 +80 = 259,80 for ".$orderResponse->sveaOrderId );
+        $this->assertEquals("145.00", $query->numberedOrderRows[0]->amountExVat);   // => 179,80 inc        
+        $this->assertEquals("24", $query->numberedOrderRows[0]->vatPercent); 
+        $this->assertEquals("64.51", $query->numberedOrderRows[1]->amountExVat);    // => 79.99 inc // öresavrundningsfel pga exvat in till Svea
+        $this->assertEquals("24", $query->numberedOrderRows[1]->vatPercent);            
+        //print_r( $orderResponse->sveaOrderId );
+    }    
+    
+   public function test_add_single_orderRow_sent_with_inc_vat_has_correct_amount() {
+        $config = Svea\SveaConfig::getDefaultConfig();
+        $orderResponse = WebPay::createOrder($config)
+                ->addOrderRow(
+                        WebPayItem::orderRow()
+                        ->setAmountIncVat(179.80)
+                        ->setVatPercent(24)
+                        ->setQuantity(1)
+                )
+                ->addCustomerDetails(TestUtil::createIndividualCustomer("SE"))
+                ->setCountryCode("SE")
+                ->setCurrency("SEK")
+                ->setOrderDate("2012-12-12")
+                ->useInvoicePayment()->doRequest();
+        $this->assertEquals(1, $orderResponse->accepted);
+
+        // add order rows to
+        $response = WebPayAdmin::addOrderRows($config)
+                ->setOrderId($orderResponse->sveaOrderId)
+                ->setCountryCode('SE')
+                ->addOrderRow(
+                        WebPayItem::orderRow()
+                        ->setVatPercent(24)
+                        ->setAmountIncVat(80.00)
+                        ->setQuantity(1)
+                )
+                ->addInvoiceOrderRows()->doRequest();
+        $this->assertEquals(1, $response->accepted);
+        
+        // query order and assert row totals
+        $query = WebPayAdmin::queryOrder($config)
+                ->setOrderId($orderResponse->sveaOrderId)
+                ->setCountryCode('SE')
+                ->queryInvoiceOrder()->doRequest();       
+        $this->assertEquals(1, $query->accepted);
+        //print_r( "\n\ntest_add_single_orderRow_with_vat_missmatch1: created w/ 145 ex @24% = 179,80 for " .$orderResponse->sveaOrderId );
+        //print_r( "\ntest_add_single_orderRow_with_vat_missmatch1: added w/ 80 inc @24% = 80" );
+        //print_r( "\ntest_add_single_orderRow_with_vat_missmatch1: total amount 179,80 +80 = 259,80 for ".$orderResponse->sveaOrderId );
+        $this->assertEquals("179.80", $query->numberedOrderRows[0]->amountIncVat);   // => 179,80        
+        $this->assertEquals("24", $query->numberedOrderRows[0]->vatPercent); 
+        $this->assertEquals("80.00", $query->numberedOrderRows[1]->amountIncVat);    // => 80.00 // ok, pga incvat in till Svea hela vägen
+        $this->assertEquals("24", $query->numberedOrderRows[1]->vatPercent);            
+        //print_r( $orderResponse->sveaOrderId );
+    }    
+    
 }
