@@ -62,6 +62,8 @@ class AddOrderRowsRequestIntegrationTest extends PHPUnit_Framework_TestCase{
                     ->useInvoicePayment()
                         ->doRequest();
 
+        //print_r( "\n\ntest_dd_single_orderRow_with_vat_match: created w/ 145 ex @24% = 179,80 for " .$orderResponse->sveaOrderId );
+        
         // add order rows to builderobject
         $response = WebPayAdmin::addOrderRows($config)
                 ->setOrderId($orderResponse->sveaOrderId)
@@ -74,6 +76,10 @@ class AddOrderRowsRequestIntegrationTest extends PHPUnit_Framework_TestCase{
                     )
                 ->addInvoiceOrderRows()
                     ->doRequest();
+        
+        //print_r( "\ntest_dd_single_orderRow_with_vat_match: added w/ 80 ex @24% = +99,2" );
+        //print_r( "\ntest_dd_single_orderRow_with_vat_match: total amount 179,80 +99,2 = 279,00 for ".$orderResponse->sveaOrderId );
+
         $this->assertEquals(1, $response->accepted );
     }
     public function test_add_single_orderRow_with_vat_missmatch1() {
@@ -92,7 +98,9 @@ class AddOrderRowsRequestIntegrationTest extends PHPUnit_Framework_TestCase{
                     ->useInvoicePayment()
                         ->doRequest();
 //        $this->assertEquals(1, $orderResponse->accepted);
-
+        
+        //print_r( "\n\ntest_add_single_orderRow_with_vat_missmatch1: created w/ 145 ex @24% = 179,80 for " .$orderResponse->sveaOrderId );
+        
         // add order rows to
         $response = WebPayAdmin::addOrderRows($config)
                 ->setOrderId($orderResponse->sveaOrderId)
@@ -105,6 +113,10 @@ class AddOrderRowsRequestIntegrationTest extends PHPUnit_Framework_TestCase{
                     )
                 ->addInvoiceOrderRows()
                     ->doRequest();
+        
+        //print_r( "\ntest_add_single_orderRow_with_vat_missmatch1: added w/ 80 inc @24% = 80" );
+        //print_r( "\ntest_add_single_orderRow_with_vat_missmatch1: total amount 179,80 +80 = 259,80 for ".$orderResponse->sveaOrderId );
+        
         $this->assertEquals(1, $response->accepted );
     }
     public function test_add_single_orderRow_with_vat_missmatch2() {
@@ -125,6 +137,8 @@ class AddOrderRowsRequestIntegrationTest extends PHPUnit_Framework_TestCase{
 //                print_r($orderResponse->sveaOrderId);
 //        $this->assertEquals(1, $orderResponse->accepted);
 
+        //print_r( "\n\ntest_add_single_orderRow_with_vat_missmatch2: created w/ 145 inc @24% = 145,00 for " .$orderResponse->sveaOrderId );
+             
         // add order rows to builderobject
 
         $response = WebPayAdmin::addOrderRows($config)
@@ -138,7 +152,10 @@ class AddOrderRowsRequestIntegrationTest extends PHPUnit_Framework_TestCase{
                     )
                 ->addInvoiceOrderRows()
                     ->doRequest();
-
+ 
+        //print_r( "\ntest_add_single_orderRow_with_vat_missmatch2: added w/ 80 ex @24% = +99,2");
+        //print_r( "\ntest_add_single_orderRow_with_vat_missmatch2: total amount 145 +99,2 = 244,2 for ".$orderResponse->sveaOrderId );
+ 
         $this->assertEquals(1, $response->accepted );
     }
 }

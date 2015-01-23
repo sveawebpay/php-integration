@@ -91,19 +91,21 @@ class WebPayAdminIntegrationTest extends PHPUnit_Framework_TestCase {
     
     /// cancelOrderRows()
     // invoice
+    // TODO
     // partpayment
+    // TODO
     // card
+    // TODO
     
     /// creditOrderRows()
     // invoice
-    // card
-    // direct bank
     public function test_creditOrderRows_creditInvoiceOrderRows_returns_CreditOrderRowsRequest() {
         $creditOrderRowsBuilder = WebPayAdmin::creditOrderRows( Svea\SveaConfig::getDefaultConfig() );
         $request = $creditOrderRowsBuilder->creditInvoiceOrderRows();        
         $this->assertInstanceOf( "Svea\AdminService\CreditOrderRowsRequest", $request );
     }    
 
+    // card
     public function test_creditOrderRows_creditCardOrderRows_returns_CreditTransaction() {
         $creditOrderRowsBuilder = WebPayAdmin::creditOrderRows( Svea\SveaConfig::getDefaultConfig() )
             ->setCountryCode("SE")
@@ -115,6 +117,7 @@ class WebPayAdminIntegrationTest extends PHPUnit_Framework_TestCase {
         $this->assertInstanceOf( "Svea\HostedService\CreditTransaction", $request );
     } 
     
+    // direct bank
     public function test_creditOrderRows_creditDirectBankOrderRows_returns_CreditTransaction() {
         $creditOrderRowsBuilder = WebPayAdmin::creditOrderRows( Svea\SveaConfig::getDefaultConfig() )
             ->setCountryCode("SE")
