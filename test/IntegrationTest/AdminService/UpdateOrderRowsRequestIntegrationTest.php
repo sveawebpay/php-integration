@@ -260,6 +260,6 @@ class UpdateOrderRowsRequestIntegrationTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(1, $query2->accepted);                
         $this->assertEquals("123.99", $query2->numberedOrderRows[0]->amountIncVat);   // sent 99.99 ex * 1.24 => sent 123.9876 inc => 123.99 queried
         $this->assertEquals("24", $query2->numberedOrderRows[0]->vatPercent);
-        print_r($orderResponse->sveaOrderId);
+        //print_r($orderResponse->sveaOrderId);
     }   
 }

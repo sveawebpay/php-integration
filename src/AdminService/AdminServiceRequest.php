@@ -119,6 +119,7 @@ abstract class AdminServiceRequest {
     
     protected function getAdminSoapOrderRowsFromBuilderOrderRowsUsingVatFlag($builderOrderRows, $priceIncludingVat) {
         $amount = 0;
+        $orderRows = array();
         foreach ($builderOrderRows as $orderRow) {
             if (isset($orderRow->vatPercent) && isset($orderRow->amountExVat)) {
                 $amount = $priceIncludingVat ? \Svea\WebService\WebServiceRowFormatter::convertExVatToIncVat($orderRow->amountExVat, $orderRow->vatPercent) : $orderRow->amountExVat;
@@ -131,7 +132,7 @@ abstract class AdminServiceRequest {
 
             $orderRows[] = new \SoapVar(
                 new AdminSoap\OrderRow(
-                $orderRow->articleNumber, 
+                    $orderRow->articleNumber, 
                     $orderRow->name . ": " . $orderRow->description, 
                     !isset($orderRow->discountPercent) ? 0 : $orderRow->discountPercent, 
                     $orderRow->quantity, 
@@ -147,6 +148,7 @@ abstract class AdminServiceRequest {
     
     protected function getAdminSoapNumberedOrderRowsFromBuilderOrderRowsUsingVatFlag($builderOrderRows, $priceIncludingVat) {
         $amount = 0;
+        $numberedOrderRows = array();
         foreach ($builderOrderRows as $orderRow) {
             if (isset($orderRow->vatPercent) && isset($orderRow->amountExVat)) {
                 $amount = $priceIncludingVat ? \Svea\WebService\WebServiceRowFormatter::convertExVatToIncVat($orderRow->amountExVat, $orderRow->vatPercent) : $orderRow->amountExVat;
@@ -157,7 +159,7 @@ abstract class AdminServiceRequest {
                 $orderRow->vatPercent = \Svea\WebService\WebServiceRowFormatter::calculateVatPercentFromPriceExVatAndPriceIncVat($orderRow->amountIncVat, $orderRow->amountExVat);
             }
            
-            $updatedOrderRows[] = new \SoapVar(
+            $numberedOrderRows[] = new \SoapVar(
                 new AdminSoap\NumberedOrderRow(
                     $orderRow->articleNumber,
                     $orderRow->name.": ".$orderRow->description,
@@ -174,6 +176,6 @@ abstract class AdminServiceRequest {
                 SOAP_ENC_OBJECT, null, null, 'NumberedOrderRow', "http://schemas.datacontract.org/2004/07/DataObjects.Admin.Service"
             );
         }
-        return $updatedOrderRows;
+        return $numberedOrderRows;
     }
 }
