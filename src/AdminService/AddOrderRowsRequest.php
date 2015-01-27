@@ -26,28 +26,23 @@ class AddOrderRowsRequest extends AdminServiceRequest {
         $this->orderBuilder = $addOrderRowsBuilder;
     }
 
-    /**
-     * populate and return soap request contents using AdminSoap helper classes to get the correct data format
-     * @return \Svea\AdminService\AdminSoap\AddOrderRowsRequest
-     * @throws \Svea\ValidationException
-     */
-    public function prepareRequest() {
-        $this->validateRequest();
+    private function getSoapOrderRowsFromBuilderOrderRowsUsingVatFlag( $builderOrderRows, $vatFlag ) {
         
-        $this->priceIncludingVat = $this->determineVatFlag($this->priceIncludingVat, $this->resendOrderVat);
+        $amount = 0;
+        $priceIncludingVat = $vatFlag;
         
-        foreach( $this->orderBuilder->orderRows as $orderRow ) {
+        foreach( $builderOrderRows as $orderRow ) {
              if (isset($orderRow->vatPercent) && isset($orderRow->amountExVat)) {
-                 $this->amount = $this->priceIncludingVat ? \Svea\WebService\WebServiceRowFormatter::convertExVatToIncVat($orderRow->amountExVat, $orderRow->vatPercent) : $orderRow->amountExVat;
-                 $this->priceIncludingVat = $this->priceIncludingVat ? TRUE : FALSE;
+                 $amount = $priceIncludingVat ? \Svea\WebService\WebServiceRowFormatter::convertExVatToIncVat($orderRow->amountExVat, $orderRow->vatPercent) : $orderRow->amountExVat;
+                 $priceIncludingVat = $priceIncludingVat ? TRUE : FALSE;
 
                // amountIncVat & vatPercent used to specify product price
              }elseif (isset($orderRow->vatPercent) && isset($orderRow->amountIncVat)) {
-                 $this->amount = $this->priceIncludingVat ? $orderRow->amountIncVat : \Svea\WebService\WebServiceRowFormatter::convertIncVatToExVat($orderRow->amountIncVat, $orderRow->vatPercent);
-                 $this->priceIncludingVat = $this->priceIncludingVat ? TRUE : FALSE;
+                 $amount = $priceIncludingVat ? $orderRow->amountIncVat : \Svea\WebService\WebServiceRowFormatter::convertIncVatToExVat($orderRow->amountIncVat, $orderRow->vatPercent);
+                 $priceIncludingVat = $priceIncludingVat ? TRUE : FALSE;
              }else{
-                 $this->amount = $this->priceIncludingVat ? $orderRow->amountIncVat : $orderRow->amountExVat;
-                 $this->priceIncludingVat = $this->priceIncludingVat ? TRUE : FALSE;
+                 $amount = $priceIncludingVat ? $orderRow->amountIncVat : $orderRow->amountExVat;
+                 $priceIncludingVat = $priceIncludingVat ? TRUE : FALSE;
                 $orderRow->vatPercent = \Svea\WebService\WebServiceRowFormatter::calculateVatPercentFromPriceExVatAndPriceIncVat($orderRow->amountIncVat, $orderRow->amountExVat );
              }
             //discountPercent must be 0 or an int
@@ -61,14 +56,31 @@ class AddOrderRowsRequest extends AdminServiceRequest {
                     $orderRow->name.": ".$orderRow->description,
                     $orderRow->discountPercent,
                     $orderRow->quantity,
-                    $this->amount,
+                    $amount,
                     $orderRow->unit,
                     $orderRow->vatPercent,
-                    $this->priceIncludingVat
+                    $priceIncludingVat
                 ),
                 SOAP_ENC_OBJECT, null, null, 'OrderRow', "http://schemas.datacontract.org/2004/07/DataObjects.Webservice"
             );
         }
+        
+        return $orderRows;
+    }
+    
+    
+    
+    /**
+     * populate and return soap request contents using AdminSoap helper classes to get the correct data format
+     * @return \Svea\AdminService\AdminSoap\AddOrderRowsRequest
+     * @throws \Svea\ValidationException
+     */
+    public function prepareRequest() {
+        $this->validateRequest();
+        
+        $this->priceIncludingVat = $this->determineVatFlag($this->priceIncludingVat, $this->resendOrderVat);
+        
+        $orderRows = $this->getSoapOrderRowsFromBuilderOrderRowsUsingVatFlag( $this->orderBuilder->orderRows, $this->priceIncludingVat );        
 
         $soapRequest = new AdminSoap\AddOrderRowsRequest(
             new AdminSoap\Authentication(
