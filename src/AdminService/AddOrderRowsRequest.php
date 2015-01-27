@@ -33,10 +33,9 @@ class AddOrderRowsRequest extends AdminServiceRequest {
      */
     public function prepareRequest() {
         $this->validateRequest();
-        if($this->resendOrderVat === NULL){
-             $this->determineVatFlag();
-        }
-//        $orderRowNumbers = array();
+        
+        $this->priceIncludingVat = $this->determineVatFlag($this->priceIncludingVat, $this->resendOrderVat);
+        
         foreach( $this->orderBuilder->orderRows as $orderRow ) {
              if (isset($orderRow->vatPercent) && isset($orderRow->amountExVat)) {
                  $this->amount = $this->priceIncludingVat ? \Svea\WebService\WebServiceRowFormatter::convertExVatToIncVat($orderRow->amountExVat, $orderRow->vatPercent) : $orderRow->amountExVat;
@@ -133,26 +132,25 @@ class AddOrderRowsRequest extends AdminServiceRequest {
         return $errors;
     }
 
-    private function determineVatFlag() {
-        $exVat = 0;
-        $incVat = 0;
+    /** @returns true iff all order rows are specified using amountIncVat, and the $override parameter was set to null or omitted */
+    private function determineVatFlag( $currentFlag, $override = NULL) {
 
-        //check first if there is a mix of orderrows
-        foreach ($this->orderBuilder->orderRows as $row) {
-            if(isset($row->amountExVat) && isset($row->amountIncVat)){
-                $incVat++;
-            }elseif (isset($row->amountExVat) && isset ($row->vatPercent)) {
-                $exVat++;
-            }else {
-                $incVat++;
+        $newFlag = $currentFlag;
+        if( $override === NULL ) {
+            $exVat = 0;
+            $incVat = 0;
+            foreach ($this->orderBuilder->orderRows as $row) {
+                if(isset($row->amountExVat) && isset($row->amountIncVat)){
+                    $incVat++;
+                }elseif (isset($row->amountExVat) && isset ($row->vatPercent)) {
+                    $exVat++;
+                }else {
+                    $incVat++;
+                }
             }
+            //if at least one of the rows are set as exVat
+           $newFlag = ($exVat >= 1) ? FALSE : TRUE;
         }
-
-          //if atleast one of the rows are set as exVat
-          if ($exVat >= 1) {
-              $this->priceIncludingVat = FALSE;
-          }  else {
-              $this->priceIncludingVat = TRUE;
-          }
+        return $newFlag;
     }
 }
