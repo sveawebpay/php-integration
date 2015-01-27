@@ -43,7 +43,6 @@ class AddOrderRowsRequestIntegrationTest extends PHPUnit_Framework_TestCase {
         $addOrderRowsResponse = $addOrderRowsRequest->doRequest();
 
         $this->assertInstanceOf('Svea\AdminService\AddOrderRowsResponse', $addOrderRowsResponse);
-        print_r( $addOrderRowsRequest);
         $this->assertEquals(1, $addOrderRowsResponse->accepted);
         
     }
@@ -328,6 +327,5 @@ class AddOrderRowsRequestIntegrationTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals("24", $query2->numberedOrderRows[0]->vatPercent);
         $this->assertEquals("123.99", $query2->numberedOrderRows[1]->amountIncVat);   // sent 99.99 ex * 1.24 => sent 123.9876 inc => 123.99 queried
         $this->assertEquals("24", $query2->numberedOrderRows[1]->vatPercent);
-        print_r($orderResponse->sveaOrderId);
     }      
 }

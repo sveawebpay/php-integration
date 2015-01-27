@@ -25,62 +25,17 @@ class AddOrderRowsRequest extends AdminServiceRequest {
         $this->action = "AddOrderRows";
         $this->orderBuilder = $addOrderRowsBuilder;
     }
-
-    private function getSoapOrderRowsFromBuilderOrderRowsUsingVatFlag( $builderOrderRows, $vatFlag ) {
-        
-        $amount = 0;
-        $priceIncludingVat = $vatFlag;
-        
-        foreach( $builderOrderRows as $orderRow ) {
-             if (isset($orderRow->vatPercent) && isset($orderRow->amountExVat)) {
-                 $amount = $priceIncludingVat ? \Svea\WebService\WebServiceRowFormatter::convertExVatToIncVat($orderRow->amountExVat, $orderRow->vatPercent) : $orderRow->amountExVat;
-                 $priceIncludingVat = $priceIncludingVat ? TRUE : FALSE;
-
-               // amountIncVat & vatPercent used to specify product price
-             }elseif (isset($orderRow->vatPercent) && isset($orderRow->amountIncVat)) {
-                 $amount = $priceIncludingVat ? $orderRow->amountIncVat : \Svea\WebService\WebServiceRowFormatter::convertIncVatToExVat($orderRow->amountIncVat, $orderRow->vatPercent);
-                 $priceIncludingVat = $priceIncludingVat ? TRUE : FALSE;
-             }else{
-                 $amount = $priceIncludingVat ? $orderRow->amountIncVat : $orderRow->amountExVat;
-                 $priceIncludingVat = $priceIncludingVat ? TRUE : FALSE;
-                $orderRow->vatPercent = \Svea\WebService\WebServiceRowFormatter::calculateVatPercentFromPriceExVatAndPriceIncVat($orderRow->amountIncVat, $orderRow->amountExVat );
-             }
-            //discountPercent must be 0 or an int
-            if(!isset($orderRow->discountPercent)) {
-                $orderRow->discountPercent = 0;
-            }
-
-            $orderRows[] = new \SoapVar(
-                new AdminSoap\OrderRow(
-                    $orderRow->articleNumber,
-                    $orderRow->name.": ".$orderRow->description,
-                    $orderRow->discountPercent,
-                    $orderRow->quantity,
-                    $amount,
-                    $orderRow->unit,
-                    $orderRow->vatPercent,
-                    $priceIncludingVat
-                ),
-                SOAP_ENC_OBJECT, null, null, 'OrderRow', "http://schemas.datacontract.org/2004/07/DataObjects.Webservice"
-            );
-        }
-        
-        return $orderRows;
-    }
-    
-    
     
     /**
      * populate and return soap request contents using AdminSoap helper classes to get the correct data format
      * @return \Svea\AdminService\AdminSoap\AddOrderRowsRequest
      * @throws \Svea\ValidationException
      */
-    public function prepareRequest() {
+    public function prepareRequest( $resendOrderWithFlippedPriceIncludingVat = false) {
         $this->validateRequest();
         
-        $this->priceIncludingVat = $this->determineVatFlag($this->priceIncludingVat, $this->resendOrderVat);
-        
-        $orderRows = $this->getSoapOrderRowsFromBuilderOrderRowsUsingVatFlag( $this->orderBuilder->orderRows, $this->priceIncludingVat );        
+        $this->priceIncludingVat = $this->determineVatFlag( $this->orderBuilder->orderRows, $resendOrderWithFlippedPriceIncludingVat);        
+        $orderRows = $this->getAdminSoapOrderRowsFromBuilderOrderRowsUsingVatFlag( $this->orderBuilder->orderRows, $this->priceIncludingVat );        
 
         $soapRequest = new AdminSoap\AddOrderRowsRequest(
             new AdminSoap\Authentication(
@@ -142,27 +97,5 @@ class AddOrderRowsRequest extends AdminServiceRequest {
             }
         }
         return $errors;
-    }
-
-    /** @returns true iff all order rows are specified using amountIncVat, and the $override parameter was set to null or omitted */
-    private function determineVatFlag( $currentFlag, $override = NULL) {
-
-        $newFlag = $currentFlag;
-        if( $override === NULL ) {
-            $exVat = 0;
-            $incVat = 0;
-            foreach ($this->orderBuilder->orderRows as $row) {
-                if(isset($row->amountExVat) && isset($row->amountIncVat)){
-                    $incVat++;
-                }elseif (isset($row->amountExVat) && isset ($row->vatPercent)) {
-                    $exVat++;
-                }else {
-                    $incVat++;
-                }
-            }
-            //if at least one of the rows are set as exVat
-           $newFlag = ($exVat >= 1) ? FALSE : TRUE;
-        }
-        return $newFlag;
-    }
+    } 
 }

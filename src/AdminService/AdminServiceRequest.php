@@ -25,33 +25,32 @@ abstract class AdminServiceRequest {
      * Set up the soap client and perform the soap call, with the soap action and prepared request from the relevant subclass
      * @return StdClass  raw response
      */
-    public function doRequest() {
+    public function doRequest( $resendOrderWithFlippedPriceIncludingVat = false ) {
 
         $endpoint = $this->orderBuilder->conf->getEndPoint( \ConfigurationProvider::ADMIN_TYPE );   // get test or prod using child instance data
-        $requestObject = $this->prepareRequest();
-        if(property_exists($requestObject, 'OrderRows')) {
-             $priceIncludingVat =  $requestObject->OrderRows->enc_value->enc_value[0]->enc_value->PriceIncludingVat->enc_value;
-        }  elseif (property_exists($requestObject, 'UpdatedOrderRows')) {
-             $priceIncludingVat =  $requestObject->UpdatedOrderRows->enc_value->enc_value[0]->enc_value->PriceIncludingVat->enc_value;
-        } else {
-            $priceIncludingVat = $this->priceIncludingVat;
-        }
+        $requestObject = $this->prepareRequest( $resendOrderWithFlippedPriceIncludingVat );
 
         $soapClient = new AdminSoap\SoapClient( $endpoint );
         $soapResponse = $soapClient->doSoapCall($this->action, $requestObject );
         $sveaResponse = new \SveaResponse( $soapResponse, null, null, $this->action );
         $response = $sveaResponse->getResponse();
-        if ($response->resultcode == "50036") {
-            $this->resendOrderVat = TRUE;
-            $this->priceIncludingVat = $priceIncludingVat ? FALSE : TRUE;
-            $requestObject = $this->prepareRequest();
-            $soapClient = new AdminSoap\SoapClient( $endpoint );
-            $soapResponse = $soapClient->doSoapCall($this->action, $requestObject );
-            $sveaResponse = new \SveaResponse( $soapResponse, null, null, $this->action );
+        
+        // iff error 50036, flip priceIncludingVat and resend enforcing flipped value
+        if ($response->resultcode == "50036") {            
+            if(property_exists($requestObject, 'OrderRows')) {
+                 $priceIncludingVat =  $requestObject->OrderRows->enc_value->enc_value[0]->enc_value->PriceIncludingVat->enc_value;
+            }  elseif (property_exists($requestObject, 'UpdatedOrderRows')) {
+                 $priceIncludingVat =  $requestObject->UpdatedOrderRows->enc_value->enc_value[0]->enc_value->PriceIncludingVat->enc_value;
+            } else {
+                $priceIncludingVat = $this->priceIncludingVat;
+            }
+            $this->priceIncludingVat = !$priceIncludingVat;
 
+            return $this->doRequest( true );
         }
-
-        return $sveaResponse->getResponse();
+        else {
+            return $sveaResponse->getResponse();
+        }
     }
 
     /**
@@ -96,5 +95,85 @@ abstract class AdminServiceRequest {
             default:
                 return $orderTypeAsConst;
         }
+    }
+    
+    /** @returns true iff all order rows are specified using amountIncVat, and the $flipPriceIncludingVat flag is omitted or false */
+    protected function determineVatFlag( $orderRows, $flipPriceIncludingVat = false) {
+        
+        $exVat = 0;
+        $incVat = 0;
+        foreach ($orderRows as $row) {
+            if(isset($row->amountExVat) && isset($row->amountIncVat)){
+                $incVat++;
+            }elseif (isset($row->amountExVat) && isset ($row->vatPercent)) {
+                $exVat++;
+            }else {
+                $incVat++;
+            }
+        }
+        //if at least one of the rows are set as exVat, set priceIncludingVat flag to false
+        $priceIncludingVat = ($exVat >= 1) ? FALSE : TRUE;
+
+        return $flipPriceIncludingVat ? !$priceIncludingVat : $priceIncludingVat;                
+    }
+    
+    protected function getAdminSoapOrderRowsFromBuilderOrderRowsUsingVatFlag($builderOrderRows, $priceIncludingVat) {
+        $amount = 0;
+        foreach ($builderOrderRows as $orderRow) {
+            if (isset($orderRow->vatPercent) && isset($orderRow->amountExVat)) {
+                $amount = $priceIncludingVat ? \Svea\WebService\WebServiceRowFormatter::convertExVatToIncVat($orderRow->amountExVat, $orderRow->vatPercent) : $orderRow->amountExVat;
+            } elseif (isset($orderRow->vatPercent) && isset($orderRow->amountIncVat)) {
+                $amount = $priceIncludingVat ? $orderRow->amountIncVat : \Svea\WebService\WebServiceRowFormatter::convertIncVatToExVat($orderRow->amountIncVat, $orderRow->vatPercent);
+            } else {
+                $amount = $priceIncludingVat ? $orderRow->amountIncVat : $orderRow->amountExVat;
+                $orderRow->vatPercent = \Svea\WebService\WebServiceRowFormatter::calculateVatPercentFromPriceExVatAndPriceIncVat($orderRow->amountIncVat, $orderRow->amountExVat);
+            }
+
+            $orderRows[] = new \SoapVar(
+                new AdminSoap\OrderRow(
+                $orderRow->articleNumber, 
+                    $orderRow->name . ": " . $orderRow->description, 
+                    !isset($orderRow->discountPercent) ? 0 : $orderRow->discountPercent, 
+                    $orderRow->quantity, 
+                    $amount, 
+                    $orderRow->unit, 
+                    $orderRow->vatPercent, 
+                    $priceIncludingVat
+                ), SOAP_ENC_OBJECT, null, null, 'OrderRow', "http://schemas.datacontract.org/2004/07/DataObjects.Webservice"
+            );
+        }
+        return $orderRows;
+    }    
+    
+    protected function getAdminSoapNumberedOrderRowsFromBuilderOrderRowsUsingVatFlag($builderOrderRows, $priceIncludingVat) {
+        $amount = 0;
+        foreach ($builderOrderRows as $orderRow) {
+            if (isset($orderRow->vatPercent) && isset($orderRow->amountExVat)) {
+                $amount = $priceIncludingVat ? \Svea\WebService\WebServiceRowFormatter::convertExVatToIncVat($orderRow->amountExVat, $orderRow->vatPercent) : $orderRow->amountExVat;
+            } elseif (isset($orderRow->vatPercent) && isset($orderRow->amountIncVat)) {
+                $amount = $priceIncludingVat ? $orderRow->amountIncVat : \Svea\WebService\WebServiceRowFormatter::convertIncVatToExVat($orderRow->amountIncVat, $orderRow->vatPercent);
+            } else {
+                $amount = $priceIncludingVat ? $orderRow->amountIncVat : $orderRow->amountExVat;
+                $orderRow->vatPercent = \Svea\WebService\WebServiceRowFormatter::calculateVatPercentFromPriceExVatAndPriceIncVat($orderRow->amountIncVat, $orderRow->amountExVat);
+            }
+           
+            $updatedOrderRows[] = new \SoapVar(
+                new AdminSoap\NumberedOrderRow(
+                    $orderRow->articleNumber,
+                    $orderRow->name.": ".$orderRow->description,
+                    !isset($orderRow->discountPercent) ? 0 : $orderRow->discountPercent,
+                    $orderRow->quantity,
+                    $amount,
+                    $orderRow->unit,
+                    $orderRow->vatPercent,
+                    $orderRow->creditInvoiceId,
+                    $orderRow->invoiceId,
+                    $orderRow->rowNumber,
+                    $priceIncludingVat
+                ),
+                SOAP_ENC_OBJECT, null, null, 'NumberedOrderRow', "http://schemas.datacontract.org/2004/07/DataObjects.Admin.Service"
+            );
+        }
+        return $updatedOrderRows;
     }
 }
