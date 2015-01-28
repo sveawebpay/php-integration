@@ -10,7 +10,7 @@ require_once $root . '/../../../TestUtil.php';
  */
 class CardPaymentIntegrationTest extends \PHPUnit_Framework_TestCase {
 
-    public function test_doRequest_to_paypage_get_status_302_found() {
+    public function test_createOrder_usePayPage_redirects_to_paypage() {
         $config = Svea\SveaConfig::getDefaultConfig();
         $rowFactory = new TestUtil();
         $form = WebPay::createOrder($config)
@@ -24,7 +24,7 @@ class CardPaymentIntegrationTest extends \PHPUnit_Framework_TestCase {
                         ->setDescription("RelativeDiscount")
                 )
                 ->setCountryCode("SE")
-                ->setClientOrderNumber(rand(0, 1000))
+                ->setClientOrderNumber("foobar".date('c'))
                 ->setOrderDate("2012-12-12")
                 ->setCurrency("SEK")
                 ->usePayPage() // PayPageObject
@@ -44,95 +44,19 @@ class CardPaymentIntegrationTest extends \PHPUnit_Framework_TestCase {
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_POST, count($fields));
         curl_setopt($ch, CURLOPT_POSTFIELDS, $fieldsString);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        //force curl to trust https
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-        //returns a html page with redirecting to bank...
-        curl_exec($ch);
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);     // follow redirects
+        curl_setopt($ch, CURLOPT_HEADER, true);             // include headers in transfer history
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);        // return transfer history
+        $cr = curl_exec($ch);
+        
+        $info = curl_getinfo($ch);                        
 
-        // Check if any error occurred
-        if (!curl_errno($ch)) {
-            $info = curl_getinfo($ch);
-            $payPage = "";
-            $response = $info['http_code'];
-
-            if (isset($info['redirect_url'])) {
-                $payPage = $info['redirect_url'];
-            }
-        }
-        curl_close($ch);
-
-        if ($response) {
-            $status = $response;
-            $redirect = substr($payPage, 41, 7);
-        } else {
-            $status = 'No answer';
-        }
-
-        $this->assertEquals(302, $status); //Curl response code "Found"
-        $this->assertEquals("payPage", $redirect);
-    }
-    
-    public function test_accepts_relativeDiscount_as_float() {
-        $config = Svea\SveaConfig::getDefaultConfig();
-        $rowFactory = new TestUtil();
-        $form = WebPay::createOrder($config)
-                ->addOrderRow(TestUtil::createOrderRow())
-                ->run($rowFactory->buildShippingFee())
-                ->addDiscount(WebPayItem::relativeDiscount()
-                        ->setDiscountId("1")
-                        ->setDiscountPercent(50.5)
-                        ->setUnit("st")
-                        ->setName('Relative')
-                        ->setDescription("RelativeDiscount")
-                )
-                ->setCountryCode("SE")
-                ->setClientOrderNumber(rand(0, 1000))
-                ->setOrderDate("2012-12-12")
-                ->setCurrency("SEK")
-                ->usePayPage() // PayPageObject
-                ->setReturnUrl("http://myurl.se")
-                ->getPaymentForm();
-        $url = "https://test.sveaekonomi.se/webpay/payment";
-
-        /** CURL  **/
-        $fields = array('merchantid' => urlencode($form->merchantid), 'message' => urlencode($form->xmlMessageBase64), 'mac' => urlencode($form->mac));
-        $fieldsString = "";
-        foreach ($fields as $key => $value) {
-            $fieldsString .= $key.'='.$value.'&';
-        }
-        rtrim($fieldsString, '&');
-
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_POST, count($fields));
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $fieldsString);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        //force curl to trust https
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-        //returns a html page with redirecting to bank...
-        curl_exec($ch);
-
-        // Check if any error occurred
-        if (!curl_errno($ch)) {
-            $info = curl_getinfo($ch);
-            $payPage = "";
-            $response = $info['http_code'];
-
-            if (isset($info['redirect_url'])) {
-                $payPage = $info['redirect_url'];
-            }
-        }
-        curl_close($ch);
-
-        if ($response) {
-            $status = $response;
-            $redirect = substr($payPage, 41, 7);
-        } else {
-            $status = 'No answer';
-        }
-
-        $this->assertEquals(302, $status); //Curl response code "Found"
-        $this->assertEquals("payPage", $redirect);
+        curl_close($ch);      
+        
+        //print_r( $cr);        
+        $this->assertEquals(200, $info['http_code']);
+        $this->assertEquals(2, $info['redirect_count']);
+        $this->assertEquals("https://test.sveaekonomi.se/webpay/public/static/paypage.html", $info['url']);
     }
 }

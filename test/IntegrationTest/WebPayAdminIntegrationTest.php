@@ -15,7 +15,49 @@ class WebPayAdminIntegrationTest extends PHPUnit_Framework_TestCase {
 
     /// queryOrder()
     // invoice
-    // partpayment
+    public function test_queryOrder_queryInvoiceOrder_is_accepted() {
+        $config = Svea\SveaConfig::getDefaultConfig();
+        $orderResponse = WebPay::createOrder($config)
+                ->addOrderRow(
+                        WebPayItem::orderRow()
+                        ->setAmountExVat(99.99) // => 123.9876 inc
+                        ->setVatPercent(24)
+                        ->setQuantity(1)
+                )
+                ->addCustomerDetails(TestUtil::createIndividualCustomer("SE"))
+                ->setCountryCode("SE")
+                ->setOrderDate("2012-12-12")
+                ->useInvoicePayment()->doRequest();
+        $this->assertEquals(1, $orderResponse->accepted);        
+        
+        $queryResponse = WebPayAdmin::queryOrder( Svea\SveaConfig::getDefaultConfig() )
+                ->setOrderId($orderResponse->sveaOrderId)
+                ->setCountryCode('SE')
+                ->queryInvoiceOrder()->doRequest();
+        $this->assertEquals(1, $queryResponse->accepted);  
+    }    
+    // paymentplan
+    public function test_queryOrder_queryPaymentPlanOrder_is_accepted() {
+        $config = Svea\SveaConfig::getDefaultConfig();
+        $orderResponse = WebPay::createOrder($config)
+                ->addOrderRow(
+                        WebPayItem::orderRow()
+                        ->setAmountExVat(999.9) // => 12398.76 inc
+                        ->setVatPercent(24)
+                        ->setQuantity(1)
+                )
+                ->addCustomerDetails(TestUtil::createIndividualCustomer("SE"))
+                ->setCountryCode("SE")
+                ->setOrderDate("2012-12-12")
+                ->usePaymentPlanPayment(TestUtil::getGetPaymentPlanParamsForTesting())->doRequest();
+        $this->assertEquals(1, $orderResponse->accepted);        
+        
+        $queryResponse = WebPayAdmin::queryOrder( Svea\SveaConfig::getDefaultConfig() )
+                ->setOrderId($orderResponse->sveaOrderId)
+                ->setCountryCode('SE')
+                ->queryPaymentPlanOrder()->doRequest();
+        $this->assertEquals(1, $queryResponse->accepted);  
+    }     
     // card
     function test_queryOrder_queryCardOrder() {
         // Set the below to match the transaction, then run the test.
@@ -35,8 +77,6 @@ class WebPayAdminIntegrationTest extends PHPUnit_Framework_TestCase {
             ->setCountryCode("SE")
         ;
         $response = $request->queryCardOrder()->doRequest();            
-//        echo "foo: ";
-//        var_dump($response); die;
         
         $this->assertEquals( 1, $response->accepted );    
         
@@ -63,47 +103,25 @@ class WebPayAdminIntegrationTest extends PHPUnit_Framework_TestCase {
     }
     
     // direct bank
-    public function test_queryOrder_queryInvoiceOrder_returns_GetOrdersRequest() {
-        $queryOrder = WebPayAdmin::queryOrder( Svea\SveaConfig::getDefaultConfig() );
-        $request = $queryOrder->queryInvoiceOrder();        
-        $this->assertInstanceOf( "Svea\AdminService\GetOrdersRequest", $request );
-        $this->assertEquals(\ConfigurationProvider::INVOICE_TYPE, $request->orderBuilder->orderType); 
-    }    
-    
-    public function test_queryOrder_queryPaymentPlanOrder_returns_GetOrdersRequest() {
-        $queryOrder = WebPayAdmin::queryOrder( Svea\SveaConfig::getDefaultConfig() );
-        $request = $queryOrder->queryPaymentPlanOrder();        
-        $this->assertInstanceOf( "Svea\AdminService\GetOrdersRequest", $request );
-        $this->assertEquals(\ConfigurationProvider::PAYMENTPLAN_TYPE, $request->orderBuilder->orderType); 
-    }       
-
-    public function test_queryOrder_queryCardOrder_returns_QueryTransaction() {
-        $queryOrder = WebPayAdmin::queryOrder( Svea\SveaConfig::getDefaultConfig() );
-        $request = $queryOrder->queryCardOrder();        
-        $this->assertInstanceOf( "Svea\HostedService\QueryTransaction", $request );
-    } 
-
-    public function test_queryOrder_queryDirectBankOrder_returns_QueryTransaction() {
-        $queryOrder = WebPayAdmin::queryOrder( Svea\SveaConfig::getDefaultConfig() );
-        $request = $queryOrder->queryDirectBankOrder();
-        $this->assertInstanceOf( "Svea\HostedService\QueryTransaction", $request );
-    }     
+    // TODO
     
     /// cancelOrderRows()
     // invoice
+    // TODO
     // partpayment
+    // TODO
     // card
+    // TODO
     
     /// creditOrderRows()
     // invoice
-    // card
-    // direct bank
     public function test_creditOrderRows_creditInvoiceOrderRows_returns_CreditOrderRowsRequest() {
         $creditOrderRowsBuilder = WebPayAdmin::creditOrderRows( Svea\SveaConfig::getDefaultConfig() );
         $request = $creditOrderRowsBuilder->creditInvoiceOrderRows();        
         $this->assertInstanceOf( "Svea\AdminService\CreditOrderRowsRequest", $request );
     }    
 
+    // card
     public function test_creditOrderRows_creditCardOrderRows_returns_CreditTransaction() {
         $creditOrderRowsBuilder = WebPayAdmin::creditOrderRows( Svea\SveaConfig::getDefaultConfig() )
             ->setCountryCode("SE")
@@ -115,6 +133,7 @@ class WebPayAdminIntegrationTest extends PHPUnit_Framework_TestCase {
         $this->assertInstanceOf( "Svea\HostedService\CreditTransaction", $request );
     } 
     
+    // direct bank
     public function test_creditOrderRows_creditDirectBankOrderRows_returns_CreditTransaction() {
         $creditOrderRowsBuilder = WebPayAdmin::creditOrderRows( Svea\SveaConfig::getDefaultConfig() )
             ->setCountryCode("SE")
@@ -143,13 +162,12 @@ class WebPayAdminIntegrationTest extends PHPUnit_Framework_TestCase {
     
     /// updateOrderRows()
     // invoice
-    // paymentplan
     public function test_updateOrderRows_updateInvoiceOrderRows_returns_UpdateOrderRowsRequest() {
         $updateOrderRowsBuilder = WebPayAdmin::updateOrderRows( Svea\SveaConfig::getDefaultConfig() );
         $request = $updateOrderRowsBuilder->updateInvoiceOrderRows();        
         $this->assertInstanceOf( "Svea\AdminService\UpdateOrderRowsRequest", $request );
     }
-
+    // paymentplan
     public function test_updateOrderRows_updatePaymentPlanOrderRows_returns_UpdateOrderRowsRequest() {
         $updateOrderRowsBuilder = WebPayAdmin::updateOrderRows( Svea\SveaConfig::getDefaultConfig() );
         $request = $updateOrderRowsBuilder->updatePaymentPlanOrderRows();        
