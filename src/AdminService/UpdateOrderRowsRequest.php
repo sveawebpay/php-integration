@@ -26,49 +26,12 @@ class UpdateOrderRowsRequest extends AdminServiceRequest {
      * populate and return soap request contents using AdminSoap helper classes to get the correct data format
      * @return Svea\AdminSoap\UpdateOrderRowsRequest
      * @throws Svea\ValidationException
-     */
-    public function prepareRequest() {
-        $this->validateRequest();
-        if($this->resendOrderVat === NULL){
-             $this->determineVatFlag();
-        }
-        $updatedOrderRows = array();
-        foreach( $this->orderBuilder->numberedOrderRows as $orderRow ) {
-             if (isset($orderRow->vatPercent) && isset($orderRow->amountExVat)) {
-                $this->amount = $this->priceIncludingVat ? \Svea\WebService\WebServiceRowFormatter::convertExVatToIncVat($orderRow->amountExVat, $orderRow->vatPercent) : $orderRow->amountExVat;
-                $this->priceIncludingVat = $this->priceIncludingVat ? TRUE : FALSE;
-            // amountIncVat & vatPercent used to specify product price
-             }elseif (isset($orderRow->vatPercent) && isset($orderRow->amountIncVat)) {
-                 $this->amount = $this->priceIncludingVat ? $orderRow->amountIncVat : \Svea\WebService\WebServiceRowFormatter::convertIncVatToExVat($orderRow->amountIncVat, $orderRow->vatPercent);
-                 $this->priceIncludingVat = $this->priceIncludingVat ? TRUE : FALSE;
-             }else{
-                 $this->amount = $this->priceIncludingVat ? $orderRow->amountIncVat : $orderRow->amountExVat;
-                 $this->priceIncludingVat = $this->priceIncludingVat ? TRUE : FALSE;
-                $orderRow->vatPercent = \Svea\WebService\WebServiceRowFormatter::calculateVatPercentFromPriceExVatAndPriceIncVat($orderRow->amountIncVat, $orderRow->amountExVat );
-             }
-
-            //discountPercent must be 0 or an int
-            if(!isset( $orderRow->discountPercent)) {
-                 $orderRow->discountPercent = 0;
-            }
-
-            $updatedOrderRows[] = new \SoapVar(
-                new AdminSoap\NumberedOrderRow(
-                    $orderRow->articleNumber,
-                    $orderRow->name.": ".$orderRow->description,
-                    $orderRow->discountPercent,
-                    $orderRow->quantity,
-                     $this->amount,
-                    $orderRow->unit,
-                    $orderRow->vatPercent,
-                    $orderRow->creditInvoiceId,
-                    $orderRow->invoiceId,
-                    $orderRow->rowNumber,
-                    $this->priceIncludingVat
-                ),
-                SOAP_ENC_OBJECT, null, null, 'NumberedOrderRow', "http://schemas.datacontract.org/2004/07/DataObjects.Admin.Service"
-            );
-        }
+     */    
+    public function prepareRequest( $resendOrderWithFlippedPriceIncludingVat = false) {
+        $this->validateRequest();        
+        $this->priceIncludingVat = $this->determineVatFlag( $this->orderBuilder->numberedOrderRows, $resendOrderWithFlippedPriceIncludingVat);
+        $updatedOrderRows = 
+            $this->getAdminSoapNumberedOrderRowsFromBuilderOrderRowsUsingVatFlag( $this->orderBuilder->numberedOrderRows, $this->priceIncludingVat );
 
         $soapRequest = new AdminSoap\UpdateOrderRowsRequest(
             new AdminSoap\Authentication(
@@ -138,28 +101,5 @@ class UpdateOrderRowsRequest extends AdminServiceRequest {
             }
         }
         return $errors;
-    }
-
-        private function determineVatFlag() {
-        $exVat = 0;
-        $incVat = 0;
-
-        //check first if there is a mix of orderrows
-        foreach( $this->orderBuilder->numberedOrderRows as $row ) {
-            if(isset($row->amountExVat) && isset($row->amountIncVat)){
-                $incVat++;
-            }elseif (isset($row->amountExVat) && isset ($row->vatPercent)) {
-                $exVat++;
-            }else {
-                $incVat++;
-            }
-        }
-
-          //if atleast one of the rows are set as exVat
-          if ($exVat >= 1) {
-              $this->priceIncludingVat = FALSE;
-          }  else {
-              $this->priceIncludingVat = TRUE;
-          }
     }
 }

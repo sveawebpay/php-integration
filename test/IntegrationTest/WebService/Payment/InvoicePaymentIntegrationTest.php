@@ -851,7 +851,6 @@ class InvoicePaymentIntegrationTest extends PHPUnit_Framework_TestCase {
 
     }
 
-    
     // Test that test suite returns complete address in each country
     // SE
     // IndividualCustomer validation
@@ -1272,4 +1271,84 @@ class InvoicePaymentIntegrationTest extends PHPUnit_Framework_TestCase {
         
     }    
     
+    function test_orderRow_discountPercent_not_used() {
+        $config = Svea\SveaConfig::getDefaultConfig();
+        $orderResponse = WebPay::createOrder($config)
+                ->addOrderRow(
+                        WebPayItem::orderRow()
+                        ->setAmountExVat(100.00)
+                        ->setVatPercent(25)
+                        ->setQuantity(1)
+                )
+                ->addCustomerDetails(TestUtil::createIndividualCustomer("SE"))
+                ->setCountryCode("SE")
+                ->setOrderDate("2012-12-12")
+                ->useInvoicePayment()->doRequest();
+        $this->assertEquals(1, $orderResponse->accepted);
+        $this->assertEquals("125.00", $orderResponse->amount);
+//        print_r($orderResponse);
+
+        $query = WebPayAdmin::queryOrder($config)
+                ->setCountryCode('SE')
+                ->setOrderId($orderResponse->sveaOrderId)
+                ->queryInvoiceOrder()->doRequest();
+        $this->assertEquals(1, $query->accepted);
+        $this->assertEquals(100.00, $query->numberedOrderRows[0]->amountExVat);
+        $this->assertEquals(25.00, $query->numberedOrderRows[0]->vatPercent);
+        $this->assertEquals(0.00, $query->numberedOrderRows[0]->discountPercent);    
+    }
+
+    function test_orderRow_discountPercent_50percent() {
+        $config = Svea\SveaConfig::getDefaultConfig();
+        $orderResponse = WebPay::createOrder($config)
+                ->addOrderRow(
+                        WebPayItem::orderRow()
+                        ->setAmountExVat(100.00)
+                        ->setVatPercent(25)
+                        ->setQuantity(1)
+                        ->setDiscountPercent(50)
+                )
+                ->addCustomerDetails(TestUtil::createIndividualCustomer("SE"))
+                ->setCountryCode("SE")
+                ->setOrderDate("2012-12-12")
+                ->useInvoicePayment()->doRequest();
+        $this->assertEquals(1, $orderResponse->accepted);
+        $this->assertEquals("62.50", $orderResponse->amount);
+
+        $query = WebPayAdmin::queryOrder($config)
+                ->setCountryCode('SE')
+                ->setOrderId($orderResponse->sveaOrderId)
+                ->queryInvoiceOrder()->doRequest();
+        $this->assertEquals(1, $query->accepted);
+        $this->assertEquals(100.00, $query->numberedOrderRows[0]->amountExVat);
+        $this->assertEquals(25.00, $query->numberedOrderRows[0]->vatPercent);
+        $this->assertEquals(50.00, $query->numberedOrderRows[0]->discountPercent);    
+    }
+    
+    function test_orderRow_discountPercent_50_percent_order_sent_as_incvat() {
+        $config = Svea\SveaConfig::getDefaultConfig();
+        $orderResponse = WebPay::createOrder($config)
+                ->addOrderRow(
+                        WebPayItem::orderRow()
+                        ->setAmountIncVat(125.00)
+                        ->setVatPercent(25)
+                        ->setQuantity(1)
+                        ->setDiscountPercent(50)
+                )
+                ->addCustomerDetails(TestUtil::createIndividualCustomer("SE"))
+                ->setCountryCode("SE")
+                ->setOrderDate("2012-12-12")
+                ->useInvoicePayment()->doRequest();
+        $this->assertEquals(1, $orderResponse->accepted);
+        $this->assertEquals("62.50", $orderResponse->amount);   // this is where 
+
+        $query = WebPayAdmin::queryOrder($config)
+                ->setCountryCode('SE')
+                ->setOrderId($orderResponse->sveaOrderId)
+                ->queryInvoiceOrder()->doRequest();
+        $this->assertEquals(1, $query->accepted);
+        $this->assertEquals(125.00, $query->numberedOrderRows[0]->amountIncVat);
+        $this->assertEquals(25.00, $query->numberedOrderRows[0]->vatPercent);    
+        $this->assertEquals(50.00, $query->numberedOrderRows[0]->discountPercent);    
+    }
 }
