@@ -43,9 +43,9 @@ class QueryTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
     function test_manual_parsing_of_queried_payment_order_works() {
 
         // Stop here and mark this test as incomplete.
-        $this->markTestIncomplete(
-            'test_manual_parsing_of_queried_payment_order_works'
-        );
+//        $this->markTestIncomplete(
+//            'test_manual_parsing_of_queried_payment_order_works'
+//        );
 
         // 1. go to https://test.sveaekonomi.se/webpay-admin/admin/start.xhtml 
         // 2. go to verktyg -> betalning

@@ -35,36 +35,11 @@ class CreditOrderRowsRequest extends AdminServiceRequest {
      * @return Svea\AdminSoap\CreditOrderRowsRequest
      * @throws Svea\ValidationException
      */
-    public function prepareRequest() {
-                   
-        $this->validateRequest();
-        
-        foreach( $this->orderBuilder->creditOrderRows as $orderRow ) {
-
-            // handle different ways to spec an orderrow            
-            // inc + ex
-            if( !isset($orderRow->vatPercent) && (isset($orderRow->amountExVat) && isset($orderRow->amountIncVat)) ) {
-                $orderRow->vatPercent = \Svea\WebService\WebServiceRowFormatter::calculateVatPercentFromPriceExVatAndPriceIncVat($orderRow->amountIncVat, $orderRow->amountExVat );
-            }
-            // % + inc
-            elseif( (isset($orderRow->vatPercent) && isset($orderRow->amountIncVat)) && !isset($orderRow->amountExVat) ) {
-                $orderRow->amountExVat = \Svea\WebService\WebServiceRowFormatter::convertIncVatToExVat($orderRow->amountIncVat, $orderRow->vatPercent);
-            }
-            // % + ex, no need to do anything
-
-            $this->orderRows[] = new \SoapVar( 
-                new AdminSoap\OrderRow(
-                    $orderRow->articleNumber, 
-                    $orderRow->name.": ".$orderRow->description,
-                    $orderRow->discountPercent,
-                    $orderRow->quantity, 
-                    $orderRow->amountExVat, 
-                    $orderRow->unit, 
-                    $orderRow->vatPercent
-                ),
-                SOAP_ENC_OBJECT, null, null, 'OrderRow', "http://schemas.datacontract.org/2004/07/DataObjects.Webservice" 
-            );
-        }
+    public function prepareRequest( $resendOrderWithFlippedPriceIncludingVat = false) {
+        $this->validateRequest();        
+        $this->priceIncludingVat = $this->determineVatFlag( $this->orderBuilder->creditOrderRows, $resendOrderWithFlippedPriceIncludingVat);
+        $this->orderRows = 
+            $this->getAdminSoapOrderRowsFromBuilderOrderRowsUsingVatFlag( $this->orderBuilder->creditOrderRows, $this->priceIncludingVat );
         
         foreach( $this->orderBuilder->rowsToCredit as $rowToCredit ) {       
             $this->rowNumbers[] = new \SoapVar($rowToCredit, XSD_LONG, null,null, 'long', "http://schemas.microsoft.com/2003/10/Serialization/Arrays");

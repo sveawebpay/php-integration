@@ -274,7 +274,7 @@ class WebPayAdmin {
      * The WebPayAdmin::deliverOrderRows entrypoint method is used to deliver individual order rows. Supports invoice and card orders. 
      * (To partially deliver PaymentPlan or Direct Bank orders, please contact Svea.)
      * 
-     * For Invoice and Payment Plan orders, the order row status is updated at Svea following each successful request.
+     * For Invoice orders, the order row status is updated at Svea following each successful request.
      * 
      * For card orders, an order can only be delivered once, and any non-delivered order rows will be cancelled (i.e. the order amount 
      * will be lowered by the sum of the non-delivered order rows). A delivered card order has status CONFIRMED at Svea.
@@ -306,8 +306,8 @@ class WebPayAdmin {
      * ...
      * 
      * @see \Svea\DeliverOrderRowsBuilder \Svea\DeliverOrderRowsBuilder
-     * @see \Svea\HostedService\ConfirmTransactionResponse \Svea\HostedService\ConfirmTransactionResponse
      * @see \Svea\AdminService\DeliverOrderRowsResponse \Svea\AdminService\DeliverOrderRowsResponse
+     * @see \Svea\HostedService\ConfirmTransactionResponse \Svea\HostedService\ConfirmTransactionResponse
      *
      * @param ConfigurationProvider $config  instance implementing ConfigurationProvider
      * @return Svea\DeliverOrderRowsBuilder
