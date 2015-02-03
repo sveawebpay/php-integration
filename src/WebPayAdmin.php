@@ -241,7 +241,7 @@ class WebPayAdmin {
     }
 
     /**
-     * WebPayAdmin::updateOrderRows() method is used to update individual order rows in non-delivered invoice and 
+     * The WebPayAdmin::updateOrderRows() method is used to update individual order rows in non-delivered invoice and 
      * payment plan orders. Supports invoice and payment plan orders.
      *
      * The order row status of the order is updated at Svea to reflect the updated order rows. If the updated rows' 
@@ -263,9 +263,9 @@ class WebPayAdmin {
      * 
      * ...
      *     $request = WebPayAdmin.updateOrderRows($config)
-     *         ->setOrderId()                  // required
-     *         ->setCountryCode()              // required
-     *         ->updateOrderRow()              // required, NumberedOrderRow matching row index of original order row
+     *         ->setOrderId()               // required
+     *         ->setCountryCode()           // required
+     *         ->updateOrderRow()           // required, NumberedOrderRowBuilder w/RowNumber attribute matching row index of original order row
      *     ;
      *     // then select the corresponding request class and send request
      *     $response = $request->updateInvoiceOrderRows()->doRequest();     // returns UpdateOrderRowsResponse
