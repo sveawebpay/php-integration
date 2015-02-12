@@ -10,6 +10,8 @@ require_once $root . '/../TestUtil.php';
  */
 class WebPayIntegrationTest extends PHPUnit_Framework_TestCase {
 
+    // TODO move to unit tests, replace with actual integration tests
+    
     /// WebPay::createOrder()
     // web service eu: invoice
     public function test_createOrder_useInvoicePayment_returns_InvoicePayment() {
@@ -112,8 +114,147 @@ class WebPayIntegrationTest extends PHPUnit_Framework_TestCase {
     }
     
     // paymentplan
-    // TODO actual integration test
+    public function test_deliverOrder_deliverPaymentPlanOrder_without_orderrows_delivers_order_in_full() {      
+        // create order
+        $config = Svea\SveaConfig::getDefaultConfig();
+        $campaigncode = TestUtil::getGetPaymentPlanParamsForTesting();
+        $order = WebPay::createOrder($config)
+            ->addOrderRow(WebPayItem::orderRow()
+                    ->setArticleNumber("1")
+                    ->setQuantity(2)
+                    ->setAmountExVat(1000.00)
+                    ->setDescription("Specification")
+                    ->setName('Prod')
+                    ->setUnit("st")
+                    ->setVatPercent(25)
+                    ->setDiscountPercent(0)
+            )
+            ->addCustomerDetails(WebPayItem::individualCustomer()
+                    ->setNationalIdNumber(194605092222)
+                    ->setInitials("SB")
+                    ->setBirthDate(1923, 12, 12)
+                    ->setName("Tess", "Testson")
+                    ->setEmail("test@svea.com")
+                    ->setPhoneNumber(999999)
+                    ->setIpAddress("123.123.123")
+                    ->setStreetAddress("Gatan", 23)
+                    ->setCoAddress("c/o Eriksson")
+                    ->setZipCode(9999)
+                    ->setLocality("Stan")
+            )
+            ->setCountryCode("SE")
+            ->setCustomerReference("33")
+            ->setClientOrderNumber("nr26")
+            ->setOrderDate("2012-12-12")
+            ->setCurrency("SEK")
+            ->usePaymentPlanPayment($campaigncode)// returnerar InvoiceOrder object
+            ->doRequest();
 
+        //print_r($order);        
+        $this->assertEquals(1, $order->accepted);        
+
+        // deliver order
+        $orderId = $order->sveaOrderId;
+        $orderBuilder = WebPay::deliverOrder($config);
+        $deliverResponse = $orderBuilder
+            //->addOrderRow(WebPayItem::orderRow()
+            //        ->setArticleNumber("1")
+            //        ->setQuantity(2)
+            //        ->setAmountExVat(1000.00)
+            //        ->setDescription("Specification")
+            //        ->setName('Prod')
+            //        ->setUnit("st")
+            //        ->setVatPercent(25)
+            //        ->setDiscountPercent(0)
+            //)
+            ->setOrderId($orderId)
+            ->setCountryCode("SE")
+            ->deliverPaymentPlanOrder()
+                ->doRequest();
+
+        //print_r($deliverResponse);        
+        $this->assertEquals(1, $deliverResponse->accepted);
+        $this->assertEquals(0, $deliverResponse->resultcode);
+        $this->assertEquals(2500, $deliverResponse->amount);
+        $this->assertEquals('PaymentPlan', $deliverResponse->orderType);
+    }
+
+    public function test_deliverOrder_deliverPaymentPlanOrder_with_orderrows_misleadingly_delivers_order_in_full() { 
+        // create order
+        $config = Svea\SveaConfig::getDefaultConfig();
+        $campaigncode = TestUtil::getGetPaymentPlanParamsForTesting();
+        $order = WebPay::createOrder($config)
+            ->addOrderRow(WebPayItem::orderRow()
+                    ->setArticleNumber("1")
+                    ->setQuantity(2)
+                    ->setAmountExVat(1000.00)
+                    ->setDescription("Specification")
+                    ->setName('Prod')
+                    ->setUnit("st")
+                    ->setVatPercent(25)
+                    ->setDiscountPercent(0)
+            )
+            ->addOrderRow(WebPayItem::orderRow()
+                    ->setArticleNumber("2")
+                    ->setQuantity(2)
+                    ->setAmountExVat(1000.00)
+                    ->setDescription("Specification")
+                    ->setName('Prod')
+                    ->setUnit("st")
+                    ->setVatPercent(25)
+                    ->setDiscountPercent(0)
+            )
+            ->addCustomerDetails(WebPayItem::individualCustomer()
+                    ->setNationalIdNumber(194605092222)
+                    ->setInitials("SB")
+                    ->setBirthDate(1923, 12, 12)
+                    ->setName("Tess", "Testson")
+                    ->setEmail("test@svea.com")
+                    ->setPhoneNumber(999999)
+                    ->setIpAddress("123.123.123")
+                    ->setStreetAddress("Gatan", 23)
+                    ->setCoAddress("c/o Eriksson")
+                    ->setZipCode(9999)
+                    ->setLocality("Stan")
+            )
+            ->setCountryCode("SE")
+            ->setCustomerReference("33")
+            ->setClientOrderNumber("nr26")
+            ->setOrderDate("2012-12-12")
+            ->setCurrency("SEK")
+            ->usePaymentPlanPayment($campaigncode)// returnerar InvoiceOrder object
+            ->doRequest();
+
+        //print_r($order);        
+        $this->assertEquals(1, $order->accepted);           
+        $this->assertEquals(5000, $order->amount);
+     
+
+        // deliver order
+        $orderId = $order->sveaOrderId;
+        $orderBuilder = WebPay::deliverOrder($config);
+        $deliverResponse = $orderBuilder
+            ->addOrderRow(WebPayItem::orderRow()            // TODO should raise validation exception
+                    ->setArticleNumber("1")
+                    ->setQuantity(2)
+                    ->setAmountExVat(1000.00)
+                    ->setDescription("Specification")
+                    ->setName('Prod')
+                    ->setUnit("st")
+                    ->setVatPercent(25)
+                    ->setDiscountPercent(0)
+            )            
+            ->setOrderId($orderId)
+            ->setInvoiceDistributionType("Post")            // TODO should raise validation exception
+            ->setCountryCode("SE")
+            ->deliverPaymentPlanOrder()
+                ->doRequest();
+
+        //print_r($deliverResponse);        
+        $this->assertEquals(1, $deliverResponse->accepted);
+        $this->assertEquals(5000, $deliverResponse->amount);
+    }    
+    
     // card
     // TODO actual integration test
     

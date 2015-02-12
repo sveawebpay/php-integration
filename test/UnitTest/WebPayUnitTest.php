@@ -492,11 +492,11 @@ class WebPayUnitTest extends \PHPUnit_Framework_TestCase {
         );   
         $order->useInvoicePayment()->prepareRequest();      
     }
-    // CompanyCustomer
-    // TODO
-        
-        
-
+//    $this->setExpectedException(
+//        'Svea\ValidationException', 
+//        '-missing value : NationalIdNumber is required for individual customers when countrycode is SE, NO, DK or FI. Use function setNationalIdNumber().'
+//    );   
+   
     /// WebPay::deliverOrder()
     // deliverInvoiceOrder
     public function test_deliverOrder_deliverInvoiceOrder_without_order_rows_goes_against_adminservice_DeliverOrders() {
@@ -511,23 +511,20 @@ class WebPayUnitTest extends \PHPUnit_Framework_TestCase {
         $request = $deliverOrder->deliverInvoiceOrder();     
         $this->assertInstanceOf( "Svea\WebService\DeliverInvoice", $request );         // WebService\DeliverInvoice => soap call DeliverOrderEU  
     }    
-    // paymentplan
+    // deliverPaymentPlanOrder
     public function test_deliverOrder_deliverPaymentPlanOrder_without_order_rows_goes_against_DeliverOrderEU() {
         $deliverOrder = WebPay::deliverOrder( Svea\SveaConfig::getDefaultConfig() );
         $request = $deliverOrder->deliverPaymentPlanOrder();        
         $this->assertInstanceOf( "Svea\WebService\DeliverPaymentPlan", $request );
         $this->assertEquals("PaymentPlan", $request->orderBuilder->orderType); 
     }
-    // TODO actual integration test
-    
+
     public function test_deliverOrder_deliverPaymentPlanOrder_with_order_rows_goes_against_DeliverOrderEU() {
         $deliverOrder = WebPay::deliverOrder( Svea\SveaConfig::getDefaultConfig() );
         $deliverOrder->addOrderRow( WebPayItem::orderRow() );   // order rows are ignored by DeliverOrderEU, can't partially deliver PaymentPlan
         $request = $deliverOrder->deliverPaymentPlanOrder();        
         $this->assertInstanceOf( "Svea\WebService\DeliverPaymentPlan", $request );      
     }
-    // TODO actual integration test
-
     // card
     public function test_deliverOrder_deliverCardOrder_returns_ConfirmTransaction() {
         $deliverOrder = WebPay::deliverOrder( Svea\SveaConfig::getDefaultConfig() );
