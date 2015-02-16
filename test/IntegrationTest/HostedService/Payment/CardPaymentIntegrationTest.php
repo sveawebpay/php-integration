@@ -59,6 +59,6 @@ class CardPaymentIntegrationTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals(2, $info['redirect_count']);
         $info_url = substr($info['url'], 0, 61);
         $this->assertEquals("https://test.sveaekonomi.se/webpay/public/static/paypage.html", $info_url);
-        print_r($info_url);
+        //print_r($info_url);
     }
 }

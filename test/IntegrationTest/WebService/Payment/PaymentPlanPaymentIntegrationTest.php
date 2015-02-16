@@ -42,7 +42,7 @@ class PaymentPlanPaymentIntegrationTest extends PHPUnit_Framework_TestCase {
                 ->setClientOrderNumber("nr26")
                 ->setOrderDate("2012-12-12")
                 ->setCurrency("SEK")
-                ->usePaymentPlanPayment($campaigncode)// returnerar InvoiceOrder object
+                ->usePaymentPlanPayment($campaigncode)
                 ->doRequest();
 
         $this->assertEquals(1, $request->accepted);

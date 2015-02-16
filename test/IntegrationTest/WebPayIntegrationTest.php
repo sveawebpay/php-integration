@@ -10,8 +10,113 @@ require_once $root . '/../TestUtil.php';
  */
 class WebPayIntegrationTest extends PHPUnit_Framework_TestCase {
 
-    // TODO move to unit tests, replace with actual integration tests
+    /// WebPay::createOrder() --------------------------------------------------
+    //useInvoicePayment
+    public function test_createOrder_useInvoicePayment(){
+        $config = Svea\SveaConfig::getDefaultConfig();
+        $request = WebPay::createOrder($config)
+                    ->addOrderRow(
+                            WebPayItem::orderRow()
+                                ->setAmountIncVat(123.9876)
+                                ->setVatPercent(24)
+                                ->setQuantity(1)
+                            )
+                    ->addCustomerDetails(TestUtil::createIndividualCustomer("SE"))
+                    ->setCountryCode("SE")
+                    ->setOrderDate("2012-12-12")
+                    ->useInvoicePayment()
+                        ->doRequest();
+          $this->assertEquals(1, $request->accepted);
+    }
+    //usePaymentPlanPayment
+    public function test_createOrder_usePaymentPlanPayment() {
+        $config = Svea\SveaConfig::getDefaultConfig();
+        $campaigncode = TestUtil::getGetPaymentPlanParamsForTesting();
+        $request = WebPay::createOrder($config)
+                ->addOrderRow(WebPayItem::orderRow()
+                        ->setArticleNumber("1")
+                        ->setQuantity(2)
+                        ->setAmountExVat(1000.00)
+                        ->setDescription("Specification")
+                        ->setName('Prod')
+                        ->setUnit("st")
+                        ->setVatPercent(25)
+                        ->setDiscountPercent(0)
+                )
+                ->addCustomerDetails(WebPayItem::individualCustomer()
+                        ->setNationalIdNumber(194605092222)
+                        ->setInitials("SB")
+                        ->setBirthDate(1923, 12, 12)
+                        ->setName("Tess", "Testson")
+                        ->setEmail("test@svea.com")
+                        ->setPhoneNumber(999999)
+                        ->setIpAddress("123.123.123")
+                        ->setStreetAddress("Gatan", 23)
+                        ->setCoAddress("c/o Eriksson")
+                        ->setZipCode(9999)
+                        ->setLocality("Stan")
+                )
+                ->setCountryCode("SE")
+                ->setCustomerReference("33")
+                ->setClientOrderNumber("nr26")
+                ->setOrderDate("2012-12-12")
+                ->setCurrency("SEK")
+                ->usePaymentPlanPayment($campaigncode)
+                ->doRequest();
+        $this->assertEquals(1, $request->accepted);
+    }
+    // card
+    public function test_createOrder_usePaymentMethod_KORTCERT_redirects_to_certitrade() {
+        $config = Svea\SveaConfig::getDefaultConfig();
+        $rowFactory = new TestUtil();
+        $form = WebPay::createOrder($config)
+                ->addOrderRow(TestUtil::createOrderRow())
+                ->run($rowFactory->buildShippingFee())
+                ->addDiscount(WebPayItem::relativeDiscount()
+                        ->setDiscountId("1")
+                        ->setDiscountPercent(50)
+                        ->setUnit("st")
+                        ->setName('Relative')
+                        ->setDescription("RelativeDiscount")
+                )
+                ->setCountryCode("SE")
+                ->setClientOrderNumber("foobar".date('c'))
+                ->setOrderDate("2012-12-12")
+                ->setCurrency("SEK")
+                ->usePaymentMethod(PaymentMethod::KORTCERT)
+                    ->setReturnUrl("http://myurl.se")
+                    ->getPaymentForm();
+        $url = "https://test.sveaekonomi.se/webpay/payment";
+
+        /** CURL  **/
+        $fields = array('merchantid' => urlencode($form->merchantid), 'message' => urlencode($form->xmlMessageBase64), 'mac' => urlencode($form->mac));
+        $fieldsString = "";
+        foreach ($fields as $key => $value) {
+            $fieldsString .= $key.'='.$value.'&';
+        }
+        rtrim($fieldsString, '&');
+
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_POST, count($fields));
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $fieldsString);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);     // follow redirects
+        curl_setopt($ch, CURLOPT_HEADER, true);             // include headers in transfer history
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);        // return transfer history
+        $cr = curl_exec($ch);
+        
+        $info = curl_getinfo($ch);                        
+
+        curl_close($ch);      
+        
+        $this->assertEquals(200, $info['http_code']);
+        $this->assertEquals(1, $info['redirect_count']);
+        $this->assertEquals("https://etest.certitrade.net/card/paywin/index", substr($info['url'],0,46) );
+    }         
     
+    // TODO Move below to unit tests?
+    // 
     /// WebPay::createOrder()
     // web service eu: invoice
     public function test_createOrder_useInvoicePayment_returns_InvoicePayment() {

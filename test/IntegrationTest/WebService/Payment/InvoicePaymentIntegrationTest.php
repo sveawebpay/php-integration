@@ -870,7 +870,7 @@ class InvoicePaymentIntegrationTest extends PHPUnit_Framework_TestCase {
                     ->setOrderDate(date('c'))
         ;
         $response = $order->useInvoicePayment()->doRequest();
-        print_r($response);
+        //print_r($response);
         $this->assertEquals(1, $response->accepted);
         $this->assertTrue( $response->customerIdentity instanceof Svea\WebService\CreateOrderIdentity );
         // verify returned address
@@ -899,7 +899,7 @@ class InvoicePaymentIntegrationTest extends PHPUnit_Framework_TestCase {
                     ->setOrderDate(date('c'))
         ;
         $response = $order->useInvoicePayment()->doRequest();
-        print_r($response);
+        //print_r($response);
         $this->assertEquals(1, $response->accepted);
         $this->assertTrue( $response->customerIdentity instanceof Svea\WebService\CreateOrderIdentity );
         // verify returned address
@@ -928,7 +928,7 @@ class InvoicePaymentIntegrationTest extends PHPUnit_Framework_TestCase {
                     ->setOrderDate(date('c'))
         ;
         $response = $order->useInvoicePayment()->doRequest();        
-        print_r($response);
+        //print_r($response);
         $this->assertEquals(1, $response->accepted);
         $this->assertTrue( $response->customerIdentity instanceof Svea\WebService\CreateOrderIdentity );
         // verify returned address
@@ -957,7 +957,7 @@ class InvoicePaymentIntegrationTest extends PHPUnit_Framework_TestCase {
                     ->setOrderDate(date('c'))
         ;
         $response = $order->useInvoicePayment()->doRequest();
-        print_r($response);
+        //print_r($response);
         $this->assertEquals(1, $response->accepted);
         $this->assertTrue( $response->customerIdentity instanceof Svea\WebService\CreateOrderIdentity );
         // verify returned address
@@ -990,7 +990,7 @@ class InvoicePaymentIntegrationTest extends PHPUnit_Framework_TestCase {
                     ->setOrderDate(date('c'))
         ;
         $response = $order->useInvoicePayment()->doRequest();
-        print_r($response);
+        //print_r($response);
         $this->assertEquals(1, $response->accepted);
         $this->assertTrue( $response->customerIdentity instanceof Svea\WebService\CreateOrderIdentity );
         // verify returned address
@@ -1025,7 +1025,7 @@ class InvoicePaymentIntegrationTest extends PHPUnit_Framework_TestCase {
                     ->setOrderDate(date('c'))
         ;
         $response = $order->useInvoicePayment()->doRequest();
-        print_r($response);
+        //print_r($response);
         $this->assertEquals(1, $response->accepted);
         $this->assertTrue( $response->customerIdentity instanceof Svea\WebService\CreateOrderIdentity );
         // verify returned address
@@ -1286,7 +1286,7 @@ class InvoicePaymentIntegrationTest extends PHPUnit_Framework_TestCase {
                 ->useInvoicePayment()->doRequest();
         $this->assertEquals(1, $orderResponse->accepted);
         $this->assertEquals("125.00", $orderResponse->amount);
-//        print_r($orderResponse);
+        //print_r($orderResponse);
 
         $query = WebPayAdmin::queryOrder($config)
                 ->setCountryCode('SE')
