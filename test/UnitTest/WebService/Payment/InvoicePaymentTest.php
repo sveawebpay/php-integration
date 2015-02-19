@@ -1,5 +1,4 @@
 <?php
-
 $root = realpath(dirname(__FILE__));
 require_once $root . '/../../../../test/UnitTest/BuildOrder/OrderBuilderTest.php';
 
@@ -1653,6 +1652,38 @@ class InvoicePaymentTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(20, $request->request->CreateOrderInformation->OrderRows['OrderRow'][4]->VatPercent);
         $this->assertEquals(-2.8571428571429, $request->request->CreateOrderInformation->OrderRows['OrderRow'][5]->PricePerUnit);
         $this->assertEquals(10, $request->request->CreateOrderInformation->OrderRows['OrderRow'][5]->VatPercent);
+    }
+
+    function test_get_invoice_total_amount_before_createorder() {
+       $order = WebPay::createOrder(Svea\SveaConfig::getDefaultConfig())
+            ->addCustomerDetails(WebPayItem::individualCustomer()->setNationalIdNumber(194605092222))
+            ->setCountryCode("SE")
+            ->setCustomerReference("33")
+            ->setOrderDate("2012-12-12")
+            ->setCurrency("SEK");
+        $order->addOrderRow(\WebPayItem::orderRow()
+                ->setName('Universal Camera Charger')
+                ->setAmountIncVat(19.60)
+                ->setVatPercent(25)
+                ->setQuantity(100)
+                )
+                ->addFee(\WebPayItem::invoiceFee()
+                    ->setAmountIncVat(29.00)
+                    ->setVatPercent(25)
+                    ->setName('Svea Invoice Fee')
+                )
+                ->addDiscount(
+                \WebPayItem::fixedDiscount()
+                    ->setAmountIncVat(294.00)
+                    ->setName('Discount')
+                )
+        ;
+        $total = $order->useInvoicePayment()
+                ->getRequestTotal();
+//                ->doRequest();
+
+
+         $this->assertEquals( 1695.0, $total );
     }
 
 }
