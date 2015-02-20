@@ -38,18 +38,22 @@ class WebServicePayment {
     }
 
     /**
-     *
-     * @return The rounded sum of all orderrows as it will be handled in request
+     * Get calculated totals before sending the request
+     * @return Array of the rounded sums of all orderrows as it will be handled in request
      */
     public function getRequestTotal() {
         $object = $this->prepareRequest();
-        $sum = 0;
+        $total_incvat = 0;
+        $total_exvat = 0;
+        $total_vat = 0;
         foreach ($object->request->CreateOrderInformation->OrderRows['OrderRow'] as $value) {
             $rowExVat = $this->calculateOrderRowExVat($value);
+            $total_exvat += $rowExVat;
             $rowVat = $this->CalculateTotalVatSumOfRows($value);
-            $sum += round(($rowExVat + $rowVat),2);
+            $total_vat += $rowVat;
+            $total_incvat += round(($rowExVat + $rowVat),2);
         }
-        return $sum;
+        return array('total_exvat' => $total_exvat, 'total_incvat' => $total_incvat, 'total_vat' => $total_vat);
 
 
     }

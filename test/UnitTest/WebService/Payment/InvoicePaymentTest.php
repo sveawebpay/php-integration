@@ -1682,8 +1682,10 @@ class InvoicePaymentTest extends PHPUnit_Framework_TestCase {
                 ->getRequestTotal();
 //                ->doRequest();
 
-
-         $this->assertEquals( 1695.0, $total );
+//   return array('total_exvat' => $total_exvat, 'total_incvat' => $total_incvat, 'total_vat' => $total_vat);
+         $this->assertEquals( 1695.0, $total['total_incvat'] );
+         $this->assertEquals( 1356.0, $total['total_exvat'] );
+         $this->assertEquals( 339.0, $total['total_vat'] );
     }
 
 }
