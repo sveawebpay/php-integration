@@ -264,7 +264,11 @@ class WebServicePayment {
         return $individualCustomerIdentity;
     }
 
-
+    /**
+     *
+     * @param type $value
+     * @return type
+     */
      private function calculateOrderRowExVat($value) {
                  if($value->PriceIncludingVat == 1){
                     $rowsum_incvat = round($value->NumberOfUnits,2) * round($value->PricePerUnit,2) * (1 - ($value->DiscountPercent / 100));
