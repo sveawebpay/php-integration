@@ -4,24 +4,31 @@ namespace Svea\WebService;
 require_once 'WebServiceResponse.php';
 
 /**
- * Handles the Svea WebService GetAddresses request response. 
- * (Note that this maps to the legacy Web Service, not the Europe Web Service GetAddresses request.)
- *
- * For attribute descriptions, see the formatObject() method documentation
+ * The Webpay::getAddresses request returns an instance of GetAddressesResponse, containing the actual customer addresses in an array of
+ * GetAddressIdentity:
+ *      
+ *      $response = WebPay::getAddresses($myConfig);
  * 
- *     $response->accepted                 // boolean, true iff Svea accepted request
- *     $response->resultcode               // may contain an error code
- *     $response->customerIdentity         // if accepted, may define a GetAddressIdentity object:
- *         ->customerType;       // not guaranteed to be defined
- *         ->nationalIdNumber;   // not guaranteed to be defined
- *         ->phoneNumber;        // not guaranteed to be defined
- *        ->firstName;          // not guaranteed to be defined
- *         ->lastName;           // not guaranteed to be defined
- *         ->fullName;           // not guaranteed to be defined
- *         ->street;             // not guaranteed to be defined
- *        ->coAddress;          // not guaranteed to be defined
- *         ->zipCode;            // not guaranteed to be defined
- *         ->locality;           // not guaranteed to be defined
+ *      // GetAddressResponse attributes:
+ *      $response->accepted;                        // Boolean  // true iff request was accepted
+ *      $response->resultcode;                      // String   // set iff accepted false
+ *      $response->errormessage;                    // String   // set iff accepted false
+ *      $response->customerIdentity;                // Array of GetAddressIdentity
+ * 
+ *      $firstCustomerAddress = $myGetAddressesResponse->customerIdentity[0];
+ * 
+ *      // GetAddressIdentity attributes:
+ *      $firstCustomerAddress->customerType;        // String   // "Person" or "Business" for individual and company customers, respectively
+ *      $firstCustomerAddress->nationalIdNumber;    // Numeric  // national id number of individual or company 
+ *      $firstCustomerAddress->fullName;            // String   // amalgated firstname and surname for indivdual, or company name for company customers
+ *      $firstCustomerAddress->coAddress;           // String   // optional
+ *      $firstCustomerAddress->street;              // String   // required, streetname including housenumber
+ *      $firstCustomerAddress->zipCode;             // String   // required
+ *      $firstCustomerAddress->locality;            // String   // required, city name
+ *      $firstCustomerAddress->phoneNumber;         // String   // optional
+ *      $firstCustomerAddress->firstName;           // String   // optional, present in GetAddressResponse, not returned in CreateOrderResponse
+ *      $firstCustomerAddress->lastName;            // String   // optional, present in GetAddressResponse, not returned in CreateOrderResponse
+ *      $firstCustomerAddress->addressSelector      // String   // optional, uniquely disambiguates company addresses      
  * 
  * @author anne-hal, Kristian Grossman-Madsen
  */

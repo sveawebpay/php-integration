@@ -180,7 +180,7 @@ class WebPay {
      *      // then select the corresponding request class and send request
      *      $response = $request->getIndividualAddresses()->doRequest();    // returns GetAddressesResponse
      *      $response = $request->getCompanyAddresses()->doRequest();       // returns GetAddressesResponse
-     *
+     * 
      * @see Svea\WebService\GetAddresses Svea\WebService\GetAddresses
      * @return Svea\WebService\GetAddressesResponse Svea\WebService\GetAddressesResponse
      * @param ConfigurationProvider $config  instance implementing ConfigurationProvider Interface
