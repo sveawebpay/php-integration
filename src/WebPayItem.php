@@ -152,7 +152,30 @@ class WebPayItem {
         return new Svea\RelativeDiscount();
     }
 
+    
     /**
+     * Use WebPayItem::individualCustomer() to add individual customer information to an order.
+     * 
+     * Note that "required" below as a requirement only when using the invoice or payment plan 
+     * payment methods, and that the required attributes vary etween countries.
+     * 
+     * (For card and direct bank orders, adding customer information to the order is optional, 
+     * unless you're using getPaymentUrl() to set up a prepared payment.)
+     * 
+     *  IndividualCustomer individual = WebPayItem::individualCustomer()
+     *      ->setNationalIdNumber() // Numeric	// invoice, paymentplan: required for customers in SE, NO, DK, FI
+     *      ->setName()             // String	// invoice, paymentplan: required, use (firstname, lastname) for customers in NL and DE 
+     *      ->setBirthDate()        // Numeric	// invoice, paymentplan: required for individual customers in NL and DE
+     *      ->setInitials()         // String	// invoice, paymentplan: required for individual customers in NL
+     *      ->setCoAddress()        // String	// invoice, paymentplan: optional
+     *      ->setStreetAddress()    // String	// invoice, paymentplan: required, use (street, housenumber) in NL and DE 
+     *      ->setZipCode)           // String	// invoice, paymentplan: required in NL and DE
+     *      ->setLocality()         // String	// invoice, paymentplan: required in NL and DE
+     *      ->setPhoneNumber()      // String	// invoice, paymentplan: optional but desirable
+     *      ->setEmail()            // String	// invoice, paymentplan: optional but desirable
+     *      ->setIpAddress()        // String	// invoice, paymentplan: optional but desirable; card: required for getPaymentUrl() orders only
+     *  ;
+     *  
      * @return \Svea\IndividualCustomer
      */
     public static function individualCustomer() {
@@ -160,6 +183,28 @@ class WebPayItem {
     }
 
     /**
+     * Use WebPayItem::companyCustomer() to add individual customer information to an order.
+     * 
+     * Note that "required" below as a requirement only when using the invoice or payment plan 
+     * payment methods, and that the required attributes vary etween countries.
+     * 
+     * (For card and direct bank orders, adding customer information to the order is optional, 
+     * unless you're using getPaymentUrl() to set up a prepared payment.)
+     * 
+     *  CompanyCustomer company = WebPayItem::companyCustomer()
+     *      ->setNationalIdNumber() // Numeric	// invoice: required for customers in SE, NO, DK, FI
+     *      ->setCompanyName()      // String	// invoice: required (companyname) for company customers in NL and DE 
+     *      ->setVatNumber()        // Numeric	// invoice: required for individual customers in NL and DE
+     *      ->setCoAddress()        // String	// invoice: optional
+     *      ->setStreetAddress()    // String	// invoice: required, use (street, housenumber) in NL and DE 
+     *      ->setZipCode)           // String	// invoice: required in NL and DE
+     *      ->setLocality()         // String	// invoice: required in NL and DE
+     *      ->setPhoneNumber()      // String	// invoice: optional but desirable
+     *      ->setEmail()            // String	// invoice: optional but desirable
+     *      ->setIpAddress()        // String	// invoice: optional but desirable; card: required for getPaymentUrl() orders only
+     *      ->setAddressSelector()  // String	// invoice: optional but recommended; received from WebPay::getAddresses() request response
+     *  ;
+     *  
      * @return \Svea\CompanyCustomer
      */
     public static function companyCustomer() {
