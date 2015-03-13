@@ -599,7 +599,7 @@ class GetOrdersRequestIntegrationTest extends PHPUnit_Framework_TestCase{
                             )
                     ->addCustomerDetails(TestUtil::createIndividualCustomer("SE"))
                     ->setCountryCode("SE")
-                ->setCurrency("SEK")
+                    ->setCurrency("SEK")
                     ->setOrderDate("2012-12-12")
                     ->useInvoicePayment()
                         ->doRequest();
@@ -609,7 +609,7 @@ class GetOrdersRequestIntegrationTest extends PHPUnit_Framework_TestCase{
               ->setOrderId($orderResponse->sveaOrderId)
               ->queryInvoiceOrder()
                 ->doRequest();
-//        print_r($response);
+        //print_r($response);
         $this->assertEquals(1, $response->accepted);
         $this->assertEquals(145.00, $response->numberedOrderRows[0]->amountExVat);
         $this->assertEquals(null, $response->numberedOrderRows[0]->amountIncVat);

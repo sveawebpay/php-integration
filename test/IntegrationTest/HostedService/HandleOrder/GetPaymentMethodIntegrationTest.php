@@ -17,14 +17,15 @@ class GetPaymentMethodIntegrationTest extends \PHPUnit_Framework_TestCase {
                 ->setCountryCode("SE")
                 ->doRequest();
          
-        ////print_r( "testGetAllPaymentMethods: "); //print_r( $response );        
-        $this->assertEquals(PaymentMethod::NORDEA_SE, $response[0]);
-        $this->assertEquals(PaymentMethod::SEB_SE, $response[1]);
-        $this->assertEquals(PaymentMethod::KORTCERT, $response[2]);
-        $this->assertEquals(\Svea\SystemPaymentMethod::INVOICE_SE, $response[3]);
-        $this->assertEquals(\Svea\SystemPaymentMethod::PAYMENTPLAN_SE, $response[4]);
-        $this->assertEquals(PaymentMethod::INVOICE, $response[5]);
-        $this->assertEquals(PaymentMethod::PAYMENTPLAN, $response[6]);
+        //print_r( "testGetAllPaymentMethods: "); //print_r( $response );        
+        $this->assertEquals(PaymentMethod::BANKAXESS, $response[0]);
+        $this->assertEquals(PaymentMethod::NORDEA_SE, $response[1]);
+        $this->assertEquals(PaymentMethod::SEB_SE, $response[2]);
+        $this->assertEquals(PaymentMethod::KORTCERT, $response[3]);
+        $this->assertEquals(\Svea\SystemPaymentMethod::INVOICE_SE, $response[4]);
+        $this->assertEquals(\Svea\SystemPaymentMethod::PAYMENTPLAN_SE, $response[5]);
+        $this->assertEquals(PaymentMethod::INVOICE, $response[6]);
+        $this->assertEquals(PaymentMethod::PAYMENTPLAN, $response[7]);
     }
 }
 ?>
