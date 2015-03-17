@@ -65,20 +65,24 @@ class WebServicePayment {
      * @throws \Svea\ValidationException
      */
     public function prepareRequest() {
+        // validate order, throw exception on validation failure
         $errors = $this->validateOrder();
         if (count($errors) > 0) {
             $exceptionString = "";
             foreach ($errors as $key => $value) {
                 $exceptionString .="-". $key. " : ".$value."\n";
             }
-
             throw new \Svea\ValidationException($exceptionString);
         }
+        
+        // create soap order object, set authorization
         $sveaOrder = new WebServiceSoap\SveaOrder;
         $sveaOrder->Auth = $this->getPasswordBasedAuthorization();
+        
         //make orderrows and put in CreateOrderInfromation
         $orderinformation = $this->formatOrderInformationWithOrderRows($this->order->orderRows);
-        //paralell ways of crateing customer
+        
+        //parallel ways of creating customer
         if (isset($this->order->customerIdentity)) {
             $orderinformation->CustomerIdentity = $this->formatCustomerDetails();
         } else {
@@ -124,11 +128,12 @@ class WebServicePayment {
         $orderInformation = new WebServiceSoap\SveaCreateOrderInformation((isset($this->order->campaignCode) ? $this->order->campaignCode : ""),
                         (isset($this->order->sendAutomaticGiroPaymentForm) ? $this->order->sendAutomaticGiroPaymentForm : 0));
 
+        // rewrite order rows to soap_class order rows
         $formatter = new WebServiceRowFormatter($this->order);
         $formattedOrderRows = $formatter->formatRows();
-
-        foreach ($formattedOrderRows as $orderRow) {
-            $orderInformation->addOrderRow($orderRow);
+        
+        foreach ($formattedOrderRows as $formattedOrderRow) {
+            $orderInformation->addOrderRow($formattedOrderRow);
         }
 
         return $orderInformation;
@@ -199,7 +204,7 @@ class WebServicePayment {
     }
 
     /**
-     * new! If CustomerIdentity is crated by addCustomerDetails()
+     * if CustomerIdentity is created by addCustomerDetails()
      * @return \SveaCustomerIdentity
      */
     public function formatCustomerDetails() {
