@@ -810,13 +810,13 @@ class DeliverOrderTest extends PHPUnit_Framework_TestCase {
                 ->deliverInvoiceOrder()
                     ->prepareRequest();
 
-        $this->assertEquals(99.99, $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][0]->PricePerUnit);
+        $this->assertEquals(123.9876, $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][0]->PricePerUnit);
         $this->assertEquals(24, $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][0]->VatPercent);
-        $this->assertFalse($request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][0]->PriceIncludingVat);
+        $this->assertTrue($request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][0]->PriceIncludingVat);
 
-        $this->assertEquals(-9.999, $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][1]->PricePerUnit);
+        $this->assertEquals(-12.39876, $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][1]->PricePerUnit);
         $this->assertEquals(24, $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][1]->VatPercent);
-        $this->assertFalse($request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][1]->PriceIncludingVat);
+        $this->assertTrue($request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][1]->PriceIncludingVat);
 
     }
     public function testDeliverOrderAndFixedDiscountSetWithMixedVat2() {
@@ -870,13 +870,13 @@ class DeliverOrderTest extends PHPUnit_Framework_TestCase {
                 ->deliverInvoiceOrder()
                     ->prepareRequest();
 
-        $this->assertEquals(99.99, $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][0]->PricePerUnit);
+        $this->assertEquals(123.9876, $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][0]->PricePerUnit);
         $this->assertEquals(24, $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][0]->VatPercent);
-        $this->assertFalse($request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][0]->PriceIncludingVat);
+        $this->assertTrue($request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][0]->PriceIncludingVat);
 
-        $this->assertEquals(-9.999, $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][1]->PricePerUnit);
+        $this->assertEquals(-12.39876, $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][1]->PricePerUnit);
         $this->assertEquals(24, $request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][1]->VatPercent);
-        $this->assertFalse($request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][1]->PriceIncludingVat);
+        $this->assertTrue($request->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][1]->PriceIncludingVat);
 
     }
     public function testDeliverOrderSetAsMixedVatAndRelativeDiscount() {
