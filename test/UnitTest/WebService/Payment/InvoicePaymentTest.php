@@ -618,8 +618,6 @@ class InvoicePaymentTest extends PHPUnit_Framework_TestCase {
     /**
      * Tests for rounding**
      */
-
-
     public function testOrderSetAsExVatAndVatPercent(){
         $config = Svea\SveaConfig::getDefaultConfig();
         $request = WebPay::createOrder($config)
@@ -1170,39 +1168,6 @@ class InvoicePaymentTest extends PHPUnit_Framework_TestCase {
 
     }
 
-      public function test2OrderAndFixedDiscountSetWithMixedVat(){
-        $config = Svea\SveaConfig::getDefaultConfig();
-        $order = WebPay::createOrder($config)
-                    ->addOrderRow(
-                            WebPayItem::orderRow()
-                                ->setAmountIncVat(123.9876)
-                                ->setVatPercent(24)
-                                ->setQuantity(1)
-                            )
-                    ->addDiscount(WebPayItem::fixedDiscount()
-                            ->setAmountExVat(9.999)
-                            )
-                    ->addCustomerDetails(TestUtil::createIndividualCustomer("SE"))
-                    ->setCountryCode("SE")
-                    ->setOrderDate("2012-12-12")
-        ;
-
-        $request = $order->useInvoicePayment()->prepareRequest();
-        
-        $this->assertEquals(123.9876, $request->request->CreateOrderInformation->OrderRows['OrderRow'][0]->PricePerUnit);
-        $this->assertEquals(24, $request->request->CreateOrderInformation->OrderRows['OrderRow'][0]->VatPercent);
-        $this->assertTrue($request->request->CreateOrderInformation->OrderRows['OrderRow'][0]->PriceIncludingVat);
-
-        // 9.999 *1.24 = 12.39876
-        $this->assertEquals(-12.39876, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->PricePerUnit);
-        $this->assertEquals(24, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->VatPercent);
-        $this->assertTrue($request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->PriceIncludingVat);
-
-        // check that service accepts order
-        $response = $order->useInvoicePayment()->doRequest();
-        $this->assertEquals( true, $response->accepted );          
-          
-    }
       public function testOrderAndFixedDiscountSetWithMixedVat2(){
         $config = Svea\SveaConfig::getDefaultConfig();
         $request = WebPay::createOrder($config)
@@ -1298,8 +1263,6 @@ class InvoicePaymentTest extends PHPUnit_Framework_TestCase {
           $this->assertFalse($request->request->CreateOrderInformation->OrderRows['OrderRow'][2]->PriceIncludingVat);
 
     }
-
-
 
 
     /// relative discount examples:
@@ -1492,6 +1455,39 @@ class InvoicePaymentTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(-3.30, $request->request->CreateOrderInformation->OrderRows['OrderRow'][5]->PricePerUnit);
         $this->assertEquals(10, $request->request->CreateOrderInformation->OrderRows['OrderRow'][5]->VatPercent);
         $this->assertEquals(true, $request->request->CreateOrderInformation->OrderRows['OrderRow'][5]->PriceIncludingVat);        
+    }
+    
+    public function testOrderAndFixedDiscountSetWithMixedVat(){
+        $config = Svea\SveaConfig::getDefaultConfig();
+        $order = WebPay::createOrder($config)
+                    ->addOrderRow(
+                            WebPayItem::orderRow()
+                                ->setAmountIncVat(123.9876)
+                                ->setVatPercent(24)
+                                ->setQuantity(1)
+                            )
+                    ->addDiscount(WebPayItem::fixedDiscount()
+                            ->setAmountExVat(9.999)
+                            )
+                    ->addCustomerDetails(TestUtil::createIndividualCustomer("SE"))
+                    ->setCountryCode("SE")
+                    ->setOrderDate("2012-12-12")
+        ;
+
+        $request = $order->useInvoicePayment()->prepareRequest();
+
+        $this->assertEquals(123.9876, $request->request->CreateOrderInformation->OrderRows['OrderRow'][0]->PricePerUnit);
+        $this->assertEquals(24, $request->request->CreateOrderInformation->OrderRows['OrderRow'][0]->VatPercent);
+        $this->assertTrue($request->request->CreateOrderInformation->OrderRows['OrderRow'][0]->PriceIncludingVat);
+
+        // 9.999 *1.24 = 12.39876
+        $this->assertEquals(-12.39876, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->PricePerUnit);
+        $this->assertEquals(24, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->VatPercent);
+        $this->assertTrue($request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->PriceIncludingVat);
+
+        // check that service accepts order
+        $response = $order->useInvoicePayment()->doRequest();
+        $this->assertEquals( true, $response->accepted );          
     }
 
     /// fixed discount examples:
@@ -2115,5 +2111,6 @@ class InvoicePaymentTest extends PHPUnit_Framework_TestCase {
          $this->assertEquals( 1356.0, $total['total_exvat'] );
          $this->assertEquals( 339.0, $total['total_vat'] );
     }
-
+    
+    // See file FixedDiscountRowsTest for specification of FixedDiscount row behaviour.
 }
