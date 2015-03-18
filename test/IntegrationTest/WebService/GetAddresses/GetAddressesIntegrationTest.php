@@ -202,8 +202,20 @@ class GetAddressesIntegrationTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(0, $request->accepted);
         $this->assertEquals('Error', $request->resultcode);
     }
+  
+    // DE/private
+    public function test_GetAddresses_Germany_Private_isNotImplemented() {
+        $request = $this->addressRequest
+                ->setOrderTypeInvoice()
+                ->setCountryCode("DE")
+                ->setIndividual("foo")
+                ->doRequest();
 
-    // DE
+        $this->assertEquals(0, $request->accepted);
+        $this->assertEquals('Error', $request->resultcode);
+    }  
+    
+    // DE/company
     public function test_GetAddresses_Germany_Company_isNotImplemented() {
         $request = $this->addressRequest
                 ->setOrderTypeInvoice()
@@ -214,8 +226,21 @@ class GetAddressesIntegrationTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(0, $request->accepted);
         $this->assertEquals('Error', $request->resultcode);
     }
-
+    
     // NL
+    // NL/private
+    public function test_GetAddresses_Netherlands_Private_isNotImplemented() {
+        $request = $this->addressRequest
+                ->setOrderTypeInvoice()
+                ->setCountryCode("NL")
+                ->setIndividual("foo")
+                ->doRequest();
+
+        $this->assertEquals(0, $request->accepted);
+        $this->assertEquals('Error', $request->resultcode);
+    }  
+    
+    // NL/company
     public function test_GetAddresses_Netherlands_Company_isNotImplemented() {
         $request = $this->addressRequest
                 ->setOrderTypeInvoice()

@@ -43,7 +43,7 @@ class IndividualCustomer {
     public $ipAddress;
     /** @var string $firstname */
     public $firstname;
-    /** @var string $lastname */
+    /** @var string $lastname */ 
     public $lastname;
     /** @var string $street */
     public $street;
@@ -56,6 +56,10 @@ class IndividualCustomer {
     /** @var string $locality */
     public $locality;
 
+    // set in GetOrdersResponse
+    public $fullName;               // compounded fullName, may be set by CreateOrder for i.e. orders where identify customer via ssn   
+    public $streetAddress;          // compounds street + housenumber,fullName, may be set by CreateOrder for i.e. orders where identify customer via ssn
+    
     /**
      * Required for private customers in SE, NO, DK, FI
      * @param string for SE, DK:  $yyyymmddxxxx, for FI:  $ddmmyyxxxx, NO:  $ddmmyyxxxxx
@@ -133,28 +137,42 @@ class IndividualCustomer {
     }
 
     /**
-     * Required for private Customers in NL and DE
-     * @param string $firstnameAsString
-     * @param string $lastnameAsString
+     * Required to set firstName and lastName for private Customers in NL and DE
+     * @param string $firstnameAsString, or $fullNameAsString iff sole argument
+     * @param string $lastnameAsString, or omitted if setting fullName
      * @return $this
      */
-    public function setName($firstnameAsString, $lastnameAsString) {
-        $this->firstname = $firstnameAsString;
-        $this->lastname = $lastnameAsString;
+    public function setName($firstnameAsString, $lastnameAsString = null) { // = null is poor man's overloading
+        // only one name given, assume fullName;
+        if( $lastnameAsString == null) {
+            $fullNameAsString = $firstnameAsString;
+            $this->name = $fullNameAsString;
+        }
+        // two names given, assume firstName and lastName
+        else {        
+            $this->firstname = $firstnameAsString;
+            $this->lastname = $lastnameAsString;
+        }
         return $this;
     }
-
+    
     /**
-     * Required in NL and DE
-     * For other countries, you may ommit this, or let either of street and/or housenumber be empty
-     *
-     * @param string $streetAsString
-     * @param int $houseNumberAsInt  -- optional
+     * Required to set street and houseNumber in NL and DE
+     * @param string $streetAsString, or $streetAddressAsString iff sole argument
+     * @param int $houseNumberAsInt, or omitted if setting streetAddress
      * @return $this
      */
     public function setStreetAddress($streetAsString, $houseNumberAsInt = null) { // = null is poor man's overloading
-        $this->street = $streetAsString;
-        $this->housenumber = $houseNumberAsInt;
+        // only one name given, assume streetName;
+        if( $houseNumberAsInt == null) {
+            $streetAddressAsString = $streetAsString;
+            $this->streetAddress = $streetAddressAsString;
+            $this->street = $streetAsString;    // preserve old behaviour if only street given (assume contains compounded street + housenumber)
+        }
+        else {
+            $this->street = $streetAsString;
+            $this->housenumber = $houseNumberAsInt;
+        }
         return $this;
     }
 

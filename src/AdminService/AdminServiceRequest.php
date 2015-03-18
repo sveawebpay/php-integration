@@ -22,8 +22,8 @@ abstract class AdminServiceRequest {
     protected $resendOrderVat = NULL;
 
     /**
-     * Set up the soap client and perform the soap call, with the soap action and prepared request from the relevant subclass
-     * @return StdClass  raw response
+     * Set up the soap client and perform the soap call, with the soap action and prepared request from the relevant subclass.
+     * Returns the apropriate request response class, as determined by SveaResponse matching on request action.
      */
     public function doRequest( $resendOrderWithFlippedPriceIncludingVat = false ) {
 

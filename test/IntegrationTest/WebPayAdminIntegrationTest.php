@@ -187,8 +187,8 @@ class WebPayAdminIntegrationTest extends PHPUnit_Framework_TestCase {
         $this->assertInstanceOf ("Svea\AdminService\DeliverOrderRowsRequest", $request );
     }    
     
-    /// queryOrder
-    //queryInvoiceOrder one row, two rows    
+    //WebPayAdmin::queryOrder()
+    //.queryInvoiceOrder
     public function test_queryOrder_queryInvoiceOrder_single_order_row_with_invoice_fee_and_shipping_fee() {
     
         // create order using order row specified with ->setName() and ->setDescription
@@ -327,7 +327,7 @@ class WebPayAdminIntegrationTest extends PHPUnit_Framework_TestCase {
     //-queryPaymentPlanOrder
     // TODO
     
-    //queryCardOrder one row, two rows
+    //.queryCardOrder
     public function test_queryOrder_queryCardOrder_single_order_row() {
     
         // created w/java package TODO make self-contained using webdriver to create card order     

@@ -111,7 +111,7 @@ class WebPay {
      * 
      *      $request = WebPay::deliverOrder($config)
      *          ->setOrderId()                  // invoice or payment plan only, required
-     *          ->setTransactionId()            // card only, optional -- you can also use setOrderId
+     *          ->setTransactionId()            // card only, optional, alias for setOrderId 
      *          ->setCountryCode()              // required
      *          ->setInvoiceDistributionType()  // invoice only, required
      *          ->setNumberOfCreditDays()       // invoice only, optional

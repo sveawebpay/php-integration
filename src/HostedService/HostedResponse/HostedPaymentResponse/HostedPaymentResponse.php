@@ -17,7 +17,7 @@ class HostedPaymentResponse extends HostedResponse{
     /** @var string $merchantId -- the merchant id */
     public $merchantId;
     /** @var string $amount The total amount including VAT, presented as a decimal number */
-    public $amount;
+    public $amount;     // TODO java: Double
     /** @var string $currency -- ISO 4217 alphabetic, e.g. SEK */
     public $currency;
 

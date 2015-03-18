@@ -15,13 +15,13 @@ require_once $root . '/../../../../src/Includes.php';
 class HostedPaymentTest extends \PHPUnit_Framework_TestCase {
 
     // TODO move tests of setXXX from subclasses of HostedPayment here
-    
+
     public function test_setXXXUrl() {
-        
+
         $returnUrlAsString = "http://foo.bar.com/1";
         $cancelUrlAsString = "http://foo.bar.com/2";
         $callbackUrlAsString = "http://foo.bar.com/3";
-        
+
         $order = \TestUtil::createOrder();
         $payment = $order->usePaymentMethod(\PaymentMethod::KORTCERT)
             ->setReturnUrl($returnUrlAsString)
@@ -32,40 +32,40 @@ class HostedPaymentTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals($cancelUrlAsString, $payment->cancelUrl );
         $this->assertEquals($callbackUrlAsString, $payment->callbackUrl );
     }
-    
-    public function test_payPageLanguage_defaults_to_english() {      
-        $defaultLanguage = "en";    
-        
+
+    public function test_payPageLanguage_defaults_to_english() {
+        $defaultLanguage = "en";
+
         $order = \TestUtil::createOrder();
         $payment = $order->usePaymentMethod(\PaymentMethod::KORTCERT);
 
         $this->assertEquals($defaultLanguage, $payment->langCode );
     }
-    
+
     public function test_setPayPageLanguage_with_unrecognised_language() {
-        $newLanguage = "unrecognised_language";     
-        
+        $newLanguage = "unrecognised_language";
+
         $order = \TestUtil::createOrder();
         $payment = $order->usePaymentMethod(\PaymentMethod::KORTCERT)
             ->setPayPageLanguage( $newLanguage );
 
         $this->assertEquals("en", $payment->langCode );
-    }   
+    }
 
     public function test_setPayPageLanguage_with_recognised_language() {
-        $orderLanguage = "sv";     
-        
+        $orderLanguage = "sv";
+
         $order = \TestUtil::createOrder();
         $payment = $order->usePaymentMethod(\PaymentMethod::KORTCERT)
             ->setPayPageLanguage( $orderLanguage );
 
         $this->assertEquals($orderLanguage, $payment->langCode );
-    }       
-    
-    // TODO tests for getPaymentForm and validatè order    
+    }
+
+    // TODO tests for getPaymentForm and validatè order
 
     //    TODO move the below to HostedRowFormatterTest???
-    
+
     /**
      * 30*69.99*1.25 = 2624.625 => 2624.62 w/Bankers rounding (half-to-even)
      *
