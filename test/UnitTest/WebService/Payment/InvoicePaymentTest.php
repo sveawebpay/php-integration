@@ -618,8 +618,6 @@ class InvoicePaymentTest extends PHPUnit_Framework_TestCase {
     /**
      * Tests for rounding**
      */
-
-
     public function testOrderSetAsExVatAndVatPercent(){
         $config = Svea\SveaConfig::getDefaultConfig();
         $request = WebPay::createOrder($config)
@@ -1170,33 +1168,6 @@ class InvoicePaymentTest extends PHPUnit_Framework_TestCase {
 
     }
 
-      public function testOrderAndFixedDiscountSetWithMixedVat(){
-        $config = Svea\SveaConfig::getDefaultConfig();
-        $request = WebPay::createOrder($config)
-                    ->addOrderRow(
-                            WebPayItem::orderRow()
-                                ->setAmountIncVat(123.9876)
-                                ->setVatPercent(24)
-                                ->setQuantity(1)
-                            )
-                    ->addDiscount(WebPayItem::fixedDiscount()
-                            ->setAmountExVat(9.999)
-                            )
-                    ->addCustomerDetails(TestUtil::createIndividualCustomer("SE"))
-                    ->setCountryCode("SE")
-                    ->setOrderDate("2012-12-12")
-                    ->useInvoicePayment()
-                        ->prepareRequest();
-
-          $this->assertEquals(99.99, $request->request->CreateOrderInformation->OrderRows['OrderRow'][0]->PricePerUnit);
-          $this->assertEquals(24, $request->request->CreateOrderInformation->OrderRows['OrderRow'][0]->VatPercent);
-          $this->assertFalse($request->request->CreateOrderInformation->OrderRows['OrderRow'][0]->PriceIncludingVat);
-
-          $this->assertEquals(-9.999, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->PricePerUnit);
-          $this->assertEquals(24, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->VatPercent);
-          $this->assertFalse($request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->PriceIncludingVat);
-
-    }
       public function testOrderAndFixedDiscountSetWithMixedVat2(){
         $config = Svea\SveaConfig::getDefaultConfig();
         $request = WebPay::createOrder($config)
@@ -1226,7 +1197,7 @@ class InvoicePaymentTest extends PHPUnit_Framework_TestCase {
     }
       public function testOrderAndFixedDiscountSetWithMixedVat3(){
         $config = Svea\SveaConfig::getDefaultConfig();
-        $request = WebPay::createOrder($config)
+        $order = WebPay::createOrder($config)
                     ->addOrderRow(
                             WebPayItem::orderRow()
                                 ->setAmountIncVat(123.9876)
@@ -1235,21 +1206,25 @@ class InvoicePaymentTest extends PHPUnit_Framework_TestCase {
                             )
                     ->addDiscount(WebPayItem::fixedDiscount()
                             ->setAmountExVat(9.999)
-                            )
+                    )
                     ->addCustomerDetails(TestUtil::createIndividualCustomer("SE"))
                     ->setCountryCode("SE")
                     ->setOrderDate("2012-12-12")
-                    ->useInvoicePayment()
-                        ->prepareRequest();
+        ;
+        $request = $order->useInvoicePayment()->prepareRequest();
+        
+        $this->assertEquals(123.9876, $request->request->CreateOrderInformation->OrderRows['OrderRow'][0]->PricePerUnit);
+        $this->assertEquals(24, $request->request->CreateOrderInformation->OrderRows['OrderRow'][0]->VatPercent);
+        $this->assertTrue($request->request->CreateOrderInformation->OrderRows['OrderRow'][0]->PriceIncludingVat);
 
-          $this->assertEquals(99.99, $request->request->CreateOrderInformation->OrderRows['OrderRow'][0]->PricePerUnit);
-          $this->assertEquals(24, $request->request->CreateOrderInformation->OrderRows['OrderRow'][0]->VatPercent);
-          $this->assertFalse($request->request->CreateOrderInformation->OrderRows['OrderRow'][0]->PriceIncludingVat);
+        // 9.999 *1.24 = 12.39876
+        $this->assertEquals(-12.39876, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->PricePerUnit);
+        $this->assertEquals(24, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->VatPercent);
+        $this->assertTrue($request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->PriceIncludingVat);
 
-          $this->assertEquals(-9.999, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->PricePerUnit);
-          $this->assertEquals(24, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->VatPercent);
-          $this->assertFalse($request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->PriceIncludingVat);
-
+        // check that service accepts order
+        $response = $order->useInvoicePayment()->doRequest();
+        $this->assertEquals( true, $response->accepted );          
     }
     public function testOrderSetAsMixedVatAndRelativeDiscount(){
         $config = Svea\SveaConfig::getDefaultConfig();
@@ -1288,8 +1263,6 @@ class InvoicePaymentTest extends PHPUnit_Framework_TestCase {
           $this->assertFalse($request->request->CreateOrderInformation->OrderRows['OrderRow'][2]->PriceIncludingVat);
 
     }
-
-
 
 
     /// relative discount examples:
@@ -1352,8 +1325,8 @@ class InvoicePaymentTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(25, $request->request->CreateOrderInformation->OrderRows['OrderRow'][4]->VatPercent);
     }
 
-    // multiple order row vat rates
-    public function test_relativeDiscount_amount_multiple_vat_rates_in_order() {
+    // relative discount on multiple order row defined exvat/vatpercent vat rates 
+    public function test_relativeDiscount_amount_multiple_vat_rates_defined_exvat_creates_discount_rows_using_exvat_and_vatpercent() {
         $order = WebPay::createOrder(Svea\SveaConfig::getDefaultConfig())
             ->addCustomerDetails(WebPayItem::individualCustomer()->setNationalIdNumber(194605092222))
             ->setCountryCode("SE")
@@ -1409,10 +1382,113 @@ class InvoicePaymentTest extends PHPUnit_Framework_TestCase {
         // expected: 10% off orderRow rows: 1x60.00 @20%, 1x30@10% => split proportionally across order row (only) vat rate: -6.0 @20%, -3.0 @10%
         $this->assertEquals(-6.00, $request->request->CreateOrderInformation->OrderRows['OrderRow'][4]->PricePerUnit);
         $this->assertEquals(20, $request->request->CreateOrderInformation->OrderRows['OrderRow'][4]->VatPercent);
+        $this->assertEquals(false, $request->request->CreateOrderInformation->OrderRows['OrderRow'][4]->PriceIncludingVat);        
         $this->assertEquals(-3.00, $request->request->CreateOrderInformation->OrderRows['OrderRow'][5]->PricePerUnit);
         $this->assertEquals(10, $request->request->CreateOrderInformation->OrderRows['OrderRow'][5]->VatPercent);
-    }
+        $this->assertEquals(false, $request->request->CreateOrderInformation->OrderRows['OrderRow'][5]->PriceIncludingVat);
 
+    }
+        
+    // relative discount -- created discount rows should use incvat + vatpercent
+    // relative discount on multiple order row defined exvat/vatpercent vat rates
+    public function test_relativeDiscount_amount_multiple_vat_rates_defined_incvat_creates_discount_rows_using_incvat_and_vatpercent() {
+        $order = WebPay::createOrder(Svea\SveaConfig::getDefaultConfig())
+            ->addCustomerDetails(WebPayItem::individualCustomer()->setNationalIdNumber(194605092222))
+            ->setCountryCode("SE")
+            ->setCustomerReference("33")
+            ->setOrderDate("2012-12-12")
+            ->setCurrency("SEK")
+            ->addOrderRow(
+                WebPayItem::orderRow()
+                ->setAmountIncVat(72.00)
+                ->setVatPercent(20)
+                ->setQuantity(1)
+                ->setName("exvatRow")
+            )
+            ->addOrderRow(
+                WebPayItem::orderRow()
+                ->setAmountIncVat(33.00)
+                ->setVatPercent(10)
+                ->setQuantity(1)
+                ->setName("exvatRow2")
+            )
+            ->addFee(
+                WebPayItem::invoiceFee()
+                ->setAmountIncVat(8.80)
+                ->setVatPercent(10)
+                ->setName("incvatInvoiceFee")
+            )
+            ->addFee(
+                WebPayItem::shippingFee()
+                ->setAmountIncVat(17.60)
+                ->setVatPercent(10)
+                ->setName("incvatShippingFee")
+            )
+            ->addDiscount(
+                WebPayItem::relativeDiscount()
+                ->setDiscountPercent(10.0)
+                ->setDiscountId("TenPercentOff")
+                ->setName("relativeDiscount")
+            )
+        ;
+        $request = $order->useInvoicePayment()->prepareRequest();
+        // all order rows
+        $this->assertEquals(72.00, $request->request->CreateOrderInformation->OrderRows['OrderRow'][0]->PricePerUnit);
+        $this->assertEquals(20, $request->request->CreateOrderInformation->OrderRows['OrderRow'][0]->VatPercent);
+        $this->assertEquals(true, $request->request->CreateOrderInformation->OrderRows['OrderRow'][0]->PriceIncludingVat);        
+        $this->assertEquals(33.00, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->PricePerUnit);
+        $this->assertEquals(10, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->VatPercent);
+        $this->assertEquals(true, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->PriceIncludingVat);        
+        // all shipping fee rows
+        $this->assertEquals(17.60, $request->request->CreateOrderInformation->OrderRows['OrderRow'][2]->PricePerUnit);
+        $this->assertEquals(10, $request->request->CreateOrderInformation->OrderRows['OrderRow'][2]->VatPercent);
+        $this->assertEquals(true, $request->request->CreateOrderInformation->OrderRows['OrderRow'][2]->PriceIncludingVat);        
+        // all invoice fee rows
+        $this->assertEquals(8.80, $request->request->CreateOrderInformation->OrderRows['OrderRow'][3]->PricePerUnit);
+        $this->assertEquals(10, $request->request->CreateOrderInformation->OrderRows['OrderRow'][3]->VatPercent);
+        $this->assertEquals(true, $request->request->CreateOrderInformation->OrderRows['OrderRow'][3]->PriceIncludingVat);        
+        // all discount rows
+        // expected: 10% off orderRow rows: 1x60.00 @20%, 1x30@10% => split proportionally across order row (only) vat rate: -6.0 @20%, -3.0 @10%
+        $this->assertEquals(-7.20, $request->request->CreateOrderInformation->OrderRows['OrderRow'][4]->PricePerUnit);
+        $this->assertEquals(20, $request->request->CreateOrderInformation->OrderRows['OrderRow'][4]->VatPercent);
+        $this->assertEquals(true, $request->request->CreateOrderInformation->OrderRows['OrderRow'][4]->PriceIncludingVat);        
+        $this->assertEquals(-3.30, $request->request->CreateOrderInformation->OrderRows['OrderRow'][5]->PricePerUnit);
+        $this->assertEquals(10, $request->request->CreateOrderInformation->OrderRows['OrderRow'][5]->VatPercent);
+        $this->assertEquals(true, $request->request->CreateOrderInformation->OrderRows['OrderRow'][5]->PriceIncludingVat);        
+    }
+    
+    public function testOrderAndFixedDiscountSetWithMixedVat(){
+        $config = Svea\SveaConfig::getDefaultConfig();
+        $order = WebPay::createOrder($config)
+                    ->addOrderRow(
+                            WebPayItem::orderRow()
+                                ->setAmountIncVat(123.9876)
+                                ->setVatPercent(24)
+                                ->setQuantity(1)
+                            )
+                    ->addDiscount(WebPayItem::fixedDiscount()
+                            ->setAmountExVat(9.999)
+                            )
+                    ->addCustomerDetails(TestUtil::createIndividualCustomer("SE"))
+                    ->setCountryCode("SE")
+                    ->setOrderDate("2012-12-12")
+        ;
+
+        $request = $order->useInvoicePayment()->prepareRequest();
+
+        $this->assertEquals(123.9876, $request->request->CreateOrderInformation->OrderRows['OrderRow'][0]->PricePerUnit);
+        $this->assertEquals(24, $request->request->CreateOrderInformation->OrderRows['OrderRow'][0]->VatPercent);
+        $this->assertTrue($request->request->CreateOrderInformation->OrderRows['OrderRow'][0]->PriceIncludingVat);
+
+        // 9.999 *1.24 = 12.39876
+        $this->assertEquals(-12.39876, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->PricePerUnit);
+        $this->assertEquals(24, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->VatPercent);
+        $this->assertTrue($request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->PriceIncludingVat);
+
+        // check that service accepts order
+        $response = $order->useInvoicePayment()->doRequest();
+        $this->assertEquals( true, $response->accepted );          
+    }
 
     /// fixed discount examples:
     // single order rows vat rate
@@ -1461,18 +1537,23 @@ class InvoicePaymentTest extends PHPUnit_Framework_TestCase {
         // all order rows
         $this->assertEquals(60.00, $request->request->CreateOrderInformation->OrderRows['OrderRow'][0]->PricePerUnit);
         $this->assertEquals(20, $request->request->CreateOrderInformation->OrderRows['OrderRow'][0]->VatPercent);
+        $this->assertEquals(false, $request->request->CreateOrderInformation->OrderRows['OrderRow'][0]->PriceIncludingVat);
         $this->assertEquals(30.00, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->PricePerUnit);
         $this->assertEquals(10, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->VatPercent);
+        $this->assertEquals(false, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->PriceIncludingVat);
         // all shipping fee rows
         $this->assertEquals(16.00, $request->request->CreateOrderInformation->OrderRows['OrderRow'][2]->PricePerUnit);
         $this->assertEquals(10, $request->request->CreateOrderInformation->OrderRows['OrderRow'][2]->VatPercent);
+        $this->assertEquals(false, $request->request->CreateOrderInformation->OrderRows['OrderRow'][2]->PriceIncludingVat);
         // all invoice fee rows
         $this->assertEquals(8.00, $request->request->CreateOrderInformation->OrderRows['OrderRow'][3]->PricePerUnit);
         $this->assertEquals(10, $request->request->CreateOrderInformation->OrderRows['OrderRow'][3]->VatPercent);
+        $this->assertEquals(false, $request->request->CreateOrderInformation->OrderRows['OrderRow'][3]->PriceIncludingVat);
         // all discount rows
         // expected: fixedDiscount: 10 @10% => 11kr, expressed as exvat + vat in request
         $this->assertEquals(-10.00, $request->request->CreateOrderInformation->OrderRows['OrderRow'][4]->PricePerUnit);
         $this->assertEquals(10, $request->request->CreateOrderInformation->OrderRows['OrderRow'][4]->VatPercent);
+        $this->assertEquals(false, $request->request->CreateOrderInformation->OrderRows['OrderRow'][4]->PriceIncludingVat);
     }
     public function test_fixedDiscount_amount_with_set_incvat_vat_rate() {
         $order = WebPay::createOrder(Svea\SveaConfig::getDefaultConfig())
@@ -1688,4 +1769,348 @@ class InvoicePaymentTest extends PHPUnit_Framework_TestCase {
          $this->assertEquals( 339.0, $total['total_vat'] );
     }
 
+    // fixed discount -- created discount rows should use incvat + vatpercent
+    /// fixed discount examples:
+    // single order rows vat rate
+    public function test_fixedDiscount_amount_with_incvat_vat_rate_creates_discount_rows_using_incvat_and_vatpercent() {
+        $order = WebPay::createOrder(Svea\SveaConfig::getDefaultConfig())
+            ->addCustomerDetails(WebPayItem::individualCustomer()->setNationalIdNumber(194605092222))
+            ->setCountryCode("SE")
+            ->setCustomerReference("33")
+            ->setOrderDate("2012-12-12")
+            ->setCurrency("SEK")
+            ->addOrderRow(
+                WebPayItem::orderRow()
+                ->setAmountIncVat(72.00)
+                ->setVatPercent(20)
+                ->setQuantity(1)
+                ->setName("incvatRow")
+            )
+            ->addOrderRow(
+                WebPayItem::orderRow()
+                ->setAmountIncVat(33.00)
+                ->setVatPercent(10)
+                ->setQuantity(1)
+                ->setName("incvatRow2")
+            )
+            ->addFee(
+                WebPayItem::invoiceFee()
+                ->setAmountIncVat(8.80)
+                ->setVatPercent(10)
+                ->setName("incvatInvoiceFee")
+            )
+            ->addFee(
+                WebPayItem::shippingFee()
+                ->setAmountIncVat(17.60)
+                ->setVatPercent(10)
+                ->setName("incvatShippingFee")
+            )
+            ->addDiscount(
+                WebPayItem::fixedDiscount()
+                ->setAmountExVat(10.0)
+                ->setVatPercent(10)
+                ->setDiscountId("ElevenCrownsOff")
+                ->setName("fixedDiscount: 10 @10% => 11kr")
+            )
+        ;
+        $request = $order->useInvoicePayment()->prepareRequest();
+        // all order rows
+        $this->assertEquals(72.00, $request->request->CreateOrderInformation->OrderRows['OrderRow'][0]->PricePerUnit);
+        $this->assertEquals(20, $request->request->CreateOrderInformation->OrderRows['OrderRow'][0]->VatPercent);
+        $this->assertEquals(true, $request->request->CreateOrderInformation->OrderRows['OrderRow'][0]->PriceIncludingVat);
+        $this->assertEquals(33.00, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->PricePerUnit);
+        $this->assertEquals(10, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->VatPercent);
+        $this->assertEquals(true, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->PriceIncludingVat);
+        // all shipping fee rows
+        $this->assertEquals(17.60, $request->request->CreateOrderInformation->OrderRows['OrderRow'][2]->PricePerUnit);
+        $this->assertEquals(10, $request->request->CreateOrderInformation->OrderRows['OrderRow'][2]->VatPercent);
+        $this->assertEquals(true, $request->request->CreateOrderInformation->OrderRows['OrderRow'][2]->PriceIncludingVat);
+        // all invoice fee rows
+        $this->assertEquals(8.80, $request->request->CreateOrderInformation->OrderRows['OrderRow'][3]->PricePerUnit);
+        $this->assertEquals(10, $request->request->CreateOrderInformation->OrderRows['OrderRow'][3]->VatPercent);
+        $this->assertEquals(true, $request->request->CreateOrderInformation->OrderRows['OrderRow'][3]->PriceIncludingVat);
+        // all discount rows
+        // expected: fixedDiscount: 10 @10% => 11kr, expressed as exvat + vat in request
+        $this->assertEquals(-11.00, $request->request->CreateOrderInformation->OrderRows['OrderRow'][4]->PricePerUnit);
+        $this->assertEquals(10, $request->request->CreateOrderInformation->OrderRows['OrderRow'][4]->VatPercent);
+        $this->assertEquals(true, $request->request->CreateOrderInformation->OrderRows['OrderRow'][4]->PriceIncludingVat);
+        
+        // check that service accepts order
+        $response = $order->useInvoicePayment()->doRequest();
+        $this->assertEquals( true, $response->accepted );
+    }
+
+    // single order rows vat rate
+    public function test_fixedDiscount_amount_with_exvat_vat_rate_creates_discount_rows_using_incvat_and_vatpercent() {
+        $order = WebPay::createOrder(Svea\SveaConfig::getDefaultConfig())
+            ->addCustomerDetails(WebPayItem::individualCustomer()->setNationalIdNumber(194605092222))
+            ->setCountryCode("SE")
+            ->setCustomerReference("33")
+            ->setOrderDate("2012-12-12")
+            ->setCurrency("SEK")
+            ->addOrderRow(
+                WebPayItem::orderRow()
+                ->setAmountExVat(60.00)
+                ->setVatPercent(20)
+                ->setQuantity(1)
+                ->setName("exvatRow")
+            )
+            ->addOrderRow(
+                WebPayItem::orderRow()
+                ->setAmountExVat(30.00)
+                ->setVatPercent(10)
+                ->setQuantity(1)
+                ->setName("exvatRow2")
+            )
+            ->addFee(
+                WebPayItem::invoiceFee()
+                ->setAmountExVat(8.00)
+                ->setVatPercent(10)
+                ->setName("exvatInvoiceFee")
+            )
+            ->addFee(
+                WebPayItem::shippingFee()
+                ->setAmountExVat(16.00)
+                ->setVatPercent(10)
+                ->setName("exvatShippingFee")
+            )
+            ->addDiscount(
+                WebPayItem::fixedDiscount()
+                ->setAmountExVat(10.0)
+                ->setVatPercent(10)
+                ->setDiscountId("ElevenCrownsOff")
+                ->setName("fixedDiscount: 10 @10% => 11kr")
+            )
+        ;
+        $request = $order->useInvoicePayment()->prepareRequest();
+        // all order rows
+        $this->assertEquals(60.00, $request->request->CreateOrderInformation->OrderRows['OrderRow'][0]->PricePerUnit);
+        $this->assertEquals(20, $request->request->CreateOrderInformation->OrderRows['OrderRow'][0]->VatPercent);
+        $this->assertEquals(false, $request->request->CreateOrderInformation->OrderRows['OrderRow'][0]->PriceIncludingVat);
+
+        // all discount rows
+        // expected: fixedDiscount: 10 @10% => 11kr, expressed as exvat + vat in request
+        $this->assertEquals(-10.00, $request->request->CreateOrderInformation->OrderRows['OrderRow'][4]->PricePerUnit);
+        $this->assertEquals(10, $request->request->CreateOrderInformation->OrderRows['OrderRow'][4]->VatPercent);
+        $this->assertEquals(false, $request->request->CreateOrderInformation->OrderRows['OrderRow'][4]->PriceIncludingVat);
+        
+        $response = $order->useInvoicePayment()->doRequest();
+        $this->assertEquals( true, $response->accepted );
+    }
+
+    public function test_fixedDiscount_amount_with_set_incvat_vat_rate_creates_discount_rows_using_incvat_and_vatpercent() {
+        $order = WebPay::createOrder(Svea\SveaConfig::getDefaultConfig())
+            ->addCustomerDetails(WebPayItem::individualCustomer()->setNationalIdNumber(194605092222))
+            ->setCountryCode("SE")
+            ->setCustomerReference("33")
+            ->setOrderDate("2012-12-12")
+            ->setCurrency("SEK")
+            ->addOrderRow(
+                WebPayItem::orderRow()
+                ->setAmountExVat(60.00)
+                ->setVatPercent(20)
+                ->setQuantity(1)
+                ->setName("exvatRow")
+            )
+            ->addOrderRow(
+                WebPayItem::orderRow()
+                ->setAmountExVat(30.00)
+                ->setVatPercent(10)
+                ->setQuantity(1)
+                ->setName("exvatRow2")
+            )
+            ->addFee(
+                WebPayItem::invoiceFee()
+                ->setAmountExVat(8.00)
+                ->setVatPercent(10)
+                ->setName("exvatInvoiceFee")
+            )
+            ->addFee(
+                WebPayItem::shippingFee()
+                ->setAmountExVat(16.00)
+                ->setVatPercent(10)
+                ->setName("exvatShippingFee")
+            )
+            ->addDiscount(
+                WebPayItem::fixedDiscount()
+                ->setAmountIncVat(11.0)
+                ->setVatPercent(10)
+                ->setDiscountId("ElevenCrownsOff")
+                ->setName("fixedDiscount: 10 @10% => 11kr")
+            )
+        ;
+        $request = $order->useInvoicePayment()->prepareRequest();
+        // all order rows
+        $this->assertEquals(60.00, $request->request->CreateOrderInformation->OrderRows['OrderRow'][0]->PricePerUnit);
+        $this->assertEquals(20, $request->request->CreateOrderInformation->OrderRows['OrderRow'][0]->VatPercent);
+        $this->assertEquals(30.00, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->PricePerUnit);
+        $this->assertEquals(10, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->VatPercent);
+        // all shipping fee rows
+        $this->assertEquals(16.00, $request->request->CreateOrderInformation->OrderRows['OrderRow'][2]->PricePerUnit);
+        $this->assertEquals(10, $request->request->CreateOrderInformation->OrderRows['OrderRow'][2]->VatPercent);
+        // all invoice fee rows
+        $this->assertEquals(8.00, $request->request->CreateOrderInformation->OrderRows['OrderRow'][3]->PricePerUnit);
+        $this->assertEquals(10, $request->request->CreateOrderInformation->OrderRows['OrderRow'][3]->VatPercent);
+        // all discount rows
+        // expected: fixedDiscount: 10 @10% => 11kr, expressed as exvat + vat in request
+        $this->assertEquals(-10.00, $request->request->CreateOrderInformation->OrderRows['OrderRow'][4]->PricePerUnit);
+        $this->assertEquals(10, $request->request->CreateOrderInformation->OrderRows['OrderRow'][4]->VatPercent);
+    }
+
+    public function test_fixedDiscount_amount_with_calculated_vat_rate_exvat_creates_discount_rows_using_incvat_and_vatpercent() {
+        $order = WebPay::createOrder(Svea\SveaConfig::getDefaultConfig())
+            ->addCustomerDetails(WebPayItem::individualCustomer()->setNationalIdNumber(194605092222))
+            ->setCountryCode("SE")
+            ->setCustomerReference("33")
+            ->setOrderDate("2012-12-12")
+            ->setCurrency("SEK")
+            ->addOrderRow(
+                WebPayItem::orderRow()
+                ->setAmountExVat(60.00)
+                ->setVatPercent(20)
+                ->setQuantity(1)
+                ->setName("exvatRow")
+            )
+            ->addOrderRow(
+                WebPayItem::orderRow()
+                ->setAmountExVat(30.00)
+                ->setVatPercent(10)
+                ->setQuantity(1)
+                ->setName("exvatRow2")
+            )
+            ->addFee(
+                WebPayItem::invoiceFee()
+                ->setAmountExVat(8.00)
+                ->setVatPercent(10)
+                ->setName("exvatInvoiceFee")
+            )
+            ->addFee(
+                WebPayItem::shippingFee()
+                ->setAmountExVat(16.00)
+                ->setVatPercent(10)
+                ->setName("exvatShippingFee")
+            )
+            ->addDiscount(
+                WebPayItem::fixedDiscount()
+                ->setAmountExVat(10.0)
+                ->setDiscountId("TenCrownsOff")
+                ->setName("fixedDiscount: 10 off exvat")
+            )
+        ;
+        $request = $order->useInvoicePayment()->prepareRequest();
+        // all order rows
+        $this->assertEquals(60.00, $request->request->CreateOrderInformation->OrderRows['OrderRow'][0]->PricePerUnit);
+        $this->assertEquals(20, $request->request->CreateOrderInformation->OrderRows['OrderRow'][0]->VatPercent);
+        $this->assertEquals(30.00, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->PricePerUnit);
+        $this->assertEquals(10, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->VatPercent);
+        // all shipping fee rows
+        $this->assertEquals(16.00, $request->request->CreateOrderInformation->OrderRows['OrderRow'][2]->PricePerUnit);
+        $this->assertEquals(10, $request->request->CreateOrderInformation->OrderRows['OrderRow'][2]->VatPercent);
+        // all invoice fee rows
+        $this->assertEquals(8.00, $request->request->CreateOrderInformation->OrderRows['OrderRow'][3]->PricePerUnit);
+        $this->assertEquals(10, $request->request->CreateOrderInformation->OrderRows['OrderRow'][3]->VatPercent);
+        // all discount rows
+        // expected: fixedDiscount: 10 off exvat, order row amount are 66% at 20% vat, 33% at 10% vat => 6.67 @20% and 3.33 @10%
+        $this->assertEquals(-6.6666666666667, $request->request->CreateOrderInformation->OrderRows['OrderRow'][4]->PricePerUnit);
+        $this->assertEquals(20, $request->request->CreateOrderInformation->OrderRows['OrderRow'][4]->VatPercent);
+        $this->assertEquals(-3.3333333333333, $request->request->CreateOrderInformation->OrderRows['OrderRow'][5]->PricePerUnit);
+        $this->assertEquals(10, $request->request->CreateOrderInformation->OrderRows['OrderRow'][5]->VatPercent);
+    }
+
+    public function test_fixedDiscount_amount_with_calculated_vat_rate_incvat_creates_discount_rows_using_incvat_and_vatpercent() {
+        $order = WebPay::createOrder(Svea\SveaConfig::getDefaultConfig())
+            ->addCustomerDetails(WebPayItem::individualCustomer()->setNationalIdNumber(194605092222))
+            ->setCountryCode("SE")
+            ->setCustomerReference("33")
+            ->setOrderDate("2012-12-12")
+            ->setCurrency("SEK")
+            ->addOrderRow(
+                WebPayItem::orderRow()
+                ->setAmountExVat(60.00)
+                ->setVatPercent(20)
+                ->setQuantity(1)
+                ->setName("exvatRow")
+            )
+            ->addOrderRow(
+                WebPayItem::orderRow()
+                ->setAmountExVat(30.00)
+                ->setVatPercent(10)
+                ->setQuantity(1)
+                ->setName("exvatRow2")
+            )
+            ->addFee(
+                WebPayItem::invoiceFee()
+                ->setAmountExVat(8.00)
+                ->setVatPercent(10)
+                ->setName("exvatInvoiceFee")
+            )
+            ->addFee(
+                WebPayItem::shippingFee()
+                ->setAmountExVat(16.00)
+                ->setVatPercent(10)
+                ->setName("exvatShippingFee")
+            )
+            ->addDiscount(
+                WebPayItem::fixedDiscount()
+                ->setAmountIncVat(10.0)
+                ->setDiscountId("TenCrownsOff")
+                ->setName("fixedDiscount: 10 off incvat")
+            )
+        ;
+        $request = $order->useInvoicePayment()->prepareRequest();
+        // all order rows
+        $this->assertEquals(60.00, $request->request->CreateOrderInformation->OrderRows['OrderRow'][0]->PricePerUnit);
+        $this->assertEquals(20, $request->request->CreateOrderInformation->OrderRows['OrderRow'][0]->VatPercent);
+        $this->assertEquals(30.00, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->PricePerUnit);
+        $this->assertEquals(10, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->VatPercent);
+        // all shipping fee rows
+        $this->assertEquals(16.00, $request->request->CreateOrderInformation->OrderRows['OrderRow'][2]->PricePerUnit);
+        $this->assertEquals(10, $request->request->CreateOrderInformation->OrderRows['OrderRow'][2]->VatPercent);
+        // all invoice fee rows
+        $this->assertEquals(8.00, $request->request->CreateOrderInformation->OrderRows['OrderRow'][3]->PricePerUnit);
+        $this->assertEquals(10, $request->request->CreateOrderInformation->OrderRows['OrderRow'][3]->VatPercent);
+        // all discount rows
+        // expected: fixedDiscount: 10 off incvat, order row amount are 66% at 20% vat, 33% at 10% vat
+        // 1.2*0.66x + 1.1*0.33x = 10 => x = 8.6580 => 5.7143 @20% and 2.8571 @10% =
+        $this->assertEquals(-5.7142857142857, $request->request->CreateOrderInformation->OrderRows['OrderRow'][4]->PricePerUnit);
+        $this->assertEquals(20, $request->request->CreateOrderInformation->OrderRows['OrderRow'][4]->VatPercent);
+        $this->assertEquals(-2.8571428571429, $request->request->CreateOrderInformation->OrderRows['OrderRow'][5]->PricePerUnit);
+        $this->assertEquals(10, $request->request->CreateOrderInformation->OrderRows['OrderRow'][5]->VatPercent);
+    }
+
+    function test_get_invoice_total_amount_before_createorder_creates_discount_rows_using_incvat_and_vatpercent() {
+       $order = WebPay::createOrder(Svea\SveaConfig::getDefaultConfig())
+            ->addCustomerDetails(WebPayItem::individualCustomer()->setNationalIdNumber(194605092222))
+            ->setCountryCode("SE")
+            ->setCustomerReference("33")
+            ->setOrderDate("2012-12-12")
+            ->setCurrency("SEK");
+        $order->addOrderRow(\WebPayItem::orderRow()
+                ->setName('Universal Camera Charger')
+                ->setAmountIncVat(19.60)
+                ->setVatPercent(25)
+                ->setQuantity(100)
+                )
+                ->addFee(\WebPayItem::invoiceFee()
+                    ->setAmountIncVat(29.00)
+                    ->setVatPercent(25)
+                    ->setName('Svea Invoice Fee')
+                )
+                ->addDiscount(
+                \WebPayItem::fixedDiscount()
+                    ->setAmountIncVat(294.00)
+                    ->setName('Discount')
+                )
+        ;
+        $total = $order->useInvoicePayment()
+                ->getRequestTotal();
+//                ->doRequest();
+
+//   return array('total_exvat' => $total_exvat, 'total_incvat' => $total_incvat, 'total_vat' => $total_vat);
+         $this->assertEquals( 1695.0, $total['total_incvat'] );
+         $this->assertEquals( 1356.0, $total['total_exvat'] );
+         $this->assertEquals( 339.0, $total['total_vat'] );
+    }
+    
+    // See file FixedDiscountRowsTest for specification of FixedDiscount row behaviour.
 }

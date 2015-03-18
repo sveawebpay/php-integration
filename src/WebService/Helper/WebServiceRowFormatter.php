@@ -19,7 +19,7 @@ class WebServiceRowFormatter {
 
     private $newRows;
     private $priceIncludingVat = false;
-    private $resendOrderVat;
+    private $resendOrderVat;                // used from admin service functions, when original request got a 50036 error
 
     /**
      * @param type $order
@@ -344,6 +344,7 @@ class WebServiceRowFormatter {
     /**
      * Formats FixedDiscount rows specified with setAmountExVat() only.
      * Returns one or more discount rows, one for each vat rate present in the order.
+     * If the 
      *
      * @param FixedDiscount $discountRow
      * @return \Svea\SveaOrderRow
@@ -374,9 +375,18 @@ class WebServiceRowFormatter {
             //calculate discount
             $discountAtThisVatRateExVat = $discountRow->amountExVat * ($amountAtThisVatRateExVat / $this->totalAmountExVat );
 
-            $orderRow->PricePerUnit = (-1) * $discountAtThisVatRateExVat;
-            $orderRow->VatPercent = $vatRate;
-            $orderRow->PriceIncludingVat = FALSE;
+            // iff priceIncludingVat set to true, write discount row as incvat
+            if( $this->priceIncludingVat ) {
+                $orderRow->PricePerUnit = (-1) * WebServiceRowFormatter::convertExVatToIncVat( $discountAtThisVatRateExVat, $vatRate );
+                $orderRow->VatPercent = $vatRate;
+                $orderRow->PriceIncludingVat = TRUE;
+            }
+            else {
+                $orderRow->PricePerUnit = (-1) * $discountAtThisVatRateExVat;
+                $orderRow->VatPercent = $vatRate;
+                $orderRow->PriceIncludingVat = FALSE;
+            }
+            
             $splitRows[] = $orderRow;
         }
 
@@ -511,7 +521,7 @@ class WebServiceRowFormatter {
                 $incVat++;
             }
         }
-          //invoicefees
+        //invoicefees
         foreach ($this->order->invoiceFeeRows as $row) {
             if(isset($row->amountExVat) && isset($row->amountIncVat)){
                 $incVat++;
@@ -521,7 +531,7 @@ class WebServiceRowFormatter {
                 $incVat++;
             }
         }
-          //shippingfees
+        //shippingfees
         foreach ($this->order->shippingFeeRows as $row) {
                if(isset($row->amountExVat) && isset($row->amountIncVat)){
                 $incVat++;
@@ -532,18 +542,16 @@ class WebServiceRowFormatter {
             }
         }
         //fixed discount
-        foreach ($this->order->fixedDiscountRows as $row) {
-               if(isset($row->amountExVat)){
-                $exVat++;
-            } if (isset($row->amount)) {
-                $incVat++;
-            }
+        // ignored, as fixed discount setAmountExVat does not bear the same meaning as in order/fee rows, so ignored when determining priceIncludingVat
+
+        //relative discount
+        // ignored, as relative discount doesn't use setAmountExVat/-IncVat at all
+        
+        //if at least one of the non-discount rows are defined exvat, need to use set priceIncludingVat to false
+        if ($exVat >= 1) {
+            $this->priceIncludingVat = FALSE;
+        }  else {
+            $this->priceIncludingVat = TRUE;
         }
-          //if atleast one of the rows are set as exVat
-          if ($exVat >= 1) {
-              $this->priceIncludingVat = FALSE;
-          }  else {
-              $this->priceIncludingVat = TRUE;
-          }
     }
 }
