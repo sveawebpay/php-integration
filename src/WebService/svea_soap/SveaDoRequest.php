@@ -19,11 +19,22 @@ class SveaDoRequest {
      */
     public function __construct($serverUrl) {
         $this->svea_server = $serverUrl;
-        $this->client = $this->SetSoapClient();
+        $this->client = $this->SetSoapClient();        
     }
-
+    
     private function SetSoapClient() {
-         return new \SoapClient($this->svea_server, array('trace' => 1));
+        
+        $client = new \SoapClient(
+            $this->svea_server, 
+            array(
+                //"exceptions" => 0,
+                "trace" => 1,
+                //"encoding" => $phpInternalEncoding,
+                'stream_context' => stream_context_create(array('http' => array('header' => 'X-Svea-TestHeader: hello world')))
+            )
+        );
+
+        return $client;    
     }
 
     /**
