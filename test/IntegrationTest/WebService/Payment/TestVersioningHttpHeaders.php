@@ -49,7 +49,16 @@ class TestVersioningHttpHeadersIntegrationTest extends PHPUnit_Framework_TestCas
                        "MOCKED_TYPE" => $mockedServiceUrl
         );
         
-        $mockedServiceConfig = new Svea\SveaConfigurationProvider( array("url" => $testurl, "credentials" => $mockedCountryConfig) );        
+        $integrationproperties = array(
+                        'integrationcompany' => "myintegrationcompany",
+                        'integrationversion' => "myintegrationversion",
+                        'integrationplatform' => "myintegrationplatform"
+                    )
+        ;
+        
+        $mockedServiceConfig = new Svea\SveaConfigurationProvider( 
+            array("url" => $testurl, "credentials" => $mockedCountryConfig, "integrationproperties" => $integrationproperties) 
+        );        
         
         $request = WebPay::createOrder($mockedServiceConfig)
                     ->addOrderRow(
@@ -62,15 +71,15 @@ class TestVersioningHttpHeadersIntegrationTest extends PHPUnit_Framework_TestCas
                     ->setCountryCode($mockedServiceCountry)
                     ->setOrderDate("2012-12-12")                
         ;        
-//        $soapRequest = $request->useInvoicePayment()->prepareRequest();
-//        print_r( $soapRequest );
+        $soapRequest = $request->useInvoicePayment()->prepareRequest();
+        print_r( $soapRequest );
 
         $invoicePayment = $request->useInvoicePayment();                
         $invoicePayment->orderType = "MOCKED_TYPE";
-//        $soapRequest = $invoicePayment->prepareRequest();
-//        print_r( $soapRequest );                
+        $soapRequest = $invoicePayment->prepareRequest();
+        print_r( $soapRequest );                
         $response = $invoicePayment->doRequest();
-        //print_r( $response );
+        print_r( $response );
 
         $this->assertEquals(1, $response->accepted);
     }

@@ -17,18 +17,18 @@ class SveaDoRequest {
      * Constructor, sets up soap server and SoapClient
      * @param string $serverUrl
      */
-    public function __construct($serverUrl) {
-        $this->svea_server = $serverUrl;
-        $this->client = $this->SetSoapClient();        
+    public function __construct($wsp) {        
+        $this->svea_server = $wsp->order->conf->getEndPoint($wsp->orderType);        
+        $this->client = $this->SetSoapClient( $wsp->order->conf );        
     }
     
-    private function SetSoapClient() {
+    private function SetSoapClient( $config) {
            
-        $libraryLanguage = "mocklanguage";
-        $libraryVersion = "mocklibver";
-        $integrationPlatform = "mockintplat";
-        $integrationCompany = "mockintcomp";
-        $integrationVersion = "mockintver";
+        $libraryLanguage = "mochliblang";
+        $libraryVersion =  "mocklibver";
+        $integrationPlatform = $config->getIntegrationPlatform();
+        $integrationCompany = $config->getIntegrationCompany();
+        $integrationVersion = $config->getIntegrationVersion();
                 
         $client = new \SoapClient(             
             $this->svea_server, 
