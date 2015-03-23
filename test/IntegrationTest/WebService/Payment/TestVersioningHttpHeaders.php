@@ -38,7 +38,7 @@ class TestVersioningHttpHeadersIntegrationTest extends PHPUnit_Framework_TestCas
             )
         );
 
-        $mockedServiceUrl = "http://PC362:8088/mockWebServiceEU";
+        $mockedServiceUrl = "http://PC362:8088/mockWebServiceEU?WSDL";   // generated in local SoapUI installation
 
         $testurl = array(
                        \ConfigurationProvider::HOSTED_TYPE      => Svea\SveaConfig::SWP_TEST_URL,
@@ -61,18 +61,16 @@ class TestVersioningHttpHeadersIntegrationTest extends PHPUnit_Framework_TestCas
                     ->addCustomerDetails(TestUtil::createIndividualCustomer("SE"))
                     ->setCountryCode($mockedServiceCountry)
                     ->setOrderDate("2012-12-12")                
-        ;
-        
+        ;        
 //        $soapRequest = $request->useInvoicePayment()->prepareRequest();
 //        print_r( $soapRequest );
 
         $invoicePayment = $request->useInvoicePayment();                
         $invoicePayment->orderType = "MOCKED_TYPE";
-        $soapRequest = $invoicePayment->prepareRequest();
-        print_r( $soapRequest );
-                
+//        $soapRequest = $invoicePayment->prepareRequest();
+//        print_r( $soapRequest );                
         $response = $invoicePayment->doRequest();
-        print_r( $response );
+        //print_r( $response );
 
         $this->assertEquals(1, $response->accepted);
     }

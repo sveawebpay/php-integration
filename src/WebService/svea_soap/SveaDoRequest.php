@@ -24,13 +24,25 @@ class SveaDoRequest {
     
     private function SetSoapClient() {
            
+        $libraryLanguage = "mocklanguage";
+        $libraryVersion = "mocklibver";
+        $integrationPlatform = "mockintplat";
+        $integrationCompany = "mockintcomp";
+        $integrationVersion = "mockintver";
+                
         $client = new \SoapClient(             
-            $this->svea_server . "?WSDL", 
+            $this->svea_server, 
             array(
                 "trace" => 1,
-                'stream_context' => stream_context_create(array('http' => array('header' => 'X-Svea-TestHeader: hello world')))
+                'stream_context' => stream_context_create(array('http' => array(
+                    'header' => 'X-Svea-Library-Language: ' . $libraryLanguage . "\n" . 
+                                'X-Svea-Library-Version: ' . $libraryVersion . "\n" .              
+                                'X-Svea-Integration-Platform: ' . $integrationPlatform . "\n" .              
+                                'X-Svea-Integration-Company: ' . $integrationCompany . "\n" .              
+                                'X-Svea-Integration-Version: ' . $integrationVersion               
+                )))
             )
-        ); 
+        );
 
         return $client;    
     }
