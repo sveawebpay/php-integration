@@ -23,16 +23,14 @@ class SveaDoRequest {
     }
     
     private function SetSoapClient() {
-        
-        $client = new \SoapClient(
-            $this->svea_server, 
+           
+        $client = new \SoapClient(             
+            $this->svea_server . "?WSDL", 
             array(
-                //"exceptions" => 0,
                 "trace" => 1,
-                //"encoding" => $phpInternalEncoding,
                 'stream_context' => stream_context_create(array('http' => array('header' => 'X-Svea-TestHeader: hello world')))
             )
-        );
+        ); 
 
         return $client;    
     }

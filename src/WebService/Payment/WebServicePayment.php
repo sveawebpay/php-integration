@@ -22,7 +22,6 @@ class WebServicePayment {
     }
 
     private function getPasswordBasedAuthorization() {
-       // $authArray = $this->order->conf->getPasswordBasedAuthorization($this->orderType);
         $auth = new WebServiceSoap\SveaAuth();
         $auth->Username = $this->order->conf->getUsername($this->orderType,  $this->order->countryCode);
         $auth->Password = $this->order->conf->getPassword($this->orderType,  $this->order->countryCode);
