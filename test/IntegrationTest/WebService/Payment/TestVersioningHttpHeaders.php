@@ -72,10 +72,10 @@ class TestVersioningHttpHeadersIntegrationTest extends PHPUnit_Framework_TestCas
                     ->setOrderDate("2012-12-12")                
         ;        
         $soapRequest = $request->useInvoicePayment()->prepareRequest();
-        print_r( $soapRequest );
+//        print_r( $soapRequest );
 
         $invoicePayment = $request->useInvoicePayment();                
-        $invoicePayment->orderType = "MOCKED_TYPE";
+        $invoicePayment->orderType = "MOCKED_TYPE"; // also need to hack AdminServiceRequest doRequest to use this instead of ADMIN_TYPE
 //        $soapRequest = $invoicePayment->prepareRequest();
 //        print_r( $soapRequest );                
         $response = $invoicePayment->doRequest();
@@ -83,4 +83,87 @@ class TestVersioningHttpHeadersIntegrationTest extends PHPUnit_Framework_TestCas
 
         $this->assertEquals(1, $response->accepted);
     }
+    
+    public function test_queryOrder_queryInvoiceOrder_is_accepted() {
+                
+        $mockedServiceCountry = "SE";
+        
+        $invoiceUsername = "sverigetest";
+        $invoicePassword = "sverigetest";
+        $invoiceClientNo = "79021";
+        
+        $paymentplanUsername = $invoiceUsername;
+        $paymentplanPassword = $invoicePassword;
+        $paymentplanClientNo = $invoiceClientNo;
+        $merchantId = "1130";
+        $secret = "wrong_secret";
+        
+        $mockedCountryConfig[$mockedServiceCountry] = array( "auth" =>
+            array(
+                \ConfigurationProvider::INVOICE_TYPE =>
+                    array("username" => $invoiceUsername, "password" => $invoicePassword, "clientNumber" => $invoiceClientNo),
+                \ConfigurationProvider::PAYMENTPLAN_TYPE =>
+                    array("username" => $paymentplanUsername, "password" => $paymentplanPassword, "clientNumber" => $paymentplanClientNo),
+                \ConfigurationProvider::HOSTED_TYPE =>
+                    array("merchantId" => $merchantId, "secret" => $secret),
+                "MOCKED_TYPE" =>
+                    array("username" => $invoiceUsername, "password" => $invoicePassword, "clientNumber" => $invoiceClientNo)
+
+            )
+        );
+
+        $mockedAdminServiceUrl = "http://PC362:8089/mockAdminSoapService?WSDL";   // generated in local SoapUI installation
+
+        $testurl = array(
+                       \ConfigurationProvider::HOSTED_TYPE      => Svea\SveaConfig::SWP_TEST_URL,
+                       \ConfigurationProvider::INVOICE_TYPE     => Svea\SveaConfig::SWP_TEST_WS_URL,
+                       \ConfigurationProvider::PAYMENTPLAN_TYPE => Svea\SveaConfig::SWP_TEST_WS_URL,
+                       \ConfigurationProvider::HOSTED_ADMIN_TYPE => Svea\SveaConfig::SWP_TEST_HOSTED_ADMIN_URL,
+                       \ConfigurationProvider::ADMIN_TYPE  => Svea\SveaConfig::SWP_TEST_ADMIN_URL,
+                       "MOCKED_TYPE" => $mockedAdminServiceUrl
+        );
+        
+        $integrationproperties = array(
+                        'integrationcompany' => "myintegrationcompany",
+                        'integrationversion' => "myintegrationversion",
+                        'integrationplatform' => "myintegrationplatform"
+                    )
+        ;
+        
+        $mockedAdminServiceConfig = new Svea\SveaConfigurationProvider( 
+            array("url" => $testurl, "credentials" => $mockedCountryConfig, "integrationproperties" => $integrationproperties) 
+        );        
+        
+
+        $config = Svea\SveaConfig::getDefaultConfig();
+        $orderResponse = WebPay::createOrder($config)
+                ->addOrderRow(
+                        WebPayItem::orderRow()
+                        ->setAmountExVat(99.99) // => 123.9876 inc
+                        ->setVatPercent(24)
+                        ->setQuantity(1)
+                )
+                ->addCustomerDetails(TestUtil::createIndividualCustomer("SE"))
+                ->setCountryCode("SE")
+                ->setOrderDate("2012-12-12")
+                ->useInvoicePayment()->doRequest();
+        $this->assertEquals(1, $orderResponse->accepted);        
+        
+        $queryRequest = WebPayAdmin::queryOrder( $mockedAdminServiceConfig )
+                ->setOrderId($orderResponse->sveaOrderId)
+                ->setCountryCode('SE')
+        ;
+        
+//        $soapQueryRequest = $queryRequest->queryInvoiceOrder()->prepareRequest();
+//        print_r( $soapQueryRequest );
+
+        $queryInvoiceOrder = $queryRequest->queryInvoiceOrder();                
+        $queryInvoiceOrder->orderBuilder->orderType = "MOCKED_TYPE";
+               
+        $queryResponse = $queryInvoiceOrder->doRequest();
+        
+        
+//        print_r($queryResponse);
+        $this->assertEquals(1, $queryResponse->accepted);  
+    } 
 }
