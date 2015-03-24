@@ -127,4 +127,43 @@ class SveaConfigurationProvider implements \ConfigurationProvider {
     private function throwInvalidTypeException( $invalid_type ) {
         throw new InvalidTypeException( sprintf('Invalid ConfigurationProvider::XXX_TYPE \"%s\".', $invalid_type) );
     }
+    
+    public function getIntegrationPlatform() {
+        try {
+            $integrationplatform = $this->getIntegrationProperty('integrationplatform');  
+        }
+        catch( InvalidTypeException $e ) {
+            $integrationplatform = "Please provide your integration platform here.";
+        }   
+        return $integrationplatform;
+    }
+    
+    public function getIntegrationVersion() {
+        try {
+            $integrationversion = $this->getIntegrationProperty('integrationversion');        
+        }
+        catch( InvalidTypeException $e ) {
+            $integrationversion = "Please provide your integration version here.";
+        }        
+        return $integrationversion;
+    }
+    
+    public function getIntegrationCompany() {
+        try {
+            $integrationcompany = $this->getIntegrationProperty('integrationcompany');        
+        }
+        catch( InvalidTypeException $e ) {
+            $integrationcompany = "Please provide your integration company here.";
+        }
+        return $integrationcompany;
+    }
+
+    private function getIntegrationProperty($property)
+    {
+        if (array_key_exists('integrationproperties', $this->conf) == FALSE) {
+            throw new InvalidTypeException( "integration properties not set" );
+        } 
+        return $this->conf['integrationproperties'][$property];
+    }
+   
 }

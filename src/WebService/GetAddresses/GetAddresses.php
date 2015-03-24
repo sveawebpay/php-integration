@@ -248,8 +248,7 @@ class GetAddresses {
     public function doRequest() {
         $this->request = $this->prepareRequest();
         
-        $url = $this->conf->getEndPoint($this->orderType);
-        $request = new WebServiceSoap\SveaDoRequest($url);
+        $request = new WebServiceSoap\SveaDoRequest($this->conf, $this->orderType);
 
         $svea_req = $request->GetAddresses($this->request);
 

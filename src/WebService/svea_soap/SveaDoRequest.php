@@ -15,15 +15,39 @@ class SveaDoRequest {
 
     /**
      * Constructor, sets up soap server and SoapClient
-     * @param string $serverUrl
+     * @param ConfigurationProvider $config
+     * @param string $orderType -- see ConfigurationProvider:: constants
      */
-    public function __construct($serverUrl) {
-        $this->svea_server = $serverUrl;
-        $this->client = $this->SetSoapClient();
+    public function __construct($config, $ordertype) {        
+        $this->svea_server = $config->getEndPoint($ordertype);        
+        $this->client = $this->SetSoapClient( $config );        
     }
+    
+    private function SetSoapClient( $config) {
+           
+        $libraryProperties = \Svea\Helper::getSveaLibraryProperties();
+        $libraryName = $libraryProperties['library_name'];
+        $libraryVersion =  $libraryProperties['library_version'];
+        
+        $integrationPlatform = $config->getIntegrationPlatform();
+        $integrationCompany = $config->getIntegrationCompany();
+        $integrationVersion = $config->getIntegrationVersion();
+                        
+        $client = new \SoapClient(             
+            $this->svea_server, 
+            array(
+                "trace" => 1,
+                'stream_context' => stream_context_create(array('http' => array(
+                    'header' => 'X-Svea-Library-Name: ' . $libraryName . "\n" . 
+                                'X-Svea-Library-Version: ' . $libraryVersion . "\n" .              
+                                'X-Svea-Integration-Platform: ' . $integrationPlatform . "\n" .              
+                                'X-Svea-Integration-Company: ' . $integrationCompany . "\n" .              
+                                'X-Svea-Integration-Version: ' . $integrationVersion               
+                )))
+            )
+        );
 
-    private function SetSoapClient() {
-         return new \SoapClient($this->svea_server, array('trace' => 1));
+        return $client;    
     }
 
     /**

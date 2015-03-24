@@ -138,4 +138,44 @@ class Helper {
         return $addressArr;
     }
 
+    /**
+     * Parses the src/docs/info.json file and returns associative array containing Svea integration package (library) name, version et al.
+     * array contains keys "library_name" and "library_version"
+     */
+    static function getSveaLibraryProperties() { 
+        if (!defined('SVEA_REQUEST_DIR')) {
+            define('SVEA_REQUEST_DIR', dirname(__FILE__));
+        }
+        $info_json = file_get_contents(SVEA_REQUEST_DIR . "/docs/info.json");
+        $library_properties = json_decode($info_json, true);
+        return $library_properties;
+    }
+
+    /**
+     * Given a ConfigurationProvider, return a json string containing the Svea integration package (library) 
+     * and integration (from config) name, version et al. Used by HostedService requests.
+     * @param ConfigurationProvider $config
+     * @return string in json format
+     */
+    static function getLibraryAndPlatformPropertiesAsJson( $config ) {
+        
+        $libraryProperties = \Svea\Helper::getSveaLibraryProperties();
+        $libraryName = $libraryProperties['library_name'];
+        $libraryVersion =  $libraryProperties['library_version'];
+        
+        $integrationPlatform = $config->getIntegrationPlatform();
+        $integrationCompany = $config->getIntegrationCompany();
+        $integrationVersion = $config->getIntegrationVersion();
+                        
+        $properties_json =  '{' . 
+                            '"X-Svea-Library-Name": "' . $libraryName . '", ' . 
+                            '"X-Svea-Library-Version": "' . $libraryVersion . '", ' .              
+                            '"X-Svea-Integration-Platform": "' . $integrationPlatform . '", ' .              
+                            '"X-Svea-Integration-Company": "' . $integrationCompany . '", ' .              
+                            '"X-Svea-Integration-Version": "' . $integrationVersion . '"' .
+                            '}'
+        ;           
+
+        return $properties_json;
+    }   
 }

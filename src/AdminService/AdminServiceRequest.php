@@ -26,11 +26,10 @@ abstract class AdminServiceRequest {
      * Returns the apropriate request response class, as determined by SveaResponse matching on request action.
      */
     public function doRequest( $resendOrderWithFlippedPriceIncludingVat = false ) {
-
-        $endpoint = $this->orderBuilder->conf->getEndPoint( \ConfigurationProvider::ADMIN_TYPE );   // get test or prod using child instance data
+        
         $requestObject = $this->prepareRequest( $resendOrderWithFlippedPriceIncludingVat );
 
-        $soapClient = new AdminSoap\SoapClient( $endpoint );
+        $soapClient = new AdminSoap\SoapClient( $this->orderBuilder->conf, \ConfigurationProvider::ADMIN_TYPE );
         $soapResponse = $soapClient->doSoapCall($this->action, $requestObject );
         $sveaResponse = new \SveaResponse( $soapResponse, null, null, $this->action );
         $response = $sveaResponse->getResponse();

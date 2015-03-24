@@ -22,7 +22,6 @@ class WebServicePayment {
     }
 
     private function getPasswordBasedAuthorization() {
-       // $authArray = $this->order->conf->getPasswordBasedAuthorization($this->orderType);
         $auth = new WebServiceSoap\SveaAuth();
         $auth->Username = $this->order->conf->getUsername($this->orderType,  $this->order->countryCode);
         $auth->Password = $this->order->conf->getPassword($this->orderType,  $this->order->countryCode);
@@ -111,8 +110,7 @@ class WebServicePayment {
     public function doRequest() {
 
         $object = $this->prepareRequest();
-        $url = $this->order->conf->getEndPoint($this->orderType);
-        $request = new WebServiceSoap\SveaDoRequest($url);
+        $request = new WebServiceSoap\SveaDoRequest($this->order->conf, $this->orderType);
         $svea_req = $request->CreateOrderEu($object);
 
         $response = new \SveaResponse($svea_req,"");
