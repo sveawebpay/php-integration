@@ -32,14 +32,12 @@ class TestConf implements \ConfigurationProvider {
     }
     
     public function getIntegrationPlatform() {
-        $library_properties = Helper::getLibraryProperties();
-        return $library_properties['integration_name']." UnitTest HostedService Payment TestConf.php";
+        return "integration_name";
     }
     public function getIntegrationCompany() {
         return "Svea WebPay";
     }
     public function getIntegrationVersion() {
-        $library_properties = Helper::getLibraryProperties();
-        return $library_properties['integration_version'];
+        return 'integration_version';
     }
 }

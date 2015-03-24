@@ -72,6 +72,7 @@ class RecurTransaction extends HostedRequest {
         $XMLWriter->openMemory();
         $XMLWriter->setIndent(true);
         $XMLWriter->startDocument("1.0", "UTF-8");        
+        $XMLWriter->writeComment( \Svea\Helper::getLibraryAndPlatformPropertiesAsJson( $this->config ) );                
             $XMLWriter->startElement($this->method);   
                 $XMLWriter->writeElement("amount",$this->amount);
                 $XMLWriter->writeElement("customerrefno",$this->customerRefNo);

@@ -54,7 +54,8 @@ class CreditTransaction extends HostedRequest {
 
         $XMLWriter->openMemory();
         $XMLWriter->setIndent(true);
-        $XMLWriter->startDocument("1.0", "UTF-8");        
+        $XMLWriter->startDocument("1.0", "UTF-8");   
+        $XMLWriter->writeComment( \Svea\Helper::getLibraryAndPlatformPropertiesAsJson( $this->config ) );                        
             $XMLWriter->startElement($this->method);   
                 $XMLWriter->writeElement("transactionid",$this->transactionId);
                 $XMLWriter->writeElement("amounttocredit",$this->creditAmount);

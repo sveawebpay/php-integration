@@ -4,7 +4,7 @@ namespace Svea\HostedService;
 require_once SVEA_REQUEST_DIR . '/Includes.php';
 
 /**
- * HostedRequest is the parent of hosted webservice requests.
+ * HostedRequest is the parent of hosted webservice (admin) requests.
  * 
  * @author Kristian Grossman-Madsen
  */
