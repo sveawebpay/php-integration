@@ -7,21 +7,26 @@ class SoapClient {
 
     /**
      * Constructor, sets up soap server and SoapClient
-     * @param string $endpoint
+     * @param ConfigurationProvider $config
+     * @param string $orderType
      */
-    public function __construct($endpoint) {
-        $this->client = $this->setSoapClient( $endpoint );
+    public function __construct($config, $orderType ) {
+        $this->client = $this->setSoapClient( $config, $orderType );
     }
 
     /**
      * When used from PHP, the SveaWebPay Administration Service requires some configuration.
-     * getSoapClient() takes the endpoint url and returns a SoapClient with a working set
+     * getSoapClient() takes the config and eturns a SoapClient with a working set
      * of options, bypassing the server wsdl.
      *
-     * @param string $endpoint
+     * @param ConfigurationProvider $config
+     * @param string $orderType
      * @return SoapClient
      */
-    public function setSoapClient( $endpoint ) {
+    public function setSoapClient( $config, $orderType ) {
+        
+        $endpoint = $config->getEndPoint( $orderType );    
+        
         $client = new \SoapClient(
             null,
             array(
