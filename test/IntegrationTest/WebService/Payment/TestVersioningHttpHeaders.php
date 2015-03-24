@@ -76,10 +76,10 @@ class TestVersioningHttpHeadersIntegrationTest extends PHPUnit_Framework_TestCas
 
         $invoicePayment = $request->useInvoicePayment();                
         $invoicePayment->orderType = "MOCKED_TYPE";
-        $soapRequest = $invoicePayment->prepareRequest();
-        print_r( $soapRequest );                
+//        $soapRequest = $invoicePayment->prepareRequest();
+//        print_r( $soapRequest );                
         $response = $invoicePayment->doRequest();
-        print_r( $response );
+//        print_r( $response );
 
         $this->assertEquals(1, $response->accepted);
     }

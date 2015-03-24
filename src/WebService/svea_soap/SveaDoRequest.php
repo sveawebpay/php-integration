@@ -24,18 +24,20 @@ class SveaDoRequest {
     
     private function SetSoapClient( $config) {
            
-        $libraryLanguage = "mochliblang";
-        $libraryVersion =  "mocklibver";
+        $libraryProperties = \Svea\Helper::getSveaLibraryProperties();
+        $libraryName = $libraryProperties['library_name'];
+        $libraryVersion =  $libraryProperties['library_version'];
+        
         $integrationPlatform = $config->getIntegrationPlatform();
         $integrationCompany = $config->getIntegrationCompany();
         $integrationVersion = $config->getIntegrationVersion();
-                
+                        
         $client = new \SoapClient(             
             $this->svea_server, 
             array(
                 "trace" => 1,
                 'stream_context' => stream_context_create(array('http' => array(
-                    'header' => 'X-Svea-Library-Language: ' . $libraryLanguage . "\n" . 
+                    'header' => 'X-Svea-Library-Name: ' . $libraryName . "\n" . 
                                 'X-Svea-Library-Version: ' . $libraryVersion . "\n" .              
                                 'X-Svea-Integration-Platform: ' . $integrationPlatform . "\n" .              
                                 'X-Svea-Integration-Company: ' . $integrationCompany . "\n" .              

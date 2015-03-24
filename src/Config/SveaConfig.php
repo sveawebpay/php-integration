@@ -255,8 +255,17 @@ class SveaConfig {
                        \ConfigurationProvider::HOSTED_ADMIN_TYPE => self::SWP_PROD_HOSTED_ADMIN_URL,
                        \ConfigurationProvider::ADMIN_TYPE => self::SWP_PROD_ADMIN_URL
         );
+        
+        $integrationproperties = array(
+                        'integrationcompany' => "myintegrationcompany",
+                        'integrationversion' => "myintegrationversion",
+                        'integrationplatform' => "myintegrationplatform"
+                    )
+        ;
 
         // return a ConfigurationProvider object
-        return new SveaConfigurationProvider(array("url" => $prod ? $produrl : $testurl, "credentials" => $singleCountryConfig));
+        return new SveaConfigurationProvider(
+            array("url" => $prod ? $produrl : $testurl, "credentials" => $singleCountryConfig, "integrationproperties" => $integrationproperties)
+        );
     }
 }
