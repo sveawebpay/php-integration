@@ -15,11 +15,12 @@ class SveaDoRequest {
 
     /**
      * Constructor, sets up soap server and SoapClient
-     * @param string $serverUrl
+     * @param ConfigurationProvider $config
+     * @param string $orderType -- see ConfigurationProvider:: constants
      */
-    public function __construct($wsp) {        
-        $this->svea_server = $wsp->order->conf->getEndPoint($wsp->orderType);        
-        $this->client = $this->SetSoapClient( $wsp->order->conf );        
+    public function __construct($config, $ordertype) {        
+        $this->svea_server = $config->getEndPoint($ordertype);        
+        $this->client = $this->SetSoapClient( $config );        
     }
     
     private function SetSoapClient( $config) {
