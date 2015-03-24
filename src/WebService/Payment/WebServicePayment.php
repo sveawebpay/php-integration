@@ -110,7 +110,7 @@ class WebServicePayment {
     public function doRequest() {
 
         $object = $this->prepareRequest();
-        $request = new WebServiceSoap\SveaDoRequest($this);
+        $request = new WebServiceSoap\SveaDoRequest($this->order->conf, $this->orderType);
         $svea_req = $request->CreateOrderEu($object);
 
         $response = new \SveaResponse($svea_req,"");
