@@ -45,7 +45,8 @@ class QueryTransaction extends HostedRequest {
         $XMLWriter->openMemory();
         $XMLWriter->setIndent(true);
         $XMLWriter->startDocument("1.0", "UTF-8");        
-            $XMLWriter->startElement("query");  // note, different than $this->method above   
+        $XMLWriter->writeComment( \Svea\Helper::getLibraryAndPlatformPropertiesAsJson( $this->config ) );                
+            $XMLWriter->startElement("query");  // note, not the same as $this->method above   
                 $XMLWriter->writeElement("transactionid",$this->transactionId);
             $XMLWriter->endElement();
         $XMLWriter->endDocument();

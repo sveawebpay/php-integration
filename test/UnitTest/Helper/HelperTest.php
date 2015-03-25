@@ -158,7 +158,11 @@ class HelperTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals( 25, $taxRates[0] );
         $this->assertEquals( 6, $taxRates[1] );
     }
-
-
+    
+    function test_getSveaLibraryProperties() { 
+        $libraryPropertiesArray = Helper::getSveaLibraryProperties();
+        $this->assertTrue( array_key_exists("library_name", $libraryPropertiesArray) );
+        $this->assertTrue( array_key_exists("library_version", $libraryPropertiesArray) );
+    }  
 }
 ?>

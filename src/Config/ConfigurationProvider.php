@@ -94,4 +94,24 @@ interface ConfigurationProvider {
      * @param string $type one of ConfigurationProvider::HOSTED_TYPE, ::INVOICE_TYPE, ::PAYMENTPLAN_TYPE, ::HOSTED_ADMIN_TYPE, ::ADMIN_TYPE
      */
     public function getEndPoint($type);
+    
+    /**
+     * Use this to provide information about your integration platform (i.e. Magento, OpenCart et al), that will be sent to Svea with every service
+     * request. Should return a string. The information provided is sent as plain text and should not include any confidential information.
+     */    
+    public function getIntegrationPlatform();
+    
+    /**
+     * Use this to provide information about the company providing this particular integration (i.e. Svea Ekonomi, for the Svea Opencart module, et al), that 
+     * will be sent to Svea with every service request. Should return a string. The information provided is sent as plain text and should not include any 
+     * confidential information.
+     */  
+    public function getIntegrationCompany();
+
+    /**
+     * Use this to provide information about the version of this particular integration integration platform (i.e. 2.0.1 et al), that will be sent to Svea
+     * with every service request. Should return a string. The information provided is sent as plain text and should not include any confidential information.
+     */  
+    public function getIntegrationVersion();
+
 }

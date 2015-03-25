@@ -14,11 +14,12 @@ class HostedXmlBuilder {
     private $XMLWriter;
     private $isCompany = "FALSE";   // set to true by serializeCustomer if needed.
 
-    private function setBaseXML(){
+    private function setBaseXML( $config ){
         $this->XMLWriter = new \XMLWriter();
         $this->XMLWriter->openMemory();
         $this->XMLWriter->setIndent(true);
-        $this->XMLWriter->startDocument("1.0", "UTF-8");
+        $this->XMLWriter->startDocument("1.0", "UTF-8");                                    
+        $this->XMLWriter->writeComment( \Svea\Helper::getLibraryAndPlatformPropertiesAsJson( $config ) );
     }    
 
     /**
@@ -43,7 +44,7 @@ class HostedXmlBuilder {
      * This method expect UTF-8 input
      */
     public function getPaymentXML($request, $order) {
-        $this->setBaseXML();
+        $this->setBaseXML( $order->conf );
         $this->XMLWriter->startElement("payment");
         
         //paymentmethod -- optional
@@ -115,7 +116,7 @@ class HostedXmlBuilder {
      * This method expect UTF-8 input
      */
     public function getPreparePaymentXML($request, $order) {
-        $this->setBaseXML();
+        $this->setBaseXML( $order->conf );
         $this->XMLWriter->startElement("payment");
 
         if (isset($request['paymentMethod'])) {

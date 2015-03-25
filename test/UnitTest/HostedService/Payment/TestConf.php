@@ -30,4 +30,14 @@ class TestConf implements \ConfigurationProvider {
     public function getClientNumber($type, $country) {
         return "clientnumber";
     }
+    
+    public function getIntegrationPlatform() {
+        return "integration_name";
+    }
+    public function getIntegrationCompany() {
+        return "Svea WebPay";
+    }
+    public function getIntegrationVersion() {
+        return 'integration_version';
+    }
 }

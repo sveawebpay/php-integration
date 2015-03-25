@@ -63,14 +63,12 @@ class DeliverInvoice extends HandleOrder {
     public function doRequest() {
         $requestObject = $this->prepareRequest();
         $priceIncludingVat =  $requestObject->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][0]->PriceIncludingVat;
-        $url = $this->orderBuilder->conf->getEndPoint($this->orderBuilder->orderType);
-        $request = new WebServiceSoap\SveaDoRequest($url);
+        $request = new WebServiceSoap\SveaDoRequest($this->orderBuilder->conf, $this->orderBuilder->orderType);
         $response = $request->DeliverOrderEu($requestObject);
         $responseObject = new \SveaResponse($response,"");
         if ($responseObject->response->resultcode == "50036") {
             $requestObject = $this->prepareRequest($priceIncludingVat);
-            $url = $this->orderBuilder->conf->getEndPoint($this->orderBuilder->orderType);
-            $request = new WebServiceSoap\SveaDoRequest($url);
+            $request = new WebServiceSoap\SveaDoRequest($this->orderBuilder->conf,$this->orderBuilder->orderType);
             $response = $request->DeliverOrderEu($requestObject);
             $responseObject = new \SveaResponse($response,"");
         }
