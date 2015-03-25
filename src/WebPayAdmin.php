@@ -34,11 +34,6 @@ The WebPay and WebPayAdmin entrypoint methods are built as a fluent API so you c
 
 ### Development environment
 The Svea WebPay PHP integration package is developed and tested using NetBeans IDE 7.3.1 with the phpunit 3.7.24 plugin.
- *
- * @api
- * @version 2.2.4
- * @package WebPay
- *
  * @author Anneli Halld'n, Daniel Brolund, Kristian Grossman-Madsen for Svea WebPay
  */
 class WebPayAdmin {
