@@ -152,6 +152,27 @@ class Helper {
     }
 
     /**
+     * Checks ConfigurationProvider for getIntegrationXX() methods, and returns associative array containing Svea integration platform, version et al.
+     * array contains keys "integration_platform", "integration_version", "integration_company"
+     * @param ConfigurationProvider $config
+     */
+    static function getSveaIntegrationProperties( $config ) { 
+        $integrationPlatform = 
+            method_exists($config, "getIntegrationPlatform") ? $config->getIntegrationPlatform() : "Integration platform not available";
+        $integrationCompany = 
+            method_exists($config, "getIntegrationCompany") ? $config->getIntegrationCompany() : "Integration company not available";
+        $integrationVersion = 
+            method_exists($config, "getIntegrationVersion") ? $config->getIntegrationVersion() : "Integration version not available";
+          
+        $integration_properties = array( 
+            "integration_platform" => $integrationPlatform,
+            "integration_version" => $integrationCompany,
+            "integration_company" => $integrationVersion 
+        );
+        return $integration_properties;
+    }    
+    
+    /**
      * Given a ConfigurationProvider, return a json string containing the Svea integration package (library) 
      * and integration (from config) name, version et al. Used by HostedService requests.
      * @param ConfigurationProvider $config
