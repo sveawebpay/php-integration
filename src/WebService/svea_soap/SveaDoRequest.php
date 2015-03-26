@@ -23,15 +23,16 @@ class SveaDoRequest {
         $this->client = $this->SetSoapClient( $config );        
     }
     
-    private function SetSoapClient( $config) {
+    private function SetSoapClient($config) {
            
         $libraryProperties = \Svea\Helper::getSveaLibraryProperties();
         $libraryName = $libraryProperties['library_name'];
         $libraryVersion =  $libraryProperties['library_version'];
-        
-        $integrationPlatform = $config->getIntegrationPlatform();
-        $integrationCompany = $config->getIntegrationCompany();
-        $integrationVersion = $config->getIntegrationVersion();
+
+        $integrationProperties = \Svea\Helper::getSveaIntegrationProperties($config);
+        $integrationPlatform = $integrationProperties['integration_platform'];
+        $integrationCompany = $integrationProperties['integration_company'];
+        $integrationVersion = $integrationProperties['integration_version'];        
                         
         $client = new \SoapClient(             
             $this->svea_server, 
