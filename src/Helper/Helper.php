@@ -184,10 +184,11 @@ class Helper {
         $libraryName = $libraryProperties['library_name'];
         $libraryVersion =  $libraryProperties['library_version'];
         
-        $integrationPlatform = $config->getIntegrationPlatform();
-        $integrationCompany = $config->getIntegrationCompany();
-        $integrationVersion = $config->getIntegrationVersion();
-                        
+        $integrationProperties = \Svea\Helper::getSveaIntegrationProperties($config);
+        $integrationPlatform = $integrationProperties['integration_platform'];
+        $integrationCompany = $integrationProperties['integration_company'];
+        $integrationVersion = $integrationProperties['integration_version'];        
+                         
         $properties_json =  '{' . 
                             '"X-Svea-Library-Name": "' . $libraryName . '", ' . 
                             '"X-Svea-Library-Version": "' . $libraryVersion . '", ' .              
