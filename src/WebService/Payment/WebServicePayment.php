@@ -123,8 +123,11 @@ class WebServicePayment {
      * @return \SveaCreateOrderInformation
      */
     protected function formatOrderInformationWithOrderRows($rows) {
-        $orderInformation = new WebServiceSoap\SveaCreateOrderInformation((isset($this->order->campaignCode) ? $this->order->campaignCode : ""),
-                        (isset($this->order->sendAutomaticGiroPaymentForm) ? $this->order->sendAutomaticGiroPaymentForm : 0));
+        $orderInformation = new WebServiceSoap\SveaCreateOrderInformation(
+                (isset($this->order->campaignCode) ? $this->order->campaignCode : ""),
+                (isset($this->order->sendAutomaticGiroPaymentForm) ? $this->order->sendAutomaticGiroPaymentForm : 0)
+            )
+        ;
 
         // rewrite order rows to soap_class order rows
         $formatter = new WebServiceRowFormatter($this->order);
