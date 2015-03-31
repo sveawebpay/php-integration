@@ -542,7 +542,15 @@ class WebServiceRowFormatter {
             }
         }
         //fixed discount
-        // ignored, as fixed discount setAmountExVat does not bear the same meaning as in order/fee rows, so ignored when determining priceIncludingVat
+        foreach ($this->order->fixedDiscountRows as $row) {
+               if(isset($row->amountExVat) && isset($row->amountIncVat)){
+                $incVat++;
+            } if (isset($row->amountExVat) && !isset($row->amountIncVat)) {
+                $exVat++;
+            }else {
+                $incVat++;
+            }
+        }         
 
         //relative discount
         // ignored, as relative discount doesn't use setAmountExVat/-IncVat at all
