@@ -271,7 +271,7 @@ class WebServicePayment {
     }
 
     private function calculateOrderRowExVat($value) {
-        if ($value->PriceIncludingVat == 1) {
+        if ($value->PriceIncludingVat == true) {
             $rowsum_incvat =
                     round($value->NumberOfUnits, 2, PHP_ROUND_HALF_EVEN) *
                     round($value->PricePerUnit, 2, PHP_ROUND_HALF_EVEN) * 
@@ -292,7 +292,7 @@ class WebServicePayment {
         //if amount inc vat
         $sum = 0;
         //calculate the exvat sum
-        if ($value->PriceIncludingVat == 1) {
+        if ($value->PriceIncludingVat == true) {
             $rowsum_incvat = 
                 round($value->NumberOfUnits, 2, PHP_ROUND_HALF_EVEN) * 
                 round($value->PricePerUnit, 2, PHP_ROUND_HALF_EVEN) * 

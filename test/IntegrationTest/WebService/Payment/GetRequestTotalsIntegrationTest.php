@@ -322,7 +322,7 @@ class FixedDiscountRowsIntegrationTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals( "131.40", $response->amount );
     }
     // same order with discount exvat should be sent with PriceIncludingVat = true but with split discount rows based on order amounts ex vat
-    public function test_incvat_order_with_fixedDiscount_as_exvat_only_has_priceIncludingVat_false() {
+    public function test_incvat_order_with_fixedDiscount_as_exvat_only_has_priceIncludingVat_true() {
         $order = FixedDiscountRowsIntegrationTest::create_only_incvat_order_and_fee_rows_order();
         $order->
             addDiscount(
@@ -411,7 +411,7 @@ class FixedDiscountRowsIntegrationTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals( "121.40", $response->amount );
     }
     // same order with discount exvat+vat should be sent with PriceIncludingVat = false with one discount row amount based on given exvat + vat
-    public function test_incvat_order_with_fixedDiscount_as_exvat_and_vatpercent_has_priceIncludingVat_false() {
+    public function test_incvat_order_with_fixedDiscount_as_exvat_and_vatpercent_has_priceIncludingVat_true() {
         $order = FixedDiscountRowsIntegrationTest::create_only_incvat_order_and_fee_rows_order();
         $order->
             addDiscount(
