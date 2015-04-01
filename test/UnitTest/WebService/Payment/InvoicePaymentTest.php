@@ -1760,7 +1760,7 @@ class InvoicePaymentTest extends PHPUnit_Framework_TestCase {
                 )
         ;
         $total = $order->useInvoicePayment()
-                ->getRequestTotal();
+                ->getRequestTotals();
 //                ->doRequest();
 
 //   return array('total_exvat' => $total_exvat, 'total_incvat' => $total_incvat, 'total_vat' => $total_vat);
@@ -2103,7 +2103,7 @@ class InvoicePaymentTest extends PHPUnit_Framework_TestCase {
                 )
         ;
         $total = $order->useInvoicePayment()
-                ->getRequestTotal();
+                ->getRequestTotals();
 //                ->doRequest();
 
 //   return array('total_exvat' => $total_exvat, 'total_incvat' => $total_incvat, 'total_vat' => $total_vat);
