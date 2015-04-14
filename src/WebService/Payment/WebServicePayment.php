@@ -270,44 +270,38 @@ class WebServicePayment {
         return $individualCustomerIdentity;
     }
 
-    private function calculateOrderRowExVat($value) {
-        if ($value->PriceIncludingVat == true) {
-            $rowsum_incvat =
-                    round($value->NumberOfUnits, 2, PHP_ROUND_HALF_EVEN) *
-                    round($value->PricePerUnit, 2, PHP_ROUND_HALF_EVEN) * 
-                    (1 - ($value->DiscountPercent / 100))
-            ;
-            $rowsum_exvat = $rowsum_incvat / (1 + ($value->VatPercent / 100));
+    private function calculateOrderRowExVat($row) {
+        if ($row->PriceIncludingVat == true) {
+            $rowsum_incvat = $this->getRowAmount( $row );
+            $rowsum_exvat = $this->convertIncVatToExVat( $row, $rowsum_incvat );
         } else {
-            $rowsum_exvat = 
-                    round($value->NumberOfUnits, 2, PHP_ROUND_HALF_EVEN) *
-                    round($value->PricePerUnit, 2, PHP_ROUND_HALF_EVEN) *
-                    (1 - ($value->DiscountPercent / 100))
-            ;
+            $rowsum_exvat = $this->getRowAmount( $row );
         }
         return round($rowsum_exvat, 2, PHP_ROUND_HALF_EVEN);
     }
 
-    private function calculateTotalVatSumOfRows($value) {
+    private function convertIncVatToExVat( $row, $rowsum_incvat ) {
+        return round( ($rowsum_incvat / (1 + ($row->VatPercent / 100))), 2, PHP_ROUND_HALF_EVEN);
+    }
+    
+    private function getRowAmount( $row ) {
+        return round($row->NumberOfUnits, 2, PHP_ROUND_HALF_EVEN) *
+               round($row->PricePerUnit, 2, PHP_ROUND_HALF_EVEN) * 
+               (1 - ($row->DiscountPercent / 100));
+    }
+    
+    private function calculateTotalVatSumOfRows($row) {
         //if amount inc vat
         $sum = 0;
         //calculate the exvat sum
-        if ($value->PriceIncludingVat == true) {
-            $rowsum_incvat = 
-                round($value->NumberOfUnits, 2, PHP_ROUND_HALF_EVEN) * 
-                round($value->PricePerUnit, 2, PHP_ROUND_HALF_EVEN) * 
-                (1 - ($value->DiscountPercent / 100))
-            ;
-            $exvat = round($rowsum_incvat, 2, PHP_ROUND_HALF_EVEN) / (1 + ($value->VatPercent / 100));
+        if ($row->PriceIncludingVat == true) {
+            $rowsum_incvat = $this->getRowAmount( $row );
+            $exvat = $this->convertIncVatToExVat( $row, $rowsum_incvat );
         } else {
-            $exvat = 
-                round($value->NumberOfUnits, 2, PHP_ROUND_HALF_EVEN) * 
-                round($value->PricePerUnit, 2, PHP_ROUND_HALF_EVEN) * 
-                (1 - ($value->DiscountPercent / 100))
-            ;
+            $exvat = $this->getRowAmount( $row );
         }
-        $vat = round($exvat, 2, PHP_ROUND_HALF_EVEN) * ($value->VatPercent / 100 );
-        $sum += intval(100.00 * $vat) / 100.00; //php for math.truncate
+        $vat = round($exvat, 2, PHP_ROUND_HALF_EVEN) * ($row->VatPercent / 100 );
+        $sum += intval(100.00 * $vat) / 100.00; //php for .NET Math.Truncate -- round to nearest integer towards zero
 
         return $sum;
     }
