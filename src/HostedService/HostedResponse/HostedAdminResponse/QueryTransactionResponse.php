@@ -241,7 +241,7 @@ class QueryTransactionResponse extends HostedAdminResponse{
     function calculateVatPercentFromVatAndAmount( $vat, $amount ) {
         $amountExVat = ($amount-$vat);
         $unroundedVatPercent = ($amountExVat > 0) ? ($vat/$amountExVat) : 0.00; // catch potential divide by zero
-        $vatPercent = round($unroundedVatPercent,2,PHP_ROUND_HALF_EVEN) *100; // OrderRow has vatpercent as int.
+        $vatPercent = \Svea\Helper::bround($unroundedVatPercent,2) *100; // OrderRow has vatpercent as int.
         return $vatPercent;
     }
 }

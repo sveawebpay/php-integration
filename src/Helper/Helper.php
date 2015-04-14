@@ -9,7 +9,7 @@ namespace Svea;
 class Helper {
 
     /**
-     * @deprecated -- use round() w/PHP_ROUND_HALF_EVEN instead
+     * w/PHP_ROUND_HALF_EVEN instead
      */
     static function bround($dVal,$iDec=0) {
         return round($dVal,$iDec,PHP_ROUND_HALF_EVEN);
@@ -38,14 +38,14 @@ class Helper {
             $b = 1 - $a;
 
             $discountA = \WebPayItem::fixedDiscount()
-                            ->setAmountExVat( round(($discountAmountExVat * $a),2,PHP_ROUND_HALF_EVEN) )
+                            ->setAmountExVat( Helper::bround(($discountAmountExVat * $a),2) )
                             ->setVatPercent( $allowedTaxRates[0] )
                             ->setName( isset( $discountName) ? $discountName : "" )
                             ->setDescription( (isset( $discountDescription) ? $discountDescription : "") . ' (' .$allowedTaxRates[0]. '%)' )
             ;
 
             $discountB = \WebPayItem::fixedDiscount()
-                            ->setAmountExVat( round(($discountAmountExVat * $b),2,PHP_ROUND_HALF_EVEN) )
+                            ->setAmountExVat( Helper::bround(($discountAmountExVat * $b),2) )
                             ->setVatPercent(  $allowedTaxRates[1] )
                             ->setName( isset( $discountName) ? $discountName : "" )
                             ->setDescription( (isset( $discountDescription) ? $discountDescription : "") . ' (' .$allowedTaxRates[1]. '%)' )
@@ -58,7 +58,7 @@ class Helper {
         // single tax rate, so use shop supplied mean as vat rate
         else {
             $discountA = \WebPayItem::fixedDiscount()
-                ->setAmountExVat( round(($discountAmountExVat),2,PHP_ROUND_HALF_EVEN) )
+                ->setAmountExVat( Helper::bround(($discountAmountExVat),2) )
                 ->setVatPercent( $allowedTaxRates[0] )
                 ->setName( isset( $discountName) ? $discountName : "" )
                 ->setDescription( (isset( $discountDescription) ? $discountDescription : "") )
@@ -86,7 +86,7 @@ class Helper {
                 $seenRate = $orderRow->vatPercent; //count
             }
             elseif( isset($orderRow->amountIncVat) && isset($orderRow->amountExVat) ) {
-                $seenRate = round( (($orderRow->amountIncVat - $orderRow->amountExVat) / $orderRow->amountExVat),2,PHP_ROUND_HALF_EVEN) *100;
+                $seenRate = Helper::bround( (($orderRow->amountIncVat - $orderRow->amountExVat) / $orderRow->amountExVat),2) *100;
             }
 
             if(isset($seenRate)) {

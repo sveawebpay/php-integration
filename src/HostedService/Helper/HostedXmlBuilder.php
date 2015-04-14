@@ -56,11 +56,11 @@ class HostedXmlBuilder {
         // currency
         $this->XMLWriter->writeElement("currency", $request['currency']);
         // amount
-        $this->XMLWriter->writeElement("amount", round($request['amount']));             
+        $this->XMLWriter->writeElement("amount", \Svea\Helper::bround($request['amount']));             
 
         // vat -- optional
         if ($request['totalVat'] != null) {
-            $this->XMLWriter->writeElement("vat", round($request['totalVat']));          
+            $this->XMLWriter->writeElement("vat", \Svea\Helper::bround($request['totalVat']));          
         }
         // customerrefno -- optional
         $this->XMLWriter->writeElement("customerrefno", $request['clientOrderNumber']);
@@ -124,10 +124,10 @@ class HostedXmlBuilder {
         }
         $this->XMLWriter->writeElement("lang", $request['langCode']);                   // required in preparepayment 
         $this->XMLWriter->writeElement("currency", $request['currency']);
-        $this->XMLWriter->writeElement("amount", round($request['amount']));             
+        $this->XMLWriter->writeElement("amount", \Svea\Helper::bround($request['amount']));             
 
         if ($request['totalVat'] != null) {
-            $this->XMLWriter->writeElement("vat", round($request['totalVat']));          
+            $this->XMLWriter->writeElement("vat", \Svea\Helper::bround($request['totalVat']));          
         }
         $this->XMLWriter->writeElement("customerrefno", $request['clientOrderNumber']);
         $this->XMLWriter->writeElement("returnurl", $request['returnUrl']);
@@ -268,13 +268,13 @@ class HostedXmlBuilder {
         }
 
         if (!empty($orderRow->amount) && $orderRow->amount != null) {
-            $this->XMLWriter->writeElement("amount", round($orderRow->amount));
+            $this->XMLWriter->writeElement("amount", \Svea\Helper::bround($orderRow->amount));
         } else {
               $this->XMLWriter->writeElement("amount", "0");
         }
 
         if (!empty($orderRow->vat) && $orderRow->vat != null) {
-            $this->XMLWriter->writeElement("vat", round($orderRow->vat));
+            $this->XMLWriter->writeElement("vat", \Svea\Helper::bround($orderRow->vat));
         } else {
             $this->XMLWriter->writeElement("vat", "0");
         }

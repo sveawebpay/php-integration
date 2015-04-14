@@ -76,10 +76,10 @@ class GetRequestTotalsIntegrationTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(false, $request->request->CreateOrderInformation->OrderRows['OrderRow'][3]->PriceIncludingVat);
         // all discount rows
         // expected: fixedDiscount: 10 exvat => split across 10e *(60/60+30) @20% + 10e *(30/60+30) @10% => 6.6666e @20% + 3.3333e @10% => 8.00i + 3.67i
-        $this->assertEquals(-6.67, round($request->request->CreateOrderInformation->OrderRows['OrderRow'][4]->PricePerUnit),2,PHP_ROUND_HALF_UP);//=WS
+        $this->assertEquals(-6.67, \Svea\Helper::bround($request->request->CreateOrderInformation->OrderRows['OrderRow'][4]->PricePerUnit),2,PHP_ROUND_HALF_UP);//=WS
         $this->assertEquals(20, $request->request->CreateOrderInformation->OrderRows['OrderRow'][4]->VatPercent);
         $this->assertEquals(false, $request->request->CreateOrderInformation->OrderRows['OrderRow'][4]->PriceIncludingVat);
-        $this->assertEquals(-3.33, round($request->request->CreateOrderInformation->OrderRows['OrderRow'][5]->PricePerUnit),2,PHP_ROUND_HALF_UP);//=WS
+        $this->assertEquals(-3.33, \Svea\Helper::bround($request->request->CreateOrderInformation->OrderRows['OrderRow'][5]->PricePerUnit),2,PHP_ROUND_HALF_UP);//=WS
         $this->assertEquals(10, $request->request->CreateOrderInformation->OrderRows['OrderRow'][5]->VatPercent);
         $this->assertEquals(false, $request->request->CreateOrderInformation->OrderRows['OrderRow'][5]->PriceIncludingVat);   
         
@@ -133,10 +133,10 @@ class GetRequestTotalsIntegrationTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(false, $request->request->CreateOrderInformation->OrderRows['OrderRow'][3]->PriceIncludingVat);
         // all discount rows
         // expected: fixedDiscount: 10 exvat => split across 10e *(60/60+30) @20% + 10e *(30/60+30) @10% => 6.6666e @20% + 3.3333e @10% => 8.00i + 3.67i
-        $this->assertEquals(-6.67, round($request->request->CreateOrderInformation->OrderRows['OrderRow'][4]->PricePerUnit),2,PHP_ROUND_HALF_UP);//=WS
+        $this->assertEquals(-6.67, \Svea\Helper::bround($request->request->CreateOrderInformation->OrderRows['OrderRow'][4]->PricePerUnit),2,PHP_ROUND_HALF_UP);//=WS
         $this->assertEquals(20, $request->request->CreateOrderInformation->OrderRows['OrderRow'][4]->VatPercent);
         $this->assertEquals(false, $request->request->CreateOrderInformation->OrderRows['OrderRow'][4]->PriceIncludingVat);
-        $this->assertEquals(-3.33, round($request->request->CreateOrderInformation->OrderRows['OrderRow'][5]->PricePerUnit),2,PHP_ROUND_HALF_UP);//=WS
+        $this->assertEquals(-3.33, \Svea\Helper::bround($request->request->CreateOrderInformation->OrderRows['OrderRow'][5]->PricePerUnit),2,PHP_ROUND_HALF_UP);//=WS
         $this->assertEquals(10, $request->request->CreateOrderInformation->OrderRows['OrderRow'][5]->VatPercent);
         $this->assertEquals(false, $request->request->CreateOrderInformation->OrderRows['OrderRow'][5]->PriceIncludingVat);   
         
@@ -189,10 +189,10 @@ class GetRequestTotalsIntegrationTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(true, $request->request->CreateOrderInformation->OrderRows['OrderRow'][3]->PriceIncludingVat);
         // all discount rows
         // expected: fixedDiscount: 10 exvat => split across 10e *(60/60+30) @20% + 10e *(30/60+30) @10% => 6.6666e @20% + 3.3333e @10% => 8.00i + 3.67i
-        $this->assertEquals(-8.00, round($request->request->CreateOrderInformation->OrderRows['OrderRow'][4]->PricePerUnit),2,PHP_ROUND_HALF_UP);//=WS
+        $this->assertEquals(-8.00, \Svea\Helper::bround($request->request->CreateOrderInformation->OrderRows['OrderRow'][4]->PricePerUnit),2,PHP_ROUND_HALF_UP);//=WS
         $this->assertEquals(20, $request->request->CreateOrderInformation->OrderRows['OrderRow'][4]->VatPercent);
         $this->assertEquals(true, $request->request->CreateOrderInformation->OrderRows['OrderRow'][4]->PriceIncludingVat);
-        $this->assertEquals(-3.67, round($request->request->CreateOrderInformation->OrderRows['OrderRow'][5]->PricePerUnit),2,PHP_ROUND_HALF_UP);//=WS
+        $this->assertEquals(-3.67, \Svea\Helper::bround($request->request->CreateOrderInformation->OrderRows['OrderRow'][5]->PricePerUnit),2,PHP_ROUND_HALF_UP);//=WS
         $this->assertEquals(10, $request->request->CreateOrderInformation->OrderRows['OrderRow'][5]->VatPercent);
         $this->assertEquals(true, $request->request->CreateOrderInformation->OrderRows['OrderRow'][5]->PriceIncludingVat);   
         
