@@ -50,7 +50,7 @@ class WebServicePayment {
             $total_exvat += $rowExVat;
             $rowVat = $this->calculateTotalVatSumOfRows($value);
             $total_vat += $rowVat;
-            $total_incvat += round(($rowExVat + $rowVat),2, PHP_ROUND_HALF_EVEN);
+            $total_incvat += \Svea\Helper::bround(($rowExVat + $rowVat),2);
         }
         return array('total_exvat' => $total_exvat, 'total_incvat' => $total_incvat, 'total_vat' => $total_vat);
 
@@ -277,16 +277,16 @@ class WebServicePayment {
         } else {
             $rowsum_exvat = $this->getRowAmount( $row );
         }
-        return round($rowsum_exvat, 2, PHP_ROUND_HALF_EVEN);
+        return \Svea\Helper::bround($rowsum_exvat,2);
     }
 
     private function convertIncVatToExVat( $row, $rowsum_incvat ) {
-        return round( ($rowsum_incvat / (1 + ($row->VatPercent / 100))), 2, PHP_ROUND_HALF_EVEN);
+        return \Svea\Helper::bround( ($rowsum_incvat / (1 + ($row->VatPercent / 100))),2);
     }
     
     private function getRowAmount( $row ) {
-        return round($row->NumberOfUnits, 2, PHP_ROUND_HALF_EVEN) *
-               round($row->PricePerUnit, 2, PHP_ROUND_HALF_EVEN) * 
+        return \Svea\Helper::bround($row->NumberOfUnits,2) *
+               \Svea\Helper::bround($row->PricePerUnit,2) * 
                (1 - ($row->DiscountPercent / 100));
     }
     
@@ -300,7 +300,7 @@ class WebServicePayment {
         } else {
             $exvat = $this->getRowAmount( $row );
         }
-        $vat = round($exvat, 2, PHP_ROUND_HALF_EVEN) * ($row->VatPercent / 100 );
+        $vat = \Svea\Helper::bround($exvat,2) * ($row->VatPercent / 100 );
         $sum += intval(100.00 * $vat) / 100.00; //php for .NET Math.Truncate -- round to nearest integer towards zero
 
         return $sum;
