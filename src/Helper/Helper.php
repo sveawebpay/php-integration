@@ -147,8 +147,8 @@ class Helper {
           
         $integration_properties = array( 
             "integration_platform" => $integrationPlatform,
-            "integration_version" => $integrationCompany,
-            "integration_company" => $integrationVersion 
+            "integration_version" => $integrationVersion,
+            "integration_company" => $integrationCompany 
         );
         return $integration_properties;
     }    
