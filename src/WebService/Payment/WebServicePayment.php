@@ -37,28 +37,6 @@ class WebServicePayment {
     }
 
     /**
-     * Get calculated totals before sending the request
-     * @return Array of the rounded sums of all orderrows as it will be sent to Svea
-     */
-    public function getRequestTotals() {
-        $object = $this->prepareRequest();
-        $total_incvat = 0;
-        $total_exvat = 0;
-        $total_vat = 0;
-        foreach ($object->request->CreateOrderInformation->OrderRows['OrderRow'] as $value) {
-            $rowExVat = $this->calculateOrderRowExVat($value);
-            $total_exvat += $rowExVat;
-            $rowVat = $this->calculateTotalVatSumOfRows($value);
-            $total_vat += $rowVat;
-            $total_incvat += \Svea\Helper::bround(($rowExVat + $rowVat),2);
-        }
-        return array('total_exvat' => $total_exvat, 'total_incvat' => $total_incvat, 'total_vat' => $total_vat);
-
-
-    }
-
-
-    /**
      * Rebuild $order with svea_soap package to be in right format for SveaWebPay Europe Web service API
      * @return prepared SveaRequest
      * @throws \Svea\ValidationException
@@ -270,6 +248,27 @@ class WebServicePayment {
         return $individualCustomerIdentity;
     }
 
+    /**
+     * Get calculated totals before sending the request
+     * @return Array of the rounded sums of all orderrows as it will be sent to Svea
+     */
+    public function getRequestTotals() {
+        $object = $this->prepareRequest();
+        $total_incvat = 0;
+        $total_exvat = 0;
+        $total_vat = 0;
+        foreach ($object->request->CreateOrderInformation->OrderRows['OrderRow'] as $value) {
+            $rowExVat = $this->calculateOrderRowExVat($value);
+            $total_exvat += $rowExVat;
+            $rowVat = $this->calculateTotalVatSumOfRows($value);
+            $total_vat += $rowVat;
+            $total_incvat += \Svea\Helper::bround(($rowExVat + $rowVat),2);
+        }
+        return array('total_exvat' => $total_exvat, 'total_incvat' => $total_incvat, 'total_vat' => $total_vat);
+
+
+    }    
+        
     private function calculateOrderRowExVat($row) {
         if ($row->PriceIncludingVat == true) {
             $rowsum_incvat = $this->getRowAmount( $row );
