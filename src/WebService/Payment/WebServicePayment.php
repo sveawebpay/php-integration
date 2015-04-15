@@ -296,11 +296,17 @@ class WebServicePayment {
         if ($row->PriceIncludingVat == true) {
             $rowsum_incvat = $this->getRowAmount( $row );
             $exvat = $this->convertIncVatToExVat( $row, $rowsum_incvat );
+
+            $vat = \Svea\Helper::bround($rowsum_incvat,2) - \Svea\Helper::bround($exvat,2);
+            $sum += $vat;            
         } else {
             $exvat = $this->getRowAmount( $row );
+            
+            $vat = \Svea\Helper::bround($exvat,2) * ($row->VatPercent / 100 );
+            $sum += \Svea\Helper::bround($vat,2);
         }
-        $vat = \Svea\Helper::bround($exvat,2) * ($row->VatPercent / 100 );
-        $sum += intval(100.00 * $vat) / 100.00; //php for .NET Math.Truncate -- round to nearest integer towards zero
+//        $vat = \Svea\Helper::bround($exvat,2) * ($row->VatPercent / 100 );
+//        $sum += intval(100.00 * $vat) / 100.00; //php for .NET Math.Truncate -- round to nearest integer towards zero
 
         return $sum;
     }
