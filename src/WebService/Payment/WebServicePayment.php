@@ -37,28 +37,6 @@ class WebServicePayment {
     }
 
     /**
-     * Get calculated totals before sending the request
-     * @return Array of the rounded sums of all orderrows as it will be handled in request
-     */
-    public function getRequestTotal() {
-        $object = $this->prepareRequest();
-        $total_incvat = 0;
-        $total_exvat = 0;
-        $total_vat = 0;
-        foreach ($object->request->CreateOrderInformation->OrderRows['OrderRow'] as $value) {
-            $rowExVat = $this->calculateOrderRowExVat($value);
-            $total_exvat += $rowExVat;
-            $rowVat = $this->CalculateTotalVatSumOfRows($value);
-            $total_vat += $rowVat;
-            $total_incvat += round(($rowExVat + $rowVat),2);
-        }
-        return array('total_exvat' => $total_exvat, 'total_incvat' => $total_incvat, 'total_vat' => $total_vat);
-
-
-    }
-
-
-    /**
      * Rebuild $order with svea_soap package to be in right format for SveaWebPay Europe Web service API
      * @return prepared SveaRequest
      * @throws \Svea\ValidationException
@@ -123,8 +101,11 @@ class WebServicePayment {
      * @return \SveaCreateOrderInformation
      */
     protected function formatOrderInformationWithOrderRows($rows) {
-        $orderInformation = new WebServiceSoap\SveaCreateOrderInformation((isset($this->order->campaignCode) ? $this->order->campaignCode : ""),
-                        (isset($this->order->sendAutomaticGiroPaymentForm) ? $this->order->sendAutomaticGiroPaymentForm : 0));
+        $orderInformation = new WebServiceSoap\SveaCreateOrderInformation(
+                (isset($this->order->campaignCode) ? $this->order->campaignCode : ""),
+                (isset($this->order->sendAutomaticGiroPaymentForm) ? $this->order->sendAutomaticGiroPaymentForm : 0)
+            )
+        ;
 
         // rewrite order rows to soap_class order rows
         $formatter = new WebServiceRowFormatter($this->order);
@@ -268,34 +249,65 @@ class WebServicePayment {
     }
 
     /**
-     *
-     * @param type $value
-     * @return type
+     * Get calculated totals before sending the request
+     * @return Array of the rounded sums of all orderrows as it will be sent to Svea
      */
-     private function calculateOrderRowExVat($value) {
-                 if($value->PriceIncludingVat == 1){
-                    $rowsum_incvat = round($value->NumberOfUnits,2) * round($value->PricePerUnit,2) * (1 - ($value->DiscountPercent / 100));
-                    $rowsum_exvat = $rowsum_incvat / (1 + ($value->VatPercent / 100));
+    public function getRequestTotals() {
+        $object = $this->prepareRequest();
+        $total_incvat = 0;
+        $total_exvat = 0;
+        $total_vat = 0;
+        foreach ($object->request->CreateOrderInformation->OrderRows['OrderRow'] as $value) {
+            $rowExVat = $this->calculateOrderRowExVat($value);
+            $total_exvat += $rowExVat;
+            $rowVat = $this->calculateTotalVatSumOfRows($value);
+            $total_vat += $rowVat;
+            $total_incvat += \Svea\Helper::bround(($rowExVat + $rowVat),2);
+        }
+        return array('total_exvat' => $total_exvat, 'total_incvat' => $total_incvat, 'total_vat' => $total_vat);
 
-                 } else {
-                    $rowsum_exvat = round($value->NumberOfUnits,2) * round($value->PricePerUnit,2) * (1 - ($value->DiscountPercent / 100));
-                 }
-                  return round($rowsum_exvat);
+
+    }    
+        
+    private function calculateOrderRowExVat($row) {
+        if ($row->PriceIncludingVat == true) {
+            $rowsum_incvat = $this->getRowAmount( $row );
+            $rowsum_exvat = $this->convertIncVatToExVat( $row, $rowsum_incvat );
+        } else {
+            $rowsum_exvat = $this->getRowAmount( $row );
+        }
+        return \Svea\Helper::bround($rowsum_exvat,2);
     }
 
-    private function CalculateTotalVatSumOfRows($value) {
-          //if amount inc vat
-         $sum = 0;
-             //calculate the exvat sum
-             if($value->PriceIncludingVat == 1){
-                  $rowsum_incvat = round($value->NumberOfUnits,2) * round($value->PricePerUnit,2) * (1 - ($value->DiscountPercent / 100));
-                  $exvat = round($rowsum_incvat,2) / (1 + ($value->VatPercent / 100));
-             }  else {
-                 $exvat = round($value->NumberOfUnits,2) * round($value->PricePerUnit,2) * (1 - ($value->DiscountPercent / 100));
-             }
-             $vat = round($exvat,2) * ($value->VatPercent / 100 );
-             $sum += intval(100.00 * $vat) / 100.00; //php for math.truncate
+    private function convertIncVatToExVat( $row, $rowsum_incvat ) {
+        return \Svea\Helper::bround( ($rowsum_incvat / (1 + ($row->VatPercent / 100))),2);
+    }
+    
+    private function getRowAmount( $row ) {
+        return \Svea\Helper::bround($row->NumberOfUnits,2) *
+               \Svea\Helper::bround($row->PricePerUnit,2) * 
+               (1 - ($row->DiscountPercent / 100));
+    }
+    
+    private function calculateTotalVatSumOfRows($row) {
+        //if amount inc vat
+        $sum = 0;
+        //calculate the exvat sum
+        if ($row->PriceIncludingVat == true) {
+            $rowsum_incvat = $this->getRowAmount( $row );
+            $exvat = $this->convertIncVatToExVat( $row, $rowsum_incvat );
 
-         return $sum;
+            $vat = \Svea\Helper::bround($rowsum_incvat,2) - \Svea\Helper::bround($exvat,2);
+            $sum += $vat;            
+        } else {
+            $exvat = $this->getRowAmount( $row );
+            
+            $vat = \Svea\Helper::bround($exvat,2) * ($row->VatPercent / 100 );
+            $sum += \Svea\Helper::bround($vat,2);
+        }
+//        $vat = \Svea\Helper::bround($exvat,2) * ($row->VatPercent / 100 );
+//        $sum += intval(100.00 * $vat) / 100.00; //php for .NET Math.Truncate -- round to nearest integer towards zero
+
+        return $sum;
     }
 }

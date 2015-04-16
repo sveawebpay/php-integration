@@ -31,7 +31,7 @@ class WebServiceRowFormatterTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals( 0, WebServiceRowFormatter::convertExVatToIncVat( 0, 25 ) );
 
         $this->assertEquals( 100.00*1.06, WebServiceRowFormatter::convertExVatToIncVat( 100.00, 6 ) );
-        $this->assertEquals( round(100.00*1.0825,2,PHP_ROUND_HALF_EVEN), WebServiceRowFormatter::convertExVatToIncVat( 100.00, 8.25 ) );
+        $this->assertEquals( \Svea\Helper::bround(100.00*1.0825,2), WebServiceRowFormatter::convertExVatToIncVat( 100.00, 8.25 ) );
     }
 
     public function test_FormatOrderRows_includes_all_attributes_in_formatted_rows() {

@@ -63,7 +63,7 @@ class WebServiceRowFormatter {
         if( $exVat == 0.0 || $incVat == 0.0 ) // avoid -100% vat on i.e. free products or fees
             return 0;
         else
-            return round( (($incVat/$exVat) -1) *100);
+            return \Svea\Helper::bround( (($incVat/$exVat) -1) *100);
     }
 
     public function formatRows() {
@@ -161,14 +161,14 @@ class WebServiceRowFormatter {
 
             // amountExVat & vatPercent used to specify product price
             if (isset($row->vatPercent) && isset($row->amountExVat)) {
-                $orderRow->PricePerUnit = $this->priceIncludingVat ? WebServiceRowFormatter::convertExVatToIncVat($row->amountExVat, round($row->vatPercent)) : $row->amountExVat;
-                $orderRow->VatPercent = round($row->vatPercent);
+                $orderRow->PricePerUnit = $this->priceIncludingVat ? WebServiceRowFormatter::convertExVatToIncVat($row->amountExVat, \Svea\Helper::bround($row->vatPercent)) : $row->amountExVat;
+                $orderRow->VatPercent = \Svea\Helper::bround($row->vatPercent);
                 $orderRow->PriceIncludingVat = $this->priceIncludingVat ? TRUE : FALSE;
             }
             // amountIncVat & vatPercent used to specify product price
             elseif (isset($row->vatPercent) && isset($row->amountIncVat)) {
-                $orderRow->PricePerUnit = $this->priceIncludingVat ? $row->amountIncVat : WebServiceRowFormatter::convertIncVatToExVat($row->amountIncVat, round($row->vatPercent));
-                $orderRow->VatPercent = round($row->vatPercent);
+                $orderRow->PricePerUnit = $this->priceIncludingVat ? $row->amountIncVat : WebServiceRowFormatter::convertIncVatToExVat($row->amountIncVat, \Svea\Helper::bround($row->vatPercent));
+                $orderRow->VatPercent = \Svea\Helper::bround($row->vatPercent);
                 $orderRow->PriceIncludingVat = $this->priceIncludingVat ? TRUE : FALSE;
             }
             // no vatPercent given
@@ -232,21 +232,21 @@ class WebServiceRowFormatter {
 
             // amountExVat & vatPercent used to specify product price
             if (isset($row->vatPercent) && isset($row->amountExVat)) {
-                $orderRow->PricePerUnit = $this->priceIncludingVat ? WebServiceRowFormatter::convertExVatToIncVat($row->amountExVat, round($row->vatPercent)) : $row->amountExVat;
-                $orderRow->VatPercent = round($row->vatPercent);
+                $orderRow->PricePerUnit = $this->priceIncludingVat ? WebServiceRowFormatter::convertExVatToIncVat($row->amountExVat, \Svea\Helper::bround($row->vatPercent)) : $row->amountExVat;
+                $orderRow->VatPercent = \Svea\Helper::bround($row->vatPercent);
                 $orderRow->PriceIncludingVat = $this->priceIncludingVat ? TRUE : FALSE;
             }
             // amountIncVat & vatPercent used to specify product price
             elseif (isset($row->vatPercent) && isset($row->amountIncVat)) {
 //                $orderRow->PricePerUnit =
 //                        WebServiceRowFormatter::convertIncVatToExVat( $row->amountIncVat, $row->vatPercent );
-                $orderRow->PricePerUnit =  $this->priceIncludingVat ? $row->amountIncVat : WebServiceRowFormatter::convertIncVatToExVat($row->amountIncVat, round($row->vatPercent));
-                $orderRow->VatPercent = round($row->vatPercent);
+                $orderRow->PricePerUnit =  $this->priceIncludingVat ? $row->amountIncVat : WebServiceRowFormatter::convertIncVatToExVat($row->amountIncVat, \Svea\Helper::bround($row->vatPercent));
+                $orderRow->VatPercent = \Svea\Helper::bround($row->vatPercent);
                 $orderRow->PriceIncludingVat = $this->priceIncludingVat ? TRUE : FALSE;
             }
             // no vatPercent given
             else {
-                $orderRow->PricePerUnit =  $this->priceIncludingVat ? $row->amountIncVat : WebServiceRowFormatter::convertIncVatToExVat($row->amountIncVat, round($row->vatPercent));
+                $orderRow->PricePerUnit =  $this->priceIncludingVat ? $row->amountIncVat : WebServiceRowFormatter::convertIncVatToExVat($row->amountIncVat, \Svea\Helper::bround($row->vatPercent));
                 $orderRow->VatPercent = $this->calculateVatPercentFromPriceExVatAndPriceIncVat( $row->amountIncVat, $row->amountExVat );
                 $orderRow->PriceIncludingVat = $this->priceIncludingVat ? TRUE : FALSE;
             }
@@ -275,21 +275,21 @@ class WebServiceRowFormatter {
 
             // amountExVat & vatPercent used to specify product price
             if (isset($row->vatPercent) && isset($row->amountExVat)) {
-                $orderRow->PricePerUnit = $this->priceIncludingVat ? WebServiceRowFormatter::convertExVatToIncVat($row->amountExVat, round($row->vatPercent)) : $row->amountExVat;
-                $orderRow->VatPercent = round($row->vatPercent);
+                $orderRow->PricePerUnit = $this->priceIncludingVat ? WebServiceRowFormatter::convertExVatToIncVat($row->amountExVat, \Svea\Helper::bround($row->vatPercent)) : $row->amountExVat;
+                $orderRow->VatPercent = \Svea\Helper::bround($row->vatPercent);
                 $orderRow->PriceIncludingVat = $this->priceIncludingVat ? TRUE : FALSE;
             }
             // amountIncVat & vatPercent used to specify product price
             elseif (isset($row->vatPercent) && isset($row->amountIncVat)) {
 //                $orderRow->PricePerUnit =
 //                        WebServiceRowFormatter::convertIncVatToExVat( $row->amountIncVat, $row->vatPercent );
-                $orderRow->PricePerUnit =  $this->priceIncludingVat ? $row->amountIncVat : WebServiceRowFormatter::convertIncVatToExVat($row->amountIncVat, round($row->vatPercent));
-                $orderRow->VatPercent = round($row->vatPercent);
+                $orderRow->PricePerUnit =  $this->priceIncludingVat ? $row->amountIncVat : WebServiceRowFormatter::convertIncVatToExVat($row->amountIncVat, \Svea\Helper::bround($row->vatPercent));
+                $orderRow->VatPercent = \Svea\Helper::bround($row->vatPercent);
                 $orderRow->PriceIncludingVat = $this->priceIncludingVat ? TRUE : FALSE;
             }
             // no vatPercent given
             else {
-                $orderRow->PricePerUnit =  $this->priceIncludingVat ? $row->amountIncVat : WebServiceRowFormatter::convertIncVatToExVat($row->amountIncVat, round($row->vatPercent));
+                $orderRow->PricePerUnit =  $this->priceIncludingVat ? $row->amountIncVat : WebServiceRowFormatter::convertIncVatToExVat($row->amountIncVat, \Svea\Helper::bround($row->vatPercent));
                 $orderRow->VatPercent = $this->calculateVatPercentFromPriceExVatAndPriceIncVat( $row->amountIncVat, $row->amountExVat );
                 $orderRow->PriceIncludingVat = $this->priceIncludingVat ? TRUE : FALSE;
             }
@@ -432,7 +432,7 @@ class WebServiceRowFormatter {
 //                    $discountAtThisVatRateExVat =
 //                            WebServiceRowFormatter::convertIncVatToExVat( $discountAtThisVatRateIncVat, $vatRate );
 
-                    $orderRow->PricePerUnit = (-1) * ($this->priceIncludingVat ? $discountAtThisVatRateIncVat : WebServiceRowFormatter::convertIncVatToExVat($row->amount, round($row->vatPercent)));
+                    $orderRow->PricePerUnit = (-1) * ($this->priceIncludingVat ? $discountAtThisVatRateIncVat : WebServiceRowFormatter::convertIncVatToExVat($row->amount, \Svea\Helper::bround($row->vatPercent)));
                     $orderRow->VatPercent = $vatRate;
                     $orderRow->PriceIncludingVat = $this->priceIncludingVat ? TRUE : FALSE;
 
@@ -458,7 +458,7 @@ class WebServiceRowFormatter {
 
                     //calculate discount
                     $vatRate = $row->vatPercent;
-                    $discountAtThisVatRate = $this->priceIncludingVat ? WebServiceRowFormatter::convertExVatToIncVat($row->amountExVat, round($row->vatPercent)) : $row->amountExVat;
+                    $discountAtThisVatRate = $this->priceIncludingVat ? WebServiceRowFormatter::convertExVatToIncVat($row->amountExVat, \Svea\Helper::bround($row->vatPercent)) : $row->amountExVat;
 
                     $orderRow->PricePerUnit = (-1) * $discountAtThisVatRate;
                     $orderRow->VatPercent = $vatRate;
@@ -542,7 +542,15 @@ class WebServiceRowFormatter {
             }
         }
         //fixed discount
-        // ignored, as fixed discount setAmountExVat does not bear the same meaning as in order/fee rows, so ignored when determining priceIncludingVat
+        foreach ($this->order->fixedDiscountRows as $row) {
+               if(isset($row->amountExVat) && isset($row->amountIncVat)){
+                $incVat++;
+            } if (isset($row->amountExVat) && !isset($row->amountIncVat)) {
+                $exVat++;
+            }else {
+                $incVat++;
+            }
+        }         
 
         //relative discount
         // ignored, as relative discount doesn't use setAmountExVat/-IncVat at all

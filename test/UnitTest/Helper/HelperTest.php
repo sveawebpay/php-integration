@@ -6,13 +6,13 @@ require_once $root . '/../../../src/Includes.php';
 
 class HelperTest extends \PHPUnit_Framework_TestCase {
 
-    // TODO check out parameterised tests
+    // Helper::bround() is an alias for round(x,0,PHP_ROUND_HALF_EVEN)
     function test_bround_RoundsHalfToEven() {
         $this->assertEquals( 1, Helper::bround(0.51) );
         $this->assertEquals( 1, Helper::bround(1.49) );
         $this->assertEquals( 2, Helper::bround(1.5) );
 
-        $this->assertEquals( 1, Helper::bround(1.49999) ); //seems to work with up to 5 decimals, then float creep pushes us over 1.5
+        $this->assertEquals( 1, Helper::bround(1.49999999999999) ); //seems to work with up to 14 decimals, then float creep pushes us over 1.5
         $this->assertEquals( 2, Helper::bround(1.500000000000000000000000000000000000000000) );
         $this->assertEquals( 1, Helper::bround(1.0) );
         $this->assertEquals( 1, Helper::bround(1) );
