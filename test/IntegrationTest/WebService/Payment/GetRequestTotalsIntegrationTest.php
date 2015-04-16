@@ -343,5 +343,125 @@ class GetRequestTotalsIntegrationTest extends PHPUnit_Framework_TestCase {
         $response = $order->useInvoicePayment()->doRequest();        
         $this->assertEquals(1, $response->accepted);
         $this->assertEquals($preview_total['total_incvat'], $response->amount);        
+    }   
+    
+        
+    public function test_getRequestTotals_reference_1321_00_ex_with_compensation_row() {
+        $config = Svea\SveaConfig::getDefaultConfig();
+        $order = WebPay::createOrder($config)
+                    ->addOrderRow(
+                        WebPayItem::orderRow()
+                            ->setAmountExVat(1321.00)
+                            ->setVatPercent(6)
+                            ->setQuantity(1)
+                    )
+                    ->addCustomerDetails(TestUtil::createIndividualCustomer("SE"))
+                    ->setCountryCode("SE")
+                    ->setOrderDate("2016-04-14")
+        ;
+        
+        $preview_total = $order->useInvoicePayment()->getRequestTotals();
+        $this->assertEquals(1400.26, $preview_total['total_incvat']);
+        $this->assertEquals(1321.00, $preview_total['total_exvat']);
+        $this->assertEquals(79.26, $preview_total['total_vat']);
+
+        $target_total = 1400.00;
+        $compensation_amount = (double)$preview_total['total_incvat'] - $target_total;
+        
+        $order->addDiscount( WebPayItem::fixedDiscount()
+                                ->setAmountIncVat($compensation_amount)
+                                ->setVatPercent(0)
+                            )
+        ;
+        
+        $compensated_preview_total = $order->useInvoicePayment()->getRequestTotals();
+                
+        $this->assertEquals(1400.00, $compensated_preview_total['total_incvat']);
+        $this->assertEquals(1320.74, $compensated_preview_total['total_exvat']);
+        $this->assertEquals(79.26, $compensated_preview_total['total_vat']);
+                
+        $response = $order->useInvoicePayment()->doRequest();        
+        $this->assertEquals(1, $response->accepted);
+        $this->assertEquals($compensated_preview_total['total_incvat'], $response->amount);        
+        print_r( "test_getRequestTotals_reference_1321_00_ex_with_compensation_row: " + $response->sveaOrderId );
+    }   
+    
+   public function test_getRequestTotals_reference_1400_26_inc_with_compensation_row() {
+        $config = Svea\SveaConfig::getDefaultConfig();
+        $order = WebPay::createOrder($config)
+                    ->addOrderRow(
+                        WebPayItem::orderRow()
+                            ->setAmountIncVat(1400.26)
+                            ->setVatPercent(6)
+                            ->setQuantity(1)
+                    )
+                    ->addCustomerDetails(TestUtil::createIndividualCustomer("SE"))
+                    ->setCountryCode("SE")
+                    ->setOrderDate("2016-04-14")
+        ;
+        
+        $preview_total = $order->useInvoicePayment()->getRequestTotals();
+        $this->assertEquals(1400.26, $preview_total['total_incvat']);
+        $this->assertEquals(1321.00, $preview_total['total_exvat']);
+        $this->assertEquals(79.26, $preview_total['total_vat']);
+
+        $target_total = 1400.00;
+        $compensation_amount = (double)$preview_total['total_incvat'] - $target_total;
+        
+        $order->addDiscount( WebPayItem::fixedDiscount()
+                                ->setAmountIncVat($compensation_amount)
+                                ->setVatPercent(0)
+                            )
+        ;
+        
+        $compensated_preview_total = $order->useInvoicePayment()->getRequestTotals();
+                
+        $this->assertEquals(1400.00, $compensated_preview_total['total_incvat']);
+        $this->assertEquals(1320.74, $compensated_preview_total['total_exvat']);
+        $this->assertEquals(79.26, $compensated_preview_total['total_vat']);
+                
+        $response = $order->useInvoicePayment()->doRequest();        
+        $this->assertEquals(1, $response->accepted);
+        $this->assertEquals($compensated_preview_total['total_incvat'], $response->amount);    
+        print_r( "test_getRequestTotals_reference_1400_26_inc_with_compensation_row: " + $response->sveaOrderId );
+        
+    }
+    
+   public function test_getRequestTotals_reference_1400_00_inc_cant_be_done_with_compensation_row() {
+        $config = Svea\SveaConfig::getDefaultConfig();
+        $order = WebPay::createOrder($config)
+                    ->addOrderRow(
+                        WebPayItem::orderRow()
+                            ->setAmountIncVat(1400.00)
+                            ->setVatPercent(6)
+                            ->setQuantity(1)
+                    )
+                    ->addCustomerDetails(TestUtil::createIndividualCustomer("SE"))
+                    ->setCountryCode("SE")
+                    ->setOrderDate("2016-04-14")
+        ;
+        
+        $preview_total = $order->useInvoicePayment()->getRequestTotals();
+        $this->assertEquals(1400.00, $preview_total['total_incvat']);
+        $this->assertEquals(1320.75, $preview_total['total_exvat']);
+        $this->assertEquals(79.25, $preview_total['total_vat']);
+
+        $target_total = 1400.00;
+        
+        $order->addDiscount( WebPayItem::fixedDiscount()
+                                ->setAmountIncVat(-0.25)
+                                ->setVatPercent(0)
+                            )
+        ;
+        
+        $compensated_preview_total = $order->useInvoicePayment()->getRequestTotals();
+                
+        $this->assertEquals(1400.25, $compensated_preview_total['total_incvat']); // should be 1400.00!
+        $this->assertEquals(1321.00, $compensated_preview_total['total_exvat']);
+        $this->assertEquals(79.25, $compensated_preview_total['total_vat']);
+               
+        $response = $order->useInvoicePayment()->doRequest();        
+        $this->assertEquals(1, $response->accepted);
+        $this->assertEquals($compensated_preview_total['total_incvat'], $response->amount);        
     }    
 }
