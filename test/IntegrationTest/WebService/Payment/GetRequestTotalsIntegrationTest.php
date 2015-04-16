@@ -383,7 +383,7 @@ class GetRequestTotalsIntegrationTest extends PHPUnit_Framework_TestCase {
         $response = $order->useInvoicePayment()->doRequest();        
         $this->assertEquals(1, $response->accepted);
         $this->assertEquals($compensated_preview_total['total_incvat'], $response->amount);        
-        print_r( "test_getRequestTotals_reference_1321_00_ex_with_compensation_row: " + $response->sveaOrderId );
+        //print_r( "test_getRequestTotals_reference_1321_00_ex_with_compensation_row: " + $response->sveaOrderId );
     }   
     
    public function test_getRequestTotals_reference_1400_26_inc_with_compensation_row() {
@@ -423,7 +423,7 @@ class GetRequestTotalsIntegrationTest extends PHPUnit_Framework_TestCase {
         $response = $order->useInvoicePayment()->doRequest();        
         $this->assertEquals(1, $response->accepted);
         $this->assertEquals($compensated_preview_total['total_incvat'], $response->amount);    
-        print_r( "test_getRequestTotals_reference_1400_26_inc_with_compensation_row: " + $response->sveaOrderId );
+        //print_r( "test_getRequestTotals_reference_1400_26_inc_with_compensation_row: " + $response->sveaOrderId );
         
     }
     
