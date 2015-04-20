@@ -106,7 +106,7 @@ class Helper {
      * @return string -- array with the entire streetaddress in position 0, the streetname in position 1 and housenumber in position 2 
      */
     static function splitStreetAddress($address){
-        //Seperates the street from the housenumber according to testcases
+        //Separates the street from the housenumber according to testcases
         $pattern = "/^(?:\s)*([0-9]*[A-ZÄÅÆÖØÜßäåæöøüa-z]*\s*[A-ZÄÅÆÖØÜßäåæöøüa-z]+)(?:[\s,]*)([0-9]*\s*[A-ZÄÅÆÖØÜßäåæöøüa-z]*(?:\s*[0-9]*)?[^\s])?(?:\s)*$/";       
         
         preg_match($pattern, $address, $addressArr);
@@ -119,6 +119,20 @@ class Helper {
         return $addressArr;
     }
 
+    static function splitStreetAddressUC($address){
+        //Separates the street from the housenumber according to testcases
+        $pattern = "/^(?:\s)*([0-9]*\\p{L}*\s*\\p{L}+)(?:[\s,]*)([0-9]*\s*\\p{L}*(?:\s*[0-9]*)?[^\s])?(?:\s)*$/u";       
+//        $pattern = "/^(?:\s)*([0-9]*[A-ZÄÅÆÖØÜßäåæöøüa-z]*\s*[A-ZÄÅÆÖØÜßäåæöøüa-z]+)(?:[\s,]*)([0-9]*\s*[A-ZÄÅÆÖØÜßäåæöøüa-z]*(?:\s*[0-9]*)?[^\s])?(?:\s)*$/";          
+        preg_match($pattern, $address, $addressArr);
+        
+//        // fallback if no match w/regexp
+//        if( !array_key_exists( 2, $addressArr ) ) { $addressArr[2] = ""; }  //fix for addresses w/o housenumber
+//        if( !array_key_exists( 1, $addressArr ) ) { $addressArr[1] = $address; }    //fixes for no match at all, return complete input in streetname
+//        if( !array_key_exists( 0, $addressArr ) ) { $addressArr[0] = $address; }    
+
+        return $addressArr;
+    }        
+    
     /**
      * Parses the src/docs/info.json file and returns associative array containing Svea integration package (library) name, version et al.
      * array contains keys "library_name" and "library_version"

@@ -142,16 +142,16 @@ class SplittAddressTest extends \PHPUnit_Framework_TestCase {
         
         //echo "ÄÅÆÖØÜßäåæöøü" . "\n";
     }
-        
-    // test unicode combined characters (i.e. U+00F6 (ö) as two code points -- U+006F (o) + U+00A8 (¨))
-    function testNoCombinedCharacterMatches() {
 
-        function unicodeChar2string( $unicode_char ) {
-            return json_decode('"'.$unicode_char.'"');
-        }
-        
-        $nocc = "\u00F6";
-        $charstring = unicodeChar2string($nocc);   
+    
+    function unicodeChar2string( $unicode_char ) {
+        return json_decode('"'.$unicode_char.'"');
+    }    
+    
+
+    function testBaselineCharacterMatches() {
+
+        $charstring = "ö";
         
         $prefix = "abc";
         $suffix = "xyz";
@@ -159,19 +159,66 @@ class SplittAddressTest extends \PHPUnit_Framework_TestCase {
         $addressString = $prefix . $charstring . $suffix . " " . $number;
                 
         $address = Helper::splitStreetAddress($addressString);
-
-        $this->assertEquals( $prefix . $charstring . $suffix, $address[1]);
-        $this->assertEquals( $number, $address[2]);        
-
         // you may force netbeans output window encoding to use utf-8 by adding 
         // netbeans_default_options= "... -J-Dfile.encoding=UTF-8"
         // to <netbeans install folder>/etc/netbeans.conf
         
-        //print_r( "\n");
-        //print_r( $addressString . "\n");
-        //print_r( $address[1] . "\n");
-        //print_r( $address[2] . "\n");                        
+        print_r( "\naddressString: " . $addressString . "\n");
+        print_r( "address[0]: " . ( isset( $address[0] ) ? $address[0] : "not set" ) . "\n" );
+        print_r( "address[1]: " . ( isset( $address[1] ) ? $address[1] : "not set" ) . "\n" );
+        print_r( "address[2]: " . ( isset( $address[2] ) ? $address[2] : "not set" ) . "\n" );
+        
+        $this->assertEquals( $prefix . $charstring . $suffix, $address[1]);
+        $this->assertEquals( $number, $address[2]);                
+    }    
+    
+    // test unicode combined characters (i.e. U+00F6 (ö) as two code points -- U+006F (o) + U+0308 (¨), combining diaeresis)
+    function testNoCombinedCharacterMatches() {
+        
+        $charstring = $this->unicodeChar2string("\u00F6");   
+        
+        $prefix = "abc";
+        $suffix = "xyz";
+        $number = "10"; 
+        $addressString = $prefix . $charstring . $suffix . " " . $number;
+                
+        $address = Helper::splitStreetAddress($addressString);
+        // you may force netbeans output window encoding to use utf-8 by adding 
+        // netbeans_default_options= "... -J-Dfile.encoding=UTF-8"
+        // to <netbeans install folder>/etc/netbeans.conf
+        
+        print_r( "\naddressString: " . $addressString . "\n");
+        print_r( "address[0]: " . ( isset( $address[0] ) ? $address[0] : "not set" ) . "\n" );
+        print_r( "address[1]: " . ( isset( $address[1] ) ? $address[1] : "not set" ) . "\n" );
+        print_r( "address[2]: " . ( isset( $address[2] ) ? $address[2] : "not set" ) . "\n" );
+        
+        $this->assertEquals( $prefix . $charstring . $suffix, $address[1]);
+        $this->assertEquals( $number, $address[2]);                
     }
+    
+    // test unicode combined characters (i.e. U+00F6 (ö) as two code points -- U+006F (o) + U+0308 (¨), combining diaeresis)
+    function testCombinedCharacterMatches() {
+        
+        $charstring = $this->unicodeChar2string("\u006F\u0308");   
+
+        $prefix = "abc";
+        $suffix = "xyz";
+        $number = "10"; 
+        $addressString = $prefix . $charstring . $suffix . " " . $number;
+
+        $address = Helper::splitStreetAddress($addressString);
+        // you may force netbeans output window encoding to use utf-8 by adding 
+        // netbeans_default_options= "... -J-Dfile.encoding=UTF-8"
+        // to <netbeans install folder>/etc/netbeans.conf
+        
+        print_r( "\naddressString: " . $addressString . "\n");
+        print_r( "address[0]: " . ( isset( $address[0] ) ? $address[0] : "not set" ) . "\n" );
+        print_r( "address[1]: " . ( isset( $address[1] ) ? $address[1] : "not set" ) . "\n" );
+        print_r( "address[2]: " . ( isset( $address[2] ) ? $address[2] : "not set" ) . "\n" );
+        
+        $this->assertEquals( $prefix . $charstring . $suffix, $address[1]);
+        $this->assertEquals( $number, $address[2]);                
+    }    
 }
 
 ?>
