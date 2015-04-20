@@ -4,7 +4,7 @@ namespace Svea;
 $root = realpath(dirname(__FILE__) );
 require_once $root . '/../../../src/Includes.php';
 
-class SplitAddressTest extends \PHPUnit_Framework_TestCase {
+class SplittAddressTest extends \PHPUnit_Framework_TestCase {
 
     // SplitStreetAddress
     function testStreet(){
@@ -139,6 +139,38 @@ class SplitAddressTest extends \PHPUnit_Framework_TestCase {
         $address = Helper::splitStreetAddress("ÄÅÆÖØÜßäåæöøü 10");
         $this->assertEquals( "ÄÅÆÖØÜßäåæöøü", $address[1]);
         $this->assertEquals( "10", $address[2]);
+        
+        //echo "ÄÅÆÖØÜßäåæöøü" . "\n";
+    }
+        
+    // test unicode combined characters (i.e. U+00F6 (ö) as two code points -- U+006F (o) + U+00A8 (¨))
+    function testNoCombinedCharacterMatches() {
+
+        function unicodeChar2string( $unicode_char ) {
+            return json_decode('"'.$unicode_char.'"');
+        }
+        
+        $nocc = "\u00F6";
+        $charstring = unicodeChar2string($nocc);   
+        
+        $prefix = "abc";
+        $suffix = "xyz";
+        $number = "10"; 
+        $addressString = $prefix . $charstring . $suffix . " " . $number;
+                
+        $address = Helper::splitStreetAddress($addressString);
+
+        $this->assertEquals( $prefix . $charstring . $suffix, $address[1]);
+        $this->assertEquals( $number, $address[2]);        
+
+        // you may force netbeans output window encoding to use utf-8 by adding 
+        // netbeans_default_options= "... -J-Dfile.encoding=UTF-8"
+        // to <netbeans install folder>/etc/netbeans.conf
+        
+        //print_r( "\n");
+        //print_r( $addressString . "\n");
+        //print_r( $address[1] . "\n");
+        //print_r( $address[2] . "\n");                        
     }
 }
 
