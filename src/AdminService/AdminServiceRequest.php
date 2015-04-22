@@ -132,7 +132,7 @@ abstract class AdminServiceRequest {
             $orderRows[] = new \SoapVar(
                 new AdminSoap\OrderRow(
                     $orderRow->articleNumber, 
-                    $orderRow->name . ": " . $orderRow->description, 
+                    $this->formatRowNameAndDescription($orderRow),                        
                     !isset($orderRow->discountPercent) ? 0 : $orderRow->discountPercent, 
                     $orderRow->quantity, 
                     $amount, 
@@ -144,6 +144,17 @@ abstract class AdminServiceRequest {
         }
         return $orderRows;
     }    
+    
+    /**
+     * wraps Svea\WebServiceRowFormatter->formatRowNameAndDescription to create a request description from order builder row name & description fields
+     *
+     * @param OrderRow|ShippingFee|et al. $webPayItemRow  an instance of the order row classes from WebPayItem
+     * @return string  the combined description string that should be written to Description
+     */
+    private function formatRowNameAndDescription( $webPayItemRow ) {        
+        $wsrf = new \Svea\WebService\WebServiceRowFormatter( null, null );
+        return $wsrf->formatRowNameAndDescription( $webPayItemRow );
+    }
     
     protected function getAdminSoapNumberedOrderRowsFromBuilderOrderRowsUsingVatFlag($builderOrderRows, $priceIncludingVat) {
         $amount = 0;
@@ -161,7 +172,7 @@ abstract class AdminServiceRequest {
             $numberedOrderRows[] = new \SoapVar(
                 new AdminSoap\NumberedOrderRow(
                     $orderRow->articleNumber,
-                    $orderRow->name.": ".$orderRow->description,
+                    $this->formatRowNameAndDescription($orderRow),                        
                     !isset($orderRow->discountPercent) ? 0 : $orderRow->discountPercent,
                     $orderRow->quantity,
                     $amount,
