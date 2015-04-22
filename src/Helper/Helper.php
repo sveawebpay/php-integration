@@ -106,19 +106,26 @@ class Helper {
      * @return string -- array with the entire streetaddress in position 0, the streetname in position 1 and housenumber in position 2 
      */
     static function splitStreetAddress($address){
-        //Seperates the street from the housenumber according to testcases
-        $pattern = "/^(?:\s)*([0-9]*[A-ZÄÅÆÖØÜßäåæöøüa-z]*\s*[A-ZÄÅÆÖØÜßäåæöøüa-z]+)(?:[\s,]*)([0-9]*\s*[A-ZÄÅÆÖØÜßäåæöøüa-z]*(?:\s*[0-9]*)?[^\s])?(?:\s)*$/";       
-        
+        //Separates the street from the housenumber according to testcases, handles unicode combined code points
+        $pattern = 
+                "/^".                       // start of string
+                "(?:\s)*".                  // non-matching group, consumes any leading whitespace
+                "(\X*?)?".                  // streetname group, lazy match of any graphemes
+                "(?:[\s,])+".               // non-matching group, 1+ separating whitespace or comma
+                "(\pN+\X*?)?".              // housenumber group, something staring with 1+ number, followed w/lazy match of any graphemes
+                "(?:\s)*".                  // non-matching group, consumes any trailing whitespace
+                "$/u"                       // end of string, use unicode
+        ;       
         preg_match($pattern, $address, $addressArr);
         
         // fallback if no match w/regexp
-        if( !array_key_exists( 2, $addressArr ) ) { $addressArr[2] = ""; }  //fix for addresses w/o housenumber
-        if( !array_key_exists( 1, $addressArr ) ) { $addressArr[1] = $address; }    //fixes for no match at all, return complete input in streetname
+        if( !array_key_exists( 2, $addressArr ) ) { $addressArr[2] = ""; }          //fix for addresses w/o housenumber
+        if( !array_key_exists( 1, $addressArr ) ) { $addressArr[1] = $address; }    //fix for no match, return entire input as streetname
         if( !array_key_exists( 0, $addressArr ) ) { $addressArr[0] = $address; }    
 
         return $addressArr;
-    }
-
+    }        
+    
     /**
      * Parses the src/docs/info.json file and returns associative array containing Svea integration package (library) name, version et al.
      * array contains keys "library_name" and "library_version"
@@ -180,5 +187,5 @@ class Helper {
         ;           
 
         return $properties_json;
-    }   
+    }  
 }
