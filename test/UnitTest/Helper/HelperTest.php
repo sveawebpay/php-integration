@@ -172,12 +172,34 @@ class HelperTest extends \PHPUnit_Framework_TestCase {
     //  4u. mean ex to two tax rates: 8.62e @16% -> 
     //  5u. mean inc to two tax rate: 10i @16 % -> 
     //
+    
+    //  1u. mean ex to single tax rate: 10e @20% -> 12i @25% 
     function test_splitMeanAcrossTaxRates_1() {
         $discountAmount = 10.0;
         $discountGivenExVat = true;
         $discountMeanVatPercent = 20.0;
-        $discountName = 'Coupon(10e@20)';
-        $discountDescription = '-12(-2)';
+        $discountName = 'Name';
+        $discountDescription = 'Description';
+        $allowedTaxRates = array( 25 );
+        
+        $discountRows = Helper::splitMeanAcrossTaxRates( 
+            $discountAmount,$discountMeanVatPercent,$discountName,$discountDescription,$allowedTaxRates, $discountGivenExVat 
+        );
+        
+        $this->assertEquals( 12, $discountRows[0]->amountIncVat );
+        $this->assertEquals( 25, $discountRows[0]->vatPercent );
+        $this->assertEquals( 'Name', $discountRows[0]->name);
+        $this->assertEquals( 'Description', $discountRows[0]->description);
+        $this->assertEquals( null, $discountRows[0]->amountExVat );
+    }
+    
+    //  2u. mean inc to single tax rate: 12i @20% -> 12i @25%
+    function test_splitMeanAcrossTaxRates_2() {
+        $discountAmount = 12.0;
+        $discountGivenExVat = false;
+        $discountMeanVatPercent = 20.0;
+        $discountName = 'Name';
+        $discountDescription = 'Description';
         $allowedTaxRates = array( 25 );
         
         $discountRows = Helper::splitMeanAcrossTaxRates( 
@@ -187,7 +209,6 @@ class HelperTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals( 12, $discountRows[0]->amountIncVat );
         $this->assertEquals( 25, $discountRows[0]->vatPercent );
         $this->assertEquals( null, $discountRows[0]->amountExVat );
-    }
-    
+    }  
 }
 ?>
