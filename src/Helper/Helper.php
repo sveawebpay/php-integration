@@ -21,6 +21,8 @@ class Helper {
      * over the allowed Tax Rates, defined using AmountExVat & VatPercent.
      *
      * Note: only supports two allowed tax rates for now.
+     * 
+     * @deprecated -- use Helper::splitMeanAcrossTaxRates() instead
      */
     static function splitMeanToTwoTaxRates( $discountAmountExVat, $discountMeanVat, $discountName, $discountDescription, $allowedTaxRates ) {
 
@@ -188,4 +190,80 @@ class Helper {
 
         return $properties_json;
     }  
+    
+    /**
+     * From a given total discount value, mean tax rate & an array of tax rates, 
+     * this functions returns an array of FixedDiscount objects representing the
+     * discount split across the given tax rates. The FixedDiscount rows are set
+     * using setAmountIncVat & setVatPercent.
+     *
+     * Note: this function is limited to one or two given tax rates at most. For
+     * a mean tax rate of zero, a single discount row is returned.
+     */
+    static function splitMeanAcrossTaxRates( $discountAmount, $discountMeanVat, $discountName, $discountDescription, $allowedTaxRates, $amountExVatFlag=true ) {
+
+        $fixedDiscounts = array();
+
+        if( $discountMeanVat > 0 ) {
+
+            if( sizeof( $allowedTaxRates ) == 2) {
+
+                // m = $discountMeanVat
+                // r0 = allowedTaxRates[0]; r1 = allowedTaxRates[1]
+                // m = a r0 + b r1 => m = a r0 + (1-a) r1 => m = (r0-r1) a + r1 => a = (m-r1)/(r0-r1)
+                // d = $discountAmountExVat;
+                // d = d (a+b) => 1 = a+b => b = 1-a
+
+                $a = ($discountMeanVat - $allowedTaxRates[1]) / ( $allowedTaxRates[0] - $allowedTaxRates[1] );
+                $b = 1 - $a;
+
+                $discountAAmount = $discountAmount * $a * 
+                    ($amountExVatFlag ? (1+($allowedTaxRates[0]/100.00)) : (1+($allowedTaxRates[0]/100.00))/(1+($discountMeanVat/100.00)));
+                $discountA = \WebPayItem::fixedDiscount()
+                                ->setAmountIncVat( Helper::bround($discountAAmount,2) )
+                                ->setVatPercent( $allowedTaxRates[0] )
+                                ->setName( isset( $discountName) ? $discountName : "" )
+                                ->setDescription( (isset( $discountDescription) ? $discountDescription : "") . ' (' .$allowedTaxRates[0]. '%)' )
+                ;
+
+                $discountBAmount = $discountAmount * $b * 
+                    ($amountExVatFlag ? (1+($allowedTaxRates[1]/100.00)) : (1+($allowedTaxRates[1]/100.00))/(1+($discountMeanVat/100.00)));           
+                $discountB = \WebPayItem::fixedDiscount()
+                                ->setAmountIncVat( Helper::bround($discountBAmount,2) )
+                                ->setVatPercent(  $allowedTaxRates[1] )
+                                ->setName( isset( $discountName) ? $discountName : "" )
+                                ->setDescription( (isset( $discountDescription) ? $discountDescription : "") . ' (' .$allowedTaxRates[1]. '%)' )
+                ;
+
+                $fixedDiscounts[] = $discountA;
+                $fixedDiscounts[] = $discountB;
+            }
+
+            elseif( sizeof( $allowedTaxRates ) == 1) {                
+                $discountIncVat = $discountAmount * ($amountExVatFlag ? (1+($discountMeanVat/100.00)) : 1.0 ); // get amount inc vat if needed
+
+                $discountA = \WebPayItem::fixedDiscount()
+                    ->setAmountIncVat( Helper::bround( ($discountIncVat),2) )
+                    ->setVatPercent( $allowedTaxRates[0] )
+                    ->setName( isset( $discountName) ? $discountName : "" )
+                    ->setDescription( (isset( $discountDescription) ? $discountDescription : "") )
+                ;
+                $fixedDiscounts[] = $discountA;
+            }
+        }
+        
+        // discountMeanVat <= 0;
+        else {
+            $discount = \WebPayItem::fixedDiscount()
+                ->setAmountIncVat( Helper::bround( ($discountAmount),2) )
+                ->setVatPercent( 0.0 )
+                ->setName( isset( $discountName) ? $discountName : "" )
+                ->setDescription( (isset( $discountDescription) ? $discountDescription : "") )
+            ;
+            $fixedDiscounts[] = $discount;                               
+        }
+        
+        return $fixedDiscounts;
+    }       
+    
 }
