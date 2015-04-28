@@ -164,5 +164,30 @@ class HelperTest extends \PHPUnit_Framework_TestCase {
         $this->assertTrue( array_key_exists("library_name", $libraryPropertiesArray) );
         $this->assertTrue( array_key_exists("library_version", $libraryPropertiesArray) );
     }  
+
+    /// new implementation of splitMeanAcrossTaxRates helper method
+    //  1u. mean ex to single tax rate: 10e @20% -> 12i @25% 
+    //  2u. mean inc to single tax rate: 12i @20% -> 12i @25%
+    //  3i. mean inc to single tax rate: 12i @20% -> 12i @25%, priceincvat = false -> resent as 9.6e @25%, priceincvat = false
+    //  4u. mean ex to two tax rates: 8.62e @16% -> 
+    //  5u. mean inc to two tax rate: 10i @16 % -> 
+    //
+    function test_splitMeanAcrossTaxRates_1() {
+        $discountAmount = 10.0;
+        $discountGivenExVat = true;
+        $discountMeanVatPercent = 20.0;
+        $discountName = 'Coupon(10e@20)';
+        $discountDescription = '-12(-2)';
+        $allowedTaxRates = array( 25 );
+        
+        $discountRows = Helper::splitMeanAcrossTaxRates( 
+            $discountAmount,$discountMeanVatPercent,$discountName,$discountDescription,$allowedTaxRates, $discountGivenExVat 
+        );
+        
+        $this->assertEquals( 12, $discountRows[0]->amountIncVat );
+        $this->assertEquals( 25, $discountRows[0]->vatPercent );
+        $this->assertEquals( null, $discountRows[0]->amountExVat );
+    }
+    
 }
 ?>
