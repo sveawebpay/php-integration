@@ -3,6 +3,7 @@ namespace Svea;
 
 $root = realpath(dirname(__FILE__) );
 require_once $root . '/../../../src/Includes.php';
+require_once $root . '/../../../test/TestUtil.php';
 
 class HelperTest extends \PHPUnit_Framework_TestCase {
 
@@ -168,9 +169,10 @@ class HelperTest extends \PHPUnit_Framework_TestCase {
     /// new implementation of splitMeanAcrossTaxRates helper method
     //  1u. mean ex to single tax rate: 10e @20% -> 12i @25% 
     //  2u. mean inc to single tax rate: 12i @20% -> 12i @25%
-    //  3i. mean inc to single tax rate: 12i @20% -> 12i @25%, priceincvat = false -> resent as 9.6e @25%, priceincvat = false
-    //  4u. mean ex to two tax rates: 8.62e @16% -> 
-    //  5u. mean inc to two tax rate: 10i @16 % -> 
+    //  3i. mean inc to single tax rate: 12i @20% -> 12i @25%, priceincvat = true => correct order total at Svea
+    //  4i. mean inc to single tax rate: 12i @20% -> 12i @25%, priceincvat = false -> resent as 9.6e @25%, priceincvat = false => correct order total at Svea
+    //  5u. mean ex to two tax rates: 8.62e @16% -> 
+    //  6u. mean inc to two tax rate: 10i @16 % -> 
     //
     
     //  1u. mean ex to single tax rate: 10e @20% -> 12i @25% 
@@ -210,5 +212,95 @@ class HelperTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals( 25, $discountRows[0]->vatPercent );
         $this->assertEquals( null, $discountRows[0]->amountExVat );
     }  
+    
+    //  3i. mean inc to single tax rate: 12i @20% -> 12i @25%, priceincvat = true => correct order total at Svea
+    function test_splitMeanAcrossTaxRates_3() {
+        $discountAmount = 12.0;
+        $discountGivenExVat = false;
+        $discountMeanVatPercent = 20.0;
+        $discountName = 'Name';
+        $discountDescription = 'Description';
+        $allowedTaxRates = array( 25 );
+        
+        $discountRows = Helper::splitMeanAcrossTaxRates( 
+            $discountAmount,$discountMeanVatPercent,$discountName,$discountDescription,$allowedTaxRates, $discountGivenExVat 
+        );
+        
+        $order = \WebPay::createOrder(SveaConfig::getDefaultConfig())
+                    ->addOrderRow(
+                            \WebPayItem::orderRow()
+                                ->setAmountIncVat(125.00)
+                                ->setVatPercent(25)
+                                ->setQuantity(1)
+                            )
+                    ->addDiscount($discountRows[0])
+                    ->addCustomerDetails(\TestUtil::createIndividualCustomer("SE"))
+                    ->setCountryCode("SE")
+                    ->setOrderDate("2012-12-12")
+        ;
+        $response = $order->useInvoicePayment()->doRequest();
+        
+        $this->assertEquals(1, $response->accepted);
+        $this->assertEquals(113.00, $response->amount);   
+    } 
+    
+    //  4i. mean inc to single tax rate: 12i @20% -> 12i @25%, priceincvat = false -> resent as 9.6e @25%, priceincvat = false => correct order total at Svea
+    function test_splitMeanAcrossTaxRates_4() {
+        $discountAmount = 12.0;
+        $discountGivenExVat = false;
+        $discountMeanVatPercent = 20.0;
+        $discountName = 'Name';
+        $discountDescription = 'Description';
+        $allowedTaxRates = array( 25 );
+        
+        $discountRows = Helper::splitMeanAcrossTaxRates( 
+            $discountAmount,$discountMeanVatPercent,$discountName,$discountDescription,$allowedTaxRates, $discountGivenExVat 
+        );
+        
+        $order = \WebPay::createOrder(SveaConfig::getDefaultConfig())
+                    ->addOrderRow(
+                            \WebPayItem::orderRow()
+                                ->setAmountExVat(100.00)
+                                ->setVatPercent(25)
+                                ->setQuantity(1)
+                            )
+                    ->addDiscount($discountRows[0])
+                    ->addCustomerDetails(\TestUtil::createIndividualCustomer("SE"))
+                    ->setCountryCode("SE")
+                    ->setOrderDate("2012-12-12")
+        ;
+        $response = $order->useInvoicePayment()->doRequest();
+        
+        $this->assertEquals(1, $response->accepted);
+        $this->assertEquals(113.00, $response->amount);   
+    }
+    
+//    function test_splitMeanToTwoTaxRates_splitTwoRates() {
+//
+//        $discountAmountExVat = 100;
+//        $discountVatAmount = 18.6667;
+//        $discountName = 'Coupon(1112)';
+//        $discountDescription = '-100kr';
+//        $allowedTaxRates = array( 25,6 );
+//
+//        $discountRows = Helper::splitMeanToTwoTaxRates( $discountAmountExVat,$discountVatAmount,$discountName,$discountDescription,$allowedTaxRates );
+//
+//        // 200 + 50 (25%)
+//        // 100 + 6 (6%)
+//        // -100 => 200/300 @25%, 100/300 @6%
+//        // => 2/3 * -100 + 2/3 * -25 discount @25%, 1/3 * -100 + 1/3 * -6 discount @6% => -100 @ 18,6667%
+//
+//        $this->assertEquals( 66.67,$discountRows[0]->amountExVat );
+//        $this->assertEquals( 25, $discountRows[0]->vatPercent );
+//        $this->assertEquals( 'Coupon(1112)', $discountRows[0]->name );
+//        $this->assertEquals( '-100kr (25%)', $discountRows[0]->description );
+//
+//        $this->assertEquals( 33.33,$discountRows[1]->amountExVat );
+//        $this->assertEquals( 6, $discountRows[1]->vatPercent );
+//        $this->assertEquals( 'Coupon(1112)', $discountRows[1]->name );
+//        $this->assertEquals( '-100kr (6%)', $discountRows[1]->description );
+//    }
+    
+    
 }
 ?>
