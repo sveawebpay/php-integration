@@ -21,6 +21,8 @@ class Helper {
      * over the allowed Tax Rates, defined using AmountExVat & VatPercent.
      *
      * Note: only supports two allowed tax rates for now.
+     * 
+     * @deprecated -- use Helper::splitMeanAcrossTaxRates() instead
      */
     static function splitMeanToTwoTaxRates( $discountAmountExVat, $discountMeanVat, $discountName, $discountDescription, $allowedTaxRates ) {
 
@@ -190,18 +192,20 @@ class Helper {
     }  
     
     /**
-     * Takes a total discount value ex. vat, a mean tax rate & an array of allowed tax rates.
-     * returns an array of FixedDiscount objects representing the discount split
-     * over the allowed Tax Rates, defined using AmountExVat & VatPercent.
+     * From a given total discount value, mean tax rate & an array of tax rates, 
+     * this functions returns an array of FixedDiscount objects representing the
+     * discount split across the given tax rates. The FixedDiscount rows are set
+     * using setAmountIncVat & setVatPercent.
      *
-     * Note: only supports two allowed tax rates for now.
+     * Note: this function is limited to one or two given tax rates at most. For
+     * a mean tax rate of zero, a single discount row is returned.
      */
-    static function splitMeanAcrossTaxRates( $discountAmount, $discountMeanVat, $discountName, $discountDescription, $allowedTaxRates, $amountExVat=true ) {
+    static function splitMeanAcrossTaxRates( $discountAmount, $discountMeanVat, $discountName, $discountDescription, $allowedTaxRates, $amountExVatFlag=true ) {
 
         $fixedDiscounts = array();
 
-        if( $amountExVat == true ) {    // discount amount given ex vat
-        
+        if( $discountMeanVat > 0 ) {
+
             if( sizeof( $allowedTaxRates ) == 2) {
 
                 // m = $discountMeanVat
@@ -213,15 +217,19 @@ class Helper {
                 $a = ($discountMeanVat - $allowedTaxRates[1]) / ( $allowedTaxRates[0] - $allowedTaxRates[1] );
                 $b = 1 - $a;
 
+                $discountAAmount = $discountAmount * $a * 
+                    ($amountExVatFlag ? (1+($allowedTaxRates[0]/100.00)) : (1+($allowedTaxRates[0]/100.00))/(1+($discountMeanVat/100.00)));
                 $discountA = \WebPayItem::fixedDiscount()
-                                ->setAmountExVat( Helper::bround(($discountAmount * $a),2) )
+                                ->setAmountIncVat( Helper::bround($discountAAmount,2) )
                                 ->setVatPercent( $allowedTaxRates[0] )
                                 ->setName( isset( $discountName) ? $discountName : "" )
                                 ->setDescription( (isset( $discountDescription) ? $discountDescription : "") . ' (' .$allowedTaxRates[0]. '%)' )
                 ;
 
+                $discountBAmount = $discountAmount * $b * 
+                    ($amountExVatFlag ? (1+($allowedTaxRates[1]/100.00)) : (1+($allowedTaxRates[1]/100.00))/(1+($discountMeanVat/100.00)));           
                 $discountB = \WebPayItem::fixedDiscount()
-                                ->setAmountExVat( Helper::bround(($discountAmount * $b),2) )
+                                ->setAmountIncVat( Helper::bround($discountBAmount,2) )
                                 ->setVatPercent(  $allowedTaxRates[1] )
                                 ->setName( isset( $discountName) ? $discountName : "" )
                                 ->setDescription( (isset( $discountDescription) ? $discountDescription : "") . ' (' .$allowedTaxRates[1]. '%)' )
@@ -229,11 +237,10 @@ class Helper {
 
                 $fixedDiscounts[] = $discountA;
                 $fixedDiscounts[] = $discountB;
-
             }
-            // single tax rate, so use shop supplied mean as vat rate
-            elseif( sizeof( $allowedTaxRates ) == 1) {          
-                $discountIncVat = $discountAmount * (1+($discountMeanVat/100.00));
+
+            elseif( sizeof( $allowedTaxRates ) == 1) {                
+                $discountIncVat = $discountAmount * ($amountExVatFlag ? (1+($discountMeanVat/100.00)) : 1.0 ); // get amount inc vat if needed
 
                 $discountA = \WebPayItem::fixedDiscount()
                     ->setAmountIncVat( Helper::bround( ($discountIncVat),2) )
@@ -245,21 +252,17 @@ class Helper {
             }
         }
         
-        else {    // discount amount given inc vat
-            
-            // single tax rate, so use shop supplied mean as vat rate
-            if( sizeof( $allowedTaxRates ) == 1) {          
-                $discountIncVat = $discountAmount;
-                
-                $discountA = \WebPayItem::fixedDiscount()
-                    ->setAmountIncVat( Helper::bround( ($discountIncVat),2) )
-                    ->setVatPercent( $allowedTaxRates[0] )
-                    ->setName( isset( $discountName) ? $discountName : "" )
-                    ->setDescription( (isset( $discountDescription) ? $discountDescription : "") )
-                ;
-                $fixedDiscounts[] = $discountA;
-            }
+        // discountMeanVat <= 0;
+        else {
+            $discount = \WebPayItem::fixedDiscount()
+                ->setAmountIncVat( Helper::bround( ($discountAmount),2) )
+                ->setVatPercent( 0.0 )
+                ->setName( isset( $discountName) ? $discountName : "" )
+                ->setDescription( (isset( $discountDescription) ? $discountDescription : "") )
+            ;
+            $fixedDiscounts[] = $discount;                               
         }
+        
         return $fixedDiscounts;
     }       
     
