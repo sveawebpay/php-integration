@@ -188,7 +188,7 @@ class WebServiceRowFormatter {
      * @param OrderRow|ShippingFee|et al. $webPayItemRow  an instance of the order row classes from WebPayItem
      * @return string  the combined description string that should be written to Description
      */
-    private function formatRowNameAndDescription( $webPayItemRow ) {
+    public function formatRowNameAndDescription( $webPayItemRow ) {
 
         $description = ""; //fallback to empty string if we haven't got either of name or description
 
