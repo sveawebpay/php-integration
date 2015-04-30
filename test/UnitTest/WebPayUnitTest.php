@@ -52,6 +52,88 @@ class WebPayUnitTest extends \PHPUnit_Framework_TestCase {
         $this->assertInstanceOf("Svea\HostedService\PayPagePayment", $request);
     }     
     
+    // Verify that orderRows may be specified with zero amount (INT-581)
+    public function test_createOrder_useInvoicePayment_allows_orderRow_with_zero_amount() {
+        $createOrder = WebPay::createOrder( Svea\SveaConfig::getDefaultConfig() )
+                ->addOrderRow( 
+                    WebPayItem::orderRow()
+                        ->setQuantity(0.0)
+                        ->setAmountIncVat(0.0)
+                        ->setVatPercent(0)
+                )
+                ->addCustomerDetails(
+                    WebPayItem::individualCustomer()
+                        ->setNationalIdNumber("4605092222")
+                )
+                ->setCountryCode("SE")
+                ->setOrderDate(date('c'))
+        ;    
+
+        $request = $createOrder->useInvoicePayment();
+        
+        // prepareRequest() validates the order and throws SveaWebPayException on validation failure
+        try {
+            $request->prepareRequest();
+        }
+        catch (Exception $e){
+            // fail on validation error
+            $this->fail( "Unexpected validation exception: " . $e->getMessage() );
+        }
+    }
+    public function test_createOrder_usePaymentPlanPayment_allows_orderRow_with_zero_amount() {
+        $createOrder = WebPay::createOrder( Svea\SveaConfig::getDefaultConfig() )
+                ->addOrderRow( 
+                    WebPayItem::orderRow()
+                        ->setQuantity(0.0)
+                        ->setAmountIncVat(0.0)
+                        ->setVatPercent(0)
+                )
+                ->addCustomerDetails(
+                    WebPayItem::individualCustomer()
+                        ->setNationalIdNumber("4605092222")
+                )
+                ->setCountryCode("SE")
+                ->setOrderDate(date('c'))
+        ;    
+
+        $request = $createOrder->usePaymentPlanPayment(TestUtil::getGetPaymentPlanParamsForTesting());
+        
+        // prepareRequest() validates the order and throws SveaWebPayException on validation failure
+        try {
+            $request->prepareRequest();
+        }
+        catch (Exception $e){
+            // fail on validation error
+            $this->fail( "Unexpected validation exception: " . $e->getMessage() );
+        }
+    }
+    public function test_createOrder_usePaymentMethod_KORTCERT_allows_orderRow_with_zero_amount() {
+        $createOrder = WebPay::createOrder( Svea\SveaConfig::getDefaultConfig() )
+                ->addOrderRow( 
+                    WebPayItem::orderRow()
+                        ->setQuantity(0.0)
+                        ->setAmountIncVat(0.0)
+                        ->setVatPercent(0)
+                )
+                ->addCustomerDetails(
+                    WebPayItem::individualCustomer()
+                        ->setNationalIdNumber("4605092222")
+                )
+                ->setCountryCode("SE")
+                ->setOrderDate(date('c'))
+                ->setCurrency("SEK")
+                ->setClientOrderNumber(date('c'))
+        ;    
+        // prepareRequest() validates the order and throws SveaWebPayException on validation failure
+        try {
+            $request = $createOrder->usePaymentMethod(PaymentMethod::KORTCERT)->setReturnUrl("http://myurl.se")->getPaymentForm();
+        }
+        catch (Exception $e){
+            // fail on validation error
+            $this->fail( "Unexpected validation exception: " . $e->getMessage() );
+        }
+    }
+    
     // individualCustomer validation - common        
     function test_validates_missing_required_method_for_useInvoicePayment_IndividualCustomer_SE_addOrderRow() {
         $order = WebPay::createOrder(Svea\SveaConfig::getDefaultConfig())
@@ -145,7 +227,7 @@ class WebPayUnitTest extends \PHPUnit_Framework_TestCase {
         );   
         $order->useInvoicePayment()->prepareRequest(); 
     }   
-
+    
     // SE
     // IndividualCustomer validation
     function test_validates_all_required_methods_for_createOrder_useInvoicePayment_IndividualCustomer_SE() {
