@@ -627,7 +627,7 @@ class HostedRowFormatterTest extends \PHPUnit_Framework_TestCase {
    }
 
     // FixedDiscount should only look at vat rates from order item rows, not shipping or invoice fees
-    public function test_FixedDiscount_specified_using_amountIncVat_are_calculated_from_order_item_rows_only() {
+    public function test_FixedDiscount_specified_using_amountIncVat_is_calculated_from_order_item_rows_only() {
         $this->order->addOrderRow(\WebPayItem::orderRow()
                 ->setAmountExVat(100.00)
                 ->setVatPercent(25)
@@ -669,14 +669,83 @@ class HostedRowFormatterTest extends \PHPUnit_Framework_TestCase {
 //
    }
 
-//  TODO port over this test as well from WebServiceRowFormatterTest
-    public function test_FixedDiscount_specified_using_amountExVat_are_calculated_from_order_item_rows_only() {}
+    // check that fixed discount split over vat rates ratios are present based on order item rows only, not shipping or invoice fees
+    public function test_FixedDiscount_specified_using_amountExVat_is_calculated_from_order_item_rows_only() {
+    
+        $order = \WebPay::createOrder(Svea\SveaConfig::getDefaultConfig())
+            ->addOrderRow( \WebPayItem::orderRow()
+                ->setName("product with price 100 @25% = 125")
+                ->setAmountExVat(100.00)
+                ->setVatPercent(25)
+                ->setQuantity(2.0)
+            )
+            ->addOrderRow( \WebPayItem::orderRow()
+                ->setName("product with price 100 @6% = 106")
+                ->setAmountExVat(100.00)
+                ->setVatPercent(6)
+                ->setQuantity(1.0)
+            )
+            ->addFee( \WebPayItem::shippingFee()	// fee row should be ignored by discount calculation
+                ->setName("shipping with price 50 @6% = 53")
+                ->setAmountExVat(50.00)
+                ->setVatPercent(6)
+            )                
+            ->addFee( \WebPayItem::invoiceFee()	// fee row should be ignored by discount calculation
+                ->setAmountExVat(23.20)
+                ->setVatPercent(25)
+            )  
+            ->addDiscount( \WebPayItem::fixedDiscount()
+                            ->setDiscountId("f100e")
+                            ->setName("couponName")
+                            ->setDescription("couponDesc")
+                            ->setAmountExVat(100.00)
+                            ->setUnit("st")
+            )
+        ;                
+                                
+        $formatter = new HostedRowFormatter();
+        $newRows = $formatter->formatRows($order);  // of type HostedOrderRowBuilder
+  
+        // 100*200/300 = 66.67 ex. 25% vat => discount 83.34 (incl. 16.67 vat @25%)
+        // 100*100/300 = 33.33 ex. 6% vat => discount 35.33 (incl 2.00 vat @6%)
+        // => total discount is 118.67 (incl 18.67 vat @18.67%)
+ 
+        // validate HostedOrderRowBuilder row contents
+        $newRow = $newRows[4];                   
+        $this->assertEquals("f100e", $newRow->sku);
+        $this->assertEquals("couponName", $newRow->name);
+        $this->assertEquals("couponDesc", $newRow->description);
+        $this->assertEquals(-11867, $newRow->amount);
+        $this->assertEquals(-1867, $newRow->vat);
+        $this->assertEquals(1, $newRow->quantity);
+        $this->assertEquals("st", $newRow->unit);    
+
+        $paymentForm = $order
+                        ->setCountryCode("SE")
+                        ->setOrderDate("2015-02-23")
+                        ->setClientOrderNumber("unique")
+                        ->setCurrency("SEK")
+                        ->usePaymentMethod(PaymentMethod::KORTCERT)
+                            ->setReturnUrl("http://myurl.com")
+                            ->getPaymentForm()
+        ;        
+        $paymentXml = $paymentForm->xmlMessage;        
+
+        //	    		// 250.00 (50.00)
+        //	    		// 106.00 (6.00)
+        //	    		// 53.00 (3.00)
+        //	    		// 29.00 (5.80)
+        //		    	// -118.67 (-18.67)
+        //		    	// => 319.33 (46.13)
+        $this->assertRegexp( '/<amount>31933<\/amount>/',$paymentXml);
+        $this->assertRegexp( '/<vat>4613<\/vat>/',$paymentXml);
+    }    
 
 //  TODO port over this test as well from WebServiceRowFormatterTest
-    public function test_FixedDiscount_specified_using_amountExVat_are_calculated_from_order_item_rows_only_multiple_vat_rates() {}
+    public function test_FixedDiscount_specified_using_amountExVat_is_calculated_from_order_item_rows_only_multiple_vat_rates() {}
 
 //  TODO port over this test as well from WebServiceRowFormatterTest
-    public function test_FixedDiscount_specified_using_amountIncVat_are_calculated_from_order_item_rows_only_multiple_vat_rates() {}
+    public function test_FixedDiscount_specified_using_amountIncVat_is_calculated_from_order_item_rows_only_multiple_vat_rates() {}
 
 //  TODO port over this test as well from WebServiceRowFormatterTest
     public function test_FixedDiscount_specified_using_amountIncVat_and_vatPercent() {}
