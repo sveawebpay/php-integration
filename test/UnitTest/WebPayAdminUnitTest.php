@@ -426,5 +426,137 @@ class WebPayAdminUnitTest extends \PHPUnit_Framework_TestCase {
     // end deliverOrderRows tests ----------------------------------------------
 
     
-   
+    // Verify that new orderRows may be specified with zero amount (INT-581) with WPA::addOrderRows
+    public function test_addOrderRows_addInvoiceOrderRows_allows_orderRow_with_zero_amount() {
+        $dummyorderid = 123456;        
+        $orderBuilder = WebPayAdmin::addOrderRows( Svea\SveaConfig::getDefaultConfig() )
+            ->setOrderId($dummyorderid)
+            ->setCountryCode("SE")
+            ->addOrderRow( 
+                    WebPayItem::orderRow()
+                        ->setAmountExVat(0.0)               
+                        ->setVatPercent(0)                  
+                        ->setQuantity(0)                    
+            )   
+        ;
+
+        try {
+            $request = $orderBuilder->addInvoiceOrderRows()->prepareRequest();
+        }
+        catch (Exception $e){
+            // fail on validation error
+            $this->fail( "Unexpected validation exception: " . $e->getMessage() );
+        }
+    }
+    public function test_addOrderRows_addPaymentPlanOrderRows_allows_orderRow_with_zero_amount() {
+        $dummyorderid = 123456;        
+        $orderBuilder = WebPayAdmin::addOrderRows( Svea\SveaConfig::getDefaultConfig() )
+            ->setOrderId($dummyorderid)
+            ->setCountryCode("SE")
+            ->addOrderRow( 
+                    WebPayItem::orderRow()
+                        ->setAmountExVat(0.0)               
+                        ->setVatPercent(0)                  
+                        ->setQuantity(0)                    
+            )   
+        ;
+
+        try {
+            $request = $orderBuilder->addPaymentPlanOrderRows()->prepareRequest();
+        }
+        catch (Exception $e){
+            // fail on validation error
+            $this->fail( "Unexpected validation exception: " . $e->getMessage() );
+        }
+    }
+    // Verify that new orderRows may be specified with zero amount (INT-581) with WPA::updateOrderRows
+    public function test_updateOrderRows_updateInvoiceOrderRows_allows_orderRow_with_zero_amount() {
+        $dummyorderid = 123456;        
+        $orderBuilder = WebPayAdmin::updateOrderRows( Svea\SveaConfig::getDefaultConfig() )
+            ->setOrderId($dummyorderid)
+            ->setCountryCode("SE")
+            ->updateOrderRow( 
+                    WebPayItem::numberedOrderRow()
+                        ->setAmountExVat(0.0)               
+                        ->setVatPercent(0)                  
+                        ->setQuantity(0)      
+                        ->setRowNumber(1)
+            )   
+        ;
+
+        try {
+            $request = $orderBuilder->updateInvoiceOrderRows()->prepareRequest();
+        }
+        catch (Exception $e){
+            // fail on validation error
+            $this->fail( "Unexpected validation exception: " . $e->getMessage() );
+        }
+    }
+    public function test_updateOrderRows_updatePaymentPlanOrderRows_allows_orderRow_with_zero_amount() {
+        $dummyorderid = 123456;        
+        $orderBuilder = WebPayAdmin::updateOrderRows( Svea\SveaConfig::getDefaultConfig() )
+            ->setOrderId($dummyorderid)
+            ->setCountryCode("SE")
+            ->updateOrderRow( 
+                    WebPayItem::numberedOrderRow()
+                        ->setAmountExVat(0.0)               
+                        ->setVatPercent(0)                  
+                        ->setQuantity(0)      
+                        ->setRowNumber(1)
+            )   
+        ;
+
+        try {
+            $request = $orderBuilder->updatePaymentPlanOrderRows()->prepareRequest();
+        }
+        catch (Exception $e){
+            // fail on validation error
+            $this->fail( "Unexpected validation exception: " . $e->getMessage() );
+        }
+    }    
+    
+    // Verify that new orderRows may be specified with zero amount (INT-581) with WPA::creditOrderRows
+    public function test_creditOrderRows_creditInvoiceOrderRows_allows_orderRow_with_zero_amount() {
+        $dummyorderid = 123456;        
+        $orderBuilder = WebPayAdmin::creditOrderRows( Svea\SveaConfig::getDefaultConfig() )
+            ->setInvoiceId($dummyorderid)
+            ->setInvoiceDistributionType(DistributionType::POST)
+            ->setCountryCode("SE")
+            ->addCreditOrderRow( 
+                    WebPayItem::orderRow()
+                        ->setAmountExVat(0.0)               
+                        ->setVatPercent(0)                  
+                        ->setQuantity(0)      
+            )   
+        ;
+
+        try {
+            $request = $orderBuilder->creditInvoiceOrderRows()->prepareRequest();
+        }
+        catch (Exception $e){
+            // fail on validation error
+            $this->fail( "Unexpected validation exception: " . $e->getMessage() );
+        }
+    }
+    public function test_creditOrderRows_creditCardOrderRows_allows_orderRow_with_zero_amount() {
+        $dummyorderid = 123456;        
+        $orderBuilder = WebPayAdmin::creditOrderRows( Svea\SveaConfig::getDefaultConfig() )
+            ->setOrderId($dummyorderid)
+            ->setCountryCode("SE")
+            ->addCreditOrderRow( 
+                    WebPayItem::orderRow()
+                        ->setAmountExVat(0.0)               
+                        ->setVatPercent(0)                  
+                        ->setQuantity(0)      
+            )   
+        ;
+
+        try {
+            $request = $orderBuilder->creditCardOrderRows()->prepareRequest();
+        }
+        catch (Exception $e){
+            // fail on validation error
+            $this->fail( "Unexpected validation exception: " . $e->getMessage() );
+        }
+    }      
 }
