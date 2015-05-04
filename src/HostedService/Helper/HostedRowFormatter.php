@@ -5,7 +5,7 @@ class HostedRowFormatter {
 
     private $totalAmount;       // order item rows, rounded to 2 decimals, multiplied by 100 to integer
     private $totalVat;          // order item rows, rounded to 2 decimals, multiplied by 100 to integer
-    private $newRows;           // all order rows, as above
+    private $newRows;           // type HostedOrderRowBuilder -- all order rows, as above
     private $rawAmount;         // unrounded, multiplied by 100, avoids cumulative rounding error (when summing up over rows)
     private $rawVat;            // unrounded, multiplied by 100, avoids cumulative rounding error (when summing up over rows)
 
