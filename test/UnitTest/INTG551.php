@@ -8,7 +8,10 @@ require_once $root . '/../TestUtil.php';
  */
 class INTG551UnitTest extends \PHPUnit_Framework_TestCase {
     
-    // characterizing test for INTG-551
+    
+    
+    
+    /// characterizing tests for INTG-551
     function test_creditOrderRows_handles_creditOrderRows_specified_using_exvat_and_vatpercent() {       
         // needs either setRow(s)ToCredit or addCreditOrderRow(s)    
         $creditOrder = WebPayAdmin::creditOrderRows( Svea\SveaConfig::getDefaultConfig() )
@@ -27,6 +30,12 @@ class INTG551UnitTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals("10", $request->NewCreditInvoiceRows->enc_value[0]->enc_value->PricePerUnit->enc_value);
         $this->assertEquals("25", $request->NewCreditInvoiceRows->enc_value[0]->enc_value->VatPercent->enc_value);
         $this->assertEquals(null, $request->NewCreditInvoiceRows->enc_value[0]->enc_value->PriceIncludingVat->enc_value);    
+        
+        
+        
+        
+        
+        
     }
     function test_creditOrderRows_handles_creditOrderRows_specified_using_incvat_and_vatpercent() {       
         // needs either setRow(s)ToCredit or addCreditOrderRow(s)    

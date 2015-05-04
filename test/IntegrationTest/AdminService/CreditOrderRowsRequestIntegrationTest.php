@@ -4,19 +4,31 @@ $root = realpath(dirname(__FILE__));
 require_once $root . '/../../../src/Includes.php';
 require_once $root . '/../../TestUtil.php';
 
+/** helper class, used to return information about an order */
+class orderToCredit {
+    var $orderId;
+    var $invoiceId;
+
+    function orderToCredit( $orderId, $invoiceId ) {
+        $this->orderId = $orderId;
+        $this->invoiceId = $invoiceId;
+    }
+}
+
 /**
  * @author Kristian Grossman-Madsen for Svea WebPay
  */
 class CreditOrderRowsRequestIntegrationTest extends PHPUnit_Framework_TestCase {
 
-    public function test_creditOrderRows_creditInvoiceOrderRows_credit_row_using_row_index() {
+    /** helper function, returns invoice for delivered order with one row, sent with PriceIncludingVat flag set to true */
+    public function get_orderInfo_sent_inc_vat( $amount, $vat, $quantity ) {
         $config = Svea\SveaConfig::getDefaultConfig();
         $orderResponse = WebPay::createOrder($config)
                 ->addOrderRow(
                         WebPayItem::orderRow()
-                        ->setAmountExVat(99.99) // => 123.9876 inc
-                        ->setVatPercent(24)
-                        ->setQuantity(1)
+                        ->setAmountIncVat($amount)
+                        ->setVatPercent($vat)
+                        ->setQuantity($quantity)
                 )
                 ->addCustomerDetails(TestUtil::createIndividualCustomer("SE"))
                 ->setCountryCode("SE")
@@ -31,11 +43,45 @@ class CreditOrderRowsRequestIntegrationTest extends PHPUnit_Framework_TestCase {
                 ->setRowToDeliver(1)
                 ->deliverInvoiceOrderRows()->doRequest();
         $this->assertEquals(1, $deliver->accepted); 
-        $this->assertEquals("123.99", $deliver->amount);
-        //print_r($deliver->invoiceId);
+        
+        return new orderToCredit( $orderResponse->sveaOrderId, $deliver->invoiceId );
+    }     
+ 
+    /** helper function, returns invoice for delivered order with one row, sent with PriceIncludingVat flag set to false */
+    public function get_orderInfo_sent_ex_vat( $amount, $vat, $quantity ) {
+        $config = Svea\SveaConfig::getDefaultConfig();
+        $orderResponse = WebPay::createOrder($config)
+                ->addOrderRow(
+                        WebPayItem::orderRow()
+                        ->setAmountExVat($amount)
+                        ->setVatPercent($vat)
+                        ->setQuantity($quantity)
+                )
+                ->addCustomerDetails(TestUtil::createIndividualCustomer("SE"))
+                ->setCountryCode("SE")
+                ->setOrderDate("2012-12-12")
+                ->useInvoicePayment()->doRequest();
+        $this->assertEquals(1, $orderResponse->accepted);
+        
+        $deliver = WebPayAdmin::deliverOrderRows($config)
+                ->setOrderId($orderResponse->sveaOrderId)
+                ->setCountryCode('SE')
+                ->setInvoiceDistributionType(DistributionType::POST)
+                ->setRowToDeliver(1)
+                ->deliverInvoiceOrderRows()->doRequest();
+        $this->assertEquals(1, $deliver->accepted); 
+        
+        return new orderToCredit( $orderResponse->sveaOrderId, $deliver->invoiceId );
+    } 
+    
+    
+    public function test_creditOrderRows_creditInvoiceOrderRows_credit_row_using_row_index() {
+        $config = Svea\SveaConfig::getDefaultConfig();
+
+        $orderInfo = $this->get_orderInfo_sent_ex_vat( 99.99, 24, 1 );
 
         $credit = WebPayAdmin::creditOrderRows($config)
-                ->setInvoiceId($deliver->invoiceId)
+                ->setInvoiceId($orderInfo->invoiceId)
                 ->setInvoiceDistributionType(DistributionType::POST)
                 ->setCountryCode('SE')
                 ->setRowToCredit(1)
@@ -46,40 +92,20 @@ class CreditOrderRowsRequestIntegrationTest extends PHPUnit_Framework_TestCase {
 
     public function test_creditOrderRows_creditInvoiceOrderRows_credit_row_using_new_order_row_original_exvat_new_exvat() {
         $config = Svea\SveaConfig::getDefaultConfig();
-        $orderResponse = WebPay::createOrder($config)
-                ->addOrderRow(
-                        WebPayItem::orderRow()
-                        ->setAmountExVat(99.99) // => 123.9876 inc
-                        ->setVatPercent(24)
-                        ->setQuantity(1)
-                )
-                ->addCustomerDetails(TestUtil::createIndividualCustomer("SE"))
-                ->setCountryCode("SE")
-                ->setOrderDate("2012-12-12")
-                ->useInvoicePayment()->doRequest();
-        $this->assertEquals(1, $orderResponse->accepted);
+        
+        $orderInfo = $this->get_orderInfo_sent_ex_vat( 99.99, 24, 1 );
 
         // query order and assert row totals
         $query = WebPayAdmin::queryOrder($config)
-                ->setOrderId($orderResponse->sveaOrderId)
+                ->setOrderId($orderInfo->orderId)
                 ->setCountryCode('SE')
                 ->queryInvoiceOrder()->doRequest();       
         $this->assertEquals(1, $query->accepted);                
         $this->assertEquals("99.99", $query->numberedOrderRows[0]->amountExVat);
         $this->assertEquals("24", $query->numberedOrderRows[0]->vatPercent);            
         
-        $deliver = WebPayAdmin::deliverOrderRows($config)
-                ->setOrderId($orderResponse->sveaOrderId)
-                ->setCountryCode('SE')
-                ->setInvoiceDistributionType(DistributionType::POST)
-                ->setRowToDeliver(1)
-                ->deliverInvoiceOrderRows()->doRequest();
-        $this->assertEquals(1, $deliver->accepted); 
-        $this->assertEquals("123.99", $deliver->amount);
-        //print_r($deliver->invoiceId);
-
         $credit = WebPayAdmin::creditOrderRows($config)
-                ->setInvoiceId($deliver->invoiceId)
+                ->setInvoiceId($orderInfo->invoiceId)
                 ->setInvoiceDistributionType(DistributionType::POST)
                 ->setCountryCode('SE')
                 ->addCreditOrderRow(
@@ -94,7 +120,7 @@ class CreditOrderRowsRequestIntegrationTest extends PHPUnit_Framework_TestCase {
    
         // query order and assert row totals
         $query = WebPayAdmin::queryOrder($config)
-                ->setOrderId($orderResponse->sveaOrderId)
+                ->setOrderId($orderInfo->orderId)
                 ->setCountryCode('SE')
                 ->queryInvoiceOrder()->doRequest();       
         $this->assertEquals(1, $query->accepted);   
@@ -106,40 +132,20 @@ class CreditOrderRowsRequestIntegrationTest extends PHPUnit_Framework_TestCase {
     
     public function test_creditOrderRows_creditInvoiceOrderRows_credit_row_using_original_exvat_new_order_incvat() {
         $config = Svea\SveaConfig::getDefaultConfig();
-        $orderResponse = WebPay::createOrder($config)
-                ->addOrderRow(
-                        WebPayItem::orderRow()
-                        ->setAmountExVat(99.99) // => 123.9876 inc
-                        ->setVatPercent(24)
-                        ->setQuantity(1)
-                )
-                ->addCustomerDetails(TestUtil::createIndividualCustomer("SE"))
-                ->setCountryCode("SE")
-                ->setOrderDate("2012-12-12")
-                ->useInvoicePayment()->doRequest();
-        $this->assertEquals(1, $orderResponse->accepted);
+        
+        $orderInfo = $this->get_orderInfo_sent_ex_vat( 99.99, 24, 1 );
 
         // query order and assert row totals
         $query = WebPayAdmin::queryOrder($config)
-                ->setOrderId($orderResponse->sveaOrderId)
+                ->setOrderId($orderInfo->orderId)
                 ->setCountryCode('SE')
                 ->queryInvoiceOrder()->doRequest();       
         $this->assertEquals(1, $query->accepted);                
         $this->assertEquals("99.99", $query->numberedOrderRows[0]->amountExVat);
         $this->assertEquals("24", $query->numberedOrderRows[0]->vatPercent);            
-        
-        $deliver = WebPayAdmin::deliverOrderRows($config)
-                ->setOrderId($orderResponse->sveaOrderId)
-                ->setCountryCode('SE')
-                ->setInvoiceDistributionType(DistributionType::POST)
-                ->setRowToDeliver(1)
-                ->deliverInvoiceOrderRows()->doRequest();
-        $this->assertEquals(1, $deliver->accepted); 
-        $this->assertEquals("123.99", $deliver->amount);
-        //print_r($deliver->invoiceId);
 
         $credit = WebPayAdmin::creditOrderRows($config)
-                ->setInvoiceId($deliver->invoiceId)
+                ->setInvoiceId($orderInfo->invoiceId)
                 ->setInvoiceDistributionType(DistributionType::POST)
                 ->setCountryCode('SE')
                 ->setRowToCredit(1)
@@ -149,15 +155,14 @@ class CreditOrderRowsRequestIntegrationTest extends PHPUnit_Framework_TestCase {
    
         // query order and assert row totals
         $query = WebPayAdmin::queryOrder($config)
-                ->setOrderId($orderResponse->sveaOrderId)
+                ->setOrderId($orderInfo->orderId)
                 ->setCountryCode('SE')
                 ->queryInvoiceOrder()->doRequest();       
         $this->assertEquals(1, $query->accepted);   
         $this->assertEquals("99.99", $query->numberedOrderRows[0]->amountExVat);   // sent 99.99 ex * 1.24 => sent 123.9876 inc => 123.99 queried
         $this->assertEquals("24", $query->numberedOrderRows[0]->vatPercent);
     }
-        
-   
+           
     public function test_add_single_orderRow_type_missmatch_3() {
         $config = Svea\SveaConfig::getDefaultConfig();
         $orderResponse = WebPay::createOrder($config)
