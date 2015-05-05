@@ -163,85 +163,6 @@ class CreditOrderRowsRequestIntegrationTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals("24", $query->numberedOrderRows[0]->vatPercent);
     }
            
-    public function test_add_single_orderRow_type_missmatch_3() {
-        $config = Svea\SveaConfig::getDefaultConfig();
-        $orderResponse = WebPay::createOrder($config)
-                ->addOrderRow(
-                        WebPayItem::orderRow()
-                        ->setAmountExVat(99.99)
-                        ->setAmountIncVat(123.9876)
-                        ->setQuantity(1)
-                )
-                ->addCustomerDetails(TestUtil::createIndividualCustomer("SE"))
-                ->setCountryCode("SE")
-                ->setCurrency("SEK")
-                ->setOrderDate("2012-12-12")
-                ->useInvoicePayment()
-                ->doRequest();
-        $this->assertEquals(1, $orderResponse->accepted);
-
-        $response = WebPayAdmin::updateOrderRows($config)
-                ->setCountryCode('SE')
-                ->setOrderId($orderResponse->sveaOrderId)
-                ->updateOrderRow(WebPayItem::numberedOrderRow()
-                        ->setRowNumber(1)
-                        ->setAmountExVat(99.99)
-                        ->setVatPercent(24)
-                        ->setQuantity(1)
-                )
-                ->updateInvoiceOrderRows()
-                ->doRequest();
-
-        $this->assertEquals(1, $response->accepted);
-    }
-
-    public function test_add_single_orderRow_type_mismatch_created_inc_updated_ex() {
-        $config = Svea\SveaConfig::getDefaultConfig();
-        $orderResponse = WebPay::createOrder($config)
-                ->addOrderRow(
-                        WebPayItem::orderRow()
-                        ->setAmountIncVat(123.9876)
-                        ->setVatPercent(24)
-                        ->setQuantity(1)
-                )
-                ->addCustomerDetails(TestUtil::createIndividualCustomer("SE"))
-                ->setCountryCode("SE")
-                ->setCurrency("SEK")
-                ->setOrderDate("2012-12-12")
-                ->useInvoicePayment()->doRequest();
-        $this->assertEquals(1, $orderResponse->accepted);
-
-        // query order and assert row totals
-        $query = WebPayAdmin::queryOrder($config)
-                ->setOrderId($orderResponse->sveaOrderId)
-                ->setCountryCode('SE')
-                ->queryInvoiceOrder()->doRequest();       
-        $this->assertEquals(1, $query->accepted);                
-        $this->assertEquals("123.99", $query->numberedOrderRows[0]->amountIncVat);  // sent 123.9876 inc => 123.99 queried
-        $this->assertEquals("24", $query->numberedOrderRows[0]->vatPercent);            
-        
-        $response = WebPayAdmin::updateOrderRows($config)
-                ->setCountryCode('SE')
-                ->setOrderId($orderResponse->sveaOrderId)
-                ->updateOrderRow(WebPayItem::numberedOrderRow()
-                        ->setRowNumber(1)
-                        ->setAmountExVat(99.99)
-                        ->setVatPercent(24)
-                        ->setQuantity(1)
-                )
-                ->updateInvoiceOrderRows()->doRequest();
-        $this->assertEquals(1, $response->accepted);        
-
-        // query order and assert row totals
-        $query2 = WebPayAdmin::queryOrder($config)
-                ->setOrderId($orderResponse->sveaOrderId)
-                ->setCountryCode('SE')
-                ->queryInvoiceOrder()->doRequest();       
-        $this->assertEquals(1, $query2->accepted);                
-        $this->assertEquals("123.99", $query2->numberedOrderRows[0]->amountIncVat);   // sent 99.99 ex * 1.24 => sent 123.9876 inc => 123.99 queried
-        $this->assertEquals("24", $query2->numberedOrderRows[0]->vatPercent);
-        //print_r($orderResponse->sveaOrderId);
-    }   
     
     
    
@@ -304,8 +225,5 @@ class CreditOrderRowsRequestIntegrationTest extends PHPUnit_Framework_TestCase {
     $this->assertEquals("12.50", $request->NewCreditInvoiceRows->enc_value[0]->enc_value->PricePerUnit->enc_value);
     $this->assertEquals("25", $request->NewCreditInvoiceRows->enc_value[0]->enc_value->VatPercent->enc_value);
     $this->assertEquals("1", $request->NewCreditInvoiceRows->enc_value[0]->enc_value->PriceIncludingVat->enc_value);    
-    }
-    
-    
-    
+    }  
 }
