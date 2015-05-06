@@ -9,7 +9,7 @@ require_once $root . '/../../TestUtil.php';
 /**
  * @author Kristian Grossman-Madsen for Svea Webpay
  */
-class CancelOrderRowsRequestTest extends \PHPUnit_Framework_TestCase {
+class CreditOrderRowsRequestTest extends \PHPUnit_Framework_TestCase {
 
     /// characterising test for INTG-462
     // invoice
