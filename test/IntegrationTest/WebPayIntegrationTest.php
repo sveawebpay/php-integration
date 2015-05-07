@@ -378,4 +378,7 @@ class WebPayIntegrationTest extends PHPUnit_Framework_TestCase {
         $this->assertInstanceOf( "Svea\HostedService\ListPaymentMethodsResponse", $response );        
         $this->assertEquals( true, $response->accepted );       
     }     
+    
+    /// WebPay::paymentPlanPricePerMonth()
+    // see WebService/GetPaymentPlanParams/PaymentPlanPricePerMonthIntegrationTest
 }
