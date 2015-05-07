@@ -6,7 +6,7 @@ $root = realpath(dirname(__FILE__));
 require_once $root . '/../../../../src/Includes.php';
 
 /**
- * @author Jonas Lith
+ * @author Jonas Lith, Kristian Grossman-Madsen
  */
 class PaymentPlanPricePerMonthTest extends PHPUnit_Framework_TestCase {
 
@@ -26,9 +26,15 @@ class PaymentPlanPricePerMonthTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(2029, $response->values[0]['pricePerMonth']);
     }
 
-    function testBuildPriceCalculatorWithLowPrice() {
+    function testBuildPriceCalculatorWithLowPrice_should_not_return_anything_if_price_is_less_than_all_campaign_min_prices() {
         $params = $this->getGetPaymentPlanParamsResponseForTesting();
         $response = new PaymentPlanPricePerMonth(200,$params);
         $this->assertEmpty($response->values);
     }
-}
+    
+    function testBuildPriceCalculatorWithLowPrice_should_return_prices_if_IgnoreCampaignMinAndMax_flag_is_set() {
+        $params = $this->getGetPaymentPlanParamsResponseForTesting();
+        $response = new PaymentPlanPricePerMonth(200,$params, true);
+        $this->assertNotEmpty($response->values);
+    }    
+}    

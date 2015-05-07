@@ -219,26 +219,9 @@ class WebPay {
         return new Svea\HostedService\GetPaymentMethods($config);
     }
 
-    /**
-     * Calculates price per month for all available campaigns.
-     *
-     * This is a helper function provided to calculate the monthly price for the
-     * different payment plan options for a given sum. This information may be
-     * used when displaying i.e. payment options to the customer by checkout, or
-     * to display the lowest amount due per month to display on a product level.
-     *
-     * The returned instance contains an array value, where each element in turn
-     * contains a pair of campaign code and price per month:
-     * $paymentPlanParamsResonseObject->value[0..n] (for n campaignCodes), where
-     * value['campaignCode' => campaignCode, 'pricePerMonth' => pricePerMonth]
-     *
-     * @param float $price
-     * @param object $paymentPlanParamsResonseObject
-     * @return Svea\WebService\PaymentPlanPricePerMonth
-     *
-     */
-    public static function paymentPlanPricePerMonth($price, $paymentPlanParamsResponseObject) {
-        return new Svea\WebService\PaymentPlanPricePerMonth($price, $paymentPlanParamsResponseObject);
+    /** @deprecated -- use Helper::paymentPlanPricePerMonth() instead*/
+    public static function paymentPlanPricePerMonth($price, $paymentPlanParamsResponseObject, $ignoreMaxAndMinFlag = false) {
+        return new Svea\WebService\PaymentPlanPricePerMonth($price, $paymentPlanParamsResponseObject, $ignoreMaxAndMinFlag);
     }
 
     /**
