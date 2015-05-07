@@ -31,4 +31,10 @@ class PaymentPlanPricePerMonthTest extends PHPUnit_Framework_TestCase {
         $response = new PaymentPlanPricePerMonth(200,$params);
         $this->assertEmpty($response->values);
     }
+    
+    function testBuildPriceCalculatorWithLowPrice_should_return_prices_if_IgnoreCampaignMinAndMax_flag_is_set() {
+        $params = $this->getGetPaymentPlanParamsResponseForTesting();
+        $response = new PaymentPlanPricePerMonth(200,$params, true);
+        $this->assertNotEmpty($response->values);
+    }    
 }    
