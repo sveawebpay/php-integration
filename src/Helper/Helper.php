@@ -264,6 +264,33 @@ class Helper {
         }
         
         return $fixedDiscounts;
-    }       
+    }   
     
+    /**
+     * Calculates price per month for all available campaigns.
+     *
+     * This is a helper function provided to calculate the monthly price for the
+     * different payment plan options for a given sum. This information may be
+     * used when displaying i.e. payment options to the customer by checkout, or
+     * to display the lowest amount due per month to display on a product level.
+     *
+     * The returned instance contains an array value, where each element in turn
+     * contains a pair of campaign code and price per month:
+     * $paymentPlanParamsResonseObject->value[0..n] (for n campaignCodes), where
+     * value['campaignCode' => campaignCode, 'pricePerMonth' => pricePerMonth]
+     *
+     * If ignoreMaxAndMinFlag is set to true, the returned array contains the 
+     * theoretical monthly installments for the given price, but the campaign
+     * may not actually be available to use in the payment request, if the price
+     * should be outside the actual campaign limits
+     * 
+     * @param float $price
+     * @param object $paymentPlanParamsResonseObject
+     * @param boolean $ignoreMaxAndMinFlag; optional, defaults to false
+     * @return Svea\WebService\PaymentPlanPricePerMonth
+     *
+     */
+    public static function paymentPlanPricePerMonth($price, $paymentPlanParamsResponseObject, $ignoreMaxAndMinFlag = false) {
+        return new WebService\PaymentPlanPricePerMonth($price, $paymentPlanParamsResponseObject, $ignoreMaxAndMinFlag);
+    }    
 }
