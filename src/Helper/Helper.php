@@ -274,15 +274,12 @@ class Helper {
      * used when displaying i.e. payment options to the customer by checkout, or
      * to display the lowest amount due per month to display on a product level.
      *
-     * The returned instance contains an array value, where each element in turn
-     * contains a pair of campaign code and price per month:
-     * $paymentPlanParamsResonseObject->value[0..n] (for n campaignCodes), where
-     * value['campaignCode' => campaignCode, 'pricePerMonth' => pricePerMonth]
-     *
-     * If ignoreMaxAndMinFlag is set to true, the returned array contains the 
-     * theoretical monthly installments for the given price, but the campaign
-     * may not actually be available to use in the payment request, if the price
-     * should be outside the actual campaign limits
+     * If the ignoreMaxAndMinFlag is set to true, the returned array also 
+     * contains the theoretical monthly installments for a given amount, even if
+     * the campaign may not actually be available to use in a payment request, 
+     * should the amount fall outside of the actual campaign min/max limit. If 
+     * the flag is set to false or left out, the values array will not include 
+     * such amounts, which may result in an empty values array in the result.
      * 
      * @param float $price
      * @param object $paymentPlanParamsResonseObject

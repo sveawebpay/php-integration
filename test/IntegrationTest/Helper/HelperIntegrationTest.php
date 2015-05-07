@@ -96,7 +96,6 @@ class HelperIntegrationTest extends \PHPUnit_Framework_TestCase {
             
         $pricesPerMonth = \Svea\Helper::paymentPlanPricePerMonth( 2000, $campaigns, true );
         $this->assertInstanceOf("Svea\WebService\PaymentPlanPricePerMonth", $pricesPerMonth);
-        
         $this->assertEquals(213060, $pricesPerMonth->values[0]['campaignCode']);
         $this->assertEquals(2029, $pricesPerMonth->values[0]['pricePerMonth']);
     }    

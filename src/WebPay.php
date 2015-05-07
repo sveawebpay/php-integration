@@ -219,7 +219,7 @@ class WebPay {
         return new Svea\HostedService\GetPaymentMethods($config);
     }
 
-    /** @deprecated 2.2.20 -- use Helper::paymentPlanPricePerMonth() instead*/
+    /** @deprecated -- use Helper::paymentPlanPricePerMonth() instead*/
     public static function paymentPlanPricePerMonth($price, $paymentPlanParamsResponseObject, $ignoreMaxAndMinFlag = false) {
         return new Svea\WebService\PaymentPlanPricePerMonth($price, $paymentPlanParamsResponseObject, $ignoreMaxAndMinFlag);
     }
