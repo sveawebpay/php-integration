@@ -52,8 +52,7 @@ class CreditOrderRowsRequest extends AdminServiceRequest {
             ),
             $this->orderBuilder->conf->getClientNumber( ($this->orderBuilder->orderType), $this->orderBuilder->countryCode ),
             $this->orderBuilder->distributionType,
-            $this->orderBuilder->invoiceId,
-                
+            $this->orderBuilder->invoiceId,                
             $this->orderRows,
             $this->rowNumbers
         );
