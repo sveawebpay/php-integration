@@ -31,7 +31,7 @@ abstract class HostedRequest {
      * are present. If not, throws an exception. Actual validation is delegated 
      * to subclass validateAttributes() implementations.
      *
-     * @throws ValidationException
+     * @throws \Svea\ValidationException
      */
     public function validateRequest() {
 

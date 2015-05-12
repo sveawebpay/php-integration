@@ -86,12 +86,13 @@ class IndividualCustomer {
      * @param string $mm
      * @param string $dd
      * @return $this
+     * @throws InvalidArgumentException in case of bad birthdate string format
      */
     public function setBirthDate($yyyy, $mm = null, $dd = null) {
         if( $mm == null && $dd == null ) { // poor man's overloading
             $yyyymmdd = $yyyy;
             if( strlen($yyyymmdd) != 8 ) {
-                throw new \InvalidArgumentException( 'setBirthDate expects arguments on format $yyyy, $mm, $dd or $yyyy' );
+                throw new \InvalidArgumentException( 'setBirthDate expects arguments on format $yyyy, $mm, $dd or $yyyymmdd' );
             }
             else {
                 $yyyy = substr($yyyymmdd,0,4);
