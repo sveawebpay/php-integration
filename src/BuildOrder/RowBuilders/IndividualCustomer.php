@@ -91,7 +91,7 @@ class IndividualCustomer {
         if( $mm == null && $dd == null ) { // poor man's overloading
             $yyyymmdd = $yyyy;
             if( strlen($yyyymmdd) != 8 ) {
-                throw new \InvalidArgumentException;
+                throw new \InvalidArgumentException( 'setBirthDate expects arguments on format $yyyy, $mm, $dd or $yyyy' );
             }
             else {
                 $yyyy = substr($yyyymmdd,0,4);
