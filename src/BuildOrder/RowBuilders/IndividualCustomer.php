@@ -13,7 +13,7 @@ namespace Svea;
  *         WebPayItem::individualCustomer()
  *             ->setNationalIdNumber(194605092222) // required for individual customers in SE, NO, DK, FI
  *             ->setInitials("SB")                 // required for individual customers in NL
- *             ->setBirthDate(1923, 12, 20)        // required for individual customers in NL and DE
+ *             ->setBirthDate(1923, 12, 20)        // required for individual customers in NL and DE, use date format yyyymmdd
  *             ->setName("Tess", "Testson")        // required for individual customers in NL and DE
  *             ->setStreetAddress("Gatan", 23)     // required in NL and DE
  *             ->setZipCode(9999)                  // required in NL and DE
