@@ -28,7 +28,7 @@ class PaymentPlanPricePerMonthTest extends PHPUnit_Framework_TestCase {
 
     function testBuildPriceCalculatorWithLowPrice_should_not_return_anything_if_price_is_less_than_all_campaign_min_prices() {
         $params = $this->getGetPaymentPlanParamsResponseForTesting();
-        $response = new PaymentPlanPricePerMonth(200,$params);
+        $response = new PaymentPlanPricePerMonth(99,$params);
         $this->assertEmpty($response->values);
     }
     
