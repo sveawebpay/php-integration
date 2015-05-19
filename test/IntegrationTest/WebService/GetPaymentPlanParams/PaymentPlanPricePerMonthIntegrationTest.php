@@ -28,7 +28,7 @@ class PaymentPlanPricePerMonthTest extends PHPUnit_Framework_TestCase {
 
     function testBuildPriceCalculatorWithLowPrice() {
         $params = $this->getGetPaymentPlanParamsResponseForTesting();
-        $response = new PaymentPlanPricePerMonth(200,$params);
+        $response = new PaymentPlanPricePerMonth(99,$params);
         $this->assertEmpty($response->values);
     }
 }
