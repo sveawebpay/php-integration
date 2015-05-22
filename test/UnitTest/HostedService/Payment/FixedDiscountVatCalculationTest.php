@@ -9,7 +9,7 @@ require_once $root . '/../../../TestUtil.php';
 class BvDiscountTest extends PHPUnit_Framework_TestCase {
     
     public function test_bv_order_sent_incvat_two_decimals_with_both_discounts() {        
-    print_r("\n\n-----test_bv_order_sent_incvat_two_decimals_with_both_discounts()\n");
+//    print_r("\n\n-----test_bv_order_sent_incvat_two_decimals_with_both_discounts()\n");
     
         $order = WebPay::createOrder(Svea\SveaConfig::getDefaultConfig())
             ->addCustomerDetails(WebPayItem::individualCustomer()->setNationalIdNumber(194605092222))
@@ -47,7 +47,7 @@ class BvDiscountTest extends PHPUnit_Framework_TestCase {
                 ->setReturnUrl("https://test.sveaekonomi.se/webpay-admin/admin/merchantresponsetest.xhtml")
                 ->getPaymentForm();
         
-    print_r( $request->xmlMessage );
+//    print_r( $request->xmlMessage );
    
         // 240i@6% => 240 (13,58491) => 24000 (1358)
         $expectedDiscountRow =
@@ -110,7 +110,7 @@ class BvDiscountTest extends PHPUnit_Framework_TestCase {
     }
     
     public function test_bv_order_sent_incvat_two_decimals_with_both_discounts_with_amount_only() {        
-    print_r("\n\n-----test_bv_order_sent_incvat_two_decimals_with_both_discounts_with_amount_only()\n");
+//    print_r("\n\n-----test_bv_order_sent_incvat_two_decimals_with_both_discounts_with_amount_only()\n");
     
         $order = WebPay::createOrder(Svea\SveaConfig::getDefaultConfig())
             ->addCustomerDetails(WebPayItem::individualCustomer()->setNationalIdNumber(194605092222))
@@ -146,7 +146,7 @@ class BvDiscountTest extends PHPUnit_Framework_TestCase {
         $request = $order->usePaymentMethod(PaymentMethod::KORTCERT)->setReturnUrl("https://test.sveaekonomi.se/webpay-admin/admin/merchantresponsetest.xhtml");
         $request = $request->getPaymentForm();
         
-    print_r( $request->xmlMessage );
+//    print_r( $request->xmlMessage );
    
         // 240i@6% => 240 (13,58491) => 24000 (1358)
         $expectedDiscountRow =
