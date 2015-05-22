@@ -239,10 +239,10 @@ class HostedRowFormatter {
             $rawVat = 0.0;
             // use old method of calculating discounts from single discount amount inc. vat, i.e. the amount specified includes vat.
             if (isset($row->amount) && !isset($row->amountExVat) && !isset($row->vatPercent)) {
-                $discountInPercent = ($row->amount * 100) / $this->totalAmount;   // discount as fraction of total order sum
+                $discountInPercent = ($row->amount * 100) / $this->rawAmount;   // discount as fraction of raw total order sum (raw doesn't decrease if multiple discounts in the same order
 
                 $rawAmount = $row->amount;
-                $rawVat = $this->totalVat/100 * $discountInPercent;     // divide by 100 so that our "round and multiply" works in setVat below
+                $rawVat = $this->rawVat/100 * $discountInPercent;     // divide by 100 so that our "round and multiply" works in setVat below
                 $tempRow->setAmount( - \Svea\Helper::bround($rawAmount,2) *100 );
                 $tempRow->setVat( - \Svea\Helper::bround($rawVat,2) *100 );
             }
@@ -252,7 +252,7 @@ class HostedRowFormatter {
             elseif (!isset($row->amount) && isset($row->amountExVat) && !isset($row->vatPercent)) {
                 $discountInPercent = ($row->amountExVat * 100) / ($this->totalAmount - $this->totalVat);
                 $rawAmount = $row->amountExVat;
-                $rawVat = $this->totalVat/100 * $discountInPercent;     // divide by 100 so that our "round and multiply" works in setVat below
+                $rawVat = $this->rawVat/100 * $discountInPercent;     // divide by 100 so that our "round and multiply" works in setVat below
                 $tempRow->setAmount( - \Svea\Helper::bround($rawAmount + $rawVat,2)*100);
                 $tempRow->setVat( - \Svea\Helper::bround($rawVat,2)*100 );
             }
