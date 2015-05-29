@@ -898,8 +898,7 @@ class CreateInvoiceOrderUnitTest extends PHPUnit_Framework_TestCase {
                 ->prepareRequest()
                 ;
 
-        $this->assertEquals(1, $order->accepted);
-        $this->assertEquals('FÖRGODKÄNDA GATAN 1', $order->customerIdentity->street);
+        $this->assertEquals('ac0f2573b58ff523', $order->request->CreateOrderInformation->CustomerIdentity->PublicKey);
 
     }
         public function test_add_publickey_for_private_customer_full_request () {
@@ -922,8 +921,7 @@ class CreateInvoiceOrderUnitTest extends PHPUnit_Framework_TestCase {
                 ->prepareRequest()
                 ;
 
-        $this->assertEquals(1, $order->accepted);
-        $this->assertEquals('FÖRGODKÄNDA GATAN 1', $order->customerIdentity->street);
+        $this->assertEquals('ac0f2573b58ff523', $order->request->CreateOrderInformation->CustomerIdentity->PublicKey);
 
     }
 
