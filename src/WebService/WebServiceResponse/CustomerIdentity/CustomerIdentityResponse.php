@@ -3,37 +3,40 @@ namespace Svea\WebService;
 
 /**
  *  CustomerIdentityResponse structure
- * 
+ *
  *  @author Anneli Halld'n, Daniel Brolund, Kristian Grossman-Madsen for Svea Webpay
- */  
+ */
 class CustomerIdentityResponse {
 
     /** @var string $customerType  one of { Person, Business } */
-    public $customerType;       
+    public $customerType;
     /** @var string $nationalIdNumber */
-    public $nationalIdNumber;   
+    public $nationalIdNumber;
     /** @var string $phoneNumber */
-    public $phoneNumber;        
+    public $phoneNumber;
     /** @var string $fullName */
-    public $fullName;           
+    public $fullName;
     /** @var string $street */
-    public $street;             
+    public $street;
     /** @var string $coAddress */
-    public $coAddress;          
+    public $coAddress;
     /** @var string $zipCode */
-    public $zipCode;            
+    public $zipCode;
     /** @var string $locality */
-    public $locality;      
-    
+    public $locality;
+    /** @var string $publicKey */
+    public $publicKey;
+
+
     /**
      * populates the CustomerIdentityResponse object
-     * 
+     *
      * @param object $customer -- response from either legacy GetAddresses or CreateOrderEU
      */
-    function __construct( $customer ) {        
-        
+    function __construct( $customer ) {
+
         if( isset($customer->BusinessType) ) { // GetAddressesResponse (Legacy webservice)
-        
+
             $this->customerType = $customer->BusinessType;
             $this->nationalIdNumber = isset($customer->SecurityNumber) ? $customer->SecurityNumber : "";
             $this->phoneNumber = isset($customer->PhoneNumber) ? $customer->PhoneNumber : "";
@@ -53,7 +56,8 @@ class CustomerIdentityResponse {
             $this->street = isset($customer->Street) ? $customer->Street : "";
             $this->coAddress = isset($customer->CoAddress) ? $customer->CoAddress : "";
             $this->zipCode = isset($customer->ZipCode) ? $customer->ZipCode : "";
-            $this->locality = isset($customer->Locality) ? $customer->Locality : "";          
+            $this->locality = isset($customer->Locality) ? $customer->Locality : "";
+            $this->publicKey = isset($customer->PublicKey) ? $customer->PublicKey : "";
         }
     }
 }

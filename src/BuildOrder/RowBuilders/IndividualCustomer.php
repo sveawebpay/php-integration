@@ -43,7 +43,7 @@ class IndividualCustomer {
     public $ipAddress;
     /** @var string $firstname */
     public $firstname;
-    /** @var string $lastname */ 
+    /** @var string $lastname */
     public $lastname;
     /** @var string $street */
     public $street;
@@ -55,11 +55,13 @@ class IndividualCustomer {
     public $zipCode;
     /** @var string $locality */
     public $locality;
+    /** $var string $publicKey */
+    public $publicKey;
 
     // set in GetOrdersResponse
-    public $fullName;               // compounded fullName, may be set by CreateOrder for i.e. orders where identify customer via ssn   
+    public $fullName;               // compounded fullName, may be set by CreateOrder for i.e. orders where identify customer via ssn
     public $streetAddress;          // compounds street + housenumber,fullName, may be set by CreateOrder for i.e. orders where identify customer via ssn
-    
+
     /**
      * Required for private customers in SE, NO, DK, FI
      * @param string for SE, DK:  $yyyymmddxxxx, for FI:  $ddmmyyxxxx, NO:  $ddmmyyxxxxx
@@ -150,13 +152,13 @@ class IndividualCustomer {
             $this->name = $fullNameAsString;
         }
         // two names given, assume firstName and lastName
-        else {        
+        else {
             $this->firstname = $firstnameAsString;
             $this->lastname = $lastnameAsString;
         }
         return $this;
     }
-    
+
     /**
      * Required to set street and houseNumber in NL and DE
      * @param string $streetAsString, or $streetAddressAsString iff sole argument
@@ -204,6 +206,16 @@ class IndividualCustomer {
      */
     public function setLocality($cityAsString) {
         $this->locality = $cityAsString;
+        return $this;
+    }
+
+    /**
+    * Optional. Identifier for selecting a specific pre-approved address.
+     * @param type $publicKeyAsString
+     * @return $this
+     */
+    public function setPublicKey($publicKeyAsString) {
+        $this->publicKey = $publicKeyAsString;
         return $this;
     }
 }
