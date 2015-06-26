@@ -483,7 +483,41 @@ class HelperTest extends \PHPUnit_Framework_TestCase {
 //        $this->assertEquals( 'Coupon(1112)', $discountRows[1]->name );
 //        $this->assertEquals( '-100kr (6%)', $discountRows[1]->description );
 //    }
+       
     
+    //  11A. mean inc to two tax rates, 50+6/3 = 18,67% => 19%
+    function test_splitMeanAcrossTaxRates_11a() {
+        $discountAmount = 119.0;
+        $discountGivenExVat = false;
+        $discountMeanVatPercent = 19;
+        $discountName = 'Name';
+        $discountDescription = 'Description';
+        $allowedTaxRates = array( 25, 6 );
+        
+        $discountRows = Helper::splitMeanAcrossTaxRates( 
+            $discountAmount,$discountMeanVatPercent,$discountName,$discountDescription,$allowedTaxRates, $discountGivenExVat 
+        );
+        
+    print_r( $discountRows );
+
+    }  
+    
+    //  11B. mean inc to two tax rates, 50+6/3 = 18,67%
+    function test_splitMeanAcrossTaxRates_11b() {
+        $discountAmount = 118.67;
+        $discountGivenExVat = false;
+        $discountMeanVatPercent = 18.67;
+        $discountName = 'Name';
+        $discountDescription = 'Description';
+        $allowedTaxRates = array( 25, 6 );
+        
+        $discountRows = Helper::splitMeanAcrossTaxRates( 
+            $discountAmount,$discountMeanVatPercent,$discountName,$discountDescription,$allowedTaxRates, $discountGivenExVat 
+        );
+        
+    print_r( $discountRows );
+
+    }      
     
 }
 ?>
