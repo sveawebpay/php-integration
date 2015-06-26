@@ -745,9 +745,9 @@ class QueryTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
     function test_manual_query_recur_card_recur_transaction() {
 
         // Stop here and mark this test as incomplete.
-//        $this->markTestIncomplete(
-//            'test_manual_query_recur_card_initial_transaction'
-//        );
+        $this->markTestIncomplete(
+            'test_manual_query_recur_card_initial_transaction'
+        );
 
         // 1. enter the below values from the transaction log from test_manual_recurring_payment_step_1
         // 2. run the test and check the output for the subscriptionId and transactionid of the recur request

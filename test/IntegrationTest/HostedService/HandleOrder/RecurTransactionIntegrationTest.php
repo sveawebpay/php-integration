@@ -49,9 +49,9 @@ class RecurTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
     function test_manual_recur_transaction_amount() {
         
         // Stop here and mark this test as incomplete.
-//        $this->markTestIncomplete(
-//          'skeleton for manual test of recur transaction amount'
-//        );
+        $this->markTestIncomplete(
+          'skeleton for manual test of recur transaction amount'
+        );
         
         // 1. go to https://test.sveaekonomi.se/webpay-admin/admin/start.xhtml 
         // 2. go to verktyg -> betalning
