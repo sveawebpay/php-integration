@@ -498,7 +498,7 @@ class HelperTest extends \PHPUnit_Framework_TestCase {
             $discountAmount,$discountMeanVatPercent,$discountName,$discountDescription,$allowedTaxRates, $discountGivenExVat 
         );
         
-    print_r( $discountRows );
+//    print_r( $discountRows );
 
     }  
     
@@ -515,7 +515,7 @@ class HelperTest extends \PHPUnit_Framework_TestCase {
             $discountAmount,$discountMeanVatPercent,$discountName,$discountDescription,$allowedTaxRates, $discountGivenExVat 
         );
         
-    print_r( $discountRows );
+//    print_r( $discountRows );
 
     }      
     
