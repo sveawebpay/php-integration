@@ -72,12 +72,11 @@ class WebPay {
      * @see \Svea\CompanyCustomer \Svea\CompanyCustomer
      * @return \Svea\CreateOrderBuilder
      * @param ConfigurationProvider $config  instance implementing ConfigurationProvider Interface
-     * @throws Exception
+     * @throws Svea\ValidationException
      *
      */
     public static function createOrder($config = NULL) {
         if( $config == NULL ) { WebPay::throwMissingConfigException(); }
-
         return new Svea\CreateOrderBuilder($config);
     }
 
@@ -126,11 +125,10 @@ class WebPay {
      * 
      * @param ConfigurationProvider $config  instance implementing ConfigurationProvider Interface
      * @return Svea\DeliverOrderBuilder
-     * @throws ValidationException
+     * @throws Svea\ValidationException
      */
     public static function deliverOrder($config = NULL) {
         if( $config == NULL ) { WebPay::throwMissingConfigException(); }
-
         return new Svea\DeliverOrderBuilder($config);
     }
   
@@ -183,7 +181,6 @@ class WebPay {
      */    
     public static function getAddresses($config = NULL) {
         if( $config == NULL ) { WebPay::throwMissingConfigException(); }
-
         return new Svea\WebService\GetAddresses($config);
     }
 
@@ -195,10 +192,10 @@ class WebPay {
      *
      * @return Svea\WebService\GetPaymentPlanParams
      * @param ConfigurationProvider $config  instance implementing ConfigurationProvider
+     * @throws \Svea\ValidationException        
      */
     public static function getPaymentPlanParams($config = NULL) {
         if( $config == NULL ) { WebPay::throwMissingConfigException(); }
-
         return new Svea\WebService\GetPaymentPlanParams($config);
     }
 
@@ -213,32 +210,16 @@ class WebPay {
      *
      * @param ConfigurationProvider $config  instance implementing ConfigurationProvider
      * @return string[] array of available paymentmethods for this ConfigurationProvider
+     * @throws \Svea\ValidationException        
      */
     public static function getPaymentMethods($config = NULL) {
         if( $config == NULL ) { WebPay::throwMissingConfigException(); }
         return new Svea\HostedService\GetPaymentMethods($config);
     }
 
-    /**
-     * Calculates price per month for all available campaigns.
-     *
-     * This is a helper function provided to calculate the monthly price for the
-     * different payment plan options for a given sum. This information may be
-     * used when displaying i.e. payment options to the customer by checkout, or
-     * to display the lowest amount due per month to display on a product level.
-     *
-     * The returned instance contains an array value, where each element in turn
-     * contains a pair of campaign code and price per month:
-     * $paymentPlanParamsResonseObject->value[0..n] (for n campaignCodes), where
-     * value['campaignCode' => campaignCode, 'pricePerMonth' => pricePerMonth]
-     *
-     * @param float $price
-     * @param object $paymentPlanParamsResonseObject
-     * @return Svea\WebService\PaymentPlanPricePerMonth
-     *
-     */
-    public static function paymentPlanPricePerMonth($price, $paymentPlanParamsResponseObject) {
-        return new Svea\WebService\PaymentPlanPricePerMonth($price, $paymentPlanParamsResponseObject);
+    /** @deprecated -- use Helper::paymentPlanPricePerMonth() instead*/
+    public static function paymentPlanPricePerMonth($price, $paymentPlanParamsResponseObject, $ignoreMaxAndMinFlag = false) {
+        return new Svea\WebService\PaymentPlanPricePerMonth($price, $paymentPlanParamsResponseObject, $ignoreMaxAndMinFlag);
     }
 
     /**
@@ -246,10 +227,10 @@ class WebPay {
      * @deprecated 2.0.0 -- use WebPayAdmin::cancelOrder instead, which supports both synchronous and asynchronous orders
      * @param ConfigurationProvider $config  instance implementing ConfigurationProvider
      * @return Svea\CloseOrderBuilder
+     * @throws \Svea\ValidationException        
      */
     public static function closeOrder($config = NULL) {
         if( $config == NULL ) { WebPay::throwMissingConfigException(); }
-
         return new Svea\CloseOrderBuilder($config);
     }
 
@@ -271,13 +252,15 @@ class WebPay {
      *
      * @param ConfigurationProvider $config
      * @return Svea\HostedService\ListPaymentMethods
+     * @throws \Svea\ValidationException        
      */
     static function listPaymentMethods($config) {
+        if( $config == NULL ) { WebPay::throwMissingConfigException(); }
         return new Svea\HostedService\ListPaymentMethods($config);
     }
 
     /** helper function, throws exception if no config is given */
     private static function throwMissingConfigException() {
-        throw new Exception('-missing parameter: This method requires an ConfigurationProvider object as parameter. Create a class that implements class ConfigurationProvider. Set returnvalues to configuration values. Create an object from that class. Alternative use static function from class SveaConfig e.g. SveaConfig::getDefaultConfig(). You can replace the default config values to return your own config values.');
+        throw new \Svea\ValidationException('-missing parameter: This method requires an ConfigurationProvider object as parameter. Create a class that implements class ConfigurationProvider. Set returnvalues to configuration values. Create an object from that class. Alternative use static function from class SveaConfig e.g. SveaConfig::getDefaultConfig(). You can replace the default config values to return your own config values.');
     }
 }

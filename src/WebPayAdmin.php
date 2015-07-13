@@ -65,7 +65,7 @@ class WebPayAdmin {
      *
      * @param ConfigurationProvider $config  instance implementing ConfigurationProvider
      * @return Svea\CancelOrderBuilder
-     * @throws Exception
+     * @throws Svea\ValidationException
      */
     public static function cancelOrder($config = NULL) {
         if( $config == NULL ) { WebPay::throwMissingConfigException(); }
@@ -100,7 +100,7 @@ class WebPayAdmin {
      *
      * @param ConfigurationProvider $config  instance implementing ConfigurationProvider
      * @return Svea\QueryOrderBuilder
-     * @throws Exception
+     * @throws Svea\ValidationException
      */
     public static function queryOrder( $config = NULL ) {
         if( $config == NULL ) { WebPay::throwMissingConfigException(); }
@@ -145,7 +145,7 @@ class WebPayAdmin {
      *
      * @param ConfigurationProvider $config  instance implementing ConfigurationProvider
      * @return Svea\CancelOrderRowsBuilder
-     * @throws ValidationException
+     * @throws Svea\ValidationException
      */
     public static function cancelOrderRows( $config = NULL ) {
         if( $config == NULL ) { WebPay::throwMissingConfigException(); }
@@ -193,7 +193,7 @@ class WebPayAdmin {
      * 
      * @param ConfigurationProvider $config
      * @return Svea\CreditOrderRowsBuilder
-     * @throws ValidationException
+     * @throws Svea\ValidationException
      *
      * @see \Svea\CreditOrderRowsBuilder \Svea\CreditOrderRowsBuilder
      * @see \Svea\AdminService\CreditInvoiceRowsResponse \Svea\AdminService\CreditInvoiceRowsResponse
@@ -228,7 +228,7 @@ class WebPayAdmin {
      *
      * @param ConfigurationProvider $config  instance implementing ConfigurationProvider
      * @return Svea\AddOrderRowsBuilder
-     * @throws ValidationException
+     * @throws Svea\ValidationException
      */
     public static function addOrderRows( $config = NULL ) {
         if( $config == NULL ) { WebPay::throwMissingConfigException(); }
@@ -274,7 +274,7 @@ class WebPayAdmin {
      *
      * @param ConfigurationProvider $config  instance implementing ConfigurationProvider
      * @return Svea\UpdateOrderRowsBuilder
-     * @throws ValidationException
+     * @throws Svea\ValidationException
      */
     public static function updateOrderRows( $config = NULL ) {
         if( $config == NULL ) { WebPay::throwMissingConfigException(); }
@@ -322,7 +322,7 @@ class WebPayAdmin {
      *
      * @param ConfigurationProvider $config  instance implementing ConfigurationProvider
      * @return Svea\DeliverOrderRowsBuilder
-     * @throws ValidationException
+     * @throws Svea\ValidationException
      */
     public static function deliverOrderRows( $config = NULL ) {
         if( $config == NULL ) { WebPay::throwMissingConfigException(); }
@@ -331,6 +331,6 @@ class WebPayAdmin {
         
     /** helper function, throws exception if no config is given */
     private static function throwMissingConfigException() {
-        throw new Exception('-missing parameter: This method requires an ConfigurationProvider object as parameter. Create a class that implements class ConfigurationProvider. Set returnvalues to configuration values. Create an object from that class. Alternative use static function from class SveaConfig e.g. SveaConfig::getDefaultConfig(). You can replace the default config values to return your own config values in the method.');
+        throw new \Svea\ValidationException('-missing parameter: This method requires an ConfigurationProvider object as parameter. Create a class that implements class ConfigurationProvider. Set returnvalues to configuration values. Create an object from that class. Alternative use static function from class SveaConfig e.g. SveaConfig::getDefaultConfig(). You can replace the default config values to return your own config values in the method.');
     }
 }

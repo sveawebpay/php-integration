@@ -23,6 +23,7 @@ class AddOrderRowsRequest {
         
         $this->Authentication = new \SoapVar( $authentication, SOAP_ENC_OBJECT, 
                 "-","--","Authentication","http://schemas.datacontract.org/2004/07/DataObjects.Admin.Service");
+        // Settings -- optional, not sent by package
         $this->ClientId = new \SoapVar( $clientId, XSD_LONG, 
                 "-","--","ClientId","http://schemas.datacontract.org/2004/07/DataObjects.Admin.Service");
         $this->OrderRows = new \SoapVar( $orderRows, SOAP_ENC_OBJECT, 

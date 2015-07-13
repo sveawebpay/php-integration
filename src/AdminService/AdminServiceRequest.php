@@ -23,7 +23,7 @@ abstract class AdminServiceRequest {
 
     /**
      * Set up the soap client and perform the soap call, with the soap action and prepared request from the relevant subclass.
-     * Returns the apropriate request response class, as determined by SveaResponse matching on request action.
+     * Returns the appropriate request response class, as determined by SveaResponse matching on request action.
      */
     public function doRequest( $resendOrderWithFlippedPriceIncludingVat = false ) {
         
@@ -80,8 +80,8 @@ abstract class AdminServiceRequest {
     abstract function validate(); // validate is defined by subclasses, should validate all elements required for call is present
 
     /**
-     * the integration package ConfigurationProvider::INVOICE_TYPE and ::PAYMENTPLAN_TYPE constanst are all caps, whereas the admin service
-     * enumeration used in the calls are CamelCase. This function converts the package constants so they work with the admin service.
+     * the integration package ConfigurationProvider::INVOICE_TYPE and ::PAYMENTPLAN_TYPE constants are all caps, whereas the admin service
+     * enumeration used in the calls are CamelCase. This function converts the package constants so that they work with the admin service.
      */
     public static function CamelCaseOrderType( $orderTypeAsConst ) {
         switch( $orderTypeAsConst ) {
@@ -138,7 +138,7 @@ abstract class AdminServiceRequest {
                     $amount, 
                     $orderRow->unit, 
                     $orderRow->vatPercent, 
-                    $priceIncludingVat
+                    $priceIncludingVat // attribute is set in correct (alphabetical) position via OrderRow constructor, see AdminSoap/OrderRow
                 ), SOAP_ENC_OBJECT, null, null, 'OrderRow', "http://schemas.datacontract.org/2004/07/DataObjects.Webservice"
             );
         }
@@ -181,7 +181,7 @@ abstract class AdminServiceRequest {
                     $orderRow->creditInvoiceId,
                     $orderRow->invoiceId,
                     $orderRow->rowNumber,
-                    $priceIncludingVat
+                    $priceIncludingVat // attribute is set in correct (alphabetical) position via OrderRow constructor, see AdminSoap/OrderRow
                 ),
                 SOAP_ENC_OBJECT, null, null, 'NumberedOrderRow', "http://schemas.datacontract.org/2004/07/DataObjects.Admin.Service"
             );

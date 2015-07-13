@@ -17,9 +17,9 @@ class GetOrdersRequestIntegrationTest extends PHPUnit_Framework_TestCase{
     public function test_manual_GetOrdersRequest_for_invoice_individual_customer_order() {
         
         // Stop here and mark this test as incomplete.
-//        $this->markTestIncomplete(
-//            'skeleton for test_manual_GetOrdersRequest_for_invoice_individual_customer_order'
-//        );
+        $this->markTestIncomplete(  // 150626 -- removed due to corrupt customerids w/no ssn in test database (known error)
+            'skeleton for test_manual_GetOrdersRequest_for_invoice_individual_customer_order'
+        );
         
         $countryCode = "SE";
         $sveaOrderIdToGet = 348629;
@@ -165,7 +165,7 @@ class GetOrdersRequestIntegrationTest extends PHPUnit_Framework_TestCase{
         $request = new Svea\AdminService\GetOrdersRequest( $getOrdersBuilder );
         $getOrdersResponse = $request->doRequest();
 
-        ////print_r( $getOrdersResponse );        
+        print_r( $getOrdersResponse );        
         
         $this->assertInstanceOf('Svea\AdminService\GetOrdersResponse', $getOrdersResponse);
         $this->assertEquals(1, $getOrdersResponse->accepted );
