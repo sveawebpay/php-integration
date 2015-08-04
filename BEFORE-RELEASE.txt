@@ -1,5 +1,5 @@
 To update gh-pages documentation.
-1. Checkout branch gh-pages.
+1. Change location to branch gh-pages. Note! cd gh-pages, not checkout gh-pages
 2. Make changes in index.md
 3. Commit and push.
 The changes will be included in the next release.
@@ -9,6 +9,8 @@ The changes will be included in the next release.
 To update the github pages documentation site (sveawebpay.github.io/php-integration):
 2015-08-03 the link to the generated php-doc site where outcommented from the main page README.md
 because we want integrators to use our api described in the gh-pages, and not integrate inside the lib.
+#For the complete class reference, see the <a href="http://sveawebpay.github.io/php-integration/api/index.html" target="_blank">API documentation</a>.
+
 
 0. create a release/hotfix branch, and bump version et al. Before running git flow release finish, do 1-6 below:
 
