@@ -26,26 +26,26 @@ class PaymentForm {
     private $submitMessage;
     private $noScriptMessage;
 
-    /** 
+    /**
      * populates the payment form object from the given parameters and generates
      * the $completeHtmlFormWithSubmitButton & $htmlFormFieldsAsArray attributes
-     * 
+     *
      * @param type $xmlMessage
      * @param ConfigurationProvider $config
      * @param string $countryCode
      */
-    function __construct( $xmlMessage, $config, $countryCode  ) {
+    function __construct( $xmlMessage, $config, $countryCode = NULL  ) {
         $this->xmlMessage = $xmlMessage;
         $this->xmlMessageBase64 = base64_encode($xmlMessage);
         $this->endPointUrl = $config->getEndPoint(\ConfigurationProvider::HOSTED_TYPE);
         $this->merchantid = $config->getMerchantId(\ConfigurationProvider::HOSTED_TYPE, $countryCode);
         $this->secretWord = $config->getSecret(\ConfigurationProvider::HOSTED_TYPE, $countryCode);
         $this->mac = hash("sha512", $this->xmlMessageBase64 . $this->secretWord);
-        
+
         $this->setForm();
         $this->setHtmlFields();
-        $this->setRawFields();        
-        
+        $this->setRawFields();
+
         $this->setSubmitMessage();
     }
 
@@ -81,7 +81,7 @@ class PaymentForm {
         $formString .= "<noscript><p>".$this->noScriptMessage."</p></noscript>";
         $formString .= "<input type='submit' name='submit' value='".$this->submitMessage."' />";
         $formString .= "</form>";
-        
+
         $this->completeHtmlFormWithSubmitButton = $formString;
     }
 

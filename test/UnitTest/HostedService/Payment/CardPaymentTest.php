@@ -28,8 +28,8 @@ class CardPaymentTest extends \PHPUnit_Framework_TestCase {
                 ->setReturnUrl("http://myurl.se")
                 ->getPaymentForm();
 
-        $this->assertEquals("merchant", $form->merchantid);
-        $this->assertEquals('secret', $form->secretWord);
+        $this->assertEquals("1130", $form->merchantid);
+        $this->assertEquals('8a9cece566e808da63c6f07ff415ff9e127909d000d259aba24daa2fed6d9e3f8b0b62e8ad1fa91c7d7cd6fc3352deaae66cdb533123edf127ad7d1f4c77e7a3', $form->secretWord);
     }
 
     public function testBuildCardPayment() {
@@ -444,7 +444,7 @@ class CardPaymentTest extends \PHPUnit_Framework_TestCase {
 
         $this->assertEquals( CardPayment::RECURRINGCAPTURE, $cardPayment->subscriptionType );
     }
-    
+
     /**
      * test that <subscriptiontype> is included in payment request xml
      */
@@ -459,9 +459,9 @@ class CardPaymentTest extends \PHPUnit_Framework_TestCase {
 
         $subscriptiontype = "<subscriptiontype>RECURRINGCAPTURE<\/subscriptiontype>"; // remember to escape <_/_subscriptiontype>
         //$this->assertRegExp("/[a-zA-Z0-9<>]*".$subscriptiontype."[a-zA-Z0-9<>]*/","foo<subscriptiontype>RECURRINGCAPTURE</subscriptiontype>bar");
-        
-        ////print_r($paymentForm->xmlMessage);        
+
+        ////print_r($paymentForm->xmlMessage);
         $this->assertRegExp("/[a-zA-Z0-9<>]*".$subscriptiontype."[a-zA-Z0-9<>]*/", $paymentForm->xmlMessage );
-    }    
+    }
 }
 

@@ -8,38 +8,38 @@ require_once $root . '/../../TestUtil.php';
  * @author Kristian Grossman-Madsen for Svea Webpay
  */
 class GetOrdersRequestIntegrationTest extends PHPUnit_Framework_TestCase{
-    
+
     /**
      * 1. create an Invoice|PaymentPlan order
      * 2. note the client credentials, order number and type, and insert below
      * 3. run the test
      */
     public function test_manual_GetOrdersRequest_for_invoice_individual_customer_order() {
-        
+
         // Stop here and mark this test as incomplete.
         $this->markTestIncomplete(  // 150626 -- removed due to corrupt customerids w/no ssn in test database (known error)
             'skeleton for test_manual_GetOrdersRequest_for_invoice_individual_customer_order'
         );
-        
+
         $countryCode = "SE";
         $sveaOrderIdToGet = 348629;
         $orderType = ConfigurationProvider::INVOICE_TYPE;
-        
+
         $getOrdersBuilder = new Svea\QueryOrderBuilder( Svea\SveaConfig::getDefaultConfig() );
         $getOrdersBuilder->setOrderId($sveaOrderIdToGet);
         $getOrdersBuilder->setCountryCode($countryCode);
-        $getOrdersBuilder->orderType = $orderType;        
+        $getOrdersBuilder->orderType = $orderType;
 
         // Example of test_manual_GetOrdersRequest_for_invoice_individual_customer_order 348629 raw request response to parse:
         //        stdClass Object
         //        (
-        //            [ErrorMessage] => 
+        //            [ErrorMessage] =>
         //            [ResultCode] => 0
         //            [Orders] => stdClass Object
         //                (
         //                    [Order] => stdClass Object
         //                        (
-        //                            [ChangedDate] => 
+        //                            [ChangedDate] =>
         //                            [ClientId] => 79021
         //                            [ClientOrderId] => 449
         //                            [CreatedDate] => 2014-05-19T16:04:54.787
@@ -53,34 +53,34 @@ class GetOrdersRequestIntegrationTest extends PHPUnit_Framework_TestCase{
         //                            [Customer] => stdClass Object
         //                                (
         //                                    [CoAddress] => c/o Eriksson, Erik
-        //                                    [CompanyIdentity] => 
+        //                                    [CompanyIdentity] =>
         //                                    [CountryCode] => SE
         //                                    [CustomerType] => Individual
         //                                    [Email] => test@svea.com
         //                                    [FullName] => Persson, Tess T
-        //                                    [HouseNumber] => 
+        //                                    [HouseNumber] =>
         //                                    [IndividualIdentity] => stdClass Object
         //                                        (
-        //                                            [BirthDate] => 
-        //                                            [FirstName] => 
-        //                                            [Initials] => 
-        //                                            [LastName] => 
+        //                                            [BirthDate] =>
+        //                                            [FirstName] =>
+        //                                            [Initials] =>
+        //                                            [LastName] =>
         //                                        )
         //
         //                                    [Locality] => Stan
         //                                    [NationalIdNumber] => 194605092222
         //                                    [PhoneNumber] => 999999
-        //                                    [PublicKey] => 
+        //                                    [PublicKey] =>
         //                                    [Street] => Testgatan 1
         //                                    [ZipCode] => 99999
         //                                )
         //
         //                            [CustomerId] => 1000117
-        //                            [CustomerReference] => 
-        //                            [DeliveryAddress] => 
+        //                            [CustomerReference] =>
+        //                            [DeliveryAddress] =>
         //                            [IsPossibleToAdminister] => false
         //                            [IsPossibleToCancel] => true
-        //                            [Notes] => 
+        //                            [Notes] =>
         //                            [OrderDeliveryStatus] => Created
         //                            [OrderRows] => stdClass Object
         //                                (
@@ -88,60 +88,60 @@ class GetOrdersRequestIntegrationTest extends PHPUnit_Framework_TestCase{
         //                                        (
         //                                            [0] => stdClass Object
         //                                                (
-        //                                                    [ArticleNumber] => 
+        //                                                    [ArticleNumber] =>
         //                                                    [Description] => Dyr produkt 25%
         //                                                    [DiscountPercent] => 0.00
         //                                                    [NumberOfUnits] => 2.00
         //                                                    [PricePerUnit] => 2000.00
-        //                                                    [Unit] => 
+        //                                                    [Unit] =>
         //                                                    [VatPercent] => 25.00
-        //                                                    [CreditInvoiceId] => 
-        //                                                    [InvoiceId] => 
+        //                                                    [CreditInvoiceId] =>
+        //                                                    [InvoiceId] =>
         //                                                    [RowNumber] => 1
         //                                                    [Status] => NotDelivered
         //                                                )
         //
         //                                            [1] => stdClass Object
         //                                                (
-        //                                                    [ArticleNumber] => 
+        //                                                    [ArticleNumber] =>
         //                                                    [Description] => Testprodukt 1kr 25%
         //                                                    [DiscountPercent] => 0.00
         //                                                    [NumberOfUnits] => 1.00
         //                                                    [PricePerUnit] => 1.00
-        //                                                    [Unit] => 
+        //                                                    [Unit] =>
         //                                                    [VatPercent] => 25.00
-        //                                                    [CreditInvoiceId] => 
-        //                                                    [InvoiceId] => 
+        //                                                    [CreditInvoiceId] =>
+        //                                                    [InvoiceId] =>
         //                                                    [RowNumber] => 2
         //                                                    [Status] => NotDelivered
         //                                                )
         //
         //                                            [2] => stdClass Object
         //                                                (
-        //                                                    [ArticleNumber] => 
+        //                                                    [ArticleNumber] =>
         //                                                    [Description] => Fastpris (Fast fraktpris)
         //                                                    [DiscountPercent] => 0.00
         //                                                    [NumberOfUnits] => 1.00
         //                                                    [PricePerUnit] => 4.00
-        //                                                    [Unit] => 
+        //                                                    [Unit] =>
         //                                                    [VatPercent] => 25.00
-        //                                                    [CreditInvoiceId] => 
-        //                                                    [InvoiceId] => 
+        //                                                    [CreditInvoiceId] =>
+        //                                                    [InvoiceId] =>
         //                                                    [RowNumber] => 3
         //                                                    [Status] => NotDelivered
         //                                                )
         //
         //                                            [3] => stdClass Object
         //                                                (
-        //                                                    [ArticleNumber] => 
+        //                                                    [ArticleNumber] =>
         //                                                    [Description] => Svea Fakturaavgift:: 20.00kr (SE)
         //                                                    [DiscountPercent] => 0.00
         //                                                    [NumberOfUnits] => 1.00
         //                                                    [PricePerUnit] => 20.00
-        //                                                    [Unit] => 
+        //                                                    [Unit] =>
         //                                                    [VatPercent] => 0.00
-        //                                                    [CreditInvoiceId] => 
-        //                                                    [InvoiceId] => 
+        //                                                    [CreditInvoiceId] =>
+        //                                                    [InvoiceId] =>
         //                                                    [RowNumber] => 4
         //                                                    [Status] => NotDelivered
         //                                                )
@@ -152,31 +152,31 @@ class GetOrdersRequestIntegrationTest extends PHPUnit_Framework_TestCase{
         //
         //                            [OrderStatus] => Active
         //                            [OrderType] => Invoice
-        //                            [PaymentPlanDetails] => 
-        //                            [PendingReasons] => 
+        //                            [PaymentPlanDetails] =>
+        //                            [PendingReasons] =>
         //                            [SveaOrderId] => 348629
         //                            [SveaWillBuy] => true
         //                        )
         //
         //                )
         //
-        //        )  
-                
+        //        )
+
         $request = new Svea\AdminService\GetOrdersRequest( $getOrdersBuilder );
         $getOrdersResponse = $request->doRequest();
 
-        print_r( $getOrdersResponse );        
-        
+//        print_r( $getOrdersResponse );    
+
         $this->assertInstanceOf('Svea\AdminService\GetOrdersResponse', $getOrdersResponse);
         $this->assertEquals(1, $getOrdersResponse->accepted );
         $this->assertEquals(0, $getOrdersResponse->resultcode);
         $this->assertEquals(null, $getOrdersResponse->errormessage);
-        
+
         $this->assertEquals( null, $getOrdersResponse->changedDate );  // TODO add test for changed order later
         $this->assertEquals( 79021, $getOrdersResponse->clientId );
         $this->assertEquals( 449, $getOrdersResponse->clientOrderId );
         $this->assertEquals( "2014-05-19T16:04:54.787", $getOrdersResponse->createdDate );
-       
+
         $this->assertEquals( true, $getOrdersResponse->creditReportStatusAccepted );
         $this->assertEquals( "2014-05-19T16:04:54.893", $getOrdersResponse->creditReportStatusCreationDate );
 
@@ -184,27 +184,27 @@ class GetOrdersRequestIntegrationTest extends PHPUnit_Framework_TestCase{
 
         $this->assertInstanceOf( "Svea\IndividualCustomer", $getOrdersResponse->customer );
         $this->assertEquals( "194605092222", $getOrdersResponse->customer->ssn );
-        $this->assertEquals( null, $getOrdersResponse->customer->initials );            
+        $this->assertEquals( null, $getOrdersResponse->customer->initials );
         $this->assertEquals( null, $getOrdersResponse->customer->birthDate );
         $this->assertEquals( null, $getOrdersResponse->customer->firstname );
         $this->assertEquals( null, $getOrdersResponse->customer->lastname );
-        //$this->assertEquals( "test@svea.com", $getOrdersResponse->customer->email );  // -- returns current customer stats, may change 
-        //$this->assertEquals( null, $getOrdersResponse->customer->phonenumber ); // -- returns current customer stats, may change 
+        //$this->assertEquals( "test@svea.com", $getOrdersResponse->customer->email );  // -- returns current customer stats, may change
+        //$this->assertEquals( null, $getOrdersResponse->customer->phonenumber ); // -- returns current customer stats, may change
         $this->assertEquals( "Persson, Tess T", $getOrdersResponse->customer->name );   // FullName
         $this->assertEquals( "Testgatan 1", $getOrdersResponse->customer->streetAddress );
         $this->assertEquals( "Testgatan 1", $getOrdersResponse->customer->street );
         $this->assertEquals( "c/o Eriksson, Erik", $getOrdersResponse->customer->coAddress );
         $this->assertEquals( "99999", $getOrdersResponse->customer->zipCode );
         $this->assertEquals( "Stan", $getOrdersResponse->customer->locality );
-       
-        $this->assertEquals( "1000117", $getOrdersResponse->customerId );   
+
+        $this->assertEquals( "1000117", $getOrdersResponse->customerId );
         $this->assertEquals( null, $getOrdersResponse->customerReference );
         $this->assertClassNotHasAttribute( "deliveryAddress", "\Svea\AdminService\GetOrdersResponse" ); // deliveryAddress field is not supported
         $this->assertEquals( false, $getOrdersResponse->isPossibleToAdminister );
         $this->assertEquals( true, $getOrdersResponse->isPossibleToCancel );
         $this->assertEquals( null, $getOrdersResponse->notes );
-        $this->assertEquals( "Created", $getOrdersResponse->orderDeliveryStatus ); 
-      
+        $this->assertEquals( "Created", $getOrdersResponse->orderDeliveryStatus );
+
         $this->assertInstanceOf( "Svea\NumberedOrderRow", $getOrdersResponse->numberedOrderRows[0] );
         $this->assertEquals( 1, $getOrdersResponse->numberedOrderRows[0]->rowNumber );
         $this->assertEquals( null, $getOrdersResponse->numberedOrderRows[0]->articleNumber );
@@ -215,11 +215,11 @@ class GetOrdersRequestIntegrationTest extends PHPUnit_Framework_TestCase{
         $this->assertEquals( null, $getOrdersResponse->numberedOrderRows[0]->name );
         $this->assertEquals( "Dyr produkt 25%", $getOrdersResponse->numberedOrderRows[0]->description );
         $this->assertEquals( 0, $getOrdersResponse->numberedOrderRows[0]->vatDiscount );
-                        
+
         // only check attributes of first row
         $this->assertInstanceOf( "Svea\NumberedOrderRow", $getOrdersResponse->numberedOrderRows[3] );
         $this->assertEquals( 4, $getOrdersResponse->numberedOrderRows[3]->rowNumber );
-        
+
         $this->assertEquals( "Active", $getOrdersResponse->orderStatus );
         $this->assertEquals( "Invoice", $getOrdersResponse->orderType );
         $this->assertEquals( null, $getOrdersResponse->paymentPlanDetailsContractLengthMonths );
@@ -232,7 +232,7 @@ class GetOrdersRequestIntegrationTest extends PHPUnit_Framework_TestCase{
     public function test_GetOrdersRequest_for_invoice_sets_individual_customer_correctly() {
         // create order
         $country = "SE";
-        $order = TestUtil::createOrder( TestUtil::createIndividualCustomer($country) ); 
+        $order = TestUtil::createOrder( TestUtil::createIndividualCustomer($country) );
         //case( "SE" ):
         //    return WebPayItem::individualCustomer()
         //        ->setNationalIdNumber("194605092222")
@@ -242,23 +242,23 @@ class GetOrdersRequestIntegrationTest extends PHPUnit_Framework_TestCase{
         //        ->setCoAddress("c/o Eriksson, Erik")
         //        ->setLocality("Stan")
         //        ->setZipCode("99999");
-        //    break;       
+        //    break;
         $order->addOrderRow( TestUtil::createOrderRow( 1000.00 ) );
-        $orderResponse = $order->useInvoicePayment()->doRequest();       
+        $orderResponse = $order->useInvoicePayment()->doRequest();
         $this->assertEquals(1, $orderResponse->accepted);
 
         $countryCode = "SE";
         $sveaOrderIdToGet = $orderResponse->sveaOrderId;
         $orderType = ConfigurationProvider::INVOICE_TYPE;
-        
+
         $getOrdersBuilder = new Svea\QueryOrderBuilder( Svea\SveaConfig::getDefaultConfig() );
         $getOrdersBuilder->setOrderId($sveaOrderIdToGet);
         $getOrdersBuilder->setCountryCode($countryCode);
-        $getOrdersBuilder->orderType = $orderType;                
-        
+        $getOrdersBuilder->orderType = $orderType;
+
         $request = new Svea\AdminService\GetOrdersRequest( $getOrdersBuilder );
         $getOrdersResponse = $request->doRequest();
-        
+
         // Example test_GetOrdersRequest_for_invoice_company_customer_order raw request response
         //
         //stdClass Object
@@ -267,24 +267,24 @@ class GetOrdersRequestIntegrationTest extends PHPUnit_Framework_TestCase{
         //                    [Customer] => stdClass Object
         //                        (
         //                            [CoAddress] => c/o Eriksson, Erik
-        //                            [CompanyIdentity] => 
+        //                            [CompanyIdentity] =>
         //                            [CountryCode] => SE
         //                            [CustomerType] => Individual
-        //                            [Email] => 
+        //                            [Email] =>
         //                            [FullName] => Persson, Tess T
-        //                            [HouseNumber] => 
+        //                            [HouseNumber] =>
         //                            [IndividualIdentity] => stdClass Object
         //                                (
-        //                                    [BirthDate] => 
-        //                                    [FirstName] => 
-        //                                    [Initials] => 
-        //                                    [LastName] => 
+        //                                    [BirthDate] =>
+        //                                    [FirstName] =>
+        //                                    [Initials] =>
+        //                                    [LastName] =>
         //                                )
         //
         //                            [Locality] => Stan
         //                            [NationalIdNumber] => 194605092222
-        //                            [PhoneNumber] => 
-        //                            [PublicKey] => 
+        //                            [PhoneNumber] =>
+        //                            [PublicKey] =>
         //                            [Street] => Testgatan 1
         //                            [ZipCode] => 99999
         //                        )
@@ -295,7 +295,7 @@ class GetOrdersRequestIntegrationTest extends PHPUnit_Framework_TestCase{
         $this->assertEquals(1, $getOrdersResponse->accepted );
         $this->assertEquals(0, $getOrdersResponse->resultcode);
         $this->assertEquals(null, $getOrdersResponse->errormessage);
-        
+
         $this->assertInstanceOf( "Svea\IndividualCustomer", $getOrdersResponse->customer );
         $this->assertEquals( "194605092222", $getOrdersResponse->customer->ssn );
         $this->assertEquals( null, $getOrdersResponse->customer->initials );
@@ -310,13 +310,13 @@ class GetOrdersRequestIntegrationTest extends PHPUnit_Framework_TestCase{
         $this->assertEquals( "c/o Eriksson, Erik", $getOrdersResponse->customer->coAddress );
         $this->assertEquals( "99999", $getOrdersResponse->customer->zipCode );
         $this->assertEquals( "Stan", $getOrdersResponse->customer->locality );
-    }        
-    
+    }
+
     public function test_GetOrdersRequest_for_invoice_sets_company_customer_correctly() {
         // create order
         $country = "SE";
-        $order = TestUtil::createOrder( TestUtil::createCompanyCustomer($country) ); 
-        //case( "SE" ):         
+        $order = TestUtil::createOrder( TestUtil::createCompanyCustomer($country) );
+        //case( "SE" ):
         //    return WebPayItem::companyCustomer()
         //        ->setNationalIdNumber("4608142222")
         //        ->setCompanyName("Tess T", "Persson")
@@ -324,23 +324,23 @@ class GetOrdersRequestIntegrationTest extends PHPUnit_Framework_TestCase{
         //        ->setCoAddress("c/o Eriksson, Erik")
         //        ->setLocality("Stan")
         //        ->setZipCode("99999");
-        //    break;           
+        //    break;
         $order->addOrderRow( TestUtil::createOrderRow( 1000.00 ) );
-        $orderResponse = $order->useInvoicePayment()->doRequest();       
+        $orderResponse = $order->useInvoicePayment()->doRequest();
         $this->assertEquals(1, $orderResponse->accepted);
 
         $countryCode = "SE";
         $sveaOrderIdToGet = $orderResponse->sveaOrderId;
         $orderType = ConfigurationProvider::INVOICE_TYPE;
-        
+
         $getOrdersBuilder = new Svea\QueryOrderBuilder( Svea\SveaConfig::getDefaultConfig() );
         $getOrdersBuilder->setOrderId($sveaOrderIdToGet);
         $getOrdersBuilder->setCountryCode($countryCode);
-        $getOrdersBuilder->orderType = $orderType;                
-        
+        $getOrdersBuilder->orderType = $orderType;
+
         $request = new Svea\AdminService\GetOrdersRequest( $getOrdersBuilder );
         $getOrdersResponse = $request-> doRequest();
-        
+
         // Example test_GetOrdersRequest_for_invoice_company_customer_order raw request response
         //
         //stdClass Object
@@ -351,35 +351,35 @@ class GetOrdersRequestIntegrationTest extends PHPUnit_Framework_TestCase{
         //                            [CoAddress] => c/o Eriksson, Erik
         //                            [CompanyIdentity] => stdClass Object
         //                                (
-        //                                    [CompanyIdentification] => 
-        //                                    [CompanyVatNumber] => 
+        //                                    [CompanyIdentification] =>
+        //                                    [CompanyVatNumber] =>
         //                                )
         //
         //                            [CountryCode] => SE
         //                            [CustomerType] => Company
-        //                            [Email] => 
+        //                            [Email] =>
         //                            [FullName] => Persson, Tess T
-        //                            [HouseNumber] => 
-        //                            [IndividualIdentity] => 
+        //                            [HouseNumber] =>
+        //                            [IndividualIdentity] =>
         //                            [Locality] => Stan
         //                            [NationalIdNumber] => 164608142222
-        //                            [PhoneNumber] => 
-        //                            [PublicKey] => 
+        //                            [PhoneNumber] =>
+        //                            [PublicKey] =>
         //                            [Street] => Testgatan 1
         //                            [ZipCode] => 99999
         //                        )
         //      /.../
         // )
-        
-        ////print_r( $getOrdersResponse );                
+
+        ////print_r( $getOrdersResponse );
         $this->assertInstanceOf('Svea\AdminService\GetOrdersResponse', $getOrdersResponse);
         $this->assertEquals(1, $getOrdersResponse->accepted );
         $this->assertEquals(0, $getOrdersResponse->resultcode);
         $this->assertEquals(null, $getOrdersResponse->errormessage);
-        
+
         $this->assertInstanceOf( "Svea\CompanyCustomer", $getOrdersResponse->customer );
         $this->assertEquals( "164608142222", $getOrdersResponse->customer->orgNumber );
-        $this->assertEquals( null, $getOrdersResponse->customer->companyVatNumber );        
+        $this->assertEquals( null, $getOrdersResponse->customer->companyVatNumber );
         $this->assertEquals( "Persson, Tess T", $getOrdersResponse->customer->companyName );
         $this->assertEquals( null, $getOrdersResponse->customer->email );
         $this->assertEquals( null, $getOrdersResponse->customer->phonenumber );
@@ -388,8 +388,8 @@ class GetOrdersRequestIntegrationTest extends PHPUnit_Framework_TestCase{
         $this->assertEquals( "c/o Eriksson, Erik", $getOrdersResponse->customer->coAddress );
         $this->assertEquals( "99999", $getOrdersResponse->customer->zipCode );
         $this->assertEquals( "Stan", $getOrdersResponse->customer->locality );
-    }    
-    
+    }
+
     public function test_manual_GetOrdersRequest_for_paymentplan_order() {
 
     // Stop here and mark this test as incomplete.
@@ -399,31 +399,31 @@ class GetOrdersRequestIntegrationTest extends PHPUnit_Framework_TestCase{
 
     // create order
             $country = "SE";
-    //        $order = TestUtil::createOrder( TestUtil::createIndividualCustomer($country) );          
+    //        $order = TestUtil::createOrder( TestUtil::createIndividualCustomer($country) );
     //        $order->addOrderRow( TestUtil::createOrderRow( 1000.00 ) );
-    //        $orderResponse = $order->usePaymentPlanPayment( TestUtil::getGetPaymentPlanParamsForTesting($country) )->doRequest();       
+    //        $orderResponse = $order->usePaymentPlanPayment( TestUtil::getGetPaymentPlanParamsForTesting($country) )->doRequest();
     //        $this->assertEquals(1, $orderResponse->accepted);
     //
         $getOrdersBuilder = new Svea\QueryOrderBuilder( Svea\SveaConfig::getDefaultConfig() );
         //$getOrdersBuilder->setOrderId($orderResponse->sveaOrderId);
         $getOrdersBuilder->setOrderId(414812);
         $getOrdersBuilder->setCountryCode($country);
-        $getOrdersBuilder->orderType = ConfigurationProvider::PAYMENTPLAN_TYPE;                
-        
+        $getOrdersBuilder->orderType = ConfigurationProvider::PAYMENTPLAN_TYPE;
+
         $request = new Svea\AdminService\GetOrdersRequest( $getOrdersBuilder );
         $getOrdersResponse = $request->doRequest();
-        
+
         // Example test_GetOrdersRequest_for_invoice_company_customer_order raw request response
         //
         // stdClass Object
         //(
-        //    [ErrorMessage] => 
+        //    [ErrorMessage] =>
         //    [ResultCode] => 0
         //    [Orders] => stdClass Object
         //        (
         //            [Order] => stdClass Object
         //                (
-        //                    [ChangedDate] => 
+        //                    [ChangedDate] =>
         //                    [ClientId] => 59999
         //                    [ClientOrderId] => clientOrderNumber:2014-09-11T17:57:07+02:00
         //                    [CreatedDate] => 2014-09-11T17:57:08.777
@@ -437,34 +437,34 @@ class GetOrdersRequestIntegrationTest extends PHPUnit_Framework_TestCase{
         //                    [Customer] => stdClass Object
         //                        (
         //                            [CoAddress] => c/o Eriksson, Erik
-        //                            [CompanyIdentity] => 
+        //                            [CompanyIdentity] =>
         //                            [CountryCode] => SE
         //                            [CustomerType] => Individual
-        //                            [Email] => 
+        //                            [Email] =>
         //                            [FullName] => Persson, Tess T
-        //                            [HouseNumber] => 
+        //                            [HouseNumber] =>
         //                            [IndividualIdentity] => stdClass Object
         //                                (
-        //                                    [BirthDate] => 
-        //                                    [FirstName] => 
-        //                                    [Initials] => 
-        //                                    [LastName] => 
+        //                                    [BirthDate] =>
+        //                                    [FirstName] =>
+        //                                    [Initials] =>
+        //                                    [LastName] =>
         //                                )
         //
         //                            [Locality] => Stan
         //                            [NationalIdNumber] => 194605092222
-        //                            [PhoneNumber] => 
-        //                            [PublicKey] => 
+        //                            [PhoneNumber] =>
+        //                            [PublicKey] =>
         //                            [Street] => Testgatan 1
         //                            [ZipCode] => 99999
         //                        )
         //
         //                    [CustomerId] => 1000013
         //                    [CustomerReference] => created by TestUtil::createOrder()
-        //                    [DeliveryAddress] => 
+        //                    [DeliveryAddress] =>
         //                    [IsPossibleToAdminister] => false
         //                    [IsPossibleToCancel] => true
-        //                    [Notes] => 
+        //                    [Notes] =>
         //                    [OrderDeliveryStatus] => Created
         //                    [OrderRows] => stdClass Object
         //                        (
@@ -479,8 +479,8 @@ class GetOrdersRequestIntegrationTest extends PHPUnit_Framework_TestCase{
         //                                            [PricePerUnit] => 100.00
         //                                            [Unit] => st
         //                                            [VatPercent] => 25.00
-        //                                            [CreditInvoiceId] => 
-        //                                            [InvoiceId] => 
+        //                                            [CreditInvoiceId] =>
+        //                                            [InvoiceId] =>
         //                                            [RowNumber] => 1
         //                                            [Status] => NotDelivered
         //                                        )
@@ -494,8 +494,8 @@ class GetOrdersRequestIntegrationTest extends PHPUnit_Framework_TestCase{
         //                                            [PricePerUnit] => 1000.00
         //                                            [Unit] => st
         //                                            [VatPercent] => 25.00
-        //                                            [CreditInvoiceId] => 
-        //                                            [InvoiceId] => 
+        //                                            [CreditInvoiceId] =>
+        //                                            [InvoiceId] =>
         //                                            [RowNumber] => 2
         //                                            [Status] => NotDelivered
         //                                        )
@@ -509,10 +509,10 @@ class GetOrdersRequestIntegrationTest extends PHPUnit_Framework_TestCase{
         //                    [PaymentPlanDetails] => stdClass Object
         //                        (
         //                            [ContractLengthMonths] => 3
-        //                            [ContractNumber] => 
+        //                            [ContractNumber] =>
         //                        )
         //
-        //                    [PendingReasons] => 
+        //                    [PendingReasons] =>
         //                    [SveaOrderId] => 414812
         //                    [SveaWillBuy] => true
         //                )
@@ -520,18 +520,18 @@ class GetOrdersRequestIntegrationTest extends PHPUnit_Framework_TestCase{
         //        )
         //
         //)
-        
-        ////print_r( $getOrdersResponse );                
+
+        ////print_r( $getOrdersResponse );
         $this->assertInstanceOf('Svea\AdminService\GetOrdersResponse', $getOrdersResponse);
         $this->assertEquals(1, $getOrdersResponse->accepted );
         $this->assertEquals(0, $getOrdersResponse->resultcode);
         $this->assertEquals(null, $getOrdersResponse->errormessage);
-        
+
         $this->assertEquals( null, $getOrdersResponse->changedDate );  // TODO add test for changed order later
         $this->assertEquals( 59999, $getOrdersResponse->clientId );
         $this->assertEquals( "clientOrderNumber:2014-09-11T17:57:07+02:00", $getOrdersResponse->clientOrderId );
         $this->assertEquals( "2014-09-11T17:57:08.777", $getOrdersResponse->createdDate );
-       
+
         $this->assertEquals( true, $getOrdersResponse->creditReportStatusAccepted );
         $this->assertEquals( "2014-09-11T17:57:08.87", $getOrdersResponse->creditReportStatusCreationDate );
 
@@ -539,18 +539,18 @@ class GetOrdersRequestIntegrationTest extends PHPUnit_Framework_TestCase{
 
         $this->assertInstanceOf( "Svea\IndividualCustomer", $getOrdersResponse->customer );
         // asserting customer attributes in other testcases
-        //$this->assertEquals( null, $getOrdersResponse->customer->email );  // -- returns current customer id email, may change 
-        
-        $this->assertEquals( "1000013", $getOrdersResponse->customerId );   
+        //$this->assertEquals( null, $getOrdersResponse->customer->email );  // -- returns current customer id email, may change
+
+        $this->assertEquals( "1000013", $getOrdersResponse->customerId );
         $this->assertEquals( "created by TestUtil::createOrder()", $getOrdersResponse->customerReference );
         $this->assertEquals( false, $getOrdersResponse->isPossibleToAdminister );
         $this->assertEquals( true, $getOrdersResponse->isPossibleToCancel );
         $this->assertEquals( null, $getOrdersResponse->notes );
-        $this->assertEquals( "Created", $getOrdersResponse->orderDeliveryStatus ); 
-      
+        $this->assertEquals( "Created", $getOrdersResponse->orderDeliveryStatus );
+
         $this->assertInstanceOf( "Svea\NumberedOrderRow", $getOrdersResponse->numberedOrderRows[0] );
         // asserting order row attributes in invoice testcase
-        
+
         $this->assertEquals( "Active", $getOrdersResponse->orderStatus );
         $this->assertEquals( "PaymentPlan", $getOrdersResponse->orderType );
         $this->assertEquals( 3, $getOrdersResponse->paymentPlanDetailsContractLengthMonths );
@@ -559,7 +559,7 @@ class GetOrdersRequestIntegrationTest extends PHPUnit_Framework_TestCase{
         $this->assertEquals( 414812, $getOrdersResponse->orderId );
         $this->assertEquals( true, $getOrdersResponse->sveaWillBuy );
     }
-    
+
     function test_orderrow_response_incvat() {
         $config = Svea\SveaConfig::getDefaultConfig();
         $orderResponse = WebPay::createOrder($config)
@@ -587,7 +587,7 @@ class GetOrdersRequestIntegrationTest extends PHPUnit_Framework_TestCase{
         $this->assertEquals(null, $response->numberedOrderRows[0]->amountExVat);
 
     }
-        
+
     function test_orderrow_response_exvat() {
         $config = Svea\SveaConfig::getDefaultConfig();
         $orderResponse = WebPay::createOrder($config)
@@ -614,6 +614,6 @@ class GetOrdersRequestIntegrationTest extends PHPUnit_Framework_TestCase{
         $this->assertEquals(145.00, $response->numberedOrderRows[0]->amountExVat);
         $this->assertEquals(null, $response->numberedOrderRows[0]->amountIncVat);
     }
-    
-    
+
+
 }
