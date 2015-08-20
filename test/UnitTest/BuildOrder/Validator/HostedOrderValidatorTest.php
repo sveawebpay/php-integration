@@ -112,8 +112,8 @@ class HostedOrderValidatorTest extends \PHPUnit_Framework_TestCase {
     }
 
     /**
-     * @expectedException Svea\ValidationException
-     * @expectedExceptionMessage -missing value : CountryCode is required. Use function setCountryCode().
+     * @expectedException Svea\InvalidCountryException
+     * @expectedExceptionMessage Invalid or missing Country code
      */
     public function testFailOnMissingCountryCode() {
         $config = SveaConfig::getDefaultConfig();

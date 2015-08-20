@@ -15,4 +15,4 @@ branches:
     - master
     - develop
 
-script: phpunit test
+script: phpunit test/UnitTest

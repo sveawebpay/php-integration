@@ -20,10 +20,10 @@ class HostedOrderValidator extends OrderValidator {
         if (isset($order->orgNumber) || isset($order->companyVatNumber) || isset($order->companyName)) {
             $this->isCompany = TRUE;
         }
-        
+
         $this->errors = $this->validateClientOrderNumber($order,$this->errors);
         $this->errors = $this->validateCurrency($order,$this->errors);
-        $this->errors = $this->validateCountryCode($order, $this->errors);
+//        $this->errors = $this->validateCountryCode($order, $this->errors); //should be optional for hosted payment because not used
         $this->errors = $this->validateRequiredFieldsForOrder($order,$this->errors);
         $this->errors = $this->validateOrderRows($order,$this->errors);
 
@@ -40,7 +40,7 @@ class HostedOrderValidator extends OrderValidator {
         }
         return $errors;
     }
-    
+
     /**
      * @param type $order
      * @param type $errors
@@ -51,7 +51,7 @@ class HostedOrderValidator extends OrderValidator {
         }
         return $errors;
     }
-    
+
     /**
      * @param type $order
      * @param type $errors

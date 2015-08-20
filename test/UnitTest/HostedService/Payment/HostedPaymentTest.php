@@ -413,4 +413,40 @@ class HostedPaymentTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals(4200, $request['totalVat']);   //  5600    - 1400 discount (= 10000/35600 *5600) discount
     }
 
+    /**
+     * Test to make countrycode optional if you use your own ConfigurationProvider implementation,
+     * because it is not required in the request.
+     */
+    function test_usepaymentmethodpayment_without_countrycode_required_success_when_using_configurationprovider () {
+        $order = \WebPay::createOrder(new TestConf());
+        $order->addOrderRow(\WebPayItem::orderRow()
+                ->setAmountExVat(100.00)
+                ->setVatPercent(25)
+                ->setQuantity(2))
+                ->setCurrency('SEK')
+                ->setClientOrderNumber('1010101')
+                ->usePaymentMethod(\PaymentMethod::KORTCERT)
+                ->setReturnUrl('testurl.com')
+                ->getPaymentForm();
+
+        $this->assertEquals (null, $order->countryCode);
+    }
+
+     /**
+     * @expectedException Exception
+     * @expectedExceptionMessage Invalid or missing Country code
+     */
+    function test_usepaymentmethodpayment_without_countrycode_required_fail_when_using_defaultconfig () {
+        $order = \WebPay::createOrder(SveaConfig::getDefaultConfig());
+        $order->addOrderRow(\WebPayItem::orderRow()
+                ->setAmountExVat(100.00)
+                ->setVatPercent(25)
+                ->setQuantity(2))
+                ->setCurrency('SEK')
+                ->setClientOrderNumber('1010101')
+                ->usePaymentMethod(\PaymentMethod::KORTCERT)
+                ->setReturnUrl('testurl.com')
+                ->getPaymentForm();
+    }
+
 }
