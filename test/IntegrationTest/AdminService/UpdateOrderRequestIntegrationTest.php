@@ -39,6 +39,7 @@ class UpdateOrderRequestIntegrationTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals('123', $query2->clientOrderNumber);
         //print_r($orderResponse->sveaOrderId);
     }
+    
     public function test_add_new_notes_invoice() {
         $config = Svea\SveaConfig::getDefaultConfig();
         $orderResponse = WebPay::createOrder($config)
