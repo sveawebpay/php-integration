@@ -17,6 +17,10 @@ class UpdateOrderBuilder {
     public $countryCode;
     /** @var string $orderType -- one of ConfigurationProvider::INVOICE_TYPE, ::PAYMENTPLAN_TYPE */
     public $orderType;
+    /** @var string $clientOrderNumber */
+    public $clientOrderNumber = null;
+    /** @var string $notes */
+    public $notes = null;
 
     public function __construct($config) {
          $this->conf = $config;
@@ -39,6 +43,24 @@ class UpdateOrderBuilder {
      */
     public function setCountryCode($countryCodeAsString) {
         $this->countryCode = $countryCodeAsString;
+        return $this;
+    }
+    /**
+     * Optional. Update clientOrderNumber on order.
+     * @param string $clientOrderNumberAsString
+     * @return $this
+     */
+    public function setClientOrderNumber($clientOrderNumberAsString) {
+        $this->clientOrderNumber = $clientOrderNumberAsString;
+        return $this;
+    }
+    /**
+     * Optional. Update notes on order.
+     * @param string $notesAsString(200)
+     * @return $this
+     */
+    public function setNotes($notesAsString) {
+        $this->notes = $notesAsString;
         return $this;
     }
 
