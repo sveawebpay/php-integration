@@ -13,7 +13,7 @@ class GetOrdersResponse extends AdminServiceResponse {
     public $changedDate;
     /** @var string $clientId -- Id that identifies a client in sveawebpay system */
     public $clientId;
-    /** @var string $clientOrderId -- Order number from client's ordersystem */
+    /** @var string $clientOrderId -- I.e. clientOrderNumber. Order number from client's ordersystem */
     public $clientOrderId;
     /** @var string $createdDate -- Date when order was first created. */
     public $createdDate;
@@ -92,10 +92,10 @@ class GetOrdersResponse extends AdminServiceResponse {
 
             //individual customer?
             if( $order->Customer->CustomerType === "Individual" ) {
-                
+
             //stdClass Object
             //(
-            //    [ChangedDate] => 
+            //    [ChangedDate] =>
             //    [ClientId] => 79021
             //    [ClientOrderId] => 449
             //    [CreatedDate] => 2014-05-19T16:04:54.787
@@ -109,34 +109,34 @@ class GetOrdersResponse extends AdminServiceResponse {
             //    [Customer] => stdClass Object
             //        (
             //            [CoAddress] => c/o Eriksson, Erik
-            //            [CompanyIdentity] => 
+            //            [CompanyIdentity] =>
             //            [CountryCode] => SE
             //            [CustomerType] => Individual
-            //            [Email] => 
+            //            [Email] =>
             //            [FullName] => Persson, Tess T
-            //            [HouseNumber] => 
+            //            [HouseNumber] =>
             //            [IndividualIdentity] => stdClass Object
             //                (
-            //                    [BirthDate] => 
-            //                    [FirstName] => 
-            //                    [Initials] => 
-            //                    [LastName] => 
+            //                    [BirthDate] =>
+            //                    [FirstName] =>
+            //                    [Initials] =>
+            //                    [LastName] =>
             //                )
             //
             //            [Locality] => Stan
             //            [NationalIdNumber] => 194605092222
-            //            [PhoneNumber] => 
-            //            [PublicKey] => 
+            //            [PhoneNumber] =>
+            //            [PublicKey] =>
             //            [Street] => Testgatan 1
             //            [ZipCode] => 99999
             //        )
             //
             //    [CustomerId] => 1000117
-            //    [CustomerReference] => 
-            //    [DeliveryAddress] => 
+            //    [CustomerReference] =>
+            //    [DeliveryAddress] =>
             //    [IsPossibleToAdminister] => false
             //    [IsPossibleToCancel] => true
-            //    [Notes] => 
+            //    [Notes] =>
             //    [OrderDeliveryStatus] => Created
             //    [OrderRows] => stdClass Object
             //        (
@@ -144,64 +144,64 @@ class GetOrdersResponse extends AdminServiceResponse {
             //                (
             //                    [0] => stdClass Object
             //                        (
-            //                            [ArticleNumber] => 
+            //                            [ArticleNumber] =>
             //                            [Description] => Dyr produkt 25%
             //                            [DiscountPercent] => 0.00
             //                            [NumberOfUnits] => 2.00
             //                            [PriceIncludingVat] => false
             //                            [PricePerUnit] => 2000.00
-            //                            [Unit] => 
+            //                            [Unit] =>
             //                            [VatPercent] => 25.00
-            //                            [CreditInvoiceId] => 
-            //                            [InvoiceId] => 
+            //                            [CreditInvoiceId] =>
+            //                            [InvoiceId] =>
             //                            [RowNumber] => 1
             //                            [Status] => NotDelivered
             //                        )
             //
             //                    [1] => stdClass Object
             //                        (
-            //                            [ArticleNumber] => 
+            //                            [ArticleNumber] =>
             //                            [Description] => Testprodukt 1kr 25%
             //                            [DiscountPercent] => 0.00
             //                            [NumberOfUnits] => 1.00
             //                            [PriceIncludingVat] => false
             //                            [PricePerUnit] => 1.00
-            //                            [Unit] => 
+            //                            [Unit] =>
             //                            [VatPercent] => 25.00
-            //                            [CreditInvoiceId] => 
-            //                            [InvoiceId] => 
+            //                            [CreditInvoiceId] =>
+            //                            [InvoiceId] =>
             //                            [RowNumber] => 2
             //                            [Status] => NotDelivered
             //                        )
             //
             //                    [2] => stdClass Object
             //                        (
-            //                            [ArticleNumber] => 
+            //                            [ArticleNumber] =>
             //                            [Description] => Fastpris (Fast fraktpris)
             //                            [DiscountPercent] => 0.00
             //                            [NumberOfUnits] => 1.00
             //                            [PriceIncludingVat] => false
             //                            [PricePerUnit] => 4.00
-            //                            [Unit] => 
+            //                            [Unit] =>
             //                            [VatPercent] => 25.00
-            //                            [CreditInvoiceId] => 
-            //                            [InvoiceId] => 
+            //                            [CreditInvoiceId] =>
+            //                            [InvoiceId] =>
             //                            [RowNumber] => 3
             //                            [Status] => NotDelivered
             //                        )
             //
             //                    [3] => stdClass Object
             //                        (
-            //                            [ArticleNumber] => 
+            //                            [ArticleNumber] =>
             //                            [Description] => Svea Fakturaavgift:: 20.00kr (SE)
             //                            [DiscountPercent] => 0.00
             //                            [NumberOfUnits] => 1.00
             //                            [PriceIncludingVat] => false
             //                            [PricePerUnit] => 20.00
-            //                            [Unit] => 
+            //                            [Unit] =>
             //                            [VatPercent] => 0.00
-            //                            [CreditInvoiceId] => 
-            //                            [InvoiceId] => 
+            //                            [CreditInvoiceId] =>
+            //                            [InvoiceId] =>
             //                            [RowNumber] => 4
             //                            [Status] => NotDelivered
             //                        )
@@ -212,12 +212,12 @@ class GetOrdersResponse extends AdminServiceResponse {
             //
             //    [OrderStatus] => Active
             //    [OrderType] => Invoice
-            //    [PaymentPlanDetails] => 
-            //    [PendingReasons] => 
+            //    [PaymentPlanDetails] =>
+            //    [PendingReasons] =>
             //    [SveaOrderId] => 348629
             //    [SveaWillBuy] => true
             //)
-                
+
                 $this->customer = new \Svea\IndividualCustomer;
 
                 $this->customer->setNationalIdNumber($order->Customer->NationalIdNumber);
@@ -237,12 +237,12 @@ class GetOrdersResponse extends AdminServiceResponse {
             }
 
             if( $order->Customer->CustomerType === "Company" ) {
-                
+
             //stdClass Object
             //(
-            //    [ChangedDate] => 
+            //    [ChangedDate] =>
             //    [ClientId] => 79021
-            //    [ClientOrderId] => 
+            //    [ClientOrderId] =>
             //    [CreatedDate] => 2014-12-29T16:41:58.897
             //    [CreditReportStatus] => stdClass Object
             //        (
@@ -256,30 +256,30 @@ class GetOrdersResponse extends AdminServiceResponse {
             //            [CoAddress] => c/o Eriksson, Erik
             //            [CompanyIdentity] => stdClass Object
             //                (
-            //                    [CompanyIdentification] => 
-            //                    [CompanyVatNumber] => 
+            //                    [CompanyIdentification] =>
+            //                    [CompanyVatNumber] =>
             //                )
             //
             //            [CountryCode] => SE
             //            [CustomerType] => Company
-            //            [Email] => 
+            //            [Email] =>
             //            [FullName] => Persson, Tess T
-            //            [HouseNumber] => 
-            //            [IndividualIdentity] => 
+            //            [HouseNumber] =>
+            //            [IndividualIdentity] =>
             //            [Locality] => Stan
             //            [NationalIdNumber] => 164608142222
-            //            [PhoneNumber] => 
-            //            [PublicKey] => 
+            //            [PhoneNumber] =>
+            //            [PublicKey] =>
             //            [Street] => Testgatan 1
             //            [ZipCode] => 99999
             //        )
             //
             //    [CustomerId] => 1000119
-            //    [CustomerReference] => 
-            //    [DeliveryAddress] => 
+            //    [CustomerReference] =>
+            //    [DeliveryAddress] =>
             //    [IsPossibleToAdminister] => false
             //    [IsPossibleToCancel] => true
-            //    [Notes] => 
+            //    [Notes] =>
             //    [OrderDeliveryStatus] => Created
             //    [OrderRows] => stdClass Object
             //        (
@@ -295,8 +295,8 @@ class GetOrdersResponse extends AdminServiceResponse {
             //                            [PricePerUnit] => 100.00
             //                            [Unit] => st
             //                            [VatPercent] => 25.00
-            //                            [CreditInvoiceId] => 
-            //                            [InvoiceId] => 
+            //                            [CreditInvoiceId] =>
+            //                            [InvoiceId] =>
             //                            [RowNumber] => 1
             //                            [Status] => NotDelivered
             //                        )
@@ -311,8 +311,8 @@ class GetOrdersResponse extends AdminServiceResponse {
             //                            [PricePerUnit] => 1000.00
             //                            [Unit] => st
             //                            [VatPercent] => 25.00
-            //                            [CreditInvoiceId] => 
-            //                            [InvoiceId] => 
+            //                            [CreditInvoiceId] =>
+            //                            [InvoiceId] =>
             //                            [RowNumber] => 2
             //                            [Status] => NotDelivered
             //                        )
@@ -323,11 +323,11 @@ class GetOrdersResponse extends AdminServiceResponse {
             //
             //    [OrderStatus] => Active
             //    [OrderType] => Invoice
-            //    [PaymentPlanDetails] => 
-            //    [PendingReasons] => 
+            //    [PaymentPlanDetails] =>
+            //    [PendingReasons] =>
             //    [SveaOrderId] => 499329
             //    [SveaWillBuy] => true
-            //)                
+            //)
                 $this->customer = new \Svea\CompanyCustomer;
 
                 $this->customer->setNationalIdNumber($order->Customer->NationalIdNumber);
