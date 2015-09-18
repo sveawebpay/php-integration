@@ -6,6 +6,8 @@ The changes will be included in the next release.
 
 
 
+Note: Below need not to be done as long as the php-doc generated site is not used.
+
 To update the github pages documentation site (sveawebpay.github.io/php-integration):
 2015-08-03 the link to the generated php-doc site where outcommented from the main page README.md
 because we want integrators to use our api described in the gh-pages, and not integrate inside the lib.

@@ -295,7 +295,7 @@ class WebPayAdmin {
      * Then use either updateInvoiceOrder() or updatePaymentPlanOrder() to get a request object, which ever
      * matches the payment method used in the original order.
      *
-     * Calling doRequest() on the request object will send the request to Svea and return UpdateOrderRowsResponse.
+     * Calling doRequest() on the request object will send the request to Svea and return UpdateOrderResponse.
      *
      * ...
      *     $request = WebPayAdmin.updateOrder($config)
