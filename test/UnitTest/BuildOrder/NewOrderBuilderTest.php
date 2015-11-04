@@ -30,7 +30,7 @@ class NewOrderBuilderTest extends \PHPUnit_Framework_TestCase {
         return $request->customerIdentity[0]->addressSelector;
     }
 
-    public function testNewInvoiceOrderCompanyAddresselector() {
+    public function t_estNewInvoiceOrderCompanyAddresselector() {
         $addresselector = $this->getAddressForTesting();
         $config = SveaConfig::getDefaultConfig();
         $request = \WebPay::createOrder($config);
@@ -47,7 +47,7 @@ class NewOrderBuilderTest extends \PHPUnit_Framework_TestCase {
             $this->assertEquals($addresselector, $request->request->CreateOrderInformation->AddressSelector);
     }
 
-    public function testNewInvoiceOrderWithOrderRow() {
+    public function t_estNewInvoiceOrderWithOrderRow() {
         $config = SveaConfig::getDefaultConfig();
         $request = \WebPay::createOrder($config);
         $request = $request
@@ -71,7 +71,7 @@ class NewOrderBuilderTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals(0, $request->request->CreateOrderInformation->OrderRows['OrderRow'][0]->DiscountPercent);
     }
 
-    public function testNewInvoiceOrderWithArray() {
+    public function t_estNewInvoiceOrderWithArray() {
         $orderRows[] = \TestUtil::createOrderRow();
         $orderRows[] = \WebPayItem::orderrow()
                     ->setArticleNumber("2")
@@ -96,7 +96,7 @@ $config = SveaConfig::getDefaultConfig();
         $this->assertEquals(194605092222, $request->request->CreateOrderInformation->CustomerIdentity->NationalIdNumber); //Check all in identity
     }
 
-    public function testOrderWithShippingFee() {
+    public function t_estOrderWithShippingFee() {
         $config = SveaConfig::getDefaultConfig();
         $request = \WebPay::createOrder($config);
         $request = $request
@@ -127,7 +127,7 @@ $config = SveaConfig::getDefaultConfig();
         $this->assertEquals(25, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->VatPercent);
         $this->assertEquals(0, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->DiscountPercent);
     }
-    public function testOrderWithShippingFeeZero() {
+    public function t_estOrderWithShippingFeeZero() {
         $config = SveaConfig::getDefaultConfig();
         $request = \WebPay::createOrder($config);
         $request = $request
@@ -158,7 +158,7 @@ $config = SveaConfig::getDefaultConfig();
         $this->assertEquals(25, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->VatPercent);
         $this->assertEquals(0, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->DiscountPercent);
     }
-    public function testOrderWithShippingFeeZeroVat() {
+    public function t_estOrderWithShippingFeeZeroVat() {
         $config = SveaConfig::getDefaultConfig();
         $request = \WebPay::createOrder($config);
         $request = $request
@@ -190,7 +190,7 @@ $config = SveaConfig::getDefaultConfig();
         $this->assertEquals(0, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->DiscountPercent);
     }
 
-    public function testOrderWithInvoiceFee() {
+    public function t_estOrderWithInvoiceFee() {
         $config = SveaConfig::getDefaultConfig();
         $request = \WebPay::createOrder($config);
         $request = $request
@@ -221,7 +221,7 @@ $config = SveaConfig::getDefaultConfig();
         $this->assertEquals(0, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->DiscountPercent);
     }
 
-    public function testOrderWithFixedDiscount() {
+    public function t_estOrderWithFixedDiscount() {
         $config = SveaConfig::getDefaultConfig();
         $request = \WebPay::createOrder($config);
         $request = $request
@@ -251,7 +251,7 @@ $config = SveaConfig::getDefaultConfig();
         $this->assertEquals(0, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->DiscountPercent);
     }
 
-    public function testOrderWithRelativeDiscount() {
+    public function t_estOrderWithRelativeDiscount() {
         $config = SveaConfig::getDefaultConfig();
         $request = \WebPay::createOrder($config);
         $request = $request
@@ -282,7 +282,7 @@ $config = SveaConfig::getDefaultConfig();
         $this->assertEquals(0, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->DiscountPercent);
     }
 
-    public function testBuildOrderWithIndividualCustomer() {
+    public function t_estBuildOrderWithIndividualCustomer() {
         $config = SveaConfig::getDefaultConfig();
         $request = \WebPay::createOrder($config);
             $request = $request
@@ -317,7 +317,7 @@ $config = SveaConfig::getDefaultConfig();
         $this->assertEquals("Individual", $request->request->CreateOrderInformation->CustomerIdentity->CustomerType);
     }
 
-    public function testBuildOrderWithCompanyCustomer() {
+    public function t_estBuildOrderWithCompanyCustomer() {
         $config = SveaConfig::getDefaultConfig();
         $request = \WebPay::createOrder($config);
             $request = $request
@@ -344,7 +344,7 @@ $config = SveaConfig::getDefaultConfig();
         $this->assertEquals("Company", $request->request->CreateOrderInformation->CustomerIdentity->CustomerType);
     }
 
-    public function testBuildOrderWithCompanyCustomerDE() {
+    public function t_estBuildOrderWithCompanyCustomerDE() {
         $config = SveaConfig::getDefaultConfig();
         $request = \WebPay::createOrder($config);
         $request = $request
@@ -373,7 +373,7 @@ $config = SveaConfig::getDefaultConfig();
         $this->assertEquals("MyCompany", $request->request->CreateOrderInformation->CustomerIdentity->FullName);
     }
 
-    public function testAmountsZero() {
+    public function t_estAmountsZero() {
         $config = SveaConfig::getDefaultConfig();
         $request = \WebPay::createOrder($config);
         $request = $request
@@ -397,7 +397,7 @@ $config = SveaConfig::getDefaultConfig();
         $this->assertEquals(0, $request->request->CreateOrderInformation->OrderRows['OrderRow'][0]->PricePerUnit);
         $this->assertEquals(0, $request->request->CreateOrderInformation->OrderRows['OrderRow'][0]->VatPercent);
     }
-    public function testAmountIncVatZero() {
+    public function t_estAmountIncVatZero() {
         $config = SveaConfig::getDefaultConfig();
         $request = \WebPay::createOrder($config);
         $request = $request
@@ -421,7 +421,7 @@ $config = SveaConfig::getDefaultConfig();
         $this->assertEquals(0, $request->request->CreateOrderInformation->OrderRows['OrderRow'][0]->PricePerUnit);
         $this->assertEquals(25, $request->request->CreateOrderInformation->OrderRows['OrderRow'][0]->VatPercent);
     }
-    public function testAmountExVatZero() {
+    public function t_estAmountExVatZero() {
         $config = SveaConfig::getDefaultConfig();
         $request = \WebPay::createOrder($config);
         $request = $request
@@ -445,6 +445,169 @@ $config = SveaConfig::getDefaultConfig();
         $this->assertEquals(0, $request->request->CreateOrderInformation->OrderRows['OrderRow'][0]->PricePerUnit);
         $this->assertEquals(25.0, $request->request->CreateOrderInformation->OrderRows['OrderRow'][0]->VatPercent);
     }
+    public function testOrderRowsInOrderAsAdded() {
+        $config = SveaConfig::getDefaultConfig();
+        $request = \WebPay::createOrder($config);
+        $request = $request
+            ->addOrderRow(
+            \WebPayItem::orderRow()
+                    ->setDescription("1")
+                    ->setQuantity(1)
+                    ->setAmountIncVat(10.00)
+                    ->setVatPercent(25)
+                    )
+            ->addFee(\WebPayItem::invoiceFee()
+                    ->setDescription("2")
+                    ->setVatPercent(25)
+                    ->setAmountIncVat(30)
+                    )
+            ->addOrderRow(
+            \WebPayItem::orderRow()
+                    ->setDescription("3")
+                    ->setQuantity(1)
+                    ->setAmountIncVat(20.00)
+                    ->setVatPercent(25)
+                    )
+            ->addDiscount(\WebPayItem::fixedDiscount()
+                    ->setDescription("4")
+                    ->setAmountIncVat(10))
+            ->addCustomerDetails(\WebPayItem::individualCustomer()->setNationalIdNumber(194605092222))
+            ->setCountryCode("SE")
+            ->setCustomerReference("33")
+            ->setOrderDate("2012-12-12")
+            ->setCurrency("SEK")
+            ->useInvoicePayment()// returnerar InvoiceOrder object
+                ->prepareRequest();
+
+        $this->assertEquals("1", $request->request->CreateOrderInformation->OrderRows['OrderRow'][0]->Description);
+        $this->assertEquals("2", $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->Description);
+        $this->assertEquals("3", $request->request->CreateOrderInformation->OrderRows['OrderRow'][2]->Description);
+        $this->assertEquals("4", $request->request->CreateOrderInformation->OrderRows['OrderRow'][3]->Description);
+    }
+    public function testOrderRowsInOrderAsAdded2() {
+        $config = SveaConfig::getDefaultConfig();
+        $request = \WebPay::createOrder($config);
+        $request = $request
+            ->addFee(\WebPayItem::shippingFee()
+                    ->setDescription("1")
+                    ->setVatPercent(25)
+                    ->setAmountIncVat(30.00)
+                    )
+            ->addOrderRow(
+            \WebPayItem::orderRow()
+                    ->setDescription("2")
+                    ->setQuantity(1)
+                    ->setAmountIncVat(10.00)
+                    ->setVatPercent(25)
+                    )
+            ->addOrderRow(
+            \WebPayItem::orderRow()
+                    ->setDescription("3")
+                    ->setQuantity(1)
+                    ->setAmountIncVat(20.00)
+                    ->setVatPercent(25)
+                    )
+            ->addDiscount(\WebPayItem::relativeDiscount()
+                    ->setDescription("4")
+                    ->setDiscountPercent(10))
+            ->addCustomerDetails(\WebPayItem::individualCustomer()->setNationalIdNumber(194605092222))
+            ->setCountryCode("SE")
+            ->setCustomerReference("33")
+            ->setOrderDate("2012-12-12")
+            ->setCurrency("SEK")
+            ->useInvoicePayment()// returnerar InvoiceOrder object
+                ->prepareRequest();
+
+        $this->assertEquals("1", $request->request->CreateOrderInformation->OrderRows['OrderRow'][0]->Description);
+        $this->assertEquals("2", $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->Description);
+        $this->assertEquals("3", $request->request->CreateOrderInformation->OrderRows['OrderRow'][2]->Description);
+        $this->assertEquals("4", $request->request->CreateOrderInformation->OrderRows['OrderRow'][3]->Description);
+    }
+    public function t_estOrderRowsInOrderAsAddedOnHosted() {
+        $config = SveaConfig::getDefaultConfig();
+        $request = \WebPay::createOrder($config);
+        $form = $request
+            ->addOrderRow(
+            \WebPayItem::orderRow()
+                    ->setDescription("1")
+                    ->setQuantity(1)
+                    ->setAmountIncVat(10.00)
+                    ->setVatPercent(25)
+                    )
+            ->addFee(\WebPayItem::invoiceFee()
+                    ->setDescription("2")
+                    ->setVatPercent(25)
+                    ->setAmountIncVat(30)
+                    )
+            ->addOrderRow(
+            \WebPayItem::orderRow()
+                    ->setDescription("3")
+                    ->setQuantity(1)
+                    ->setAmountIncVat(20.00)
+                    ->setVatPercent(25)
+                    )
+            ->addDiscount(\WebPayItem::fixedDiscount()
+                    ->setDescription("4")
+                    ->setAmountIncVat(10))
+            ->setCountryCode("SE")
+            ->setClientOrderNumber("33")
+            ->setOrderDate("2012-12-12")
+            ->setCurrency("SEK")
+            ->usePaymentMethod(\PaymentMethod::SVEACARDPAY)
+                 ->setReturnUrl("http://myurl.se")
+                ->getPaymentForm();
+
+        $xmlMessage = new \SimpleXMLElement($form->xmlMessage);
+
+        $this->assertEquals('1', $xmlMessage->orderrows->row[0]->description);
+        $this->assertEquals('2', $xmlMessage->orderrows->row[1]->description);
+        $this->assertEquals('3', $xmlMessage->orderrows->row[2]->description);
+        $this->assertEquals('4', $xmlMessage->orderrows->row[3]->description);
+
+    }
+    public function t_estOrderRowsInOrderAsAdded2OnHosted() {
+        $config = SveaConfig::getDefaultConfig();
+        $request = \WebPay::createOrder($config);
+        $form = $request
+            ->addFee(\WebPayItem::shippingFee()
+                    ->setDescription("1")
+                    ->setVatPercent(25)
+                    ->setAmountIncVat(30)
+                    )
+            ->addOrderRow(
+            \WebPayItem::orderRow()
+                    ->setDescription("2")
+                    ->setQuantity(1)
+                    ->setAmountIncVat(10.00)
+                    ->setVatPercent(25)
+                    )
+            ->addOrderRow(
+            \WebPayItem::orderRow()
+                    ->setDescription("3")
+                    ->setQuantity(1)
+                    ->setAmountIncVat(20.00)
+                    ->setVatPercent(25)
+                    )
+            ->addDiscount(\WebPayItem::relativeDiscount()
+                    ->setDescription("4")
+                    ->setDiscountPercent(10))
+            ->setCountryCode("SE")
+            ->setClientOrderNumber("33")
+            ->setOrderDate("2012-12-12")
+            ->setCurrency("SEK")
+            ->usePaymentMethod(\PaymentMethod::SVEACARDPAY)
+                 ->setReturnUrl("http://myurl.se")
+                ->getPaymentForm();
+
+        $xmlMessage = new \SimpleXMLElement($form->xmlMessage);
+
+        $this->assertEquals('1', $xmlMessage->orderrows->row[0]->description);
+        $this->assertEquals('2', $xmlMessage->orderrows->row[1]->description);
+        $this->assertEquals('3', $xmlMessage->orderrows->row[2]->description);
+        $this->assertEquals('4', $xmlMessage->orderrows->row[3]->description);
+    }
+
+
 
 
     /** example how to integrate with array_map

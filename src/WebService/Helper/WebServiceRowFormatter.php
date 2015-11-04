@@ -77,11 +77,28 @@ class WebServiceRowFormatter {
             $this->priceIncludingVat = $this->resendOrderVat ? FALSE : TRUE;
         }
 
-        $this->formatOrderRows();
-        $this->formatShippingFeeRows();
-        $this->formatInvoiceFeeRows();
-        $this->formatFixedDiscountRows();
-        $this->formatRelativeDiscountRows();
+        foreach ($this->order->Rows as $row) {
+            switch (get_class($row)) {
+                case 'Svea\OrderRow':
+                    $this->formatOrderRows($row);
+                    break;
+                case 'Svea\ShippingFee':
+                    $this->formatShippingFeeRows($row);
+                    break;
+                case 'Svea\InvoiceFee':
+                    $this->formatInvoiceFeeRows($row);
+                    break;
+                case 'Svea\FixedDiscount':
+                    $this->formatFixedDiscountRows($row);
+                    break;
+                case 'Svea\RelativeDiscount':
+                    $this->formatRelativeDiscountRows($row);
+                    break;
+                default:
+                    break;
+            }
+        }
+
 
         return $this->newRows;
     }
@@ -142,8 +159,8 @@ class WebServiceRowFormatter {
         }
     }
 
-    private function formatOrderRows() {
-        foreach ($this->order->orderRows as $row) {
+    private function formatOrderRows($row) {
+//        foreach ($this->order->orderRows as $row) {
 
             $orderRow = new WebServiceSoap\SveaOrderRow();
 
@@ -179,7 +196,7 @@ class WebServiceRowFormatter {
             }
 
             $this->newRows[] = $orderRow;
-        }
+//        }
     }
 
     /**
@@ -209,12 +226,12 @@ class WebServiceRowFormatter {
         return $description;
     }
 
-    private function formatShippingFeeRows() {
-        if (!isset($this->order->shippingFeeRows)) {
-            return;
-        }
-
-        foreach ($this->order->shippingFeeRows as $row) {
+    private function formatShippingFeeRows($row) {
+//        if (!isset($this->order->shippingFeeRows)) {
+//            return;
+//        }
+//
+//        foreach ($this->order->shippingFeeRows as $row) {
 
             $orderRow = new WebServiceSoap\SveaOrderRow();
 
@@ -251,15 +268,15 @@ class WebServiceRowFormatter {
                 $orderRow->PriceIncludingVat = $this->priceIncludingVat ? TRUE : FALSE;
             }
             $this->newRows[] = $orderRow;
-        }
+//        }
     }
 
-    private function formatInvoiceFeeRows() {
-        if (!isset($this->order->invoiceFeeRows)) {
-            return;
-        }
-
-        foreach ($this->order->invoiceFeeRows as $row) {
+    private function formatInvoiceFeeRows($row) {
+//        if (!isset($this->order->invoiceFeeRows)) {
+//            return;
+//        }
+//
+//        foreach ($this->order->invoiceFeeRows as $row) {
 
             $orderRow = new WebServiceSoap\SveaOrderRow();
 
@@ -294,7 +311,7 @@ class WebServiceRowFormatter {
                 $orderRow->PriceIncludingVat = $this->priceIncludingVat ? TRUE : FALSE;
             }
             $this->newRows[] = $orderRow;
-        }
+//        }
     }
 
     /**
@@ -344,7 +361,7 @@ class WebServiceRowFormatter {
     /**
      * Formats FixedDiscount rows specified with setAmountExVat() only.
      * Returns one or more discount rows, one for each vat rate present in the order.
-     * If the 
+     * If the
      *
      * @param FixedDiscount $discountRow
      * @return \Svea\SveaOrderRow
@@ -386,18 +403,18 @@ class WebServiceRowFormatter {
                 $orderRow->VatPercent = $vatRate;
                 $orderRow->PriceIncludingVat = FALSE;
             }
-            
+
             $splitRows[] = $orderRow;
         }
 
         return $splitRows;
     }
 
-    private function formatFixedDiscountRows() {
-        if (!isset($this->order->fixedDiscountRows)) {
-            return;
-        }
-        foreach ($this->order->fixedDiscountRows as $row) {
+    private function formatFixedDiscountRows($row) {
+//        if (!isset($this->order->fixedDiscountRows)) {
+//            return;
+//        }
+//        foreach ($this->order->fixedDiscountRows as $row) {
 
             // only amountIncVat (i.e. amount) was specified:
             if( isset($row->amount) && !isset($row->vatPercent) && !isset($row->amountExVat) ) {
@@ -466,15 +483,15 @@ class WebServiceRowFormatter {
 
                     $this->newRows[] = $orderRow;
             }
-        }
+//        }
     }
 
-    private function formatRelativeDiscountRows() {
-        if (!isset($this->order->relativeDiscountRows)) {
-            return;
-        }
-
-        foreach ($this->order->relativeDiscountRows as $row) {
+    private function formatRelativeDiscountRows($row) {
+//        if (!isset($this->order->relativeDiscountRows)) {
+//            return;
+//        }
+//
+//        foreach ($this->order->relativeDiscountRows as $row) {
 
             foreach( $this->totalAmountPerVatRateIncVat as $vatRate => $amountAtThisVatRateIncVat ) {
                 $orderRow = new WebServiceSoap\SveaOrderRow();
@@ -504,7 +521,7 @@ class WebServiceRowFormatter {
 
                 $this->newRows[] = $orderRow;
             }
-        }
+//        }
     }
 
     private function determineVatFlag() {
@@ -550,11 +567,11 @@ class WebServiceRowFormatter {
             }else {
                 $incVat++;
             }
-        }         
+        }
 
         //relative discount
         // ignored, as relative discount doesn't use setAmountExVat/-IncVat at all
-        
+
         //if at least one of the non-discount rows are defined exvat, need to use set priceIncludingVat to false
         if ($exVat >= 1) {
             $this->priceIncludingVat = FALSE;
