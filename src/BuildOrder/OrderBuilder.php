@@ -36,7 +36,7 @@ class OrderBuilder {
     public $relativeDiscountRows = array();
 
     /** @var type array of all rows in the order they are set */
-    public $Rows = array();
+    public $rows = array();
 
     /** @var string Country code as described by ISO 3166-1: "SE", "NO", "DK", "FI","DE", "NL" */
     public $countryCode;
@@ -88,11 +88,11 @@ class OrderBuilder {
         if (is_array($itemOrderRowObject)) {
             foreach ($itemOrderRowObject as $row) {
                 array_push($this->orderRows, $row);
-                array_push($this->Rows, $row);
+                array_push($this->rows, $row);
             }
         } else {
              array_push($this->orderRows, $itemOrderRowObject);
-             array_push($this->Rows, $itemOrderRowObject);
+             array_push($this->rows, $itemOrderRowObject);
         }
        return $this;
     }
@@ -106,7 +106,7 @@ class OrderBuilder {
     public function addFee($itemFeeObject) {
          if (is_array($itemFeeObject)) {
             foreach ($itemFeeObject as $row) {
-                array_push($this->Rows, $row);
+                array_push($this->rows, $row);
                 if (get_class($row) == "Svea\ShippingFee") {
                     array_push($this->shippingFeeRows, $row);
                 }
@@ -115,7 +115,7 @@ class OrderBuilder {
                 }
             }
         } else {
-             array_push($this->Rows, $itemFeeObject);
+             array_push($this->rows, $itemFeeObject);
              if (get_class($itemFeeObject) == "Svea\ShippingFee") {
                      array_push($this->shippingFeeRows, $itemFeeObject);
             }
@@ -140,7 +140,7 @@ class OrderBuilder {
     public function addDiscount($itemDiscountObject) {
         if (is_array($itemDiscountObject)) {
             foreach ($itemDiscountObject as $row) {
-                array_push($this->Rows, $row);
+                array_push($this->rows, $row);
                 if (get_class($row) == "Svea\FixedDiscount") {
                     array_push($this->fixedDiscountRows, $row);
                 }
@@ -150,7 +150,7 @@ class OrderBuilder {
             }
         }
         else {
-             array_push($this->Rows, $itemDiscountObject);
+             array_push($this->rows, $itemDiscountObject);
             if (get_class($itemDiscountObject) == "Svea\FixedDiscount") {
                 array_push($this->fixedDiscountRows, $itemDiscountObject);
             }

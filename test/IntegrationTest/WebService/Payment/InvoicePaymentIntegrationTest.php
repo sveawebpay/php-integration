@@ -320,7 +320,6 @@ class InvoicePaymentIntegrationTest extends PHPUnit_Framework_TestCase {
 
         // asserts on request
         $request = $order->useInvoicePayment()->prepareRequest();
-        print_r($request);
         $newRows = $request->request->CreateOrderInformation->OrderRows['OrderRow'];
 
         $newRow = $newRows[0];
