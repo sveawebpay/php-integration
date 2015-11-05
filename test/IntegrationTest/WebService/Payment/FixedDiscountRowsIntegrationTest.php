@@ -10,14 +10,14 @@ require_once $root . '/../../../TestUtil.php';
  */
 class FixedDiscountRowsIntegrationTest extends PHPUnit_Framework_TestCase {
 
-    // This file contains the same tests as UnitTest/WebService/Payment/FixedDiscountRowsIntegrationTest 
+    // This file contains the same tests as UnitTest/WebService/Payment/FixedDiscountRowsIntegrationTest
     // but also sends the create order request to the service and checks response for success and order amount.
-        
+
     /**
-     * Tests that orders created with a mix of order and fee rows specified as exvat/incvat and vatpercent 
+     * Tests that orders created with a mix of order and fee rows specified as exvat/incvat and vatpercent
      * are sent to the webservice using the correct PriceIncludingVat flag.
-     * 
-     * Also tests that fixed discount rows specified as amount inc/exvat only are split correctly across 
+     *
+     * Also tests that fixed discount rows specified as amount inc/exvat only are split correctly across
      * all the order vat rates, and that the split discount rows are sent to the service using the correct
      * PriceIncludingVat flag.
      */
@@ -57,7 +57,7 @@ class FixedDiscountRowsIntegrationTest extends PHPUnit_Framework_TestCase {
         ;
         return $order;
     }
-    
+
     // order with order/fee rows mixed exvat+vat / incvat+vat should be sent with PriceIncludingVat = false
     public function test_mixed_order_row_and_shipping_fees_only_has_priceIncludingVat_false() {
         $order = FixedDiscountRowsIntegrationTest::create_mixed_exvat_and_incvat_order_and_fee_rows_order();
@@ -70,15 +70,15 @@ class FixedDiscountRowsIntegrationTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(30.00, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->PricePerUnit);
         $this->assertEquals(10, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->VatPercent);
         $this->assertEquals(false, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->PriceIncludingVat);
-        // all shipping fee rows
-        $this->assertEquals(16.00, $request->request->CreateOrderInformation->OrderRows['OrderRow'][2]->PricePerUnit);
+        // all invoice fee rows
+        $this->assertEquals(8.00, $request->request->CreateOrderInformation->OrderRows['OrderRow'][2]->PricePerUnit);
         $this->assertEquals(10, $request->request->CreateOrderInformation->OrderRows['OrderRow'][2]->VatPercent);
         $this->assertEquals(false, $request->request->CreateOrderInformation->OrderRows['OrderRow'][2]->PriceIncludingVat);
-        // all invoice fee rows
-        $this->assertEquals(8.00, $request->request->CreateOrderInformation->OrderRows['OrderRow'][3]->PricePerUnit);
+                // all shipping fee rows
+        $this->assertEquals(16.00, $request->request->CreateOrderInformation->OrderRows['OrderRow'][3]->PricePerUnit);
         $this->assertEquals(10, $request->request->CreateOrderInformation->OrderRows['OrderRow'][3]->VatPercent);
         $this->assertEquals(false, $request->request->CreateOrderInformation->OrderRows['OrderRow'][3]->PriceIncludingVat);
-        
+
         // check that service accepts order
         $response = $order->useInvoicePayment()->doRequest();
         $this->assertEquals( true, $response->accepted );
@@ -104,14 +104,15 @@ class FixedDiscountRowsIntegrationTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(30.00, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->PricePerUnit);
         $this->assertEquals(10, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->VatPercent);
         $this->assertEquals(false, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->PriceIncludingVat);
-        // all shipping fee rows
-        $this->assertEquals(16.00, $request->request->CreateOrderInformation->OrderRows['OrderRow'][2]->PricePerUnit);
+          // all invoice fee rows
+        $this->assertEquals(8.00, $request->request->CreateOrderInformation->OrderRows['OrderRow'][2]->PricePerUnit);
         $this->assertEquals(10, $request->request->CreateOrderInformation->OrderRows['OrderRow'][2]->VatPercent);
         $this->assertEquals(false, $request->request->CreateOrderInformation->OrderRows['OrderRow'][2]->PriceIncludingVat);
-        // all invoice fee rows
-        $this->assertEquals(8.00, $request->request->CreateOrderInformation->OrderRows['OrderRow'][3]->PricePerUnit);
+        // all shipping fee rows
+        $this->assertEquals(16.00, $request->request->CreateOrderInformation->OrderRows['OrderRow'][3]->PricePerUnit);
         $this->assertEquals(10, $request->request->CreateOrderInformation->OrderRows['OrderRow'][3]->VatPercent);
         $this->assertEquals(false, $request->request->CreateOrderInformation->OrderRows['OrderRow'][3]->PriceIncludingVat);
+
         // all discount rows
         // expected: fixedDiscount: 10 exvat => split across 10e *(60/60+30) @20% + 10e *(30/60+30) @10% => 6.67e @20% + 3.33e @10%
         $this->assertEquals(-6.67, \Svea\Helper::bround($request->request->CreateOrderInformation->OrderRows['OrderRow'][4]->PricePerUnit),2,PHP_ROUND_HALF_UP);//=WS
@@ -119,8 +120,8 @@ class FixedDiscountRowsIntegrationTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(false, $request->request->CreateOrderInformation->OrderRows['OrderRow'][4]->PriceIncludingVat);
         $this->assertEquals(-3.33, \Svea\Helper::bround($request->request->CreateOrderInformation->OrderRows['OrderRow'][5]->PricePerUnit),2,PHP_ROUND_HALF_UP); //=WS
         $this->assertEquals(10, $request->request->CreateOrderInformation->OrderRows['OrderRow'][5]->VatPercent);
-        $this->assertEquals(false, $request->request->CreateOrderInformation->OrderRows['OrderRow'][5]->PriceIncludingVat);    
-        
+        $this->assertEquals(false, $request->request->CreateOrderInformation->OrderRows['OrderRow'][5]->PriceIncludingVat);
+
         // check that service accepts order
         $response = $order->useInvoicePayment()->doRequest();
         $this->assertEquals( true, $response->accepted );
@@ -128,7 +129,7 @@ class FixedDiscountRowsIntegrationTest extends PHPUnit_Framework_TestCase {
         // r(60*1.20*1) + r(30*1.10*1) + r(16*1.10*1) + r(8*1.10*1) + r(-6.67*1.20*1) + r(-3.33*1.10*1) => 72.00+33.00+17.60+8.80-8.00-3.66 => 119.74
         $this->assertEquals( "119.74", $response->amount );
     }
-    
+
     // same order with discount incvat should be sent with PriceIncludingVat = false but with split discount rows based on order amounts inc vat
     public function test_mixed_order_with_fixedDiscount_as_incvat_only_has_priceIncludingVat_false() {
         $order = FixedDiscountRowsIntegrationTest::create_mixed_exvat_and_incvat_order_and_fee_rows_order();
@@ -149,12 +150,12 @@ class FixedDiscountRowsIntegrationTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(30.00, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->PricePerUnit);
         $this->assertEquals(10, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->VatPercent);
         $this->assertEquals(false, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->PriceIncludingVat);
-        // all shipping fee rows
-        $this->assertEquals(16.00, $request->request->CreateOrderInformation->OrderRows['OrderRow'][2]->PricePerUnit);
+        // all invoice fee rows
+        $this->assertEquals(8.00, $request->request->CreateOrderInformation->OrderRows['OrderRow'][2]->PricePerUnit);
         $this->assertEquals(10, $request->request->CreateOrderInformation->OrderRows['OrderRow'][2]->VatPercent);
         $this->assertEquals(false, $request->request->CreateOrderInformation->OrderRows['OrderRow'][2]->PriceIncludingVat);
-        // all invoice fee rows
-        $this->assertEquals(8.00, $request->request->CreateOrderInformation->OrderRows['OrderRow'][3]->PricePerUnit);
+         // all shipping fee rows
+        $this->assertEquals(16.00, $request->request->CreateOrderInformation->OrderRows['OrderRow'][3]->PricePerUnit);
         $this->assertEquals(10, $request->request->CreateOrderInformation->OrderRows['OrderRow'][3]->VatPercent);
         $this->assertEquals(false, $request->request->CreateOrderInformation->OrderRows['OrderRow'][3]->PriceIncludingVat);
         // all discount rows
@@ -164,15 +165,15 @@ class FixedDiscountRowsIntegrationTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(false, $request->request->CreateOrderInformation->OrderRows['OrderRow'][4]->PriceIncludingVat);
         $this->assertEquals(-2.86, \Svea\Helper::bround($request->request->CreateOrderInformation->OrderRows['OrderRow'][5]->PricePerUnit),2,PHP_ROUND_HALF_UP);//=WS
         $this->assertEquals(10, $request->request->CreateOrderInformation->OrderRows['OrderRow'][5]->VatPercent);
-        $this->assertEquals(false, $request->request->CreateOrderInformation->OrderRows['OrderRow'][5]->PriceIncludingVat);    
-        
+        $this->assertEquals(false, $request->request->CreateOrderInformation->OrderRows['OrderRow'][5]->PriceIncludingVat);
+
         // check that service accepts order
         $response = $order->useInvoicePayment()->doRequest();
         $this->assertEquals( true, $response->accepted );
         // r() is round($val, 2, PHP_ROUND_HALF_EVEN), i.e. bankers rounding
         // r(60*1.20*1) + r(30*1.10*1) + r(16*1.10*1) + r(8*1.10*1) + r(-5.72*1.20*1) + r(-2.85*1.10*1) => 72.00+33.00+17.60+8.80-6.85-3.15 => 121.40
         $this->assertEquals( "121.40", $response->amount );
-    } 
+    }
     // same order with discount exvat+vat should be sent with PriceIncludingVat = false with one discount row amount based on given exvat + vat
     public function test_mixed_order_with_fixedDiscount_as_exvat_and_vatpercent_has_priceIncludingVat_false() {
         $order = FixedDiscountRowsIntegrationTest::create_mixed_exvat_and_incvat_order_and_fee_rows_order();
@@ -193,28 +194,28 @@ class FixedDiscountRowsIntegrationTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(30.00, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->PricePerUnit);
         $this->assertEquals(10, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->VatPercent);
         $this->assertEquals(false, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->PriceIncludingVat);
-        // all shipping fee rows
-        $this->assertEquals(16.00, $request->request->CreateOrderInformation->OrderRows['OrderRow'][2]->PricePerUnit);
+        // all invoice fee rows
+        $this->assertEquals(8.00, $request->request->CreateOrderInformation->OrderRows['OrderRow'][2]->PricePerUnit);
         $this->assertEquals(10, $request->request->CreateOrderInformation->OrderRows['OrderRow'][2]->VatPercent);
         $this->assertEquals(false, $request->request->CreateOrderInformation->OrderRows['OrderRow'][2]->PriceIncludingVat);
-        // all invoice fee rows
-        $this->assertEquals(8.00, $request->request->CreateOrderInformation->OrderRows['OrderRow'][3]->PricePerUnit);
+           // all shipping fee rows
+        $this->assertEquals(16.00, $request->request->CreateOrderInformation->OrderRows['OrderRow'][3]->PricePerUnit);
         $this->assertEquals(10, $request->request->CreateOrderInformation->OrderRows['OrderRow'][3]->VatPercent);
         $this->assertEquals(false, $request->request->CreateOrderInformation->OrderRows['OrderRow'][3]->PriceIncludingVat);
         // all discount rows
-        // expected: fixedDiscount: 11 incvat @10% => -10e @10% 
+        // expected: fixedDiscount: 11 incvat @10% => -10e @10%
         $this->assertEquals(-10, $request->request->CreateOrderInformation->OrderRows['OrderRow'][4]->PricePerUnit);
         $this->assertEquals(10, $request->request->CreateOrderInformation->OrderRows['OrderRow'][4]->VatPercent);
         $this->assertEquals(false, $request->request->CreateOrderInformation->OrderRows['OrderRow'][4]->PriceIncludingVat);
         $this->assertFalse( isset($request->request->CreateOrderInformation->OrderRows['OrderRow'][5]) );
-  
+
         // check that service accepts order
         $response = $order->useInvoicePayment()->doRequest();
         $this->assertEquals( true, $response->accepted );
         // r() is round($val, 2, PHP_ROUND_HALF_EVEN), i.e. bankers rounding
         // r(60*1.20*1) + r(30*1.10*1) + r(16*1.10*1) + r(8*1.10*1) + r(-10*1.10*1) = 72+33+17.60 + 8.80 -11.00 = 120.40
         $this->assertEquals( "120.40", $response->amount );
-    } 
+    }
     // same order with discount incvat+vat should be sent with PriceIncludingVat = false with one discount row amount based on given incvat + vat
     public function test_mixed_order_with_fixedDiscount_as_incvat_and_vatpercent_has_priceIncludingVat_false() {
         $order = FixedDiscountRowsIntegrationTest::create_mixed_exvat_and_incvat_order_and_fee_rows_order();
@@ -235,29 +236,29 @@ class FixedDiscountRowsIntegrationTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(30.00, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->PricePerUnit);
         $this->assertEquals(10, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->VatPercent);
         $this->assertEquals(false, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->PriceIncludingVat);
-        // all shipping fee rows
-        $this->assertEquals(16.00, $request->request->CreateOrderInformation->OrderRows['OrderRow'][2]->PricePerUnit);
+        // all invoice fee rows
+        $this->assertEquals(8.00, $request->request->CreateOrderInformation->OrderRows['OrderRow'][2]->PricePerUnit);
         $this->assertEquals(10, $request->request->CreateOrderInformation->OrderRows['OrderRow'][2]->VatPercent);
         $this->assertEquals(false, $request->request->CreateOrderInformation->OrderRows['OrderRow'][2]->PriceIncludingVat);
-        // all invoice fee rows
-        $this->assertEquals(8.00, $request->request->CreateOrderInformation->OrderRows['OrderRow'][3]->PricePerUnit);
+         // all shipping fee rows
+        $this->assertEquals(16.00, $request->request->CreateOrderInformation->OrderRows['OrderRow'][3]->PricePerUnit);
         $this->assertEquals(10, $request->request->CreateOrderInformation->OrderRows['OrderRow'][3]->VatPercent);
         $this->assertEquals(false, $request->request->CreateOrderInformation->OrderRows['OrderRow'][3]->PriceIncludingVat);
         // all discount rows
-        // expected: fixedDiscount: 11 incvat @10% => -10e @10% 
+        // expected: fixedDiscount: 11 incvat @10% => -10e @10%
         $this->assertEquals(-10, $request->request->CreateOrderInformation->OrderRows['OrderRow'][4]->PricePerUnit);
         $this->assertEquals(10, $request->request->CreateOrderInformation->OrderRows['OrderRow'][4]->VatPercent);
         $this->assertEquals(false, $request->request->CreateOrderInformation->OrderRows['OrderRow'][4]->PriceIncludingVat);
         $this->assertFalse( isset($request->request->CreateOrderInformation->OrderRows['OrderRow'][5]) );
-  
+
         // check that service accepts order
         $response = $order->useInvoicePayment()->doRequest();
         $this->assertEquals( true, $response->accepted );
         // r() is round($val, 2, PHP_ROUND_HALF_EVEN), i.e. bankers rounding
         // r(60*1.20*1) + r(30*1.10*1) + r(16*1.10*1) + r(8*1.10*1) + r(-10*1.10*1) = 72+33+17.60 + 8.80 -11.00 = 120.40
         $this->assertEquals( "120.40", $response->amount );
-    } 
-    
+    }
+
     private static function create_only_incvat_order_and_fee_rows_order() {
         $order = WebPay::createOrder(Svea\SveaConfig::getDefaultConfig())
             ->addCustomerDetails(WebPayItem::individualCustomer()->setNationalIdNumber(194605092222))
@@ -307,15 +308,15 @@ class FixedDiscountRowsIntegrationTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(33.00, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->PricePerUnit);
         $this->assertEquals(10, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->VatPercent);
         $this->assertEquals(true, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->PriceIncludingVat);
-        // all shipping fee rows
-        $this->assertEquals(17.60, $request->request->CreateOrderInformation->OrderRows['OrderRow'][2]->PricePerUnit);
+        // all invoice fee rows
+        $this->assertEquals(8.80, $request->request->CreateOrderInformation->OrderRows['OrderRow'][2]->PricePerUnit);
         $this->assertEquals(10, $request->request->CreateOrderInformation->OrderRows['OrderRow'][2]->VatPercent);
         $this->assertEquals(true, $request->request->CreateOrderInformation->OrderRows['OrderRow'][2]->PriceIncludingVat);
-        // all invoice fee rows
-        $this->assertEquals(8.80, $request->request->CreateOrderInformation->OrderRows['OrderRow'][3]->PricePerUnit);
+         // all shipping fee rows
+        $this->assertEquals(17.60, $request->request->CreateOrderInformation->OrderRows['OrderRow'][3]->PricePerUnit);
         $this->assertEquals(10, $request->request->CreateOrderInformation->OrderRows['OrderRow'][3]->VatPercent);
         $this->assertEquals(true, $request->request->CreateOrderInformation->OrderRows['OrderRow'][3]->PriceIncludingVat);
-        
+
         // check that service accepts order
         $response = $order->useInvoicePayment()->doRequest();
         $this->assertEquals( true, $response->accepted );
@@ -341,12 +342,12 @@ class FixedDiscountRowsIntegrationTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(30.00, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->PricePerUnit);
         $this->assertEquals(10, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->VatPercent);
         $this->assertEquals(false, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->PriceIncludingVat);
-        // all shipping fee rows
-        $this->assertEquals(16.00, $request->request->CreateOrderInformation->OrderRows['OrderRow'][2]->PricePerUnit);
+        // all invoice fee rows
+        $this->assertEquals(8.00, $request->request->CreateOrderInformation->OrderRows['OrderRow'][2]->PricePerUnit);
         $this->assertEquals(10, $request->request->CreateOrderInformation->OrderRows['OrderRow'][2]->VatPercent);
         $this->assertEquals(false, $request->request->CreateOrderInformation->OrderRows['OrderRow'][2]->PriceIncludingVat);
-        // all invoice fee rows
-        $this->assertEquals(8.00, $request->request->CreateOrderInformation->OrderRows['OrderRow'][3]->PricePerUnit);
+         // all shipping fee rows
+        $this->assertEquals(16.00, $request->request->CreateOrderInformation->OrderRows['OrderRow'][3]->PricePerUnit);
         $this->assertEquals(10, $request->request->CreateOrderInformation->OrderRows['OrderRow'][3]->VatPercent);
         $this->assertEquals(false, $request->request->CreateOrderInformation->OrderRows['OrderRow'][3]->PriceIncludingVat);
         // all discount rows
@@ -356,8 +357,8 @@ class FixedDiscountRowsIntegrationTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(false, $request->request->CreateOrderInformation->OrderRows['OrderRow'][4]->PriceIncludingVat);
         $this->assertEquals(-3.33, \Svea\Helper::bround($request->request->CreateOrderInformation->OrderRows['OrderRow'][5]->PricePerUnit),2,PHP_ROUND_HALF_UP);//=WS
         $this->assertEquals(10, $request->request->CreateOrderInformation->OrderRows['OrderRow'][5]->VatPercent);
-        $this->assertEquals(false, $request->request->CreateOrderInformation->OrderRows['OrderRow'][5]->PriceIncludingVat);   
-        
+        $this->assertEquals(false, $request->request->CreateOrderInformation->OrderRows['OrderRow'][5]->PriceIncludingVat);
+
         // check that service accepts order
         $response = $order->useInvoicePayment()->doRequest();
         $this->assertEquals( true, $response->accepted );
@@ -386,12 +387,12 @@ class FixedDiscountRowsIntegrationTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(33.00, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->PricePerUnit);
         $this->assertEquals(10, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->VatPercent);
         $this->assertEquals(true, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->PriceIncludingVat);
-        // all shipping fee rows
-        $this->assertEquals(17.60, $request->request->CreateOrderInformation->OrderRows['OrderRow'][2]->PricePerUnit);
+        // all invoice fee rows
+        $this->assertEquals(8.80, $request->request->CreateOrderInformation->OrderRows['OrderRow'][2]->PricePerUnit);
         $this->assertEquals(10, $request->request->CreateOrderInformation->OrderRows['OrderRow'][2]->VatPercent);
         $this->assertEquals(true, $request->request->CreateOrderInformation->OrderRows['OrderRow'][2]->PriceIncludingVat);
-        // all invoice fee rows
-        $this->assertEquals(8.80, $request->request->CreateOrderInformation->OrderRows['OrderRow'][3]->PricePerUnit);
+         // all shipping fee rows
+        $this->assertEquals(17.60, $request->request->CreateOrderInformation->OrderRows['OrderRow'][3]->PricePerUnit);
         $this->assertEquals(10, $request->request->CreateOrderInformation->OrderRows['OrderRow'][3]->VatPercent);
         $this->assertEquals(true, $request->request->CreateOrderInformation->OrderRows['OrderRow'][3]->PriceIncludingVat);
         // all discount rows
@@ -401,8 +402,8 @@ class FixedDiscountRowsIntegrationTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(true, $request->request->CreateOrderInformation->OrderRows['OrderRow'][4]->PriceIncludingVat);
         $this->assertEquals(-3.14, \Svea\Helper::bround($request->request->CreateOrderInformation->OrderRows['OrderRow'][5]->PricePerUnit),2,PHP_ROUND_HALF_UP);//=WS
         $this->assertEquals(10, $request->request->CreateOrderInformation->OrderRows['OrderRow'][5]->VatPercent);
-        $this->assertEquals(true, $request->request->CreateOrderInformation->OrderRows['OrderRow'][5]->PriceIncludingVat);    
-        
+        $this->assertEquals(true, $request->request->CreateOrderInformation->OrderRows['OrderRow'][5]->PriceIncludingVat);
+
         // check that service accepts order
         $response = $order->useInvoicePayment()->doRequest();
         $this->assertEquals( true, $response->accepted );
@@ -430,12 +431,12 @@ class FixedDiscountRowsIntegrationTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(30.00, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->PricePerUnit);
         $this->assertEquals(10, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->VatPercent);
         $this->assertEquals(false, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->PriceIncludingVat);
-        // all shipping fee rows
-        $this->assertEquals(16.00, $request->request->CreateOrderInformation->OrderRows['OrderRow'][2]->PricePerUnit);
+        // all invoice fee rows
+        $this->assertEquals(8.00, $request->request->CreateOrderInformation->OrderRows['OrderRow'][2]->PricePerUnit);
         $this->assertEquals(10, $request->request->CreateOrderInformation->OrderRows['OrderRow'][2]->VatPercent);
         $this->assertEquals(false, $request->request->CreateOrderInformation->OrderRows['OrderRow'][2]->PriceIncludingVat);
-        // all invoice fee rows
-        $this->assertEquals(8.00, $request->request->CreateOrderInformation->OrderRows['OrderRow'][3]->PricePerUnit);
+        // all shipping fee rows
+        $this->assertEquals(16.00, $request->request->CreateOrderInformation->OrderRows['OrderRow'][3]->PricePerUnit);
         $this->assertEquals(10, $request->request->CreateOrderInformation->OrderRows['OrderRow'][3]->VatPercent);
         $this->assertEquals(false, $request->request->CreateOrderInformation->OrderRows['OrderRow'][3]->PriceIncludingVat);
         // all discount rows
@@ -444,7 +445,7 @@ class FixedDiscountRowsIntegrationTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(10, $request->request->CreateOrderInformation->OrderRows['OrderRow'][4]->VatPercent);
         $this->assertEquals(false, $request->request->CreateOrderInformation->OrderRows['OrderRow'][4]->PriceIncludingVat);
         $this->assertFalse( isset($request->request->CreateOrderInformation->OrderRows['OrderRow'][5]) );
-        
+
         // check that service accepts order
         $response = $order->useInvoicePayment()->doRequest();
         $this->assertEquals( true, $response->accepted );
@@ -472,12 +473,12 @@ class FixedDiscountRowsIntegrationTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(33.00, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->PricePerUnit);
         $this->assertEquals(10, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->VatPercent);
         $this->assertEquals(true, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->PriceIncludingVat);
-        // all shipping fee rows
-        $this->assertEquals(17.60, $request->request->CreateOrderInformation->OrderRows['OrderRow'][2]->PricePerUnit);
+        // all invoice fee rows
+        $this->assertEquals(8.80, $request->request->CreateOrderInformation->OrderRows['OrderRow'][2]->PricePerUnit);
         $this->assertEquals(10, $request->request->CreateOrderInformation->OrderRows['OrderRow'][2]->VatPercent);
         $this->assertEquals(true, $request->request->CreateOrderInformation->OrderRows['OrderRow'][2]->PriceIncludingVat);
-        // all invoice fee rows
-        $this->assertEquals(8.80, $request->request->CreateOrderInformation->OrderRows['OrderRow'][3]->PricePerUnit);
+         // all shipping fee rows
+        $this->assertEquals(17.60, $request->request->CreateOrderInformation->OrderRows['OrderRow'][3]->PricePerUnit);
         $this->assertEquals(10, $request->request->CreateOrderInformation->OrderRows['OrderRow'][3]->VatPercent);
         $this->assertEquals(true, $request->request->CreateOrderInformation->OrderRows['OrderRow'][3]->PriceIncludingVat);
         // all discount rows
@@ -486,7 +487,7 @@ class FixedDiscountRowsIntegrationTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(10, $request->request->CreateOrderInformation->OrderRows['OrderRow'][4]->VatPercent);
         $this->assertEquals(true, $request->request->CreateOrderInformation->OrderRows['OrderRow'][4]->PriceIncludingVat);
         $this->assertFalse( isset($request->request->CreateOrderInformation->OrderRows['OrderRow'][5]) );
-        
+
         // check that service accepts order
         $response = $order->useInvoicePayment()->doRequest();
         $this->assertEquals( true, $response->accepted );
