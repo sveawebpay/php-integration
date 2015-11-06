@@ -54,7 +54,7 @@ class OrderBuilder {
     public $clientOrderNumber;
 
     /**
-     * @param \ConfigurationProvider $config
+     * @param \ConfigurationProvider $config 
      */
     public function __construct($config) {
         $this->conf = $config;

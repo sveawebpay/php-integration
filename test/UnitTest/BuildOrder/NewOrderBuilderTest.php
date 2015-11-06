@@ -30,7 +30,7 @@ class NewOrderBuilderTest extends \PHPUnit_Framework_TestCase {
         return $request->customerIdentity[0]->addressSelector;
     }
 
-    public function t_estNewInvoiceOrderCompanyAddresselector() {
+    public function testNewInvoiceOrderCompanyAddresselector() {
         $addresselector = $this->getAddressForTesting();
         $config = SveaConfig::getDefaultConfig();
         $request = \WebPay::createOrder($config);
@@ -47,7 +47,7 @@ class NewOrderBuilderTest extends \PHPUnit_Framework_TestCase {
             $this->assertEquals($addresselector, $request->request->CreateOrderInformation->AddressSelector);
     }
 
-    public function t_estNewInvoiceOrderWithOrderRow() {
+    public function testNewInvoiceOrderWithOrderRow() {
         $config = SveaConfig::getDefaultConfig();
         $request = \WebPay::createOrder($config);
         $request = $request
@@ -71,7 +71,7 @@ class NewOrderBuilderTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals(0, $request->request->CreateOrderInformation->OrderRows['OrderRow'][0]->DiscountPercent);
     }
 
-    public function t_estNewInvoiceOrderWithArray() {
+    public function testNewInvoiceOrderWithArray() {
         $orderRows[] = \TestUtil::createOrderRow();
         $orderRows[] = \WebPayItem::orderrow()
                     ->setArticleNumber("2")
@@ -96,7 +96,7 @@ $config = SveaConfig::getDefaultConfig();
         $this->assertEquals(194605092222, $request->request->CreateOrderInformation->CustomerIdentity->NationalIdNumber); //Check all in identity
     }
 
-    public function t_estOrderWithShippingFee() {
+    public function testOrderWithShippingFee() {
         $config = SveaConfig::getDefaultConfig();
         $request = \WebPay::createOrder($config);
         $request = $request
@@ -127,7 +127,7 @@ $config = SveaConfig::getDefaultConfig();
         $this->assertEquals(25, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->VatPercent);
         $this->assertEquals(0, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->DiscountPercent);
     }
-    public function t_estOrderWithShippingFeeZero() {
+    public function testOrderWithShippingFeeZero() {
         $config = SveaConfig::getDefaultConfig();
         $request = \WebPay::createOrder($config);
         $request = $request
@@ -158,7 +158,7 @@ $config = SveaConfig::getDefaultConfig();
         $this->assertEquals(25, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->VatPercent);
         $this->assertEquals(0, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->DiscountPercent);
     }
-    public function t_estOrderWithShippingFeeZeroVat() {
+    public function testOrderWithShippingFeeZeroVat() {
         $config = SveaConfig::getDefaultConfig();
         $request = \WebPay::createOrder($config);
         $request = $request
@@ -190,7 +190,7 @@ $config = SveaConfig::getDefaultConfig();
         $this->assertEquals(0, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->DiscountPercent);
     }
 
-    public function t_estOrderWithInvoiceFee() {
+    public function testOrderWithInvoiceFee() {
         $config = SveaConfig::getDefaultConfig();
         $request = \WebPay::createOrder($config);
         $request = $request
@@ -221,7 +221,7 @@ $config = SveaConfig::getDefaultConfig();
         $this->assertEquals(0, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->DiscountPercent);
     }
 
-    public function t_estOrderWithFixedDiscount() {
+    public function testOrderWithFixedDiscount() {
         $config = SveaConfig::getDefaultConfig();
         $request = \WebPay::createOrder($config);
         $request = $request
@@ -251,7 +251,7 @@ $config = SveaConfig::getDefaultConfig();
         $this->assertEquals(0, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->DiscountPercent);
     }
 
-    public function t_estOrderWithRelativeDiscount() {
+    public function testOrderWithRelativeDiscount() {
         $config = SveaConfig::getDefaultConfig();
         $request = \WebPay::createOrder($config);
         $request = $request
@@ -282,7 +282,7 @@ $config = SveaConfig::getDefaultConfig();
         $this->assertEquals(0, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->DiscountPercent);
     }
 
-    public function t_estBuildOrderWithIndividualCustomer() {
+    public function testBuildOrderWithIndividualCustomer() {
         $config = SveaConfig::getDefaultConfig();
         $request = \WebPay::createOrder($config);
             $request = $request
@@ -317,7 +317,7 @@ $config = SveaConfig::getDefaultConfig();
         $this->assertEquals("Individual", $request->request->CreateOrderInformation->CustomerIdentity->CustomerType);
     }
 
-    public function t_estBuildOrderWithCompanyCustomer() {
+    public function testBuildOrderWithCompanyCustomer() {
         $config = SveaConfig::getDefaultConfig();
         $request = \WebPay::createOrder($config);
             $request = $request
@@ -344,7 +344,7 @@ $config = SveaConfig::getDefaultConfig();
         $this->assertEquals("Company", $request->request->CreateOrderInformation->CustomerIdentity->CustomerType);
     }
 
-    public function t_estBuildOrderWithCompanyCustomerDE() {
+    public function testBuildOrderWithCompanyCustomerDE() {
         $config = SveaConfig::getDefaultConfig();
         $request = \WebPay::createOrder($config);
         $request = $request
@@ -373,7 +373,7 @@ $config = SveaConfig::getDefaultConfig();
         $this->assertEquals("MyCompany", $request->request->CreateOrderInformation->CustomerIdentity->FullName);
     }
 
-    public function t_estAmountsZero() {
+    public function testAmountsZero() {
         $config = SveaConfig::getDefaultConfig();
         $request = \WebPay::createOrder($config);
         $request = $request
@@ -397,7 +397,7 @@ $config = SveaConfig::getDefaultConfig();
         $this->assertEquals(0, $request->request->CreateOrderInformation->OrderRows['OrderRow'][0]->PricePerUnit);
         $this->assertEquals(0, $request->request->CreateOrderInformation->OrderRows['OrderRow'][0]->VatPercent);
     }
-    public function t_estAmountIncVatZero() {
+    public function testAmountIncVatZero() {
         $config = SveaConfig::getDefaultConfig();
         $request = \WebPay::createOrder($config);
         $request = $request
@@ -421,7 +421,7 @@ $config = SveaConfig::getDefaultConfig();
         $this->assertEquals(0, $request->request->CreateOrderInformation->OrderRows['OrderRow'][0]->PricePerUnit);
         $this->assertEquals(25, $request->request->CreateOrderInformation->OrderRows['OrderRow'][0]->VatPercent);
     }
-    public function t_estAmountExVatZero() {
+    public function testAmountExVatZero() {
         $config = SveaConfig::getDefaultConfig();
         $request = \WebPay::createOrder($config);
         $request = $request
@@ -523,7 +523,7 @@ $config = SveaConfig::getDefaultConfig();
         $this->assertEquals("3", $request->request->CreateOrderInformation->OrderRows['OrderRow'][2]->Description);
         $this->assertEquals("4", $request->request->CreateOrderInformation->OrderRows['OrderRow'][3]->Description);
     }
-    public function t_estOrderRowsInOrderAsAddedOnHosted() {
+    public function testOrderRowsInOrderAsAddedOnHosted() {
         $config = SveaConfig::getDefaultConfig();
         $request = \WebPay::createOrder($config);
         $form = $request
@@ -556,7 +556,6 @@ $config = SveaConfig::getDefaultConfig();
             ->usePaymentMethod(\PaymentMethod::SVEACARDPAY)
                  ->setReturnUrl("http://myurl.se")
                 ->getPaymentForm();
-
         $xmlMessage = new \SimpleXMLElement($form->xmlMessage);
 
         $this->assertEquals('1', $xmlMessage->orderrows->row[0]->description);
@@ -565,7 +564,7 @@ $config = SveaConfig::getDefaultConfig();
         $this->assertEquals('4', $xmlMessage->orderrows->row[3]->description);
 
     }
-    public function t_estOrderRowsInOrderAsAdded2OnHosted() {
+    public function testOrderRowsInOrderAsAdded2OnHosted() {
         $config = SveaConfig::getDefaultConfig();
         $request = \WebPay::createOrder($config);
         $form = $request
