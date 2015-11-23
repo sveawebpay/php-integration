@@ -35,7 +35,6 @@ class HostedRowFormatter {
      */
     public function formatRows($order) {
          foreach ($order->rows as $row ) {
-             print_r(get_class($row));
              switch (get_class($row)) {
                    case 'Svea\OrderRow':
                     $this->formatOrderRows($row);
