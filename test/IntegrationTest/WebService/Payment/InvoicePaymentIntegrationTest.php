@@ -313,7 +313,6 @@ class InvoicePaymentIntegrationTest extends PHPUnit_Framework_TestCase {
                 ->setAmountIncVat(29.00)
                 ->setAmountExVat(23.20)
                 )
-
                 ->addCustomerDetails( TestUtil::createCompanyCustomer("SE") )
                 ->setCountryCode("SE")
                 ->setOrderDate("2013-10-28")
@@ -321,7 +320,6 @@ class InvoicePaymentIntegrationTest extends PHPUnit_Framework_TestCase {
 
         // asserts on request
         $request = $order->useInvoicePayment()->prepareRequest();
-
         $newRows = $request->request->CreateOrderInformation->OrderRows['OrderRow'];
 
         $newRow = $newRows[0];

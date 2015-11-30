@@ -1,7 +1,7 @@
 <?php
 /**
  * example file, how to create a card order request
- * 
+ *
  * @author Kristian Grossman-madsen for Svea WebPay
  */
 error_reporting( E_ALL );
@@ -52,10 +52,10 @@ $firstBoughtItem->setDescription( "Billy" );
 $firstBoughtItem->setArticleNumber("123456789A");
 
 // Add firstBoughtItem to order row
-$myOrder->addOrderRow( $firstBoughtItem ); 
+$myOrder->addOrderRow( $firstBoughtItem );
 
-// Add secondBoughtItem in a fluent fashion 
-$myOrder->addOrderRow( 
+// Add secondBoughtItem in a fluent fashion
+$myOrder->addOrderRow(
             WebPayItem::orderRow()
                 ->setAmountIncVat( 5.00 )
                 ->setVatPercent( 12 )
@@ -75,19 +75,19 @@ $myCustomerInformation->setZipCode( $customerZipCode )->setLocality( $customerCi
 $myOrder->addCustomerDetails( $myCustomerInformation );
 
 // We have now completed specifying the order, and wish to send the payment request to Svea. To do so, we first select a payment method.
-// For card orders, we recommend using the ->usePaymentMethod(PaymentMethod::KORTCERT), which processes card orders via Certitrade.
-$myCardOrderRequest = $myOrder->usePaymentMethod(PaymentMethod::KORTCERT);
+// For card orders, we recommend using the ->usePaymentMethod(PaymentMethod::SVEACARDPAY).
+$myCardOrderRequest = $myOrder->usePaymentMethod(PaymentMethod::SVEACARDPAY);
 
 
 // Then set any additional required request attributes as detailed below. (See Svea\PaymentMethodPayment and Svea\HostedPayment classes for details.)
 $myCardOrderRequest
     ->setCardPageLanguage("SV")                                     // ISO639 language code, i.e. "SV", "EN" etc. Defaults to English.
     ->setReturnUrl("http://localhost/".getPath()."/landingpage.php"); // The return url where we receive and process the finished request response
-      
+
 // Get a payment form object which you can use to send the payment request to Svea
 $myCardOrderPaymentForm = $myCardOrderRequest->getPaymentForm();
 
-// Then send the form to Svea, and receive the response on the landingpage after the customer has completed the card checkout at certitrade
+// Then send the form to Svea, and receive the response on the landingpage after the customer has completed the card checkout SveaCardPay
 echo "<pre>";
 print_r( "press submit to send the card payment request to Svea");
 print_r( $myCardOrderPaymentForm->completeHtmlFormWithSubmitButton );

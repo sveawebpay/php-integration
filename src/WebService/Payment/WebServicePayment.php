@@ -55,7 +55,6 @@ class WebServicePayment {
         // create soap order object, set authorization
         $sveaOrder = new WebServiceSoap\SveaOrder;
         $sveaOrder->Auth = $this->getPasswordBasedAuthorization();
-
         //make orderrows and put in CreateOrderInfromation
         $orderinformation = $this->formatOrderInformationWithOrderRows($this->order->orderRows);
 

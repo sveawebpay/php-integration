@@ -71,7 +71,7 @@ class HostedPayment {
      *
      * When a hosted payment transaction completes the payment service will answer
      * with a response xml message sent to the return url. This is also the return
-     * url used if the user cancels at i.e. the Certitrade card payment page.
+     * url used if the user cancels at i.e. the SveaCardPay card payment page.
      *
      * @param string $returnUrlAsString
      * @return $this

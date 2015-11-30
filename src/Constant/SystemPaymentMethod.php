@@ -25,6 +25,7 @@ abstract class SystemPaymentMethod {
     const DBTAPIOLAFI = 'DBTAPIOLAFI';
     //PaymentMethodType::CARD
     const KORTCERT = 'KORTCERT';
+    const SVEACARDPAY = 'SVEACARDPAY';
 
     const SKRILL = 'SKRILL';
     const KORTWN = 'KORTWN';
