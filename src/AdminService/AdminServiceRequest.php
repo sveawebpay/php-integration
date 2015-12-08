@@ -26,16 +26,16 @@ abstract class AdminServiceRequest {
      * Returns the appropriate request response class, as determined by SveaResponse matching on request action.
      */
     public function doRequest( $resendOrderWithFlippedPriceIncludingVat = false ) {
-        
+
         $requestObject = $this->prepareRequest( $resendOrderWithFlippedPriceIncludingVat );
 
         $soapClient = new AdminSoap\SoapClient( $this->orderBuilder->conf, \ConfigurationProvider::ADMIN_TYPE );
         $soapResponse = $soapClient->doSoapCall($this->action, $requestObject );
         $sveaResponse = new \SveaResponse( $soapResponse, null, null, $this->action );
         $response = $sveaResponse->getResponse();
-        
+
         // iff error 50036, flip priceIncludingVat and resend enforcing flipped value
-        if ($response->resultcode == "50036") {            
+        if ($response->resultcode == "50036") {
             if(property_exists($requestObject, 'OrderRows')) {
                  $priceIncludingVat =  $requestObject->OrderRows->enc_value->enc_value[0]->enc_value->PriceIncludingVat->enc_value;
             }  elseif (property_exists($requestObject, 'UpdatedOrderRows')) {
@@ -95,10 +95,10 @@ abstract class AdminServiceRequest {
                 return $orderTypeAsConst;
         }
     }
-    
+
     /** @returns true iff all order rows are specified using amountIncVat, and the $flipPriceIncludingVat flag is omitted or false */
     protected function determineVatFlag( $orderRows, $flipPriceIncludingVat = false) {
-        
+
         $exVat = 0;
         $incVat = 0;
         foreach ($orderRows as $row) {
@@ -113,10 +113,10 @@ abstract class AdminServiceRequest {
         //if at least one of the rows are set as exVat, set priceIncludingVat flag to false
         $priceIncludingVat = ($exVat >= 1) ? FALSE : TRUE;
 
-        return $flipPriceIncludingVat ? !$priceIncludingVat : $priceIncludingVat;                
+        return $flipPriceIncludingVat ? !$priceIncludingVat : $priceIncludingVat;
     }
-    
-    protected function getAdminSoapOrderRowsFromBuilderOrderRowsUsingVatFlag($builderOrderRows, $priceIncludingVat) {
+
+   protected function getAdminSoapOrderRowsFromBuilderOrderRowsUsingVatFlag($builderOrderRows, $priceIncludingVat) {
         $amount = 0;
         $orderRows = array();
         foreach ($builderOrderRows as $orderRow) {
@@ -131,31 +131,31 @@ abstract class AdminServiceRequest {
 
             $orderRows[] = new \SoapVar(
                 new AdminSoap\OrderRow(
-                    $orderRow->articleNumber, 
-                    $this->formatRowNameAndDescription($orderRow),                        
-                    !isset($orderRow->discountPercent) ? 0 : $orderRow->discountPercent, 
-                    $orderRow->quantity, 
-                    $amount, 
-                    $orderRow->unit, 
-                    $orderRow->vatPercent, 
+                    $orderRow->articleNumber,
+                    $this->formatRowNameAndDescription($orderRow),
+                    !isset($orderRow->discountPercent) ? 0 : $orderRow->discountPercent,
+                    $orderRow->quantity,
+                    $amount,
+                    $orderRow->unit,
+                    $orderRow->vatPercent,
                     $priceIncludingVat // attribute is set in correct (alphabetical) position via OrderRow constructor, see AdminSoap/OrderRow
                 ), SOAP_ENC_OBJECT, null, null, 'OrderRow', "http://schemas.datacontract.org/2004/07/DataObjects.Webservice"
             );
         }
         return $orderRows;
-    }    
-    
+    }
+
     /**
      * wraps Svea\WebServiceRowFormatter->formatRowNameAndDescription to create a request description from order builder row name & description fields
      *
      * @param OrderRow|ShippingFee|et al. $webPayItemRow  an instance of the order row classes from WebPayItem
      * @return string  the combined description string that should be written to Description
      */
-    private function formatRowNameAndDescription( $webPayItemRow ) {        
+    protected function formatRowNameAndDescription( $webPayItemRow ) {
         $wsrf = new \Svea\WebService\WebServiceRowFormatter( null, null );
         return $wsrf->formatRowNameAndDescription( $webPayItemRow );
     }
-    
+
     protected function getAdminSoapNumberedOrderRowsFromBuilderOrderRowsUsingVatFlag($builderOrderRows, $priceIncludingVat) {
         $amount = 0;
         $numberedOrderRows = array();
@@ -168,11 +168,11 @@ abstract class AdminServiceRequest {
                 $amount = $priceIncludingVat ? $orderRow->amountIncVat : $orderRow->amountExVat;
                 $orderRow->vatPercent = \Svea\WebService\WebServiceRowFormatter::calculateVatPercentFromPriceExVatAndPriceIncVat($orderRow->amountIncVat, $orderRow->amountExVat);
             }
-           
+
             $numberedOrderRows[] = new \SoapVar(
                 new AdminSoap\NumberedOrderRow(
                     $orderRow->articleNumber,
-                    $this->formatRowNameAndDescription($orderRow),                        
+                    $this->formatRowNameAndDescription($orderRow),
                     !isset($orderRow->discountPercent) ? 0 : $orderRow->discountPercent,
                     $orderRow->quantity,
                     $amount,
