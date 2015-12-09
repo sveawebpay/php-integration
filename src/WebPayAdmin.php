@@ -205,6 +205,34 @@ class WebPayAdmin {
         if( $config == NULL ) { WebPay::throwMissingConfigException(); }
         return new Svea\CreditOrderRowsBuilder($config);
     }
+    /**
+     * The WebPayAdmin::creditAmount entrypoint method is used to credit an amount in an order after it has been delivered.
+     * Supports PaymentPlan
+     *
+     *
+     * Get an order builder instance using the WebPayAdmin::creditOrderRows entrypoint, then provide more information about the
+     * transaction and send the request using the creditOrderRowsBuilder methods:
+     *
+     * ...
+     *      $request = WebPayAdmin::creditAmount($config)
+     *              ->setContractNumber($orderInfo->contractNumber)
+     *              ->setCountryCode('SE')
+     *              ->setDescription('credit desc')
+     *              ->setAmount(100);
+     *
+     *      $response = $request->cancelPaymentPlanAmount()->doRequest();
+     * ...
+     *
+     * @param ConfigurationProvider $config
+     * @return Svea\CreditAmountBuilder
+     * @throws Svea\ValidationException
+     *
+     * @author SveaWebPay
+     */
+    public static function creditAmount( $config = NULL ) {
+        if( $config == NULL ) { WebPay::throwMissingConfigException(); }
+        return new Svea\CreditAmountBuilder($config);
+    }
 
     /**
      * Add order rows to an order.
@@ -373,4 +401,5 @@ class WebPayAdmin {
     private static function throwMissingConfigException() {
         throw new \Svea\ValidationException('-missing parameter: This method requires an ConfigurationProvider object as parameter. Create a class that implements class ConfigurationProvider. Set returnvalues to configuration values. Create an object from that class. Alternative use static function from class SveaConfig e.g. SveaConfig::getDefaultConfig(). You can replace the default config values to return your own config values in the method.');
     }
+
 }

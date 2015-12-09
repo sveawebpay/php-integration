@@ -359,7 +359,6 @@ class CreditOrderRowsRequestIntegrationTest extends PHPUnit_Framework_TestCase {
             )
         ;
         $request = $creditOrder->creditInvoiceOrderRows()->prepareRequest();
-//        print_r($request);
         $this->assertEquals("20", $request->NewCreditInvoiceRows->enc_value[0]->enc_value->PricePerUnit->enc_value);
         $this->assertEquals("25", $request->NewCreditInvoiceRows->enc_value[0]->enc_value->VatPercent->enc_value);
         $this->assertEquals(true, $request->NewCreditInvoiceRows->enc_value[0]->enc_value->PriceIncludingVat->enc_value);
