@@ -97,9 +97,9 @@ class CreditOrderRowsRequestIntegrationTest extends PHPUnit_Framework_TestCase {
                 ->setContractNumber($orderInfo->contractNumber)
                 ->setCountryCode('SE')
                 ->setDescription('credit desc')
-                ->setAmount(100)
+                ->setAmountIncVat(100.00)
                 ->cancelPaymentPlanAmount()->doRequest();
-        
+
         $this->assertEquals(1, $credit->accepted);
         //print_r($credit);
     }
@@ -112,7 +112,7 @@ class CreditOrderRowsRequestIntegrationTest extends PHPUnit_Framework_TestCase {
                 ->setContractNumber($orderInfo->contractNumber)
                 ->setCountryCode('SE')
                 ->setDescription('credit desc')
-                ->setAmount(100)
+                ->setAmountIncVat(100.00)
                 ->cancelPaymentPlanAmount()->doRequest();
 
        $this->assertEquals(1, $credit->accepted);
@@ -125,7 +125,7 @@ class CreditOrderRowsRequestIntegrationTest extends PHPUnit_Framework_TestCase {
                 ->setContractNumber($orderInfo->contractNumber)
                 ->setCountryCode('SE')
                 ->setDescription('credit desc')
-                ->setAmount(1500.00)
+                ->setAmountIncVat(1500.00)
                 ->cancelPaymentPlanAmount()->doRequest();
 
         $this->assertEquals(0, $credit->accepted);
