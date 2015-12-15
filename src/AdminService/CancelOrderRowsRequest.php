@@ -14,9 +14,6 @@ class CancelOrderRowsRequest extends AdminServiceRequest {
     /** @var CreditOrderRowBuilder $orderBuilder */
     public $orderBuilder;
 
-    /** @var SoapVar[] $rowNumbers  initally empty, contains the indexes of all order rows that will be credited */
-    public $rowNumbers;
-
     /** @var SoapVar[] $orderRows  initially empty, specifies any additional credit order rows to credit */
     public $orderRows;
 
@@ -37,7 +34,7 @@ class CancelOrderRowsRequest extends AdminServiceRequest {
      */
     public function prepareRequest( $resendOrderWithFlippedPriceIncludingVat = false) {
         $this->validateRequest();
-        $this->orderRows = $this->getAdminSoapOrderRowsFromBuilderOrderRowsUsingVatFlag( $this->orderBuilder->cancelOrderRows );
+        $this->orderRows = $this->getAdminSoapOrderRowsFromBuilderOrderRowsUsingVatFlag( $this->orderBuilder->creditOrderRows );
         $soapRequest = new AdminSoap\CancelPaymentPlanRowsRequest(
             new AdminSoap\Authentication(
                 $this->orderBuilder->conf->getUsername( ($this->orderBuilder->orderType), $this->orderBuilder->countryCode ),
@@ -46,7 +43,6 @@ class CancelOrderRowsRequest extends AdminServiceRequest {
             $this->orderRows,
             $this->orderBuilder->conf->getClientNumber( ($this->orderBuilder->orderType), $this->orderBuilder->countryCode ),
             $this->orderBuilder->contractNumber
-
         );
 
         return $soapRequest;
@@ -77,15 +73,17 @@ class CancelOrderRowsRequest extends AdminServiceRequest {
         return $errors;
     }
 
-    private function validateHasRows($errors) {
-        if (count($this->orderBuilder->cancelOrderRows) == 0) {
-             $errors[] = array('missing value' => "no rows to cancel, use addCancelOrderRow(s)().");
+ private function validateHasRows($errors) {
+        if( (count($this->orderBuilder->rowsToCredit) == 0) &&
+            (count($this->orderBuilder->creditOrderRows) == 0) )
+        {
+            $errors[] = array('missing value' => "no rows to credit, use setRow(s)ToCredit() or addCreditOrderRow(s)().");
         }
         return $errors;
     }
 
     private function validateCreditOrderRowsHasPriceAndVatInformation($errors) {
-        foreach( $this->orderBuilder->cancelOrderRows as $orderRow ) {
+        foreach( $this->orderBuilder->creditOrderRows as $orderRow ) {
             if( !isset($orderRow->vatPercent) && (!isset($orderRow->amountIncVat) && !isset($orderRow->amountExVat)) ) {
                 $errors[] = array('missing order row vat information' => "cannot calculate orderRow vatPercent, need at least two of amountExVat, amountIncVat and vatPercent.");
             }
@@ -103,6 +101,18 @@ class CancelOrderRowsRequest extends AdminServiceRequest {
         protected function getAdminSoapOrderRowsFromBuilderOrderRowsUsingVatFlag($builderOrderRows, $priceIncludingVat = NULL) {
         $amount = 0;
         $orderRows = array();
+         if(count($this->orderBuilder->rowsToCredit) > 0) {
+            foreach ($this->orderBuilder->rowsToCredit as $rownumber) {
+                $orderRows[] = new \SoapVar(
+                new AdminSoap\CancellationRow(
+                    0.00,
+                    "Numbered row",
+                    0,
+                    $rownumber
+                ), SOAP_ENC_OBJECT, null, null, 'CancellationRow', "http://schemas.datacontract.org/2004/07/DataObjects.Webservice"
+            );
+            }
+         }
         foreach ($builderOrderRows as $orderRow) {
             if (isset($orderRow->vatPercent) && isset($orderRow->amountExVat)) {
                 $amount =  \Svea\WebService\WebServiceRowFormatter::convertExVatToIncVat($orderRow->amountExVat, $orderRow->vatPercent);
@@ -116,11 +126,14 @@ class CancelOrderRowsRequest extends AdminServiceRequest {
                 new AdminSoap\CancellationRow(
                     $amount,
                     $this->formatRowNameAndDescription($orderRow),
-                    $orderRow->rowNumber,
                     $orderRow->vatPercent
                 ), SOAP_ENC_OBJECT, null, null, 'CancellationRow', "http://schemas.datacontract.org/2004/07/DataObjects.Webservice"
             );
         }
+
+
         return $orderRows;
     }
+
+
 }

@@ -98,7 +98,7 @@ class CreditOrderRowsRequestIntegrationTest extends PHPUnit_Framework_TestCase {
                 ->setCountryCode('SE')
                 ->setDescription('credit desc')
                 ->setAmountIncVat(100.00)
-                ->cancelPaymentPlanAmount()->doRequest();
+                ->creditPaymentPlanAmount()->doRequest();
 
         $this->assertEquals(1, $credit->accepted);
         //print_r($credit);
@@ -113,7 +113,7 @@ class CreditOrderRowsRequestIntegrationTest extends PHPUnit_Framework_TestCase {
                 ->setCountryCode('SE')
                 ->setDescription('credit desc')
                 ->setAmountIncVat(100.00)
-                ->cancelPaymentPlanAmount()->doRequest();
+                ->creditPaymentPlanAmount()->doRequest();
 
        $this->assertEquals(1, $credit->accepted);
     }
@@ -126,7 +126,7 @@ class CreditOrderRowsRequestIntegrationTest extends PHPUnit_Framework_TestCase {
                 ->setCountryCode('SE')
                 ->setDescription('credit desc')
                 ->setAmountIncVat(1500.00)
-                ->cancelPaymentPlanAmount()->doRequest();
+                ->creditPaymentPlanAmount()->doRequest();
 
         $this->assertEquals(0, $credit->accepted);
     }

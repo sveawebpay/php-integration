@@ -130,14 +130,15 @@ class CreditOrderRowsRequestIntegrationTest extends PHPUnit_Framework_TestCase {
         $credit = WebPayAdmin::creditOrderRows($config)
                 ->setContractNumber($orderInfo->contractNumber)
                 ->setCountryCode('SE')
-                 ->addCancellationRow(
-                        WebPayItem::cancellationRow()
-                        ->setAmountExVat(8)
-                        ->setVatPercent(25)
-                        ->setDescription('desc')
-                        ->setName('name')
-                )
-                ->cancelPaymentPlanOrderRows()->doRequest();
+                ->setRowToCredit(1)
+//                 ->addCancellationRow(
+//                        WebPayItem::cancellationRow()
+//                        ->setAmountExVat(8)
+//                        ->setVatPercent(25)
+//                        ->setDescription('desc')
+//                        ->setName('name')
+//                )
+                ->creditPaymentPlanOrderRows()->doRequest();
         $this->assertEquals(1, $credit->accepted);
         //print_r($credit);
     }
@@ -454,13 +455,19 @@ class CreditOrderRowsRequestIntegrationTest extends PHPUnit_Framework_TestCase {
         $credit = WebPayAdmin::creditOrderRows($config)
                 ->setContractNumber($orderInfo->contractNumber)
                 ->setCountryCode('SE')
-                ->addCancellationRow(
-                        WebPayItem::cancellationRow()
-                        ->setAmountExVat(8)
+                 ->addCreditOrderRow(
+                        WebPayItem::orderRow()
+                        ->setAmountIncVat(10)
                         ->setVatPercent(25)
-                        ->setDescription('my orderrow')
+                        ->setQuantity(1)
                 )
-                ->cancelPaymentplanOrderRows()->doRequest();
+//                ->addCancellationRow(
+//                        WebPayItem::cancellationRow()
+//                        ->setAmountExVat(8)
+//                        ->setVatPercent(25)
+//                        ->setDescription('my orderrow')
+//                )
+                ->creditPaymentplanOrderRows()->doRequest();
 
         // logs should createOrderEU (w/priceIncludingVat = true) => deliverOrderRows
         // => creditOrderRows (w/priceIncludingVat = true) success
@@ -502,13 +509,13 @@ class CreditOrderRowsRequestIntegrationTest extends PHPUnit_Framework_TestCase {
         $credit = WebPayAdmin::creditOrderRows($config)
                 ->setContractNumber($orderInfo->contractNumber)
                 ->setCountryCode('SE')
-                ->addCancellationRow(
-                        WebPayItem::cancellationRow()
+                 ->addCreditOrderRow(
+                        WebPayItem::orderRow()
                         ->setAmountExVat(8)
                         ->setVatPercent(25)
-                        ->setDescription("my row")
+                        ->setQuantity(1)
                 )
-                ->cancelPaymentplanOrderRows()->doRequest();
+                ->creditPaymentplanOrderRows()->doRequest();
         // logs should createOrderEU (w/priceIncludingVat = true) => deliverOrderRows
         // => creditOrderRows (w/priceIncludingVat = false) fail =>  creditOrderRows (w/priceIncludingVat = true) success
         $this->assertEquals(1, $credit->accepted);

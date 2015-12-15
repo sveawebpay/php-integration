@@ -81,12 +81,12 @@ class CreditAmountBuilder {
     }
 
     /**
-     * Use creditPaymentPlanOrderRows() to cancel rows to a delivered Payment plan using AdminServiceRequest CreditOrderRows request
-     * @return \Svea\AdminService\CreditOrderRowsRequest
+     * Use creditPaymentPlanAmount() to cancel amount to a delivered Payment plan using AdminServiceRequest CreditAmount request
+     * @return \Svea\AdminService\CancelAmountRequest
      */
-    public function cancelPaymentPlanAmount() {
+    public function creditPaymentPlanAmount() {
         $this->orderType = \ConfigurationProvider::PAYMENTPLAN_TYPE;
-        // validation is done in CreditOrderRowsRequest
+        // CreditPaymentPlan amount is really a CancelPaymentPlanAmount in API but wrapped in lib
         return new AdminService\CancelAmountRequest($this);
     }
 

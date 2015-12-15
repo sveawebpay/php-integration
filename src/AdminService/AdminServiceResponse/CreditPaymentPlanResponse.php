@@ -8,7 +8,7 @@ require_once 'AdminServiceResponse.php';
  *
  * @author Kristian Grossman-Madsen
  */
-class CancelPaymentPlanResponse extends AdminServiceResponse {
+class CreditPaymentPlanResponse extends AdminServiceResponse {
 
 
 

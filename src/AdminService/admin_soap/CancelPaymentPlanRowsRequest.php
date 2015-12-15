@@ -34,6 +34,5 @@ class CancelPaymentPlanRowsRequest {
         $this->ContractNumber = new \SoapVar( $contractNumber, XSD_LONG,
                 "-","--","ContractNumber","http://schemas.datacontract.org/2004/07/DataObjects.Admin.Service");
 
-
     }
 }

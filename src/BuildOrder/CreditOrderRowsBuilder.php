@@ -53,9 +53,6 @@ class CreditOrderRowsBuilder {
     /** @var OrderRows[] $creditOrderRows  any additional new order rows to credit */
     public $creditOrderRows;
 
-    /** @var CancellationRows[] $cancelOrderRows  any additional new order rows to cancel */
-    public $cancelOrderRows;
-
     /** @var int[] $rowsToCredit  array of original order row indexes to credit */
     public $rowsToCredit;
 
@@ -198,18 +195,6 @@ class CreditOrderRowsBuilder {
         $this->creditOrderRows[] = $row;
         return $this;
     }
-    /**
-     * Optional -- add an order row to credit that was not present in the original order.
-     *
-     * These rows will be credited in addition to the rows specified using setRow(s)ToCredit
-     *
-     * @param OrderRow $row
-     * @return $this
-     */
-    public function addCancellationRow( $row ) {
-        $this->cancelOrderRows[] = $row;
-        return $this;
-    }
 
     /**
      * Optional -- convenience method to add serveral new rows at once.
@@ -273,11 +258,11 @@ class CreditOrderRowsBuilder {
      * Use creditPaymentPlanOrderRows() to cancel rows to a delivered Payment plan using AdminServiceRequest CreditOrderRows request
      * @return \Svea\AdminService\CreditOrderRowsRequest
      */
-    public function cancelPaymentPlanOrderRows() {
+    public function creditPaymentPlanOrderRows() {
         $this->orderType = \ConfigurationProvider::PAYMENTPLAN_TYPE;
 
         // validation is done in CreditOrderRowsRequest
-
+        //Credit Paymentplan request is really cancelPaymentPlanRows but wrapped as creditPaymentPlanRows
         return new AdminService\CancelOrderRowsRequest($this);
     }
 

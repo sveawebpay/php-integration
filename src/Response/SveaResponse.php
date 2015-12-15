@@ -101,10 +101,10 @@ class SveaResponse {
                         $this->response = new Svea\AdminService\DeliverPartialResponse( $message );
                         break;
                     case "CancelPaymentPlanRows":
-                        $this->response = new Svea\AdminService\CancelPaymentPlanResponse( $message );
+                        $this->response = new Svea\AdminService\CreditPaymentPlanResponse( $message );
                         break;
                     case "CancelPaymentPlanAmount":
-                        $this->response = new Svea\AdminService\CancelPaymentPlanResponse( $message );
+                        $this->response = new Svea\AdminService\CreditPaymentPlanResponse( $message );
                         break;
 
                     default:
