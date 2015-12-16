@@ -54,6 +54,7 @@ class CancelOrderRowsRequest extends AdminServiceRequest {
         $errors = $this->validateHasRows($errors);
         $errors = $this->validateOrderType($errors);
         $errors = $this->validateCountryCode($errors);
+        $errors = $this->validateDescription($errors);
         $errors = $this->validateCreditOrderRowsHasPriceAndVatInformation($errors);
         return $errors;
     }
@@ -86,6 +87,15 @@ class CancelOrderRowsRequest extends AdminServiceRequest {
         foreach( $this->orderBuilder->creditOrderRows as $orderRow ) {
             if( !isset($orderRow->vatPercent) && (!isset($orderRow->amountIncVat) && !isset($orderRow->amountExVat)) ) {
                 $errors[] = array('missing order row vat information' => "cannot calculate orderRow vatPercent, need at least two of amountExVat, amountIncVat and vatPercent.");
+            }
+        }
+        return $errors;
+    }
+
+    public function validateDescription($errors) {
+         foreach( $this->orderBuilder->creditOrderRows as $orderRow ) {
+            if( !isset($orderRow->description)) {
+                $errors[] = array('missing value' => "Description is required.");
             }
         }
         return $errors;
@@ -134,6 +144,5 @@ class CancelOrderRowsRequest extends AdminServiceRequest {
 
         return $orderRows;
     }
-
 
 }

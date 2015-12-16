@@ -453,13 +453,8 @@ class CreditOrderRowsRequestIntegrationTest extends PHPUnit_Framework_TestCase {
                         ->setAmountIncVat(10)
                         ->setVatPercent(25)
                         ->setQuantity(1)
+                         ->setDescription("row")
                 )
-//                ->addCancellationRow(
-//                        WebPayItem::cancellationRow()
-//                        ->setAmountExVat(8)
-//                        ->setVatPercent(25)
-//                        ->setDescription('my orderrow')
-//                )
                 ->creditPaymentplanOrderRows()->doRequest();
 
         // logs should createOrderEU (w/priceIncludingVat = true) => deliverOrderRows
@@ -507,6 +502,7 @@ class CreditOrderRowsRequestIntegrationTest extends PHPUnit_Framework_TestCase {
                         ->setAmountExVat(8)
                         ->setVatPercent(25)
                         ->setQuantity(1)
+                        ->setDescription("row")
                 )
                 ->creditPaymentplanOrderRows()->doRequest();
         // logs should createOrderEU (w/priceIncludingVat = true) => deliverOrderRows
@@ -514,5 +510,56 @@ class CreditOrderRowsRequestIntegrationTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(1, $credit->accepted);
 
     }
+    public function test_creditOrderRows_creditInvoiceOrderRows_multipleRows() {
+        $config = Svea\SveaConfig::getDefaultConfig();
+
+        $orderInfo = $this->get_orderInfo_sent_inc_vat( 100.00, 25, 1 );
+
+        $orderRows[] =   WebPayItem::orderRow()
+                        ->setAmountIncVat(10.00)
+                        ->setVatPercent(25)
+                        ->setQuantity(1)
+                        ->setDescription("row 1");
+        $orderRows[] =   WebPayItem::orderRow()
+                        ->setAmountIncVat(10.00)
+                        ->setVatPercent(25)
+                        ->setQuantity(1)
+                        ->setDescription("row 2");
+
+        $credit = WebPayAdmin::creditOrderRows($config)
+               ->setInvoiceId($orderInfo->invoiceId)
+                ->setInvoiceDistributionType(DistributionType::POST)
+                ->setCountryCode('SE')
+                ->addCreditOrderRows($orderRows)
+                ->creditInvoiceOrderRows()->doRequest();
+
+        $this->assertEquals(1, $credit->accepted);
+
+    }
+    public function test_creditOrderRows_creditPyamentplanOrderRows_multipleRows() {
+        $config = Svea\SveaConfig::getDefaultConfig();
+
+        $orderInfo = $this->get_orderInfo_sent_inc_vat( 1000.00, 25, 1, TRUE );
+        $orderRows[] =   WebPayItem::orderRow()
+                        ->setAmountIncVat(10.00)
+                        ->setVatPercent(25)
+                        ->setQuantity(1)
+                        ->setDescription("row 1");
+        $orderRows[] =   WebPayItem::orderRow()
+                        ->setAmountIncVat(10.00)
+                        ->setVatPercent(25)
+                        ->setQuantity(1)
+                        ->setDescription("row 2");
+        $credit = WebPayAdmin::creditOrderRows($config)
+                ->setContractNumber($orderInfo->contractNumber)
+                ->setCountryCode('SE')
+                ->addCreditOrderRows($orderRows)
+                ->creditPaymentplanOrderRows()->doRequest();
+        // logs should createOrderEU (w/priceIncludingVat = true) => deliverOrderRows
+        // => creditOrderRows (w/priceIncludingVat = false) fail =>  creditOrderRows (w/priceIncludingVat = true) success
+        $this->assertEquals(1, $credit->accepted);
+
+    }
+
 
 }
