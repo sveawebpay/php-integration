@@ -62,13 +62,6 @@ class WebPayItem {
      public static function numberedOrderRow() {
          return new Svea\NumberedOrderRow();
     }
-    /**
-     * Use this only when supplying CancellationRow items for creditOrderRows->cancelPaymentplanRows.
-     * @return \Svea\NumberedOrderRow
-     */
-     public static function cancellationRow() {
-         return new Svea\CancellationRow();
-    }
 
     /**
      * The WebPayItem::shippingFee() entrypoint method is used to specify order shipping fee rows.

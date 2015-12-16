@@ -131,13 +131,6 @@ class CreditOrderRowsRequestIntegrationTest extends PHPUnit_Framework_TestCase {
                 ->setContractNumber($orderInfo->contractNumber)
                 ->setCountryCode('SE')
                 ->setRowToCredit(1)
-//                 ->addCancellationRow(
-//                        WebPayItem::cancellationRow()
-//                        ->setAmountExVat(8)
-//                        ->setVatPercent(25)
-//                        ->setDescription('desc')
-//                        ->setName('name')
-//                )
                 ->creditPaymentPlanOrderRows()->doRequest();
         $this->assertEquals(1, $credit->accepted);
         //print_r($credit);
