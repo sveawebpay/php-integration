@@ -34,7 +34,7 @@ class TestUtil {
 
         return $orderObject;
     }
-
+   
     /**
      * creates a populated order object for use in tests
      *

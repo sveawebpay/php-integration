@@ -100,6 +100,12 @@ class SveaResponse {
                     case "DeliverPartial":
                         $this->response = new Svea\AdminService\DeliverPartialResponse( $message );
                         break;
+                    case "CancelPaymentPlanRows":
+                        $this->response = new Svea\AdminService\CreditPaymentPlanResponse( $message );
+                        break;
+                    case "CancelPaymentPlanAmount":
+                        $this->response = new Svea\AdminService\CreditPaymentPlanResponse( $message );
+                        break;
 
                     default:
                         throw new Exception("unknown method: $method");
