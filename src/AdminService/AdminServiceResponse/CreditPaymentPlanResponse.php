@@ -4,9 +4,9 @@ namespace Svea\AdminService;
 require_once 'AdminServiceResponse.php';
 
 /**
- * Handles the Svea Admin Web Service CreditInvoiceRows request response.
+ * Handles the Svea Admin Web Service CancelPaymentPlanRows request response.
  *
- * @author Kristian Grossman-Madsen
+ * @author ann-hal for Svea Ekonomi Ab | WebPay
  */
 class CreditPaymentPlanResponse extends AdminServiceResponse {
 

@@ -12,7 +12,7 @@ class CreditAmountBuilder {
     /** @var ConfigurationProvider $conf  */
     public $conf;
 
-    /** @var string $orderType -- one of ConfigurationProvider::INVOICE_TYPE, ::HOSTED_ADMIN_TYPE */
+    /** @var string $orderType -- one of ConfigurationProvider::INVOICE_TYPE, PAYMENTPLAN_TYPE, ::HOSTED_ADMIN_TYPE */
     public $orderType;
 
     /** @var float $amountIncVat */
@@ -32,7 +32,7 @@ class CreditAmountBuilder {
     }
 
     /**
-     *
+     * Required
      * @param float $AmountAsFloat
      * @return $this
      */
@@ -58,8 +58,6 @@ class CreditAmountBuilder {
      * PaymentPlan only
      * Required for creditPaymentPlanOrder() -- use contract number recieved with deliverOrder response.
      *
-     * Use setInvoiceId() to set the invoice to credit. Use setContractNumber() to set the contract id to credit. Use setOrderId() to set the
-     * card or direct bank transaction to credit.
      *
      * @param string $contractNumberAsString
      * @return $this
@@ -87,7 +85,7 @@ class CreditAmountBuilder {
     public function creditPaymentPlanAmount() {
         $this->orderType = \ConfigurationProvider::PAYMENTPLAN_TYPE;
         // CreditPaymentPlan amount is really a CancelPaymentPlanAmount in API but wrapped in lib
-        return new AdminService\CancelAmountRequest($this);
+        return new AdminService\CreditAmountRequest($this);
     }
 
 }

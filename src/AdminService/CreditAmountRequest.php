@@ -5,28 +5,23 @@ require_once SVEA_REQUEST_DIR . '/Includes.php';
 require_once 'AdminServiceRequest.php';
 
 /**
- * Admin Service CreditOrderRowsRequest class
+ * Admin Service CreditAmountRequest class
  *
- * @author Kristian Grossman-Madsen
+ * @author ann-hal
  */
-class CancelOrderRowsRequest extends AdminServiceRequest {
+class CreditAmountRequest extends AdminServiceRequest {
 
     /** @var CreditOrderRowBuilder $orderBuilder */
     public $orderBuilder;
 
-    /** @var SoapVar[] $orderRows  initially empty, specifies any additional credit order rows to credit */
-    public $orderRows;
-
     /**
-     * @param creditOrderRowsBuilder $orderBuilder
+     * @param CreditAmountBuilder $creditAmountBuilder
      */
-    public function __construct($creditOrderRowsBuilder) {
-        $this->action = "CancelPaymentPlanRows";
-        $this->orderRows = array();
-        $this->orderBuilder = $creditOrderRowsBuilder;
+    public function __construct($creditAmountBuilder) {
+        $this->action = "CancelPaymentPlanAmount";
+        $this->orderBuilder = $creditAmountBuilder;
 
     }
-
     /**
      * populate and return soap request contents using AdminSoap helper classes to get the correct data format
      * @return Svea\AdminSoap\CreditOrderRowsRequest
@@ -34,15 +29,16 @@ class CancelOrderRowsRequest extends AdminServiceRequest {
      */
     public function prepareRequest( $resendOrderWithFlippedPriceIncludingVat = false) {
         $this->validateRequest();
-        $this->orderRows = $this->getAdminSoapOrderRowsFromBuilderOrderRowsUsingVatFlag( $this->orderBuilder->creditOrderRows );
-        $soapRequest = new AdminSoap\CancelPaymentPlanRowsRequest(
+        $soapRequest = new AdminSoap\CancelPaymentPlanAmountRequest(
             new AdminSoap\Authentication(
                 $this->orderBuilder->conf->getUsername( ($this->orderBuilder->orderType), $this->orderBuilder->countryCode ),
                 $this->orderBuilder->conf->getPassword( ($this->orderBuilder->orderType), $this->orderBuilder->countryCode )
             ),
-            $this->orderRows,
+            $this->orderBuilder->amountIncVat,
+            $this->orderBuilder->description,
             $this->orderBuilder->conf->getClientNumber( ($this->orderBuilder->orderType), $this->orderBuilder->countryCode ),
             $this->orderBuilder->contractNumber
+
         );
 
         return $soapRequest;
@@ -51,11 +47,9 @@ class CancelOrderRowsRequest extends AdminServiceRequest {
     public function validate() {
         $errors = array();
         $errors = $this->validateContractNumber($errors);
-        $errors = $this->validateHasRows($errors);
         $errors = $this->validateOrderType($errors);
         $errors = $this->validateCountryCode($errors);
-        $errors = $this->validateDescription($errors);
-        $errors = $this->validateCreditOrderRowsHasPriceAndVatInformation($errors);
+        $errors = $this->validateAmount($errors);
         return $errors;
     }
 
@@ -74,29 +68,11 @@ class CancelOrderRowsRequest extends AdminServiceRequest {
         return $errors;
     }
 
- private function validateHasRows($errors) {
-        if( (count($this->orderBuilder->rowsToCredit) == 0) &&
-            (count($this->orderBuilder->creditOrderRows) == 0) )
-        {
-            $errors[] = array('missing value' => "no rows to credit, use setRow(s)ToCredit() or addCreditOrderRow(s)().");
-        }
-        return $errors;
-    }
-
-    private function validateCreditOrderRowsHasPriceAndVatInformation($errors) {
-        foreach( $this->orderBuilder->creditOrderRows as $orderRow ) {
-            if( !isset($orderRow->vatPercent) && (!isset($orderRow->amountIncVat) && !isset($orderRow->amountExVat)) ) {
-                $errors[] = array('missing order row vat information' => "cannot calculate orderRow vatPercent, need at least two of amountExVat, amountIncVat and vatPercent.");
-            }
-        }
-        return $errors;
-    }
-
-    public function validateDescription($errors) {
-         foreach( $this->orderBuilder->creditOrderRows as $orderRow ) {
-            if( !isset($orderRow->description)) {
-                $errors[] = array('missing value' => "Description is required.");
-            }
+    private function validateAmount($errors) {
+        if (!isset($this->orderBuilder->amountIncVat) || $this->orderBuilder->amountIncVat <= 0) {
+            $errors[] = array('incorrect value' => "amountIncVat is too small.");
+        } elseif ( isset($this->orderBuilder->amountIncVat) && !is_float( $this->orderBuilder->amountIncVat)  ){
+            $errors[] = array('incorrect datatype' => "amountIncVat is not of type float.");
         }
         return $errors;
     }
@@ -108,21 +84,9 @@ class CancelOrderRowsRequest extends AdminServiceRequest {
         return $errors;
     }
 
-        protected function getAdminSoapOrderRowsFromBuilderOrderRowsUsingVatFlag($builderOrderRows, $priceIncludingVat = NULL) {
+    protected function getAdminSoapOrderRowsFromBuilderOrderRowsUsingVatFlag($builderOrderRows, $priceIncludingVat = NULL) {
         $amount = 0;
         $orderRows = array();
-         if(count($this->orderBuilder->rowsToCredit) > 0) {
-            foreach ($this->orderBuilder->rowsToCredit as $rownumber) {
-                $orderRows[] = new \SoapVar(
-                new AdminSoap\CancellationRow(
-                    0.00,
-                    "Numbered row",
-                    0,
-                    $rownumber
-                ), SOAP_ENC_OBJECT, null, null, 'CancellationRow', "http://schemas.datacontract.org/2004/07/DataObjects.Webservice"
-            );
-            }
-         }
         foreach ($builderOrderRows as $orderRow) {
             if (isset($orderRow->vatPercent) && isset($orderRow->amountExVat)) {
                 $amount =  \Svea\WebService\WebServiceRowFormatter::convertExVatToIncVat($orderRow->amountExVat, $orderRow->vatPercent);
@@ -136,13 +100,11 @@ class CancelOrderRowsRequest extends AdminServiceRequest {
                 new AdminSoap\CancellationRow(
                     $amount,
                     $this->formatRowNameAndDescription($orderRow),
+                    $orderRow->rowNumber,
                     $orderRow->vatPercent
                 ), SOAP_ENC_OBJECT, null, null, 'CancellationRow', "http://schemas.datacontract.org/2004/07/DataObjects.Webservice"
             );
         }
-
-
         return $orderRows;
     }
-
 }

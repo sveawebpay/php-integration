@@ -47,7 +47,7 @@ class CreditOrderRowsBuilder {
     /** @var ConfigurationProvider $conf  */
     public $conf;
 
-    /** @var string $orderType -- one of ConfigurationProvider::INVOICE_TYPE, ::HOSTED_ADMIN_TYPE */
+    /** @var string $orderType -- one of ConfigurationProvider::INVOICE_TYPE, PAYMENTPLAN_TYPE, ::HOSTED_ADMIN_TYPE */
     public $orderType;
 
     /** @var OrderRows[] $creditOrderRows  any additional new order rows to credit */
@@ -99,9 +99,6 @@ class CreditOrderRowsBuilder {
      * Invoice only
      * Required for creditInvoiceOrder() -- use invoice id recieved with deliverOrder response.
      *
-     * Use setInvoiceId() to set the invoice to credit.  Use setContractNumber() to set the contract id to credit. Use setOrderId() to set the
-     * card or direct bank transaction to credit.
-     *
      * @param string $invoiceIdAsString
      * @return $this
      */
@@ -112,9 +109,6 @@ class CreditOrderRowsBuilder {
     /**
      * PaymentPlan only
      * Required for creditPaymentPlanOrder() -- use contract number recieved with deliverOrder response.
-     *
-     * Use setInvoiceId() to set the invoice to credit. Use setContractNumber() to set the contract id to credit. Use setOrderId() to set the
-     * card or direct bank transaction to credit.
      *
      * @param string $contractNumberAsString
      * @return $this
@@ -263,7 +257,7 @@ class CreditOrderRowsBuilder {
 
         // validation is done in CreditOrderRowsRequest
         //Credit Paymentplan request is really cancelPaymentPlanRows but wrapped as creditPaymentPlanRows
-        return new AdminService\CancelOrderRowsRequest($this);
+        return new AdminService\CreditOrderRowsRequest($this);
     }
 
     /**
