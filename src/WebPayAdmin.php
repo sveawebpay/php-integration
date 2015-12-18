@@ -187,7 +187,7 @@ class WebPayAdmin {
      *     ;
      *     // then select the corresponding request class and send request
      *     $response = $request->creditInvoiceOrderRows()->doRequest();     // returns CreditInvoiceRowsResponse
-     *     $response = $request->creditPaymentplanOrderRows()->doRequest(); // returns CreditOrderRowsRequest
+     *     $response = $request->creditPaymentplanOrderRows()->doRequest(); // returns CreditPaymentPlanRowsRequest
      *     $response = $request->creditCardOrderRows()->doRequest();        // returns CreditTransactionResponse
      *     $response = $request->creditDirectBankOrderRows()->doRequest();  // returns CreditTransactionResponse
      * ...

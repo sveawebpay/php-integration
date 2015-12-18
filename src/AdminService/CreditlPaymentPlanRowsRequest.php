@@ -9,7 +9,7 @@ require_once 'AdminServiceRequest.php';
  *
  * @author Kristian Grossman-Madsen
  */
-class CreditOrderRowsRequest extends AdminServiceRequest {
+class CreditPaymentPlanRowsRequest extends AdminServiceRequest {
 
     /** @var CreditOrderRowBuilder $orderBuilder */
     public $orderBuilder;

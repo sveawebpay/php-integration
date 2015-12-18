@@ -238,26 +238,26 @@ class CreditOrderRowsBuilder {
 
     /**
      * Use creditInvoiceOrderRows() to credit rows to an Invoice order using AdminServiceRequest CreditOrderRows request
-     * @return \Svea\AdminService\CreditOrderRowsRequest
+     * @return \Svea\AdminService\CreditInvoiceRowsRequest
      */
     public function creditInvoiceOrderRows() {
         $this->orderType = \ConfigurationProvider::INVOICE_TYPE;
 
-        // validation is done in CreditOrderRowsRequest
+        // validation is done in CreditInvoiceRowsRequest
 
-        return new AdminService\CreditOrderRowsRequest($this);
+        return new AdminService\CreditInvoiceRowsRequest($this);
     }
 
     /**
      * Use creditPaymentPlanOrderRows() to cancel rows to a delivered Payment plan using AdminServiceRequest CreditOrderRows request
-     * @return \Svea\AdminService\CreditOrderRowsRequest
+     * @return \Svea\AdminService\CreditPaymentPlanRowsRequest
      */
     public function creditPaymentPlanOrderRows() {
         $this->orderType = \ConfigurationProvider::PAYMENTPLAN_TYPE;
 
-        // validation is done in CreditOrderRowsRequest
+        // validation is done in CreditPaymentPlanRowsRequest
         //Credit Paymentplan request is really cancelPaymentPlanRows but wrapped as creditPaymentPlanRows
-        return new AdminService\CreditOrderRowsRequest($this);
+        return new AdminService\CreditPaymentPlanRowsRequest($this);
     }
 
     /**

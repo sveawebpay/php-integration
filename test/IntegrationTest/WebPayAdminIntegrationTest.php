@@ -28,14 +28,14 @@ class WebPayAdminIntegrationTest extends PHPUnit_Framework_TestCase {
                 ->setCountryCode("SE")
                 ->setOrderDate("2012-12-12")
                 ->useInvoicePayment()->doRequest();
-        $this->assertEquals(1, $orderResponse->accepted);        
-        
+        $this->assertEquals(1, $orderResponse->accepted);
+
         $queryResponse = WebPayAdmin::queryOrder( Svea\SveaConfig::getDefaultConfig() )
                 ->setOrderId($orderResponse->sveaOrderId)
                 ->setCountryCode('SE')
                 ->queryInvoiceOrder()->doRequest();
-        $this->assertEquals(1, $queryResponse->accepted);  
-    }    
+        $this->assertEquals(1, $queryResponse->accepted);
+    }
     // paymentplan
     public function test_queryOrder_queryPaymentPlanOrder_is_accepted() {
         $config = Svea\SveaConfig::getDefaultConfig();
@@ -50,37 +50,37 @@ class WebPayAdminIntegrationTest extends PHPUnit_Framework_TestCase {
                 ->setCountryCode("SE")
                 ->setOrderDate("2012-12-12")
                 ->usePaymentPlanPayment(TestUtil::getGetPaymentPlanParamsForTesting())->doRequest();
-        $this->assertEquals(1, $orderResponse->accepted);        
-        
+        $this->assertEquals(1, $orderResponse->accepted);
+
         $queryResponse = WebPayAdmin::queryOrder( Svea\SveaConfig::getDefaultConfig() )
                 ->setOrderId($orderResponse->sveaOrderId)
                 ->setCountryCode('SE')
                 ->queryPaymentPlanOrder()->doRequest();
-        $this->assertEquals(1, $queryResponse->accepted);  
-    }     
+        $this->assertEquals(1, $queryResponse->accepted);
+    }
     // card
     function test_queryOrder_queryCardOrder() {
         // Set the below to match the transaction, then run the test.
         $transactionId = 590177;
 
-        $request = WebPayAdmin::queryOrder( 
+        $request = WebPayAdmin::queryOrder(
                 Svea\SveaConfig::getSingleCountryConfig(
-                    "SE", 
+                    "SE",
                     "foo", "bar", "123456", // invoice
                     "foo", "bar", "123456", // paymentplan
                     "1200", // merchantid, secret
                     "27f18bfcbe4d7f39971cb3460fbe7234a82fb48f985cf22a068fa1a685fe7e6f93c7d0d92fee4e8fd7dc0c9f11e2507300e675220ee85679afa681407ee2416d",
                     false // prod = false
                 )
-            )    
+            )
             ->setTransactionId( strval($transactionId) )
             ->setCountryCode("SE")
         ;
-        $response = $request->queryCardOrder()->doRequest();            
-        
-        $this->assertEquals( 1, $response->accepted );    
-        
-        $this->assertEquals( $transactionId, $response->transactionId );                            
+        $response = $request->queryCardOrder()->doRequest();
+
+        $this->assertEquals( 1, $response->accepted );
+
+        $this->assertEquals( $transactionId, $response->transactionId );
         $this->assertInstanceOf( "Svea\NumberedOrderRow", $response->numberedOrderRows[0] );
         $this->assertEquals( "Soft213s", $response->numberedOrderRows[0]->articleNumber );
         $this->assertEquals( "1.0", $response->numberedOrderRows[0]->quantity );
@@ -89,7 +89,7 @@ class WebPayAdminIntegrationTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals( 25, $response->numberedOrderRows[0]->vatPercent );
         $this->assertEquals( "Soft", $response->numberedOrderRows[0]->name );
 //        $this->assertEquals( "Specification", $response->numberedOrderRows[1]->description );
-        $this->assertEquals( 0, $response->numberedOrderRows[0]->vatDiscount );                      
+        $this->assertEquals( 0, $response->numberedOrderRows[0]->vatDiscount );
 
         $this->assertInstanceOf( "Svea\NumberedOrderRow", $response->numberedOrderRows[1] );
         $this->assertEquals( "07", $response->numberedOrderRows[1]->articleNumber );
@@ -99,27 +99,17 @@ class WebPayAdminIntegrationTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals( 0, $response->numberedOrderRows[1]->vatPercent );
         $this->assertEquals( "Sits: Hatfield Beige 6", $response->numberedOrderRows[1]->name );
 //        $this->assertEquals( "Specification", $response->numberedOrderRows[1]->description );
-        $this->assertEquals( 0, $response->numberedOrderRows[1]->vatDiscount );                      
+        $this->assertEquals( 0, $response->numberedOrderRows[1]->vatDiscount );
     }
-    
-    // direct bank
-    // TODO
-    
-    /// cancelOrderRows()
-    // invoice
-    // TODO
-    // partpayment
-    // TODO
-    // card
-    // TODO
-    
+
+
     /// creditOrderRows()
     // invoice
     public function test_creditOrderRows_creditInvoiceOrderRows_returns_CreditOrderRowsRequest() {
         $creditOrderRowsBuilder = WebPayAdmin::creditOrderRows( Svea\SveaConfig::getDefaultConfig() );
-        $request = $creditOrderRowsBuilder->creditInvoiceOrderRows();        
-        $this->assertInstanceOf( "Svea\AdminService\CreditOrderRowsRequest", $request );
-    }    
+        $request = $creditOrderRowsBuilder->creditInvoiceOrderRows();
+        $this->assertInstanceOf( "Svea\AdminService\CreditInvoiceRowsRequest", $request );
+    }
 
     // card
     public function test_creditOrderRows_creditCardOrderRows_returns_CreditTransaction() {
@@ -129,10 +119,10 @@ class WebPayAdminIntegrationTest extends PHPUnit_Framework_TestCase {
             ->addNumberedOrderRow( TestUtil::createNumberedOrderRow( 100.00, 1, 1 ) )
             ->setRowToCredit(1)
         ;
-        $request = $creditOrderRowsBuilder->creditCardOrderRows();                
+        $request = $creditOrderRowsBuilder->creditCardOrderRows();
         $this->assertInstanceOf( "Svea\HostedService\CreditTransaction", $request );
-    } 
-    
+    }
+
     // direct bank
     public function test_creditOrderRows_creditDirectBankOrderRows_returns_CreditTransaction() {
         $creditOrderRowsBuilder = WebPayAdmin::creditOrderRows( Svea\SveaConfig::getDefaultConfig() )
@@ -141,39 +131,39 @@ class WebPayAdminIntegrationTest extends PHPUnit_Framework_TestCase {
             ->addNumberedOrderRow( TestUtil::createNumberedOrderRow( 100.00, 1, 1 ) )
             ->setRowToCredit(1)
         ;
-        $request = $creditOrderRowsBuilder->creditDirectBankOrderRows();                
+        $request = $creditOrderRowsBuilder->creditDirectBankOrderRows();
         $this->assertInstanceOf( "Svea\HostedService\CreditTransaction", $request );
-    } 
-    
+    }
+
     /// addOrderRows()
     // invoice
     // paymentplan
     public function test_addOrderRows_addInvoiceOrderRows_returns_AddOrderRowsRequest() {
         $addOrderRowsBuilder = WebPayAdmin::addOrderRows( Svea\SveaConfig::getDefaultConfig() );
-        $request = $addOrderRowsBuilder->addInvoiceOrderRows();        
+        $request = $addOrderRowsBuilder->addInvoiceOrderRows();
         $this->assertInstanceOf( "Svea\AdminService\AddOrderRowsRequest", $request );
     }
 
     public function test_addOrderRows_addPaymentPlanOrderRows_returns_AddOrderRowsRequest() {
         $addOrderRowsBuilder = WebPayAdmin::addOrderRows( Svea\SveaConfig::getDefaultConfig() );
-        $request = $addOrderRowsBuilder->addPaymentPlanOrderRows();        
+        $request = $addOrderRowsBuilder->addPaymentPlanOrderRows();
         $this->assertInstanceOf( "Svea\AdminService\AddOrderRowsRequest", $request );
-    }    
-    
+    }
+
     /// updateOrderRows()
     // invoice
     public function test_updateOrderRows_updateInvoiceOrderRows_returns_UpdateOrderRowsRequest() {
         $updateOrderRowsBuilder = WebPayAdmin::updateOrderRows( Svea\SveaConfig::getDefaultConfig() );
-        $request = $updateOrderRowsBuilder->updateInvoiceOrderRows();        
+        $request = $updateOrderRowsBuilder->updateInvoiceOrderRows();
         $this->assertInstanceOf( "Svea\AdminService\UpdateOrderRowsRequest", $request );
     }
     // paymentplan
     public function test_updateOrderRows_updatePaymentPlanOrderRows_returns_UpdateOrderRowsRequest() {
         $updateOrderRowsBuilder = WebPayAdmin::updateOrderRows( Svea\SveaConfig::getDefaultConfig() );
-        $request = $updateOrderRowsBuilder->updatePaymentPlanOrderRows();        
+        $request = $updateOrderRowsBuilder->updatePaymentPlanOrderRows();
         $this->assertInstanceOf( "Svea\AdminService\UpdateOrderRowsRequest", $request );
-    } 
-    
+    }
+
     // deliverOrderRows()
     // invoice
     public function test_deliverOrderRows_deliverInvoiceOrderRows_returns_DeliverOrderRowsRequest() {
@@ -185,84 +175,84 @@ class WebPayAdminIntegrationTest extends PHPUnit_Framework_TestCase {
             ->deliverInvoiceOrderRows()
         ;
         $this->assertInstanceOf ("Svea\AdminService\DeliverOrderRowsRequest", $request );
-    }    
-    
+    }
+
     //WebPayAdmin::queryOrder()
     //.queryInvoiceOrder
     public function test_queryOrder_queryInvoiceOrder_single_order_row_with_invoice_fee_and_shipping_fee() {
-    
+
         // create order using order row specified with ->setName() and ->setDescription
         $specifiedOrderRow = WebPayItem::orderRow()
-            ->setAmountExVat(100.00)                
-            ->setVatPercent(25)                     
-            ->setQuantity(1)                        
-            ->setName("orderrow 1")                 
-            ->setDescription("description 1")       
-        ;   
+            ->setAmountExVat(100.00)
+            ->setVatPercent(25)
+            ->setQuantity(1)
+            ->setName("orderrow 1")
+            ->setDescription("description 1")
+        ;
 
         $invoiceFeeOrderRow = WebPayItem::invoiceFee()
-            ->setAmountExVat(20.00)                 
-            ->setVatPercent(25)                     
-            ->setName("invoicefee 1")               
-            ->setDescription("invoicefee description 1") 
-        ;         
+            ->setAmountExVat(20.00)
+            ->setVatPercent(25)
+            ->setName("invoicefee 1")
+            ->setDescription("invoicefee description 1")
+        ;
 
         $shippingFeeOrderRow = WebPayItem::shippingFee()
-            ->setAmountExVat(40.00)                 
-            ->setVatPercent(25)                     
-            ->setName("shippingfee 1")              
+            ->setAmountExVat(40.00)
+            ->setVatPercent(25)
+            ->setName("shippingfee 1")
             ->setDescription("shippingfee description 1")
-        ;         
-         
+        ;
+
         $order = TestUtil::createOrderWithoutOrderRows()
             ->addOrderRow($specifiedOrderRow)
-            ->addOrderRow($invoiceFeeOrderRow)               
+            ->addOrderRow($invoiceFeeOrderRow)
             ->addOrderRow($shippingFeeOrderRow)
-        ;                
-        
+        ;
+
         $createOrderResponse = $order->useInvoicePayment()->doRequest();
-        
+
         //print_r( $createOrderResponse );
         $this->assertInstanceOf ("Svea\WebService\CreateOrderResponse", $createOrderResponse );
         $this->assertTrue( $createOrderResponse->accepted );
-        
-        $createdOrderId = $createOrderResponse->sveaOrderId;        
-        
+
+        $createdOrderId = $createOrderResponse->sveaOrderId;
+
         // query orderrows
         $queryOrderBuilder = WebPayAdmin::queryOrder( Svea\SveaConfig::getDefaultConfig() )
             ->setOrderId( $createdOrderId )
             ->setCountryCode("SE")
         ;
-                
-        $queryResponse = $queryOrderBuilder->queryInvoiceOrder()->doRequest();         
-        
+
+        $queryResponse = $queryOrderBuilder->queryInvoiceOrder()->doRequest();
+
         //print_r( $queryResponse);
-        $this->assertEquals( 1, $queryResponse->accepted); 
-        
+        $this->assertEquals( 1, $queryResponse->accepted);
+
         $this->assertEquals( 1, $queryResponse->numberedOrderRows[0]->rowNumber );
         $this->assertEquals( 1.00, $queryResponse->numberedOrderRows[0]->quantity );
         $this->assertEquals( 100.00, $queryResponse->numberedOrderRows[0]->amountExVat );
         $this->assertEquals( 25, $queryResponse->numberedOrderRows[0]->vatPercent );
         $this->assertEquals( null, $queryResponse->numberedOrderRows[0]->name );
-        $this->assertEquals( "orderrow 1: description 1", $queryResponse->numberedOrderRows[0]->description );        
+        $this->assertEquals( "orderrow 1: description 1", $queryResponse->numberedOrderRows[0]->description );
 
         $this->assertEquals( 2, $queryResponse->numberedOrderRows[1]->rowNumber );
         $this->assertEquals( 1.00, $queryResponse->numberedOrderRows[1]->quantity );
         $this->assertEquals( 20.00, $queryResponse->numberedOrderRows[1]->amountExVat );
         $this->assertEquals( 25, $queryResponse->numberedOrderRows[1]->vatPercent );
         $this->assertEquals( null, $queryResponse->numberedOrderRows[1]->name );
-        $this->assertEquals( "invoicefee 1: invoicefee description 1", $queryResponse->numberedOrderRows[1]->description );         
-        
+        $this->assertEquals( "invoicefee 1: invoicefee description 1", $queryResponse->numberedOrderRows[1]->description );
+
         $this->assertEquals( 3, $queryResponse->numberedOrderRows[2]->rowNumber );
         $this->assertEquals( 1.00, $queryResponse->numberedOrderRows[2]->quantity );
         $this->assertEquals( 40.00, $queryResponse->numberedOrderRows[2]->amountExVat );
         $this->assertEquals( 25, $queryResponse->numberedOrderRows[2]->vatPercent );
         $this->assertEquals( null, $queryResponse->numberedOrderRows[2]->name );
-        $this->assertEquals( "shippingfee 1: shippingfee description 1", $queryResponse->numberedOrderRows[2]->description );            
-    }  
-    
+        $this->assertEquals( "shippingfee 1: shippingfee description 1", $queryResponse->numberedOrderRows[2]->description );
+    }
+
     public function test_queryOrder_queryInvoiceOrder_multiple_order_rows() {
-    
+
         // create order using order row specified with ->setName() and ->setDescription
         $specifiedOrderRow = WebPayItem::orderRow()
             ->setAmountExVat(100.00)                // recommended to specify price using AmountExVat & VatPercent
@@ -270,7 +260,7 @@ class WebPayAdminIntegrationTest extends PHPUnit_Framework_TestCase {
             ->setQuantity(1)                        // required
             ->setName("orderrow 1")                 // optional
             ->setDescription("description 1")       // optional
-        ;   
+        ;
 
         // create order using order row specified with ->setName() and ->setDescription
         $specifiedOrderRow2 = WebPayItem::orderRow()
@@ -279,20 +269,20 @@ class WebPayAdminIntegrationTest extends PHPUnit_Framework_TestCase {
             ->setQuantity(1)                        // required
             ->setName("orderrow 2")                 // optional
             ->setDescription("description 2")       // optional
-        ;         
-        
+        ;
+
         $order = TestUtil::createOrderWithoutOrderRows()
-            ->addOrderRow($specifiedOrderRow)  
+            ->addOrderRow($specifiedOrderRow)
             ->addOrderRow($specifiedOrderRow2);
-         
+
         $createOrderResponse = $order->useInvoicePayment()->doRequest();
-        
+
         ////print_r( $createOrderResponse );
         $this->assertInstanceOf ("Svea\WebService\CreateOrderResponse", $createOrderResponse );
         $this->assertTrue( $createOrderResponse->accepted );
-        
-        $createdOrderId = $createOrderResponse->sveaOrderId;        
-        
+
+        $createdOrderId = $createOrderResponse->sveaOrderId;
+
         // WPA::queryOrder()
         // ->queryInvoiceOrder()
         // query orderrows
@@ -300,89 +290,89 @@ class WebPayAdminIntegrationTest extends PHPUnit_Framework_TestCase {
             ->setOrderId( $createdOrderId )
             ->setCountryCode("SE")
         ;
-                
-        $queryResponse = $queryOrderBuilder->queryInvoiceOrder()->doRequest();         
-        
+
+        $queryResponse = $queryOrderBuilder->queryInvoiceOrder()->doRequest();
+
         //print_r( $queryResponse);
-        $this->assertEquals(1, $queryResponse->accepted);    
-                
-        // assert that order rows are the same 
-        $this->assertEquals( 1, $queryResponse->accepted); 
-        
+        $this->assertEquals(1, $queryResponse->accepted);
+
+        // assert that order rows are the same
+        $this->assertEquals( 1, $queryResponse->accepted);
+
         $this->assertEquals( 1, $queryResponse->numberedOrderRows[0]->rowNumber );
         $this->assertEquals( 1.00, $queryResponse->numberedOrderRows[0]->quantity );
         $this->assertEquals( 100.00, $queryResponse->numberedOrderRows[0]->amountExVat );
         $this->assertEquals( 25, $queryResponse->numberedOrderRows[0]->vatPercent );
         $this->assertEquals( null, $queryResponse->numberedOrderRows[0]->name );
         $this->assertEquals( "orderrow 1: description 1", $queryResponse->numberedOrderRows[0]->description );
-        
+
         $this->assertEquals( 2, $queryResponse->numberedOrderRows[1]->rowNumber );
         $this->assertEquals( 1.00, $queryResponse->numberedOrderRows[1]->quantity );
         $this->assertEquals( 100.00, $queryResponse->numberedOrderRows[1]->amountExVat );
         $this->assertEquals( 25, $queryResponse->numberedOrderRows[1]->vatPercent );
         $this->assertEquals( null, $queryResponse->numberedOrderRows[1]->name );
         $this->assertEquals( "orderrow 2: description 2", $queryResponse->numberedOrderRows[1]->description );
-    }        
-    
+    }
+
     //-queryPaymentPlanOrder
     // TODO
-    
+
     //.queryCardOrder
     public function test_queryOrder_queryCardOrder_single_order_row() {
-    
-        // created w/java package TODO make self-contained using webdriver to create card order     
-        $createdOrderId = 587673;  
-        
+
+        // created w/java package TODO make self-contained using webdriver to create card order
+        $createdOrderId = 587673;
+
         // query orderrows
         $queryOrderBuilder = WebPayAdmin::queryOrder( Svea\SveaConfig::getDefaultConfig() )
             ->setOrderId( $createdOrderId )
             ->setCountryCode("SE")
         ;
-                
-        $queryResponse = $queryOrderBuilder->queryCardOrder()->doRequest();         
-        
+
+        $queryResponse = $queryOrderBuilder->queryCardOrder()->doRequest();
+
         //print_r( $queryResponse);
-        $this->assertEquals( 1, $queryResponse->accepted); 
-        
+        $this->assertEquals( 1, $queryResponse->accepted);
+
         $this->assertEquals( 1, $queryResponse->numberedOrderRows[0]->rowNumber );
         $this->assertEquals( 1.00, $queryResponse->numberedOrderRows[0]->quantity );
         $this->assertEquals( 100.00, $queryResponse->numberedOrderRows[0]->amountExVat );
         $this->assertEquals( 25, $queryResponse->numberedOrderRows[0]->vatPercent );
         $this->assertEquals( "orderrow 1", $queryResponse->numberedOrderRows[0]->name );
-        $this->assertEquals( "description 1", $queryResponse->numberedOrderRows[0]->description );          
-    }  
-    
+        $this->assertEquals( "description 1", $queryResponse->numberedOrderRows[0]->description );
+    }
+
     public function test_queryOrder_queryCardOrder_multiple_order_rows() {
 
-        // created w/java package TODO make self-contained using webdriver to create card order     
-        $createdOrderId = 587679;  
-        
+        // created w/java package TODO make self-contained using webdriver to create card order
+        $createdOrderId = 587679;
+
         // query orderrows
         $queryOrderBuilder = WebPayAdmin::queryOrder( Svea\SveaConfig::getDefaultConfig() )
             ->setOrderId( $createdOrderId )
             ->setCountryCode("SE")
         ;
-                
-        $queryResponse = $queryOrderBuilder->queryCardOrder()->doRequest();         
-        
+
+        $queryResponse = $queryOrderBuilder->queryCardOrder()->doRequest();
+
         //print_r( $queryResponse);
-        $this->assertEquals( 1, $queryResponse->accepted); 
-        
+        $this->assertEquals( 1, $queryResponse->accepted);
+
         $this->assertEquals( 1, $queryResponse->numberedOrderRows[0]->rowNumber );
         $this->assertEquals( 1.00, $queryResponse->numberedOrderRows[0]->quantity );
         $this->assertEquals( 100.00, $queryResponse->numberedOrderRows[0]->amountExVat );
         $this->assertEquals( 25, $queryResponse->numberedOrderRows[0]->vatPercent );
         $this->assertEquals( "orderrow 1", $queryResponse->numberedOrderRows[0]->name );
-        $this->assertEquals( "description 1", $queryResponse->numberedOrderRows[0]->description );      
+        $this->assertEquals( "description 1", $queryResponse->numberedOrderRows[0]->description );
 
         $this->assertEquals( 2, $queryResponse->numberedOrderRows[1]->rowNumber );
         $this->assertEquals( 1.00, $queryResponse->numberedOrderRows[1]->quantity );
         $this->assertEquals( 100.00, $queryResponse->numberedOrderRows[1]->amountExVat );
         $this->assertEquals( 25, $queryResponse->numberedOrderRows[1]->vatPercent );
         $this->assertEquals( "orderrow 2", $queryResponse->numberedOrderRows[1]->name );
-        $this->assertEquals( "description 2", $queryResponse->numberedOrderRows[1]->description );        
-    }  
-    
+        $this->assertEquals( "description 2", $queryResponse->numberedOrderRows[1]->description );
+    }
+
     //-queryDirectBankOrder
     // TODO
 }

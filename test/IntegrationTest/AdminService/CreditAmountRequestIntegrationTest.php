@@ -5,12 +5,12 @@ require_once $root . '/../../../src/Includes.php';
 require_once $root . '/../../TestUtil.php';
 
 /** helper class, used to return information about an order */
-class orderToCredit {
+class orderToCreditAmount {
     var $orderId;
     var $invoiceId;
     var $contractNumber;
 
-    function orderToCredit( $orderId, $invoiceId = NULL, $contractNumber = NULL ) {
+    function orderToCreditAmount( $orderId, $invoiceId = NULL, $contractNumber = NULL ) {
         $this->orderId = $orderId;
         $this->invoiceId = $invoiceId;
         $this->contractNumber = $contractNumber;
@@ -20,7 +20,7 @@ class orderToCredit {
 /**
  * @author Kristian Grossman-Madsen for Svea WebPay
  */
-class CreditOrderRowsRequestIntegrationTest extends PHPUnit_Framework_TestCase {
+class CreditAmountRequestIntegrationTest extends PHPUnit_Framework_TestCase {
 
     /** helper function, returns invoice for delivered order with one row, sent with PriceIncludingVat flag set to true */
     public function get_orderInfo_sent_inc_vat( $amount, $vat, $quantity, $is_paymentplan = NULL) {
@@ -51,7 +51,7 @@ class CreditOrderRowsRequestIntegrationTest extends PHPUnit_Framework_TestCase {
                 }
         $this->assertEquals(1, $deliver->accepted);
 
-      return new orderToCredit( $orderResponse->sveaOrderId, NULL, $deliver->contractNumber );
+      return new orderToCreditAmount( $orderResponse->sveaOrderId, NULL, $deliver->contractNumber );
 
     }
 
@@ -84,7 +84,7 @@ class CreditOrderRowsRequestIntegrationTest extends PHPUnit_Framework_TestCase {
                                 ->deliverPaymentPlanOrder()->doRequest();
                 }
         $this->assertEquals(1, $deliver->accepted);
-        return  new orderToCredit( $orderResponse->sveaOrderId, NULL, $deliver->contractNumber );
+        return  new orderToCreditAmount( $orderResponse->sveaOrderId, NULL, $deliver->contractNumber );
 
     }
 
