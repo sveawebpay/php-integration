@@ -165,7 +165,7 @@ class GetOrdersRequestIntegrationTest extends PHPUnit_Framework_TestCase{
         $request = new Svea\AdminService\GetOrdersRequest( $getOrdersBuilder );
         $getOrdersResponse = $request->doRequest();
 
-//        print_r( $getOrdersResponse );    
+//        print_r( $getOrdersResponse );
 
         $this->assertInstanceOf('Svea\AdminService\GetOrdersResponse', $getOrdersResponse);
         $this->assertEquals(1, $getOrdersResponse->accepted );
@@ -378,7 +378,7 @@ class GetOrdersRequestIntegrationTest extends PHPUnit_Framework_TestCase{
         $this->assertEquals(null, $getOrdersResponse->errormessage);
 
         $this->assertInstanceOf( "Svea\CompanyCustomer", $getOrdersResponse->customer );
-        $this->assertEquals( "164608142222", $getOrdersResponse->customer->orgNumber );
+        $this->assertEquals( "194608142222", $getOrdersResponse->customer->orgNumber );
         $this->assertEquals( null, $getOrdersResponse->customer->companyVatNumber );
         $this->assertEquals( "Persson, Tess T", $getOrdersResponse->customer->companyName );
         $this->assertEquals( null, $getOrdersResponse->customer->email );

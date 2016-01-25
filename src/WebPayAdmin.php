@@ -154,20 +154,19 @@ class WebPayAdmin {
 
     /**
      * The WebPayAdmin::creditOrderRows entrypoint method is used to credit rows in an order after it has been delivered.
-     * Supports invoice, card and direct bank orders. (To credit a payment plan order, please contact Svea customer service.)
+     * Supports invoice, PaymentPlan, card and direct bank orders.
+     * (To credit a payment plan order, please contact Svea customer service first.)
      *
      * If you wish to credit an amount not present in the original order, use addCreditOrderRow() or addCreditOrderRows()
      * and supply a new order row for the amount to credit. This is the recommended way to credit a card or direct bank order.
      *
-     * If you wish to credit an invoice order row in full, you can specify the index of the order row to credit using setRowToCredit().
+     * If you wish to credit an invoice or Payment Plan order row in full, you can specify the index of the order row to credit using setRowToCredit().
      * The corresponding order row at Svea will then be credited. (For card or direct bank orders you need to first query and then
      * supply the corresponding numbered order rows using the addNumberedOrderRows() method.)
      *
      * Following the request Svea will issue a credit invoice including the original order rows specified using setRowToCredit(),
      * as well as any new credit order rows specified using addCreditOrderRow(). For card or direct bank orders, the order row amount
      * will be credited to the customer.
-     *
-     * Note: when using addCreditOrderRows, you may only use WebPayItem::orderRow with price specified as amountExVat and vatPercent.
      *
      * Get an order builder instance using the WebPayAdmin::creditOrderRows entrypoint, then provide more information about the
      * transaction and send the request using the creditOrderRowsBuilder methods:
@@ -176,6 +175,7 @@ class WebPayAdmin {
      *     $request = WebPay::creditOrder($config)
      *         ->setInvoiceId()                // invoice only, required
      *         ->setInvoiceDistributionType()  // invoice only, required
+     *         ->setContractNumber()           // Paymentplan only, required
      *         ->setOrderId()                  // card and direct bank only, required
      *         ->setCountryCode()              // required
      *         ->addCreditOrderRow()           // optional, use to specify a new credit row, i.e. for amounts not present in the original order
@@ -186,9 +186,10 @@ class WebPayAdmin {
      *         ->addNumberedOrderRows()        // card and direct bank only, optional
      *     ;
      *     // then select the corresponding request class and send request
-     *     $response = $request->creditInvoiceOrderRows()->doRequest();    // returns CreditInvoiceRowsResponse
-     *     $response = $request->creditCardOrderRows()->doRequest();       // returns CreditTransactionResponse
-     *     $response = $request->creditDirectBankOrderRows()->doRequest(); // returns CreditTransactionResponse
+     *     $response = $request->creditInvoiceOrderRows()->doRequest();     // returns CreditInvoiceRowsResponse
+     *     $response = $request->creditPaymentplanOrderRows()->doRequest(); // returns CreditPaymentPlanRowsRequest
+     *     $response = $request->creditCardOrderRows()->doRequest();        // returns CreditTransactionResponse
+     *     $response = $request->creditDirectBankOrderRows()->doRequest();  // returns CreditTransactionResponse
      * ...
      *
      * @param ConfigurationProvider $config
@@ -197,6 +198,7 @@ class WebPayAdmin {
      *
      * @see \Svea\CreditOrderRowsBuilder \Svea\CreditOrderRowsBuilder
      * @see \Svea\AdminService\CreditInvoiceRowsResponse \Svea\AdminService\CreditInvoiceRowsResponse
+     * @see \Svea\AdminService\CreditPaymentPlanResponse  \Svea\AdminService\CreditPaymentPlanResponse
      * @see \Svea\HostedService\CreditTransactionResponse \Svea\HostedService\CreditTransactionResponse
      *
      * @author Kristian Grossman-Madsen for Svea WebPay
@@ -204,6 +206,34 @@ class WebPayAdmin {
     public static function creditOrderRows( $config = NULL ) {
         if( $config == NULL ) { WebPay::throwMissingConfigException(); }
         return new Svea\CreditOrderRowsBuilder($config);
+    }
+    /**
+     * The WebPayAdmin::creditAmount entrypoint method is used to credit an amount in an order after it has been delivered.
+     * Supports PaymentPlan
+     *
+     *
+     * Get an order builder instance using the WebPayAdmin::creditAmount entrypoint, then provide more information about the
+     * transaction and send the request using the CreditAmountBuilder methods:
+     *
+     * ...
+     *      $request = WebPayAdmin::creditAmount($config)
+     *              ->setContractNumber($deliverorderInfo->contractNumber)
+     *              ->setCountryCode('SE')
+     *              ->setDescription('credit desc')
+     *              ->setAmountIncVat(100);
+     *
+     *      $response = $request->cancelPaymentPlanAmount()->doRequest();
+     * ...
+     *
+     * @param ConfigurationProvider $config
+     * @return Svea\CreditAmountBuilder
+     * @throws Svea\ValidationException
+     *
+     * @author  ann-hal for Svea Ekonomi Ab | WebPay
+     */
+    public static function creditAmount( $config = NULL ) {
+        if( $config == NULL ) { WebPay::throwMissingConfigException(); }
+        return new Svea\CreditAmountBuilder($config);
     }
 
     /**
@@ -373,4 +403,5 @@ class WebPayAdmin {
     private static function throwMissingConfigException() {
         throw new \Svea\ValidationException('-missing parameter: This method requires an ConfigurationProvider object as parameter. Create a class that implements class ConfigurationProvider. Set returnvalues to configuration values. Create an object from that class. Alternative use static function from class SveaConfig e.g. SveaConfig::getDefaultConfig(). You can replace the default config values to return your own config values in the method.');
     }
+
 }

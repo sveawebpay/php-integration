@@ -1,6 +1,6 @@
 # PHP Integration Package API for Svea WebPay
 
-## Version 2.2.25
+## Version 2.3.0
 
 ### Current build status
 | Branch                            | Build status                               |
