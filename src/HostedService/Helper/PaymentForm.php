@@ -42,11 +42,11 @@ class PaymentForm {
         $this->secretWord = $config->getSecret(\ConfigurationProvider::HOSTED_TYPE, $countryCode);
         $this->mac = hash("sha512", $this->xmlMessageBase64 . $this->secretWord);
 
+        $this->setSubmitMessage();
+
         $this->setForm();
         $this->setHtmlFields();
         $this->setRawFields();
-
-        $this->setSubmitMessage();
     }
 
     public function setRawFields() {
