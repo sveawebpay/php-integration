@@ -102,7 +102,7 @@ interface ConfigurationProvider {
      *
      * Uncomment this if you wish to provide this information from your ConfigurationProvider implementation.
      */
-    // public function getIntegrationPlatform();
+     public function getIntegrationPlatform();
 
     /**
      * Use this to provide information about the company providing this particular integration (i.e. Svea Ekonomi, for the Svea Opencart module, et al), that
@@ -111,7 +111,7 @@ interface ConfigurationProvider {
      *
      * Uncomment this if you wish to provide this information from your ConfigurationProvider implementation.
      */
-    // public function getIntegrationCompany();
+     public function getIntegrationCompany();
 
     /**
      * Use this to provide information about the version of this particular integration integration platform (i.e. 2.0.1 et al), that will be sent to Svea
@@ -119,6 +119,5 @@ interface ConfigurationProvider {
      *
      * Uncomment this if you wish to provide this information from your ConfigurationProvider implementation.
      */
-    // public function getIntegrationVersion();
-
+     public function getIntegrationVersion();
 }

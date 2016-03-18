@@ -1,0 +1,6 @@
+php-integration package
+updated 2016-03-18
+
+version 2.3.0
+
+Remember to activate integration functions in Config/ConfigurationProvider.php on update
