@@ -1,9 +1,7 @@
 <?php
-use \Svea\HostedService\AnnulTransaction as AnnulTransaction;
 
-$root = realpath(dirname(__FILE__));
-require_once $root . '/../../../../src/Includes.php';
-require_once $root . '/../../../../src/WebService/svea_soap/SveaSoapConfig.php';
+use Svea\WebPay\HostedService\HostedAdminRequest\AnnulTransaction as AnnulTransaction;
+use Svea\WebPay\Config\ConfigurationProvider;
 
 /**
  * @author Kristian Grossman-Madsen for Svea Webpay
@@ -15,13 +13,13 @@ class AnnulTransactionTest extends PHPUnit_Framework_TestCase {
 
     // fixture, run once before each test method
     protected function setUp() {
-        $this->configObject = Svea\SveaConfig::getDefaultConfig();
+        $this->configObject = \Svea\WebPay\Config\SveaConfig::getDefaultConfig();
         $this->annulObject = new AnnulTransaction( $this->configObject );
     }
 
     // test methods
     function test_class_exists(){
-        $this->assertInstanceOf( "Svea\HostedService\AnnulTransaction", $this->annulObject);      
+        $this->assertInstanceOf( "Svea\WebPay\HostedService\HostedAdminRequest\AnnulTransaction", $this->annulObject);      
         $this->assertEquals( "annul", PHPUnit_Framework_Assert::readAttribute($this->annulObject, 'method') );        
     }
                   
@@ -73,7 +71,7 @@ class AnnulTransactionTest extends PHPUnit_Framework_TestCase {
     function test_prepareRequest_missing_transactionId_throws_exception() {
 
         $this->setExpectedException(
-            'Svea\ValidationException', 
+            'Svea\WebPay\BuildOrder\Validator\ValidationException', 
             '-missing value : transactionId is required. Use function setTransactionId() with the SveaOrderId from the createOrder response.'
         );        
         

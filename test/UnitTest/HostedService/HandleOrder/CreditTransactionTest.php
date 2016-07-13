@@ -1,8 +1,7 @@
 <?php
 
-$root = realpath(dirname(__FILE__));
-require_once $root . '/../../../../src/Includes.php';
-require_once $root . '/../../../../src/WebService/svea_soap/SveaSoapConfig.php';
+use Svea\WebPay\Config\ConfigurationProvider;
+
 
 /**
  * @author Kristian Grossman-Madsen for Svea Webpay
@@ -14,13 +13,13 @@ class CreditTransactionTest extends PHPUnit_Framework_TestCase {
 
     // fixture, run once before each test method
     protected function setUp() {
-        $this->configObject = Svea\SveaConfig::getDefaultConfig();
-        $this->creditObject = new Svea\HostedService\CreditTransaction( $this->configObject );
+        $this->configObject = \Svea\WebPay\Config\SveaConfig::getDefaultConfig();
+        $this->creditObject = new \Svea\WebPay\HostedService\HostedAdminRequest\CreditTransaction( $this->configObject );
     }
 
     // test methods
     function test_class_exists(){
-        $this->assertInstanceOf( "Svea\HostedService\CreditTransaction", $this->creditObject);      
+        $this->assertInstanceOf( "Svea\WebPay\HostedService\HostedAdminRequest\CreditTransaction", $this->creditObject);      
         $this->assertEquals( "credit", PHPUnit_Framework_Assert::readAttribute($this->creditObject, 'method') );        
     }
               
@@ -80,7 +79,7 @@ class CreditTransactionTest extends PHPUnit_Framework_TestCase {
     function test_prepareRequest_missing_transactionId_throws_exception() {
         
         $this->setExpectedException(
-            'Svea\ValidationException', 
+            'Svea\WebPay\BuildOrder\Validator\ValidationException', 
             '-missing value : transactionId is required. Use function setTransactionId() with the SveaOrderId from the createOrder response.'
         );
         
@@ -96,7 +95,7 @@ class CreditTransactionTest extends PHPUnit_Framework_TestCase {
     function test_prepareRequest_missing_creditAmount_throws_exception() {
 
         $this->setExpectedException(
-            'Svea\ValidationException', 
+            'Svea\WebPay\BuildOrder\Validator\ValidationException', 
             '-missing value : creditAmount is required. Use function setCreditAmount().'
         );        
         

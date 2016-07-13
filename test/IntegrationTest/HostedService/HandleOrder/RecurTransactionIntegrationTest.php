@@ -1,14 +1,12 @@
 <?php
-use Svea\HostedService\RecurTransaction as RecurTransaction;
+use Svea\WebPay\Config\SveaConfig;
+use Svea\WebPay\HostedService\HostedAdminRequest\RecurTransaction as RecurTransaction;
 
-$root = realpath(dirname(__FILE__));
-require_once $root . '/../../../../src/Includes.php';
-require_once $root . '/../../../TestUtil.php';
 
 /**
  * RecurTransactionIntegrationTest 
  * 
- * @author Kristian Grossman-Madsen for Svea WebPay
+ * @author Kristian Grossman-Madsen for Svea Svea\WebPay\WebPay
  */
 class RecurTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
      
@@ -24,7 +22,7 @@ class RecurTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
         $currency = "SEK";
         $amount = 100;
                 
-        $request = new RecurTransaction( Svea\SveaConfig::getDefaultConfig() );
+        $request = new RecurTransaction( SveaConfig::getDefaultConfig() );
         $request->subscriptionId = $subscriptionId;
         $request->customerRefNo = $customerRefNo;
         $request->amount = $amount;        
@@ -33,7 +31,7 @@ class RecurTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
         $request->countryCode = "SE";
         $response = $request->doRequest();
 
-        $this->assertInstanceOf( "Svea\HostedService\RecurTransactionResponse", $response );
+        $this->assertInstanceOf( "Svea\WebPay\HostedService\HostedResponse\HostedAdminResponse\RecurTransactionResponse", $response );
         
         // if we receive an error from the service, the integration test passes
         $this->assertEquals( 0, $response->accepted );
@@ -78,7 +76,7 @@ class RecurTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
         $new_clientOrderNumber = "test_recur_".date('c');  
 
         // below is actual test, shouldn't need to change it
-        $request = new RecurTransaction( Svea\SveaConfig::getDefaultConfig() );
+        $request = new RecurTransaction( SveaConfig::getDefaultConfig() );
         $request->subscriptionId = $subscriptionId;
         $request->customerRefNo = $new_clientOrderNumber;
         $request->amount = $new_amount;        
@@ -87,7 +85,7 @@ class RecurTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
         $request->countryCode = "SE";
         $response = $request->doRequest();      
         
-        $this->assertInstanceOf( "Svea\HostedService\RecurTransactionResponse", $response );
+        $this->assertInstanceOf( "Svea\WebPay\HostedService\HostedResponse\HostedAdminResponse\RecurTransactionResponse", $response );
         
         ////print_r($response);                
         $this->assertEquals( 1, $response->accepted );  

@@ -1,14 +1,12 @@
 <?php
-use Svea\HostedService\CreditTransaction as CreditTransaction;
+use Svea\WebPay\Config\SveaConfig;
+use Svea\WebPay\HostedService\HostedAdminRequest\CreditTransaction as CreditTransaction;
 
-$root = realpath(dirname(__FILE__));
-require_once $root . '/../../../../src/Includes.php';
-require_once $root . '/../../../TestUtil.php';
 
 /**
  * CreditTransactionIntegrationTest 
  * 
- * @author Kristian Grossman-Madsen for Svea WebPay
+ * @author Kristian Grossman-Madsen for Svea Svea\WebPay\WebPay
  */
 class CreditTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
  
@@ -22,13 +20,13 @@ class CreditTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
         $transactionId = 987654;
         $amount = 100;
                 
-        $request = new CreditTransaction( Svea\SveaConfig::getDefaultConfig() );
+        $request = new CreditTransaction( SveaConfig::getDefaultConfig() );
         $request->transactionId = $transactionId;
         $request->creditAmount = $amount;
         $request->countryCode = "SE";
         $response = $request->doRequest();
 
-        $this->assertInstanceOf( "Svea\HostedService\CreditTransactionResponse", $response );
+        $this->assertInstanceOf( "Svea\WebPay\HostedService\HostedResponse\HostedAdminResponse\CreditTransactionResponse", $response );
         
         $this->assertEquals( 0, $response->accepted );
         $this->assertEquals( "128 (NO_SUCH_TRANS)", $response->resultcode );    
@@ -52,14 +50,14 @@ class CreditTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
         $transactionId = 587949;
         $amount = 100;
                 
-        $request = new CreditTransaction( Svea\SveaConfig::getDefaultConfig() );
+        $request = new CreditTransaction( SveaConfig::getDefaultConfig() );
         $request->transactionId = $transactionId;
         $request->creditAmount = $amount;
         $request->countryCode = "SE";
         $response = $request->doRequest();       
                 
         //print_r( $response );
-        $this->assertInstanceOf( "Svea\HostedService\CreditTransactionResponse", $response );
+        $this->assertInstanceOf( "Svea\WebPay\HostedService\HostedResponse\HostedAdminResponse\CreditTransactionResponse", $response );
         $this->assertEquals( 1, $response->accepted );        
         $this->assertStringMatchesFormat( "%d", $response->transactionId);   // %d => an unsigned integer value
               

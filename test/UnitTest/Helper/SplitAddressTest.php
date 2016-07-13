@@ -1,10 +1,8 @@
 <?php
-namespace Svea;
 
-$root = realpath(dirname(__FILE__) );
-require_once $root . '/../../../src/Includes.php';
+use Svea\WebPay\Helper\Helper;
 
-class SplittAddressTest extends \PHPUnit_Framework_TestCase {
+class SplitAddressTest extends \PHPUnit_Framework_TestCase {
 
     function debugPrintSplitStreetAddressOutput( $address ) {
         $PRINT_TO_CONSOLE = false;      // set to true to get debug output
@@ -296,4 +294,4 @@ class SplittAddressTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals( 1, $match);
     }
 }
-?>
+

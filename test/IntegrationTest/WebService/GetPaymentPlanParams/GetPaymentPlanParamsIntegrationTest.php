@@ -1,8 +1,6 @@
 <?php
-use \Svea\WebService\GetPaymentPlanParams as GetPaymentPlanParams;
-
-$root = realpath(dirname(__FILE__));
-require_once $root . '/../../../../src/Includes.php';
+use Svea\WebPay\Config\SveaConfig;
+use Svea\WebPay\WebService\GetPaymentPlanParams\GetPaymentPlanParams as GetPaymentPlanParams;
 
 /**
  * @author Jonas Lith
@@ -10,7 +8,7 @@ require_once $root . '/../../../../src/Includes.php';
 class GetPaymentPlanParamsIntegrationTest extends PHPUnit_Framework_TestCase {
 
     public function testPaymentPlanParamsResult() {
-        $config = Svea\SveaConfig::getDefaultConfig();
+        $config = SveaConfig::getDefaultConfig();
         $paymentPlanRequest = new GetPaymentPlanParams($config);
         $request = $paymentPlanRequest
                 ->setCountryCode("SE")
@@ -20,7 +18,7 @@ class GetPaymentPlanParamsIntegrationTest extends PHPUnit_Framework_TestCase {
     }
 
     public function testResultGetPaymentPlanParams() {
-        $config = Svea\SveaConfig::getDefaultConfig();
+        $config = SveaConfig::getDefaultConfig();
         $paymentPlanRequest = new GetPaymentPlanParams($config);
         $request = $paymentPlanRequest
                 ->setCountryCode("SE")
@@ -44,7 +42,7 @@ class GetPaymentPlanParamsIntegrationTest extends PHPUnit_Framework_TestCase {
     //outcommented cause need to use client with only one campaign to test
 //    public function testResultGetPaymentPlanParams_only_one_campaign() {
 //
-//        $paymentPlanRequest = new GetPaymentPlanParams(\Svea\SveaConfig::getTestConfig());
+//        $paymentPlanRequest = new GetPaymentPlanParams(\Svea\WebPay\Config\SveaConfig::getTestConfig());
 //        $request = $paymentPlanRequest
 //                ->setCountryCode("SE")
 //                ->doRequest();

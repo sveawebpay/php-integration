@@ -1,11 +1,9 @@
 <?php
-namespace Svea;
+use Svea\WebPay\BuildOrder\CreditOrderRowsBuilder;
+use Svea\WebPay\BuildOrder\RowBuilders\NumberedOrderRow;
+use Svea\WebPay\Config\SveaConfig;
+use Svea\WebPay\Constant\DistributionType;
 
-$root = realpath(dirname(__FILE__));
-require_once $root . '/../../../src/Includes.php';
-
-$root = realpath(dirname(__FILE__));
-require_once $root . '/../../TestUtil.php';
 
 /**
  * @author Kristian Grossman-Madsen for Svea Webpay
@@ -19,7 +17,7 @@ class CreditOrderRowsBuilderTest extends \PHPUnit_Framework_TestCase {
     }
 
     public function test_creditOrderRowsBuilder_class_exists() {
-        $this->assertInstanceOf("Svea\CreditOrderRowsBuilder", $this->creditOrderRowsObject);
+        $this->assertInstanceOf("Svea\WebPay\BuildOrder\CreditOrderRowsBuilder", $this->creditOrderRowsObject);
     }
 
     public function test_creditOrderRowsBuilder_setOrderId() {
@@ -46,13 +44,13 @@ class CreditOrderRowsBuilderTest extends \PHPUnit_Framework_TestCase {
     }
 
     public function test_creditOrderRowsBuilder_setInvoiceDistributionType() {
-        $distributionType = \DistributionType::POST;
+        $distributionType = DistributionType::POST;
         $this->creditOrderRowsObject->setInvoiceDistributionType($distributionType);
         $this->assertEquals($distributionType, $this->creditOrderRowsObject->distributionType);
     }
 
     public function test_addNumberedOrderRow() {
-        $numberedOrderRow = new \Svea\NumberedOrderRow();
+        $numberedOrderRow = new NumberedOrderRow();
         $numberedOrderRow
             ->setAmountExVat(100.00)                // recommended to specify price using AmountExVat & VatPercent
             ->setVatPercent(25)                     // recommended to specify price using AmountExVat & VatPercent
@@ -65,14 +63,14 @@ class CreditOrderRowsBuilderTest extends \PHPUnit_Framework_TestCase {
     }
 
     public function test_addNumberedOrderRows() {
-        $numberedOrderRow1 = new \Svea\NumberedOrderRow();
+        $numberedOrderRow1 = new NumberedOrderRow();
         $numberedOrderRow1
             ->setAmountExVat(100.00)                // recommended to specify price using AmountExVat & VatPercent
             ->setVatPercent(25)                     // recommended to specify price using AmountExVat & VatPercent
             ->setQuantity(1)                        // required
             ->setRowNumber(1)
         ;
-        $numberedOrderRow2 = new \Svea\NumberedOrderRow();
+        $numberedOrderRow2 = new NumberedOrderRow();
         $numberedOrderRow2
             ->setAmountExVat(100.00)                // recommended to specify price using AmountExVat & VatPercent
             ->setVatPercent(25)                     // recommended to specify price using AmountExVat & VatPercent
@@ -88,12 +86,12 @@ class CreditOrderRowsBuilderTest extends \PHPUnit_Framework_TestCase {
         $orderId = "123456";
         $creditOrderRowsObject = $this->creditOrderRowsObject->setOrderId($orderId)->creditInvoiceOrderRows();
 
-        $this->assertInstanceOf("Svea\AdminService\CreditInvoiceRowsRequest", $creditOrderRowsObject);
+        $this->assertInstanceOf("Svea\WebPay\AdminService\CreditInvoiceRowsRequest", $creditOrderRowsObject);
     }
 
     public function test_creditOrderRowsBuilder_creditCardOrderRowsBuilder_returns_LowerTransaction() {
         $orderId = "123456";
-        $mockedNumberedOrderRow = new \Svea\NumberedOrderRow();
+        $mockedNumberedOrderRow = new NumberedOrderRow();
         $mockedNumberedOrderRow
             ->setAmountExVat(100.00)                // recommended to specify price using AmountExVat & VatPercent
             ->setVatPercent(25)                     // recommended to specify price using AmountExVat & VatPercent
@@ -110,12 +108,12 @@ class CreditOrderRowsBuilderTest extends \PHPUnit_Framework_TestCase {
 
         $request = $creditOrderRowsObject->creditCardOrderRows();
 
-        $this->assertInstanceOf("Svea\HostedService\CreditTransaction", $request);
+        $this->assertInstanceOf("Svea\WebPay\HostedService\HostedAdminRequest\CreditTransaction", $request);
     }
 
     public function test_creditOrderRowsBuilder_creditDirectBankOrderRowsBuilder_returns_LowerTransaction() {
         $orderId = "123456";
-        $mockedNumberedOrderRow = new \Svea\NumberedOrderRow();
+        $mockedNumberedOrderRow = new NumberedOrderRow();
         $mockedNumberedOrderRow
             ->setAmountExVat(100.00)                // recommended to specify price using AmountExVat & VatPercent
             ->setVatPercent(25)                     // recommended to specify price using AmountExVat & VatPercent
@@ -132,6 +130,6 @@ class CreditOrderRowsBuilderTest extends \PHPUnit_Framework_TestCase {
 
         $request = $creditOrderRowsObject->creditDirectBankOrderRows();
 
-        $this->assertInstanceOf("Svea\HostedService\CreditTransaction", $request);
+        $this->assertInstanceOf("Svea\WebPay\HostedService\HostedAdminRequest\CreditTransaction", $request);
     }
 }

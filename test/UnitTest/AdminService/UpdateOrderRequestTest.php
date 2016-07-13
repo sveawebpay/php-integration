@@ -1,10 +1,7 @@
 <?php
 
-$root = realpath(dirname(__FILE__));
-require_once $root . '/../../../src/Includes.php';
+use Svea\WebPay\WebPayAdmin;
 
-$root = realpath(dirname(__FILE__));
-require_once $root . '/../../TestUtil.php';
 
 /**
  * @author Kristian Grossman-Madsen for Svea Webpay
@@ -21,7 +18,7 @@ class UpdateOrderRequestTest extends \PHPUnit_Framework_TestCase {
      */
     public function test_updateorder_clientnr_invoice() {
         print_r(strlen($this->notes));
-        $config = Svea\SveaConfig::getDefaultConfig();
+        $config = \Svea\WebPay\Config\SveaConfig::getDefaultConfig();
         $request = WebPayAdmin::updateOrder($config)//only need clientid
                 ->setCountryCode('SE') //req for config
                 ->setOrderId('test')
@@ -32,7 +29,7 @@ class UpdateOrderRequestTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals('123', $request->ClientOrderNumber->enc_value);
     }
     public function test_updateorder_addnotes_invoice() {
-        $config = Svea\SveaConfig::getDefaultConfig();
+        $config = \Svea\WebPay\Config\SveaConfig::getDefaultConfig();
         $request = WebPayAdmin::updateOrder($config)//only need clientid
                 ->setCountryCode('SE') //req for config
                 ->setOrderId('test')
@@ -43,7 +40,7 @@ class UpdateOrderRequestTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals($this->notes, $request->Notes->enc_value);
     }
     public function test_updateorder_clientnr_paymentplan() {
-        $config = Svea\SveaConfig::getDefaultConfig();
+        $config = \Svea\WebPay\Config\SveaConfig::getDefaultConfig();
         $request = WebPayAdmin::updateOrder($config)//only need clientid
                 ->setCountryCode('SE') //req for config
                 ->setOrderId('test')
@@ -54,7 +51,7 @@ class UpdateOrderRequestTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals('123', $request->ClientOrderNumber->enc_value);
     }
     public function test_updateorder_addnotes_paymentplan() {
-        $config = Svea\SveaConfig::getDefaultConfig();
+        $config = \Svea\WebPay\Config\SveaConfig::getDefaultConfig();
         $request = WebPayAdmin::updateOrder($config)//only need clientid
                 ->setCountryCode('SE') //req for config
                 ->setOrderId('test')
@@ -65,12 +62,12 @@ class UpdateOrderRequestTest extends \PHPUnit_Framework_TestCase {
          $this->assertEquals($this->notes, $request->Notes->enc_value);
     }
     /**
-     * @expectedException Svea\ValidationException
+     * @expectedException \Svea\WebPay\BuildOrder\Validator\ValidationException
      * @expectedExceptionMessage -String length : The field Notes must be a string with a maximum length of 200.
      *
      */
     public function test_updateorder_addnotes_chars_validate_invoice() {
-        $config = Svea\SveaConfig::getDefaultConfig();
+        $config = \Svea\WebPay\Config\SveaConfig::getDefaultConfig();
         $request = WebPayAdmin::updateOrder($config)//only need clientid
                 ->setCountryCode('SE') //req for config
                 ->setOrderId('test')

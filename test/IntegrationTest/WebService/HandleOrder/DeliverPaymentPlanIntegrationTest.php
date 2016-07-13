@@ -1,14 +1,15 @@
 <?php
 // Integration tests should not need to use the namespace
 
-$root = realpath(dirname(__FILE__));
-require_once $root . '/../../../../src/Includes.php';
+use Svea\WebPay\Config\SveaConfig;
+use Svea\WebPay\Constant\DistributionType;
+use Svea\WebPay\Test\TestUtil;
+use Svea\WebPay\WebPay;
+use Svea\WebPay\WebPayItem;
 
-$root = realpath(dirname(__FILE__));
-require_once $root . '/../../../TestUtil.php';
 
 /**
- * @author Kristian Grossman-Madsen for Svea WebPay
+ * @author Kristian Grossman-Madsen for Svea Svea\WebPay\WebPay
  */
 class DeliverPaymentPlanIntegrationTest extends PHPUnit_Framework_TestCase {
 
@@ -17,7 +18,7 @@ class DeliverPaymentPlanIntegrationTest extends PHPUnit_Framework_TestCase {
      * @return SveaOrderId
      */
     private function getPaymentPlanOrderId() {
-        $config = Svea\SveaConfig::getDefaultConfig();
+        $config = SveaConfig::getDefaultConfig();
         $response = WebPay::createOrder($config)
                 ->addOrderRow(TestUtil::createOrderRow(1000.00, 1))
                 ->addCustomerDetails(WebPayItem::individualCustomer()->setNationalIdNumber(194605092222))
@@ -32,7 +33,7 @@ class DeliverPaymentPlanIntegrationTest extends PHPUnit_Framework_TestCase {
     }
 
     public function testDeliverPaymentPlanOrder() {
-        $config = Svea\SveaConfig::getDefaultConfig();
+        $config = SveaConfig::getDefaultConfig();
         $orderId = $this->getPaymentPlanOrderId();
         $orderBuilder = WebPay::deliverOrder($config);
         $request = $orderBuilder
@@ -49,10 +50,10 @@ class DeliverPaymentPlanIntegrationTest extends PHPUnit_Framework_TestCase {
     }
 
     /**
-     * @expectedException Svea\ValidationException
+     * @expectedException \Svea\WebPay\BuildOrder\Validator\ValidationException
      */
     public function testDeliverPaymentPlanOrder_missing_setOrderId_throws_ValidationException() {
-        $config = Svea\SveaConfig::getDefaultConfig();
+        $config = SveaConfig::getDefaultConfig();
         $orderId = $this->getPaymentPlanOrderId();
         $orderBuilder = WebPay::deliverOrder($config);
         $request = $orderBuilder
@@ -67,7 +68,7 @@ class DeliverPaymentPlanIntegrationTest extends PHPUnit_Framework_TestCase {
      */
 
        public function testCreateOrderWithAmountIncAndDeliverWithAmountExvat() {
-        $config = Svea\SveaConfig::getDefaultConfig();
+        $config = SveaConfig::getDefaultConfig();
          $campaigncode = TestUtil::getGetPaymentPlanParamsForTesting();
          $order = WebPay::createOrder($config)
                     ->addOrderRow(
@@ -100,7 +101,7 @@ class DeliverPaymentPlanIntegrationTest extends PHPUnit_Framework_TestCase {
 
     }
       public function testCreateOrderWithAmountExAndDeliverWithAmountIncvat() {
-        $config = Svea\SveaConfig::getDefaultConfig();
+        $config = SveaConfig::getDefaultConfig();
          $campaigncode = TestUtil::getGetPaymentPlanParamsForTesting();
          $order = WebPay::createOrder($config)
                     ->addOrderRow(
@@ -133,7 +134,7 @@ class DeliverPaymentPlanIntegrationTest extends PHPUnit_Framework_TestCase {
 
     }
     public function testCreateOrderWithFeesAsAmountIncAndDeliverWithAmountExvat() {
-        $config = Svea\SveaConfig::getDefaultConfig();
+        $config = SveaConfig::getDefaultConfig();
          $campaigncode = TestUtil::getGetPaymentPlanParamsForTesting();
          $order = WebPay::createOrder($config)
                     ->addOrderRow(
@@ -181,7 +182,7 @@ class DeliverPaymentPlanIntegrationTest extends PHPUnit_Framework_TestCase {
 
     }
     public function testCreateOrderWithFeesAsAmountExAndDeliverWithAmountIncvat() {
-        $config = Svea\SveaConfig::getDefaultConfig();
+        $config = SveaConfig::getDefaultConfig();
          $campaigncode = TestUtil::getGetPaymentPlanParamsForTesting();
          $order = WebPay::createOrder($config)
                     ->addOrderRow(
@@ -229,7 +230,7 @@ class DeliverPaymentPlanIntegrationTest extends PHPUnit_Framework_TestCase {
 
     }
     public function testCreateOrderWithDiscountAsAmountExAndDeliverWithAmountIncvat() {
-        $config = Svea\SveaConfig::getDefaultConfig();
+        $config = SveaConfig::getDefaultConfig();
          $campaigncode = TestUtil::getGetPaymentPlanParamsForTesting();
          $order = WebPay::createOrder($config)
                     ->addOrderRow(

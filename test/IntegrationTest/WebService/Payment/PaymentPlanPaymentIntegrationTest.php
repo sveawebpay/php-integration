@@ -1,9 +1,10 @@
 <?php
 // Integration tests should not need to use the namespace
 
-$root = realpath(dirname(__FILE__));
-require_once $root . '/../../../../src/Includes.php';
-require_once $root . '/../../../TestUtil.php';
+use Svea\WebPay\Test\TestUtil;
+use Svea\WebPay\WebPay;
+use Svea\WebPay\WebPayItem;
+
 
 /**
  * @author Anneli Halld'n, Daniel Brolund for Svea Webpay
@@ -11,7 +12,7 @@ require_once $root . '/../../../TestUtil.php';
 class PaymentPlanPaymentIntegrationTest extends PHPUnit_Framework_TestCase {
 
     public function testPaymentPlanRequestReturnsAcceptedResult() {
-        $config = Svea\SveaConfig::getDefaultConfig();
+        $config = \Svea\WebPay\Config\SveaConfig::getDefaultConfig();
         $campaigncode = TestUtil::getGetPaymentPlanParamsForTesting();
         $request = WebPay::createOrder($config)
                 ->addOrderRow(WebPayItem::orderRow()

@@ -1,11 +1,13 @@
 <?php
 
-$root = realpath(dirname(__FILE__));
-require_once $root . '/../../../src/Includes.php';
-require_once $root . '/../../TestUtil.php';
+use Svea\WebPay\BuildOrder\RowBuilders\NumberedOrderRow;
+use Svea\WebPay\Config\SveaConfig;
+use Svea\WebPay\Test\TestUtil;
+use Svea\WebPay\WebPayAdmin;
+use Svea\WebPay\WebPayItem;
 
 /**
- * @author Kristian Grossman-Madsen for Svea WebPay
+ * @author Kristian Grossman-Madsen for Svea Svea\WebPay\WebPay
  */
 class UpdateOrderRowsBuilderIntegrationTest extends PHPUnit_Framework_TestCase {
     
@@ -48,7 +50,7 @@ class UpdateOrderRowsBuilderIntegrationTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(1, $orderResponse->accepted);
 
         // update all attributes for a numbered orderRow   
-        $updateOrderRowsResponse = WebPayAdmin::updateOrderRows( Svea\SveaConfig::getDefaultConfig() )
+        $updateOrderRowsResponse = WebPayAdmin::updateOrderRows( SveaConfig::getDefaultConfig() )
                 ->setOrderId($orderResponse->sveaOrderId)
                 ->setCountryCode($country)
                 ->updateOrderRow( WebPayItem::numberedOrderRow()
@@ -61,7 +63,7 @@ class UpdateOrderRowsBuilderIntegrationTest extends PHPUnit_Framework_TestCase {
                     ->setUnit("st")
                     ->setDiscountPercent(1)
                     ->setRowNumber(1)
-                    ->setStatus(Svea\NumberedOrderRow::ORDERROWSTATUS_NOTDELIVERED)
+                    ->setStatus(NumberedOrderRow::ORDERROWSTATUS_NOTDELIVERED)
                 )    
                 ->updateInvoiceOrderRows()
                     ->doRequest();
@@ -111,7 +113,7 @@ class UpdateOrderRowsBuilderIntegrationTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(1, $orderResponse->accepted);
 
         // update all attributes for a numbered orderRow   
-        $updateOrderRowsResponse = WebPayAdmin::updateOrderRows( Svea\SveaConfig::getDefaultConfig() )
+        $updateOrderRowsResponse = WebPayAdmin::updateOrderRows( SveaConfig::getDefaultConfig() )
                 ->setOrderId($orderResponse->sveaOrderId)
                 ->setCountryCode($country)
                 ->updateOrderRow( WebPayItem::numberedOrderRow()
@@ -124,7 +126,7 @@ class UpdateOrderRowsBuilderIntegrationTest extends PHPUnit_Framework_TestCase {
                     ->setUnit("st")
                     ->setDiscountPercent(1)
                     ->setRowNumber(1)
-                    ->setStatus(Svea\NumberedOrderRow::ORDERROWSTATUS_NOTDELIVERED)
+                    ->setStatus(NumberedOrderRow::ORDERROWSTATUS_NOTDELIVERED)
                 )    
                 ->updateOrderRows( 
                     array( 
@@ -138,7 +140,7 @@ class UpdateOrderRowsBuilderIntegrationTest extends PHPUnit_Framework_TestCase {
                             ->setUnit("st")
                             ->setDiscountPercent(1)
                             ->setRowNumber(2)
-                            ->setStatus(Svea\NumberedOrderRow::ORDERROWSTATUS_NOTDELIVERED)
+                            ->setStatus(NumberedOrderRow::ORDERROWSTATUS_NOTDELIVERED)
                         ,
                         WebPayItem::numberedOrderRow()
                             ->setArticleNumber("30")
@@ -150,7 +152,7 @@ class UpdateOrderRowsBuilderIntegrationTest extends PHPUnit_Framework_TestCase {
                             ->setUnit("st")
                             ->setDiscountPercent(1)
                             ->setRowNumber(3)
-                            ->setStatus(Svea\NumberedOrderRow::ORDERROWSTATUS_NOTDELIVERED)
+                            ->setStatus(NumberedOrderRow::ORDERROWSTATUS_NOTDELIVERED)
                     )                    
                 )
                 ->updateInvoiceOrderRows()
@@ -201,7 +203,7 @@ class UpdateOrderRowsBuilderIntegrationTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(1, $orderResponse->accepted);
 
         // update all attributes for a numbered orderRow   
-        $updateOrderRowsResponse = WebPayAdmin::updateOrderRows( Svea\SveaConfig::getDefaultConfig() )
+        $updateOrderRowsResponse = WebPayAdmin::updateOrderRows( SveaConfig::getDefaultConfig() )
                 ->setOrderId($orderResponse->sveaOrderId)
                 ->setCountryCode($country)
                 ->updateOrderRow( WebPayItem::numberedOrderRow()
@@ -214,7 +216,7 @@ class UpdateOrderRowsBuilderIntegrationTest extends PHPUnit_Framework_TestCase {
                     ->setUnit("st")
                     ->setDiscountPercent(1)
                     ->setRowNumber(1)
-                    ->setStatus(Svea\NumberedOrderRow::ORDERROWSTATUS_NOTDELIVERED)
+                    ->setStatus(NumberedOrderRow::ORDERROWSTATUS_NOTDELIVERED)
                 )    
                 ->updateOrderRows( 
                     array( 
@@ -228,7 +230,7 @@ class UpdateOrderRowsBuilderIntegrationTest extends PHPUnit_Framework_TestCase {
                             ->setUnit("st")
                             ->setDiscountPercent(1)
                             ->setRowNumber(2)
-                            ->setStatus(Svea\NumberedOrderRow::ORDERROWSTATUS_NOTDELIVERED)
+                            ->setStatus(NumberedOrderRow::ORDERROWSTATUS_NOTDELIVERED)
                         ,
                         WebPayItem::numberedOrderRow()
                             ->setArticleNumber("30")
@@ -240,7 +242,7 @@ class UpdateOrderRowsBuilderIntegrationTest extends PHPUnit_Framework_TestCase {
                             ->setUnit("st")
                             ->setDiscountPercent(1)
                             ->setRowNumber(3)
-                            ->setStatus(Svea\NumberedOrderRow::ORDERROWSTATUS_NOTDELIVERED)
+                            ->setStatus(NumberedOrderRow::ORDERROWSTATUS_NOTDELIVERED)
                     )                    
                 )
                 ->updatePaymentPlanOrderRows()
@@ -256,8 +258,8 @@ class UpdateOrderRowsBuilderIntegrationTest extends PHPUnit_Framework_TestCase {
         $country = "SE";
 
 //        // create order
-//        $order = TestUtil::createOrderWithoutOrderRows( TestUtil::createIndividualCustomer($country) );
-//        $order->addOrderRow( WebPayItem::orderRow()
+//        $order = Svea\WebPay\Test\TestUtil::createOrderWithoutOrderRows( Svea\WebPay\Test\TestUtil::createIndividualCustomer($country) );
+//        $order->addOrderRow( Svea\WebPay\WebPayItem::orderRow()
 //            ->setArticleNumber("1")
 //            ->setQuantity( 1 )
 //            ->setAmountExVat( 1000.00 )
@@ -267,7 +269,7 @@ class UpdateOrderRowsBuilderIntegrationTest extends PHPUnit_Framework_TestCase {
 //            ->setUnit("st")
 //            ->setDiscountPercent(0)
 //        );      
-//        $order->addOrderRow( WebPayItem::orderRow()
+//        $order->addOrderRow( Svea\WebPay\WebPayItem::orderRow()
 //            ->setArticleNumber("2")
 //            ->setQuantity( 1 )
 //            ->setAmountExVat( 2000.00 )
@@ -277,7 +279,7 @@ class UpdateOrderRowsBuilderIntegrationTest extends PHPUnit_Framework_TestCase {
 //            ->setUnit("st")
 //            ->setDiscountPercent(0)
 //        );         
-//        $order->addOrderRow( WebPayItem::orderRow()
+//        $order->addOrderRow( Svea\WebPay\WebPayItem::orderRow()
 //            ->setArticleNumber("3")
 //            ->setQuantity( 1 )
 //            ->setAmountExVat( 3000.00 )
@@ -287,11 +289,11 @@ class UpdateOrderRowsBuilderIntegrationTest extends PHPUnit_Framework_TestCase {
 //            ->setUnit("st")
 //            ->setDiscountPercent(0)
 //        );         
-//        $orderResponse = $order->usePaymentPlanPayment( TestUtil::getGetPaymentPlanParamsForTesting() )->doRequest();       
+//        $orderResponse = $order->usePaymentPlanPayment( Svea\WebPay\Test\TestUtil::getGetPaymentPlanParamsForTesting() )->doRequest();       
 //        $this->assertEquals(1, $orderResponse->accepted);
 
         // update all attributes for a numbered orderRow   
-        $updateOrderRowsResponse = WebPayAdmin::updateOrderRows( Svea\SveaConfig::getDefaultConfig() )
+        $updateOrderRowsResponse = WebPayAdmin::updateOrderRows( SveaConfig::getDefaultConfig() )
                 ->setOrderId( 364183 )
                 ->setCountryCode($country)
                 ->updateOrderRow( WebPayItem::numberedOrderRow()
@@ -304,7 +306,7 @@ class UpdateOrderRowsBuilderIntegrationTest extends PHPUnit_Framework_TestCase {
                     ->setUnit("st")
                     ->setDiscountPercent(1)
                     ->setRowNumber(1)
-                    ->setStatus(Svea\NumberedOrderRow::ORDERROWSTATUS_NOTDELIVERED)
+                    ->setStatus(NumberedOrderRow::ORDERROWSTATUS_NOTDELIVERED)
                 )    
                 ->updatePaymentPlanOrderRows()
                     ->doRequest();

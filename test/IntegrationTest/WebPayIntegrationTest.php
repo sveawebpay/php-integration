@@ -1,19 +1,23 @@
 <?php
 // Integration tests should not need to use the namespace
 
-$root = realpath(dirname(__FILE__));
-require_once $root . '/../../src/Includes.php';
-require_once $root . '/../TestUtil.php';
+use Svea\WebPay\Config\SveaConfig;
+use Svea\WebPay\Constant\DistributionType;
+use Svea\WebPay\Constant\PaymentMethod;
+use Svea\WebPay\Helper\Helper;
+use Svea\WebPay\Test\TestUtil;
+use Svea\WebPay\WebPay;
+use Svea\WebPay\WebPayItem;
 
 /**
- * @author Kristian Grossman-Madsen for Svea WebPay
+ * @author Kristian Grossman-Madsen for Svea Svea\WebPay\WebPay
  */
 class WebPayIntegrationTest extends PHPUnit_Framework_TestCase {
 
-    /// WebPay::createOrder() --------------------------------------------------
+    /// Svea\WebPay\WebPay::createOrder() --------------------------------------------------
     //useInvoicePayment
     public function test_createOrder_useInvoicePayment(){
-        $config = Svea\SveaConfig::getDefaultConfig();
+        $config = SveaConfig::getDefaultConfig();
         $request = WebPay::createOrder($config)
                     ->addOrderRow(
                             WebPayItem::orderRow()
@@ -30,7 +34,7 @@ class WebPayIntegrationTest extends PHPUnit_Framework_TestCase {
     }
     //usePaymentPlanPayment
     public function test_createOrder_usePaymentPlanPayment() {
-        $config = Svea\SveaConfig::getDefaultConfig();
+        $config = SveaConfig::getDefaultConfig();
         $campaigncode = TestUtil::getGetPaymentPlanParamsForTesting();
         $request = WebPay::createOrder($config)
                 ->addOrderRow(WebPayItem::orderRow()
@@ -67,7 +71,7 @@ class WebPayIntegrationTest extends PHPUnit_Framework_TestCase {
     }
     // card
     public function test_createOrder_usePaymentMethod_KORTCERT_redirects_to_certitrade() {
-        $config = Svea\SveaConfig::getDefaultConfig();
+        $config = SveaConfig::getDefaultConfig();
         $rowFactory = new TestUtil();
         $form = WebPay::createOrder($config)
                 ->addOrderRow(TestUtil::createOrderRow())
@@ -117,41 +121,41 @@ class WebPayIntegrationTest extends PHPUnit_Framework_TestCase {
 
     // TODO Move below to unit tests?
     //
-    /// WebPay::createOrder()
+    /// Svea\WebPay\WebPay::createOrder()
     // web service eu: invoice
     public function test_createOrder_useInvoicePayment_returns_InvoicePayment() {
-        $createOrder = WebPay::createOrder( Svea\SveaConfig::getDefaultConfig() );
+        $createOrder = WebPay::createOrder( SveaConfig::getDefaultConfig() );
         // we should set attributes here if real request
         $request = $createOrder->useInvoicePayment();
-        $this->assertInstanceOf("Svea\WebService\InvoicePayment", $request);
+        $this->assertInstanceOf("Svea\WebPay\WebService\Payment\InvoicePayment", $request);
     }
 
     // web service eu: paymentplan
     public function test_createOrder_usePaymentPlanPayment_returns_PaymentPlanPayment() {
-        $createOrder = WebPay::createOrder( Svea\SveaConfig::getDefaultConfig() );
+        $createOrder = WebPay::createOrder( SveaConfig::getDefaultConfig() );
         $request = $createOrder->usePaymentPlanPayment( TestUtil::getGetPaymentPlanParamsForTesting() );
-        $this->assertInstanceOf("Svea\WebService\PaymentPlanPayment", $request);
+        $this->assertInstanceOf("Svea\WebPay\WebService\Payment\PaymentPlanPayment", $request);
     }
 
     // paypage: cardonly
     public function test_createOrder_usePayPageCardOnly_returns_CardPayment() {
-        $createOrder = WebPay::createOrder( Svea\SveaConfig::getDefaultConfig() );
+        $createOrder = WebPay::createOrder( SveaConfig::getDefaultConfig() );
         $request = $createOrder->usePayPageCardOnly();
-        $this->assertInstanceOf("Svea\HostedService\CardPayment", $request);
+        $this->assertInstanceOf("Svea\WebPay\HostedService\Payment\CardPayment", $request);
     }
 
     // paypage: directbankonly
     public function test_createOrder_usePayPageDirectBankOnly_returns_DirectPayment() {
-        $createOrder = WebPay::createOrder( Svea\SveaConfig::getDefaultConfig() );
+        $createOrder = WebPay::createOrder( SveaConfig::getDefaultConfig() );
         $request = $createOrder->usePayPageDirectBankOnly();
-        $this->assertInstanceOf("Svea\HostedService\DirectPayment", $request);
+        $this->assertInstanceOf("Svea\WebPay\HostedService\Payment\DirectPayment", $request);
     }
 
     // bypass paypage: usepaymentmethod
     public function test_createOrder_usePaymentMethod_returns_PaymentMethodPayment() {
-        $createOrder = WebPay::createOrder( Svea\SveaConfig::getDefaultConfig() );
+        $createOrder = WebPay::createOrder( SveaConfig::getDefaultConfig() );
         $request = $createOrder->usePaymentMethod("mocked_paymentMethod");
-        $this->assertInstanceOf("Svea\HostedService\PaymentMethodPayment", $request);
+        $this->assertInstanceOf("Svea\WebPay\HostedService\Payment\PaymentMethodPayment", $request);
     }
 
     // usepaymentmethod KORTCERT with recurring payment
@@ -159,12 +163,12 @@ class WebPayIntegrationTest extends PHPUnit_Framework_TestCase {
 
     // paypage
     public function test_createOrder_usePayPage_returns_PayPagePayment() {
-        $createOrder = WebPay::createOrder( Svea\SveaConfig::getDefaultConfig() );
+        $createOrder = WebPay::createOrder( SveaConfig::getDefaultConfig() );
         $request = $createOrder->usePayPage();
-        $this->assertInstanceOf("Svea\HostedService\PayPagePayment", $request);
+        $this->assertInstanceOf("Svea\WebPay\HostedService\Payment\PayPagePayment", $request);
     }
 
-    /// WebPay::deliverOrder()
+    /// Svea\WebPay\WebPay::deliverOrder()
     // invoice
     // TODO actual integration test
 
@@ -183,13 +187,13 @@ class WebPayIntegrationTest extends PHPUnit_Framework_TestCase {
         $createOrderResponse = $order->useInvoicePayment()->doRequest();
 
         //print_r( $createOrderResponse );
-        $this->assertInstanceOf ("Svea\WebService\CreateOrderResponse", $createOrderResponse );
+        $this->assertInstanceOf ("Svea\WebPay\WebService\WebServiceResponse\CreateOrderResponse", $createOrderResponse );
         $this->assertTrue( $createOrderResponse->accepted );
 
         $createdOrderId = $createOrderResponse->sveaOrderId;
 
         // deliver order
-        $deliverOrderBuilder = WebPay::deliverOrder( Svea\SveaConfig::getDefaultConfig() )
+        $deliverOrderBuilder = WebPay::deliverOrder( SveaConfig::getDefaultConfig() )
             ->setOrderId( $createdOrderId )
             ->setCountryCode("SE")
             ->setInvoiceDistributionType( DistributionType::POST )
@@ -198,13 +202,13 @@ class WebPayIntegrationTest extends PHPUnit_Framework_TestCase {
         $deliverOrderResponse = $deliverOrderBuilder->deliverInvoiceOrder()->doRequest();
 
         //print_r( $deliverOrderResponse );
-        $this->assertInstanceOf ("Svea\WebService\DeliverOrderResult", $deliverOrderResponse );
+        $this->assertInstanceOf ("Svea\WebPay\WebService\WebServiceResponse\DeliverOrderResult", $deliverOrderResponse );
         $this->assertTrue( $createOrderResponse->accepted );
 
         $deliveredInvoiceId = $deliverOrderResponse->invoiceId;
 
         // credit order
-        $creditOrderBuilder = WebPay::deliverOrder( Svea\SveaConfig::getDefaultConfig() )
+        $creditOrderBuilder = WebPay::deliverOrder( SveaConfig::getDefaultConfig() )
             ->setOrderId( $createdOrderId )
             ->setCountryCode("SE")
             ->setInvoiceDistributionType( DistributionType::POST )
@@ -214,14 +218,14 @@ class WebPayIntegrationTest extends PHPUnit_Framework_TestCase {
         $creditOrderResponse = $creditOrderBuilder->deliverInvoiceOrder()->doRequest();
 
         //print_r( $creditOrderResponse );
-        $this->assertInstanceOf ("Svea\WebService\DeliverOrderResult", $deliverOrderResponse );
+        $this->assertInstanceOf ("Svea\WebPay\WebService\WebServiceResponse\DeliverOrderResult", $deliverOrderResponse );
         $this->assertTrue( $creditOrderResponse->accepted );
     }
 
     // paymentplan
     public function test_deliverOrder_deliverPaymentPlanOrder_without_orderrows_delivers_order_in_full() {
         // create order
-        $config = Svea\SveaConfig::getDefaultConfig();
+        $config = SveaConfig::getDefaultConfig();
         $campaigncode = TestUtil::getGetPaymentPlanParamsForTesting();
         $order = WebPay::createOrder($config)
             ->addOrderRow(WebPayItem::orderRow()
@@ -262,7 +266,7 @@ class WebPayIntegrationTest extends PHPUnit_Framework_TestCase {
         $orderId = $order->sveaOrderId;
         $orderBuilder = WebPay::deliverOrder($config);
         $deliverResponse = $orderBuilder
-            //->addOrderRow(WebPayItem::orderRow()
+            //->addOrderRow(Svea\WebPay\WebPayItem::orderRow()
             //        ->setArticleNumber("1")
             //        ->setQuantity(2)
             //        ->setAmountExVat(1000.00)
@@ -286,7 +290,7 @@ class WebPayIntegrationTest extends PHPUnit_Framework_TestCase {
 
     public function test_deliverOrder_deliverPaymentPlanOrder_with_orderrows_misleadingly_delivers_order_in_full() {
         // create order
-        $config = Svea\SveaConfig::getDefaultConfig();
+        $config = SveaConfig::getDefaultConfig();
         $campaigncode = TestUtil::getGetPaymentPlanParamsForTesting();
         $order = WebPay::createOrder($config)
             ->addOrderRow(WebPayItem::orderRow()
@@ -363,33 +367,33 @@ class WebPayIntegrationTest extends PHPUnit_Framework_TestCase {
     // card
     // TODO actual integration test
 
-    /// WebPay::getAddresses()
+    /// Svea\WebPay\WebPay::getAddresses()
     // TODO
 
-    /// WebPay::getPaymentPlanParams()
+    /// Svea\WebPay\WebPay::getPaymentPlanParams()
     // TODO
 
-    /// WebPay::listPaymentMethods()
+    /// Svea\WebPay\WebPay::listPaymentMethods()
     public function test_listPaymentMethods_returns_ListPaymentMethods() {
-        $response = WebPay::listPaymentMethods( Svea\SveaConfig::getDefaultConfig() )
+        $response = WebPay::listPaymentMethods( SveaConfig::getDefaultConfig() )
                 ->setCountryCode("SE")
                 ->doRequest()
         ;
-        $this->assertInstanceOf( "Svea\HostedService\ListPaymentMethodsResponse", $response );
+        $this->assertInstanceOf( "Svea\WebPay\HostedService\HostedResponse\HostedAdminResponse\ListPaymentMethodsResponse", $response );
         $this->assertEquals( true, $response->accepted );
     }
 
-    /// WebPay::paymentPlanPricePerMonth()
+    /// Svea\WebPay\WebPay::paymentPlanPricePerMonth()
     public function test_paymentPlanPricePerMonth_returns_PaymentPlanPricePerMonth() {
         $campaigns =
-            WebPay::getPaymentPlanParams( Svea\SveaConfig::getDefaultConfig() )
+            WebPay::getPaymentPlanParams( SveaConfig::getDefaultConfig() )
                 ->setCountryCode("SE")
                 ->doRequest()
         ;
         $this->assertTrue( $campaigns->accepted );
 
-        $pricesPerMonth = Svea\Helper::paymentPlanPricePerMonth( 2000, $campaigns, true );
-        $this->assertInstanceOf("Svea\WebService\PaymentPlanPricePerMonth", $pricesPerMonth);
+        $pricesPerMonth = Helper::paymentPlanPricePerMonth( 2000, $campaigns, true );
+        $this->assertInstanceOf("Svea\WebPay\WebService\GetPaymentPlanParams\PaymentPlanPricePerMonth", $pricesPerMonth);
 
 //        $this->assertEquals(213060, $pricesPerMonth->values[0]['campaignCode']); //don't test to be flexible
         $this->assertEquals(2029, $pricesPerMonth->values[0]['pricePerMonth']);

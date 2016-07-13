@@ -1,25 +1,26 @@
 <?php
-namespace Svea\WebService;
 
-require_once 'WebServiceResponse.php';
+namespace Svea\WebPay\WebService\WebServiceResponse;
+
+use Svea\WebPay\WebService\WebServiceResponse\CustomerIdentity\GetAddressIdentity;
 
 /**
  * The Webpay::getAddresses request returns an instance of GetAddressesResponse, containing the actual customer addresses in an array of
  * GetAddressIdentity:
- *      
- *      $response = WebPay::getAddresses($myConfig);
- * 
+ *
+ *      $response = Svea\WebPay\WebPay::getAddresses($testConfig);
+ *
  *      // GetAddressResponse attributes:
  *      $response->accepted;                        // Boolean  // true iff request was accepted
  *      $response->resultcode;                      // String   // set iff accepted false
  *      $response->errormessage;                    // String   // set iff accepted false
  *      $response->customerIdentity;                // Array of GetAddressIdentity
- * 
+ *
  *      $firstCustomerAddress = $myGetAddressesResponse->customerIdentity[0];
- * 
+ *
  *      // GetAddressIdentity attributes:
  *      $firstCustomerAddress->customerType;        // String   // "Person" or "Business" for individual and company customers, respectively
- *      $firstCustomerAddress->nationalIdNumber;    // Numeric  // national id number of individual or company 
+ *      $firstCustomerAddress->nationalIdNumber;    // Numeric  // national id number of individual or company
  *      $firstCustomerAddress->fullName;            // String   // amalgated firstname and surname for indivdual, or company name for company customers
  *      $firstCustomerAddress->coAddress;           // String   // optional
  *      $firstCustomerAddress->street;              // String   // required, streetname including housenumber
@@ -28,26 +29,31 @@ require_once 'WebServiceResponse.php';
  *      $firstCustomerAddress->phoneNumber;         // String   // optional
  *      $firstCustomerAddress->firstName;           // String   // optional, present in GetAddressResponse, not returned in CreateOrderResponse
  *      $firstCustomerAddress->lastName;            // String   // optional, present in GetAddressResponse, not returned in CreateOrderResponse
- *      $firstCustomerAddress->addressSelector      // String   // optional, uniquely disambiguates company addresses      
- * 
+ *      $firstCustomerAddress->addressSelector      // String   // optional, uniquely disambiguates company addresses
+ *
  * @author anne-hal, Kristian Grossman-Madsen
  */
-class GetAddressesResponse extends WebServiceResponse{
-    
-    /** @var GetAddressIdentity  array of GetAddressIdentity */
+class GetAddressesResponse extends WebServiceResponse
+{
+    /**
+     * @var $customerIdentity - GetAddressIdentity  array of GetAddressIdentity
+     */
     public $customerIdentity = array();
-    
-    public function __construct($response) {
-        
+
+    /**
+     * GetAddressesResponse constructor.
+     * @param $response
+     */
+    public function __construct($response)
+    {
         // was request accepted?
-        if( $response->GetAddressesResult->RejectionCode == "Error" ) {
+        if ($response->GetAddressesResult->RejectionCode == "Error") {
             $this->accepted = 0;
-        }
-        else {
+        } else {
             $this->accepted = $response->GetAddressesResult->Accepted;
         }
         $this->resultcode = $response->GetAddressesResult->RejectionCode;
-        $this->errormessage = isset($response->GetAddressesResult->ErrorMessage) ? $response->GetAddressesResult->ErrorMessage : "";        
+        $this->errormessage = isset($response->GetAddressesResult->ErrorMessage) ? $response->GetAddressesResult->ErrorMessage : "";
 
         // set response attributes
         if (property_exists($response->GetAddressesResult, "Addresses") && $this->accepted == 1) {
@@ -55,13 +61,12 @@ class GetAddressesResponse extends WebServiceResponse{
         }
     }
 
-    private function formatCustomerIdentity($customers) {
-
+    private function formatCustomerIdentity($customers)
+    {
         is_array($customers->CustomerAddress) ? $loopValue = $customers->CustomerAddress : $loopValue = $customers;
-        
+
         foreach ($loopValue as $customer) {
-            $temp = new GetAddressIdentity( $customer );
-            
+            $temp = new GetAddressIdentity($customer);
             array_push($this->customerIdentity, $temp);
         }
     }

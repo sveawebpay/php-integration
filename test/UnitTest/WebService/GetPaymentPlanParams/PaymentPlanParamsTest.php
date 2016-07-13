@@ -1,8 +1,7 @@
 <?php
 
-$root = realpath(dirname(__FILE__));
-require_once $root . '/../../../../src/Includes.php';
-require_once $root . '/../../../../src/WebService/svea_soap/SveaSoapConfig.php';
+use Svea\WebPay\WebPay;
+
 
 /**
  * @author Anneli Halld'n, Daniel Brolund for Svea Webpay
@@ -10,7 +9,7 @@ require_once $root . '/../../../../src/WebService/svea_soap/SveaSoapConfig.php';
 class PaymentPlanParamsTest extends PHPUnit_Framework_TestCase {
 
     public function testBuildRequest() {
-        $config = Svea\SveaConfig::getDefaultConfig();
+        $config = \Svea\WebPay\Config\SveaConfig::getDefaultConfig();
         $addressRequest = WebPay::getPaymentPlanParams($config);
         $request = $addressRequest
                 ->setCountryCode("SE")

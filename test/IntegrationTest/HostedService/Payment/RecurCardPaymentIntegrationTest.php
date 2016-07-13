@@ -1,12 +1,14 @@
 <?php
 // Integration tests should not need to use the namespace
 
-$root = realpath(dirname(__FILE__));
-require_once $root . '/../../../../src/Includes.php';
-require_once $root . '/../../../TestUtil.php';
+use Svea\WebPay\Config\SveaConfig;
+use Svea\WebPay\HostedService\HostedAdminRequest\RecurTransaction;
+use Svea\WebPay\HostedService\Payment\CardPayment;
+use Svea\WebPay\Test\TestUtil;
+
 
 /**
- * @author Kristian Grossman-Madsen for Svea WebPay
+ * @author Kristian Grossman-Madsen for Svea Svea\WebPay\WebPay
  */
 class RecurCardPaymentIntegrationTest extends \PHPUnit_Framework_TestCase {
 
@@ -35,14 +37,14 @@ class RecurCardPaymentIntegrationTest extends \PHPUnit_Framework_TestCase {
         $ipAddress = "127.0.0.1";
         
         // create order
-        $order = \TestUtil::createOrder( TestUtil::createIndividualCustomer("SE")->setIpAddress($ipAddress) );
+        $order = TestUtil::createOrder( TestUtil::createIndividualCustomer("SE")->setIpAddress($ipAddress) );
         // set payment method
         // call getPaymentURL
         $response = $order
             ->usePayPageCardOnly()
             ->setPayPageLanguage($orderLanguage)
             ->setReturnUrl($returnUrl)
-            ->setSubscriptionType( Svea\HostedService\CardPayment::RECURRINGCAPTURE)
+            ->setSubscriptionType( CardPayment::RECURRINGCAPTURE)
             ->getPaymentUrl();
 
         // check that request was accepted
@@ -83,7 +85,7 @@ class RecurCardPaymentIntegrationTest extends \PHPUnit_Framework_TestCase {
         $new_customerrefno = "test_manual_recurring_payment_step_1 ".date('c');  
 
         // below is actual test, shouldn't need to change it
-        $request = new Svea\HostedService\RecurTransaction( Svea\SveaConfig::getDefaultConfig() );
+        $request = new RecurTransaction( SveaConfig::getDefaultConfig() );
         $request->countryCode = "SE";
         $request->subscriptionId = $subscriptionid;
         $request->currency = $currency;

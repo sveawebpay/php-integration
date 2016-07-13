@@ -1,9 +1,7 @@
 <?php
-$root = realpath(dirname(__FILE__));
-require_once $root . '/../../../../test/UnitTest/BuildOrder/OrderBuilderTest.php';
+use Svea\WebPay\WebPay;
+use Svea\WebPay\WebPayItem;
 
-$root = realpath(dirname(__FILE__));
-require_once $root . '/../../../TestUtil.php';
 
 /**
  * @author Kristian Grossman-Madsen
@@ -19,7 +17,7 @@ class FixedDiscountRowsTest extends PHPUnit_Framework_TestCase {
      * PriceIncludingVat flag.
      */
     private static function create_mixed_exvat_and_incvat_order_and_fee_rows_order() {
-        $order = WebPay::createOrder(Svea\SveaConfig::getDefaultConfig())
+        $order = WebPay::createOrder(\Svea\WebPay\Config\SveaConfig::getDefaultConfig())
             ->addCustomerDetails(WebPayItem::individualCustomer()->setNationalIdNumber(194605092222))
             ->setCountryCode("SE")
             ->setCustomerReference("33")
@@ -237,7 +235,7 @@ class FixedDiscountRowsTest extends PHPUnit_Framework_TestCase {
     }
 
     private static function create_only_incvat_order_and_fee_rows_order() {
-        $order = WebPay::createOrder(Svea\SveaConfig::getDefaultConfig())
+        $order = WebPay::createOrder(\Svea\WebPay\Config\SveaConfig::getDefaultConfig())
             ->addCustomerDetails(WebPayItem::individualCustomer()->setNationalIdNumber(194605092222))
             ->setCountryCode("SE")
             ->setCustomerReference("33")

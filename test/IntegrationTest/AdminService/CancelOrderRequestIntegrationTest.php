@@ -1,7 +1,9 @@
 <?php
 
-$root = realpath(dirname(__FILE__));
-require_once $root . '/../../../src/Includes.php';
+use Svea\WebPay\AdminService\CancelOrderRequest;
+use Svea\WebPay\BuildOrder\CancelOrderBuilder;
+use Svea\WebPay\Config\ConfigurationProvider;
+use Svea\WebPay\Config\SveaConfig;
 
 /**
  * @author Kristian Grossman-Madsen for Svea Webpay
@@ -22,18 +24,18 @@ class CancelOrderRequestIntegrationTest extends PHPUnit_Framework_TestCase{
                 
         $countryCode = "SE";
         $sveaOrderIdToClose = 349698;        
-        $orderType = \ConfigurationProvider::INVOICE_TYPE;
+        $orderType = ConfigurationProvider::INVOICE_TYPE;
         
-        $cancelOrderBuilder = new Svea\CancelOrderBuilder( Svea\SveaConfig::getDefaultConfig() );
+        $cancelOrderBuilder = new CancelOrderBuilder( SveaConfig::getDefaultConfig() );
         $cancelOrderBuilder->setCountryCode( $countryCode );
         $cancelOrderBuilder->setOrderId( $sveaOrderIdToClose );
         $cancelOrderBuilder->orderType = $orderType;
         
-        $request = new Svea\AdminService\CancelOrderRequest( $cancelOrderBuilder );
+        $request = new CancelOrderRequest( $cancelOrderBuilder );
         $response = $request->doRequest();
         
         ////print_r("cancelorderrequest: "); //print_r( $response );        
-        $this->assertInstanceOf('Svea\AdminService\CancelOrderResponse', $response);
+        $this->assertInstanceOf('Svea\WebPay\AdminService\AdminServiceResponse\CancelOrderResponse', $response);
         $this->assertEquals(1, $response->accepted );    
         $this->assertEquals(0, $response->resultcode );        
 

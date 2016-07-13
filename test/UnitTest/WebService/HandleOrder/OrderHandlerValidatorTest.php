@@ -1,10 +1,9 @@
 <?php
 
-$root = realpath(dirname(__FILE__));
-require_once $root . '/../../../../src/Includes.php';
+use Svea\WebPay\Test\TestUtil;
+use Svea\WebPay\WebPay;
+use Svea\WebPay\WebPayItem;
 
-$root = realpath(dirname(__FILE__));
-require_once $root . '/../../../TestUtil.php';
 
 /**
  * @author Anneli Halld'n, Daniel Brolund for Svea Webpay
@@ -12,11 +11,11 @@ require_once $root . '/../../../TestUtil.php';
 class OrderHandlerValidatorTest extends PHPUnit_Framework_TestCase {
 
     /**
-     * @expectedException Svea\ValidationException
+     * @expectedException \Svea\WebPay\BuildOrder\Validator\ValidationException
      * @expectedExceptionMessage -missing value : OrderId is required. Use function setOrderId() with the SveaOrderId from the createOrder response.
      */
     public function test_deliverPaymentPlanOrder_with_missing_OrderId_raises_exception() {
-        $config = Svea\SveaConfig::getDefaultConfig();
+        $config = \Svea\WebPay\Config\SveaConfig::getDefaultConfig();
         $builder = WebPay::deliverOrder($config);
         $object = $builder;
 
@@ -25,7 +24,7 @@ class OrderHandlerValidatorTest extends PHPUnit_Framework_TestCase {
     }
     
     public function test_deliverPaymentPlanOrder_with_missing_invoiceDistributionType_validates_OK() {
-        $config = Svea\SveaConfig::getDefaultConfig();
+        $config = \Svea\WebPay\Config\SveaConfig::getDefaultConfig();
         $builder = WebPay::deliverOrder($config);
         $request = $builder
             ->setOrderId(123456)
@@ -36,11 +35,11 @@ class OrderHandlerValidatorTest extends PHPUnit_Framework_TestCase {
     }    
 
     /**
-     * @expectedException Svea\ValidationException
+     * @expectedException \Svea\WebPay\BuildOrder\Validator\ValidationException
      * @expectedExceptionMessage -missing value : InvoiceDistributionType is required for deliverInvoiceOrder. Use function setInvoiceDistributionType().
      */    
     public function test_deliverInvoiceOrder_with_missing_invoiceDistributionType_raises_exception() {
-        $config = Svea\SveaConfig::getDefaultConfig();
+        $config = \Svea\WebPay\Config\SveaConfig::getDefaultConfig();
         $builder = WebPay::deliverOrder($config);
         $request = $builder
             ->setOrderId(123456)
@@ -51,11 +50,11 @@ class OrderHandlerValidatorTest extends PHPUnit_Framework_TestCase {
     }    
     
     /**
-     * @expectedException Svea\ValidationException
+     * @expectedException \Svea\WebPay\BuildOrder\Validator\ValidationException
      * @expectedExceptionMessage -missing value : InvoiceDistributionType is required for deliverInvoiceOrder. Use function setInvoiceDistributionType().
      */
     public function testFailOnMissingInvoiceDetailsOnInvoiceDeliver() {
-        $config = Svea\SveaConfig::getDefaultConfig();
+        $config = \Svea\WebPay\Config\SveaConfig::getDefaultConfig();
         $builder = WebPay::deliverOrder($config);
         $object = $builder
             ->addOrderRow(TestUtil::createOrderRow())
@@ -74,19 +73,19 @@ class OrderHandlerValidatorTest extends PHPUnit_Framework_TestCase {
     }
 
     /**
-     * @expectedException Svea\ValidationException
+     * @expectedException \Svea\WebPay\BuildOrder\Validator\ValidationException
      * @expectedExceptionMessage No rows has been included. Use function beginOrderRow(), beginShippingfee() or beginInvoiceFee().
      * 
      * 2.0 goes directly to DeliverInvoice
      */
     public function testFailOnMissingOrderRowsOnInvoiceDeliver() {
-        $config = Svea\SveaConfig::getDefaultConfig();
-        $builder = new \Svea\DeliverOrderBuilder($config);
+        $config = \Svea\WebPay\Config\SveaConfig::getDefaultConfig();
+        $builder = new \Svea\WebPay\BuildOrder\DeliverOrderBuilder($config);
         $builder
             ->setOrderId('id')
             ->setInvoiceDistributionType('Post')
         ;        
-        $object = new \Svea\WebService\DeliverInvoice( $builder );
+        $object = new \Svea\WebPay\WebService\HandleOrder\DeliverInvoice( $builder );
         $object->prepareRequest();
     }  
 }

@@ -1,10 +1,8 @@
 <?php
 
-$root = realpath(dirname(__FILE__));
-require_once $root . '/../../../src/Includes.php';
+use Svea\WebPay\WebPayAdmin;
+use Svea\WebPay\WebPayItem;
 
-$root = realpath(dirname(__FILE__));
-require_once $root . '/../../TestUtil.php';
 
 /**
  * @author Kristian Grossman-Madsen for Svea Webpay
@@ -12,7 +10,7 @@ require_once $root . '/../../TestUtil.php';
 class UpdateOrderRowsRequestTest extends \PHPUnit_Framework_TestCase {
 
     public function test_add_single_orderRow_as_exvat() {
-        $config = Svea\SveaConfig::getDefaultConfig();
+        $config = \Svea\WebPay\Config\SveaConfig::getDefaultConfig();
       $request = WebPayAdmin::updateOrderRows($config)
               ->setCountryCode('SE')
               ->setOrderId('test')
@@ -29,7 +27,7 @@ class UpdateOrderRowsRequestTest extends \PHPUnit_Framework_TestCase {
     }
 
     public function test_add_single_orderRow_as_incvat_and_vatpercent() {
-        $config = Svea\SveaConfig::getDefaultConfig();
+        $config = \Svea\WebPay\Config\SveaConfig::getDefaultConfig();
         $request = WebPayAdmin::updateOrderRows($config)
               ->setCountryCode('SE')
               ->setOrderId('test')
@@ -46,7 +44,7 @@ class UpdateOrderRowsRequestTest extends \PHPUnit_Framework_TestCase {
         $this->assertTrue($request->UpdatedOrderRows->enc_value->enc_value[0]->enc_value->PriceIncludingVat->enc_value);
     }
     public function test_add_single_orderRow_as_incvat_and_exvat() {
-        $config = Svea\SveaConfig::getDefaultConfig();
+        $config = \Svea\WebPay\Config\SveaConfig::getDefaultConfig();
         $request = WebPayAdmin::updateOrderRows($config)
               ->setCountryCode('SE')
               ->setOrderId('test')
@@ -63,7 +61,7 @@ class UpdateOrderRowsRequestTest extends \PHPUnit_Framework_TestCase {
         $this->assertTrue($request->UpdatedOrderRows->enc_value->enc_value[0]->enc_value->PriceIncludingVat->enc_value);
     }
     public function test_add_single_orderRow_mixed_types_1() {
-        $config = Svea\SveaConfig::getDefaultConfig();
+        $config = \Svea\WebPay\Config\SveaConfig::getDefaultConfig();
         $request = WebPayAdmin::updateOrderRows($config)
               ->setCountryCode('SE')
               ->setOrderId('test')
@@ -88,7 +86,7 @@ class UpdateOrderRowsRequestTest extends \PHPUnit_Framework_TestCase {
         $this->assertFalse($request->UpdatedOrderRows->enc_value->enc_value[1]->enc_value->PriceIncludingVat->enc_value);
     }
     public function test_add_single_orderRow_mixed_types_2() {
-        $config = Svea\SveaConfig::getDefaultConfig();
+        $config = \Svea\WebPay\Config\SveaConfig::getDefaultConfig();
         $request = WebPayAdmin::updateOrderRows($config)
               ->setCountryCode('SE')
               ->setOrderId('test')
@@ -113,7 +111,7 @@ class UpdateOrderRowsRequestTest extends \PHPUnit_Framework_TestCase {
         $this->assertFalse($request->UpdatedOrderRows->enc_value->enc_value[1]->enc_value->PriceIncludingVat->enc_value);
     }
     public function test_add_single_orderRow_mixed_types_3() {
-        $config = Svea\SveaConfig::getDefaultConfig();
+        $config = \Svea\WebPay\Config\SveaConfig::getDefaultConfig();
         $request = WebPayAdmin::updateOrderRows($config)
               ->setCountryCode('SE')
               ->setOrderId('test')
@@ -147,11 +145,11 @@ class UpdateOrderRowsRequestTest extends \PHPUnit_Framework_TestCase {
     }
 
     /**
-     * @expectedException Svea\ValidationException
+     * @expectedException \Svea\WebPay\BuildOrder\Validator\ValidationException
      * @expectedExceptionMessage -missing value : rowNumber is required
      */
     public function test_add_single_orderRow_missing_rownumber() {
-        $config = Svea\SveaConfig::getDefaultConfig();
+        $config = \Svea\WebPay\Config\SveaConfig::getDefaultConfig();
         $request = WebPayAdmin::updateOrderRows($config)
               ->setCountryCode('SE')
               ->setOrderId('test')

@@ -1,14 +1,16 @@
 <?php
 
-$root = realpath(dirname(__FILE__));
-require_once $root . '/../../../src/Includes.php';
-require_once $root . '/../../TestUtil.php';
+use Svea\WebPay\Config\SveaConfig;
+use Svea\WebPay\Test\TestUtil;
+use Svea\WebPay\WebPay;
+use Svea\WebPay\WebPayItem;
+
 
 /**
  * CreateOrderBuilderIntegrationTest holds all tests for how to build orders for diverse
  * payment methods.
  * 
- * @author Kristian Grossman-Madsen for Svea WebPay
+ * @author Kristian Grossman-Madsen for Svea Svea\WebPay\WebPay
  */
 class CreateOrderBuilderIntegrationTest extends PHPUnit_Framework_TestCase {
 
@@ -21,7 +23,7 @@ class CreateOrderBuilderIntegrationTest extends PHPUnit_Framework_TestCase {
     
     public function test_createOrder_Paymentplan_SE_Accepted() {
 
-        $order = WebPay::createOrder( Svea\SveaConfig::getDefaultConfig() )
+        $order = WebPay::createOrder( SveaConfig::getDefaultConfig() )
             ->addOrderRow( WebPayItem::orderRow()
                 ->setQuantity(1)
                 ->setAmountExVat(1000.00)

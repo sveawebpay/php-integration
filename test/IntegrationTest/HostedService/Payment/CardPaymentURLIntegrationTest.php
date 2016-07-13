@@ -1,9 +1,10 @@
 <?php
 // Integration tests should not need to use the namespace
 
-$root = realpath(dirname(__FILE__));
-require_once $root . '/../../../../src/Includes.php';
-require_once $root . '/../../../TestUtil.php';
+use Svea\WebPay\Constant\PaymentMethod;
+use Svea\WebPay\HostedService\HostedResponse\HostedAdminResponse\HostedAdminResponse;
+use Svea\WebPay\Test\TestUtil;
+
 
 /**
  * @author Kristian Grossman-Madsen for Svea Webpay
@@ -11,7 +12,7 @@ require_once $root . '/../../../TestUtil.php';
 class CardPaymentURLIntegrationTest extends \PHPUnit_Framework_TestCase {
 
     /**
-     * @expectedException Svea\ValidationException
+     * @expectedException \Svea\WebPay\BuildOrder\Validator\ValidationException
      * @expectedExceptionMessage ipAddress is required. Use function setIpAddress() on the order customer.
      *
      * @todo move to unit test for getPaymentURL validation
@@ -22,16 +23,16 @@ class CardPaymentURLIntegrationTest extends \PHPUnit_Framework_TestCase {
         $ipAddress = "127.0.0.1";
 
         // create order
-        $order = \TestUtil::createOrder(); // default customer has no ipAddress set
+        $order = TestUtil::createOrder(); // default customer has no ipAddress set
         // set payment method
         // call getPaymentURL
         $payment = $order
-            ->usePaymentMethod(\PaymentMethod::KORTCERT)
+            ->usePaymentMethod(PaymentMethod::KORTCERT)
             ->setPayPageLanguage($orderLanguage)
             ->setReturnUrl($returnUrl)
             ->getPaymentUrl();
         // check that request response contains an URL
-        $this->assertInstanceOf( "Svea\HostedAdminResponse", $response );
+        $this->assertInstanceOf( 'Svea\WebPay\HostedService\HostedResponse\HostedAdminResponse\HostedAdminResponse', $response ); 
     }
 
     public function test_CardPayment_getPaymentURL_returns_HostedResponse() {
@@ -40,17 +41,17 @@ class CardPaymentURLIntegrationTest extends \PHPUnit_Framework_TestCase {
         $ipAddress = "127.0.0.1";
 
         // create order
-        $order = \TestUtil::createOrder( TestUtil::createIndividualCustomer("SE")->setIpAddress($ipAddress) );
+        $order = TestUtil::createOrder( TestUtil::createIndividualCustomer("SE")->setIpAddress($ipAddress) );
         $order->setClientOrderNumber("foobar".date('c'));
         // set payment method
         // call getPaymentURL
         $response = $order
-            ->usePaymentMethod(\PaymentMethod::KORTCERT)
+            ->usePaymentMethod(PaymentMethod::KORTCERT)
             ->setPayPageLanguage($orderLanguage)
             ->setReturnUrl($returnUrl)
             ->getPaymentUrl();
 
-        $this->assertInstanceOf( "Svea\HostedService\HostedAdminResponse", $response );
+        $this->assertInstanceOf( "Svea\WebPay\HostedService\HostedResponse\HostedAdminResponse\HostedAdminResponse", $response );
     }
 
     public function test_manual_CardPayment_getPaymentURL_response_is_accepted_and_contains_response_attributes() {
@@ -64,12 +65,12 @@ class CardPaymentURLIntegrationTest extends \PHPUnit_Framework_TestCase {
         $ipAddress = "127.0.0.1";
 
         // create order
-        $order = \TestUtil::createOrder( TestUtil::createIndividualCustomer("SE")->setIpAddress($ipAddress) );
+        $order = TestUtil::createOrder( TestUtil::createIndividualCustomer("SE")->setIpAddress($ipAddress) );
         $order->setClientOrderNumber("foobar".date('c'));
         // set payment method
         // call getPaymentURL
         $response = $order
-            ->usePaymentMethod(\PaymentMethod::KORTCERT )
+            ->usePaymentMethod(PaymentMethod::KORTCERT )
             ->setPayPageLanguage($orderLanguage)
             ->setReturnUrl($returnUrl)
             ->getPaymentUrl();
@@ -107,12 +108,12 @@ class CardPaymentURLIntegrationTest extends \PHPUnit_Framework_TestCase {
         $ipAddress = "127.0.0.1";
 
         // create order
-        $order = \TestUtil::createOrder( TestUtil::createIndividualCustomer("SE")->setIpAddress($ipAddress) );
+        $order = TestUtil::createOrder( TestUtil::createIndividualCustomer("SE")->setIpAddress($ipAddress) );
         // set payment method
         // call getPaymentURL
         $response = $order
             ->setClientOrderNumber("foobar".date('c'))
-            ->usePaymentMethod(\PaymentMethod::KORTCERT )
+            ->usePaymentMethod(PaymentMethod::KORTCERT )
             ->setPayPageLanguage($orderLanguage)
             ->setReturnUrl($returnUrl)
             ->getPaymentUrl();
@@ -143,12 +144,12 @@ class CardPaymentURLIntegrationTest extends \PHPUnit_Framework_TestCase {
         $ipAddress = "127.0.0.1";
 
         // create order
-        $order = \TestUtil::createOrder( TestUtil::createIndividualCustomer("SE")->setIpAddress($ipAddress) );
+        $order = TestUtil::createOrder( TestUtil::createIndividualCustomer("SE")->setIpAddress($ipAddress) );
         // set payment method
         // call getPaymentURL
         $response = $order
             ->setClientOrderNumber("foobar".date('c'))
-            ->usePaymentMethod(\PaymentMethod::KORTCERT )
+            ->usePaymentMethod(PaymentMethod::KORTCERT )
             ->setPayPageLanguage($orderLanguage)
             ->setReturnUrl($returnUrl)
             ->getPaymentUrl();

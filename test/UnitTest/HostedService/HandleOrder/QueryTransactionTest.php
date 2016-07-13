@@ -1,8 +1,7 @@
 <?php
 
-$root = realpath(dirname(__FILE__));
-require_once $root . '/../../../../src/Includes.php';
-require_once $root . '/../../../../src/WebService/svea_soap/SveaSoapConfig.php';
+use Svea\WebPay\Config\ConfigurationProvider;
+
 
 /**
  * @author Kristian Grossman-Madsen for Svea Webpay
@@ -14,13 +13,13 @@ class QueryTransactionTest extends PHPUnit_Framework_TestCase {
 
     // fixture, run once before each test method
     protected function setUp() {
-        $this->configObject = Svea\SveaConfig::getDefaultConfig();
-        $this->queryObject = new Svea\HostedService\QueryTransaction( $this->configObject );
+        $this->configObject = \Svea\WebPay\Config\SveaConfig::getDefaultConfig();
+        $this->queryObject = new \Svea\WebPay\HostedService\HostedAdminRequest\QueryTransaction( $this->configObject );
     }
 
     // test methods
     function test_class_exists(){        
-        $this->assertInstanceOf( "Svea\HostedService\QueryTransaction", $this->queryObject);
+        $this->assertInstanceOf( "Svea\WebPay\HostedService\HostedAdminRequest\QueryTransaction", $this->queryObject);
         $this->assertEquals( "querytransactionid", PHPUnit_Framework_Assert::readAttribute($this->queryObject, 'method') );        
     }
     
@@ -78,7 +77,7 @@ class QueryTransactionTest extends PHPUnit_Framework_TestCase {
     function test_prepareRequest_missing_transactionId_throws_exception() {
 
         $this->setExpectedException(
-            'Svea\ValidationException', 
+            'Svea\WebPay\BuildOrder\Validator\ValidationException', 
             '-missing value : transactionId is required. Use function setTransactionId() with the SveaOrderId from the createOrder response.'
         );        
         

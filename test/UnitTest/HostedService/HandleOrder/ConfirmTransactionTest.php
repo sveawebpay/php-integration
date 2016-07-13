@@ -1,6 +1,5 @@
 <?php
-$root = realpath(dirname(__FILE__));
-require_once $root . '/../../../../src/Includes.php';
+use Svea\WebPay\Config\ConfigurationProvider;
 
 /**
  * @author Kristian Grossman-Madsen for Svea Webpay
@@ -12,13 +11,13 @@ class ConfirmTransactionTest extends PHPUnit_Framework_TestCase {
 
     // fixture, run once before each test method
     protected function setUp() {
-        $this->configObject = Svea\SveaConfig::getDefaultConfig();
-        $this->confirmObject = new Svea\HostedService\ConfirmTransaction( $this->configObject );
+        $this->configObject = \Svea\WebPay\Config\SveaConfig::getDefaultConfig();
+        $this->confirmObject = new \Svea\WebPay\HostedService\HostedAdminRequest\ConfirmTransaction( $this->configObject );
     }
 
     // test methods
     function test_class_exists(){
-        $this->assertInstanceOf( "Svea\HostedService\ConfirmTransaction", $this->confirmObject);
+        $this->assertInstanceOf( "Svea\WebPay\HostedService\HostedAdminRequest\ConfirmTransaction", $this->confirmObject);
         $this->assertEquals( "confirm", PHPUnit_Framework_Assert::readAttribute($this->confirmObject, 'method') );                
     }
               
@@ -77,7 +76,7 @@ class ConfirmTransactionTest extends PHPUnit_Framework_TestCase {
     function test_prepareRequest_missing_transactionId_throws_exception() {
 
         $this->setExpectedException(
-            'Svea\ValidationException', 
+            'Svea\WebPay\BuildOrder\Validator\ValidationException', 
             '-missing value : transactionId is required. Use function setTransactionId() with the SveaOrderId from the createOrder response.'
         );
         
@@ -93,7 +92,7 @@ class ConfirmTransactionTest extends PHPUnit_Framework_TestCase {
     function test_prepareRequest_missing_captureDate_throws_exception() {
 
         $this->setExpectedException(
-            'Svea\ValidationException', 
+            'Svea\WebPay\BuildOrder\Validator\ValidationException', 
             '-missing value : captureDate is required. Use function setCaptureDate().'
         );
         
@@ -110,7 +109,7 @@ class ConfirmTransactionTest extends PHPUnit_Framework_TestCase {
     function test_prepareRequest_missing_countryCode_throws_exception() {
 
         $this->setExpectedException(
-            'Svea\ValidationException', 
+            'Svea\WebPay\BuildOrder\Validator\ValidationException', 
             '-missing value : CountryCode is required. Use function setCountryCode().'
         );
        

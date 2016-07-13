@@ -1,22 +1,22 @@
 <?php
+use Svea\WebPay\BuildOrder\AddOrderRowsBuilder;
+use Svea\WebPay\Config\SveaConfig;
+use Svea\WebPay\Test\TestUtil;
 
-$root = realpath(dirname(__FILE__));
-require_once $root . '/../../../src/Includes.php';
-require_once $root . '/../../TestUtil.php';
 
 /**
- * @author Kristian Grossman-Madsen for Svea WebPay
+ * @author Kristian Grossman-Madsen for Svea Svea\WebPay\WebPay
  */
 class AddOrderRowsBuilderTest extends \PHPUnit_Framework_TestCase {
 
     protected $addOrderRowsObject;
     
     function setUp() {
-        $this->addOrderRowsObject = new Svea\AddOrderRowsBuilder(Svea\SveaConfig::getDefaultConfig());  
+        $this->addOrderRowsObject = new AddOrderRowsBuilder(SveaConfig::getDefaultConfig());
     }
     
     public function test_addOrderRowsBuilder_class_exists() {     
-        $this->assertInstanceOf("Svea\AddOrderRowsBuilder", $this->addOrderRowsObject);
+        $this->assertInstanceOf("Svea\WebPay\BuildOrder\AddOrderRowsBuilder", $this->addOrderRowsObject);
     }
     
     public function test_addOrderRowsBuilder_setOrderId() {
@@ -35,30 +35,30 @@ class AddOrderRowsBuilderTest extends \PHPUnit_Framework_TestCase {
         $orderId = "123456";
         $addOrderRowsObject = $this->addOrderRowsObject
                 ->setOrderId($orderId)
-                ->addOrderRow( \TestUtil::createOrderRow(1.00) )
+                ->addOrderRow( TestUtil::createOrderRow(1.00) )
                 ->addInvoiceOrderRows();
         
-        $this->assertInstanceOf("Svea\AdminService\AddOrderRowsRequest", $addOrderRowsObject);
+        $this->assertInstanceOf("Svea\WebPay\AdminService\AddOrderRowsRequest", $addOrderRowsObject);
     }
     
     public function test_addOrderRowsBuilder_addPaymentPlanOrderRowsBuilder_returns_AddOrderRowsRequest() {
         $orderId = "123456";  
         $addOrderRowsObject = $this->addOrderRowsObject
                 ->setOrderId($orderId)
-                ->addOrderRow( \TestUtil::createOrderRow(1.00) )
+                ->addOrderRow( TestUtil::createOrderRow(1.00) )
                 ->addPaymentPlanOrderRows();
         
-        $this->assertInstanceOf("Svea\AdminService\AddOrderRowsRequest", $addOrderRowsObject);
+        $this->assertInstanceOf("Svea\WebPay\AdminService\AddOrderRowsRequest", $addOrderRowsObject);
     }
     
     public function test_addOrderRowsBuilder_missing_orderRows_throws_exception() {
         
-        $this->setExpectedException('Svea\ValidationException');
+        $this->setExpectedException('Svea\WebPay\BuildOrder\Validator\ValidationException');
         
         $orderId = "123456";
         $addOrderRowsObject = $this->addOrderRowsObject
                 ->setOrderId($orderId)
-                //->addOrderRow( \TestUtil::createOrderRow(1.00) )
+                //->addOrderRow( \Svea\WebPay\Test\TestUtil::createOrderRow(1.00) )
                 ->addInvoiceOrderRows();
         ;
 

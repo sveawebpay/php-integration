@@ -1,8 +1,6 @@
 <?php
-$root = realpath(dirname(__FILE__));
+use Svea\WebPay\Config\ConfigurationProvider;
 
-require_once $root . '/../../../../src/Includes.php';
-require_once $root . '/../../../../src/WebService/svea_soap/SveaSoapConfig.php';
 
 /**
  * @author Kristian Grossman-Madsen for Svea Webpay
@@ -14,13 +12,13 @@ class ListPaymentMethodsTest extends PHPUnit_Framework_TestCase {
 
     // fixture, run once before each test method
     protected function setUp() {
-        $this->configObject = Svea\SveaConfig::getDefaultConfig();
-        $this->listpaymentmethodObject = new Svea\HostedService\ListPaymentMethods( $this->configObject );
+        $this->configObject = \Svea\WebPay\Config\SveaConfig::getDefaultConfig();
+        $this->listpaymentmethodObject = new \Svea\WebPay\HostedService\HostedAdminRequest\ListPaymentMethods( $this->configObject );
     }
 
     // test methods
     function test_class_exists(){
-        $this->assertInstanceOf( "Svea\HostedService\ListPaymentMethods", $this->listpaymentmethodObject);      
+        $this->assertInstanceOf( "Svea\WebPay\HostedService\HostedAdminRequest\ListPaymentMethods", $this->listpaymentmethodObject);      
         $this->assertEquals( "getpaymentmethods", PHPUnit_Framework_Assert::readAttribute($this->listpaymentmethodObject, 'method') );        
     }
                   

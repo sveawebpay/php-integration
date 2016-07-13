@@ -1,9 +1,7 @@
 <?php
-$root = realpath(dirname(__FILE__));
-require_once $root . '/../../../../test/UnitTest/BuildOrder/OrderBuilderTest.php';
+use Svea\WebPay\WebPay;
+use Svea\WebPay\WebPayItem;
 
-$root = realpath(dirname(__FILE__));
-require_once $root . '/../../../TestUtil.php';
 
 /**
  * Tests ported from Java webservice/payment/CreateInvoiceOrderUnitTest.java for INTG-550
@@ -22,7 +20,7 @@ class CreateInvoiceOrderUnitTest extends PHPUnit_Framework_TestCase {
 
     public function setUp() {   // run before each test, in effect resetting the default order
 
-        $this->order = WebPay::createOrder(Svea\SveaConfig::getDefaultConfig())
+        $this->order = WebPay::createOrder(\Svea\WebPay\Config\SveaConfig::getDefaultConfig())
             ->addCustomerDetails(WebPayItem::individualCustomer()->setNationalIdNumber(194605092222))
             ->setCountryCode("SE")
             ->setOrderDate(date('c'))
@@ -214,10 +212,10 @@ class CreateInvoiceOrderUnitTest extends PHPUnit_Framework_TestCase {
         // expected: fixedDiscount: 10 off incvat, order row amount are 66% at 20% vat, 33% at 10% vat
         // 1.2*0.66x + 1.1*0.33x = 10 => x = 8.6580 => 5.7143ex @20% and 2.8571ex @10% => 6.86inc @20%, 3.14inc @10%
         // NOTE that php package does not round the request amounts to two decimals, as the java integration package, hence the call to bround below
-        $this->assertEquals(-6.86, Svea\Helper::bround($request->request->CreateOrderInformation->OrderRows['OrderRow'][4]->PricePerUnit,2));
+        $this->assertEquals(-6.86, \Svea\WebPay\Helper\Helper::bround($request->request->CreateOrderInformation->OrderRows['OrderRow'][4]->PricePerUnit,2));
         $this->assertEquals(20, $request->request->CreateOrderInformation->OrderRows['OrderRow'][4]->VatPercent);
         $this->assertEquals(true, $request->request->CreateOrderInformation->OrderRows['OrderRow'][4]->PriceIncludingVat);
-        $this->assertEquals(-3.14, Svea\Helper::bround($request->request->CreateOrderInformation->OrderRows['OrderRow'][5]->PricePerUnit,2));
+        $this->assertEquals(-3.14, \Svea\WebPay\Helper\Helper::bround($request->request->CreateOrderInformation->OrderRows['OrderRow'][5]->PricePerUnit,2));
         $this->assertEquals(10, $request->request->CreateOrderInformation->OrderRows['OrderRow'][5]->VatPercent);
         $this->assertEquals(true, $request->request->CreateOrderInformation->OrderRows['OrderRow'][5]->PriceIncludingVat);
         // order total should be (72+33+17.6+8.8)-10 = 121.40, see integration test
@@ -272,10 +270,10 @@ class CreateInvoiceOrderUnitTest extends PHPUnit_Framework_TestCase {
         // expected: fixedDiscount: 10 off incvat, order row amount are 66% at 20% vat, 33% at 10% vat
         // 1.2*0.66x + 1.1*0.33x = 10 => x = 8.6580 => 5.7143ex @20% and 2.8571ex @10% =
         // NOTE that php package does not round the request amounts to two decimals, as the java integration package, hence the call to bround below
-        $this->assertEquals(-5.71, Svea\Helper::bround($request->request->CreateOrderInformation->OrderRows['OrderRow'][4]->PricePerUnit,2));
+        $this->assertEquals(-5.71, \Svea\WebPay\Helper\Helper::bround($request->request->CreateOrderInformation->OrderRows['OrderRow'][4]->PricePerUnit,2));
         $this->assertEquals(20, $request->request->CreateOrderInformation->OrderRows['OrderRow'][4]->VatPercent);
         $this->assertEquals(false, $request->request->CreateOrderInformation->OrderRows['OrderRow'][4]->PriceIncludingVat);
-        $this->assertEquals(-2.86, Svea\Helper::bround($request->request->CreateOrderInformation->OrderRows['OrderRow'][5]->PricePerUnit,2));
+        $this->assertEquals(-2.86, \Svea\WebPay\Helper\Helper::bround($request->request->CreateOrderInformation->OrderRows['OrderRow'][5]->PricePerUnit,2));
         $this->assertEquals(10, $request->request->CreateOrderInformation->OrderRows['OrderRow'][5]->VatPercent);
         $this->assertEquals(false, $request->request->CreateOrderInformation->OrderRows['OrderRow'][5]->PriceIncludingVat);
         // order total should be (72+33+17.6+8.8)-10 = 121.40, see integration test
@@ -690,10 +688,10 @@ class CreateInvoiceOrderUnitTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(false, $request->request->CreateOrderInformation->OrderRows['OrderRow'][3]->PriceIncludingVat);
         // all discount rows
         // expected: fixedDiscount: 10 off exvat, order row amount are 66% at 20% vat, 33% at 10% vat => 6.67 @20% and 3.33 @10%
-        $this->assertEquals(-6.67, Svea\Helper::bround($request->request->CreateOrderInformation->OrderRows['OrderRow'][4]->PricePerUnit,2));
+        $this->assertEquals(-6.67, \Svea\WebPay\Helper\Helper::bround($request->request->CreateOrderInformation->OrderRows['OrderRow'][4]->PricePerUnit,2));
         $this->assertEquals(20, $request->request->CreateOrderInformation->OrderRows['OrderRow'][4]->VatPercent);
         $this->assertEquals(false, $request->request->CreateOrderInformation->OrderRows['OrderRow'][4]->PriceIncludingVat);
-        $this->assertEquals(-3.33, Svea\Helper::bround($request->request->CreateOrderInformation->OrderRows['OrderRow'][5]->PricePerUnit,2));
+        $this->assertEquals(-3.33, \Svea\WebPay\Helper\Helper::bround($request->request->CreateOrderInformation->OrderRows['OrderRow'][5]->PricePerUnit,2));
         $this->assertEquals(10, $request->request->CreateOrderInformation->OrderRows['OrderRow'][5]->VatPercent);
         $this->assertEquals(false, $request->request->CreateOrderInformation->OrderRows['OrderRow'][5]->PriceIncludingVat);
     }
@@ -740,15 +738,15 @@ class CreateInvoiceOrderUnitTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(10, $request->request->CreateOrderInformation->OrderRows['OrderRow'][2]->VatPercent);
         $this->assertEquals(false, $request->request->CreateOrderInformation->OrderRows['OrderRow'][2]->PriceIncludingVat);
         // all shipping fee rows
-        $this->assertEquals(156.36, Svea\Helper::bround($request->request->CreateOrderInformation->OrderRows['OrderRow'][3]->PricePerUnit,2));
+        $this->assertEquals(156.36, \Svea\WebPay\Helper\Helper::bround($request->request->CreateOrderInformation->OrderRows['OrderRow'][3]->PricePerUnit,2));
         $this->assertEquals(10, $request->request->CreateOrderInformation->OrderRows['OrderRow'][3]->VatPercent);
         $this->assertEquals(false, $request->request->CreateOrderInformation->OrderRows['OrderRow'][3]->PriceIncludingVat);
         // all discount rows
         // expected: fixedDiscount: 10 off exvat, order row amount are 66% @20% vat, 33% @10% vat => 6.67ex @20% = 8.00 inc and 3.33ex @10% = 3.67inc
-        $this->assertEquals(-6.67, Svea\Helper::bround($request->request->CreateOrderInformation->OrderRows['OrderRow'][4]->PricePerUnit,2));
+        $this->assertEquals(-6.67, \Svea\WebPay\Helper\Helper::bround($request->request->CreateOrderInformation->OrderRows['OrderRow'][4]->PricePerUnit,2));
         $this->assertEquals(20, $request->request->CreateOrderInformation->OrderRows['OrderRow'][4]->VatPercent);
         $this->assertEquals(false, $request->request->CreateOrderInformation->OrderRows['OrderRow'][4]->PriceIncludingVat);
-        $this->assertEquals(-3.33, Svea\Helper::bround($request->request->CreateOrderInformation->OrderRows['OrderRow'][5]->PricePerUnit,2));
+        $this->assertEquals(-3.33, \Svea\WebPay\Helper\Helper::bround($request->request->CreateOrderInformation->OrderRows['OrderRow'][5]->PricePerUnit,2));
         $this->assertEquals(10, $request->request->CreateOrderInformation->OrderRows['OrderRow'][5]->VatPercent);
         $this->assertEquals(false, $request->request->CreateOrderInformation->OrderRows['OrderRow'][5]->PriceIncludingVat);
     }
@@ -801,10 +799,10 @@ class CreateInvoiceOrderUnitTest extends PHPUnit_Framework_TestCase {
 	    // all discount rows
         // expected: fixedDiscount: 10 off incvat, order row amount are 66% at 20% vat, 33% at 10% vat
         // 1.2*0.66x + 1.1*0.33x = 10 => x = 8.6580 => 5.7143 @20% and 2.8571 @10% = 10kr
-        $this->assertEquals(-5.71, Svea\Helper::bround($request->request->CreateOrderInformation->OrderRows['OrderRow'][4]->PricePerUnit,2));
+        $this->assertEquals(-5.71, \Svea\WebPay\Helper\Helper::bround($request->request->CreateOrderInformation->OrderRows['OrderRow'][4]->PricePerUnit,2));
         $this->assertEquals(20, $request->request->CreateOrderInformation->OrderRows['OrderRow'][4]->VatPercent);
         $this->assertEquals(false, $request->request->CreateOrderInformation->OrderRows['OrderRow'][4]->PriceIncludingVat);
-        $this->assertEquals(-2.86, Svea\Helper::bround($request->request->CreateOrderInformation->OrderRows['OrderRow'][5]->PricePerUnit,2));
+        $this->assertEquals(-2.86, \Svea\WebPay\Helper\Helper::bround($request->request->CreateOrderInformation->OrderRows['OrderRow'][5]->PricePerUnit,2));
         $this->assertEquals(10, $request->request->CreateOrderInformation->OrderRows['OrderRow'][5]->VatPercent);
         $this->assertEquals(false, $request->request->CreateOrderInformation->OrderRows['OrderRow'][5]->PriceIncludingVat);
     }
@@ -851,22 +849,22 @@ class CreateInvoiceOrderUnitTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(10, $request->request->CreateOrderInformation->OrderRows['OrderRow'][2]->VatPercent);
         $this->assertEquals(true, $request->request->CreateOrderInformation->OrderRows['OrderRow'][2]->PriceIncludingVat);
         // all shipping fee rows
-        $this->assertEquals(172.00, Svea\Helper::bround($request->request->CreateOrderInformation->OrderRows['OrderRow'][3]->PricePerUnit,2));
+        $this->assertEquals(172.00, \Svea\WebPay\Helper\Helper::bround($request->request->CreateOrderInformation->OrderRows['OrderRow'][3]->PricePerUnit,2));
         $this->assertEquals(10, $request->request->CreateOrderInformation->OrderRows['OrderRow'][3]->VatPercent);
         $this->assertEquals(true, $request->request->CreateOrderInformation->OrderRows['OrderRow'][3]->PriceIncludingVat);
 	    // all discount rows
         // expected: fixedDiscount: 10 off incvat, order row amount are 66% at 20% vat, 33% at 10% vat
         // 1.2*0.66x + 1.1*0.33x = 10 => x = 8.6580 => 5.7143 @20% and 2.8571 @10% = 10kr
-        $this->assertEquals(-6.86, Svea\Helper::bround($request->request->CreateOrderInformation->OrderRows['OrderRow'][4]->PricePerUnit,2));
+        $this->assertEquals(-6.86, \Svea\WebPay\Helper\Helper::bround($request->request->CreateOrderInformation->OrderRows['OrderRow'][4]->PricePerUnit,2));
         $this->assertEquals(20, $request->request->CreateOrderInformation->OrderRows['OrderRow'][4]->VatPercent);
         $this->assertEquals(true, $request->request->CreateOrderInformation->OrderRows['OrderRow'][4]->PriceIncludingVat);
-        $this->assertEquals(-3.14, Svea\Helper::bround($request->request->CreateOrderInformation->OrderRows['OrderRow'][5]->PricePerUnit,2));
+        $this->assertEquals(-3.14, \Svea\WebPay\Helper\Helper::bround($request->request->CreateOrderInformation->OrderRows['OrderRow'][5]->PricePerUnit,2));
         $this->assertEquals(10, $request->request->CreateOrderInformation->OrderRows['OrderRow'][5]->VatPercent);
         $this->assertEquals(true, $request->request->CreateOrderInformation->OrderRows['OrderRow'][5]->PriceIncludingVat);
     }
 
     public function test_add_publickey_for_company_customer () {
-        $config = \Svea\SveaConfig::getTestConfig();
+        $config = \Svea\WebPay\Config\SveaConfig::getTestConfig();
         $order = WebPay::createOrder($config)
                 ->addCustomerDetails(
                 WebPayItem::companyCustomer()
@@ -877,7 +875,7 @@ class CreateInvoiceOrderUnitTest extends PHPUnit_Framework_TestCase {
 
     }
     public function test_add_publickey_for_private_customer () {
-        $config = \Svea\SveaConfig::getTestConfig();
+        $config = \Svea\WebPay\Config\SveaConfig::getTestConfig();
         $order = WebPay::createOrder($config)
                 ->addCustomerDetails(
                 WebPayItem::individualCustomer()
@@ -889,7 +887,7 @@ class CreateInvoiceOrderUnitTest extends PHPUnit_Framework_TestCase {
     }
 
         public function test_add_publickey_for_company_customer_full_request () {
-        $config = \Svea\SveaConfig::getTestConfig();
+        $config = \Svea\WebPay\Config\SveaConfig::getTestConfig();
         $order = WebPay::createOrder($config)
                 ->addCustomerDetails(
                 WebPayItem::companyCustomer()
@@ -912,7 +910,7 @@ class CreateInvoiceOrderUnitTest extends PHPUnit_Framework_TestCase {
 
     }
         public function test_add_publickey_for_private_customer_full_request () {
-        $config = \Svea\SveaConfig::getTestConfig();
+        $config = \Svea\WebPay\Config\SveaConfig::getTestConfig();
         $order = WebPay::createOrder($config)
                 ->addCustomerDetails(
                 WebPayItem::companyCustomer()

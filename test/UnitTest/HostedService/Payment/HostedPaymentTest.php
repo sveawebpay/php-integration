@@ -1,16 +1,9 @@
 <?php
 namespace Svea;
-use \Svea\HostedService\HostedRowFormatter as HostedRowFormatter;
-
-require_once 'FakeHostedPayment.php';
-
-$root = realpath(dirname(__FILE__));
-require_once $root . '/../../../TestUtil.php';
-
-$root = realpath(dirname(__FILE__));
-require_once $root . '/TestConf.php';
-
-require_once $root . '/../../../../src/Includes.php';
+use Svea\WebPay\BuildOrder\CreateOrderBuilder;
+use Svea\WebPay\HostedService\Helper\HostedRowFormatter as HostedRowFormatter;
+use Svea\WebPay\Config\SveaConfig;
+use Svea\WebPay\Config\SveaConfigurationProvider;
 
 class HostedPaymentTest extends \PHPUnit_Framework_TestCase {
 
@@ -22,8 +15,8 @@ class HostedPaymentTest extends \PHPUnit_Framework_TestCase {
         $cancelUrlAsString = "http://foo.bar.com/2";
         $callbackUrlAsString = "http://foo.bar.com/3";
 
-        $order = \TestUtil::createOrder();
-        $payment = $order->usePaymentMethod(\PaymentMethod::KORTCERT)
+        $order = WebPay\Test\TestUtil::createOrder();
+        $payment = $order->usePaymentMethod(WebPay\Constant\PaymentMethod::KORTCERT)
             ->setReturnUrl($returnUrlAsString)
             ->setCancelUrl($cancelUrlAsString)
             ->setCallbackUrl($callbackUrlAsString);
@@ -36,8 +29,8 @@ class HostedPaymentTest extends \PHPUnit_Framework_TestCase {
     public function test_payPageLanguage_defaults_to_english() {
         $defaultLanguage = "en";
 
-        $order = \TestUtil::createOrder();
-        $payment = $order->usePaymentMethod(\PaymentMethod::KORTCERT);
+        $order = WebPay\Test\TestUtil::createOrder();
+        $payment = $order->usePaymentMethod(WebPay\Constant\PaymentMethod::KORTCERT);
 
         $this->assertEquals($defaultLanguage, $payment->langCode );
     }
@@ -45,8 +38,8 @@ class HostedPaymentTest extends \PHPUnit_Framework_TestCase {
     public function test_setPayPageLanguage_with_unrecognised_language() {
         $newLanguage = "unrecognised_language";
 
-        $order = \TestUtil::createOrder();
-        $payment = $order->usePaymentMethod(\PaymentMethod::KORTCERT)
+        $order = WebPay\Test\TestUtil::createOrder();
+        $payment = $order->usePaymentMethod(WebPay\Constant\PaymentMethod::KORTCERT)
             ->setPayPageLanguage( $newLanguage );
 
         $this->assertEquals("en", $payment->langCode );
@@ -55,8 +48,8 @@ class HostedPaymentTest extends \PHPUnit_Framework_TestCase {
     public function test_setPayPageLanguage_with_recognised_language() {
         $orderLanguage = "sv";
 
-        $order = \TestUtil::createOrder();
-        $payment = $order->usePaymentMethod(\PaymentMethod::KORTCERT)
+        $order = WebPay\Test\TestUtil::createOrder();
+        $payment = $order->usePaymentMethod(WebPay\Constant\PaymentMethod::KORTCERT)
             ->setPayPageLanguage( $orderLanguage );
 
         $this->assertEquals($orderLanguage, $payment->langCode );
@@ -73,9 +66,9 @@ class HostedPaymentTest extends \PHPUnit_Framework_TestCase {
      *
      */
     public function testCalculateRequestValues_CorrectTotalAmountFromMultipleItems_ItemsDefinedWithExVatAndVatPercent() {
-        $order = new createOrderBuilder(new SveaConfigurationProvider(SveaConfig::getDefaultConfig()));
+        $order = new CreateOrderBuilder(new SveaConfigurationProvider(SveaConfig::getDefaultConfig()));
         $order->
-            addOrderRow(\WebPayItem::orderRow()
+            addOrderRow(WebPay\WebPayItem::orderRow()
                 ->setArticleNumber("0")
                 ->setName("testCalculateRequestValues_CorrectTotalAmountFromMultipleItems")
                 ->setDescription("testCalculateRequestValues_CorrectTotalAmountFromMultipleItems")
@@ -100,7 +93,7 @@ class HostedPaymentTest extends \PHPUnit_Framework_TestCase {
     public function testCalculateRequestValues_CorrectTotalAmountFromMultipleItems_ItemsDefinedWithIncVatAndVatPercent() {
         $order = new createOrderBuilder(new SveaConfigurationProvider(SveaConfig::getDefaultConfig()));
         $order->
-            addOrderRow(\WebPayItem::orderRow()
+            addOrderRow(WebPay\WebPayItem::orderRow()
                 ->setArticleNumber("0")
                 ->setName("testCalculateRequestValues_CorrectTotalAmountFromMultipleItems")
                 ->setDescription("testCalculateRequestValues_CorrectTotalAmountFromMultipleItems")
@@ -125,7 +118,7 @@ class HostedPaymentTest extends \PHPUnit_Framework_TestCase {
     public function testCalculateRequestValues_CorrectTotalAmountFromMultipleItems_ItemsDefinedWithExVatAndIncVat() {
         $order = new createOrderBuilder(new SveaConfigurationProvider(SveaConfig::getDefaultConfig()));
         $order->
-            addOrderRow(\WebPayItem::orderRow()
+            addOrderRow(WebPay\WebPayItem::orderRow()
                 ->setArticleNumber("0")
                 ->setName("testCalculateRequestValues_CorrectTotalAmountFromMultipleItems")
                 ->setDescription("testCalculateRequestValues_CorrectTotalAmountFromMultipleItems")
@@ -154,12 +147,12 @@ class HostedPaymentTest extends \PHPUnit_Framework_TestCase {
     public function testCalculateRequestValues_CorrectTotalAmountFromMultipleItems_WithFixedDiscountIncVatOnly() {
         $order = new createOrderBuilder(new SveaConfigurationProvider(SveaConfig::getDefaultConfig()));
         $order
-            ->addOrderRow(\WebPayItem::orderRow()
+            ->addOrderRow(WebPay\WebPayItem::orderRow()
                 ->setAmountExVat(69.99)
                 ->setVatPercent(25)
                 ->setQuantity(30)
             )
-            ->addDiscount(\WebPayItem::fixedDiscount()
+            ->addDiscount(WebPay\WebPayItem::fixedDiscount()
                 ->setAmountIncVat(10.00)
             );
 
@@ -179,12 +172,12 @@ class HostedPaymentTest extends \PHPUnit_Framework_TestCase {
     public function testCalculateRequestValues_CorrectTotalAmountFromMultipleItems_WithFixedDiscountIncVatAndVatPercent() {
         $order = new createOrderBuilder(new SveaConfigurationProvider(SveaConfig::getDefaultConfig()));
         $order
-            ->addOrderRow(\WebPayItem::orderRow()
+            ->addOrderRow(WebPay\WebPayItem::orderRow()
                 ->setAmountExVat(69.99)
                 ->setVatPercent(25)
                 ->setQuantity(30)
             )
-            ->addDiscount(\WebPayItem::fixedDiscount()
+            ->addDiscount(WebPay\WebPayItem::fixedDiscount()
                 ->setAmountIncVat(12.50)
                 ->setVatPercent(25)
             );
@@ -204,19 +197,19 @@ class HostedPaymentTest extends \PHPUnit_Framework_TestCase {
     // calculated fixed discount vat rate, multiple vat rate in order
     public function testCalculateRequestValues_CorrectTotalAmount_WithFixedDiscountIncVatOnly_WithDifferentVatRatesPresent() {
         $config = SveaConfig::getDefaultConfig();
-        $order = \WebPay::createOrder($config);
+        $order = WebPay\WebPay::createOrder($config);
         $order
-            ->addOrderRow(\WebPayItem::orderRow()
+            ->addOrderRow(WebPay\WebPayItem::orderRow()
                 ->setAmountExVat(100.00)
                 ->setVatPercent(25)
                 ->setQuantity(2)
             )
-            ->addOrderRow(\WebPayItem::orderRow()
+            ->addOrderRow(WebPay\WebPayItem::orderRow()
                 ->setAmountExVat(100.00)
                 ->setVatPercent(6)
                 ->setQuantity(1)
             )
-            ->addDiscount(\WebPayItem::fixedDiscount()
+            ->addDiscount(WebPay\WebPayItem::fixedDiscount()
                 ->setAmountIncVat(100.00)
             );
 
@@ -238,19 +231,19 @@ class HostedPaymentTest extends \PHPUnit_Framework_TestCase {
     // explicit fixed discount vat rate, multiple vat rate in order
     public function testCalculateRequestValues_CorrectTotalAmount_WithFixedDiscountIncVatAndVatPercent_WithDifferentVatRatesPresent() {
         $config = SveaConfig::getDefaultConfig();
-        $order = \WebPay::createOrder($config);
+        $order = WebPay\WebPay::createOrder($config);
         $order
-            ->addOrderRow(\WebPayItem::orderRow()
+            ->addOrderRow(WebPay\WebPayItem::orderRow()
                 ->setAmountExVat(100.00)
                 ->setVatPercent(25)
                 ->setQuantity(2)
             )
-            ->addOrderRow(\WebPayItem::orderRow()
+            ->addOrderRow(WebPay\WebPayItem::orderRow()
                 ->setAmountExVat(100.00)
                 ->setVatPercent(6)
                 ->setQuantity(1)
             )
-            ->addDiscount(\WebPayItem::fixedDiscount()
+            ->addDiscount(WebPay\WebPayItem::fixedDiscount()
                 ->setAmountIncVat(125.00)
                 ->setVatPercent(25)
             );
@@ -269,19 +262,19 @@ class HostedPaymentTest extends \PHPUnit_Framework_TestCase {
 
     public function testCalculateRequestValues_CorrectTotalAmount_WithFixedDiscountExVatAndVatPercent_WithDifferentVatRatesPresent() {
         $config = SveaConfig::getDefaultConfig();
-        $order = \WebPay::createOrder($config);
+        $order = WebPay\WebPay::createOrder($config);
         $order
-            ->addOrderRow(\WebPayItem::orderRow()
+            ->addOrderRow(WebPay\WebPayItem::orderRow()
                 ->setAmountExVat(100.00)
                 ->setVatPercent(25)
                 ->setQuantity(2)
             )
-            ->addOrderRow(\WebPayItem::orderRow()
+            ->addOrderRow(WebPay\WebPayItem::orderRow()
                 ->setAmountExVat(100.00)
                 ->setVatPercent(6)
                 ->setQuantity(1)
             )
-            ->addDiscount(\WebPayItem::fixedDiscount()
+            ->addDiscount(WebPay\WebPayItem::fixedDiscount()
                 ->setAmountExVat(100.00)
                 ->setVatPercent(0)
             );
@@ -300,19 +293,19 @@ class HostedPaymentTest extends \PHPUnit_Framework_TestCase {
 
     public function testCalculateRequestValues_CorrectTotalAmount_WithFixedDiscountExVatAndIncVat_WithDifferentVatRatesPresent() {
         $config = SveaConfig::getDefaultConfig();
-        $order = \WebPay::createOrder($config);
+        $order = WebPay\WebPay::createOrder($config);
         $order
-            ->addOrderRow(\WebPayItem::orderRow()
+            ->addOrderRow(WebPay\WebPayItem::orderRow()
                 ->setAmountExVat(100.00)
                 ->setVatPercent(25)
                 ->setQuantity(2)
             )
-            ->addOrderRow(\WebPayItem::orderRow()
+            ->addOrderRow(WebPay\WebPayItem::orderRow()
                 ->setAmountExVat(100.00)
                 ->setVatPercent(6)
                 ->setQuantity(1)
             )
-            ->addDiscount(\WebPayItem::fixedDiscount()
+            ->addDiscount(WebPay\WebPayItem::fixedDiscount()
                 ->setAmountExVat(80.00)
                 ->setAmountIncVat(100.00)
             );
@@ -333,12 +326,12 @@ class HostedPaymentTest extends \PHPUnit_Framework_TestCase {
     public function testCalculateRequestValues_CorrectTotalAmountFromMultipleItems_WithRelativeDiscount_WithDifferentVatRatesPresent() {
         $order = new createOrderBuilder(new SveaConfigurationProvider(SveaConfig::getDefaultConfig()));
         $order
-            ->addOrderRow(\WebPayItem::orderRow()
+            ->addOrderRow(WebPay\WebPayItem::orderRow()
                 ->setAmountExVat(69.99)
                 ->setVatPercent(25)
                 ->setQuantity(30)
             )
-            ->addDiscount(\WebPayItem::relativeDiscount()
+            ->addDiscount(WebPay\WebPayItem::relativeDiscount()
                 ->setDiscountPercent(25.00)
             );
 
@@ -358,12 +351,12 @@ class HostedPaymentTest extends \PHPUnit_Framework_TestCase {
     public function testCalculateRequestValues_CorrectTotalAmountFromMultipleItems_WithRelativeDiscount_WithDifferentVatRatesPresent2() {
         $order = new createOrderBuilder(new SveaConfigurationProvider(SveaConfig::getDefaultConfig()));
         $order
-            ->addOrderRow(\WebPayItem::orderRow()
+            ->addOrderRow(WebPay\WebPayItem::orderRow()
                 ->setAmountExVat(69.99)
                 ->setVatPercent(25)
                 ->setQuantity(1)
             )
-            ->addDiscount(\WebPayItem::relativeDiscount()
+            ->addDiscount(WebPay\WebPayItem::relativeDiscount()
                 ->setDiscountPercent(25.00)
             );
 
@@ -382,19 +375,19 @@ class HostedPaymentTest extends \PHPUnit_Framework_TestCase {
     // calculated relative discount vat rate, multiple vat rate in order
     public function testCalculateRequestValues_CorrectTotalAmount_WithRelativeDiscount_WithDifferentVatRatesPresent() {
         $config = SveaConfig::getDefaultConfig();
-        $order = \WebPay::createOrder($config);
+        $order = WebPay\WebPay::createOrder($config);
         $order
-            ->addOrderRow(\WebPayItem::orderRow()
+            ->addOrderRow(WebPay\WebPayItem::orderRow()
                 ->setAmountExVat(100.00)
                 ->setVatPercent(25)
                 ->setQuantity(2)
             )
-            ->addOrderRow(\WebPayItem::orderRow()
+            ->addOrderRow(WebPay\WebPayItem::orderRow()
                 ->setAmountExVat(100.00)
                 ->setVatPercent(6)
                 ->setQuantity(1)
             )
-            ->addDiscount(\WebPayItem::relativeDiscount()
+            ->addDiscount(WebPay\WebPayItem::relativeDiscount()
                 ->setDiscountPercent(25)
             );
 
@@ -414,18 +407,18 @@ class HostedPaymentTest extends \PHPUnit_Framework_TestCase {
     }
 
     /**
-     * Test to make countrycode optional if you use your own ConfigurationProvider implementation,
+     * Test to make countrycode optional if you use your own Svea\WebPay\Config\ConfigurationProvider implementation,
      * because it is not required in the request.
      */
     function test_usepaymentmethodpayment_without_countrycode_required_success_when_using_configurationprovider () {
-        $order = \WebPay::createOrder(new TestConf());
-        $order->addOrderRow(\WebPayItem::orderRow()
+        $order = WebPay\WebPay::createOrder(new TestConf());
+        $order->addOrderRow(WebPay\WebPayItem::orderRow()
                 ->setAmountExVat(100.00)
                 ->setVatPercent(25)
                 ->setQuantity(2))
                 ->setCurrency('SEK')
                 ->setClientOrderNumber('1010101')
-                ->usePaymentMethod(\PaymentMethod::KORTCERT)
+                ->usePaymentMethod(WebPay\Constant\PaymentMethod::KORTCERT)
                 ->setReturnUrl('testurl.com')
                 ->getPaymentForm();
 
@@ -437,14 +430,14 @@ class HostedPaymentTest extends \PHPUnit_Framework_TestCase {
      * @expectedExceptionMessage Invalid or missing Country code
      */
     function test_usepaymentmethodpayment_without_countrycode_required_fail_when_using_defaultconfig () {
-        $order = \WebPay::createOrder(SveaConfig::getDefaultConfig());
-        $order->addOrderRow(\WebPayItem::orderRow()
+        $order = WebPay\WebPay::createOrder(SveaConfig::getDefaultConfig());
+        $order->addOrderRow(WebPay\WebPayItem::orderRow()
                 ->setAmountExVat(100.00)
                 ->setVatPercent(25)
                 ->setQuantity(2))
                 ->setCurrency('SEK')
                 ->setClientOrderNumber('1010101')
-                ->usePaymentMethod(\PaymentMethod::KORTCERT)
+                ->usePaymentMethod(WebPay\Constant\PaymentMethod::KORTCERT)
                 ->setReturnUrl('testurl.com')
                 ->getPaymentForm();
     }

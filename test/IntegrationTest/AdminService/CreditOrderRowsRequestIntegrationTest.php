@@ -1,8 +1,12 @@
 <?php
 
-$root = realpath(dirname(__FILE__));
-require_once $root . '/../../../src/Includes.php';
-require_once $root . '/../../TestUtil.php';
+use Svea\WebPay\Config\SveaConfig;
+use Svea\WebPay\Constant\DistributionType;
+use Svea\WebPay\Test\TestUtil;
+use Svea\WebPay\WebPay;
+use Svea\WebPay\WebPayAdmin;
+use Svea\WebPay\WebPayItem;
+
 
 /** helper class, used to return information about an order */
 class orderToCredit {
@@ -18,13 +22,13 @@ class orderToCredit {
 }
 
 /**
- * @author Kristian Grossman-Madsen for Svea WebPay
+ * @author Kristian Grossman-Madsen for Svea Svea\WebPay\WebPay
  */
 class CreditOrderRowsRequestIntegrationTest extends PHPUnit_Framework_TestCase {
 
     /** helper function, returns invoice for delivered order with one row, sent with PriceIncludingVat flag set to true */
     public function get_orderInfo_sent_inc_vat( $amount, $vat, $quantity, $is_paymentplan = NULL) {
-        $config = Svea\SveaConfig::getDefaultConfig();
+        $config = SveaConfig::getDefaultConfig();
         if ($is_paymentplan)
             $campaignCode = TestUtil::getGetPaymentPlanParamsForTesting();
 
@@ -67,7 +71,7 @@ class CreditOrderRowsRequestIntegrationTest extends PHPUnit_Framework_TestCase {
 
     /** helper function, returns invoice for delivered order with one row, sent with PriceIncludingVat flag set to false */
     public function get_orderInfo_sent_ex_vat( $amount, $vat, $quantity, $is_paymentplan = NULL ) {
-        $config = Svea\SveaConfig::getDefaultConfig();
+        $config = SveaConfig::getDefaultConfig();
          if ($is_paymentplan)
             $campaignCode = TestUtil::getGetPaymentPlanParamsForTesting();
 
@@ -110,7 +114,7 @@ class CreditOrderRowsRequestIntegrationTest extends PHPUnit_Framework_TestCase {
 
 
     public function test_creditOrderRows_creditInvoiceOrderRows_credit_row_using_row_index() {
-        $config = Svea\SveaConfig::getDefaultConfig();
+        $config = SveaConfig::getDefaultConfig();
 
         $orderInfo = $this->get_orderInfo_sent_ex_vat( 99.99, 24, 1 );
         $credit = WebPayAdmin::creditOrderRows($config)
@@ -124,7 +128,7 @@ class CreditOrderRowsRequestIntegrationTest extends PHPUnit_Framework_TestCase {
         //print_r($credit);
     }
     public function test_creditOrderRows_creditPaymentPlanOrderRows_credit_row_using_row_index() {
-        $config = Svea\SveaConfig::getDefaultConfig();
+        $config = SveaConfig::getDefaultConfig();
 
         $orderInfo = $this->get_orderInfo_sent_ex_vat( 999.99, 24, 1, TRUE );
         $credit = WebPayAdmin::creditOrderRows($config)
@@ -137,7 +141,7 @@ class CreditOrderRowsRequestIntegrationTest extends PHPUnit_Framework_TestCase {
     }
 
     public function test_creditOrderRows_creditInvoiceOrderRows_credit_row_using_new_order_row_original_exvat_new_exvat() {
-        $config = Svea\SveaConfig::getDefaultConfig();
+        $config = SveaConfig::getDefaultConfig();
 
         $orderInfo = $this->get_orderInfo_sent_ex_vat( 99.99, 24, 1 );
 
@@ -177,7 +181,7 @@ class CreditOrderRowsRequestIntegrationTest extends PHPUnit_Framework_TestCase {
     }
 
     public function test_creditOrderRows_creditInvoiceOrderRows_credit_row_using_original_exvat_new_order_incvat() {
-        $config = Svea\SveaConfig::getDefaultConfig();
+        $config = SveaConfig::getDefaultConfig();
 
         $orderInfo = $this->get_orderInfo_sent_ex_vat( 99.99, 24, 1 );
 
@@ -212,7 +216,7 @@ class CreditOrderRowsRequestIntegrationTest extends PHPUnit_Framework_TestCase {
     /// characterizing unit tests for INTG-551
     function test_creditOrderRows_handles_creditOrderRows_specified_using_exvat_and_vatpercent() {
         // needs either setRow(s)ToCredit or addCreditOrderRow(s)
-        $creditOrder = WebPayAdmin::creditOrderRows( Svea\SveaConfig::getDefaultConfig() )
+        $creditOrder = WebPayAdmin::creditOrderRows( SveaConfig::getDefaultConfig() )
             ->setInvoiceId("123456789")
             ->setInvoiceDistributionType(DistributionType::POST)
             ->setCountryCode("SE")
@@ -232,7 +236,7 @@ class CreditOrderRowsRequestIntegrationTest extends PHPUnit_Framework_TestCase {
 
     function test_creditOrderRows_handles_creditOrderRows_specified_using_incvat_and_vatpercent() {
         // needs either setRow(s)ToCredit or addCreditOrderRow(s)
-        $creditOrder = WebPayAdmin::creditOrderRows( Svea\SveaConfig::getDefaultConfig() )
+        $creditOrder = WebPayAdmin::creditOrderRows( SveaConfig::getDefaultConfig() )
             ->setInvoiceId("123456789")
             ->setInvoiceDistributionType(DistributionType::POST)
             ->setCountryCode("SE")
@@ -272,7 +276,7 @@ class CreditOrderRowsRequestIntegrationTest extends PHPUnit_Framework_TestCase {
 
     // INTG-551 integration tests
     public function test_credit_row_sent_exandvat_credit_sent_incandex() {  // credit req. should be resent, see backoffice logs
-        $config = Svea\SveaConfig::getDefaultConfig();
+        $config = SveaConfig::getDefaultConfig();
 
         $orderInfo = $this->get_orderInfo_sent_ex_vat( 100.00, 25, 2 );
 
@@ -326,7 +330,7 @@ class CreditOrderRowsRequestIntegrationTest extends PHPUnit_Framework_TestCase {
     }
 
     public function test_credit_row_sent_inc_credit_sent_incandex() {  // credit req. should not be resent, see backoffice logs
-        $config = Svea\SveaConfig::getDefaultConfig();
+        $config = SveaConfig::getDefaultConfig();
 
         $orderInfo = $this->get_orderInfo_sent_inc_vat( 125.00, 25, 2 );
 
@@ -380,7 +384,7 @@ class CreditOrderRowsRequestIntegrationTest extends PHPUnit_Framework_TestCase {
 
     /// characterising integration test for INTG-576
     public function test_creditOrderRows_creditInvoiceOrderRows_original_exvat_new_exvat() {
-        $config = Svea\SveaConfig::getDefaultConfig();
+        $config = SveaConfig::getDefaultConfig();
 
         $orderInfo = $this->get_orderInfo_sent_ex_vat( 100.00, 25, 1 );
 
@@ -401,7 +405,7 @@ class CreditOrderRowsRequestIntegrationTest extends PHPUnit_Framework_TestCase {
     }
 
     public function test_creditOrderRows_creditInvoiceOrderRows_original_exvat_new_incvat() {
-        $config = Svea\SveaConfig::getDefaultConfig();
+        $config = SveaConfig::getDefaultConfig();
 
         $orderInfo = $this->get_orderInfo_sent_ex_vat( 100.00, 25, 1 );
 
@@ -422,7 +426,7 @@ class CreditOrderRowsRequestIntegrationTest extends PHPUnit_Framework_TestCase {
     }
 
     public function test_creditOrderRows_creditInvoiceOrderRows_original_incvat_new_incvat() {
-        $config = Svea\SveaConfig::getDefaultConfig();
+        $config = SveaConfig::getDefaultConfig();
 
         $orderInfo = $this->get_orderInfo_sent_inc_vat( 100.00, 25, 1 );
 
@@ -442,7 +446,7 @@ class CreditOrderRowsRequestIntegrationTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(1, $credit->accepted);
     }
     public function test_creditOrderRows_creditPaymentPlanOrderRows_original_incvat_new_incvat() {
-        $config = Svea\SveaConfig::getDefaultConfig();
+        $config = SveaConfig::getDefaultConfig();
 
         $orderInfo = $this->get_orderInfo_sent_inc_vat( 1000.00, 25, 1, TRUE );
         $credit = WebPayAdmin::creditOrderRows($config)
@@ -463,7 +467,7 @@ class CreditOrderRowsRequestIntegrationTest extends PHPUnit_Framework_TestCase {
     }
 
     public function test_creditOrderRows_creditInvoiceOrderRows_original_incvat_new_exvat() {
-        $config = Svea\SveaConfig::getDefaultConfig();
+        $config = SveaConfig::getDefaultConfig();
 
         $orderInfo = $this->get_orderInfo_sent_inc_vat( 100.00, 25, 1 );
 
@@ -484,7 +488,7 @@ class CreditOrderRowsRequestIntegrationTest extends PHPUnit_Framework_TestCase {
 
     }
     public function test_creditOrderRows_creditPyamentplanOrderRows_original_incvat_new_exvat() {
-        $config = Svea\SveaConfig::getDefaultConfig();
+        $config = SveaConfig::getDefaultConfig();
 
         $orderInfo = $this->get_orderInfo_sent_inc_vat( 1000.00, 25, 1, TRUE );
           //ContractNumber
@@ -511,7 +515,7 @@ class CreditOrderRowsRequestIntegrationTest extends PHPUnit_Framework_TestCase {
 
     }
     public function test_creditOrderRows_creditInvoiceOrderRows_multipleRows() {
-        $config = Svea\SveaConfig::getDefaultConfig();
+        $config = SveaConfig::getDefaultConfig();
 
         $orderInfo = $this->get_orderInfo_sent_inc_vat( 100.00, 25, 1 );
 
@@ -537,7 +541,7 @@ class CreditOrderRowsRequestIntegrationTest extends PHPUnit_Framework_TestCase {
 
     }
     public function test_creditOrderRows_creditPyamentplanOrderRows_multipleRows() {
-        $config = Svea\SveaConfig::getDefaultConfig();
+        $config = SveaConfig::getDefaultConfig();
 
         $orderInfo = $this->get_orderInfo_sent_inc_vat( 1000.00, 25, 1, TRUE );
         $orderRows[] =   WebPayItem::orderRow()

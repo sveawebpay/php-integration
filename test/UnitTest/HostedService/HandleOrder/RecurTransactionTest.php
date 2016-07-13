@@ -1,8 +1,7 @@
 <?php
 
-$root = realpath(dirname(__FILE__));
-require_once $root . '/../../../../src/Includes.php';
-require_once $root . '/../../../../src/WebService/svea_soap/SveaSoapConfig.php';
+use Svea\WebPay\Config\ConfigurationProvider;
+
 
 /**
  * @author Kristian Grossman-Madsen for Svea Webpay
@@ -14,13 +13,13 @@ class RecurTransactionTest extends PHPUnit_Framework_TestCase {
 
     // fixture, run once before each test method
     protected function setUp() {
-        $this->configObject = Svea\SveaConfig::getDefaultConfig();
-        $this->recurTransactionObject = new Svea\HostedService\RecurTransaction($this->configObject);
+        $this->configObject = \Svea\WebPay\Config\SveaConfig::getDefaultConfig();
+        $this->recurTransactionObject = new \Svea\WebPay\HostedService\HostedAdminRequest\RecurTransaction($this->configObject);
     }
 
     // test methods
     function test_class_exists(){
-        $this->assertInstanceOf( "Svea\HostedService\RecurTransaction", $this->recurTransactionObject);      
+        $this->assertInstanceOf( "Svea\WebPay\HostedService\HostedAdminRequest\RecurTransaction", $this->recurTransactionObject);      
         $this->assertEquals( "recur", PHPUnit_Framework_Assert::readAttribute($this->recurTransactionObject, 'method') );        
     }
     
@@ -117,7 +116,7 @@ class RecurTransactionTest extends PHPUnit_Framework_TestCase {
     function test_prepareRequest_missing_customerRefNo_throws_exception() {
 
         $this->setExpectedException(
-            'Svea\ValidationException', 
+            'Svea\WebPay\BuildOrder\Validator\ValidationException', 
             '-missing value : customerRefNo is required. Use function setCustomerRefNo (also check setClientOrderNumber in order builder).'
         );   
   
@@ -139,7 +138,7 @@ class RecurTransactionTest extends PHPUnit_Framework_TestCase {
     function test_prepareRequest_missing_subscriptionId_throws_exception() {
 
         $this->setExpectedException(
-            'Svea\ValidationException', 
+            'Svea\WebPay\BuildOrder\Validator\ValidationException', 
             '-missing value : subscriptionId is required. Use function setSubscriptionId() with the subscriptionId from the createOrder response.'
         );   
     
@@ -162,7 +161,7 @@ class RecurTransactionTest extends PHPUnit_Framework_TestCase {
     function test_prepareRequest_missing_amount_throws_exception() {
 
         $this->setExpectedException(
-            'Svea\ValidationException', 
+            'Svea\WebPay\BuildOrder\Validator\ValidationException', 
             '-missing value : amount is required. Use function setAmount().'
         );   
     

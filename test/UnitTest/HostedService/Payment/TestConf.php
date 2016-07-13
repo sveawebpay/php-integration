@@ -1,11 +1,11 @@
 <?php
 namespace Svea;
-require_once $root . '/../../../../src/Includes.php';
+use Svea\WebPay\Config\SveaConfig;
 
 /**
  * @author Jonas Lith
  */
-class TestConf implements \ConfigurationProvider {
+class TestConf implements WebPay\Config\ConfigurationProvider {
 
     public function getClientNumber($type, $country) {
         return 79021;
@@ -46,7 +46,7 @@ class TestConf implements \ConfigurationProvider {
         return "integration_name";
     }
     public function getIntegrationCompany() {
-        return "Svea WebPay";
+        return "Svea Svea\WebPay\WebPay";
     }
     public function getIntegrationVersion() {
         return 'integration_version';

@@ -1,12 +1,8 @@
 <?php
-use Svea\WebService\CloseOrder as CloseOrder;
-
-
-$root = realpath(dirname(__FILE__));
-require_once $root . '/../../../../src/Includes.php';
-
-$root = realpath(dirname(__FILE__));
-require_once $root . '/../../../TestUtil.php';
+use Svea\WebPay\Config\SveaConfig;
+use Svea\WebPay\Test\TestUtil;
+use Svea\WebPay\WebPay;
+use Svea\WebPay\WebPayItem;
 
 /**
  * @author Jonas Lith
@@ -18,7 +14,7 @@ class CloseOrderIntegrationTest extends PHPUnit_Framework_TestCase {
      * @return SveaOrderId
      */
     private function getInvoiceOrderId() {
-        $config = Svea\SveaConfig::getDefaultConfig();
+        $config = SveaConfig::getDefaultConfig();
         $request = WebPay::createOrder($config)
                 ->addOrderRow(TestUtil::createOrderRow())
                 ->addCustomerDetails(WebPayItem::individualCustomer()->setNationalIdNumber(194605092222))
@@ -34,7 +30,7 @@ class CloseOrderIntegrationTest extends PHPUnit_Framework_TestCase {
     }
 
     public function testCloseInvoiceOrder() {
-        $config = Svea\SveaConfig::getDefaultConfig();
+        $config = SveaConfig::getDefaultConfig();
         $orderId = $this->getInvoiceOrderId();
         $orderBuilder = WebPay::closeOrder($config);
         $request = $orderBuilder
@@ -48,10 +44,10 @@ class CloseOrderIntegrationTest extends PHPUnit_Framework_TestCase {
     }
   
     /**
-     * @expectedException Svea\ValidationException
+     * @expectedException \Svea\WebPay\BuildOrder\Validator\ValidationException
      */ 
     public function testCloseInvoiceOrder_missing_setOrderId_throws_ValidationException() {
-        $config = Svea\SveaConfig::getDefaultConfig();
+        $config = SveaConfig::getDefaultConfig();
         $orderId = $this->getInvoiceOrderId();
         $orderBuilder = WebPay::closeOrder($config);
         $request = $orderBuilder

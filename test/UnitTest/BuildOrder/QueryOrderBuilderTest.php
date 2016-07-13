@@ -1,11 +1,8 @@
 <?php
-namespace Svea;
 
-$root = realpath(dirname(__FILE__));
-require_once $root . '/../../../src/Includes.php';
-
-$root = realpath(dirname(__FILE__));
-require_once $root . '/../../TestUtil.php';
+use Svea\WebPay\Config\SveaConfig;
+use Svea\WebPay\BuildOrder\QueryOrderBuilder;
+use Svea\WebPay\Config\ConfigurationProvider;
 
 /**
  * @author Kristian Grossman-Madsen for Svea Webpay
@@ -19,7 +16,7 @@ class QueryOrderBuilderTest extends \PHPUnit_Framework_TestCase {
     }
     
     public function test_queryOrderBuilder_class_exists() {     
-        $this->assertInstanceOf("Svea\queryOrderBuilder", $this->queryOrderObject);
+        $this->assertInstanceOf('Svea\WebPay\BuildOrder\QueryOrderBuilder', $this->queryOrderObject);
     }
     
     public function test_queryOrderBuilder_setOrderId() {
@@ -42,22 +39,22 @@ class QueryOrderBuilderTest extends \PHPUnit_Framework_TestCase {
     
     public function test_queryOrderBuilder_queryInvoiceOrder_returns_GetOrdersRequest_with_correct_orderType() {
         $orderId = "123456";
-        $paymentMethod = \ConfigurationProvider::INVOICE_TYPE;   // todo check these ws ConfigProvicer::INVOICE_TYPE et al...
+        $paymentMethod = ConfigurationProvider::INVOICE_TYPE;   // todo check these ws ConfigProvicer::INVOICE_TYPE et al...
         
         $queryOrderObject = $this->queryOrderObject->setOrderId($orderId)->queryInvoiceOrder();
         
-        $this->assertInstanceOf("Svea\AdminService\GetOrdersRequest", $queryOrderObject);
+        $this->assertInstanceOf("Svea\WebPay\AdminService\GetOrdersRequest", $queryOrderObject);
         $this->assertEquals($paymentMethod, $queryOrderObject->orderBuilder->orderType);
 
     }
     
     public function test_queryOrderBuilder_queryPaymentPlanOrder_returns_GetOrdersRequest_with_correct_orderType() {
         $orderId = "123456";
-        $paymentMethod = \ConfigurationProvider::PAYMENTPLAN_TYPE;   // todo check these ws ConfigProvicer::INVOICE_TYPE et al...
+        $paymentMethod = ConfigurationProvider::PAYMENTPLAN_TYPE;   // todo check these ws ConfigProvicer::INVOICE_TYPE et al...
         
         $queryOrderObject = $this->queryOrderObject->setOrderId($orderId)->queryPaymentPlanOrder();
         
-        $this->assertInstanceOf("Svea\AdminService\GetOrdersRequest", $queryOrderObject);
+        $this->assertInstanceOf("Svea\WebPay\AdminService\GetOrdersRequest", $queryOrderObject);
         $this->assertEquals($paymentMethod, $queryOrderObject->orderBuilder->orderType);
 
     }
@@ -67,6 +64,6 @@ class QueryOrderBuilderTest extends \PHPUnit_Framework_TestCase {
         
         $queryOrderObject = $this->queryOrderObject->setOrderId($orderId)->queryCardOrder();
         
-        $this->assertInstanceOf("Svea\HostedService\QueryTransaction", $queryOrderObject);
+        $this->assertInstanceOf("Svea\WebPay\HostedService\HostedAdminRequest\QueryTransaction", $queryOrderObject);
     }  
 }

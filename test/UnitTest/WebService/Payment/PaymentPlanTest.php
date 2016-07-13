@@ -1,10 +1,9 @@
 <?php
 
-$root = realpath(dirname(__FILE__));
-require_once $root . '/../../../../test/UnitTest/BuildOrder/OrderBuilderTest.php';
+use Svea\WebPay\Test\TestUtil;
+use Svea\WebPay\WebPay;
+use Svea\WebPay\WebPayItem;
 
-$root = realpath(dirname(__FILE__));
-require_once $root . '/../../../TestUtil.php';
 
 /**
  * @author Anneli Halld'n, Daniel Brolund for Svea Webpay
@@ -16,7 +15,7 @@ class PaymentPlanTest extends PHPUnit_Framework_TestCase {
      * @return type
      */
     public function getGetPaymentPlanParamsForTesting() {
-        $config = Svea\SveaConfig::getDefaultConfig();
+        $config = \Svea\WebPay\Config\SveaConfig::getDefaultConfig();
         $addressRequest = WebPay::getPaymentPlanParams($config);
         $response = $addressRequest
                 ->setCountryCode("SE")
@@ -25,7 +24,7 @@ class PaymentPlanTest extends PHPUnit_Framework_TestCase {
     }
 
     public function testPaymentPlanRequestObjectSpecifics() {
-        $config = Svea\SveaConfig::getDefaultConfig();
+        $config = \Svea\WebPay\Config\SveaConfig::getDefaultConfig();
         $rowFactory = new TestUtil();
         $request = WebPay::createOrder($config)
                 ->addOrderRow(TestUtil::createOrderRow())
@@ -44,7 +43,7 @@ class PaymentPlanTest extends PHPUnit_Framework_TestCase {
     }
 
     public function testInvoiceRequestObjectWithRelativeDiscountOnTwoProducts() {
-        $config = Svea\SveaConfig::getDefaultConfig();
+        $config = \Svea\WebPay\Config\SveaConfig::getDefaultConfig();
         $request = WebPay::createOrder($config)
                 ->addOrderRow(WebPayItem::orderRow()
                     ->setArticleNumber("1")
@@ -76,7 +75,7 @@ class PaymentPlanTest extends PHPUnit_Framework_TestCase {
     }
 
     public function testPaymentPlanWithPriceAsDecimal() {
-        $config = Svea\SveaConfig::getDefaultConfig();
+        $config = \Svea\WebPay\Config\SveaConfig::getDefaultConfig();
         $campaign = $this->getGetPaymentPlanParamsForTesting();
         $request = WebPay::createOrder($config)
                 ->addOrderRow(WebPayItem::orderRow()
@@ -106,7 +105,7 @@ class PaymentPlanTest extends PHPUnit_Framework_TestCase {
      */
 
     public function testDiscountSetAsExVatWhenPriceSetAsExVatAndVatPercent(){
-        $config = Svea\SveaConfig::getDefaultConfig();
+        $config = \Svea\WebPay\Config\SveaConfig::getDefaultConfig();
         $campaign = $this->getGetPaymentPlanParamsForTesting();
         $request = WebPay::createOrder($config)
                     ->addOrderRow(
@@ -129,7 +128,7 @@ class PaymentPlanTest extends PHPUnit_Framework_TestCase {
 
     }
     public function testDiscountSetAsExVatAndVatPercentWhenPriceSetAsExVatAndVatPercent(){
-        $config = Svea\SveaConfig::getDefaultConfig();
+        $config = \Svea\WebPay\Config\SveaConfig::getDefaultConfig();
          $campaign = $this->getGetPaymentPlanParamsForTesting();
         $request = WebPay::createOrder($config)
                     ->addOrderRow(
@@ -154,7 +153,7 @@ class PaymentPlanTest extends PHPUnit_Framework_TestCase {
 
     }
     public function testDiscountPercentAndVatPercentWhenPriceSetAsExVatAndVatPercent(){
-        $config = Svea\SveaConfig::getDefaultConfig();
+        $config = \Svea\WebPay\Config\SveaConfig::getDefaultConfig();
          $campaign = $this->getGetPaymentPlanParamsForTesting();
         $request = WebPay::createOrder($config)
                     ->addOrderRow(
@@ -179,7 +178,7 @@ class PaymentPlanTest extends PHPUnit_Framework_TestCase {
 
     }
     public function testFeeSetAsExVatAndVatPercentWhenPriceSetAsExVatAndVatPercent(){
-        $config = Svea\SveaConfig::getDefaultConfig();
+        $config = \Svea\WebPay\Config\SveaConfig::getDefaultConfig();
         $campaign = $this->getGetPaymentPlanParamsForTesting();
         $request = WebPay::createOrder($config)
                     ->addOrderRow(
@@ -207,7 +206,7 @@ class PaymentPlanTest extends PHPUnit_Framework_TestCase {
     }
 
      public function testOrderRowPriceSetAsInkVatAndVatPercentSetAmountAsIncVat(){
-        $config = Svea\SveaConfig::getDefaultConfig();
+        $config = \Svea\WebPay\Config\SveaConfig::getDefaultConfig();
         $campaign = $this->getGetPaymentPlanParamsForTesting();
         $request = WebPay::createOrder($config)
                     ->addOrderRow(
@@ -229,7 +228,7 @@ class PaymentPlanTest extends PHPUnit_Framework_TestCase {
     }
 
       public function testFeeSetAsIncVatAndVatPercentWhenPriceSetAsIncVatAndVatPercent(){
-        $config = Svea\SveaConfig::getDefaultConfig();
+        $config = \Svea\WebPay\Config\SveaConfig::getDefaultConfig();
         $campaign = $this->getGetPaymentPlanParamsForTesting();
         $request = WebPay::createOrder($config)
                     ->addOrderRow(
@@ -264,7 +263,7 @@ class PaymentPlanTest extends PHPUnit_Framework_TestCase {
     }
 
       public function testDiscountSetAsIncVatWhenPriceSetAsIncVatAndVatPercent(){
-        $config = Svea\SveaConfig::getDefaultConfig();
+        $config = \Svea\WebPay\Config\SveaConfig::getDefaultConfig();
         $campaign = $this->getGetPaymentPlanParamsForTesting();
         $request = WebPay::createOrder($config)
                     ->addOrderRow(
@@ -291,7 +290,7 @@ class PaymentPlanTest extends PHPUnit_Framework_TestCase {
     }
 
      public function testDiscountSetAsExVatAndVatPercentWhenPriceSetAsIncVatAndVatPercent(){
-        $config = Svea\SveaConfig::getDefaultConfig();
+        $config = \Svea\WebPay\Config\SveaConfig::getDefaultConfig();
         $campaign = $this->getGetPaymentPlanParamsForTesting();
         $request = WebPay::createOrder($config)
                     ->addOrderRow(
@@ -320,7 +319,7 @@ class PaymentPlanTest extends PHPUnit_Framework_TestCase {
 
 
     public function testDiscountPercentAndVatPercentWhenPriceSetAsIncVatAndVatPercent(){
-        $config = Svea\SveaConfig::getDefaultConfig();
+        $config = \Svea\WebPay\Config\SveaConfig::getDefaultConfig();
         $campaign = $this->getGetPaymentPlanParamsForTesting();
         $request = WebPay::createOrder($config)
                     ->addOrderRow(

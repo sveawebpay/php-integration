@@ -1,5 +1,9 @@
 <?php
 
+use Svea\WebPay\Constant\PaymentMethod;
+use Svea\WebPay\WebPay;
+use Svea\WebPay\WebPayItem;
+
 $root = realpath(dirname(__FILE__));
 require_once $root . '/../../../TestUtil.php';
 
@@ -11,7 +15,7 @@ class BvDiscountTest extends PHPUnit_Framework_TestCase {
     public function test_bv_order_sent_incvat_two_decimals_with_both_discounts() {        
 //    print_r("\n\n-----test_bv_order_sent_incvat_two_decimals_with_both_discounts()\n");
     
-        $order = WebPay::createOrder(Svea\SveaConfig::getDefaultConfig())
+        $order = WebPay::createOrder(\Svea\WebPay\Config\SveaConfig::getDefaultConfig())
             ->addCustomerDetails(WebPayItem::individualCustomer()->setNationalIdNumber(194605092222))
             ->setCountryCode("SE")
             ->setCustomerReference("1337")
@@ -112,7 +116,7 @@ class BvDiscountTest extends PHPUnit_Framework_TestCase {
     public function test_bv_order_sent_incvat_two_decimals_with_both_discounts_with_amount_only() {        
 //    print_r("\n\n-----test_bv_order_sent_incvat_two_decimals_with_both_discounts_with_amount_only()\n");
     
-        $order = WebPay::createOrder(Svea\SveaConfig::getDefaultConfig())
+        $order = WebPay::createOrder(\Svea\WebPay\Config\SveaConfig::getDefaultConfig())
             ->addCustomerDetails(WebPayItem::individualCustomer()->setNationalIdNumber(194605092222))
             ->setCountryCode("SE")
             ->setCustomerReference("1337")

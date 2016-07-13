@@ -1,11 +1,14 @@
 <?php
 
-$root = realpath(dirname(__FILE__));
-require_once $root . '/../../../src/Includes.php';
-require_once $root . '/../../TestUtil.php';
+use Svea\WebPay\WebPayItem;
+use Svea\WebPay\WebPayAdmin;
+use Svea\WebPay\Test\TestUtil;
+use Svea\WebPay\Config\SveaConfig;
+use Svea\WebPay\HostedService\HostedResponse\HostedAdminResponse\HostedAdminResponse;
+
 
 /**
- * @author Kristian Grossman-Madsen for Svea WebPay
+ * @author Kristian Grossman-Madsen for Svea Svea\WebPay\WebPay
  */
 class CancelOrderBuilderIntegrationTest extends PHPUnit_Framework_TestCase {
 
@@ -17,7 +20,7 @@ class CancelOrderBuilderIntegrationTest extends PHPUnit_Framework_TestCase {
        
         $this->assertEquals(1, $orderResponse->accepted);
          
-        $cancelResponse = WebPayAdmin::cancelOrder( Svea\SveaConfig::getDefaultConfig() )
+        $cancelResponse = WebPayAdmin::cancelOrder( SveaConfig::getDefaultConfig() )
                 ->setOrderId($orderResponse->sveaOrderId)
                 ->setCountryCode($country)
                 ->cancelInvoiceOrder()
@@ -39,7 +42,7 @@ class CancelOrderBuilderIntegrationTest extends PHPUnit_Framework_TestCase {
 
         $this->assertEquals(1, $orderResponse->accepted);
         
-        $cancelResponse = WebPayAdmin::cancelOrder( Svea\SveaConfig::getDefaultConfig() )
+        $cancelResponse = WebPayAdmin::cancelOrder( SveaConfig::getDefaultConfig() )
                 ->setOrderId($orderResponse->sveaOrderId)
                 ->setCountryCode($country)
                 ->cancelPaymentPlanOrder()
@@ -65,14 +68,14 @@ class CancelOrderBuilderIntegrationTest extends PHPUnit_Framework_TestCase {
         $customerrefno = "test_1396964349955";
         $transactionId = 580658;
 
-        $request = WebPayAdmin::cancelOrder( Svea\SveaConfig::getDefaultConfig() )
+        $request = WebPayAdmin::cancelOrder( SveaConfig::getDefaultConfig() )
             ->setOrderId( $transactionId )
             ->setCountryCode( "SE" )
             ->cancelCardOrder()
                 ->doRequest();        
          
-        $this->assertInstanceOf( "Svea\HostedAdminResponse", $response );
-        
+        $this->assertInstanceOf( 'Svea\WebPay\HostedService\HostedResponse\HostedAdminResponse\HostedAdminResponse', $response );
+
         $this->assertEquals( 1, $response->accepted );        
         $this->assertEquals( $customerrefno, $response->customerrefno );
     }    

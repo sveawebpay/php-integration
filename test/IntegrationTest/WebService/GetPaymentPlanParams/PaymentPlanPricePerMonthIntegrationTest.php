@@ -1,9 +1,8 @@
 <?php
-use \Svea\WebService\GetPaymentPlanParams as GetPaymentPlanParams;
-use \Svea\WebService\PaymentPlanPricePerMonth as PaymentPlanPricePerMonth;
+use Svea\WebPay\Config\SveaConfig;
+use Svea\WebPay\WebService\GetPaymentPlanParams\GetPaymentPlanParams as GetPaymentPlanParams;
+use Svea\WebPay\WebService\GetPaymentPlanParams\PaymentPlanPricePerMonth as PaymentPlanPricePerMonth;
 
-$root = realpath(dirname(__FILE__));
-require_once $root . '/../../../../src/Includes.php';
 
 /**
  * @author Jonas Lith, Kristian Grossman-Madsen
@@ -11,7 +10,7 @@ require_once $root . '/../../../../src/Includes.php';
 class PaymentPlanPricePerMonthTest extends PHPUnit_Framework_TestCase {
 
     private function getGetPaymentPlanParamsResponseForTesting() {
-        $config = Svea\SveaConfig::getDefaultConfig();
+        $config = SveaConfig::getDefaultConfig();
         $addressRequest = new GetPaymentPlanParams($config);
         $response = $addressRequest
                 ->setCountryCode("SE")

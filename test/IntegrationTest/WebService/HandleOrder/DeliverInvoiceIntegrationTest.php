@@ -1,11 +1,14 @@
 <?php
 // Integration tests should not need to use the namespace
 
-$root = realpath(dirname(__FILE__));
-require_once $root . '/../../../../src/Includes.php';
+use Svea\WebPay\BuildOrder\DeliverOrderBuilder;
+use Svea\WebPay\Config\SveaConfig;
+use Svea\WebPay\Constant\DistributionType;
+use Svea\WebPay\Test\TestUtil;
+use Svea\WebPay\WebPay;
+use Svea\WebPay\WebPayItem;
+use Svea\WebPay\WebService\HandleOrder\DeliverInvoice;
 
-$root = realpath(dirname(__FILE__));
-require_once $root . '/../../../TestUtil.php';
 
 /**
  * @author jona-lit
@@ -17,7 +20,7 @@ class DeliverInvoiceIntegrationTest extends PHPUnit_Framework_TestCase {
      * @return SveaOrderId
      */
     private function getInvoiceOrderId() {
-        $config = Svea\SveaConfig::getDefaultConfig();
+        $config = SveaConfig::getDefaultConfig();
         $request = WebPay::createOrder($config)
                 ->addOrderRow(TestUtil::createOrderRow())
                 ->addCustomerDetails(WebPayItem::individualCustomer()->setNationalIdNumber(194605092222))
@@ -32,7 +35,7 @@ class DeliverInvoiceIntegrationTest extends PHPUnit_Framework_TestCase {
     }
 
     public function testDeliverInvoiceOrder() {
-        $config = Svea\SveaConfig::getDefaultConfig();
+        $config = SveaConfig::getDefaultConfig();
         $orderId = $this->getInvoiceOrderId();
         $orderBuilder = WebPay::deliverOrder($config);
         $request = $orderBuilder
@@ -57,10 +60,10 @@ class DeliverInvoiceIntegrationTest extends PHPUnit_Framework_TestCase {
     }
 
     /**
-     * @expectedException Svea\ValidationException
+     * @expectedException \Svea\WebPay\BuildOrder\Validator\ValidationException
      */
     public function testDeliverInvoiceOrder_missing_setOrderId_throws_ValidationException() {
-        $config = Svea\SveaConfig::getDefaultConfig();
+        $config = SveaConfig::getDefaultConfig();
         $orderId = $this->getInvoiceOrderId();
         $orderBuilder = WebPay::deliverOrder($config);
         $request = $orderBuilder
@@ -74,29 +77,29 @@ class DeliverInvoiceIntegrationTest extends PHPUnit_Framework_TestCase {
     }
 
     /**
-     * @expectedException Svea\ValidationException
+     * @expectedException \Svea\WebPay\BuildOrder\Validator\ValidationException
      *
-     * bypasses WebPay::deliverOrders, as 2.0 allows deliverOrder w/o orderRows
+     * bypasses Svea\WebPay\WebPay::deliverOrders, as 2.0 allows deliverOrder w/o orderRows
      */
     public function test_DeliverInvoice_missing_addOrderRow_throws_ValidationException() {
-        $config = Svea\SveaConfig::getDefaultConfig();
+        $config = SveaConfig::getDefaultConfig();
         $orderId = $this->getInvoiceOrderId();
-        $orderBuilder = new \Svea\DeliverOrderBuilder($config);
+        $orderBuilder = new DeliverOrderBuilder($config);
         $orderBuilder = $orderBuilder
-                //->addOrderRow(TestUtil::createOrderRow())
+                //->addOrderRow(Svea\WebPay\Test\TestUtil::createOrderRow())
                 ->setOrderId($orderId)
                 ->setNumberOfCreditDays(1)
                 ->setCountryCode("SE")
                 ->setInvoiceDistributionType('Post')//Post or Email
         ;
-        $deliverInvoiceObject = new Svea\WebService\DeliverInvoice( $orderBuilder );
+        $deliverInvoiceObject = new DeliverInvoice( $orderBuilder );
         $response = $deliverInvoiceObject->doRequest();
     }
     /**
-     * @expectedException Svea\ValidationException
+     * @expectedException \Svea\WebPay\BuildOrder\Validator\ValidationException
      */
     public function testDeliverInvoiceOrder_missing_setInvoiceDistributionType_throws_ValidationException() {
-        $config = Svea\SveaConfig::getDefaultConfig();
+        $config = SveaConfig::getDefaultConfig();
         $orderId = $this->getInvoiceOrderId();
         $orderBuilder = WebPay::deliverOrder($config);
         $request = $orderBuilder
@@ -114,7 +117,7 @@ class DeliverInvoiceIntegrationTest extends PHPUnit_Framework_TestCase {
      */
 
     public function testDeliverOrderWithAmountExVatAndVatPercent() {
-        $config = Svea\SveaConfig::getDefaultConfig();
+        $config = SveaConfig::getDefaultConfig();
          $order = WebPay::createOrder($config)
                     ->addOrderRow(
                             WebPayItem::orderRow()
@@ -176,7 +179,7 @@ class DeliverInvoiceIntegrationTest extends PHPUnit_Framework_TestCase {
 
     }
     public function testDeliverOrderWithAmountIncVatAndVatPercent() {
-        $config = Svea\SveaConfig::getDefaultConfig();
+        $config = SveaConfig::getDefaultConfig();
          $order = WebPay::createOrder($config)
                     ->addOrderRow(
                             WebPayItem::orderRow()
@@ -239,7 +242,7 @@ class DeliverInvoiceIntegrationTest extends PHPUnit_Framework_TestCase {
     }
 
       public function testCreateOrderWithAmountIncAndDeliverWithAmountExvat() {
-        $config = Svea\SveaConfig::getDefaultConfig();
+        $config = SveaConfig::getDefaultConfig();
          $order = WebPay::createOrder($config)
                     ->addOrderRow(
                             WebPayItem::orderRow()
@@ -270,7 +273,7 @@ class DeliverInvoiceIntegrationTest extends PHPUnit_Framework_TestCase {
 
     }
       public function testCreateOrderWithAmountExAndDeliverWithAmountIncvat() {
-        $config = Svea\SveaConfig::getDefaultConfig();
+        $config = SveaConfig::getDefaultConfig();
          $order = WebPay::createOrder($config)
                     ->addOrderRow(
                             WebPayItem::orderRow()
@@ -302,7 +305,7 @@ class DeliverInvoiceIntegrationTest extends PHPUnit_Framework_TestCase {
 
     }
     public function testCreateOrderWithFeesAsAmountIncAndDeliverWithAmountExvat() {
-        $config = Svea\SveaConfig::getDefaultConfig();
+        $config = SveaConfig::getDefaultConfig();
          $order = WebPay::createOrder($config)
                     ->addOrderRow(
                             WebPayItem::orderRow()
@@ -349,7 +352,7 @@ class DeliverInvoiceIntegrationTest extends PHPUnit_Framework_TestCase {
 
     }
     public function testCreateOrderWithFeesAsAmountExAndDeliverWithAmountIncvat() {
-        $config = Svea\SveaConfig::getDefaultConfig();
+        $config = SveaConfig::getDefaultConfig();
          $order = WebPay::createOrder($config)
                     ->addOrderRow(
                             WebPayItem::orderRow()
@@ -396,7 +399,7 @@ class DeliverInvoiceIntegrationTest extends PHPUnit_Framework_TestCase {
 
     }
     public function testCreateOrderWithDiscountAsAmountExAndDeliverWithAmountIncvat() {
-        $config = Svea\SveaConfig::getDefaultConfig();
+        $config = SveaConfig::getDefaultConfig();
          $order = WebPay::createOrder($config)
                     ->addOrderRow(
                             WebPayItem::orderRow()

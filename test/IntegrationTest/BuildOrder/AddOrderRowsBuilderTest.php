@@ -1,11 +1,13 @@
 <?php
 
-$root = realpath(dirname(__FILE__));
-require_once $root . '/../../../src/Includes.php';
-require_once $root . '/../../TestUtil.php';
+use Svea\WebPay\BuildOrder\AddOrderRowsBuilder;
+use Svea\WebPay\Config\SveaConfig;
+use Svea\WebPay\Test\TestUtil;
+use Svea\WebPay\WebPayAdmin;
+use Svea\WebPay\WebPayItem;
 
 /**
- * @author Kristian Grossman-Madsen for Svea WebPay
+ * @author Kristian Grossman-Madsen for Svea Svea\WebPay\WebPay
  */
 class AddOrderRowsBuilderIntegrationTest extends PHPUnit_Framework_TestCase {
     
@@ -34,7 +36,7 @@ class AddOrderRowsBuilderIntegrationTest extends PHPUnit_Framework_TestCase {
         $b_description = "B Description";    
         $b_discount = 0;
         
-        $addOrderRowsBuilder = new \Svea\AddOrderRowsBuilder( Svea\SveaConfig::getDefaultConfig() );
+        $addOrderRowsBuilder = new AddOrderRowsBuilder( SveaConfig::getDefaultConfig() );
         $addOrderRowsResponse = $addOrderRowsBuilder
                 ->setOrderId($orderResponse->sveaOrderId)
                 ->setCountryCode($country)
@@ -56,7 +58,7 @@ class AddOrderRowsBuilderIntegrationTest extends PHPUnit_Framework_TestCase {
         ////print_r("test_AddOrderRows_addInvoiceOrderRows_single_row_success: "); //print_r( $createdOrderId );
         
         // query orderrows
-        $queryOrderBuilder = WebPayAdmin::queryOrder( Svea\SveaConfig::getDefaultConfig() )
+        $queryOrderBuilder = WebPayAdmin::queryOrder( SveaConfig::getDefaultConfig() )
             ->setOrderId( $createdOrderId )
             ->setCountryCode($country)
         ;
@@ -74,7 +76,7 @@ class AddOrderRowsBuilderIntegrationTest extends PHPUnit_Framework_TestCase {
         $this->assertStringStartsWith( $b_name, $queryResponse->numberedOrderRows[1]->description );
         $this->assertStringEndsWith( $b_description, $queryResponse->numberedOrderRows[1]->description );
         $this->assertEquals( $b_discount, $queryResponse->numberedOrderRows[1]->discountPercent );
-        $this->assertEquals( Svea\NumberedOrderRow::ORDERROWSTATUS_NOTDELIVERED, $queryResponse->numberedOrderRows[1]->status );
+        $this->assertEquals( \Svea\WebPay\BuildOrder\RowBuilders\NumberedOrderRow::ORDERROWSTATUS_NOTDELIVERED, $queryResponse->numberedOrderRows[1]->status );
         $this->assertEquals( 2, $queryResponse->numberedOrderRows[1]->rowNumber );      
     }
         
@@ -94,7 +96,7 @@ class AddOrderRowsBuilderIntegrationTest extends PHPUnit_Framework_TestCase {
         $b_description = "B Description";    
         $b_discount = 0;
 
-        $addOrderRowsBuilder = new \Svea\AddOrderRowsBuilder( Svea\SveaConfig::getDefaultConfig() );
+        $addOrderRowsBuilder = new AddOrderRowsBuilder( SveaConfig::getDefaultConfig() );
         $addOrderRowsResponse = $addOrderRowsBuilder
                 ->setOrderId($orderResponse->sveaOrderId)
                 ->setCountryCode($country)
@@ -117,7 +119,7 @@ class AddOrderRowsBuilderIntegrationTest extends PHPUnit_Framework_TestCase {
         ////print_r("test_AddOrderRows_addInvoiceOrderRows_multiple_rows_success: "); //print_r( $createdOrderId );
         
         // query orderrows
-        $queryOrderBuilder = WebPayAdmin::queryOrder( Svea\SveaConfig::getDefaultConfig() )
+        $queryOrderBuilder = WebPayAdmin::queryOrder( SveaConfig::getDefaultConfig() )
             ->setOrderId( $createdOrderId )
             ->setCountryCode($country)
         ;
@@ -155,7 +157,7 @@ class AddOrderRowsBuilderIntegrationTest extends PHPUnit_Framework_TestCase {
         $b_description = "B Description";    
         $b_discount = 0;
 
-        $addOrderRowsBuilder = new \Svea\AddOrderRowsBuilder( Svea\SveaConfig::getDefaultConfig() );
+        $addOrderRowsBuilder = new AddOrderRowsBuilder( SveaConfig::getDefaultConfig() );
         $addOrderRowsResponse = $addOrderRowsBuilder
                 ->setOrderId($orderResponse->sveaOrderId)
                 ->setCountryCode($country)
@@ -178,7 +180,7 @@ class AddOrderRowsBuilderIntegrationTest extends PHPUnit_Framework_TestCase {
         ////print_r("test_AddOrderRows_addPaymentPlanOrderRows_multiple_rows_success: "); //print_r( $createdOrderId );
         
         // query orderrows
-        $queryOrderBuilder = WebPayAdmin::queryOrder( Svea\SveaConfig::getDefaultConfig() )
+        $queryOrderBuilder = WebPayAdmin::queryOrder( SveaConfig::getDefaultConfig() )
             ->setOrderId( $createdOrderId )
             ->setCountryCode($country)
         ;
@@ -216,7 +218,7 @@ class AddOrderRowsBuilderIntegrationTest extends PHPUnit_Framework_TestCase {
         $orderResponse = $order->useInvoicePayment()->doRequest();       
         $this->assertEquals(1, $orderResponse->accepted);
 
-        $addOrderRowsBuilder = new \Svea\AddOrderRowsBuilder( Svea\SveaConfig::getDefaultConfig() );
+        $addOrderRowsBuilder = new AddOrderRowsBuilder( SveaConfig::getDefaultConfig() );
         $addOrderRowsResponse = $addOrderRowsBuilder
                 ->setOrderId($orderResponse->sveaOrderId)
                 ->setCountryCode($country)

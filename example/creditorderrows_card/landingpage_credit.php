@@ -1,27 +1,26 @@
 <?php
-
 /**
  * example file, writes card order request response transactionid to file for use when crediting transaction
  * 
- * @author Kristian Grossman-madsen for Svea WebPay
+ * @author Kristian Grossman-madsen for Svea Svea\WebPay\WebPay
  */
+
+require_once '../../vendor/autoload.php';
+
+use Svea\WebPay\Response\SveaResponse;
 
 error_reporting( E_ALL );
 ini_set('display_errors', 'On');
 
-// Include Svea PHP integration package.
-$svea_directory = "../../src/";
-require_once( $svea_directory . "Includes.php" );
-
 // get config object
-$myConfig = Svea\SveaConfig::getTestConfig();
+$myConfig = \Svea\WebPay\Config\SveaConfig::getTestConfig();
 
 $countryCode = "SE"; // should match request countryCode
 
 // the raw request response is posted to the returnurl (this page) from Svea.
 $rawResponse = $_POST;
 
-// decode the raw response by passing it through the SveaResponse class
+// decode the raw response by passing it through the Svea\WebPay\Response\SveaResponse class
 $myResponse = new SveaResponse( $rawResponse, $countryCode, $myConfig );
 
 // abort if request failed
@@ -49,7 +48,7 @@ echo "\n</pre><font color='blue'><pre>\n\n
 
 An example of a successful request response. The 'accepted' attribute is true (1), and resultcode/errormessage is not set.
 
-Svea\HostedService\HostedPaymentResponse Object
+Svea\WebPay\HostedService\HostedResponse\HostedPaymentResponse Object
 (
     [transactionId] => 589739
     [clientOrderNumber] => order #2014-11-20T14:48:28 01:00

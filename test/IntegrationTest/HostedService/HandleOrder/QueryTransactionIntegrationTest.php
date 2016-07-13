@@ -1,15 +1,14 @@
 <?php
 // Integration tests should not need to use the namespace
-use Svea\HostedService\QueryTransaction as QueryTransaction;
+use Svea\WebPay\Config\SveaConfig;
+use Svea\WebPay\HostedService\HostedAdminRequest\QueryTransaction as QueryTransaction;
+use Svea\WebPay\HostedService\HostedAdminRequest\RecurTransaction;
 
-$root = realpath(dirname(__FILE__));
-require_once $root . '/../../../../src/Includes.php';
-require_once $root . '/../../../TestUtil.php';
 
 /**
  * QueryTransactionIntegrationTest 
  * 
- * @author Kristian Grossman-Madsen for Svea WebPay
+ * @author Kristian Grossman-Madsen for Svea Svea\WebPay\WebPay
  */
 class QueryTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
  
@@ -22,12 +21,12 @@ class QueryTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
              
         $transactionId = 987654;
                 
-        $request = new QueryTransaction( Svea\SveaConfig::getDefaultConfig() );
+        $request = new QueryTransaction( SveaConfig::getDefaultConfig() );
         $request->transactionId = $transactionId;
         $request->countryCode = "SE";
         $response = $request->doRequest();
 
-        $this->assertInstanceOf( "Svea\HostedService\QueryTransactionResponse", $response );
+        $this->assertInstanceOf( "Svea\WebPay\HostedService\HostedResponse\HostedAdminResponse\QueryTransactionResponse", $response );
         
         // if we receive an error from the service, the integration test passes
         $this->assertEquals( 0, $response->accepted );
@@ -60,7 +59,7 @@ class QueryTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
         // Set the below to match the transaction, then run the test.
         $transactionId = 587401;
 
-        $request = new QueryTransaction( Svea\SveaConfig::getDefaultConfig() );
+        $request = new QueryTransaction( SveaConfig::getDefaultConfig() );
         $request->transactionId = $transactionId;
         $request->countryCode = "SE";
         $response = $request->doRequest();    
@@ -139,10 +138,10 @@ class QueryTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
         //    [statuscode] => 0
         //)        
         
-        $this->assertInstanceOf( "Svea\HostedService\QueryTransactionResponse", $response );
+        $this->assertInstanceOf( "Svea\WebPay\HostedService\HostedResponse\HostedAdminResponse\QueryTransactionResponse", $response );
         
         ////print_r($response);  // uncomment to dump our processed request response:
-        //Svea\HostedService\QueryTransactionResponse Object
+        //Svea\WebPay\HostedService\HostedResponse\HostedAdminResponse\QueryTransactionResponse Object
         //(
         //    [transactionId] => 587401
         //    [clientOrderNumber] => test_manual_query_card_2xz
@@ -160,7 +159,7 @@ class QueryTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
         //    [paymentMethod] => KORTCERT
         //    [numberedOrderRows] => Array
         //        (
-        //            [0] => Svea\NumberedOrderRow Object
+        //            [0] => Svea\WebPay\BuildOrder\RowBuilders\NumberedOrderRow Object
         //                (
         //                    [creditInvoiceId] => 
         //                    [invoiceId] => 
@@ -178,7 +177,7 @@ class QueryTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
         //                    [vatDiscount] => 0
         //                )
         //
-        //            [1] => Svea\NumberedOrderRow Object
+        //            [1] => Svea\WebPay\BuildOrder\RowBuilders\NumberedOrderRow Object
         //                (
         //                    [creditInvoiceId] => 
         //                    [invoiceId] => 
@@ -236,7 +235,7 @@ class QueryTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals( "0", $response->merchantresponsecode );
         $this->assertEquals( "KORTCERT", $response->paymentMethod );
         
-        $this->assertInstanceOf( "Svea\NumberedOrderRow", $response->numberedOrderRows[0] );
+        $this->assertInstanceOf( "Svea\WebPay\BuildOrder\RowBuilders\NumberedOrderRow", $response->numberedOrderRows[0] );
         $this->assertEquals( "123", $response->numberedOrderRows[0]->articleNumber );
         $this->assertEquals( "1", $response->numberedOrderRows[0]->quantity );
         $this->assertEquals( "st", $response->numberedOrderRows[0]->unit );
@@ -246,7 +245,7 @@ class QueryTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals( "Orderrow description", $response->numberedOrderRows[0]->description );
         $this->assertEquals( 0, $response->numberedOrderRows[0]->vatDiscount );
                         
-        $this->assertInstanceOf( "Svea\OrderRow", $response->numberedOrderRows[1] );
+        $this->assertInstanceOf( "Svea\WebPay\BuildOrder\RowBuilders\OrderRow", $response->numberedOrderRows[1] );
         $this->assertEquals( "124", $response->numberedOrderRows[1]->articleNumber );
         $this->assertEquals( "2", $response->numberedOrderRows[1]->quantity );
         $this->assertEquals( "m2", $response->numberedOrderRows[1]->unit );
@@ -291,7 +290,7 @@ class QueryTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
         // Set the below to match the transaction, then run the test.
         $transactionId = 581497;
 
-        $request = new QueryTransaction( Svea\SveaConfig::getDefaultConfig() );
+        $request = new QueryTransaction( SveaConfig::getDefaultConfig() );
         $request->transactionId = $transactionId;
         $request->countryCode = "SE";
         $response = $request->doRequest();    
@@ -332,10 +331,10 @@ class QueryTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
         //    [statuscode] => 0
         //)               
                 
-        $this->assertInstanceOf( "Svea\HostedService\QueryTransactionResponse", $response );
+        $this->assertInstanceOf( "Svea\WebPay\HostedService\HostedResponse\HostedAdminResponse\QueryTransactionResponse", $response );
         
         ////print_r($response);  // uncomment to dump our processed request response:
-        //Svea\HostedService\QueryTransactionResponse Object
+        //Svea\WebPay\HostedService\HostedResponse\HostedAdminResponse\QueryTransactionResponse Object
         //(
         //    [transactionId] => 581497
         //    [clientOrderNumber] => test_recur_1
@@ -418,7 +417,7 @@ class QueryTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
         // Set the below to match the transaction, then run the test.
         $transactionId = 586076;
 
-        $request = new QueryTransaction( Svea\SveaConfig::getDefaultConfig() );
+        $request = new QueryTransaction( SveaConfig::getDefaultConfig() );
         $request->transactionId = $transactionId;
         $request->countryCode = "SE";
         $response = $request->doRequest();    
@@ -550,7 +549,7 @@ class QueryTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals( "0", $response->merchantresponsecode );
         $this->assertEquals( "KORTCERT", $response->paymentMethod );        
                      
-        $this->assertInstanceOf( "Svea\OrderRow", $response->numberedOrderRows[0] );
+        $this->assertInstanceOf( "Svea\WebPay\BuildOrder\RowBuilders\OrderRow", $response->numberedOrderRows[0] );
         $this->assertEquals( "1", $response->numberedOrderRows[0]->articleNumber );
         $this->assertEquals( "2.0", $response->numberedOrderRows[0]->quantity );
         $this->assertEquals( "st", $response->numberedOrderRows[0]->unit );
@@ -601,17 +600,17 @@ class QueryTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
         // Set the below to match the transaction, then run the test.
         $transactionId = 582690;
 
-        $request = new QueryTransaction( Svea\SveaConfig::getDefaultConfig() );
+        $request = new QueryTransaction( SveaConfig::getDefaultConfig() );
         $request->transactionId = $transactionId;
         $request->countryCode = "SE";
         $response = $request->doRequest();       
          
-        $this->assertInstanceOf( "Svea\HostedService\QueryTransactionResponse", $response );
+        $this->assertInstanceOf( "Svea\WebPay\HostedService\HostedResponse\HostedAdminResponse\QueryTransactionResponse", $response );
         
         ////print_r($response);
         $this->assertEquals( 1, $response->accepted );    
-        $this->assertInstanceOf( "Svea\NumberedOrderRow", $response->numberedOrderRows[0] );              
-        $this->assertInstanceOf( "Svea\NumberedOrderRow", $response->numberedOrderRows[1] );
+        $this->assertInstanceOf( "Svea\WebPay\BuildOrder\RowBuilders\NumberedOrderRow", $response->numberedOrderRows[0] );              
+        $this->assertInstanceOf( "Svea\WebPay\BuildOrder\RowBuilders\NumberedOrderRow", $response->numberedOrderRows[1] );
 
         $this->assertEquals( 0, $response->numberedOrderRows[1]->vatDiscount );
     } 
@@ -726,12 +725,12 @@ class QueryTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
         //    [statuscode] => 0
         //)
         
-        $request = new Svea\HostedService\QueryTransaction( Svea\SveaConfig::getDefaultConfig() );
+        $request = new QueryTransaction( SveaConfig::getDefaultConfig() );
         $request->transactionId = $transactionId;
         $request->countryCode = "SE";
         $response = $request->doRequest();       
          
-        $this->assertInstanceOf( "Svea\HostedService\QueryTransactionResponse", $response );
+        $this->assertInstanceOf( "Svea\WebPay\HostedService\HostedResponse\HostedAdminResponse\QueryTransactionResponse", $response );
         
         ////print_r($response);
 
@@ -767,7 +766,7 @@ class QueryTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
         $new_customerrefno = "test_manual_recurring_payment_step_1 ".date('c');  
 
         // below is actual test, shouldn't need to change it
-        $request = new Svea\HostedService\RecurTransaction( Svea\SveaConfig::getDefaultConfig() );
+        $request = new RecurTransaction( SveaConfig::getDefaultConfig() );
         $request->countryCode = "SE";
         $request->subscriptionId = $subscriptionId;
         $request->currency = $currency;
@@ -780,7 +779,7 @@ class QueryTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
         
         ////print_r("Recur card transaction response: "); //print_r( $response );        
         //
-        //Recur card transaction response: Svea\HostedService\RecurTransactionResponse Object
+        //Recur card transaction response: Svea\WebPay\HostedService\HostedResponse\HostedAdminResponse\RecurTransactionResponse Object
         //(
         //    [transactionid] => 586165
         //    [customerrefno] => test_manual_recurring_payment_step_1 2014-09-12T11:38:30+02:00
@@ -845,16 +844,16 @@ class QueryTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
         //    [statuscode] => 0
         //)
 
-        $request = new Svea\HostedService\QueryTransaction( Svea\SveaConfig::getDefaultConfig() );
+        $request = new QueryTransaction( SveaConfig::getDefaultConfig() );
         $request->transactionId = $transactionId;
         $request->countryCode = "SE";
         $queryResponse = $request->doRequest();       
          
-        $this->assertInstanceOf( "Svea\HostedService\QueryTransactionResponse", $queryResponse );
+        $this->assertInstanceOf( "Svea\WebPay\HostedService\HostedResponse\HostedAdminResponse\QueryTransactionResponse", $queryResponse );
         
         ////print_r($queryResponse);        
         //
-        //Svea\HostedService\QueryTransactionResponse Object
+        //Svea\WebPay\HostedService\HostedResponse\HostedAdminResponse\QueryTransactionResponse Object
         //(
         //    [transactionId] => 587424
         //    [clientOrderNumber] => test_manual_recurring_payment_step_1 2014-10-06T15:53:45+02:00

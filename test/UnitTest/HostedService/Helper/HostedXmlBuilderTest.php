@@ -1,21 +1,19 @@
 <?php
-use Svea\HostedService\HostedXmlBuilder as HostedXmlBuilder;
 
-$root = realpath(dirname(__FILE__));
-require_once $root . '/../../../../src/Includes.php';
-require_once $root . '/../Payment/FakeHostedPayment.php';
+use Svea\WebPay\HostedService\Helper\HostedXmlBuilder as HostedXmlBuilder;
+
 
 class HostedXmlBuilderTest extends \PHPUnit_Framework_TestCase {
     
     private $order;
     
     protected function setUp() {        
-        $this->order = \WebPay::createOrder(Svea\SveaConfig::getDefaultConfig());
+        $this->order = \Svea\WebPay\WebPay::createOrder(\Svea\WebPay\Config\SveaConfig::getDefaultConfig());
      
-        $this->individualCustomer = new Svea\IndividualCustomer();
+        $this->individualCustomer = new \Svea\WebPay\BuildOrder\RowBuilders\IndividualCustomer();
         $this->individualCustomer->setNationalIdNumber("123456");
         
-        $this->orderRow = new Svea\OrderRow();
+        $this->orderRow = new \Svea\WebPay\BuildOrder\RowBuilders\OrderRow();
         $this->orderRow->setAmountExVat(100.00);
         $this->orderRow->setVatPercent(25);
         $this->orderRow->setQuantity(2);
@@ -74,7 +72,7 @@ class HostedXmlBuilderTest extends \PHPUnit_Framework_TestCase {
         $customer->setZipCode("9999");
         $customer->setLocality("Stan");
         
-        $this->order = new Svea\CreateOrderBuilder(new Svea\SveaConfigurationProvider(Svea\SveaConfig::getDefaultConfig()));
+        $this->order = new \Svea\WebPay\BuildOrder\CreateOrderBuilder(new \Svea\WebPay\Config\SveaConfigurationProvider(\Svea\WebPay\Config\SveaConfig::getDefaultConfig()));
         $this->order->setClientOrderNumber("1234")
                 ->setCountryCode("SE")
                 ->setCurrency("SEK")

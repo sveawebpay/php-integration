@@ -1,10 +1,9 @@
 <?php
 // Integration tests should not need to use the namespace
 
-use \Svea\WebService\GetAddresses as GetAddresses;
+use Svea\WebPay\Config\SveaConfig;
+use Svea\WebPay\WebService\GetAddress\GetAddresses as GetAddresses;
 
-$root = realpath(dirname(__FILE__));
-require_once $root . '/../../../../src/Includes.php';
 
 /**
  * @author Jonas Lith, Kristian Grossman-Madsen
@@ -15,7 +14,7 @@ class GetAddressesIntegrationTest extends PHPUnit_Framework_TestCase {
     private $addressRequest;
 
     public function SetUp() {
-        $this->config = Svea\SveaConfig::getDefaultConfig();
+        $this->config = SveaConfig::getDefaultConfig();
         $this->addressRequest = new GetAddresses($this->config);
     }
 

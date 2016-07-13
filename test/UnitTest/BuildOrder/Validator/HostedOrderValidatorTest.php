@@ -1,11 +1,9 @@
 <?php
-namespace Svea;
 
-$root = realpath(dirname(__FILE__));
-require_once $root . '/../../../../src/Includes.php';
-
-$root = realpath(dirname(__FILE__));
-require_once $root . '/../../../TestUtil.php';
+use Svea\WebPay\Config\SveaConfig;
+use Svea\WebPay\Constant\PaymentMethod;
+use Svea\WebPay\Test\TestUtil;
+use Svea\WebPay\WebPay;
 
 /**
  * @author Anneli Halld'n, Daniel Brolund for Svea Webpay
@@ -13,14 +11,14 @@ require_once $root . '/../../../TestUtil.php';
 class HostedOrderValidatorTest extends \PHPUnit_Framework_TestCase {
 
     /**
-     * @expectedException Svea\ValidationException
+     * @expectedException Svea\WebPay\BuildOrder\Validator\ValidationException
      * @expectedExceptionMessage -missing value : ClientOrderNumber is required. Use function setClientOrderNumber().
      */
     public function testFailOnNullCustomerRefNo() {
         $config = SveaConfig::getDefaultConfig();
-        $builder = \WebPay::createOrder($config);
+        $builder = WebPay::createOrder($config);
         $order = $builder
-                ->addOrderRow(\TestUtil::createHostedOrderRow())
+                ->addOrderRow(TestUtil::createHostedOrderRow())
                 ->setCountryCode("SE")
                 ->setCurrency("SEK")
                 ->usePayPageCardOnly()
@@ -30,14 +28,14 @@ class HostedOrderValidatorTest extends \PHPUnit_Framework_TestCase {
     }
 
     /**
-     * @expectedException Svea\ValidationException
+     * @expectedException Svea\WebPay\BuildOrder\Validator\ValidationException
      * @expectedExceptionMessage -missing value : ClientOrderNumber is required. Use function setClientOrderNumber().
      */
     public function testFailOnEmptyCustomerRefNo() {
         $config = SveaConfig::getDefaultConfig();
-        $builder = \WebPay::createOrder($config);
+        $builder = WebPay::createOrder($config);
         $order = $builder
-                ->addOrderRow(\TestUtil::createHostedOrderRow())
+                ->addOrderRow(TestUtil::createHostedOrderRow())
                 ->setCountryCode("SE")
                 ->setCurrency("SEK")
                 ->setClientOrderNumber("")
@@ -48,7 +46,7 @@ class HostedOrderValidatorTest extends \PHPUnit_Framework_TestCase {
     }
 
     /**
-     * @expectedException Svea\ValidationException
+     * @expectedException Svea\WebPay\BuildOrder\Validator\ValidationException
      * @expectedExceptionMessage
      * -missing value : Initials is required for INVOICE and PAYMENTPLAN payments for individual customers when countrycode is NL. Use function setInitials().
      * -missing value : BirthDate is required for INVOICE and PAYMENTPLAN payments for individual customers when countrycode is NL. Use function setBirthDate().
@@ -59,20 +57,20 @@ class HostedOrderValidatorTest extends \PHPUnit_Framework_TestCase {
      */
     public function testFailOnMissingCustomerForNL() {
         $config = SveaConfig::getDefaultConfig();
-        $builder = \WebPay::createOrder($config);
+        $builder = WebPay::createOrder($config);
         $order = $builder
-                ->addOrderRow(\TestUtil::createHostedOrderRow())
+                ->addOrderRow(TestUtil::createHostedOrderRow())
                 ->setCountryCode("NL")
                 ->setCurrency("SEK")
                 ->setClientOrderNumber("55")
-                ->usePaymentMethod(\PaymentMethod::INVOICE)
+                ->usePaymentMethod(PaymentMethod::INVOICE)
                 ->setReturnUrl("myurl.se");
 
         $order->getPaymentForm();
     }
 
     /**
-     * @expectedException Svea\ValidationException
+     * @expectedException Svea\WebPay\BuildOrder\Validator\ValidationException
      * @expectedExceptionMessage
      * -missing value : StreetAddress is required for INVOICE and PAYMENTPLAN payments for all customers when countrycode is NL. Use function setStreetAddress().
      * -missing value : Locality is required for INVOICE and PAYMENTPLAN payments for all customers when countrycode is NL. Use function setLocality().
@@ -82,27 +80,27 @@ class HostedOrderValidatorTest extends \PHPUnit_Framework_TestCase {
      */
     public function testFailOnMissingCompanyCustomerForNL() {
         $config = SveaConfig::getDefaultConfig();
-        $builder = \WebPay::createOrder($config);
+        $builder = WebPay::createOrder($config);
         $order = $builder
-                ->addOrderRow(\TestUtil::createHostedOrderRow())
+                ->addOrderRow(TestUtil::createHostedOrderRow())
                 ->setCountryCode("NL")
                 ->setCurrency("SEK")
                 ->setClientOrderNumber("55")
-                ->usePaymentMethod(\PaymentMethod::INVOICE)
+                ->usePaymentMethod(PaymentMethod::INVOICE)
                 ->setReturnUrl("myurl.se");
 
         $order->getPaymentForm();
     }
 
     /**
-     * @expectedException Svea\ValidationException
+     * @expectedException Svea\WebPay\BuildOrder\Validator\ValidationException
      * @expectedExceptionMessage -missing value : Currency is required. Use function setCurrency().
      */
     public function testFailOnMissingCurrency() {
         $config = SveaConfig::getDefaultConfig();
-        $builder = \WebPay::createOrder($config);
+        $builder = WebPay::createOrder($config);
         $order = $builder
-                ->addOrderRow(\TestUtil::createHostedOrderRow())
+                ->addOrderRow(TestUtil::createHostedOrderRow())
                 ->setCountryCode("SE")
                 ->setClientOrderNumber("34")
                 ->usePayPageCardOnly()
@@ -112,14 +110,14 @@ class HostedOrderValidatorTest extends \PHPUnit_Framework_TestCase {
     }
 
     /**
-     * @expectedException Svea\InvalidCountryException
+     * @expectedException \Svea\WebPay\HostedService\Helper\InvalidCountryException
      * @expectedExceptionMessage Invalid or missing Country code
      */
     public function testFailOnMissingCountryCode() {
         $config = SveaConfig::getDefaultConfig();
-        $builder = \WebPay::createOrder($config);
+        $builder = WebPay::createOrder($config);
         $order = $builder
-                ->addOrderRow(\TestUtil::createHostedOrderRow())
+                ->addOrderRow(TestUtil::createHostedOrderRow())
                 //->setCountryCode("SE")
                 ->setCurrency("SEK")
                 ->setClientOrderNumber("34")
@@ -130,14 +128,14 @@ class HostedOrderValidatorTest extends \PHPUnit_Framework_TestCase {
     }
 
     /**
-     * @expectedException Svea\ValidationException
+     * @expectedException Svea\WebPay\BuildOrder\Validator\ValidationException
      * @expectedExceptionMessage -missing value : ReturnUrl is required. Use function setReturnUrl().
      */
     public function testFailOnMissingReturnUrl() {
         $config = SveaConfig::getDefaultConfig();
-        $builder = \WebPay::createOrder($config);
+        $builder = WebPay::createOrder($config);
         $order = $builder
-                ->addOrderRow(\TestUtil::createHostedOrderRow())
+                ->addOrderRow(TestUtil::createHostedOrderRow())
                 ->setCountryCode("SE")
                 ->setCurrency("SEK")
                 ->setClientOrderNumber("34")

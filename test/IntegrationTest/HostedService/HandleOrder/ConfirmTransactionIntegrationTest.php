@@ -1,14 +1,14 @@
 <?php
-use Svea\HostedService\ConfirmTransaction as ConfirmTransaction;
+use Svea\WebPay\Config\SveaConfig;
+use Svea\WebPay\HostedService\HostedAdminRequest\ConfirmTransaction as ConfirmTransaction;
+use Svea\WebPay\Constant\PaymentMethod;
+use Svea\WebPay\Test\TestUtil;
 
-$root = realpath(dirname(__FILE__));
-require_once $root . '/../../../../src/Includes.php';
-require_once $root . '/../../../TestUtil.php';
 
 /**
  * ConfirmTransactionIntegrationTest 
  * 
- * @author Kristian Grossman-Madsen for Svea WebPay
+ * @author Kristian Grossman-Madsen for Svea Svea\WebPay\WebPay
  */
 class ConfirmTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
  
@@ -62,13 +62,13 @@ class ConfirmTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
         $transactionId = 987654;
         $captureDate = "2014-03-21";
 
-        $request = new ConfirmTransaction( Svea\SveaConfig::getDefaultConfig() );
+        $request = new ConfirmTransaction( SveaConfig::getDefaultConfig() );
         $request->transactionId = $transactionId;
         $request->captureDate = $captureDate;
         $request->countryCode = "SE";
         $response = $request->doRequest();
 
-        $this->assertInstanceOf( "Svea\HostedService\ConfirmTransactionResponse", $response );
+        $this->assertInstanceOf( "Svea\WebPay\HostedService\HostedResponse\HostedAdminResponse\ConfirmTransactionResponse", $response );
         
         // if we receive an error from the service, the integration test passes
         $this->assertEquals( 0, $response->accepted );
@@ -93,14 +93,14 @@ class ConfirmTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
         $transactionId = 587950;
         $captureDate = date('c');
                 
-        $request = new ConfirmTransaction( Svea\SveaConfig::getDefaultConfig() );
+        $request = new ConfirmTransaction( SveaConfig::getDefaultConfig() );
         $request->transactionId = $transactionId;
         $request->captureDate = $captureDate;
         $request->countryCode = "SE";
         $response = $request->doRequest();     
         
         //print_r( $response );
-        $this->assertInstanceOf( "Svea\HostedService\ConfirmTransactionResponse", $response );     
+        $this->assertInstanceOf( "Svea\WebPay\HostedService\HostedResponse\HostedAdminResponse\ConfirmTransactionResponse", $response );     
         $this->assertEquals( 1, $response->accepted );        
         $this->assertStringMatchesFormat( "%d", $response->transactionId);   // %d => an unsigned integer value
         

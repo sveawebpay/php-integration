@@ -1,9 +1,6 @@
 <?php
-use Svea\HostedService\HostedPayment as HostedPayment;
-use Svea\HostedService\ExcludePayments as ExcludePayments;
-
-$root = realpath(dirname(__FILE__));
-require_once $root . '/../../../../src/Includes.php';
+use Svea\WebPay\HostedService\Payment\HostedPayment as HostedPayment;
+use Svea\WebPay\HostedService\Helper\ExcludePayments as ExcludePayments;
 
 class FakeHostedPayment extends HostedPayment {
     

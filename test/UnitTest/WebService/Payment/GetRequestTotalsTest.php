@@ -1,32 +1,31 @@
 <?php
-$root = realpath(dirname(__FILE__));
-require_once $root . '/../../../../test/UnitTest/BuildOrder/OrderBuilderTest.php';
+use Svea\WebPay\Test\TestUtil;
+use Svea\WebPay\WebPay;
+use Svea\WebPay\WebPayItem;
 
-$root = realpath(dirname(__FILE__));
-require_once $root . '/../../../TestUtil.php';
 
 class GetRequestTotalsTest extends PHPUnit_Framework_TestCase {
 
     function test_get_invoice_total_amount_before_createorder() {
-       $order = WebPay::createOrder(Svea\SveaConfig::getDefaultConfig())
+       $order = WebPay::createOrder(\Svea\WebPay\Config\SveaConfig::getDefaultConfig())
             ->addCustomerDetails(WebPayItem::individualCustomer()->setNationalIdNumber(194605092222))
             ->setCountryCode("SE")
             ->setCustomerReference("33")
             ->setOrderDate("2012-12-12")
             ->setCurrency("SEK");
-        $order->addOrderRow(\WebPayItem::orderRow()
+        $order->addOrderRow(\Svea\WebPay\WebPayItem::orderRow()
                 ->setName('Universal Camera Charger')
                 ->setAmountIncVat(19.60)
                 ->setVatPercent(25)
                 ->setQuantity(100)
                 )
-                ->addFee(\WebPayItem::invoiceFee()
+                ->addFee(\Svea\WebPay\WebPayItem::invoiceFee()
                     ->setAmountIncVat(29.00)
                     ->setVatPercent(25)
                     ->setName('Svea Invoice Fee')
                 )
                 ->addDiscount(
-                \WebPayItem::fixedDiscount()
+                \Svea\WebPay\WebPayItem::fixedDiscount()
                     ->setAmountIncVat(294.00)
                     ->setName('Discount')
                 )
@@ -39,25 +38,25 @@ class GetRequestTotalsTest extends PHPUnit_Framework_TestCase {
     }
 
     function test_get_invoice_total_amount_before_createorder_creates_discount_rows_using_incvat_and_vatpercent() {
-       $order = WebPay::createOrder(Svea\SveaConfig::getDefaultConfig())
+       $order = WebPay::createOrder(\Svea\WebPay\Config\SveaConfig::getDefaultConfig())
             ->addCustomerDetails(WebPayItem::individualCustomer()->setNationalIdNumber(194605092222))
             ->setCountryCode("SE")
             ->setCustomerReference("33")
             ->setOrderDate("2012-12-12")
             ->setCurrency("SEK");
-        $order->addOrderRow(\WebPayItem::orderRow()
+        $order->addOrderRow(\Svea\WebPay\WebPayItem::orderRow()
                 ->setName('Universal Camera Charger')
                 ->setAmountIncVat(19.60)
                 ->setVatPercent(25)
                 ->setQuantity(100)
                 )
-                ->addFee(\WebPayItem::invoiceFee()
+                ->addFee(\Svea\WebPay\WebPayItem::invoiceFee()
                     ->setAmountIncVat(29.00)
                     ->setVatPercent(25)
                     ->setName('Svea Invoice Fee')
                 )
                 ->addDiscount(
-                \WebPayItem::fixedDiscount()
+                \Svea\WebPay\WebPayItem::fixedDiscount()
                     ->setAmountIncVat(294.00)
                     ->setName('Discount')
                 )
@@ -72,7 +71,7 @@ class GetRequestTotalsTest extends PHPUnit_Framework_TestCase {
     /// example of order differing when sent incvat and exvat ----------------------------------------------------------------------
 
     private static function create_only_incvat_order_and_fee_rows_order() {
-        $order = WebPay::createOrder(Svea\SveaConfig::getDefaultConfig())
+        $order = WebPay::createOrder(\Svea\WebPay\Config\SveaConfig::getDefaultConfig())
             ->addCustomerDetails(WebPayItem::individualCustomer()->setNationalIdNumber(194605092222))
             ->setCountryCode("SE")
             ->setCustomerReference("33")
@@ -137,10 +136,10 @@ class GetRequestTotalsTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(false, $request->request->CreateOrderInformation->OrderRows['OrderRow'][3]->PriceIncludingVat);
         // all discount rows
         // expected: fixedDiscount: 10 exvat => split across 10e *(60/60+30) @20% + 10e *(30/60+30) @10% => 6.6666e @20% + 3.3333e @10% => 8.00i + 3.67i
-        $this->assertEquals(-6.67, \Svea\Helper::bround($request->request->CreateOrderInformation->OrderRows['OrderRow'][4]->PricePerUnit),2,PHP_ROUND_HALF_UP);//=WS
+        $this->assertEquals(-6.67, \Svea\WebPay\Helper\Helper::bround($request->request->CreateOrderInformation->OrderRows['OrderRow'][4]->PricePerUnit),2,PHP_ROUND_HALF_UP);//=WS
         $this->assertEquals(20, $request->request->CreateOrderInformation->OrderRows['OrderRow'][4]->VatPercent);
         $this->assertEquals(false, $request->request->CreateOrderInformation->OrderRows['OrderRow'][4]->PriceIncludingVat);
-        $this->assertEquals(-3.33, \Svea\Helper::bround($request->request->CreateOrderInformation->OrderRows['OrderRow'][5]->PricePerUnit),2,PHP_ROUND_HALF_UP);//=WS
+        $this->assertEquals(-3.33, \Svea\WebPay\Helper\Helper::bround($request->request->CreateOrderInformation->OrderRows['OrderRow'][5]->PricePerUnit),2,PHP_ROUND_HALF_UP);//=WS
         $this->assertEquals(10, $request->request->CreateOrderInformation->OrderRows['OrderRow'][5]->VatPercent);
         $this->assertEquals(false, $request->request->CreateOrderInformation->OrderRows['OrderRow'][5]->PriceIncludingVat);
 
@@ -194,10 +193,10 @@ class GetRequestTotalsTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(true, $request->request->CreateOrderInformation->OrderRows['OrderRow'][3]->PriceIncludingVat);
         // all discount rows
         // expected: fixedDiscount: 10 exvat => split across 10e *(60/60+30) @20% + 10e *(30/60+30) @10% => 6.6666e @20% + 3.3333e @10% => 8.00i + 3.67i
-        $this->assertEquals(-8.00, \Svea\Helper::bround($request->request->CreateOrderInformation->OrderRows['OrderRow'][4]->PricePerUnit),2,PHP_ROUND_HALF_UP);//=WS
+        $this->assertEquals(-8.00, \Svea\WebPay\Helper\Helper::bround($request->request->CreateOrderInformation->OrderRows['OrderRow'][4]->PricePerUnit),2,PHP_ROUND_HALF_UP);//=WS
         $this->assertEquals(20, $request->request->CreateOrderInformation->OrderRows['OrderRow'][4]->VatPercent);
         $this->assertEquals(true, $request->request->CreateOrderInformation->OrderRows['OrderRow'][4]->PriceIncludingVat);
-        $this->assertEquals(-3.67, \Svea\Helper::bround($request->request->CreateOrderInformation->OrderRows['OrderRow'][5]->PricePerUnit),2,PHP_ROUND_HALF_UP);//=WS
+        $this->assertEquals(-3.67, \Svea\WebPay\Helper\Helper::bround($request->request->CreateOrderInformation->OrderRows['OrderRow'][5]->PricePerUnit),2,PHP_ROUND_HALF_UP);//=WS
         $this->assertEquals(10, $request->request->CreateOrderInformation->OrderRows['OrderRow'][5]->VatPercent);
         $this->assertEquals(true, $request->request->CreateOrderInformation->OrderRows['OrderRow'][5]->PriceIncludingVat);
 
@@ -217,7 +216,7 @@ class GetRequestTotalsTest extends PHPUnit_Framework_TestCase {
 
     /// example of getRequestTotals() not matching service --------------------------------------------------------------------------
     public function test_integrationtest_reference_1400_00_inc_behaviour() {
-        $config = Svea\SveaConfig::getDefaultConfig();
+        $config = \Svea\WebPay\Config\SveaConfig::getDefaultConfig();
         $request = WebPay::createOrder($config)
                     ->addOrderRow(
                         WebPayItem::orderRow()
@@ -235,7 +234,7 @@ class GetRequestTotalsTest extends PHPUnit_Framework_TestCase {
     }
 
     public function test_integrationtest_reference_1321_00_ex_behaviour() {
-        $config = Svea\SveaConfig::getDefaultConfig();
+        $config = \Svea\WebPay\Config\SveaConfig::getDefaultConfig();
         $request = WebPay::createOrder($config)
                     ->addOrderRow(
                         WebPayItem::orderRow()
@@ -253,7 +252,7 @@ class GetRequestTotalsTest extends PHPUnit_Framework_TestCase {
     }
 
     public function test_getRequestTotals_reference_1400_00_inc_behaviour() {
-        $config = Svea\SveaConfig::getDefaultConfig();
+        $config = \Svea\WebPay\Config\SveaConfig::getDefaultConfig();
         $order = WebPay::createOrder($config)
                     ->addOrderRow(
                         WebPayItem::orderRow()
@@ -273,7 +272,7 @@ class GetRequestTotalsTest extends PHPUnit_Framework_TestCase {
     }
 
     public function test_getRequestTotals_reference_1400_26_inc_behaviour() {
-        $config = Svea\SveaConfig::getDefaultConfig();
+        $config = \Svea\WebPay\Config\SveaConfig::getDefaultConfig();
         $order = WebPay::createOrder($config)
                     ->addOrderRow(
                         WebPayItem::orderRow()
@@ -293,7 +292,7 @@ class GetRequestTotalsTest extends PHPUnit_Framework_TestCase {
     }
 
     public function test_getRequestTotals_reference_1321_00_ex_behaviour() {
-        $config = Svea\SveaConfig::getDefaultConfig();
+        $config = \Svea\WebPay\Config\SveaConfig::getDefaultConfig();
         $order = WebPay::createOrder($config)
                     ->addOrderRow(
                         WebPayItem::orderRow()

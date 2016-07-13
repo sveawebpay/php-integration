@@ -1,13 +1,16 @@
 <?php
 
-$root = realpath(dirname(__FILE__));
-require_once $root . '/../../../src/Includes.php';
-require_once $root . '/../../TestUtil.php';
+use Svea\WebPay\Config\SveaConfig;
+use Svea\WebPay\Constant\DistributionType;
+use Svea\WebPay\WebPay;
+use Svea\WebPay\WebPayItem;
+use Svea\WebPay\Test\TestUtil;
+
 
 /**
  * DeliverOrderBuilder test holds all tests for how to deliver orders using DeliverOrderBuilder
  * 
- * @author Kristian Grossman-Madsen for Svea WebPay
+ * @author Kristian Grossman-Madsen for Svea Svea\WebPay\WebPay
  */
 class DeliverOrderBuilderIntegrationTest extends PHPUnit_Framework_TestCase {
 
@@ -20,18 +23,18 @@ class DeliverOrderBuilderIntegrationTest extends PHPUnit_Framework_TestCase {
         
         $orderId = $response->sveaOrderId;
         
-        $DeliverOrderBuilder = WebPay::deliverOrder( Svea\SveaConfig::getDefaultConfig() )
+        $DeliverOrderBuilder = WebPay::deliverOrder( SveaConfig::getDefaultConfig() )
                 ->addOrderRow( TestUtil::createOrderRow() )
                 ->setCountryCode("SE")
                 ->setOrderId( $orderId )
-                ->setInvoiceDistributionType(\DistributionType::POST)
+                ->setInvoiceDistributionType(DistributionType::POST)
         ;
         
         $response = $DeliverOrderBuilder->deliverInvoiceOrder()->doRequest();
 
         ////print_r( $response );
         $this->assertEquals(1, $response->accepted);                
-        $this->assertInstanceOf( "Svea\WebService\DeliverOrderResult", $response );    // deliverOrderResult => deliverOrderEU 
+        $this->assertInstanceOf( "Svea\WebPay\WebService\WebServiceResponse\DeliverOrderResult", $response );    // deliverOrderResult => deliverOrderEU 
     }
 
     public function test_deliverOrder_deliverInvoiceOrder_without_orderrows_use_admin_service_deliverOrders_and_is_accepted() {
@@ -42,11 +45,11 @@ class DeliverOrderBuilderIntegrationTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(1, $createResponse->accepted);
                 
         $orderId = $createResponse->sveaOrderId;        
-        $DeliverOrderBuilder = WebPay::deliverOrder( Svea\SveaConfig::getDefaultConfig() )
-                //->addOrderRow( TestUtil::createOrderRow() )
+        $DeliverOrderBuilder = WebPay::deliverOrder( SveaConfig::getDefaultConfig() )
+                //->addOrderRow( Svea\WebPay\Test\TestUtil::createOrderRow() )
                 ->setCountryCode("SE")
                 ->setOrderId( $orderId )
-                ->setInvoiceDistributionType(\DistributionType::POST)
+                ->setInvoiceDistributionType(DistributionType::POST)
         ;
         
         // example of raw deliver orders response to parse
@@ -72,7 +75,7 @@ class DeliverOrderBuilderIntegrationTest extends PHPUnit_Framework_TestCase {
         $deliverResponse = $DeliverOrderBuilder->deliverInvoiceOrder()->doRequest();
         
         ////print_r( $deliverResponse );        
-        //Svea\AdminService\DeliverOrdersResponse Object
+        //Svea\WebPay\AdminService\AdminServiceResponse\DeliverOrdersResponse Object
         //(
         //    [clientId] => 79021
         //    [amount] => 250.00
@@ -85,7 +88,7 @@ class DeliverOrderBuilderIntegrationTest extends PHPUnit_Framework_TestCase {
         //    [errormessage] => 
         //)
         
-        $this->assertInstanceOf( "Svea\AdminService\DeliverOrdersResponse", $deliverResponse );
+        $this->assertInstanceOf( "Svea\WebPay\AdminService\AdminServiceResponse\DeliverOrdersResponse", $deliverResponse );
         $this->assertEquals(1, $deliverResponse->accepted);
         $this->assertEquals(0, $deliverResponse->resultcode);
         $this->assertEquals(null, $deliverResponse->errormessage);
@@ -101,7 +104,7 @@ class DeliverOrderBuilderIntegrationTest extends PHPUnit_Framework_TestCase {
     // orderrows are ignored by the service for paymentplan orders
     public function test_deliverOrder_deliverPaymentPlanOrder_with_orderrows_use_DeliverOrderEU_and_is_accepted() {
         
-        $order = WebPay::createOrder( Svea\SveaConfig::getDefaultConfig() )
+        $order = WebPay::createOrder( SveaConfig::getDefaultConfig() )
             ->addOrderRow( WebPayItem::orderRow()
                 ->setQuantity(1)
                 ->setAmountExVat(1000.00)
@@ -118,7 +121,7 @@ class DeliverOrderBuilderIntegrationTest extends PHPUnit_Framework_TestCase {
         
         $orderId = $response->sveaOrderId;
 
-        $DeliverOrderBuilder = WebPay::deliverOrder( Svea\SveaConfig::getDefaultConfig() )
+        $DeliverOrderBuilder = WebPay::deliverOrder( SveaConfig::getDefaultConfig() )
             ->addOrderRow( WebPayItem::orderRow()
                 ->setQuantity(1)
                 ->setAmountExVat(1000.00)
@@ -132,12 +135,12 @@ class DeliverOrderBuilderIntegrationTest extends PHPUnit_Framework_TestCase {
 
         ////print_r( $response );
         $this->assertEquals(1, $response->accepted);
-        $this->assertInstanceOf( "Svea\WebService\DeliverOrderResult", $response );
+        $this->assertInstanceOf( "Svea\WebPay\WebService\WebServiceResponse\DeliverOrderResult", $response );
     }
     
     public function test_deliverOrder_deliverPaymentPlanOrder_without_orderrows_use_DeliverOrderEU_and_is_accepted() {
         
-        $order = WebPay::createOrder( Svea\SveaConfig::getDefaultConfig() )
+        $order = WebPay::createOrder( SveaConfig::getDefaultConfig() )
             ->addOrderRow( WebPayItem::orderRow()
                 ->setQuantity(1)
                 ->setAmountExVat(1000.00)
@@ -154,8 +157,8 @@ class DeliverOrderBuilderIntegrationTest extends PHPUnit_Framework_TestCase {
         
         $orderId = $response->sveaOrderId;
 
-        $DeliverOrderBuilder = WebPay::deliverOrder( Svea\SveaConfig::getDefaultConfig() )
-            //->addOrderRow( WebPayItem::orderRow()
+        $DeliverOrderBuilder = WebPay::deliverOrder( SveaConfig::getDefaultConfig() )
+            //->addOrderRow( Svea\WebPay\WebPayItem::orderRow()
             //    ->setQuantity(1)
             //    ->setAmountExVat(1000.00)
             //    ->setVatPercent(25)
@@ -168,7 +171,7 @@ class DeliverOrderBuilderIntegrationTest extends PHPUnit_Framework_TestCase {
 
         ////print_r( $response );
         $this->assertEquals(1, $response->accepted);
-        $this->assertInstanceOf( "Svea\WebService\DeliverOrderResult", $response );
+        $this->assertInstanceOf( "Svea\WebPay\WebService\WebServiceResponse\DeliverOrderResult", $response );
     }    
     
     public function test_manual_deliverOrder_deliverCardOrder_use_ConfirmTransaction_and_is_accepted() {
@@ -182,7 +185,7 @@ class DeliverOrderBuilderIntegrationTest extends PHPUnit_Framework_TestCase {
         
         $orderId = 585714;  // pre-existing card transactionId with status AUTHORIZED  
         
-        $DeliverOrderBuilder = WebPay::deliverOrder( Svea\SveaConfig::getDefaultConfig() )
+        $DeliverOrderBuilder = WebPay::deliverOrder( SveaConfig::getDefaultConfig() )
             ->setCountryCode("SE")
             ->setOrderId( $orderId )
         ;
@@ -191,7 +194,7 @@ class DeliverOrderBuilderIntegrationTest extends PHPUnit_Framework_TestCase {
 
         ////print_r( $response );
         $this->assertEquals(1, $response->accepted);
-        $this->assertInstanceOf( "Svea\HostedService\ConfirmTransactionResponse", $response );                
+        $this->assertInstanceOf( "Svea\WebPay\HostedService\HostedResponse\HostedAdminResponse\ConfirmTransactionResponse", $response );                
     }     
 }
 ?>

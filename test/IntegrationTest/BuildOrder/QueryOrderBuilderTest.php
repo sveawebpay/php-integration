@@ -1,11 +1,13 @@
 <?php
 
-$root = realpath(dirname(__FILE__));
-require_once $root . '/../../../src/Includes.php';
-require_once $root . '/../../TestUtil.php';
+use Svea\WebPay\Config\SveaConfig;
+use Svea\WebPay\Test\TestUtil;
+use Svea\WebPay\WebPayAdmin;
+use Svea\WebPay\WebPayItem;
+
 
 /**
- * @author Kristian Grossman-Madsen for Svea WebPay
+ * @author Kristian Grossman-Madsen for Svea Svea\WebPay\WebPay
  */
 class QueryOrderBuilderIntegrationTest extends PHPUnit_Framework_TestCase {
 
@@ -53,7 +55,7 @@ class QueryOrderBuilderIntegrationTest extends PHPUnit_Framework_TestCase {
         $createdOrderId = $orderResponse->sveaOrderId;
         
         // query orderrows
-        $queryOrderBuilder = WebPayAdmin::queryOrder( Svea\SveaConfig::getDefaultConfig() )
+        $queryOrderBuilder = WebPayAdmin::queryOrder( SveaConfig::getDefaultConfig() )
             ->setOrderId( $createdOrderId )
             ->setCountryCode($country)
         ;
@@ -103,7 +105,7 @@ class QueryOrderBuilderIntegrationTest extends PHPUnit_Framework_TestCase {
         $createdOrderId = $orderResponse->sveaOrderId;
         
         // query orderrows
-        $queryOrderBuilder = WebPayAdmin::queryOrder( Svea\SveaConfig::getDefaultConfig() )
+        $queryOrderBuilder = WebPayAdmin::queryOrder( SveaConfig::getDefaultConfig() )
             ->setOrderId( $createdOrderId )
             ->setCountryCode($country)
         ;
@@ -160,7 +162,7 @@ class QueryOrderBuilderIntegrationTest extends PHPUnit_Framework_TestCase {
         $createdOrderId = $orderResponse->sveaOrderId;
         
         // query orderrows
-        $queryOrderBuilder = WebPayAdmin::queryOrder( Svea\SveaConfig::getDefaultConfig() )
+        $queryOrderBuilder = WebPayAdmin::queryOrder( SveaConfig::getDefaultConfig() )
             ->setOrderId( $createdOrderId )
             ->setCountryCode($country)
         ;
@@ -209,7 +211,7 @@ class QueryOrderBuilderIntegrationTest extends PHPUnit_Framework_TestCase {
         $ipAddress = "127.0.0.1";
         
         // create order
-        $order = \TestUtil::createOrderWithoutOrderRows( TestUtil::createIndividualCustomer("SE")->setIpAddress($ipAddress) );       
+        $order = TestUtil::createOrderWithoutOrderRows( TestUtil::createIndividualCustomer("SE")->setIpAddress($ipAddress) );       
         
         // create order w/three rows (2xA, 1xB)
         $country = "SE";
@@ -296,7 +298,7 @@ class QueryOrderBuilderIntegrationTest extends PHPUnit_Framework_TestCase {
         $b_discount = 0;
         
         // query orderrows
-        $queryOrderBuilder = WebPayAdmin::queryOrder( Svea\SveaConfig::getDefaultConfig() )
+        $queryOrderBuilder = WebPayAdmin::queryOrder( SveaConfig::getDefaultConfig() )
             ->setOrderId( $createdOrderId )
             ->setCountryCode($country)
         ;
@@ -341,7 +343,7 @@ class QueryOrderBuilderIntegrationTest extends PHPUnit_Framework_TestCase {
         $ipAddress = "127.0.0.1";
         
         // create order
-        $order = \TestUtil::createOrderWithoutOrderRows( TestUtil::createIndividualCustomer("SE")->setIpAddress($ipAddress) );       
+        $order = TestUtil::createOrderWithoutOrderRows( TestUtil::createIndividualCustomer("SE")->setIpAddress($ipAddress) );       
         
         // create order w/three rows (2xA, 1xB)
         $country = "SE";
@@ -427,7 +429,7 @@ class QueryOrderBuilderIntegrationTest extends PHPUnit_Framework_TestCase {
         $b_discount = 0;
         
         // query orderrows
-        $queryOrderBuilder = WebPayAdmin::queryOrder( Svea\SveaConfig::getDefaultConfig() )
+        $queryOrderBuilder = WebPayAdmin::queryOrder( SveaConfig::getDefaultConfig() )
             ->setOrderId( $createdOrderId )
             ->setCountryCode($country)
         ;
@@ -455,7 +457,7 @@ class QueryOrderBuilderIntegrationTest extends PHPUnit_Framework_TestCase {
         //    [paymentmethod] => DBNORDEASE
         //    [orderrows] => Array
         //        (
-        //            [0] => Svea\OrderRow Object
+        //            [0] => Svea\WebPay\BuildOrder\RowBuilders\OrderRow Object
         //                (
         //                    [articleNumber] => 
         //                    [quantity] => 2
@@ -469,7 +471,7 @@ class QueryOrderBuilderIntegrationTest extends PHPUnit_Framework_TestCase {
         //                    [vatDiscount] => 0
         //                )
         //
-        //            [1] => Svea\OrderRow Object
+        //            [1] => Svea\WebPay\BuildOrder\RowBuilders\OrderRow Object
         //                (
         //                    [articleNumber] => Red 5
         //                    [quantity] => 1

@@ -2,17 +2,21 @@
 /**
  * example file, how to create a card order request
  *
- * @author Kristian Grossman-madsen for Svea WebPay
+ * @author Kristian Grossman-madsen for Svea Svea\WebPay\WebPay
  */
+
+require_once '../../vendor/autoload.php';
+
+use Svea\WebPay\Constant\PaymentMethod;
+use Svea\WebPay\WebPay;
+use Svea\WebPay\WebPayItem;
+
 error_reporting( E_ALL );
 ini_set('display_errors', 'On');
 
-// Include Svea PHP integration package.
-$svea_directory = "../../src/";
-require_once( $svea_directory . "Includes.php" );
 
 // get config object
-$myConfig = Svea\SveaConfig::getTestConfig(); //replace with class holding your merchantid, secretword, et al, adopted from package Config/SveaConfig.php
+$myConfig = \Svea\WebPay\Config\SveaConfig::getTestConfig(); //replace with class holding your merchantid, secretword, et al, adopted from package Config/SveaConfig.php
 
 // We assume that you've collected the following information about the order in your shop:
 
@@ -28,10 +32,10 @@ $customerCountry = "Sverige";
 
 // We'll also need information about the customer country, and the currency used for this order, etc., see below
 
-// Start the order creation process by creating the order builder object by calling WebPay::createOrder():
+// Start the order creation process by creating the order builder object by calling Svea\WebPay\WebPay::createOrder():
 $myOrder = WebPay::createOrder( $myConfig );
 
-// You then add information to the order object by using the methods in the Svea\CreateOrderBuilder class.
+// You then add information to the order object by using the methods in the Svea\WebPay\BuildOrder\CreateOrderBuilder class.
 // For a Card order, the following methods are required:
 $myOrder->setCountryCode("SE");                         // customer country, we recommend basing this on the customer billing address
 $myOrder->setCurrency("SEK");                           // order currency
@@ -43,7 +47,7 @@ $myOrder
         ->setOrderDate("2014-05-28")                    // optional - or use an ISO8601 date as produced by i.e. date('c')
 ;
 
-// Then specify the items bought as order rows, using the methods in the Svea\OrderRow class, and adding them to the order:
+// Then specify the items bought as order rows, using the methods in the Svea\WebPay\BuildOrder\RowBuilders\OrderRow class, and adding them to the order:
 $firstBoughtItem = WebPayItem::orderRow();
 $firstBoughtItem->setAmountExVat( 10.99 );
 $firstBoughtItem->setVatPercent( 25 );
@@ -68,14 +72,14 @@ $myCustomerInformation = WebPayItem::individualCustomer(); // there's also a ::c
 
 // Set customer information, using the methods from the IndividualCustomer class
 $myCustomerInformation->setName( $customerFirstName, $customerLastName);
-$sveaAddress = Svea\Helper::splitStreetAddress($customerAddress); // Svea requires an address and a house number
+$sveaAddress = \Svea\WebPay\Helper\Helper::splitStreetAddress($customerAddress); // Svea requires an address and a house number
 $myCustomerInformation->setStreetAddress( $sveaAddress[0], $sveaAddress[1] );
 $myCustomerInformation->setZipCode( $customerZipCode )->setLocality( $customerCity );
 
 $myOrder->addCustomerDetails( $myCustomerInformation );
 
 // We have now completed specifying the order, and wish to send the payment request to Svea. To do so, we first select a payment method.
-// For card orders, we recommend using the ->usePaymentMethod(PaymentMethod::SVEACARDPAY).
+// For card orders, we recommend using the ->usePaymentMethod(Svea\WebPay\Constant\PaymentMethod::SVEACARDPAY).
 $myCardOrderRequest = $myOrder->usePaymentMethod(PaymentMethod::SVEACARDPAY);
 
 

@@ -1,11 +1,17 @@
 <?php
 
-$root = realpath(dirname(__FILE__));
-require_once $root . '/../../../src/Includes.php';
-require_once $root . '/../../TestUtil.php';
+use Svea\WebPay\BuildOrder\CreditOrderRowsBuilder;
+use Svea\WebPay\Config\SveaConfig;
+use Svea\WebPay\Constant\DistributionType;
+use Svea\WebPay\Constant\PaymentMethod;
+use Svea\WebPay\Test\TestUtil;
+use Svea\WebPay\WebPay;
+use Svea\WebPay\WebPayAdmin;
+use Svea\WebPay\WebPayItem;
+
 
 /**
- * @author Kristian Grossman-Madsen for Svea WebPay
+ * @author Kristian Grossman-Madsen for Svea Svea\WebPay\WebPay
  */
 class CreditOrderRowsBuilderIntegrationTest extends PHPUnit_Framework_TestCase {
     
@@ -87,7 +93,7 @@ class CreditOrderRowsBuilderIntegrationTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(1, $orderResponse->accepted);
 
         // deliver order
-        $deliver = WebPay::deliverOrder( Svea\SveaConfig::getDefaultConfig() );
+        $deliver = WebPay::deliverOrder( SveaConfig::getDefaultConfig() );
         $deliver->setCountryCode($this->country)->setOrderId($orderResponse->sveaOrderId)->setInvoiceDistributionType(DistributionType::POST);
         $deliverResponse = $deliver->deliverInvoiceOrder()->doRequest();        
         $this->assertEquals(1, $deliverResponse->accepted); 
@@ -102,7 +108,7 @@ class CreditOrderRowsBuilderIntegrationTest extends PHPUnit_Framework_TestCase {
             'first set up approved invoice and enter id in setUp()'
         );     
         
-        $creditOrderRowsRequest = new Svea\CreditOrderRowsBuilder( Svea\SveaConfig::getDefaultConfig() );
+        $creditOrderRowsRequest = new CreditOrderRowsBuilder( SveaConfig::getDefaultConfig() );
         $creditOrderRowsResponse = $creditOrderRowsRequest
                 ->setInvoiceId( $this->invoiceIdToTest )
                 ->setInvoiceDistributionType( DistributionType::POST )
@@ -123,7 +129,7 @@ class CreditOrderRowsBuilderIntegrationTest extends PHPUnit_Framework_TestCase {
             'first set up approved invoice and enter id in setUp()'
         );
 
-        $creditOrderRowsRequest = new Svea\CreditOrderRowsBuilder( Svea\SveaConfig::getDefaultConfig() );
+        $creditOrderRowsRequest = new CreditOrderRowsBuilder( SveaConfig::getDefaultConfig() );
         $creditOrderRowsResponse = $creditOrderRowsRequest
                 ->setInvoiceId( $this->invoiceIdToTest )
                 ->setInvoiceDistributionType( DistributionType::POST )
@@ -144,7 +150,7 @@ class CreditOrderRowsBuilderIntegrationTest extends PHPUnit_Framework_TestCase {
             'first set up approved invoice and enter id in setUp()'
         );     
 
-        $creditOrderRowsRequest = new Svea\CreditOrderRowsBuilder( Svea\SveaConfig::getDefaultConfig() );
+        $creditOrderRowsRequest = new CreditOrderRowsBuilder( SveaConfig::getDefaultConfig() );
         $creditOrderRowsResponse = $creditOrderRowsRequest
                 ->setInvoiceId( $this->invoiceIdToTest )
                 ->setInvoiceDistributionType( DistributionType::POST )
@@ -174,7 +180,7 @@ class CreditOrderRowsBuilderIntegrationTest extends PHPUnit_Framework_TestCase {
             'first set up approved invoice and enter id in setUp()'
         );     
 
-        $creditOrderRowsRequest = new Svea\CreditOrderRowsBuilder( Svea\SveaConfig::getDefaultConfig() );
+        $creditOrderRowsRequest = new CreditOrderRowsBuilder( SveaConfig::getDefaultConfig() );
         $creditOrderRowsResponse = $creditOrderRowsRequest
                 ->setInvoiceId( $this->invoiceIdToTest )
                 ->setInvoiceDistributionType( DistributionType::POST )
@@ -214,7 +220,7 @@ class CreditOrderRowsBuilderIntegrationTest extends PHPUnit_Framework_TestCase {
             'first set up approved invoice and enter id in setUp()'
         );     
 
-        $creditOrderRowsRequest = new Svea\CreditOrderRowsBuilder( Svea\SveaConfig::getDefaultConfig() );
+        $creditOrderRowsRequest = new CreditOrderRowsBuilder( SveaConfig::getDefaultConfig() );
         $creditOrderRowsResponse = $creditOrderRowsRequest
                 ->setInvoiceId( $this->invoiceIdToTest )
                 ->setInvoiceDistributionType( DistributionType::POST )
@@ -246,7 +252,7 @@ class CreditOrderRowsBuilderIntegrationTest extends PHPUnit_Framework_TestCase {
             'first set up approved invoice and enter id in setUp()'
         );  
         
-        $creditOrderRowsRequest = new Svea\CreditOrderRowsBuilder( Svea\SveaConfig::getDefaultConfig() );
+        $creditOrderRowsRequest = new CreditOrderRowsBuilder( SveaConfig::getDefaultConfig() );
         $creditOrderRowsResponse = $creditOrderRowsRequest
                 ->setInvoiceId( $this->invoiceIdToTest )
                 ->setInvoiceDistributionType( DistributionType::POST )
@@ -286,7 +292,7 @@ class CreditOrderRowsBuilderIntegrationTest extends PHPUnit_Framework_TestCase {
         $ipAddress = "127.0.0.1";
         
         // create order
-        $order = WebPay::createOrder( Svea\SveaConfig::getDefaultConfig() )
+        $order = WebPay::createOrder( SveaConfig::getDefaultConfig() )
                 ->setCountryCode( $this->country )
                 ->setCurrency("SEK")
                 ->setCustomerReference("CreditCardOrderRows_testdata".date('c'))
@@ -297,7 +303,7 @@ class CreditOrderRowsBuilderIntegrationTest extends PHPUnit_Framework_TestCase {
         $order->addCustomerDetails(
             WebPayItem::individualCustomer()
                 ->setNationalIdNumber("194605092222")
-                ->setBirthDate(1946, 05, 09)
+                ->setBirthDate(1946, 05, 9)
                 ->setName("Tess T", "Persson")
                 ->setStreetAddress("Testgatan", 1)
                 ->setCoAddress("c/o Eriksson, Erik")
@@ -376,7 +382,7 @@ class CreditOrderRowsBuilderIntegrationTest extends PHPUnit_Framework_TestCase {
         );         
 
         // query orderrows to pass in creditOrderRows->setNumberedOrderRows()
-        $queryOrderBuilder = WebPayAdmin::queryOrder( Svea\SveaConfig::getDefaultConfig() )
+        $queryOrderBuilder = WebPayAdmin::queryOrder( SveaConfig::getDefaultConfig() )
             ->setOrderId( $this->successfulTransactionToTest )
             ->setCountryCode($this->country)
         ;
@@ -386,7 +392,7 @@ class CreditOrderRowsBuilderIntegrationTest extends PHPUnit_Framework_TestCase {
         //print_r( $queryResponse );
         $this->assertEquals(1, $queryResponse->accepted);
         
-        $creditOrderRowsBuilder = new Svea\CreditOrderRowsBuilder( Svea\SveaConfig::getDefaultConfig() );
+        $creditOrderRowsBuilder = new CreditOrderRowsBuilder( SveaConfig::getDefaultConfig() );
         $creditOrderRowsRequest = $creditOrderRowsBuilder
             ->setOrderId( $this->successfulTransactionToTest )
             ->setCountryCode( $this->country )
@@ -402,7 +408,7 @@ class CreditOrderRowsBuilderIntegrationTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(1, $creditOrderRowsResponse->accepted);
         
         // query orderrows again
-        $queryOrderBuilder = WebPayAdmin::queryOrder( Svea\SveaConfig::getDefaultConfig() )
+        $queryOrderBuilder = WebPayAdmin::queryOrder( SveaConfig::getDefaultConfig() )
             ->setOrderId( $this->successfulTransactionToTest )
             ->setCountryCode($this->country)
         ;        
@@ -421,7 +427,7 @@ class CreditOrderRowsBuilderIntegrationTest extends PHPUnit_Framework_TestCase {
         );         
 
         // query orderrows to pass in creditOrderRows->setNumberedOrderRows()
-        $queryOrderBuilder = WebPayAdmin::queryOrder( Svea\SveaConfig::getDefaultConfig() )
+        $queryOrderBuilder = WebPayAdmin::queryOrder( SveaConfig::getDefaultConfig() )
             ->setOrderId( $this->successfulTransactionToTest )
             ->setCountryCode($this->country)
         ;
@@ -431,7 +437,7 @@ class CreditOrderRowsBuilderIntegrationTest extends PHPUnit_Framework_TestCase {
         //print_r( $queryResponse );
         $this->assertEquals(1, $queryResponse->accepted);
         
-        $creditOrderRowsBuilder = new Svea\CreditOrderRowsBuilder( Svea\SveaConfig::getDefaultConfig() );
+        $creditOrderRowsBuilder = new CreditOrderRowsBuilder( SveaConfig::getDefaultConfig() );
         $creditOrderRowsRequest = $creditOrderRowsBuilder
             ->setOrderId( $this->successfulTransactionToTest )
             ->setCountryCode( $this->country )
@@ -447,7 +453,7 @@ class CreditOrderRowsBuilderIntegrationTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(1, $creditOrderRowsResponse->accepted);
         
         // query orderrows again
-        $queryOrderBuilder = WebPayAdmin::queryOrder( Svea\SveaConfig::getDefaultConfig() )
+        $queryOrderBuilder = WebPayAdmin::queryOrder( SveaConfig::getDefaultConfig() )
             ->setOrderId( $this->successfulTransactionToTest )
             ->setCountryCode($this->country)
         ;        
@@ -468,7 +474,7 @@ class CreditOrderRowsBuilderIntegrationTest extends PHPUnit_Framework_TestCase {
         );         
 
         // query orderrows to pass in creditOrderRows->setNumberedOrderRows()
-        $queryOrderBuilder = WebPayAdmin::queryOrder( Svea\SveaConfig::getDefaultConfig() )
+        $queryOrderBuilder = WebPayAdmin::queryOrder( SveaConfig::getDefaultConfig() )
             ->setOrderId( $this->successfulTransactionToTest )
             ->setCountryCode($this->country)
         ;
@@ -478,7 +484,7 @@ class CreditOrderRowsBuilderIntegrationTest extends PHPUnit_Framework_TestCase {
         //print_r( $queryResponse );
         $this->assertEquals(1, $queryResponse->accepted);
         
-        $creditOrderRowsBuilder = new Svea\CreditOrderRowsBuilder( Svea\SveaConfig::getDefaultConfig() );
+        $creditOrderRowsBuilder = new CreditOrderRowsBuilder( SveaConfig::getDefaultConfig() );
         $creditOrderRowsRequest = $creditOrderRowsBuilder
             ->setOrderId( $this->successfulTransactionToTest )
             ->setCountryCode( $this->country )
@@ -505,7 +511,7 @@ class CreditOrderRowsBuilderIntegrationTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(1, $creditOrderRowsResponse->accepted);
         
         // query orderrows again
-        $queryOrderBuilder = WebPayAdmin::queryOrder( Svea\SveaConfig::getDefaultConfig() )
+        $queryOrderBuilder = WebPayAdmin::queryOrder( SveaConfig::getDefaultConfig() )
             ->setOrderId( $this->successfulTransactionToTest )
             ->setCountryCode($this->country)
         ;        
@@ -526,7 +532,7 @@ class CreditOrderRowsBuilderIntegrationTest extends PHPUnit_Framework_TestCase {
         );  
 
         // query orderrows to pass in creditOrderRows->setNumberedOrderRows()
-        $queryOrderBuilder = WebPayAdmin::queryOrder( Svea\SveaConfig::getDefaultConfig() )
+        $queryOrderBuilder = WebPayAdmin::queryOrder( SveaConfig::getDefaultConfig() )
             ->setOrderId( $this->successfulTransactionToTest )
             ->setCountryCode($this->country)
         ;                
@@ -535,7 +541,7 @@ class CreditOrderRowsBuilderIntegrationTest extends PHPUnit_Framework_TestCase {
         //print_r( $queryResponse );
         $this->assertEquals(1, $queryResponse->accepted);
         
-        $creditOrderRowsBuilder = new Svea\CreditOrderRowsBuilder( Svea\SveaConfig::getDefaultConfig() );
+        $creditOrderRowsBuilder = new CreditOrderRowsBuilder( SveaConfig::getDefaultConfig() );
         $creditOrderRowsRequest = $creditOrderRowsBuilder
             ->setOrderId( $this->successfulTransactionToTest )
             ->setCountryCode( $this->country )

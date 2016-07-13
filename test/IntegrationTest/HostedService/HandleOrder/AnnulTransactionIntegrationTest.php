@@ -1,14 +1,12 @@
 <?php
-use Svea\HostedService\AnnulTransaction as AnnulTransaction;
+use Svea\WebPay\Config\SveaConfig;
+use Svea\WebPay\HostedService\HostedAdminRequest\AnnulTransaction as AnnulTransaction;
 
-$root = realpath(dirname(__FILE__));
-require_once $root . '/../../../../src/Includes.php';
-require_once $root . '/../../../TestUtil.php';
 
 /**
  * AnnulTransactionIntegrationTest 
  * 
- * @author Kristian Grossman-Madsen for Svea WebPay
+ * @author Kristian Grossman-Madsen for Svea Svea\WebPay\WebPay
  */
 class AnnulTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
         
@@ -21,12 +19,12 @@ class AnnulTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
              
         $transactionId = 987654;
 
-        $request = new AnnulTransaction( Svea\SveaConfig::getDefaultConfig() );
+        $request = new AnnulTransaction( SveaConfig::getDefaultConfig() );
         $request->transactionId = $transactionId;
         $request->countryCode = "SE";
         $response = $request->doRequest();
 
-        $this->assertInstanceOf( "Svea\HostedService\AnnulTransactionResponse", $response );
+        $this->assertInstanceOf( "Svea\WebPay\HostedService\HostedResponse\HostedAdminResponse\AnnulTransactionResponse", $response );
         
         // if we receive an error from the service, the integration test passes
         $this->assertEquals( 0, $response->accepted );
@@ -50,13 +48,13 @@ class AnnulTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
         $customerrefno = "794";
         $transactionId = 587947;
 
-        $request = new AnnulTransaction( Svea\SveaConfig::getDefaultConfig() );
+        $request = new AnnulTransaction( SveaConfig::getDefaultConfig() );
         $request->transactionId = $transactionId;
         $request->countryCode = "SE";
         $response = $request->doRequest();   
               
         //print_r( $response); 
-        $this->assertInstanceOf( "Svea\HostedService\AnnulTransactionResponse", $response );
+        $this->assertInstanceOf( "Svea\WebPay\HostedService\HostedResponse\HostedAdminResponse\AnnulTransactionResponse", $response );
         $this->assertEquals( 1, $response->accepted );        
         $this->assertStringMatchesFormat( "%d", $response->transactionId);   // %d => an unsigned integer value
         

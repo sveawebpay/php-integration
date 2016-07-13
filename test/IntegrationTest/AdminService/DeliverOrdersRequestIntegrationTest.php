@@ -1,8 +1,12 @@
 <?php
 
-$root = realpath(dirname(__FILE__));
-require_once $root . '/../../../src/Includes.php';
-require_once $root . '/../../TestUtil.php';
+use Svea\WebPay\AdminService\DeliverOrdersRequest;
+use Svea\WebPay\BuildOrder\DeliverOrderBuilder;
+use Svea\WebPay\Config\ConfigurationProvider;
+use Svea\WebPay\Config\SveaConfig;
+use Svea\WebPay\Constant\DistributionType;
+use Svea\WebPay\Test\TestUtil;
+
 
 /**
  * @author Kristian Grossman-Madsen for Svea Webpay
@@ -23,19 +27,19 @@ class DeliverOrdersRequestIntegrationTest extends PHPUnit_Framework_TestCase{
         
         $countryCode = "SE";
         $sveaOrderIdToDeliver = 349699; // need to exist, be closed
-        $orderType = \ConfigurationProvider::INVOICE_TYPE;
+        $orderType = ConfigurationProvider::INVOICE_TYPE;
         
-        $DeliverOrderBuilder = new Svea\DeliverOrderBuilder( Svea\SveaConfig::getDefaultConfig() );
+        $DeliverOrderBuilder = new DeliverOrderBuilder( SveaConfig::getDefaultConfig() );
         $DeliverOrderBuilder->setCountryCode( $countryCode );
         $DeliverOrderBuilder->setOrderId( $sveaOrderIdToDeliver );
         $DeliverOrderBuilder->setInvoiceDistributionType(DistributionType::POST);
         $DeliverOrderBuilder->orderType = $orderType;
           
-        $request = new Svea\AdminService\DeliverOrdersRequest( $DeliverOrderBuilder );
+        $request = new DeliverOrdersRequest( $DeliverOrderBuilder );
         $response = $request->doRequest();
         
         ////print_r( $response );        
-        $this->assertInstanceOf('Svea\AdminService\DeliverOrdersResponse', $response);
+        $this->assertInstanceOf('Svea\WebPay\AdminService\AdminServiceResponse\DeliverOrdersResponse', $response);
         $this->assertEquals(0, $response->accepted ); // 
         $this->assertEquals(20000, $response->resultcode ); // 20000, order is closed.
     }
@@ -55,14 +59,14 @@ class DeliverOrdersRequestIntegrationTest extends PHPUnit_Framework_TestCase{
         $myOrderId = $orderResponse->sveaOrderId;
         
         // deliver order
-        $DeliverOrderBuilder = new Svea\DeliverOrderBuilder( Svea\SveaConfig::getDefaultConfig() );
+        $DeliverOrderBuilder = new DeliverOrderBuilder( SveaConfig::getDefaultConfig() );
         $DeliverOrderBuilder->setCountryCode( $country );
         $DeliverOrderBuilder->setOrderId( $myOrderId );
         $DeliverOrderBuilder->setInvoiceDistributionType(DistributionType::POST);
         $DeliverOrderBuilder->orderType = ConfigurationProvider::INVOICE_TYPE;
         
         
-        $request = new Svea\AdminService\DeliverOrdersRequest( $DeliverOrderBuilder );
+        $request = new DeliverOrdersRequest( $DeliverOrderBuilder );
         $response = $request->doRequest();
                 
         ////print_r( $response );        

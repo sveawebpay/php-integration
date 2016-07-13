@@ -1,11 +1,7 @@
 <?php
-namespace Svea;
 
-$root = realpath(dirname(__FILE__));
-require_once $root . '/../../../src/Includes.php';
-
-$root = realpath(dirname(__FILE__));
-require_once $root . '/../../TestUtil.php';
+use Svea\WebPay\BuildOrder\UpdateOrderRowsBuilder;
+use Svea\WebPay\Config\SveaConfig;
 
 /**
  * @author Kristian Grossman-Madsen for Svea Webpay
@@ -19,7 +15,7 @@ class UpdateOrderRowsBuilderTest extends \PHPUnit_Framework_TestCase {
     }
     
     public function test_updateOrderRowsBuilder_class_exists() {     
-        $this->assertInstanceOf("Svea\UpdateOrderRowsBuilder", $this->updateOrderRowsObject);
+        $this->assertInstanceOf("Svea\WebPay\BuildOrder\UpdateOrderRowsBuilder", $this->updateOrderRowsObject);
     }
     
     public function test_updateOrderRowsBuilder_setOrderId() {
@@ -38,13 +34,13 @@ class UpdateOrderRowsBuilderTest extends \PHPUnit_Framework_TestCase {
         $orderId = "123456";
         $updateOrderRowsObject = $this->updateOrderRowsObject->setOrderId($orderId)->updateInvoiceOrderRows();
         
-        $this->assertInstanceOf("Svea\AdminService\UpdateOrderRowsRequest", $updateOrderRowsObject);
+        $this->assertInstanceOf("Svea\WebPay\AdminService\UpdateOrderRowsRequest", $updateOrderRowsObject);
     }
     
     public function test_updateOrderRowsBuilder_updatePaymentPlanOrderRowsBuilder_returns_UpdateOrderRowsRequest() {
         $orderId = "123456";  
         $updateOrderRowsObject = $this->updateOrderRowsObject->setOrderId($orderId)->updatePaymentPlanOrderRows();
         
-        $this->assertInstanceOf("Svea\AdminService\UpdateOrderRowsRequest", $updateOrderRowsObject);
+        $this->assertInstanceOf("Svea\WebPay\AdminService\UpdateOrderRowsRequest", $updateOrderRowsObject);
     }
 }

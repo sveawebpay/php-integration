@@ -1,8 +1,11 @@
 <?php
 
-$root = realpath(dirname(__FILE__));
-require_once $root . '/../../../src/Includes.php';
-require_once $root . '/../../TestUtil.php';
+use Svea\WebPay\Config\SveaConfig;
+use Svea\WebPay\Test\TestUtil;
+use Svea\WebPay\WebPay;
+use Svea\WebPay\WebPayAdmin;
+use Svea\WebPay\WebPayItem;
+
 
 /**
  * @author Kristian Grossman-Madsen for Svea Webpay
@@ -10,7 +13,7 @@ require_once $root . '/../../TestUtil.php';
 class UpdateOrderRowsRequestIntegrationTest extends PHPUnit_Framework_TestCase {
 
     public function test_update_orderRow_as_exvat_and_vatpercent() {
-        $config = Svea\SveaConfig::getDefaultConfig();
+        $config = SveaConfig::getDefaultConfig();
         $orderResponse = WebPay::createOrder($config)
                 ->addOrderRow(
                         WebPayItem::orderRow()
@@ -49,7 +52,7 @@ class UpdateOrderRowsRequestIntegrationTest extends PHPUnit_Framework_TestCase {
     }
 
     public function test_update_orderRow_as_incvat_and_vatpercent() {
-        $config = Svea\SveaConfig::getDefaultConfig();
+        $config = SveaConfig::getDefaultConfig();
         $orderResponse = WebPay::createOrder($config)
                 ->addOrderRow(
                         WebPayItem::orderRow()
@@ -88,7 +91,7 @@ class UpdateOrderRowsRequestIntegrationTest extends PHPUnit_Framework_TestCase {
     }
 
     public function test_update_orderRow_as_incvat_and_exvat() {
-        $config = Svea\SveaConfig::getDefaultConfig();
+        $config = SveaConfig::getDefaultConfig();
         $orderResponse = WebPay::createOrder($config)
                 ->addOrderRow(
                         WebPayItem::orderRow()
@@ -138,7 +141,7 @@ class UpdateOrderRowsRequestIntegrationTest extends PHPUnit_Framework_TestCase {
     }
 
     public function test_UpdateOrderRows_created_exvat_updated_incvat() {
-        $config = Svea\SveaConfig::getDefaultConfig();
+        $config = SveaConfig::getDefaultConfig();
         $orderResponse = WebPay::createOrder($config)
                 ->addOrderRow(
                         WebPayItem::orderRow()
@@ -177,7 +180,7 @@ class UpdateOrderRowsRequestIntegrationTest extends PHPUnit_Framework_TestCase {
     }
 
     public function test_UpdateOrderRows_created_exvat_updated_exvat() {
-        $config = Svea\SveaConfig::getDefaultConfig();
+        $config = SveaConfig::getDefaultConfig();
         $orderResponse = WebPay::createOrder($config)
                 ->addOrderRow(
                         WebPayItem::orderRow()
@@ -216,7 +219,7 @@ class UpdateOrderRowsRequestIntegrationTest extends PHPUnit_Framework_TestCase {
     }
 
     public function test_UpdateOrderRows_created_incvat_updated_exvat() {
-        $config = Svea\SveaConfig::getDefaultConfig();
+        $config = SveaConfig::getDefaultConfig();
         $orderResponse = WebPay::createOrder($config)
                 ->addOrderRow(
                         WebPayItem::orderRow()
@@ -264,7 +267,7 @@ class UpdateOrderRowsRequestIntegrationTest extends PHPUnit_Framework_TestCase {
     }   
     
     public function test_add_single_orderRow_type_missmatch_3() {
-        $config = Svea\SveaConfig::getDefaultConfig();
+        $config = SveaConfig::getDefaultConfig();
         $orderResponse = WebPay::createOrder($config)
                 ->addOrderRow(
                         WebPayItem::orderRow()
@@ -296,7 +299,7 @@ class UpdateOrderRowsRequestIntegrationTest extends PHPUnit_Framework_TestCase {
     }
 
     public function test_add_single_orderRow_type_mismatch_created_inc_updated_ex() {
-        $config = Svea\SveaConfig::getDefaultConfig();
+        $config = SveaConfig::getDefaultConfig();
         $orderResponse = WebPay::createOrder($config)
                 ->addOrderRow(
                         WebPayItem::orderRow()

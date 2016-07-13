@@ -1,8 +1,12 @@
 <?php
 
-$root = realpath(dirname(__FILE__));
-require_once $root . '/../../../src/Includes.php';
-require_once $root . '/../../TestUtil.php';
+use Svea\WebPay\Config\SveaConfig;
+use Svea\WebPay\Constant\DistributionType;
+use Svea\WebPay\HostedService\HostedAdminRequest\ConfirmTransaction;
+use Svea\WebPay\Test\TestUtil;
+use Svea\WebPay\WebPayAdmin;
+use Svea\WebPay\WebPayItem;
+
 
 /**
  * @author Kristian Grossman-Madsen for Svea Webpay
@@ -35,7 +39,7 @@ class DeliverOrderRowsRequestIntegrationTest extends PHPUnit_Framework_TestCase{
         $myOrderId = $orderResponse->sveaOrderId;
         
         // deliver first row in order
-        $deliverOrderRowsRequest = WebPayAdmin::deliverOrderRows( Svea\SveaConfig::getDefaultConfig() );  
+        $deliverOrderRowsRequest = WebPayAdmin::deliverOrderRows( SveaConfig::getDefaultConfig() );  
         $deliverOrderRowsRequest->setCountryCode( $country );
         $deliverOrderRowsRequest->setOrderId($myOrderId);
         $deliverOrderRowsRequest->setInvoiceDistributionType(DistributionType::POST);
@@ -67,7 +71,7 @@ class DeliverOrderRowsRequestIntegrationTest extends PHPUnit_Framework_TestCase{
         //
         // Example DeliverPartialResponse
         //
-        //Svea\AdminService\DeliverPartialResponse Object
+        //Svea\WebPay\AdminService\AdminServiceResponse\DeliverPartialResponse Object
         //(
         //    [clientId] => 79021
         //    [amount] => 250.00
@@ -80,7 +84,7 @@ class DeliverOrderRowsRequestIntegrationTest extends PHPUnit_Framework_TestCase{
         //    [errormessage] => 
         //)        
             
-        $this->assertInstanceOf( "Svea\AdminService\DeliverPartialResponse", $deliverOrderRowsResponse );
+        $this->assertInstanceOf( "Svea\WebPay\AdminService\AdminServiceResponse\DeliverPartialResponse", $deliverOrderRowsResponse );
         $this->assertEquals(1, $deliverOrderRowsResponse->accepted);
         $this->assertEquals(0, $deliverOrderRowsResponse->resultcode);
         $this->assertEquals(null, $deliverOrderRowsResponse->errormessage);
@@ -120,7 +124,7 @@ class DeliverOrderRowsRequestIntegrationTest extends PHPUnit_Framework_TestCase{
         $myOrderId = $orderResponse->sveaOrderId;
         
         // deliver first row in order
-        $deliverOrderRowsRequest = WebPayAdmin::deliverOrderRows( Svea\SveaConfig::getDefaultConfig() );  
+        $deliverOrderRowsRequest = WebPayAdmin::deliverOrderRows( SveaConfig::getDefaultConfig() );  
         $deliverOrderRowsRequest->setCountryCode( $country );
         $deliverOrderRowsRequest->setOrderId($myOrderId);
         $deliverOrderRowsRequest->setInvoiceDistributionType(DistributionType::POST);
@@ -128,7 +132,7 @@ class DeliverOrderRowsRequestIntegrationTest extends PHPUnit_Framework_TestCase{
         $deliverOrderRowsResponse = $deliverOrderRowsRequest->deliverInvoiceOrderRows()->doRequest();
         
         ////print_r( $deliverOrderRowsResponse );        
-        $this->assertInstanceOf('Svea\AdminService\DeliverPartialResponse', $deliverOrderRowsResponse);
+        $this->assertInstanceOf('Svea\WebPay\AdminService\AdminServiceResponse\DeliverPartialResponse', $deliverOrderRowsResponse);
         $this->assertEquals(true, $deliverOrderRowsResponse->accepted );    // truth
         $this->assertEquals(1, $deliverOrderRowsResponse->accepted );       // equals literal 1
         $this->assertEquals(0, $deliverOrderRowsResponse->resultcode );
@@ -170,7 +174,7 @@ class DeliverOrderRowsRequestIntegrationTest extends PHPUnit_Framework_TestCase{
         // Set the below to match the transaction, then run the test.
         $transactionId = 586223;
         
-        $queryRequest = WebPayAdmin::queryOrder(Svea\SveaConfig::getDefaultConfig());        
+        $queryRequest = WebPayAdmin::queryOrder(SveaConfig::getDefaultConfig());        
         $queryResponse = $queryRequest->setCountryCode("SE")->setTransactionId($transactionId)->queryCardOrder()->doRequest();        
 
         ////print_r( $queryResponse );                   
@@ -180,17 +184,17 @@ class DeliverOrderRowsRequestIntegrationTest extends PHPUnit_Framework_TestCase{
         $this->assertEquals(600, $queryResponse->authorizedamount); // not manipulated post creation
         $this->assertEquals(0, $queryResponse->creditedamount); // not manipulated post creation        
         
-        $deliverRequest = WebPayAdmin::deliverOrderRows(Svea\SveaConfig::getDefaultConfig());
+        $deliverRequest = WebPayAdmin::deliverOrderRows(SveaConfig::getDefaultConfig());
         $deliverRequest->setCountryCode("SE")->setOrderId($transactionId);
         $deliverRequest->setRowToDeliver(1)->addNumberedOrderRows($queryResponse->numberedOrderRows);
         $deliverResponse = $deliverRequest->deliverCardOrderRows()->doRequest();
 
         //print_r( $deliverResponse );
         $this->assertEquals(1, $deliverResponse->accepted);
-        $this->assertInstanceOf( "Svea\HostedService\ConfirmTransactionResponse", $deliverResponse );               
+        $this->assertInstanceOf( "Svea\WebPay\HostedService\HostedResponse\HostedAdminResponse\ConfirmTransactionResponse", $deliverResponse );               
 
         // query orderrows
-        $queryResponse2 = WebPayAdmin::queryOrder( Svea\SveaConfig::getDefaultConfig() )
+        $queryResponse2 = WebPayAdmin::queryOrder( SveaConfig::getDefaultConfig() )
             ->setOrderId( $transactionId )->setCountryCode("SE")->queryCardOrder()->doRequest();         
 
         //print_r( $queryResponse2); 
@@ -233,29 +237,29 @@ class DeliverOrderRowsRequestIntegrationTest extends PHPUnit_Framework_TestCase{
         // Set the below to match the transaction, then run the test.
         $transactionId = 586256;               
         
-        $queryRequest = WebPayAdmin::queryOrder(Svea\SveaConfig::getDefaultConfig());        
+        $queryRequest = WebPayAdmin::queryOrder(SveaConfig::getDefaultConfig());        
         $queryResponse = $queryRequest->setCountryCode("SE")->setTransactionId($transactionId)->queryCardOrder()->doRequest();        
 
         ////print_r( $queryResponse );                   
         $this->assertEquals(1, $queryResponse->accepted);
         
-        $deliverRequest = WebPayAdmin::deliverOrderRows(Svea\SveaConfig::getDefaultConfig());
+        $deliverRequest = WebPayAdmin::deliverOrderRows(SveaConfig::getDefaultConfig());
         $deliverRequest->setCountryCode("SE")->setOrderId($transactionId);
         $deliverRequest->setRowToDeliver(1)->addNumberedOrderRows($queryResponse->numberedOrderRows);
         $deliverResponse = $deliverRequest->deliverCardOrderRows()->doRequest();
 
         ////print_r( $deliverResponse );
-        $this->assertInstanceOf( "Svea\HostedService\ConfirmTransactionResponse", $deliverResponse ); 
+        $this->assertInstanceOf( "Svea\WebPay\HostedService\HostedResponse\HostedAdminResponse\ConfirmTransactionResponse", $deliverResponse ); 
         $this->assertEquals(1, $deliverResponse->accepted);        
         
         // again (i.e. lower too large an amount)
-        $deliver2Request = WebPayAdmin::deliverOrderRows(Svea\SveaConfig::getDefaultConfig());
+        $deliver2Request = WebPayAdmin::deliverOrderRows(SveaConfig::getDefaultConfig());
         $deliver2Request->setCountryCode("SE")->setOrderId($transactionId);
         $deliver2Request->setRowToDeliver(1)->addNumberedOrderRows($queryResponse->numberedOrderRows);
         $deliver2Response = $deliver2Request->deliverCardOrderRows()->doRequest();
 
         ////print_r( $deliver2Response );
-        $this->assertInstanceOf( "Svea\HostedService\ConfirmTransactionResponse", $deliver2Response ); 
+        $this->assertInstanceOf( "Svea\WebPay\HostedService\HostedResponse\HostedAdminResponse\ConfirmTransactionResponse", $deliver2Response ); 
         $this->assertEquals(0, $deliver2Response->accepted);
         $this->assertEquals("100", $deliver2Response->resultcode);
         $this->assertEquals(
@@ -299,30 +303,30 @@ class DeliverOrderRowsRequestIntegrationTest extends PHPUnit_Framework_TestCase{
         $transactionId = 586263;
 
         // confirm the transaction
-        $confirmRequest = new \Svea\HostedService\ConfirmTransaction( Svea\SveaConfig::getDefaultConfig() );
+        $confirmRequest = new ConfirmTransaction( SveaConfig::getDefaultConfig() );
         $confirmRequest->transactionId = $transactionId;
         $confirmRequest->captureDate = date('c');
         $confirmRequest->countryCode = "SE";
         $confirmResponse = $confirmRequest->doRequest();     
         
         ////print_r( $confirmResponse );
-        $this->assertInstanceOf( "Svea\HostedService\ConfirmTransactionResponse", $confirmResponse );
+        $this->assertInstanceOf( "Svea\WebPay\HostedService\HostedResponse\HostedAdminResponse\ConfirmTransactionResponse", $confirmResponse );
         $this->assertEquals( 1, $confirmResponse->accepted );                
         
-        $queryRequest = WebPayAdmin::queryOrder(Svea\SveaConfig::getDefaultConfig());        
+        $queryRequest = WebPayAdmin::queryOrder(SveaConfig::getDefaultConfig());        
         $queryResponse = $queryRequest->setCountryCode("SE")->setTransactionId($transactionId)->queryCardOrder()->doRequest();        
 
         //print_r( $queryResponse );                   
         $this->assertEquals(1, $queryResponse->accepted);
         $this->assertEquals("CONFIRMED", $queryResponse->status);
         
-        $deliverRequest = WebPayAdmin::deliverOrderRows(Svea\SveaConfig::getDefaultConfig());
+        $deliverRequest = WebPayAdmin::deliverOrderRows(SveaConfig::getDefaultConfig());
         $deliverRequest->setCountryCode("SE")->setOrderId($transactionId);
         $deliverRequest->setRowToDeliver(1)->addNumberedOrderRows($queryResponse->numberedOrderRows);
         $deliverResponse = $deliverRequest->deliverCardOrderRows()->doRequest();
 
         //print_r( $deliverResponse );
-        $this->assertInstanceOf( "Svea\HostedService\ConfirmTransactionResponse", $deliverResponse ); 
+        $this->assertInstanceOf( "Svea\WebPay\HostedService\HostedResponse\HostedAdminResponse\ConfirmTransactionResponse", $deliverResponse ); 
         $this->assertEquals(0, $deliverResponse->accepted);
         $this->assertEquals("105 (ILLEGAL_TRANSACTIONSTATUS)", $deliverResponse->resultcode);   // confirm of confirmed order
         $this->assertEquals( "Invalid transaction status.",$deliverResponse->errormessage );

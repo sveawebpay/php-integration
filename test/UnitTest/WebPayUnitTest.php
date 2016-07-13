@@ -1,13 +1,18 @@
 <?php
 
-$root = realpath(dirname(__FILE__));
-require_once $root . '/../../src/Includes.php';
-require_once $root . '/../TestUtil.php';
+require_once '../../vendor/autoload.php';
+
+use Svea\WebPay\Constant\DistributionType;
+use Svea\WebPay\Constant\PaymentMethod;
+use Svea\WebPay\Test\TestUtil;
+use Svea\WebPay\WebPay;
+use Svea\WebPay\WebPayItem;
+
 
 /**
- * WebPay unit tests checks that we validate all required methods for the various entry point methods
+ * Svea\WebPay\WebPay unit tests checks that we validate all required methods for the various entry point methods
  * 
- * @author Kristian Grossman-Madsen for Svea WebPay
+ * @author Kristian Grossman-Madsen for Svea Svea\WebPay\WebPay
  */
 class WebPayUnitTest extends \PHPUnit_Framework_TestCase {
 
@@ -21,42 +26,42 @@ class WebPayUnitTest extends \PHPUnit_Framework_TestCase {
     // paypage: directbankonly
     // paypage
     public function test_createOrder_useInvoicePayment_returns_InvoicePayment() {
-        $createOrder = WebPay::createOrder( Svea\SveaConfig::getDefaultConfig() );
+        $createOrder = WebPay::createOrder( \Svea\WebPay\Config\SveaConfig::getDefaultConfig() );
         // we should set attributes here if real request
         $request = $createOrder->useInvoicePayment();
-        $this->assertInstanceOf("Svea\WebService\InvoicePayment", $request);
+        $this->assertInstanceOf("Svea\WebPay\WebService\Payment\InvoicePayment", $request);
     }
     public function test_createOrder_usePaymentPlanPayment_returns_PaymentPlanPayment() {
-        $createOrder = WebPay::createOrder( Svea\SveaConfig::getDefaultConfig() );
+        $createOrder = WebPay::createOrder( \Svea\WebPay\Config\SveaConfig::getDefaultConfig() );
         $request = $createOrder->usePaymentPlanPayment( TestUtil::getGetPaymentPlanParamsForTesting() );
-        $this->assertInstanceOf("Svea\WebService\PaymentPlanPayment", $request);
+        $this->assertInstanceOf("Svea\WebPay\WebService\Payment\PaymentPlanPayment", $request);
     }    
     public function test_createOrder_usePayPageCardOnly_returns_CardPayment() {
-        $createOrder = WebPay::createOrder( Svea\SveaConfig::getDefaultConfig() );
+        $createOrder = WebPay::createOrder( \Svea\WebPay\Config\SveaConfig::getDefaultConfig() );
         $request = $createOrder->usePayPageCardOnly();
-        $this->assertInstanceOf("Svea\HostedService\CardPayment", $request);
+        $this->assertInstanceOf("Svea\WebPay\HostedService\Payment\CardPayment", $request);
     }   
     public function test_createOrder_usePayPageDirectBankOnly_returns_DirectPayment() {
-        $createOrder = WebPay::createOrder( Svea\SveaConfig::getDefaultConfig() );
+        $createOrder = WebPay::createOrder( \Svea\WebPay\Config\SveaConfig::getDefaultConfig() );
         $request = $createOrder->usePayPageDirectBankOnly();
-        $this->assertInstanceOf("Svea\HostedService\DirectPayment", $request);
+        $this->assertInstanceOf("Svea\WebPay\HostedService\Payment\DirectPayment", $request);
     }          
     public function test_createOrder_usePaymentMethod_returns_PaymentMethodPayment() {
-        $createOrder = WebPay::createOrder( Svea\SveaConfig::getDefaultConfig() );
+        $createOrder = WebPay::createOrder( \Svea\WebPay\Config\SveaConfig::getDefaultConfig() );
         $request = $createOrder->usePaymentMethod("mocked_paymentMethod");
-        $this->assertInstanceOf("Svea\HostedService\PaymentMethodPayment", $request);
+        $this->assertInstanceOf("Svea\WebPay\HostedService\Payment\PaymentMethodPayment", $request);
     }  
     public function test_createOrder_usePayPage_returns_PayPagePayment() {
-        $createOrder = WebPay::createOrder( Svea\SveaConfig::getDefaultConfig() );
+        $createOrder = WebPay::createOrder( \Svea\WebPay\Config\SveaConfig::getDefaultConfig() );
         $request = $createOrder->usePayPage();
-        $this->assertInstanceOf("Svea\HostedService\PayPagePayment", $request);
+        $this->assertInstanceOf("Svea\WebPay\HostedService\Payment\PayPagePayment", $request);
     }     
         
     // individualCustomer validation - common        
     function test_validates_missing_required_method_for_useInvoicePayment_IndividualCustomer_SE_addOrderRow() {
-        $order = WebPay::createOrder(Svea\SveaConfig::getDefaultConfig())
+        $order = WebPay::createOrder(\Svea\WebPay\Config\SveaConfig::getDefaultConfig())
                     //->addOrderRow( 
-                    //    WebPayItem::orderRow()
+                    //    Svea\WebPay\WebPayItem::orderRow()
                     //        ->setQuantity(1.0)
                     //        ->setAmountExVat(4.0)
                     //        ->setAmountIncVat(5.0)
@@ -71,13 +76,13 @@ class WebPayUnitTest extends \PHPUnit_Framework_TestCase {
 
         // prepareRequest() validates the order and throws SveaWebPayException on validation failure
         $this->setExpectedException(
-            'Svea\ValidationException', 
-            '-missing values : OrderRows are required. Use function addOrderRow(WebPayItem::orderRow) to get orderrow setters.'
+            'Svea\WebPay\BuildOrder\Validator\ValidationException', 
+            '-missing values : OrderRows are required. Use function addOrderRow(Svea\WebPay\WebPayItem::orderRow) to get orderrow setters.'
         );   
         $order->useInvoicePayment()->prepareRequest();               
     }        
     function test_validates_missing_required_method_for_useInvoicePayment_IndividualCustomer_SE_addCustomerDetails() {
-        $order = WebPay::createOrder(Svea\SveaConfig::getDefaultConfig())
+        $order = WebPay::createOrder(\Svea\WebPay\Config\SveaConfig::getDefaultConfig())
                     ->addOrderRow( 
                         WebPayItem::orderRow()
                             ->setQuantity(1.0)
@@ -85,7 +90,7 @@ class WebPayUnitTest extends \PHPUnit_Framework_TestCase {
                             ->setAmountIncVat(5.0)
                     )
                     //->addCustomerDetails(
-                    //    WebPayItem::individualCustomer()
+                    //    Svea\WebPay\WebPayItem::individualCustomer()
                     //        ->setNationalIdNumber("4605092222")
                     //)
                     ->setCountryCode("SE")
@@ -94,13 +99,13 @@ class WebPayUnitTest extends \PHPUnit_Framework_TestCase {
 
         // prepareRequest() validates the order and throws SveaWebPayException on validation failure
         $this->setExpectedException(
-            'Svea\ValidationException', 
+            'Svea\WebPay\BuildOrder\Validator\ValidationException', 
             '-missing customerIdentity : customerIdentity is required. Use function addCustomerDetails().'
         );   
         $order->useInvoicePayment()->prepareRequest();               
     }                
     function test_validates_missing_required_method_for_useInvoicePayment_IndividualCustomer_SE_setCountryCode() {
-        $order = WebPay::createOrder(Svea\SveaConfig::getDefaultConfig())
+        $order = WebPay::createOrder(\Svea\WebPay\Config\SveaConfig::getDefaultConfig())
                     ->addOrderRow( 
                         WebPayItem::orderRow()
                             ->setQuantity(1.0)
@@ -117,13 +122,13 @@ class WebPayUnitTest extends \PHPUnit_Framework_TestCase {
 
         // prepareRequest() validates the order and throws SveaWebPayException on validation failure
         $this->setExpectedException(
-            'Svea\ValidationException', 
+            'Svea\WebPay\BuildOrder\Validator\ValidationException', 
             '-missing value : CountryCode is required. Use function setCountryCode().'
         );      
         $order->useInvoicePayment()->prepareRequest();       
     }       
     function test_validates_missing_required_method_for_useInvoicePayment_IndividualCustomer_SE_setOrderDate() {
-        $order = WebPay::createOrder(Svea\SveaConfig::getDefaultConfig())
+        $order = WebPay::createOrder(\Svea\WebPay\Config\SveaConfig::getDefaultConfig())
                     ->addOrderRow( 
                         WebPayItem::orderRow()
                             ->setQuantity(1.0)
@@ -140,7 +145,7 @@ class WebPayUnitTest extends \PHPUnit_Framework_TestCase {
 
         // prepareRequest() validates the order and throws SveaWebPayException on validation failure
         $this->setExpectedException(
-            'Svea\ValidationException', 
+            'Svea\WebPay\BuildOrder\Validator\ValidationException', 
             '-missing value : OrderDate is Required. Use function setOrderDate().'
         );   
         $order->useInvoicePayment()->prepareRequest(); 
@@ -149,7 +154,7 @@ class WebPayUnitTest extends \PHPUnit_Framework_TestCase {
     // SE
     // IndividualCustomer validation
     function test_validates_all_required_methods_for_createOrder_useInvoicePayment_IndividualCustomer_SE() {
-        $order = WebPay::createOrder(Svea\SveaConfig::getDefaultConfig())
+        $order = WebPay::createOrder(\Svea\WebPay\Config\SveaConfig::getDefaultConfig())
                     ->addOrderRow( 
                         WebPayItem::orderRow()
                             ->setQuantity(1.0)
@@ -174,7 +179,7 @@ class WebPayUnitTest extends \PHPUnit_Framework_TestCase {
     }
 
     function test_validates_missing_required_method_for_useInvoicePayment_IndividualCustomer_missing_credentials_SE() {
-        $order = WebPay::createOrder(Svea\SveaConfig::getDefaultConfig())
+        $order = WebPay::createOrder(\Svea\WebPay\Config\SveaConfig::getDefaultConfig())
                     ->addOrderRow( 
                         WebPayItem::orderRow()
                             ->setQuantity(1.0)
@@ -193,7 +198,7 @@ class WebPayUnitTest extends \PHPUnit_Framework_TestCase {
 
         // prepareRequest() validates the order and throws SveaWebPayException on validation failure
         $this->setExpectedException(
-            'Svea\ValidationException', 
+            'Svea\WebPay\BuildOrder\Validator\ValidationException', 
             '-missing value : NationalIdNumber is required for individual customers when countrycode is SE, NO, DK or FI. Use function setNationalIdNumber().'
         );   
         $order->useInvoicePayment()->prepareRequest();      
@@ -204,7 +209,7 @@ class WebPayUnitTest extends \PHPUnit_Framework_TestCase {
     // NO
     // IndividualCustomer validation
     function test_validates_all_required_methods_for_createOrder_useInvoicePayment_IndividualCustomer_NO() {
-        $order = WebPay::createOrder(Svea\SveaConfig::getDefaultConfig())
+        $order = WebPay::createOrder(\Svea\WebPay\Config\SveaConfig::getDefaultConfig())
                     ->addOrderRow( 
                         WebPayItem::orderRow()
                             ->setQuantity(1.0)
@@ -229,7 +234,7 @@ class WebPayUnitTest extends \PHPUnit_Framework_TestCase {
     }
 
     function test_validates_missing_required_method_for_useInvoicePayment_IndividualCustomer_missing_credentials_NO() {
-        $order = WebPay::createOrder(Svea\SveaConfig::getDefaultConfig())
+        $order = WebPay::createOrder(\Svea\WebPay\Config\SveaConfig::getDefaultConfig())
                     ->addOrderRow( 
                         WebPayItem::orderRow()
                             ->setQuantity(1.0)
@@ -246,7 +251,7 @@ class WebPayUnitTest extends \PHPUnit_Framework_TestCase {
 
         // prepareRequest() validates the order and throws SveaWebPayException on validation failure
         $this->setExpectedException(
-            'Svea\ValidationException', 
+            'Svea\WebPay\BuildOrder\Validator\ValidationException', 
             '-missing value : NationalIdNumber is required for individual customers when countrycode is SE, NO, DK or FI. Use function setNationalIdNumber().'
         );   
         $order->useInvoicePayment()->prepareRequest();      
@@ -257,7 +262,7 @@ class WebPayUnitTest extends \PHPUnit_Framework_TestCase {
     // DK
     // IndividualCustomer validation
     function test_validates_all_required_methods_for_createOrder_useInvoicePayment_IndividualCustomer_DK() {
-        $order = WebPay::createOrder(Svea\SveaConfig::getDefaultConfig())
+        $order = WebPay::createOrder(\Svea\WebPay\Config\SveaConfig::getDefaultConfig())
                     ->addOrderRow( 
                         WebPayItem::orderRow()
                             ->setQuantity(1.0)
@@ -282,7 +287,7 @@ class WebPayUnitTest extends \PHPUnit_Framework_TestCase {
     }
 
     function test_validates_missing_required_method_for_useInvoicePayment_IndividualCustomer_missing_credentials_DK() {
-        $order = WebPay::createOrder(Svea\SveaConfig::getDefaultConfig())
+        $order = WebPay::createOrder(\Svea\WebPay\Config\SveaConfig::getDefaultConfig())
                     ->addOrderRow( 
                         WebPayItem::orderRow()
                             ->setQuantity(1.0)
@@ -299,7 +304,7 @@ class WebPayUnitTest extends \PHPUnit_Framework_TestCase {
 
         // prepareRequest() validates the order and throws SveaWebPayException on validation failure
         $this->setExpectedException(
-            'Svea\ValidationException', 
+            'Svea\WebPay\BuildOrder\Validator\ValidationException', 
             '-missing value : NationalIdNumber is required for individual customers when countrycode is SE, NO, DK or FI. Use function setNationalIdNumber().'
         );   
         $order->useInvoicePayment()->prepareRequest();      
@@ -310,7 +315,7 @@ class WebPayUnitTest extends \PHPUnit_Framework_TestCase {
     // FI
     // IndividualCustomer validation
     function test_validates_all_required_methods_for_createOrder_useInvoicePayment_IndividualCustomer_FI() {
-        $order = WebPay::createOrder(Svea\SveaConfig::getDefaultConfig())
+        $order = WebPay::createOrder(\Svea\WebPay\Config\SveaConfig::getDefaultConfig())
                     ->addOrderRow( 
                         WebPayItem::orderRow()
                             ->setQuantity(1.0)
@@ -335,7 +340,7 @@ class WebPayUnitTest extends \PHPUnit_Framework_TestCase {
     }
 
     function test_validates_missing_required_method_for_useInvoicePayment_IndividualCustomer_missing_credentials_FI() {
-        $order = WebPay::createOrder(Svea\SveaConfig::getDefaultConfig())
+        $order = WebPay::createOrder(\Svea\WebPay\Config\SveaConfig::getDefaultConfig())
                     ->addOrderRow( 
                         WebPayItem::orderRow()
                             ->setQuantity(1.0)
@@ -352,7 +357,7 @@ class WebPayUnitTest extends \PHPUnit_Framework_TestCase {
 
         // prepareRequest() validates the order and throws SveaWebPayException on validation failure
         $this->setExpectedException(
-            'Svea\ValidationException', 
+            'Svea\WebPay\BuildOrder\Validator\ValidationException', 
             '-missing value : NationalIdNumber is required for individual customers when countrycode is SE, NO, DK or FI. Use function setNationalIdNumber().'
         );   
         $order->useInvoicePayment()->prepareRequest();      
@@ -363,7 +368,7 @@ class WebPayUnitTest extends \PHPUnit_Framework_TestCase {
     // DE
     // IndividualCustomer validation
     function test_validates_all_required_methods_for_createOrder_useInvoicePayment_IndividualCustomer_DE() {
-        $order = WebPay::createOrder(Svea\SveaConfig::getDefaultConfig())
+        $order = WebPay::createOrder(\Svea\WebPay\Config\SveaConfig::getDefaultConfig())
                     ->addOrderRow( 
                         WebPayItem::orderRow()
                             ->setQuantity(1.0)
@@ -397,7 +402,7 @@ class WebPayUnitTest extends \PHPUnit_Framework_TestCase {
     }
 
     function test_validates_missing_required_method_for_useInvoicePayment_IndividualCustomer_missing_credentials_DE() {
-        $order = WebPay::createOrder(Svea\SveaConfig::getDefaultConfig())
+        $order = WebPay::createOrder(\Svea\WebPay\Config\SveaConfig::getDefaultConfig())
                     ->addOrderRow( 
                         WebPayItem::orderRow()
                             ->setQuantity(1.0)
@@ -418,7 +423,7 @@ class WebPayUnitTest extends \PHPUnit_Framework_TestCase {
 
         // prepareRequest() validates the order and throws SveaWebPayException on validation failure
         $this->setExpectedException(
-            'Svea\ValidationException', 
+            'Svea\WebPay\BuildOrder\Validator\ValidationException', 
             '-missing value : ZipCode is required for all customers when countrycode is DE. Use function setZipCode().'
         );   
         $order->useInvoicePayment()->prepareRequest();      
@@ -429,7 +434,7 @@ class WebPayUnitTest extends \PHPUnit_Framework_TestCase {
     // NL
     // IndividualCustomer validation
     function test_validates_all_required_methods_for_createOrder_useInvoicePayment_IndividualCustomer_NL() {
-        $order = WebPay::createOrder(Svea\SveaConfig::getDefaultConfig())
+        $order = WebPay::createOrder(\Svea\WebPay\Config\SveaConfig::getDefaultConfig())
                     ->addOrderRow( 
                         WebPayItem::orderRow()
                             ->setQuantity(1.0)
@@ -465,7 +470,7 @@ class WebPayUnitTest extends \PHPUnit_Framework_TestCase {
     }
 
     function test_validates_missing_required_method_for_useInvoicePayment_IndividualCustomer_missing_credentials_NL() {
-        $order = WebPay::createOrder(Svea\SveaConfig::getDefaultConfig())
+        $order = WebPay::createOrder(\Svea\WebPay\Config\SveaConfig::getDefaultConfig())
                     ->addOrderRow( 
                         WebPayItem::orderRow()
                             ->setQuantity(1.0)
@@ -487,50 +492,50 @@ class WebPayUnitTest extends \PHPUnit_Framework_TestCase {
 
         // prepareRequest() validates the order and throws SveaWebPayException on validation failure
         $this->setExpectedException(
-            'Svea\ValidationException', 
+            'Svea\WebPay\BuildOrder\Validator\ValidationException', 
             '-missing value : ZipCode is required for all customers when countrycode is NL. Use function setZipCode()'
         );   
         $order->useInvoicePayment()->prepareRequest();      
     }
 //    $this->setExpectedException(
-//        'Svea\ValidationException', 
+//        'Svea\WebPay\BuildOrder\Validator\ValidationException', 
 //        '-missing value : NationalIdNumber is required for individual customers when countrycode is SE, NO, DK or FI. Use function setNationalIdNumber().'
 //    );   
    
-    /// WebPay::deliverOrder()
+    /// Svea\WebPay\WebPay::deliverOrder()
     // deliverInvoiceOrder
     public function test_deliverOrder_deliverInvoiceOrder_without_order_rows_goes_against_adminservice_DeliverOrders() {
-        $deliverOrder = WebPay::deliverOrder( Svea\SveaConfig::getDefaultConfig() );
+        $deliverOrder = WebPay::deliverOrder( \Svea\WebPay\Config\SveaConfig::getDefaultConfig() );
         $request = $deliverOrder->deliverInvoiceOrder();        
-        $this->assertInstanceOf( "Svea\AdminService\DeliverOrdersRequest", $request ); 
+        $this->assertInstanceOf( "Svea\WebPay\AdminService\DeliverOrdersRequest", $request ); 
         $this->assertEquals("Invoice", $request->orderBuilder->orderType);    
     }    
     public function test_deliverOrder_deliverInvoiceOrder_with_order_rows_goes_against_DeliverOrderEU() {
-        $deliverOrder = WebPay::deliverOrder( Svea\SveaConfig::getDefaultConfig() );
+        $deliverOrder = WebPay::deliverOrder( \Svea\WebPay\Config\SveaConfig::getDefaultConfig() );
         $deliverOrder->addOrderRow( WebPayItem::orderRow() );
         $request = $deliverOrder->deliverInvoiceOrder();     
-        $this->assertInstanceOf( "Svea\WebService\DeliverInvoice", $request );         // WebService\DeliverInvoice => soap call DeliverOrderEU  
+        $this->assertInstanceOf( "Svea\WebPay\WebService\HandleOrder\DeliverInvoice", $request );         // WebService\DeliverInvoice => soap call DeliverOrderEU  
     }    
     // deliverPaymentPlanOrder
     public function test_deliverOrder_deliverPaymentPlanOrder_without_order_rows_goes_against_DeliverOrderEU() {
-        $deliverOrder = WebPay::deliverOrder( Svea\SveaConfig::getDefaultConfig() );
+        $deliverOrder = WebPay::deliverOrder( \Svea\WebPay\Config\SveaConfig::getDefaultConfig() );
         $request = $deliverOrder->deliverPaymentPlanOrder();        
-        $this->assertInstanceOf( "Svea\WebService\DeliverPaymentPlan", $request );
+        $this->assertInstanceOf( "Svea\WebPay\WebService\HandleOrder\DeliverPaymentPlan", $request );
         $this->assertEquals("PaymentPlan", $request->orderBuilder->orderType); 
     }
 
     public function test_deliverOrder_deliverPaymentPlanOrder_with_order_rows_goes_against_DeliverOrderEU() {
-        $deliverOrder = WebPay::deliverOrder( Svea\SveaConfig::getDefaultConfig() );
+        $deliverOrder = WebPay::deliverOrder( \Svea\WebPay\Config\SveaConfig::getDefaultConfig() );
         $deliverOrder->addOrderRow( WebPayItem::orderRow() );   // order rows are ignored by DeliverOrderEU, can't partially deliver PaymentPlan
         $request = $deliverOrder->deliverPaymentPlanOrder();        
-        $this->assertInstanceOf( "Svea\WebService\DeliverPaymentPlan", $request );      
+        $this->assertInstanceOf( "Svea\WebPay\WebService\HandleOrder\DeliverPaymentPlan", $request );      
     }
     // card
     public function test_deliverOrder_deliverCardOrder_returns_ConfirmTransaction() {
-        $deliverOrder = WebPay::deliverOrder( Svea\SveaConfig::getDefaultConfig() );
+        $deliverOrder = WebPay::deliverOrder( \Svea\WebPay\Config\SveaConfig::getDefaultConfig() );
         $deliverOrder->addOrderRow( WebPayItem::orderRow() );
         $request = $deliverOrder->deliverCardOrder();        
-        $this->assertInstanceOf( "Svea\HostedService\ConfirmTransaction", $request );
+        $this->assertInstanceOf( "Svea\WebPay\HostedService\HostedAdminRequest\ConfirmTransaction", $request );
     }
 
         
@@ -544,7 +549,7 @@ class WebPayUnitTest extends \PHPUnit_Framework_TestCase {
 
     /// listPaymentMethods
     function test_validates_all_required_methods_for_listPaymentMethods() {
-        $order = WebPay::listPaymentMethods(Svea\SveaConfig::getDefaultConfig())
+        $order = WebPay::listPaymentMethods(\Svea\WebPay\Config\SveaConfig::getDefaultConfig())
                     ->setCountryCode("SE")
         ;
         try {
@@ -557,33 +562,33 @@ class WebPayUnitTest extends \PHPUnit_Framework_TestCase {
     }
 
     function test_validates_missing_required_method_for_listPaymentMethods_setCountryCode() {
-            $order = WebPay::listPaymentMethods(Svea\SveaConfig::getDefaultConfig())
+            $order = WebPay::listPaymentMethods(\Svea\WebPay\Config\SveaConfig::getDefaultConfig())
                         //->setCountryCode("SE")
             ;
             
             $this->setExpectedException(
-                'Svea\ValidationException', 
+                'Svea\WebPay\BuildOrder\Validator\ValidationException', 
                 '-missing value : CountryCode is required. Use function setCountryCode().'                
             );   
             $order->prepareRequest();         
         }             
 
-    /// WebPay::getAddresses()
+    /// Svea\WebPay\WebPay::getAddresses()
     public function test_getAddresses_returns_GetAddresses() {
-        $request = WebPay::getAddresses( Svea\SveaConfig::getDefaultConfig() );
-        $this->assertInstanceOf( "Svea\WebService\GetAddresses", $request );
+        $request = WebPay::getAddresses( \Svea\WebPay\Config\SveaConfig::getDefaultConfig() );
+        $this->assertInstanceOf( "Svea\WebPay\WebService\GetAddress\GetAddresses", $request );
     }    
  
-    /// WebPay::getPaymentPlanParams()
+    /// Svea\WebPay\WebPay::getPaymentPlanParams()
     public function test_getPaymentPlanParams_returns_GetPaymentPlanParams() {
-        $request = WebPay::getPaymentPlanParams( Svea\SveaConfig::getDefaultConfig() );
-        $this->assertInstanceOf( "Svea\WebService\GetPaymentPlanParams", $request );
+        $request = WebPay::getPaymentPlanParams( \Svea\WebPay\Config\SveaConfig::getDefaultConfig() );
+        $this->assertInstanceOf( "Svea\WebPay\WebService\GetPaymentPlanParams\GetPaymentPlanParams", $request );
     }          
 
 
     // Verify that orderRows may be specified with zero amount (INT-581) when creating an order
     public function test_createOrder_useInvoicePayment_allows_orderRow_with_zero_amount() {
-        $createOrder = WebPay::createOrder( Svea\SveaConfig::getDefaultConfig() )
+        $createOrder = WebPay::createOrder( \Svea\WebPay\Config\SveaConfig::getDefaultConfig() )
                 ->addOrderRow( 
                     WebPayItem::orderRow()
                         ->setQuantity(0.0)
@@ -610,7 +615,7 @@ class WebPayUnitTest extends \PHPUnit_Framework_TestCase {
         }
     }
     public function test_createOrder_usePaymentPlanPayment_allows_orderRow_with_zero_amount() {
-        $createOrder = WebPay::createOrder( Svea\SveaConfig::getDefaultConfig() )
+        $createOrder = WebPay::createOrder( \Svea\WebPay\Config\SveaConfig::getDefaultConfig() )
                 ->addOrderRow( 
                     WebPayItem::orderRow()
                         ->setQuantity(0.0)
@@ -637,7 +642,7 @@ class WebPayUnitTest extends \PHPUnit_Framework_TestCase {
         }
     }
     public function test_createOrder_usePaymentMethod_KORTCERT_allows_orderRow_with_zero_amount() {
-        $createOrder = WebPay::createOrder( Svea\SveaConfig::getDefaultConfig() )
+        $createOrder = WebPay::createOrder( \Svea\WebPay\Config\SveaConfig::getDefaultConfig() )
                 ->addOrderRow( 
                     WebPayItem::orderRow()
                         ->setQuantity(0.0)
@@ -666,7 +671,7 @@ class WebPayUnitTest extends \PHPUnit_Framework_TestCase {
     // Verify that orderRows may be specified with zero amount (INT-581) when delivering an order
     public function test_deliverOrder_deliverInvoiceOrder_allows_orderRow_with_zero_amount() {
         $dummyorderid = 123456;        
-        $deliverOrderBuilder = WebPay::deliverOrder( Svea\SveaConfig::getDefaultConfig() )
+        $deliverOrderBuilder = WebPay::deliverOrder( \Svea\WebPay\Config\SveaConfig::getDefaultConfig() )
             ->setOrderId( $dummyorderid )  
             ->setCountryCode("SE")
             ->setInvoiceDistributionType( DistributionType::POST )   
@@ -688,7 +693,7 @@ class WebPayUnitTest extends \PHPUnit_Framework_TestCase {
     }
     public function test_deliverOrder_deliverPaymentPlanOrder_allows_orderRow_with_zero_amount() {
         $dummyorderid = 123456;        
-        $deliverOrderBuilder = WebPay::deliverOrder( Svea\SveaConfig::getDefaultConfig() )
+        $deliverOrderBuilder = WebPay::deliverOrder( \Svea\WebPay\Config\SveaConfig::getDefaultConfig() )
             ->setOrderId( $dummyorderid )  
             ->setCountryCode("SE")
             ->setInvoiceDistributionType( DistributionType::POST )   
@@ -711,7 +716,7 @@ class WebPayUnitTest extends \PHPUnit_Framework_TestCase {
 
     public function test_deliverOrder_deliverCardOrder_allows_orderRow_with_zero_amount() {
         $dummyorderid = 123456;        
-        $deliverOrderBuilder = WebPay::deliverOrder( Svea\SveaConfig::getDefaultConfig() )
+        $deliverOrderBuilder = WebPay::deliverOrder( \Svea\WebPay\Config\SveaConfig::getDefaultConfig() )
             ->setOrderId( $dummyorderid )  
             ->setCountryCode("SE")
             ->setInvoiceDistributionType( DistributionType::POST )   

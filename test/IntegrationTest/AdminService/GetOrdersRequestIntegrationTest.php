@@ -1,8 +1,14 @@
 <?php
 
-$root = realpath(dirname(__FILE__));
-require_once $root . '/../../../src/Includes.php';
-require_once $root . '/../../TestUtil.php';
+use Svea\WebPay\AdminService\GetOrdersRequest;
+use Svea\WebPay\BuildOrder\QueryOrderBuilder;
+use Svea\WebPay\Config\ConfigurationProvider;
+use Svea\WebPay\Config\SveaConfig;
+use Svea\WebPay\Test\TestUtil;
+use Svea\WebPay\WebPay;
+use Svea\WebPay\WebPayAdmin;
+use Svea\WebPay\WebPayItem;
+
 
 /**
  * @author Kristian Grossman-Madsen for Svea Webpay
@@ -25,7 +31,7 @@ class GetOrdersRequestIntegrationTest extends PHPUnit_Framework_TestCase{
         $sveaOrderIdToGet = 348629;
         $orderType = ConfigurationProvider::INVOICE_TYPE;
 
-        $getOrdersBuilder = new Svea\QueryOrderBuilder( Svea\SveaConfig::getDefaultConfig() );
+        $getOrdersBuilder = new QueryOrderBuilder( SveaConfig::getDefaultConfig() );
         $getOrdersBuilder->setOrderId($sveaOrderIdToGet);
         $getOrdersBuilder->setCountryCode($countryCode);
         $getOrdersBuilder->orderType = $orderType;
@@ -162,12 +168,12 @@ class GetOrdersRequestIntegrationTest extends PHPUnit_Framework_TestCase{
         //
         //        )
 
-        $request = new Svea\AdminService\GetOrdersRequest( $getOrdersBuilder );
+        $request = new GetOrdersRequest( $getOrdersBuilder );
         $getOrdersResponse = $request->doRequest();
 
 //        print_r( $getOrdersResponse );
 
-        $this->assertInstanceOf('Svea\AdminService\GetOrdersResponse', $getOrdersResponse);
+        $this->assertInstanceOf('Svea\WebPay\AdminService\AdminServiceResponse\GetOrdersResponse', $getOrdersResponse);
         $this->assertEquals(1, $getOrdersResponse->accepted );
         $this->assertEquals(0, $getOrdersResponse->resultcode);
         $this->assertEquals(null, $getOrdersResponse->errormessage);
@@ -182,7 +188,7 @@ class GetOrdersRequestIntegrationTest extends PHPUnit_Framework_TestCase{
 
         $this->assertEquals( "SEK", $getOrdersResponse->currency );
 
-        $this->assertInstanceOf( "Svea\IndividualCustomer", $getOrdersResponse->customer );
+        $this->assertInstanceOf( "Svea\WebPay\BuildOrder\RowBuilders\IndividualCustomer", $getOrdersResponse->customer );
         $this->assertEquals( "194605092222", $getOrdersResponse->customer->ssn );
         $this->assertEquals( null, $getOrdersResponse->customer->initials );
         $this->assertEquals( null, $getOrdersResponse->customer->birthDate );
@@ -205,7 +211,7 @@ class GetOrdersRequestIntegrationTest extends PHPUnit_Framework_TestCase{
         $this->assertEquals( null, $getOrdersResponse->notes );
         $this->assertEquals( "Created", $getOrdersResponse->orderDeliveryStatus );
 
-        $this->assertInstanceOf( "Svea\NumberedOrderRow", $getOrdersResponse->numberedOrderRows[0] );
+        $this->assertInstanceOf( "Svea\WebPay\BuildOrder\RowBuilders\NumberedOrderRow", $getOrdersResponse->numberedOrderRows[0] );
         $this->assertEquals( 1, $getOrdersResponse->numberedOrderRows[0]->rowNumber );
         $this->assertEquals( null, $getOrdersResponse->numberedOrderRows[0]->articleNumber );
         $this->assertEquals( 2.00, $getOrdersResponse->numberedOrderRows[0]->quantity );
@@ -217,7 +223,7 @@ class GetOrdersRequestIntegrationTest extends PHPUnit_Framework_TestCase{
         $this->assertEquals( 0, $getOrdersResponse->numberedOrderRows[0]->vatDiscount );
 
         // only check attributes of first row
-        $this->assertInstanceOf( "Svea\NumberedOrderRow", $getOrdersResponse->numberedOrderRows[3] );
+        $this->assertInstanceOf( "Svea\WebPay\BuildOrder\RowBuilders\NumberedOrderRow", $getOrdersResponse->numberedOrderRows[3] );
         $this->assertEquals( 4, $getOrdersResponse->numberedOrderRows[3]->rowNumber );
 
         $this->assertEquals( "Active", $getOrdersResponse->orderStatus );
@@ -234,7 +240,7 @@ class GetOrdersRequestIntegrationTest extends PHPUnit_Framework_TestCase{
         $country = "SE";
         $order = TestUtil::createOrder( TestUtil::createIndividualCustomer($country) );
         //case( "SE" ):
-        //    return WebPayItem::individualCustomer()
+        //    return Svea\WebPay\WebPayItem::individualCustomer()
         //        ->setNationalIdNumber("194605092222")
         //        ->setBirthDate(1946, 05, 09)
         //        ->setName("Tess T", "Persson")
@@ -251,12 +257,12 @@ class GetOrdersRequestIntegrationTest extends PHPUnit_Framework_TestCase{
         $sveaOrderIdToGet = $orderResponse->sveaOrderId;
         $orderType = ConfigurationProvider::INVOICE_TYPE;
 
-        $getOrdersBuilder = new Svea\QueryOrderBuilder( Svea\SveaConfig::getDefaultConfig() );
+        $getOrdersBuilder = new QueryOrderBuilder( SveaConfig::getDefaultConfig() );
         $getOrdersBuilder->setOrderId($sveaOrderIdToGet);
         $getOrdersBuilder->setCountryCode($countryCode);
         $getOrdersBuilder->orderType = $orderType;
 
-        $request = new Svea\AdminService\GetOrdersRequest( $getOrdersBuilder );
+        $request = new GetOrdersRequest( $getOrdersBuilder );
         $getOrdersResponse = $request->doRequest();
 
         // Example test_GetOrdersRequest_for_invoice_company_customer_order raw request response
@@ -291,12 +297,12 @@ class GetOrdersRequestIntegrationTest extends PHPUnit_Framework_TestCase{
         //      /.../
         // )
 
-        $this->assertInstanceOf('Svea\AdminService\GetOrdersResponse', $getOrdersResponse);
+        $this->assertInstanceOf('Svea\WebPay\AdminService\AdminServiceResponse\GetOrdersResponse', $getOrdersResponse);
         $this->assertEquals(1, $getOrdersResponse->accepted );
         $this->assertEquals(0, $getOrdersResponse->resultcode);
         $this->assertEquals(null, $getOrdersResponse->errormessage);
 
-        $this->assertInstanceOf( "Svea\IndividualCustomer", $getOrdersResponse->customer );
+        $this->assertInstanceOf( "Svea\WebPay\BuildOrder\RowBuilders\IndividualCustomer", $getOrdersResponse->customer );
         $this->assertEquals( "194605092222", $getOrdersResponse->customer->ssn );
         $this->assertEquals( null, $getOrdersResponse->customer->initials );
         $this->assertEquals( null, $getOrdersResponse->customer->birthDate );
@@ -317,7 +323,7 @@ class GetOrdersRequestIntegrationTest extends PHPUnit_Framework_TestCase{
         $country = "SE";
         $order = TestUtil::createOrder( TestUtil::createCompanyCustomer($country) );
         //case( "SE" ):
-        //    return WebPayItem::companyCustomer()
+        //    return Svea\WebPay\WebPayItem::companyCustomer()
         //        ->setNationalIdNumber("4608142222")
         //        ->setCompanyName("Tess T", "Persson")
         //        ->setStreetAddress("Testgatan", 1)
@@ -333,12 +339,12 @@ class GetOrdersRequestIntegrationTest extends PHPUnit_Framework_TestCase{
         $sveaOrderIdToGet = $orderResponse->sveaOrderId;
         $orderType = ConfigurationProvider::INVOICE_TYPE;
 
-        $getOrdersBuilder = new Svea\QueryOrderBuilder( Svea\SveaConfig::getDefaultConfig() );
+        $getOrdersBuilder = new QueryOrderBuilder( SveaConfig::getDefaultConfig() );
         $getOrdersBuilder->setOrderId($sveaOrderIdToGet);
         $getOrdersBuilder->setCountryCode($countryCode);
         $getOrdersBuilder->orderType = $orderType;
 
-        $request = new Svea\AdminService\GetOrdersRequest( $getOrdersBuilder );
+        $request = new GetOrdersRequest( $getOrdersBuilder );
         $getOrdersResponse = $request-> doRequest();
 
         // Example test_GetOrdersRequest_for_invoice_company_customer_order raw request response
@@ -372,12 +378,12 @@ class GetOrdersRequestIntegrationTest extends PHPUnit_Framework_TestCase{
         // )
 
         ////print_r( $getOrdersResponse );
-        $this->assertInstanceOf('Svea\AdminService\GetOrdersResponse', $getOrdersResponse);
+        $this->assertInstanceOf('Svea\WebPay\AdminService\AdminServiceResponse\GetOrdersResponse', $getOrdersResponse);
         $this->assertEquals(1, $getOrdersResponse->accepted );
         $this->assertEquals(0, $getOrdersResponse->resultcode);
         $this->assertEquals(null, $getOrdersResponse->errormessage);
 
-        $this->assertInstanceOf( "Svea\CompanyCustomer", $getOrdersResponse->customer );
+        $this->assertInstanceOf( "Svea\WebPay\BuildOrder\RowBuilders\CompanyCustomer", $getOrdersResponse->customer );
         $this->assertEquals( "194608142222", $getOrdersResponse->customer->orgNumber );
         $this->assertEquals( null, $getOrdersResponse->customer->companyVatNumber );
         $this->assertEquals( "Persson, Tess T", $getOrdersResponse->customer->companyName );
@@ -399,18 +405,18 @@ class GetOrdersRequestIntegrationTest extends PHPUnit_Framework_TestCase{
 
     // create order
             $country = "SE";
-    //        $order = TestUtil::createOrder( TestUtil::createIndividualCustomer($country) );
-    //        $order->addOrderRow( TestUtil::createOrderRow( 1000.00 ) );
-    //        $orderResponse = $order->usePaymentPlanPayment( TestUtil::getGetPaymentPlanParamsForTesting($country) )->doRequest();
+    //        $order = Svea\WebPay\Test\TestUtil::createOrder( Svea\WebPay\Test\TestUtil::createIndividualCustomer($country) );
+    //        $order->addOrderRow( Svea\WebPay\Test\TestUtil::createOrderRow( 1000.00 ) );
+    //        $orderResponse = $order->usePaymentPlanPayment( Svea\WebPay\Test\TestUtil::getGetPaymentPlanParamsForTesting($country) )->doRequest();
     //        $this->assertEquals(1, $orderResponse->accepted);
     //
-        $getOrdersBuilder = new Svea\QueryOrderBuilder( Svea\SveaConfig::getDefaultConfig() );
+        $getOrdersBuilder = new QueryOrderBuilder( SveaConfig::getDefaultConfig() );
         //$getOrdersBuilder->setOrderId($orderResponse->sveaOrderId);
         $getOrdersBuilder->setOrderId(414812);
         $getOrdersBuilder->setCountryCode($country);
         $getOrdersBuilder->orderType = ConfigurationProvider::PAYMENTPLAN_TYPE;
 
-        $request = new Svea\AdminService\GetOrdersRequest( $getOrdersBuilder );
+        $request = new GetOrdersRequest( $getOrdersBuilder );
         $getOrdersResponse = $request->doRequest();
 
         // Example test_GetOrdersRequest_for_invoice_company_customer_order raw request response
@@ -460,7 +466,7 @@ class GetOrdersRequestIntegrationTest extends PHPUnit_Framework_TestCase{
         //                        )
         //
         //                    [CustomerId] => 1000013
-        //                    [CustomerReference] => created by TestUtil::createOrder()
+        //                    [CustomerReference] => created by Svea\WebPay\Test\TestUtil::createOrder()
         //                    [DeliveryAddress] =>
         //                    [IsPossibleToAdminister] => false
         //                    [IsPossibleToCancel] => true
@@ -522,7 +528,7 @@ class GetOrdersRequestIntegrationTest extends PHPUnit_Framework_TestCase{
         //)
 
         ////print_r( $getOrdersResponse );
-        $this->assertInstanceOf('Svea\AdminService\GetOrdersResponse', $getOrdersResponse);
+        $this->assertInstanceOf('Svea\WebPay\AdminService\AdminServiceResponse\GetOrdersResponse', $getOrdersResponse);
         $this->assertEquals(1, $getOrdersResponse->accepted );
         $this->assertEquals(0, $getOrdersResponse->resultcode);
         $this->assertEquals(null, $getOrdersResponse->errormessage);
@@ -537,18 +543,18 @@ class GetOrdersRequestIntegrationTest extends PHPUnit_Framework_TestCase{
 
         $this->assertEquals( "SEK", $getOrdersResponse->currency );
 
-        $this->assertInstanceOf( "Svea\IndividualCustomer", $getOrdersResponse->customer );
+        $this->assertInstanceOf( "Svea\WebPay\BuildOrder\RowBuilders\IndividualCustomer", $getOrdersResponse->customer );
         // asserting customer attributes in other testcases
         //$this->assertEquals( null, $getOrdersResponse->customer->email );  // -- returns current customer id email, may change
 
         $this->assertEquals( "1000013", $getOrdersResponse->customerId );
-        $this->assertEquals( "created by TestUtil::createOrder()", $getOrdersResponse->customerReference );
+        $this->assertEquals( "created by Svea\WebPay\Test\TestUtil::createOrder()", $getOrdersResponse->customerReference );
         $this->assertEquals( false, $getOrdersResponse->isPossibleToAdminister );
         $this->assertEquals( true, $getOrdersResponse->isPossibleToCancel );
         $this->assertEquals( null, $getOrdersResponse->notes );
         $this->assertEquals( "Created", $getOrdersResponse->orderDeliveryStatus );
 
-        $this->assertInstanceOf( "Svea\NumberedOrderRow", $getOrdersResponse->numberedOrderRows[0] );
+        $this->assertInstanceOf( "Svea\WebPay\BuildOrder\RowBuilders\NumberedOrderRow", $getOrdersResponse->numberedOrderRows[0] );
         // asserting order row attributes in invoice testcase
 
         $this->assertEquals( "Active", $getOrdersResponse->orderStatus );
@@ -561,7 +567,7 @@ class GetOrdersRequestIntegrationTest extends PHPUnit_Framework_TestCase{
     }
 
     function test_orderrow_response_incvat() {
-        $config = Svea\SveaConfig::getDefaultConfig();
+        $config = SveaConfig::getDefaultConfig();
         $orderResponse = WebPay::createOrder($config)
                     ->addOrderRow(
                             WebPayItem::orderRow()
@@ -589,7 +595,7 @@ class GetOrdersRequestIntegrationTest extends PHPUnit_Framework_TestCase{
     }
 
     function test_orderrow_response_exvat() {
-        $config = Svea\SveaConfig::getDefaultConfig();
+        $config = SveaConfig::getDefaultConfig();
         $orderResponse = WebPay::createOrder($config)
                     ->addOrderRow(
                             WebPayItem::orderRow()

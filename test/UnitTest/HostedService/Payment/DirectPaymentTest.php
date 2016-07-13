@@ -1,6 +1,8 @@
 <?php
 namespace Svea;
-use \Svea\HostedService\DirectPayment as DirectPayment;
+use Svea\WebPay\HostedService\Payment\DirectPayment as DirectPayment;
+use Svea\WebPay\Config\SveaConfig;
+use Svea\WebPay\Constant\SystemPaymentMethod;
 
 $root = realpath(dirname(__FILE__));
 require_once $root . '/../../../../test/UnitTest/BuildOrder/OrderBuilderTest.php';
@@ -19,11 +21,11 @@ class DirectPaymentTest extends \PHPUnit_Framework_TestCase {
      */
     public function testFailOnWrongCountryCodeInConfig() {
         $config = SveaConfig::getDefaultConfig();
-        $rowFactory = new \TestUtil();
-        $form = \WebPay::createOrder($config)
-                ->addOrderRow(\TestUtil::createOrderRow())
+        $rowFactory = new WebPay\Test\TestUtil();
+        $form = WebPay\WebPay::createOrder($config)
+                ->addOrderRow(WebPay\Test\TestUtil::createOrderRow())
             ->run($rowFactory->buildShippingFee())
-            ->addCustomerDetails(\WebPayItem::individualCustomer()
+            ->addCustomerDetails(WebPay\WebPayItem::individualCustomer()
                     ->setNationalIdNumber(194605092222)
                     )
             ->setCountryCode("ZZ")
@@ -46,11 +48,11 @@ class DirectPaymentTest extends \PHPUnit_Framework_TestCase {
 
     public function testConfigureExcludedPaymentMethods() {
         $config = SveaConfig::getDefaultConfig();
-        $rowFactory = new \TestUtil();
-        $form = \WebPay::createOrder($config)
-                ->addOrderRow(\TestUtil::createOrderRow())
+        $rowFactory = new WebPay\Test\TestUtil();
+        $form = WebPay\WebPay::createOrder($config)
+                ->addOrderRow(WebPay\Test\TestUtil::createOrderRow())
             ->run($rowFactory->buildShippingFee())
-            ->addCustomerDetails(\WebPayItem::individualCustomer()
+            ->addCustomerDetails(WebPay\WebPayItem::individualCustomer()
                     ->setNationalIdNumber(194605092222)
             )
             ->setCountryCode("SE")
@@ -75,10 +77,10 @@ class DirectPaymentTest extends \PHPUnit_Framework_TestCase {
 
     public function testBuildDirectBankPayment() {
         $config = SveaConfig::getDefaultConfig();
-        $rowFactory = new \TestUtil();
-        $form = \WebPay::createOrder($config)
-                ->addOrderRow(\TestUtil::createOrderRow())
-                ->addFee(\WebPayItem::shippingFee()
+        $rowFactory = new WebPay\Test\TestUtil();
+        $form = WebPay\WebPay::createOrder($config)
+                ->addOrderRow(WebPay\Test\TestUtil::createOrderRow())
+                ->addFee(WebPay\WebPayItem::shippingFee()
                     ->setShippingId('33')
                     ->setName('shipping')
                     ->setDescription("Specification")
@@ -87,14 +89,14 @@ class DirectPaymentTest extends \PHPUnit_Framework_TestCase {
                     ->setVatPercent(25)
                     ->setDiscountPercent(0)
                 )
-                ->addDiscount(\WebPayItem::relativeDiscount()
+                ->addDiscount(WebPay\WebPayItem::relativeDiscount()
                     ->setDiscountId("1")
                     ->setDiscountPercent(50)
                     ->setUnit("st")
                     ->setName('Relative')
                     ->setDescription("RelativeDiscount")
                 )
-                ->addCustomerDetails(\WebPayItem::individualCustomer()->setNationalIdNumber(194605092222))
+                ->addCustomerDetails(WebPay\WebPayItem::individualCustomer()->setNationalIdNumber(194605092222))
                 ->setCountryCode("SE")
                 ->setClientOrderNumber("33")
                 ->setOrderDate("2012-12-12")
@@ -114,10 +116,10 @@ class DirectPaymentTest extends \PHPUnit_Framework_TestCase {
     }
     public function testBuildDirectBankPaymentCallBackUrl() {
         $config = SveaConfig::getDefaultConfig();
-        $rowFactory = new \TestUtil();
-        $form = \WebPay::createOrder($config)
-                ->addOrderRow(\TestUtil::createOrderRow())
-                ->addCustomerDetails(\WebPayItem::individualCustomer()->setNationalIdNumber(194605092222))
+        $rowFactory = new WebPay\Test\TestUtil();
+        $form = WebPay\WebPay::createOrder($config)
+                ->addOrderRow(WebPay\Test\TestUtil::createOrderRow())
+                ->addCustomerDetails(WebPay\WebPayItem::individualCustomer()->setNationalIdNumber(194605092222))
                 ->setCountryCode("SE")
                 ->setClientOrderNumber("33")
                 ->setOrderDate("2012-12-12")

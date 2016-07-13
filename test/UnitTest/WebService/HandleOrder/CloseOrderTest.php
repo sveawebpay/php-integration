@@ -1,10 +1,7 @@
 <?php
 
-$root = realpath(dirname(__FILE__));
-require_once $root . '/../../../../src/Includes.php';
+use Svea\WebPay\WebPay;
 
-$root = realpath(dirname(__FILE__));
-require_once $root . '/../../../TestUtil.php';
 
 /**
  * @author Anneli Halld'n, Daniel Brolund for Svea Webpay
@@ -12,7 +9,7 @@ require_once $root . '/../../../TestUtil.php';
 class CloseOrderTest extends PHPUnit_Framework_TestCase {
 
     public function testCloseInvoiceOrder() {
-        $config = Svea\SveaConfig::getDefaultConfig();
+        $config = \Svea\WebPay\Config\SveaConfig::getDefaultConfig();
         $orderBuilder = WebPay::closeOrder($config);
         $request = $orderBuilder
                 ->setOrderId("id")
@@ -24,7 +21,7 @@ class CloseOrderTest extends PHPUnit_Framework_TestCase {
     }
 
     public function testClosePaymentPlanOrder() {
-        $config = Svea\SveaConfig::getDefaultConfig();
+        $config = \Svea\WebPay\Config\SveaConfig::getDefaultConfig();
         $orderBuilder = WebPay::closeOrder($config);
         $request = $orderBuilder
                 ->setCountryCode("SE")

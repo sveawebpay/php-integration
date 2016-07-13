@@ -1,6 +1,9 @@
 <?php
-namespace Svea;
 
-class InvalidTypeException extends \Exception {  // \Exception referes to class Exception outside our \Svea\ namespace
+namespace Svea\WebPay\HostedService\Helper;
+
+class InvalidTypeException extends \Exception
+{
+    // \Exception referes to class Exception outside our \Svea\ namespace
 }
 

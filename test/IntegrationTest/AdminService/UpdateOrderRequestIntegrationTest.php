@@ -1,8 +1,11 @@
 <?php
 
-$root = realpath(dirname(__FILE__));
-require_once $root . '/../../../src/Includes.php';
-require_once $root . '/../../TestUtil.php';
+use Svea\WebPay\Config\SveaConfig;
+use Svea\WebPay\Test\TestUtil;
+use Svea\WebPay\WebPay;
+use Svea\WebPay\WebPayAdmin;
+use Svea\WebPay\WebPayItem;
+
 
 /**
  * @author Kristian Grossman-Madsen for Svea Webpay
@@ -14,7 +17,7 @@ class UpdateOrderRequestIntegrationTest extends PHPUnit_Framework_TestCase {
                     penatibus et magnis';
 
     public function test_add_new_clientordernumber_invoice() {
-        $config = Svea\SveaConfig::getDefaultConfig();
+        $config = SveaConfig::getDefaultConfig();
                $orderResponse = WebPay::createOrder($config)
                 ->addOrderRow(
                         WebPayItem::orderRow()
@@ -47,7 +50,7 @@ class UpdateOrderRequestIntegrationTest extends PHPUnit_Framework_TestCase {
     }
 
     public function test_add_new_notes_invoice() {
-        $config = Svea\SveaConfig::getDefaultConfig();
+        $config = SveaConfig::getDefaultConfig();
         $orderResponse = WebPay::createOrder($config)
                 ->addOrderRow(
                         WebPayItem::orderRow()
