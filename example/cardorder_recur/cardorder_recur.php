@@ -7,16 +7,18 @@
 
 require_once '../../vendor/autoload.php';
 
-use Svea\WebPay\Constant\PaymentMethod;
 use Svea\WebPay\WebPay;
 use Svea\WebPay\WebPayItem;
+use Svea\WebPay\Config\SveaConfig;
+use Svea\WebPay\Constant\PaymentMethod;
+use Svea\WebPay\HostedService\Payment\HostedPayment;
 
 error_reporting( E_ALL );
 ini_set('display_errors', 'On');
 
 
 // get config object
-$myConfig = \Svea\WebPay\Config\SveaConfig::getTestConfig(); //replace with class holding your merchantid, secretword, et al, adopted from package Config/SveaConfig.php
+$myConfig = SveaConfig::getTestConfig(); //replace with class holding your merchantid, secretword, et al, adopted from package Config/SveaConfig.php
 
 // Start the order creation process by creating the order builder object by calling Svea\WebPay\WebPay::createOrder():
 $myOrder = WebPay::createOrder( $myConfig );
@@ -41,7 +43,7 @@ $myOrder->addOrderRow(
 $myCardOrderRequest = $myOrder->usePaymentMethod(PaymentMethod::SVEACARDPAY);
 
 // For recurring card payments, use setSubscriptionType() on the request object, one of the subscription types from HostedService\HostedPayment
-$myCardOrderRequest->setSubscriptionType(\Svea\WebPay\HostedService\Payment\HostedPayment::RECURRINGCAPTURE);
+$myCardOrderRequest->setSubscriptionType(HostedPayment::RECURRINGCAPTURE);
 
 // Then set any additional required request attributes as detailed below. (See Svea\PaymentMethodPayment and Svea\HostedPayment classes for details.)
 $myCardOrderRequest

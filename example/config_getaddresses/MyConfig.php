@@ -26,7 +26,7 @@ class MyConfig
                       array(
                           // invoice payment method credentials for SE, i.e. client number, username and password
                           // replace with your own, or leave blank
-                          WebPay\Config\ConfigurationProvider::INVOICE_TYPE =>
+                          ConfigurationProvider::INVOICE_TYPE =>
                               array(
                                   "username" => "sverigetest", // swap this for your actual SE invoice prod account credentials
                                   "password" => "sverigetest", // swap this for your actual SE invoice prod account credentials
@@ -35,7 +35,7 @@ class MyConfig
 
                           // payment plan payment method credentials for SE
                           // replace with your own, or leave blank
-                          WebPay\Config\ConfigurationProvider::PAYMENTPLAN_TYPE =>
+                          ConfigurationProvider::PAYMENTPLAN_TYPE =>
                               array(
                                   "username" => "sverigetest", // swap this for your actual SE payment plan prod account credentials
                                   "password" => "sverigetest", // swap this for your actual SE payment plan prod account credentials
@@ -44,7 +44,7 @@ class MyConfig
 
                           // card and direct bank payment method credentials, i.e. merchant id and secret word
                           // replace with your own, or leave blank
-                          WebPay\Config\ConfigurationProvider::HOSTED_TYPE =>
+                          ConfigurationProvider::HOSTED_TYPE =>
                               array(
                                   "merchantId" => 1130,
                                   "secret" => "8a9cece566e808da63c6f07ff415ff9e127909d000d259aba24daa2fed6d9e3f8b0b62e8ad1fa91c7d7cd6fc3352deaae66cdb533123edf127ad7d1f4c77e7a3"
@@ -56,14 +56,14 @@ class MyConfig
         $prodConfig["NO"] =
             array("auth" =>
                       array(
-                          WebPay\Config\ConfigurationProvider::INVOICE_TYPE =>
+                          ConfigurationProvider::INVOICE_TYPE =>
                               array(
                                   "username" => "norgetest2", // swap this for your actual SE invoice account credentials
                                   "password" => "norgetest2", // swap this for your actual SE invoice account credentials
                                   "clientNumber" => 33308 // swap this for your actual SE invoice account credentials
                               ),
-                          WebPay\Config\ConfigurationProvider::PAYMENTPLAN_TYPE => array("username" => "", "password" => "", "clientNumber" => ""),
-                          WebPay\Config\ConfigurationProvider::HOSTED_TYPE => array("merchantId" => "", "secret" => "")
+                          ConfigurationProvider::PAYMENTPLAN_TYPE => array("username" => "", "password" => "", "clientNumber" => ""),
+                          ConfigurationProvider::HOSTED_TYPE => array("merchantId" => "", "secret" => "")
                       )
             );
 
@@ -71,8 +71,8 @@ class MyConfig
         $prodConfig["DK"] =
             array("auth" =>
                       array(
-                          WebPay\Config\ConfigurationProvider::INVOICE_TYPE => array("username" => "", "password" => "", "clientNumber" => ""),
-                          WebPay\Config\ConfigurationProvider::PAYMENTPLAN_TYPE => array("username" => "", "password" => "", "clientNumber" => ""),
+                          ConfigurationProvider::INVOICE_TYPE => array("username" => "", "password" => "", "clientNumber" => ""),
+                          ConfigurationProvider::PAYMENTPLAN_TYPE => array("username" => "", "password" => "", "clientNumber" => ""),
                           array(
                               // swap these for your actual merchant id and secret word
                               "merchantId" => 1130,
@@ -85,27 +85,27 @@ class MyConfig
         $prodConfig["FI"] =
             array("auth" =>
                       array(
-                          WebPay\Config\ConfigurationProvider::INVOICE_TYPE => array("username" => "", "password" => "", "clientNumber" => ""),
-                          WebPay\Config\ConfigurationProvider::PAYMENTPLAN_TYPE => array("username" => "", "password" => "", "clientNumber" => ""),
-                          WebPay\Config\ConfigurationProvider::HOSTED_TYPE => array("merchantId" => "", "secret" => "")
+                          ConfigurationProvider::INVOICE_TYPE => array("username" => "", "password" => "", "clientNumber" => ""),
+                          ConfigurationProvider::PAYMENTPLAN_TYPE => array("username" => "", "password" => "", "clientNumber" => ""),
+                          ConfigurationProvider::HOSTED_TYPE => array("merchantId" => "", "secret" => "")
                       )
             );
         // We have no invoice or payment plan accounts for Germany, neither do we accept card payments from there
         $prodConfig["DE"] =
             array("auth" =>
                       array(
-                          WebPay\Config\ConfigurationProvider::INVOICE_TYPE => array("username" => "", "password" => "", "clientNumber" => ""),
-                          WebPay\Config\ConfigurationProvider::PAYMENTPLAN_TYPE => array("username" => "", "password" => "", "clientNumber" => ""),
-                          WebPay\Config\ConfigurationProvider::HOSTED_TYPE => array("merchantId" => "", "secret" => "")
+                          ConfigurationProvider::INVOICE_TYPE => array("username" => "", "password" => "", "clientNumber" => ""),
+                          ConfigurationProvider::PAYMENTPLAN_TYPE => array("username" => "", "password" => "", "clientNumber" => ""),
+                          ConfigurationProvider::HOSTED_TYPE => array("merchantId" => "", "secret" => "")
                       )
             );
         // We have no invoice or payment plan accounts for Netherlands, neither do we accept card payments from Denmark
         $prodConfig["NL"] =
             array("auth" =>
                       array(
-                          WebPay\Config\ConfigurationProvider::INVOICE_TYPE => array("username" => "", "password" => "", "clientNumber" => ""),
-                          WebPay\Config\ConfigurationProvider::PAYMENTPLAN_TYPE => array("username" => "", "password" => "", "clientNumber" => ""),
-                          WebPay\Config\ConfigurationProvider::HOSTED_TYPE => array("merchantId" => "", "secret" => "")
+                          ConfigurationProvider::INVOICE_TYPE => array("username" => "", "password" => "", "clientNumber" => ""),
+                          ConfigurationProvider::PAYMENTPLAN_TYPE => array("username" => "", "password" => "", "clientNumber" => ""),
+                          ConfigurationProvider::HOSTED_TYPE => array("merchantId" => "", "secret" => "")
                       )
             );
 

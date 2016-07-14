@@ -7,16 +7,18 @@
 
 require_once '../../vendor/autoload.php';
 
-use Svea\WebPay\Constant\PaymentMethod;
 use Svea\WebPay\WebPay;
 use Svea\WebPay\WebPayItem;
+use Svea\WebPay\Helper\Helper;
+use Svea\WebPay\Config\SveaConfig;
+use Svea\WebPay\Constant\PaymentMethod;
 
 error_reporting( E_ALL );
 ini_set('display_errors', 'On');
 
 
 // get config object
-$myConfig = \Svea\WebPay\Config\SveaConfig::getTestConfig(); //replace with class holding your merchantid, secretword, et al, adopted from package Config/SveaConfig.php
+$myConfig = SveaConfig::getTestConfig(); //replace with class holding your merchantid, secretword, et al, adopted from package Config/SveaConfig.php
 
 // We assume that you've collected the following information about the order in your shop:
 
@@ -72,7 +74,7 @@ $myCustomerInformation = WebPayItem::individualCustomer(); // there's also a ::c
 
 // Set customer information, using the methods from the IndividualCustomer class
 $myCustomerInformation->setName( $customerFirstName, $customerLastName);
-$sveaAddress = \Svea\WebPay\Helper\Helper::splitStreetAddress($customerAddress); // Svea requires an address and a house number
+$sveaAddress = Helper::splitStreetAddress($customerAddress); // Svea requires an address and a house number
 $myCustomerInformation->setStreetAddress( $sveaAddress[0], $sveaAddress[1] );
 $myCustomerInformation->setZipCode( $customerZipCode )->setLocality( $customerCity );
 

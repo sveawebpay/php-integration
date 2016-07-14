@@ -1,4 +1,5 @@
 <?php
+
 /**
  * example file, how to create an invoice order request
  *
@@ -89,8 +90,9 @@ $myResponse = $myInvoiceOrderRequest->doRequest();
 // Check the response attribute 'accepted' for true to see if the request succeeded, if not, see the attributes resultcode and/or errormessage
 echo "<pre>Your request response:\n\n";
 print_r($myResponse);
+echo "</pre>";
 
-echo "</pre><font color='blue'><pre>
+echo "<font color='blue'><pre>
 An example of a successful request response. The 'accepted' attribute is true (1), and resultcode/errormessage is not set. 
 (Note that the customerIdentity received in the response indicates the Svea invoice address, which should normally match the order shipping address.):
 
