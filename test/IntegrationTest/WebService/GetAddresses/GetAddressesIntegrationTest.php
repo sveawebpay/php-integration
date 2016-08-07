@@ -1,26 +1,31 @@
 <?php
 // Integration tests should not need to use the namespace
 
-use \Svea\WebService\GetAddresses as GetAddresses;
+namespace Svea\WebPay\Test\IntegrationTest\WebService\GetAddress;
 
-$root = realpath(dirname(__FILE__));
-require_once $root . '/../../../../src/Includes.php';
+use PHPUnit_Framework_TestCase;
+use Svea\WebPay\Config\SveaConfig;
+use Svea\WebPay\WebService\GetAddress\GetAddresses as GetAddresses;
+
 
 /**
  * @author Jonas Lith, Kristian Grossman-Madsen
  */
-class GetAddressesIntegrationTest extends PHPUnit_Framework_TestCase {
+class GetAddressesIntegrationTest extends PHPUnit_Framework_TestCase
+{
 
     private $config;
     private $addressRequest;
 
-    public function SetUp() {
-        $this->config = Svea\SveaConfig::getDefaultConfig();
+    public function SetUp()
+    {
+        $this->config = SveaConfig::getDefaultConfig();
         $this->addressRequest = new GetAddresses($this->config);
     }
 
     // private, company
-    public function testGetAddressesResult_Private() {
+    public function testGetAddressesResult_Private()
+    {
         $request = $this->addressRequest
             ->setOrderTypeInvoice()
             ->setCountryCode("SE")
@@ -29,7 +34,8 @@ class GetAddressesIntegrationTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(1, $request->accepted);
     }
 
-    public function testGetAddressesResult_Company() {
+    public function testGetAddressesResult_Company()
+    {
         $request = $this->addressRequest
             ->setOrderTypeInvoice()
             ->setCountryCode("SE")
@@ -38,7 +44,8 @@ class GetAddressesIntegrationTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(1, $request->accepted);
     }
 
-    public function testGetAddressesResult_PaymentPlan() {
+    public function testGetAddressesResult_PaymentPlan()
+    {
         $request = $this->addressRequest
             ->setOrderTypePaymentPlan()
             ->setCountryCode("SE")
@@ -47,7 +54,8 @@ class GetAddressesIntegrationTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(1, $request->accepted);
     }
 
-    public function testGetAddressesResult_Invoice() {
+    public function testGetAddressesResult_Invoice()
+    {
         $request = $this->addressRequest
             ->setOrderTypeInvoice()
             ->setCountryCode("SE")
@@ -56,33 +64,36 @@ class GetAddressesIntegrationTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(1, $request->accepted);
     }
 
-    public function test_GetAddressesResult_Invoice_NoSuchEntity() {
+    public function test_GetAddressesResult_Invoice_NoSuchEntity()
+    {
         $request = $this->addressRequest
             ->setOrderTypeInvoice()
             ->setCountryCode("SE")
-            ->setIndividual("4608142222")   // setIndividual w/Company SSN
+            ->setIndividual("4608142222")// setIndividual w/Company SSN
             ->doRequest();
         $this->assertEquals(0, $request->accepted);
         $this->assertEquals("NoSuchEntity", $request->resultcode);
     }
 
-    public function test_GetAddressesResult_Invoice_Errormessage() {
+    public function test_GetAddressesResult_Invoice_Errormessage()
+    {
         $request = $this->addressRequest
             ->setOrderTypeInvoice()
             ->setCountryCode("SE")
-            ->setIndividual("4608142222")   // setIndividual w/Company SSN
+            ->setIndividual("4608142222")// setIndividual w/Company SSN
             ->doRequest();
         $this->assertEquals(0, $request->accepted);
         $this->assertEquals("NoSuchEntity", $request->resultcode);
         $this->assertEquals("No customer address was found", $request->errormessage);
     }
 
-    public function test_GetAddresses_CredentialsForPrivate_areCorrect() {
+    public function test_GetAddresses_CredentialsForPrivate_areCorrect()
+    {
         $request = $this->addressRequest
-                ->setOrderTypeInvoice()
-                ->setCountryCode("SE")
-                ->setIndividual("194605092222")
-                ->doRequest();
+            ->setOrderTypeInvoice()
+            ->setCountryCode("SE")
+            ->setIndividual("194605092222")
+            ->doRequest();
 
         $this->assertEquals(1, $request->accepted);
         $this->assertEquals('Accepted', $request->resultcode);
@@ -98,15 +109,17 @@ class GetAddressesIntegrationTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals('Stan', $request->customerIdentity[0]->locality);
         $this->assertEquals(4605092222, $request->customerIdentity[0]->nationalIdNumber);
     }
+
     /**
      * out commented because it's too detaild and breaks on changes
      */
-    public function t_est_GetAddresses_CredentialsForCompany_areCorrect() {
+    public function t_est_GetAddresses_CredentialsForCompany_areCorrect()
+    {
         $request = $this->addressRequest
-                ->setOrderTypeInvoice()
-                ->setCountryCode("SE")
-                ->setCompany("194608142222")    // 12 digit orgnr should start with 16 or be 10 digits.
-                ->doRequest();
+            ->setOrderTypeInvoice()
+            ->setCountryCode("SE")
+            ->setCompany("194608142222")// 12 digit orgnr should start with 16 or be 10 digits.
+            ->doRequest();
 
         $this->assertEquals(1, $request->accepted);
         $this->assertEquals('Accepted', $request->resultcode);
@@ -137,68 +150,78 @@ class GetAddressesIntegrationTest extends PHPUnit_Framework_TestCase {
 
     // getAddresses is supported for the following countries and customer types
     // SE/private
-    public function test_GetAddresses_Sweden_Private_isAccepted() {
+    public function test_GetAddresses_Sweden_Private_isAccepted()
+    {
         $request = $this->addressRequest
-                ->setOrderTypeInvoice()
-                ->setCountryCode("SE")
-                ->setIndividual("194605092222")
-                ->doRequest();
+            ->setOrderTypeInvoice()
+            ->setCountryCode("SE")
+            ->setIndividual("194605092222")
+            ->doRequest();
 
         $this->assertEquals(1, $request->accepted);
         $this->assertEquals('Accepted', $request->resultcode);
     }
+
     // DK/private
-    public function test_GetAddresses_Denmark_Private_isAccepted() {
+    public function test_GetAddresses_Denmark_Private_isAccepted()
+    {
         $request = $this->addressRequest
-                ->setOrderTypeInvoice()
-                ->setCountryCode("DK")
-                ->setIndividual("2603692503")
-                ->doRequest();
+            ->setOrderTypeInvoice()
+            ->setCountryCode("DK")
+            ->setIndividual("2603692503")
+            ->doRequest();
 
         $this->assertEquals(1, $request->accepted);
         $this->assertEquals('Accepted', $request->resultcode);
     }
+
     // SE/company
-    public function test_GetAddresses_Sweden_Company_isAccepted() {
+    public function test_GetAddresses_Sweden_Company_isAccepted()
+    {
         $request = $this->addressRequest
-                ->setOrderTypeInvoice()
-                ->setCountryCode("SE")
-                ->setCompany("4608142222")
-                ->doRequest();
+            ->setOrderTypeInvoice()
+            ->setCountryCode("SE")
+            ->setCompany("4608142222")
+            ->doRequest();
 
         $this->assertEquals(1, $request->accepted);
         $this->assertEquals('Accepted', $request->resultcode);
     }
+
     // DK/company
-    public function test_GetAddresses_Denmark_Company_isAccepted() {
+    public function test_GetAddresses_Denmark_Company_isAccepted()
+    {
         $request = $this->addressRequest
-                ->setOrderTypeInvoice()
-                ->setCountryCode("DK")
-                ->setCompany("99999993")
-                ->doRequest();
+            ->setOrderTypeInvoice()
+            ->setCountryCode("DK")
+            ->setCompany("99999993")
+            ->doRequest();
 
         $this->assertEquals(1, $request->accepted);
         $this->assertEquals('Accepted', $request->resultcode);
     }
+
     // NO/company
-    public function test_GetAddresses_Norway_Company_isAccepted() {
+    public function test_GetAddresses_Norway_Company_isAccepted()
+    {
         $request = $this->addressRequest
-                ->setOrderTypeInvoice()
-                ->setCountryCode("NO")
-                ->setCompany("923313850")
-                ->doRequest();
+            ->setOrderTypeInvoice()
+            ->setCountryCode("NO")
+            ->setCompany("923313850")
+            ->doRequest();
 
         $this->assertEquals(1, $request->accepted);
         $this->assertEquals('Accepted', $request->resultcode);
     }
 
     // NO/private
-    public function test_GetAddresses_Norway_Private_isDisabled() {
+    public function test_GetAddresses_Norway_Private_isDisabled()
+    {
         $request = $this->addressRequest
-                ->setOrderTypeInvoice()
-                ->setCountryCode("NO")
-                ->setCompany("17054512066")
-                ->doRequest();
+            ->setOrderTypeInvoice()
+            ->setCountryCode("NO")
+            ->setCompany("17054512066")
+            ->doRequest();
 
         //disabled oct-13
         $this->assertEquals(0, $request->accepted);
@@ -206,24 +229,26 @@ class GetAddressesIntegrationTest extends PHPUnit_Framework_TestCase {
     }
 
     // DE/private
-    public function test_GetAddresses_Germany_Private_isNotImplemented() {
+    public function test_GetAddresses_Germany_Private_isNotImplemented()
+    {
         $request = $this->addressRequest
-                ->setOrderTypeInvoice()
-                ->setCountryCode("DE")
-                ->setIndividual("foo")
-                ->doRequest();
+            ->setOrderTypeInvoice()
+            ->setCountryCode("DE")
+            ->setIndividual("foo")
+            ->doRequest();
 
         $this->assertEquals(0, $request->accepted);
         $this->assertEquals('Error', $request->resultcode);
     }
 
     // DE/company
-    public function test_GetAddresses_Germany_Company_isNotImplemented() {
+    public function test_GetAddresses_Germany_Company_isNotImplemented()
+    {
         $request = $this->addressRequest
-                ->setOrderTypeInvoice()
-                ->setCountryCode("DE")
-                ->setCompany("19680403")
-                ->doRequest();
+            ->setOrderTypeInvoice()
+            ->setCountryCode("DE")
+            ->setCompany("19680403")
+            ->doRequest();
 
         $this->assertEquals(0, $request->accepted);
         $this->assertEquals('Error', $request->resultcode);
@@ -231,24 +256,26 @@ class GetAddressesIntegrationTest extends PHPUnit_Framework_TestCase {
 
     // NL
     // NL/private
-    public function test_GetAddresses_Netherlands_Private_isNotImplemented() {
+    public function test_GetAddresses_Netherlands_Private_isNotImplemented()
+    {
         $request = $this->addressRequest
-                ->setOrderTypeInvoice()
-                ->setCountryCode("NL")
-                ->setIndividual("foo")
-                ->doRequest();
+            ->setOrderTypeInvoice()
+            ->setCountryCode("NL")
+            ->setIndividual("foo")
+            ->doRequest();
 
         $this->assertEquals(0, $request->accepted);
         $this->assertEquals('Error', $request->resultcode);
     }
 
     // NL/company
-    public function test_GetAddresses_Netherlands_Company_isNotImplemented() {
+    public function test_GetAddresses_Netherlands_Company_isNotImplemented()
+    {
         $request = $this->addressRequest
-                ->setOrderTypeInvoice()
-                ->setCountryCode("NL")
-                ->setCompany("19550307")
-                ->doRequest();
+            ->setOrderTypeInvoice()
+            ->setCountryCode("NL")
+            ->setCompany("19550307")
+            ->doRequest();
 
         $this->assertEquals(0, $request->accepted);
         $this->assertEquals('Error', $request->resultcode);

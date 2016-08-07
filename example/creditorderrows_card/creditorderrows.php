@@ -1,18 +1,21 @@
 <?php
 /**
  * example file, how to credit an existing card order by specifying a new credit order row for the entire row amount
- * 
- * @author Kristian Grossman-Madsen for Svea WebPay
+ *
+ * @author Kristian Grossman-Madsen for Svea Svea\WebPay\WebPay
  */
-error_reporting( E_ALL );
+
+require_once '../../vendor/autoload.php';
+
+use Svea\WebPay\Config\SveaConfig;
+use Svea\WebPay\WebPayAdmin;
+use Svea\WebPay\WebPayItem;
+
+error_reporting(E_ALL);
 ini_set('display_errors', 'On');
 
-// Include Svea PHP integration package.
-$svea_directory = "../../src/";
-require_once( $svea_directory . "Includes.php" );
-
 // get config object
-$myConfig = Svea\SveaConfig::getTestConfig(); //replace with class holding your merchantid, secretword, et al, adopted from package Config/SveaConfig.php
+$myConfig = SveaConfig::getTestConfig(); //replace with class holding your merchantid, secretword, et al, adopted from package Config/SveaConfig.php
 
 // We wish to credit the entire card order. To do so, we need to credit the order with an amount equal to the original order total.
 // This can be done by either :
@@ -22,45 +25,43 @@ $myConfig = Svea\SveaConfig::getTestConfig(); //replace with class holding your 
 // 1) Using the first method (for 2), see file creditorderrows_with_rows.php:
 
 // First we create a builder object and populate them with the required fields.
-$firstCreditOrderRowsBuilder = WebPayAdmin::creditOrderRows( $myConfig );
+$firstCreditOrderRowsBuilder = WebPayAdmin::creditOrderRows($myConfig);
 
 // To credit the order, we need its transactionid, which we received with the order request response and wrote to file.
 $myTransactionId = file_get_contents("transactionid.txt");
-if( ! $myTransactionId ) {
+if (!$myTransactionId) {
     echo "<pre>Error: transactionid.txt not found, first run cardorder_credit.php to set up the card order. aborting.";
-    die;    
+    die;
 }
 $firstCreditOrderRowsBuilder
-    ->setOrderId( $myTransactionId )
-    ->setCountryCode( "SE" )
-;
- 
+    ->setOrderId($myTransactionId)
+    ->setCountryCode("SE");
+
 // Assume that we know that the original order total amount was 1*(100*1.25) + 2*(5.00*1.12) = 125+11.2 = SEK 136.2 (incl. VAT 26.2)
 // Create a new OrderRow for the credited amount and add it to the builder object using addCreditOrderRow():
-$myCreditRow =  WebPayItem::orderRow()
-                ->setAmountExVat( 300 )
-                ->setVatPercent( 25 )
-                ->setQuantity( 1 )
-                ->setDescription( "Credited order #".$myTransactionId )
-;
+$myCreditRow = WebPayItem::orderRow()
+    ->setAmountExVat(300)
+    ->setVatPercent(25)
+    ->setQuantity(1)
+    ->setDescription("Credited order #" . $myTransactionId);
 // Add the new order row to credit to the builder object.
 $firstCreditOrderRowsBuilder->addCreditOrderRow($myCreditRow);
 
 // Then we can send the credit request to Svea:
 
-$myCreditRequest = $firstCreditOrderRowsBuilder->creditCardOrderRows();        
+$myCreditRequest = $firstCreditOrderRowsBuilder->creditCardOrderRows();
 $myCreditResponse = $myCreditRequest->doRequest();
 
 
 // The response is an instance of LowerTransactionResponse 
 echo "<pre>";
-print_r( "the creditCardOrderRows() response:");
-print_r( $myCreditResponse );
+print_r("the creditCardOrderRows() response:");
+print_r($myCreditResponse);
 
 echo "\n</pre><font color='red'><pre>\n\n
 An example of a non-successful credit request response, where the card order had not yet been processed (i.e. Svea transactionstatus doesn't equal SUCCESS).
 
-the creditCardOrderRows() response:Svea\HostedService\CreditTransactionResponse Object
+the creditCardOrderRows() response:Svea\WebPay\HostedService\HostedResponse\HostedAdminResponse\CreditTransactionResponse Object
 (
     [customerrefno] => order #2014-08-26T13:49:48 02:00
     [accepted] => 0
@@ -70,7 +71,7 @@ the creditCardOrderRows() response:Svea\HostedService\CreditTransactionResponse 
 
 An example of a non-successful credit request response, where the card order has already been credited for the full amount.
 
-the creditCardOrderRows() response:Svea\HostedService\CreditTransactionResponse Object
+the creditCardOrderRows() response:Svea\WebPay\HostedService\HostedResponse\HostedAdminResponse\CreditTransactionResponse Object
 (
     [customerrefno] => order #2014-08-26T14:28:33 02:00
     [accepted] => 0
@@ -81,7 +82,7 @@ the creditCardOrderRows() response:Svea\HostedService\CreditTransactionResponse 
 echo "\n</pre><font color='blue'><pre>\n\n
 An example of a non-successful credit request response, where the card order has been first confirmed and then processed to status SUCCESS in bank.
 
-the creditCardOrderRows() response:Svea\HostedService\CreditTransactionResponse Object
+the creditCardOrderRows() response:Svea\WebPay\HostedService\HostedResponse\HostedAdminResponse\CreditTransactionResponse Object
 (
     [customerrefno] => order #2014-08-26T14:28:33 02:00
     [accepted] => 1
@@ -89,11 +90,11 @@ the creditCardOrderRows() response:Svea\HostedService\CreditTransactionResponse 
     [errormessage] => 
 )
 
-The following is the result of a WebPayAdmin::queryOrder for the above order, as you can see the entire authorized/captured amount has been credited:
+The following is the result of a Svea\WebPay\WebPayAdmin::queryOrder for the above order, as you can see the entire authorized/captured amount has been credited:
 
 </pre>
 <pre><font color='black'>
-Svea\HostedService\QueryTransactionResponse Object
+Svea\WebPay\HostedService\HostedResponse\HostedAdminResponse\QueryTransactionResponse Object
 (
     [transactionId] => 589747
     [clientOrderNumber] => order #2014-11-20T15:26:33 01:00
@@ -111,7 +112,7 @@ Svea\HostedService\QueryTransactionResponse Object
     [paymentMethod] => KORTCERT
     [numberedOrderRows] => Array
         (
-            [0] => Svea\NumberedOrderRow Object
+            [0] => Svea\WebPay\BuildOrder\RowBuilders\NumberedOrderRow Object
                 (
                     [creditInvoiceId] => 
                     [invoiceId] => 
@@ -129,7 +130,7 @@ Svea\HostedService\QueryTransactionResponse Object
                     [vatDiscount] => 0
                 )
 
-            [1] => Svea\NumberedOrderRow Object
+            [1] => Svea\WebPay\BuildOrder\RowBuilders\NumberedOrderRow Object
                 (
                     [creditInvoiceId] => 
                     [invoiceId] => 
@@ -147,7 +148,7 @@ Svea\HostedService\QueryTransactionResponse Object
                     [vatDiscount] => 0
                 )
 
-            [2] => Svea\NumberedOrderRow Object
+            [2] => Svea\WebPay\BuildOrder\RowBuilders\NumberedOrderRow Object
                 (
                     [creditInvoiceId] => 
                     [invoiceId] => 
@@ -188,12 +189,14 @@ Svea\HostedService\QueryTransactionResponse Object
 /**
  * get the path to this file, for use in specifying the returnurl etc.
  */
-function getPath() {
+function getPath()
+{
     $myURL = $_SERVER['SCRIPT_NAME'];
     $myPath = explode('/', $myURL);
-    unset( $myPath[count($myPath)-1]);
-    $myPath = implode( '/', $myPath);
+    unset($myPath[count($myPath) - 1]);
+    $myPath = implode('/', $myPath);
 
     return $myPath;
 }
+
 ?>

@@ -1,14 +1,16 @@
 <?php
-namespace Svea\HostedService;
-use Svea\SystemPaymentMethod as SystemPaymentMethod;
 
-require_once  SVEA_REQUEST_DIR.'/Constant/PaymentMethod.php';
+namespace Svea\WebPay\HostedService\Payment;
+
+use Svea\WebPay\Constant\PaymentMethod;
+use Svea\WebPay\Constant\SystemPaymentMethod;
+use Svea\WebPay\BuildOrder\CreateOrderBuilder;
 
 /**
- * @author Anneli Halld'n, Daniel Brolund, Kristian Grossman-Madsen for Svea WebPay
+ * @author Anneli Halld'n, Daniel Brolund, Kristian Grossman-Madsen for Svea Svea\WebPay\WebPay
  */
-class PayPagePayment extends HostedPayment {
-
+class PayPagePayment extends HostedPayment
+{
     public $paymentMethod;
     public $excludedPaymentMethods;
 
@@ -16,39 +18,44 @@ class PayPagePayment extends HostedPayment {
      * Creates a new PayPagePayment containing a given order.
      * @param CreateOrderBuilder $order
      */
-    public function __construct($order) {
-        parent::__construct($order);    
+    public function __construct($order)
+    {
+        parent::__construct($order);
     }
 
-    public function calculateRequestValues() {
+    public function calculateRequestValues()
+    {
         if (isset($this->paymentMethod)) {
             $this->request['paymentMethod'] = $this->paymentMethod;
         }
         if (isset($this->excludedPaymentMethods)) {
             $this->request['excludePaymentMethods'] = $this->excludedPaymentMethods;
         }
+
         return parent::calculateRequestValues();
     }
 
     /**
      * Exclude specific payment methods from being shown of the PayPage.
-     * @params string $paymentMethod  use the constants listed in PaymentMethod 
+     * @params string $paymentMethod  use the constants listed in Svea\WebPay\Constant\PaymentMethod
      * Flexible number of params
      * @return $this
      */
-    public function excludePaymentMethods() {
+    public function excludePaymentMethods()
+    {
         $excludes = func_get_args();
 
         foreach ($excludes as $method) {
-            if ($method == \PaymentMethod::INVOICE) {
-                $this->excludedPaymentMethods[] ="SVEAINVOICEEU_".$this->order->countryCode;
-                $this->excludedPaymentMethods[] ="SVEAINVOICE".$this->order->countryCode;
-            } elseif ($this->paymentMethod == \PaymentMethod::PAYMENTPLAN) {
-                $this->excludedPaymentMethods[] = "SVEASPLITEU_".$this->order->countryCode;
+            if ($method == PaymentMethod::INVOICE) {
+                $this->excludedPaymentMethods[] = "SVEAINVOICEEU_" . $this->order->countryCode;
+                $this->excludedPaymentMethods[] = "SVEAINVOICE" . $this->order->countryCode;
+            } elseif ($this->paymentMethod == PaymentMethod::PAYMENTPLAN) {
+                $this->excludedPaymentMethods[] = "SVEASPLITEU_" . $this->order->countryCode;
             } else {
                 $this->excludedPaymentMethods[] = $method;
             }
         }
+
         return $this;
     }
 
@@ -58,7 +65,8 @@ class PayPagePayment extends HostedPayment {
      * Flexible number of params
      * @return $this
      */
-    public function includePaymentMethods() {
+    public function includePaymentMethods()
+    {
         //get parameters sent no matter how many
         $include = func_get_args();
         //exclude all functions
@@ -67,8 +75,8 @@ class PayPagePayment extends HostedPayment {
         $this->excludedPaymentMethods[] = SystemPaymentMethod::SKRILL;
         $this->excludedPaymentMethods[] = SystemPaymentMethod::INVOICESE;
         $this->excludedPaymentMethods[] = SystemPaymentMethod::PAYMENTPLANSE;
-        $this->excludedPaymentMethods[] = "SVEAINVOICEEU_".$this->order->countryCode;
-        $this->excludedPaymentMethods[] = "SVEASPLITEU_".$this->order->countryCode;
+        $this->excludedPaymentMethods[] = "SVEAINVOICEEU_" . $this->order->countryCode;
+        $this->excludedPaymentMethods[] = "SVEASPLITEU_" . $this->order->countryCode;
         $this->excludedPaymentMethods[] = SystemPaymentMethod::PAYPAL;
         $this->excludedPaymentMethods[] = SystemPaymentMethod::DBSWEDBANKSE;
         $this->excludedPaymentMethods[] = SystemPaymentMethod::DBSHBSE;
@@ -85,19 +93,20 @@ class PayPagePayment extends HostedPayment {
                 //unset if a match in exlude array
                 if ($cleanValue == $v) {
                     unset($this->excludedPaymentMethods[$k]);
-                //unset the invoice methods if INVOICE is desired
-                } elseif ($cleanValue == \PaymentMethod::INVOICE) {
-                    if ($v == "SVEAINVOICEEU_".$this->order->countryCode || $k == SystemPaymentMethod::INVOICESE) {
+                    //unset the invoice methods if INVOICE is desired
+                } elseif ($cleanValue == PaymentMethod::INVOICE) {
+                    if ($v == "SVEAINVOICEEU_" . $this->order->countryCode || $k == SystemPaymentMethod::INVOICESE) {
                         unset($this->excludedPaymentMethods[$k]);
                     }
-                //unset the paymentplan methods if PAYMENTPLAN is desired
-                } elseif ($cleanValue == \PaymentMethod::PAYMENTPLAN) {
-                    if ($k == "SVEASPLITEU_".$this->order->countryCode || $k == SystemPaymentMethod::PAYMENTPLANSE) {
+                    //unset the paymentplan methods if PAYMENTPLAN is desired
+                } elseif ($cleanValue == PaymentMethod::PAYMENTPLAN) {
+                    if ($k == "SVEASPLITEU_" . $this->order->countryCode || $k == SystemPaymentMethod::PAYMENTPLANSE) {
                         unset($this->excludedPaymentMethods[$k]);
                     }
                 }
             }
         }
+
         return $this;
     }
 
@@ -105,10 +114,12 @@ class PayPagePayment extends HostedPayment {
      * Exclude all cardpayments from being shown on the PayPage.
      * @return $this
      */
-    public function excludeCardPaymentMethods() {
+    public function excludeCardPaymentMethods()
+    {
         $this->excludedPaymentMethods[] = SystemPaymentMethod::KORTCERT;
         $this->excludedPaymentMethods[] = SystemPaymentMethod::SKRILL;
         $this->excludedPaymentMethods[] = SystemPaymentMethod::KORTWN;
+
         return $this;
     }
 
@@ -117,14 +128,15 @@ class PayPagePayment extends HostedPayment {
      * @return $this
      *
      */
-    public function excludeDirectPaymentMethods() {
+    public function excludeDirectPaymentMethods()
+    {
         $this->excludedPaymentMethods[] = SystemPaymentMethod::BANKAXESS;
         $this->excludedPaymentMethods[] = SystemPaymentMethod::DBNORDEASE;
         $this->excludedPaymentMethods[] = SystemPaymentMethod::DBSEBSE;
         $this->excludedPaymentMethods[] = SystemPaymentMethod::DBSEBFTGSE;
         $this->excludedPaymentMethods[] = SystemPaymentMethod::DBSHBSE;
         $this->excludedPaymentMethods[] = SystemPaymentMethod::DBSWEDBANKSE;
+
         return $this;
     }
-
 }

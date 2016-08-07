@@ -1,7 +1,9 @@
 <?php
-namespace Svea\AdminService;
 
-require_once SVEA_REQUEST_DIR . '/Includes.php';
+namespace Svea\WebPay\AdminService;
+
+use Svea\WebPay\BuildOrder\CancelOrderBuilder;
+use Svea\WebPay\AdminService\AdminSoap\Authentication;
 
 /**
  * Admin Service CancelOrderRequest class
@@ -10,11 +12,13 @@ require_once SVEA_REQUEST_DIR . '/Includes.php';
  */
 class CancelOrderRequest extends AdminServiceRequest {
     
-    /** @var cancelOrderBuilder $orderBuilder */
-    public $orderBuilder;    
+    /**
+     * @var cancelOrderBuilder $orderBuilder
+     */
+    public $orderBuilder;
 
     /**
-     * @param cancelOrderBuilder $orderBuilder
+     * @param $cancelOrderBuilder
      */
     public function __construct($cancelOrderBuilder) {
         $this->action = "CancelOrder";
@@ -23,14 +27,14 @@ class CancelOrderRequest extends AdminServiceRequest {
 
     /**
      * populate and return soap request contents
-     * @return Svea\AdminSoap\CancelOrderRequest
+     * @return \Svea\WebPay\AdminService\AdminSoap\CancelOrderRequest
      */    
     public function prepareRequest() {        
         
         $this->validateRequest();
         
-        $soapRequest = new AdminSoap\CancelOrderRequest( 
-                new AdminSoap\Authentication( 
+        $soapRequest = new \Svea\WebPay\AdminService\AdminSoap\CancelOrderRequest( 
+                new Authentication( 
                     $this->orderBuilder->conf->getUsername( ($this->orderBuilder->orderType), $this->orderBuilder->countryCode ), 
                     $this->orderBuilder->conf->getPassword( ($this->orderBuilder->orderType), $this->orderBuilder->countryCode ) 
                 ),

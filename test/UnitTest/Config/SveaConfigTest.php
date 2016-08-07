@@ -1,25 +1,27 @@
 <?php
-namespace Svea;
 
-$root = realpath(dirname(__FILE__));
-require_once $root . '/../../../src/Includes.php';
+namespace Svea\WebPay\Test\UnitTest\Config;
 
-$root = realpath(dirname(__FILE__));
-require_once $root . '/../../TestUtil.php';
+use Svea\WebPay\WebPay;
+use Svea\WebPay\WebPayItem;
+use Svea\WebPay\Test\TestUtil;
+use Svea\WebPay\Config\SveaConfig;
+use Svea\WebPay\Config\ConfigurationProvider;
+
 
 class SveaConfigTest extends \PHPUnit_Framework_TestCase {
 
     function testSveaConfigNotFound(){
         $config = SveaConfig::getTestConfig();
-        $foo = \WebPay::createOrder($config);
+        $foo = WebPay::createOrder($config);
 
         $this->assertEquals("sverigetest", $config->conf['credentials']['SE']['auth']['Invoice']['username']);
     }
 
     public function testOrderWithSEConfigFromFunction() {
-           $request = \WebPay::createOrder(SveaConfig::getTestConfig())
-            ->addOrderRow(\TestUtil::createOrderRow())
-            ->addCustomerDetails(\WebPayItem::individualCustomer()->setNationalIdNumber(194605092222))
+           $request = WebPay::createOrder(SveaConfig::getTestConfig())
+            ->addOrderRow(TestUtil::createOrderRow())
+            ->addCustomerDetails(WebPayItem::individualCustomer()->setNationalIdNumber(194605092222))
                     ->setCountryCode("SE")
                     ->setCustomerReference("33")
                     ->setOrderDate("2012-12-12")
@@ -43,18 +45,18 @@ class SveaConfigTest extends \PHPUnit_Framework_TestCase {
                 null // test
         );        
 
-        $this->assertInstanceOf('ConfigurationProvider', $config );
-        $this->assertEquals("sverigetest", $config->getUsername(\ConfigurationProvider::INVOICE_TYPE, "SE") );
-        $this->assertEquals("sverigetest", $config->getPassword(\ConfigurationProvider::INVOICE_TYPE, "SE") );
-        $this->assertEquals("79021", $config->getClientNumber(\ConfigurationProvider::INVOICE_TYPE, "SE") );
-        $this->assertEquals(SveaConfig::SWP_TEST_WS_URL, $config->getEndPoint(\ConfigurationProvider::INVOICE_TYPE));
-        $this->assertEquals("sverigetest", $config->getUsername(\ConfigurationProvider::PAYMENTPLAN_TYPE, "SE") );
-        $this->assertEquals("sverigetest", $config->getPassword(\ConfigurationProvider::PAYMENTPLAN_TYPE, "SE") );
-        $this->assertEquals("59999", $config->getClientNumber(\ConfigurationProvider::PAYMENTPLAN_TYPE, "SE") );
-        $this->assertEquals(SveaConfig::SWP_TEST_WS_URL, $config->getEndPoint(\ConfigurationProvider::PAYMENTPLAN_TYPE));
-        $this->assertEquals("1130", $config->getMerchantId(\ConfigurationProvider::HOSTED_TYPE, "SE"));
-        $this->assertEquals($secret, $config->getSecret(\ConfigurationProvider::HOSTED_TYPE, "SE"));
-        $this->assertEquals(SveaConfig::SWP_TEST_URL, $config->getEndPoint(\ConfigurationProvider::HOSTED_TYPE));
+        $this->assertInstanceOf('Svea\WebPay\Config\ConfigurationProvider', $config );
+        $this->assertEquals("sverigetest", $config->getUsername(ConfigurationProvider::INVOICE_TYPE, "SE") );
+        $this->assertEquals("sverigetest", $config->getPassword(ConfigurationProvider::INVOICE_TYPE, "SE") );
+        $this->assertEquals("79021", $config->getClientNumber(ConfigurationProvider::INVOICE_TYPE, "SE") );
+        $this->assertEquals(SveaConfig::SWP_TEST_WS_URL, $config->getEndPoint(ConfigurationProvider::INVOICE_TYPE));
+        $this->assertEquals("sverigetest", $config->getUsername(ConfigurationProvider::PAYMENTPLAN_TYPE, "SE") );
+        $this->assertEquals("sverigetest", $config->getPassword(ConfigurationProvider::PAYMENTPLAN_TYPE, "SE") );
+        $this->assertEquals("59999", $config->getClientNumber(ConfigurationProvider::PAYMENTPLAN_TYPE, "SE") );
+        $this->assertEquals(SveaConfig::SWP_TEST_WS_URL, $config->getEndPoint(ConfigurationProvider::PAYMENTPLAN_TYPE));
+        $this->assertEquals("1130", $config->getMerchantId(ConfigurationProvider::HOSTED_TYPE, "SE"));
+        $this->assertEquals($secret, $config->getSecret(ConfigurationProvider::HOSTED_TYPE, "SE"));
+        $this->assertEquals(SveaConfig::SWP_TEST_URL, $config->getEndPoint(ConfigurationProvider::HOSTED_TYPE));
     }
     
     public function test_getSveaSingleCountryConfig_respects_passed_parameters() {
@@ -67,22 +69,22 @@ class SveaConfigTest extends \PHPUnit_Framework_TestCase {
                 true // $prod = true
         );        
         
-        $this->assertInstanceOf('ConfigurationProvider', $config );
-        $this->assertEquals("norgetest2", $config->getUsername(\ConfigurationProvider::INVOICE_TYPE, "NO") );
-        $this->assertEquals("norgetest2", $config->getPassword(\ConfigurationProvider::INVOICE_TYPE, "NO") );
-        $this->assertEquals("33308", $config->getClientNumber(\ConfigurationProvider::INVOICE_TYPE, "NO") );
-        $this->assertEquals(SveaConfig::SWP_PROD_WS_URL, $config->getEndPoint(\ConfigurationProvider::INVOICE_TYPE));
-        $this->assertEquals("norgetest2", $config->getUsername(\ConfigurationProvider::PAYMENTPLAN_TYPE, "NO") );
-        $this->assertEquals("norgetest2", $config->getPassword(\ConfigurationProvider::PAYMENTPLAN_TYPE, "NO") );
-        $this->assertEquals("32503", $config->getClientNumber(\ConfigurationProvider::PAYMENTPLAN_TYPE, "NO") );
-        $this->assertEquals(SveaConfig::SWP_PROD_WS_URL, $config->getEndPoint(\ConfigurationProvider::PAYMENTPLAN_TYPE));
-        $this->assertEquals("1701", $config->getMerchantId(\ConfigurationProvider::HOSTED_TYPE, "NO") );
-        $this->assertEquals("foo", $config->getSecret(\ConfigurationProvider::HOSTED_TYPE, "NO"));
-        $this->assertEquals(SveaConfig::SWP_PROD_URL, $config->getEndPoint(\ConfigurationProvider::HOSTED_TYPE));
+        $this->assertInstanceOf('Svea\WebPay\Config\ConfigurationProvider', $config );
+        $this->assertEquals("norgetest2", $config->getUsername(ConfigurationProvider::INVOICE_TYPE, "NO") );
+        $this->assertEquals("norgetest2", $config->getPassword(ConfigurationProvider::INVOICE_TYPE, "NO") );
+        $this->assertEquals("33308", $config->getClientNumber(ConfigurationProvider::INVOICE_TYPE, "NO") );
+        $this->assertEquals(SveaConfig::SWP_PROD_WS_URL, $config->getEndPoint(ConfigurationProvider::INVOICE_TYPE));
+        $this->assertEquals("norgetest2", $config->getUsername(ConfigurationProvider::PAYMENTPLAN_TYPE, "NO") );
+        $this->assertEquals("norgetest2", $config->getPassword(ConfigurationProvider::PAYMENTPLAN_TYPE, "NO") );
+        $this->assertEquals("32503", $config->getClientNumber(ConfigurationProvider::PAYMENTPLAN_TYPE, "NO") );
+        $this->assertEquals(SveaConfig::SWP_PROD_WS_URL, $config->getEndPoint(ConfigurationProvider::PAYMENTPLAN_TYPE));
+        $this->assertEquals("1701", $config->getMerchantId(ConfigurationProvider::HOSTED_TYPE, "NO") );
+        $this->assertEquals("foo", $config->getSecret(ConfigurationProvider::HOSTED_TYPE, "NO"));
+        $this->assertEquals(SveaConfig::SWP_PROD_URL, $config->getEndPoint(ConfigurationProvider::HOSTED_TYPE));
     }
     
     /**
-     * @expectedException Svea\InvalidCountryException
+     * @expectedException Svea\WebPay\HostedService\Helper\InvalidCountryException
      */
     public function test_getSveaSingleCountryConfig_throws_InvalidCountryException_for_invalid_country() {
         $config = SveaConfig::getSingleCountryConfig(
@@ -93,7 +95,7 @@ class SveaConfigTest extends \PHPUnit_Framework_TestCase {
                 null // test
         );        
 
-        $config->getUsername(\ConfigurationProvider::INVOICE_TYPE, "NO");
+        $config->getUsername(ConfigurationProvider::INVOICE_TYPE, "NO");
     }
 
 }

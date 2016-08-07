@@ -1,41 +1,48 @@
 <?php
 
-$root = realpath(dirname(__FILE__));
-require_once $root . '/../../../src/Includes.php';
+namespace Svea\WebPay\Test\IntegrationTest\AdminService;
+
+use PHPUnit_Framework_TestCase;
+use Svea\WebPay\AdminService\CancelOrderRequest;
+use Svea\WebPay\BuildOrder\CancelOrderBuilder;
+use Svea\WebPay\Config\ConfigurationProvider;
+use Svea\WebPay\Config\SveaConfig;
 
 /**
  * @author Kristian Grossman-Madsen for Svea Webpay
  */
-class CancelOrderRequestIntegrationTest extends PHPUnit_Framework_TestCase{
+class CancelOrderRequestIntegrationTest extends PHPUnit_Framework_TestCase
+{
 
     /**
      * 1. create an Invoice|PaymentPlan order
      * 2. note the client credentials, order number and type, and insert below
      * 3. run the test
      */
-    public function test_manual_CancelOrderRequest() {
+    public function test_manual_CancelOrderRequest()
+    {
 
         // Stop here and mark this test as incomplete.
 //        $this->markTestIncomplete(
 //            'skeleton for test_manual_CancelOrderRequest'
 //        );
-                
+
         $countryCode = "SE";
-        $sveaOrderIdToClose = 349698;        
-        $orderType = \ConfigurationProvider::INVOICE_TYPE;
-        
-        $cancelOrderBuilder = new Svea\CancelOrderBuilder( Svea\SveaConfig::getDefaultConfig() );
-        $cancelOrderBuilder->setCountryCode( $countryCode );
-        $cancelOrderBuilder->setOrderId( $sveaOrderIdToClose );
+        $sveaOrderIdToClose = 349698;
+        $orderType = ConfigurationProvider::INVOICE_TYPE;
+
+        $cancelOrderBuilder = new CancelOrderBuilder(SveaConfig::getDefaultConfig());
+        $cancelOrderBuilder->setCountryCode($countryCode);
+        $cancelOrderBuilder->setOrderId($sveaOrderIdToClose);
         $cancelOrderBuilder->orderType = $orderType;
-        
-        $request = new Svea\AdminService\CancelOrderRequest( $cancelOrderBuilder );
+
+        $request = new CancelOrderRequest($cancelOrderBuilder);
         $response = $request->doRequest();
-        
+
         ////print_r("cancelorderrequest: "); //print_r( $response );        
-        $this->assertInstanceOf('Svea\AdminService\CancelOrderResponse', $response);
-        $this->assertEquals(1, $response->accepted );    
-        $this->assertEquals(0, $response->resultcode );        
+        $this->assertInstanceOf('Svea\WebPay\AdminService\AdminServiceResponse\CancelOrderResponse', $response);
+        $this->assertEquals(1, $response->accepted);
+        $this->assertEquals(0, $response->resultcode);
 
     }
 }

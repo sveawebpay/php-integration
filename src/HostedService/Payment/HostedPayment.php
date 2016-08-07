@@ -1,7 +1,21 @@
 <?php
-namespace Svea\HostedService;
 
-require_once SVEA_REQUEST_DIR . '/Includes.php';
+namespace Svea\WebPay\HostedService\Payment;
+
+use SimpleXMLElement;
+use Svea\WebPay\Response\SveaResponse;
+use Svea\WebPay\Constant\PaymentMethod;
+use Svea\WebPay\Config\ConfigurationProvider;
+use Svea\WebPay\BuildOrder\CreateOrderBuilder;
+use Svea\WebPay\Config\SveaConfigurationProvider;
+use Svea\WebPay\HostedService\Helper\PaymentForm;
+use Svea\WebPay\HostedService\Helper\HostedXmlBuilder;
+use Svea\WebPay\HostedService\Helper\HostedRowFormatter;
+use Svea\WebPay\BuildOrder\Validator\ValidationException;
+use Svea\WebPay\BuildOrder\Validator\HostedOrderValidator;
+use Svea\WebPay\HostedService\HostedAdminRequest\RecurTransaction;
+use Svea\WebPay\HostedService\HostedResponse\HostedPaymentResponse;
+use Svea\WebPay\HostedService\HostedResponse\HostedAdminResponse\RecurTransactionResponse;
 
 /**
  * HostedPayment and its descendants sets up the various hosted payment methods.
@@ -13,7 +27,7 @@ require_once SVEA_REQUEST_DIR . '/Includes.php';
  * Finish by using the getPaymentForm() method which returns an HTML form with
  * the POST request to Svea prepared. After the customer has completed the
  * hosted payment request, a response xml message is returned to the specified
- * return url, where it can be parsed using i.e. the SveaResponse class.
+ * return url, where it can be parsed using i.e. the Svea\WebPay\Response\SveaResponse class.
  *
  * Alternatively, you can use the getPaymentUrl() to get a response with
  * an URL that the customer can visit later to complete the payment at a later
@@ -25,42 +39,59 @@ require_once SVEA_REQUEST_DIR . '/Includes.php';
  *
  * @author Anneli Halld'n, Daniel Brolund, Kristian Grossman-Madsen for Svea Webpay
  */
-class HostedPayment {
-
+class HostedPayment
+{
     const RECURRINGCAPTURE = "RECURRINGCAPTURE";
     const ONECLICKCAPTURE = "ONECLICKCAPTURE";
     const RECURRING = "RECURRING";
     const ONECLICK = "ONECLICK";
 
-    /** @var CreateOrderBuilder $order  holds the order information */
+    /**
+     * @var CreateOrderBuilder $order holds the order information
+     */
     public $order;
 
-    /** @var string $xmlMessage  holds the generated message XML used in request */
+    /**
+     * @var string $xmlMessage holds the generated message XML used in request
+     */
     public $xmlMessage;
 
-    /** @var string $xmlMessageBase64  holds the Base64-encoded $xmlMessage */
+    /**
+     * @var string $xmlMessageBase64 holds the Base64-encoded $xmlMessage
+     */
     public $xmlMessageBase64;
 
-    /** @var string $returnUrl  holds the return URL used in request */
+    /**
+     * @var string $returnUrl holds the return URL used in request
+     */
     public $returnUrl;
 
-    /** @var string $callbackUrl  holds the callback URL used in request */
+    /**
+     * @var string $callbackUrl holds the callback URL used in request
+     */
     public $callbackUrl;
 
-    /** @var string $cancelUrl  holds the cancel URL used in request */
+    /**
+     * @var string $cancelUrl holds the cancel URL used in request
+     */
     public $cancelUrl;
 
-    /** @var string $langCode  holds the language code used in request */
+    /**
+     * @var string $langCode holds the language code used in request
+     */
     public $langCode;
 
-    /** @var string[] $request placeholder for the request parameter key/value pair array */
+    /**
+     * @var string[] $request placeholder for the request parameter key/value pair array
+     */
     public $request;
 
     /**
      * Creates a HostedPayment, sets default language to english
      * @param CreateOrderBuilder $order
      */
-    public function __construct($order) {
+    public function __construct($order)
+    {
         $this->langCode = "en";
         $this->order = $order;
         $this->request = array();
@@ -76,8 +107,10 @@ class HostedPayment {
      * @param string $returnUrlAsString
      * @return $this
      */
-    public function setReturnUrl($returnUrlAsString) {
+    public function setReturnUrl($returnUrlAsString)
+    {
         $this->returnUrl = $returnUrlAsString;
+
         return $this;
     }
 
@@ -95,8 +128,10 @@ class HostedPayment {
      * @param string $callbackUrlAsString
      * @return $this
      */
-    public function setCallbackUrl($callbackUrlAsString) {
+    public function setCallbackUrl($callbackUrlAsString)
+    {
         $this->callbackUrl = $callbackUrlAsString;
+
         return $this;
     }
 
@@ -109,8 +144,10 @@ class HostedPayment {
      * @param string $cancelUrlAsString
      * @return $this
      */
-    public function setCancelUrl($cancelUrlAsString) {
+    public function setCancelUrl($cancelUrlAsString)
+    {
         $this->cancelUrl = $cancelUrlAsString;
+
         return $this;
     }
 
@@ -121,7 +158,8 @@ class HostedPayment {
      * @param string $languageCodeAsISO639
      * @return $this
      */
-    public function setPayPageLanguage($languageCodeAsISO639){
+    public function setPayPageLanguage($languageCodeAsISO639)
+    {
         switch ($languageCodeAsISO639) {
             case "sv":
             case "en":
@@ -139,6 +177,7 @@ class HostedPayment {
                 $this->langCode = "en";
                 break;
         }
+
         return $this;
     }
 
@@ -148,28 +187,84 @@ class HostedPayment {
      * @return PaymentForm
      * @throws ValidationException
      */
-    public function getPaymentForm() {
+    public function getPaymentForm()
+    {
         //validate the order
         $errors = $this->validateOrder();
         $exceptionString = "";
         if (count($errors) > 0 || (isset($this->returnUrl) == FALSE && isset($this->paymentMethod) == FALSE)) {
             if (isset($this->returnUrl) == FALSE) {
-             $exceptionString .="-missing value : ReturnUrl is required. Use function setReturnUrl().\n";
+                $exceptionString .= "-missing value : ReturnUrl is required. Use function setReturnUrl().\n";
             }
 
             foreach ($errors as $key => $value) {
-                $exceptionString .="-". $key. " : ".$value."\n";
+                $exceptionString .= "-" . $key . " : " . $value . "\n";
             }
 
-            throw new \Svea\ValidationException($exceptionString);
+            throw new ValidationException($exceptionString);
         }
 
         $xmlBuilder = new HostedXmlBuilder();
-        $this->xmlMessage = $xmlBuilder->getPaymentXML($this->calculateRequestValues(),$this->order);
+        $this->xmlMessage = $xmlBuilder->getPaymentXML($this->calculateRequestValues(), $this->order);
         $this->xmlMessageBase64 = base64_encode($this->xmlMessage);
 
-        $formObject = new PaymentForm( $this->xmlMessage, $this->order->conf, $this->order->countryCode );
+        $formObject = new PaymentForm($this->xmlMessage, $this->order->conf, $this->order->countryCode);
+
         return $formObject;
+    }
+
+    /**
+     * @return string[] $errors an array containing the validation errors found
+     */
+    public function validateOrder()
+    {
+        $validator = new HostedOrderValidator();
+        $errors = $validator->validate($this->order);
+        if (($this->order->countryCode == "NL" || $this->order->countryCode == "DE") && isset($this->paymentMethod)) {
+            if (isset($this->paymentMethod) &&
+                ($this->paymentMethod == PaymentMethod::INVOICE || $this->paymentMethod == PaymentMethod::PAYMENTPLAN)
+            ) {
+                $errors = $validator->validateEuroCustomer($this->order, $errors);
+            }
+        }
+
+        return $errors;
+    }
+
+    /**
+     * returns a list of request attributes-value pairs
+     */
+    public function calculateRequestValues()
+    {
+        // format order data
+        $formatter = new HostedRowFormatter();
+        $this->request['rows'] = $formatter->formatRows($this->order);
+        $this->request['amount'] = $formatter->formatTotalAmount($this->request['rows']);
+        $this->request['totalVat'] = $formatter->formatTotalVat($this->request['rows']);
+
+        $this->request['clientOrderNumber'] = $this->order->clientOrderNumber; /// used by payment
+
+        if (isset($this->order->customerIdentity->ipAddress)) {
+            $this->request['ipAddress'] = $this->order->customerIdentity->ipAddress; /// used by payment (optional), preparepayment (required)
+        }
+
+        $this->request['langCode'] = $this->langCode;
+
+        $this->request['returnUrl'] = $this->returnUrl;
+        $this->request['callbackUrl'] = $this->callbackUrl;
+        $this->request['cancelUrl'] = $this->cancelUrl;
+
+        $this->request['currency'] = strtoupper(trim($this->order->currency));
+
+        if (isset($this->subscriptionType)) {
+            $this->request['subscriptionType'] = $this->subscriptionType;
+        }
+
+        if (isset($this->subscriptionId)) {
+            $this->request['subscriptionId'] = $this->subscriptionId;
+        }
+
+        return $this->request;
     }
 
     /**
@@ -180,7 +275,7 @@ class HostedPayment {
      * Use function setIpAddress() on the order customer.";
      * Use function setPayPageLanguage().";
      *
-     * @return HostedPaymentResponse
+     * @return \Svea\WebPay\HostedService\HostedResponse\HostedPaymentResponse
      * [accepted] => 1
      * [resultcode] => 0
      * [errormessage] =>
@@ -190,7 +285,8 @@ class HostedPayment {
      * [testurl] => https://test.sveaekonomi.se/webpay/preparedpayment/xxxxx Deprecated! Not valid if the order is created in prod.
      * @throws ValidationException
      */
-    public function getPaymentUrl() {
+    public function getPaymentUrl()
+    {
 
         // follow the procedure set out in getPaymentForm, then
         //
@@ -198,28 +294,28 @@ class HostedPayment {
         $errors = $this->validateOrder();
 
         //additional validation for PreparedPayment request
-        if( !isset( $this->order->customerIdentity->ipAddress ) ) {
+        if (!isset($this->order->customerIdentity->ipAddress)) {
             $errors['missing value'] = "ipAddress is required. Use function setIpAddress() on the order customer.";
         }
-        if( !isset( $this->langCode) ) {
+        if (!isset($this->langCode)) {
             $errors['missing value'] = "langCode is required. Use function setPayPageLanguage().";
         }
 
         $exceptionString = "";
         if (count($errors) > 0 || (isset($this->returnUrl) == FALSE && isset($this->paymentMethod) == FALSE)) {
             if (isset($this->returnUrl) == FALSE) {
-             $exceptionString .="-missing value : ReturnUrl is required. Use function setReturnUrl().\n";
+                $exceptionString .= "-missing value : ReturnUrl is required. Use function setReturnUrl().\n";
             }
 
             foreach ($errors as $key => $value) {
-                $exceptionString .="-". $key. " : ".$value."\n";
+                $exceptionString .= "-" . $key . " : " . $value . "\n";
             }
 
-            throw new \Svea\ValidationException($exceptionString);
+            throw new ValidationException($exceptionString);
         }
 
         $xmlBuilder = new HostedXmlBuilder();
-        $this->xmlMessage = $xmlBuilder->getPreparePaymentXML($this->calculateRequestValues(),$this->order);
+        $this->xmlMessage = $xmlBuilder->getPreparePaymentXML($this->calculateRequestValues(), $this->order);
 
         // curl away the request to Svea, and pick up the answer.
 
@@ -230,8 +326,8 @@ class HostedPayment {
         $this->countryCode = $this->order->countryCode;
         $message = $this->xmlMessage;
 
-        $merchantId = $this->config->getMerchantId( \ConfigurationProvider::HOSTED_TYPE,  $this->countryCode);
-        $secret = $this->config->getSecret( \ConfigurationProvider::HOSTED_TYPE, $this->countryCode);
+        $merchantId = $this->config->getMerchantId(ConfigurationProvider::HOSTED_TYPE, $this->countryCode);
+        $secret = $this->config->getSecret(ConfigurationProvider::HOSTED_TYPE, $this->countryCode);
 
         // calculate mac
         $mac = hash("sha512", base64_encode($message) . $secret);
@@ -246,12 +342,12 @@ class HostedPayment {
         // below taken from HostedRequest doRequest
         $fieldsString = "";
         foreach ($fields as $key => $value) {
-            $fieldsString .= $key.'='.$value.'&';
+            $fieldsString .= $key . '=' . $value . '&';
         }
         rtrim($fieldsString, '&');
 
         $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $this->config->getEndpoint(\Svea\SveaConfigurationProvider::HOSTED_ADMIN_TYPE). "preparepayment");
+        curl_setopt($ch, CURLOPT_URL, $this->config->getEndpoint(SveaConfigurationProvider::HOSTED_ADMIN_TYPE) . "preparepayment");
         curl_setopt($ch, CURLOPT_POST, count($fields));
         curl_setopt($ch, CURLOPT_POSTFIELDS, $fieldsString);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
@@ -261,61 +357,11 @@ class HostedPayment {
         $responseXML = curl_exec($ch);
         curl_close($ch);
 
-        // create SveaResponse to handle response
-        $responseObj = new \SimpleXMLElement($responseXML);
-        $sveaResponse = new \SveaResponse($responseObj, $this->countryCode, $this->config);
+        // create Svea\WebPay\Response\SveaResponse to handle response
+        $responseObj = new SimpleXMLElement($responseXML);
+        $sveaResponse = new SveaResponse($responseObj, $this->countryCode, $this->config);
 
         return $sveaResponse->response;
-    }
-
-    /**
-     * @return string[] $errors an array containing the validation errors found
-     */
-    public function validateOrder() {
-        $validator = new \Svea\HostedOrderValidator();
-        $errors = $validator->validate($this->order);
-        if (($this->order->countryCode == "NL" || $this->order->countryCode == "DE") && isset($this->paymentMethod)) {
-            if( isset($this->paymentMethod) &&
-                ($this->paymentMethod == \PaymentMethod::INVOICE || $this->paymentMethod == \PaymentMethod::PAYMENTPLAN)) {
-                $errors = $validator->validateEuroCustomer($this->order, $errors);
-            }
-        }
-        return $errors;
-    }
-
-    /**
-     * returns a list of request attributes-value pairs
-     */
-    public function calculateRequestValues() {
-        // format order data
-        $formatter = new HostedRowFormatter();
-        $this->request['rows'] = $formatter->formatRows($this->order);
-        $this->request['amount'] = $formatter->formatTotalAmount($this->request['rows']);
-        $this->request['totalVat'] = $formatter->formatTotalVat( $this->request['rows']);
-
-        $this->request['clientOrderNumber'] = $this->order->clientOrderNumber; /// used by payment
-
-        if (isset($this->order->customerIdentity->ipAddress)) {
-             $this->request['ipAddress'] = $this->order->customerIdentity->ipAddress; /// used by payment (optional), preparepayment (required)
-        }
-
-        $this->request['langCode'] = $this->langCode;
-
-        $this->request['returnUrl'] = $this->returnUrl;
-        $this->request['callbackUrl'] = $this->callbackUrl;
-        $this->request['cancelUrl'] = $this->cancelUrl;
-
-        $this->request['currency'] = strtoupper(trim($this->order->currency));
-
-        if (isset($this->subscriptionType)) {
-             $this->request['subscriptionType'] = $this->subscriptionType;
-        }
-
-        if (isset($this->subscriptionId)) {
-             $this->request['subscriptionId'] = $this->subscriptionId;
-        }
-
-        return $this->request;
     }
 
     /**
@@ -340,11 +386,13 @@ class HostedPayment {
      * Use of setSubscriptionType() will set the attributes subscriptionId and subscriptionType
      * in the HostedPaymentResponse.
      *
-     * @param string $subscriptionType  @see CardPayment constants
+     * @param string $subscriptionType @see CardPayment constants
      * @return $this
      */
-    public function setSubscriptionType( $subscriptionType ) {
+    public function setSubscriptionType($subscriptionType)
+    {
         $this->subscriptionType = $subscriptionType;
+
         return $this;
     }
 
@@ -359,8 +407,10 @@ class HostedPayment {
      * @param string $subscriptionType
      * @return $this
      */
-    public function setSubscriptionId( $subscriptionId ) {
+    public function setSubscriptionId($subscriptionId)
+    {
         $this->subscriptionId = $subscriptionId;
+
         return $this;
     }
 
@@ -377,15 +427,15 @@ class HostedPayment {
      *
      * @return RecurTransactionResponse
      */
-    public function doRecur() {
-
+    public function doRecur()
+    {
         // calculate amount from order rows
         $formatter = new HostedRowFormatter();
         $this->request['rows'] = $formatter->formatRows($this->order);
         $this->request['amount'] = $formatter->formatTotalAmount($this->request['rows']);
-        $this->request['totalVat'] = $formatter->formatTotalVat( $this->request['rows']);
+        $this->request['totalVat'] = $formatter->formatTotalVat($this->request['rows']);
 
-        $request = new RecurTransaction( $this->order->conf );
+        $request = new RecurTransaction($this->order->conf);
         $request->currency = $this->order->currency;
         $request->amount = $this->request['amount'];
         $request->customerRefNo = $this->order->clientOrderNumber;

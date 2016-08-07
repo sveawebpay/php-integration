@@ -1,25 +1,27 @@
 <?php
-namespace Svea\WebService;
+
+namespace Svea\WebPay\WebService\WebServiceResponse\CampaignCode;
 
 /**
  *  CampaignCodes structure
  *
- *  @attrib     ->campaignCode                      // numeric campaign code identifier
- *  @attrib     ->description                       // localised description string
- *  @attrib     ->paymentPlanType                   // human readable identifier (not guaranteed unique)
- *  @attrib     ->contractLengthInMonths
- *  @attrib     ->monthlyAnnuityFactor              // pricePerMonth = price * monthlyAnnuityFactor + notificationFee
- *  @attrib     ->initialFee
- *  @attrib     ->notificationFee
- *  @attrib     ->interestRatePercent
- *  @attrib     ->numberOfInterestFreeMonths
- *  @attrib     ->numberOfPaymentFreeMonths
- *  @attrib     ->fromAmount                        // amount lower limit for plan availability
- *  @attrib     ->toAmount                          // amount upper limit for plan availability
- * 
- *  @author anne-hal, Kristian Grossman-Madsen
+ * @attrib     ->campaignCode                      // numeric campaign code identifier
+ * @attrib     ->description                       // localised description string
+ * @attrib     ->paymentPlanType                   // human readable identifier (not guaranteed unique)
+ * @attrib     ->contractLengthInMonths
+ * @attrib     ->monthlyAnnuityFactor              // pricePerMonth = price * monthlyAnnuityFactor + notificationFee
+ * @attrib     ->initialFee
+ * @attrib     ->notificationFee
+ * @attrib     ->interestRatePercent
+ * @attrib     ->numberOfInterestFreeMonths
+ * @attrib     ->numberOfPaymentFreeMonths
+ * @attrib     ->fromAmount                        // amount lower limit for plan availability
+ * @attrib     ->toAmount                          // amount upper limit for plan availability
+ *
+ * @author anne-hal, Kristian Grossman-Madsen
  */
-class CampaignCode {
+class CampaignCode
+{
     public $campaignCode;
     public $description;
     public $paymentPlanType;

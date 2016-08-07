@@ -1,8 +1,9 @@
 <?php
-namespace Svea;
 
-$root = realpath(dirname(__FILE__));
-require_once $root . '/../../../src/Includes.php';
+namespace Svea\WebPay\Test\UnitTest\Config;
+
+use Svea\WebPay\Config\SveaConfig;
+
 
 class ConfigurationProviderTest extends \PHPUnit_Framework_TestCase {
     

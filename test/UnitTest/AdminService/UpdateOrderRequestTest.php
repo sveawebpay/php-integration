@@ -1,15 +1,16 @@
 <?php
 
-$root = realpath(dirname(__FILE__));
-require_once $root . '/../../../src/Includes.php';
+namespace Svea\WebPay\Test\UnitTest\AdminService;
 
-$root = realpath(dirname(__FILE__));
-require_once $root . '/../../TestUtil.php';
+use Svea\WebPay\WebPayAdmin;
+use Svea\WebPay\Config\SveaConfig;
+
 
 /**
  * @author Kristian Grossman-Madsen for Svea Webpay
  */
-class UpdateOrderRequestTest extends \PHPUnit_Framework_TestCase {
+class UpdateOrderRequestTest extends \PHPUnit_Framework_TestCase
+{
 
     public $notes = 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
                     Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque
@@ -19,62 +20,71 @@ class UpdateOrderRequestTest extends \PHPUnit_Framework_TestCase {
      * req: SveaOrderId, ClientId
      * update: Notes, ClientOrderNumber
      */
-    public function test_updateorder_clientnr_invoice() {
+    public function test_updateorder_clientnr_invoice()
+    {
         print_r(strlen($this->notes));
-        $config = Svea\SveaConfig::getDefaultConfig();
+        $config = SveaConfig::getDefaultConfig();
         $request = WebPayAdmin::updateOrder($config)//only need clientid
-                ->setCountryCode('SE') //req for config
-                ->setOrderId('test')
-                ->setClientOrderNumber('123')//string
-                ->updateInvoiceOrder()
-                ->prepareRequest();
+        ->setCountryCode('SE')//req for config
+        ->setOrderId('test')
+            ->setClientOrderNumber('123')//string
+            ->updateInvoiceOrder()
+            ->prepareRequest();
 
         $this->assertEquals('123', $request->ClientOrderNumber->enc_value);
     }
-    public function test_updateorder_addnotes_invoice() {
-        $config = Svea\SveaConfig::getDefaultConfig();
+
+    public function test_updateorder_addnotes_invoice()
+    {
+        $config = SveaConfig::getDefaultConfig();
         $request = WebPayAdmin::updateOrder($config)//only need clientid
-                ->setCountryCode('SE') //req for config
-                ->setOrderId('test')
-                 ->setNotes($this->notes)//string 200 chars
-                ->updateInvoiceOrder()
-                ->prepareRequest();
+        ->setCountryCode('SE')//req for config
+        ->setOrderId('test')
+            ->setNotes($this->notes)//string 200 chars
+            ->updateInvoiceOrder()
+            ->prepareRequest();
 
         $this->assertEquals($this->notes, $request->Notes->enc_value);
     }
-    public function test_updateorder_clientnr_paymentplan() {
-        $config = Svea\SveaConfig::getDefaultConfig();
+
+    public function test_updateorder_clientnr_paymentplan()
+    {
+        $config = SveaConfig::getDefaultConfig();
         $request = WebPayAdmin::updateOrder($config)//only need clientid
-                ->setCountryCode('SE') //req for config
-                ->setOrderId('test')
-                ->setClientOrderNumber('123')//string
-                ->updateInvoiceOrder()
-                ->prepareRequest();
+        ->setCountryCode('SE')//req for config
+        ->setOrderId('test')
+            ->setClientOrderNumber('123')//string
+            ->updateInvoiceOrder()
+            ->prepareRequest();
 
         $this->assertEquals('123', $request->ClientOrderNumber->enc_value);
     }
-    public function test_updateorder_addnotes_paymentplan() {
-        $config = Svea\SveaConfig::getDefaultConfig();
-        $request = WebPayAdmin::updateOrder($config)//only need clientid
-                ->setCountryCode('SE') //req for config
-                ->setOrderId('test')
-                ->setNotes($this->notes)//string 200 chars
-                ->updateInvoiceOrder()
-                ->prepareRequest();
 
-         $this->assertEquals($this->notes, $request->Notes->enc_value);
+    public function test_updateorder_addnotes_paymentplan()
+    {
+        $config = SveaConfig::getDefaultConfig();
+        $request = WebPayAdmin::updateOrder($config)//only need clientid
+        ->setCountryCode('SE')//req for config
+        ->setOrderId('test')
+            ->setNotes($this->notes)//string 200 chars
+            ->updateInvoiceOrder()
+            ->prepareRequest();
+
+        $this->assertEquals($this->notes, $request->Notes->enc_value);
     }
+
     /**
-     * @expectedException Svea\ValidationException
+     * @expectedException \Svea\WebPay\BuildOrder\Validator\ValidationException
      * @expectedExceptionMessage -String length : The field Notes must be a string with a maximum length of 200.
      *
      */
-    public function test_updateorder_addnotes_chars_validate_invoice() {
-        $config = Svea\SveaConfig::getDefaultConfig();
+    public function test_updateorder_addnotes_chars_validate_invoice()
+    {
+        $config = SveaConfig::getDefaultConfig();
         $request = WebPayAdmin::updateOrder($config)//only need clientid
-                ->setCountryCode('SE') //req for config
-                ->setOrderId('test')
-                ->setNotes('Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+        ->setCountryCode('SE')//req for config
+        ->setOrderId('test')
+            ->setNotes('Lorem ipsum dolor sit amet, consectetur adipiscing elit.
                     Nullam faucibus turpis ut nibh cursus, volutpat consectetur odio
                     consequat. Quisque fermentum, augue eget scelerisque hendrerit,
                     libero odio mollis metus, eleifend semper enim ligula eu eros.
@@ -84,9 +94,9 @@ class UpdateOrderRequestTest extends \PHPUnit_Framework_TestCase {
                     Etiam ut lacinia augue, id fringilla lorem. Duis vel pellentesque purus,
                     in feugiat ligula. Curabitur efficitur, nunc et mattis volutpat,
                     urna turpis tempus magna, nec convallis nisi mauris ut eros. ')//string to long
-                ->updateInvoiceOrder()
-                ->prepareRequest();
-         $this->assertEquals($this->notes, $request->Notes->enc_value);
+            ->updateInvoiceOrder()
+            ->prepareRequest();
+        $this->assertEquals($this->notes, $request->Notes->enc_value);
     }
 
 }

@@ -1,47 +1,52 @@
 <?php
-namespace Svea\AdminService;
 
-require_once SVEA_REQUEST_DIR . '/Includes.php';
+namespace Svea\WebPay\AdminService;
+
+use SoapVar;
+use Svea\WebPay\AdminService\AdminSoap\Authentication;
 
 /**
  * Admin Service CancelOrderRowsRequest class
  *
  * @author Kristian Grossman-Madsen
  */
-class CancelOrderRowsRequest extends AdminServiceRequest {
-
-    /** @var CancelOrderRowBuilder $orderBuilder */
+class CancelOrderRowsRequest extends AdminServiceRequest
+{
+    /**
+     * @var \Svea\WebPay\AdminService\AdminSoap\CancelOrderRowsRequest $orderBuilder
+     */
     public $orderBuilder;
 
     /**
-     * @param cancelOrderRowsBuilder $orderBuilder
+     * @param \Svea\WebPay\AdminService\AdminSoap\CancelOrderRowsRequest $cancelOrderRowsBuilder
      */
-    public function __construct($cancelOrderRowsBuilder) {
+    public function __construct($cancelOrderRowsBuilder)
+    {
         $this->action = "CancelOrderRows";
         $this->orderBuilder = $cancelOrderRowsBuilder;
     }
 
     /**
      * populate and return soap request contents using AdminSoap helper classes to get the correct data format
-     * @return Svea\AdminSoap\CancelOrderRowsRequest
+     * @return \Svea\WebPay\AdminService\AdminSoap\CancelOrderRowsRequest
      */
-    public function prepareRequest() {
-
+    public function prepareRequest()
+    {
         $this->validateRequest();
 
         $orderRowNumbers = array();
-        foreach( $this->orderBuilder->rowsToCancel as $rowToCancel ) {
-            $orderRowNumbers[] = new \SoapVar($rowToCancel, XSD_LONG, null, null, 'long', "http://schemas.microsoft.com/2003/10/Serialization/Arrays");
+        foreach ($this->orderBuilder->rowsToCancel as $rowToCancel) {
+            $orderRowNumbers[] = new SoapVar($rowToCancel, XSD_LONG, null, null, 'long', "http://schemas.microsoft.com/2003/10/Serialization/Arrays");
         }
 
-        $soapRequest = new AdminSoap\CancelOrderRowsRequest(
-            new AdminSoap\Authentication(
-                $this->orderBuilder->conf->getUsername( ($this->orderBuilder->orderType), $this->orderBuilder->countryCode ),
-                $this->orderBuilder->conf->getPassword( ($this->orderBuilder->orderType), $this->orderBuilder->countryCode )
+        $soapRequest = new \Svea\WebPay\AdminService\AdminSoap\CancelOrderRowsRequest(
+            new Authentication(
+                $this->orderBuilder->conf->getUsername(($this->orderBuilder->orderType), $this->orderBuilder->countryCode),
+                $this->orderBuilder->conf->getPassword(($this->orderBuilder->orderType), $this->orderBuilder->countryCode)
             ),
-            $this->orderBuilder->conf->getClientNumber( ($this->orderBuilder->orderType), $this->orderBuilder->countryCode ),
-            new \SoapVar($orderRowNumbers, SOAP_ENC_OBJECT),
-            AdminServiceRequest::CamelCaseOrderType( $this->orderBuilder->orderType ),
+            $this->orderBuilder->conf->getClientNumber(($this->orderBuilder->orderType), $this->orderBuilder->countryCode),
+            new SoapVar($orderRowNumbers, SOAP_ENC_OBJECT),
+            AdminServiceRequest::CamelCaseOrderType($this->orderBuilder->orderType),
             $this->orderBuilder->orderId
         );
 
@@ -71,40 +76,50 @@ class CancelOrderRowsRequest extends AdminServiceRequest {
         return $soapRequest;
     }
 
-    public function validate() {
+    public function validate()
+    {
         $errors = array();
         $errors = $this->validateOrderId($errors);
         $errors = $this->validateOrderType($errors);
         $errors = $this->validateCountryCode($errors);
         $errors = $this->validateRowsToCancel($errors);
+
         return $errors;
     }
 
-    private function validateOrderId($errors) {
+    private function validateOrderId($errors)
+    {
         if (isset($this->orderBuilder->orderId) == FALSE) {
             $errors[] = array('missing value' => "orderId is required.");
         }
+
         return $errors;
     }
 
-    private function validateOrderType($errors) {
+    private function validateOrderType($errors)
+    {
         if (isset($this->orderBuilder->orderType) == FALSE) {
             $errors[] = array('missing value' => "orderType is required.");
         }
+
         return $errors;
     }
 
-    private function validateCountryCode($errors) {
+    private function validateCountryCode($errors)
+    {
         if (isset($this->orderBuilder->countryCode) == FALSE) {
             $errors[] = array('missing value' => "countryCode is required.");
         }
+
         return $errors;
     }
 
-    private function validateRowsToCancel($errors) {
+    private function validateRowsToCancel($errors)
+    {
         if (isset($this->orderBuilder->rowsToCancel) == FALSE) {
             $errors[] = array('missing value' => "rowsToCancel is required.");
         }
+
         return $errors;
     }
 }
