@@ -100,6 +100,68 @@ class CreditOrderRowsRequestTest extends \PHPUnit_Framework_TestCase
 
     }
 
+    public function test_creditOrderRows_creditCardOrderRowsAsIncvatAndVatPercent()
+    {
+        $config = SveaConfig::getDefaultConfig();
+
+        $orderRows[] = WebPayItem::orderRow()
+            ->setAmountIncVat(123.9876)
+            ->setVatPercent(25)
+            ->setQuantity(1)
+            ->setDescription("row 1");
+
+        $request = WebPayAdmin::creditOrderRows($config)
+            ->setTransactionId()
+            ->setCountryCode('SE')
+            ->addCreditOrderRows($orderRows)
+            ->creditCardOrderRows()
+            ->prepareRequest();
+
+
+    }
+
+    public function test_creditOrderRows_creditCardOrderRowsAsAmountExVatAndVatPercent()
+    {
+        $config = SveaConfig::getDefaultConfig();
+
+        $orderRows[] = WebPayItem::orderRow()
+            ->setAmountIncVat(123.9876)
+            ->setVatPercent(25)
+            ->setQuantity(1)
+            ->setDescription("row 1");
+
+        $request = WebPayAdmin::creditOrderRows($config)
+            ->setTransactionId()
+            ->setCountryCode('SE')
+            ->addCreditOrderRows($orderRows)
+            ->creditCardOrderRows()
+            ->prepareRequest();
+
+
+
+    }
+
+    public function test_creditOrderRows_creditCardOrderRowsAsAmountExVatAndAmountIncVat()
+    {
+        $config = SveaConfig::getDefaultConfig();
+
+        $orderRows[] = WebPayItem::orderRow()
+            ->setAmountIncVat(123.9876)
+            ->setAmountExVat(140)
+            ->setQuantity(1)
+            ->setDescription("row 1");
+
+        $request = WebPayAdmin::creditOrderRows($config)
+            ->setTransactionId()
+            ->setCountryCode('SE')
+            ->addCreditOrderRows($orderRows)
+            ->creditCardOrderRows()
+            ->prepareRequest();
+
+
+
+    }
+
     /**
      * @expectedException \Svea\WebPay\BuildOrder\Validator\ValidationException
      * @expectedExceptionMessage -missing value : Description is required.
