@@ -327,7 +327,7 @@ class CreditOrderRowsBuilder extends PaymentAdminOrderBuilder
 
         $creditTransaction = new CreditTransaction($this->conf);
         $creditTransaction->transactionId = $this->orderId;
-        $creditTransaction->creditAmount = $sumOfRowAmounts * 100; // *100, as setAmountToLower wants minor currency
+        $creditTransaction->creditAmount = Helper::bround($sumOfRowAmounts, 2) * 100; // *100, as setAmountToLower wants minor currency
         $creditTransaction->countryCode = $this->countryCode;
         return $creditTransaction;
     }
@@ -381,7 +381,21 @@ class CreditOrderRowsBuilder extends PaymentAdminOrderBuilder
                 throw new ValidationException($exceptionString);
             }
         }
+
+        foreach ($this->creditOrderRows as $orderRow) {
+            if ($orderRow->amountExVat && empty($orderRow->vatPercent) && empty($orderRow->amountIncVat)) {
+                $exceptionString = "Order with amountExVat must have vatPercent";
+                throw new ValidationException($exceptionString);
+            }
+
+            if (empty($orderRow->amountExVat) && empty($orderRow->amountIncVat)) {
+                $exceptionString = "amountExVat or amountIncVat must be set";
+                throw new ValidationException($exceptionString);
+            }
+        }
     }
+
+
 
     /**
      * @param $rowIndexes
@@ -394,13 +408,22 @@ class CreditOrderRowsBuilder extends PaymentAdminOrderBuilder
         $sum = 0.0;
         $unique_indexes = array_unique($rowIndexes);
         foreach ($numberedRows as $numberedRow) {
+
             if (in_array($numberedRow->rowNumber, $unique_indexes)) {
-                $sum += ($numberedRow->quantity * ($numberedRow->amountExVat * (1 + ($numberedRow->vatPercent / 100))));
+                if ($numberedRow->amountIncVat) {
+                    $sum += $numberedRow->quantity * $numberedRow->amountIncVat;
+                } else {
+                    $sum += ($numberedRow->quantity * ($numberedRow->amountExVat * (1 + ($numberedRow->vatPercent / 100))));
+                }
             }
         }
         if (count($creditOrderRows) > 0) {
             foreach ($creditOrderRows as $creditOrderRow) {
-                $sum += ($creditOrderRow->quantity * ($creditOrderRow->amountExVat * (1 + ($creditOrderRow->vatPercent / 100))));
+                if ($creditOrderRow->amountIncVat) {
+                    $sum += $creditOrderRow->quantity * $creditOrderRow->amountIncVat;
+                } else {
+                    $sum += ($creditOrderRow->quantity * ($creditOrderRow->amountExVat * (1 + ($creditOrderRow->vatPercent / 100))));
+                }
             }
         }
         return $sum;
