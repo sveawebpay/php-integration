@@ -1,10 +1,11 @@
 <?php
 
+namespace Svea\WebPay\Test\UnitTest\AdminService;
+
+use Svea\WebPay\WebPayItem;
+use Svea\WebPay\WebPayAdmin;
 use Svea\WebPay\Config\SveaConfig;
 use Svea\WebPay\Constant\DistributionType;
-use Svea\WebPay\WebPayAdmin;
-use Svea\WebPay\WebPayItem;
-use Svea\WebPay\AdminService\CreditPaymentPlanRowsRequest;
 
 
 /**

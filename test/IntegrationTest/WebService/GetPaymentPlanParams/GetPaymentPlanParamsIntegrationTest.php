@@ -1,28 +1,34 @@
 <?php
+namespace Svea\WebPay\Test\IntegrationTest\WebService\GetPaymentPlanParams;
+
+use PHPUnit_Framework_TestCase;
 use Svea\WebPay\Config\SveaConfig;
 use Svea\WebPay\WebService\GetPaymentPlanParams\GetPaymentPlanParams as GetPaymentPlanParams;
 
 /**
  * @author Jonas Lith
  */
-class GetPaymentPlanParamsIntegrationTest extends PHPUnit_Framework_TestCase {
+class GetPaymentPlanParamsIntegrationTest extends PHPUnit_Framework_TestCase
+{
 
-    public function testPaymentPlanParamsResult() {
+    public function testPaymentPlanParamsResult()
+    {
         $config = SveaConfig::getDefaultConfig();
         $paymentPlanRequest = new GetPaymentPlanParams($config);
         $request = $paymentPlanRequest
-                ->setCountryCode("SE")
-                ->doRequest();
+            ->setCountryCode("SE")
+            ->doRequest();
 
         $this->assertEquals(1, $request->accepted);
     }
 
-    public function testResultGetPaymentPlanParams() {
+    public function testResultGetPaymentPlanParams()
+    {
         $config = SveaConfig::getDefaultConfig();
         $paymentPlanRequest = new GetPaymentPlanParams($config);
         $request = $paymentPlanRequest
-                ->setCountryCode("SE")
-                ->doRequest();
+            ->setCountryCode("SE")
+            ->doRequest();
 
         $this->assertEquals(1, $request->accepted);
         $this->assertEquals(0, $request->resultcode);

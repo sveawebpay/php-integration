@@ -65,7 +65,7 @@ $myCardOrderRequest
 // Get a payment form object which we can use to send the payment request to Svea
 $myCardOrderPaymentForm = $myCardOrderRequest->getPaymentForm();
 
-// Then send the form to Svea, and receive the response on the landingpage after the customer has completed the card checkout at SveaCardPay
+// Then send the form to Svea, and receive the response on the landingpage after the customer has completed the card payment at SveaCardPay
 echo "<pre>";
 echo "Press submit to send the inital card order request to Svea.";
 print_r($myCardOrderPaymentForm->completeHtmlFormWithSubmitButton);

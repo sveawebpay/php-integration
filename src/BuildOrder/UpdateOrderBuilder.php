@@ -9,7 +9,7 @@ use Svea\WebPay\Config\ConfigurationProvider;
  * Update order in a non-delivered invoice or payment plan order.
  * (Card and Direct Bank orders are not supported.)
  */
-class UpdateOrderBuilder extends CheckoutAdminOrderBuilder
+class UpdateOrderBuilder extends PaymentAdminOrderBuilder
 {
     /**
      * @var ConfigurationProvider $conf
@@ -77,25 +77,7 @@ class UpdateOrderBuilder extends CheckoutAdminOrderBuilder
         return $this;
     }
 
-    /**
-     * Use updateCheckoutOrder() to update a Checkout order
-     * @return UpdateOrderRequest
-     * @throws \Svea\WebPay\BuildOrder\Validator\ValidationException
-     * @throws \Exception
-     */
-    public function updateCheckoutOrder()
-    {
-        $subsystemInfo = $this->processCheckoutOrderInformation($this->orderId);
-        $paymentType = $subsystemInfo->getPaymentType();
-
-        if ($paymentType === ConfigurationProvider::INVOICE_TYPE) {
-            return $this->updateInvoiceOrder();
-        } else if ($paymentType === ConfigurationProvider::PAYMENTPLAN_TYPE) {
-            return $this->updatePaymentPlanOrder();
-        } else {
-            throw new \Exception("This functionality currently does not support this method of payment ($paymentType)");
-        }
-    }
+    
 
     /**
      * Use updateInvoiceOrder() to update an Invoice order using AdminServiceRequest UpdateOrder request

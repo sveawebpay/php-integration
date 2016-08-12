@@ -59,7 +59,7 @@ $myRecurOrderRequest
 // Send the recur payment request to Svea
 $myRecurOrderResponse = $myRecurOrderRequest->doRecur();
 
-// Then send the form to Svea, and receive the response on the landingpage after the customer has completed the card checkout at SveaCardPay
+// Then send the form to Svea, and receive the response on the landingpage after the customer has completed the card payment at SveaCardPay
 echo "<pre>";
 print_r("the recur order response");
 print_r($myRecurOrderResponse);

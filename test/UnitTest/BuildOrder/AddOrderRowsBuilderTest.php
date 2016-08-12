@@ -1,66 +1,76 @@
 <?php
-use Svea\WebPay\BuildOrder\AddOrderRowsBuilder;
-use Svea\WebPay\Config\SveaConfig;
+
+namespace Svea\WebPay\Test\UnitTest\BuildOrder;
+
 use Svea\WebPay\Test\TestUtil;
+use Svea\WebPay\Config\SveaConfig;
+use Svea\WebPay\BuildOrder\AddOrderRowsBuilder;
 
 
 /**
  * @author Kristian Grossman-Madsen for Svea Svea\WebPay\WebPay
  */
-class AddOrderRowsBuilderTest extends \PHPUnit_Framework_TestCase {
+class AddOrderRowsBuilderTest extends \PHPUnit_Framework_TestCase
+{
 
     protected $addOrderRowsObject;
-    
-    function setUp() {
+
+    function setUp()
+    {
         $this->addOrderRowsObject = new AddOrderRowsBuilder(SveaConfig::getDefaultConfig());
     }
-    
-    public function test_addOrderRowsBuilder_class_exists() {     
+
+    public function test_addOrderRowsBuilder_class_exists()
+    {
         $this->assertInstanceOf("Svea\WebPay\BuildOrder\AddOrderRowsBuilder", $this->addOrderRowsObject);
     }
-    
-    public function test_addOrderRowsBuilder_setOrderId() {
+
+    public function test_addOrderRowsBuilder_setOrderId()
+    {
         $orderId = "123456";
         $this->addOrderRowsObject->setOrderId($orderId);
-        $this->assertEquals($orderId, $this->addOrderRowsObject->orderId);        
+        $this->assertEquals($orderId, $this->addOrderRowsObject->orderId);
     }
-    
-    public function test_addOrderRowsBuilder_setCountryCode() {
+
+    public function test_addOrderRowsBuilder_setCountryCode()
+    {
         $country = "SE";
         $this->addOrderRowsObject->setCountryCode($country);
-        $this->assertEquals($country, $this->addOrderRowsObject->countryCode);        
+        $this->assertEquals($country, $this->addOrderRowsObject->countryCode);
     }
-    
-    public function test_addOrderRowsBuilder_addInvoiceOrderRowsBuilder_returns_AddOrderRowsRequest() {
+
+    public function test_addOrderRowsBuilder_addInvoiceOrderRowsBuilder_returns_AddOrderRowsRequest()
+    {
         $orderId = "123456";
         $addOrderRowsObject = $this->addOrderRowsObject
-                ->setOrderId($orderId)
-                ->addOrderRow( TestUtil::createOrderRow(1.00) )
-                ->addInvoiceOrderRows();
-        
+            ->setOrderId($orderId)
+            ->addOrderRow(TestUtil::createOrderRow(1.00))
+            ->addInvoiceOrderRows();
+
         $this->assertInstanceOf("Svea\WebPay\AdminService\AddOrderRowsRequest", $addOrderRowsObject);
     }
-    
-    public function test_addOrderRowsBuilder_addPaymentPlanOrderRowsBuilder_returns_AddOrderRowsRequest() {
-        $orderId = "123456";  
+
+    public function test_addOrderRowsBuilder_addPaymentPlanOrderRowsBuilder_returns_AddOrderRowsRequest()
+    {
+        $orderId = "123456";
         $addOrderRowsObject = $this->addOrderRowsObject
-                ->setOrderId($orderId)
-                ->addOrderRow( TestUtil::createOrderRow(1.00) )
-                ->addPaymentPlanOrderRows();
-        
+            ->setOrderId($orderId)
+            ->addOrderRow(TestUtil::createOrderRow(1.00))
+            ->addPaymentPlanOrderRows();
+
         $this->assertInstanceOf("Svea\WebPay\AdminService\AddOrderRowsRequest", $addOrderRowsObject);
     }
-    
-    public function test_addOrderRowsBuilder_missing_orderRows_throws_exception() {
-        
+
+    public function test_addOrderRowsBuilder_missing_orderRows_throws_exception()
+    {
+
         $this->setExpectedException('Svea\WebPay\BuildOrder\Validator\ValidationException');
-        
+
         $orderId = "123456";
         $addOrderRowsObject = $this->addOrderRowsObject
-                ->setOrderId($orderId)
-                //->addOrderRow( \Svea\WebPay\Test\TestUtil::createOrderRow(1.00) )
-                ->addInvoiceOrderRows();
-        ;
+            ->setOrderId($orderId)
+            //->addOrderRow( \Svea\WebPay\Test\TestUtil::createOrderRow(1.00) )
+            ->addInvoiceOrderRows();;
 
         $addOrderRowsObject->doRequest();
     }

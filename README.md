@@ -100,8 +100,8 @@ the above section 1.x text is taken from the Svea\WebPay\WebPay/Svea\WebPay\WebP
 When library is pulled into project, it will be stored into vendor directory
 under `svea` name.
 
-In working files you will need to include two files, `vendor/autoload.php` and
-`Includes.php` file that is under src/ directory in this library.
+In working files you will need to include one of two files, `vendor/autoload.php` if you are working with composer or
+`includes.php` file that is under src/ directory in this library if you are not using composer.
 
 ### 1.3 Configuration <a name="i1-3"></a>
 In order to make use of the Svea services you need to supply your account credentials to authorize yourself against the Svea services. For the Invoice and Payment Plan payment methods, the credentials consist of a set of Username, Password and Client number (one set for each country and service type). For Card and Direct Bank payment methods,  the credentials consist of a (single) set of Merchant id and Secret Word.

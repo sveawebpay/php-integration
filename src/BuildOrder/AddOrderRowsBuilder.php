@@ -22,7 +22,7 @@ use Svea\WebPay\BuildOrder\Validator\ValidationException;
  *
  * Use addOrderRow() or addOrderRows() to specify the order row(s) to add to the order.
  *
- * Then use either addInvoiceOrderRows() or addPaymentPlanOrderRows() or addCheckoutOrderRows(), which ever matches
+ * Then use either addInvoiceOrderRows() or addPaymentPlanOrderRows(), which ever matches
  * the payment method used in the original order request.
  *
  * The final doRequest() will send the addOrderRows request to Svea, and the
@@ -30,7 +30,7 @@ use Svea\WebPay\BuildOrder\Validator\ValidationException;
  *
  * @author Kristian Grossman-Madsen for Svea Svea\WebPay\WebPay
  */
-class AddOrderRowsBuilder extends CheckoutAdminOrderBuilder
+class AddOrderRowsBuilder extends PaymentAdminOrderBuilder
 {
     /**
      * @var ConfigurationProvider $conf
@@ -122,23 +122,5 @@ class AddOrderRowsBuilder extends CheckoutAdminOrderBuilder
         return new AddOrderRowsRequest($this);
     }
 
-    /**
-     * Use addCheckoutOrderRows() to add rows to a Checkout order
-     * @return AddOrderRowsRequest
-     * @throws ValidationException
-     * @throws \Exception
-     */
-    public function addCheckoutOrderRows()
-    {
-        $subsystemInfo = $this->processCheckoutOrderInformation($this->orderId);
-        $paymentType = $subsystemInfo->getPaymentType();
-
-        if ($paymentType === ConfigurationProvider::INVOICE_TYPE) {
-            return $this->addInvoiceOrderRows();
-        } else if ($paymentType === ConfigurationProvider::PAYMENTPLAN_TYPE) {
-            return $this->addPaymentPlanOrderRows();
-        } else {
-            throw new \Exception("This functionality currently does not support this method of payment ($paymentType)");
-        }
-    }
+    
 }

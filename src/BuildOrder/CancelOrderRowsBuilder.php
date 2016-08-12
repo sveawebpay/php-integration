@@ -36,15 +36,15 @@ use Svea\WebPay\HostedService\HostedAdminRequest\LowerTransaction;
  * Note: if card order rows has been changed (i.e. credited, cancelled) after initial creation,
  * the returned rows may not be accurate.)
  *
- * Then use either cancelInvoiceOrderRows(), cancelPaymentPlanOrderRows or cancelCardOrderRows or
- * cancelCheckoutOrderRows(), which ever matches the payment method used in the original order request.
+ * Then use either cancelInvoiceOrderRows(), cancelPaymentPlanOrderRows or cancelCardOrderRows
+ * which ever matches the payment method used in the original order request.
  *
  * The final doRequest() will send the queryOrder request to Svea, and the
  * resulting response code specifies the outcome of the request.
  *
  * @author Kristian Grossman-Madsen for Svea Svea\WebPay\WebPay
  */
-class CancelOrderRowsBuilder extends CheckoutAdminOrderBuilder
+class CancelOrderRowsBuilder extends PaymentAdminOrderBuilder
 {
 
     /**
@@ -172,27 +172,7 @@ class CancelOrderRowsBuilder extends CheckoutAdminOrderBuilder
         return $this;
     }
 
-    /**
-     * Use cancelCheckoutOrderRows() to cancel a Checkout Order
-     * @return CancelOrderRowsRequest|LowerTransaction
-     * @throws ValidationException
-     * @throws \Exception
-     */
-    public function cancelCheckoutOrderRows()
-    {
-        $subsystemInfo = $this->processCheckoutOrderInformation($this->orderId);
-        $paymentType = $subsystemInfo->getPaymentType();
-
-        if (Helper::isCheckoutHostedPaymentType($paymentType)) {
-            return $this->cancelCardOrderRows();
-        } else if ($paymentType === ConfigurationProvider::INVOICE_TYPE) {
-            return $this->cancelInvoiceOrderRows();
-        } else if ($paymentType === ConfigurationProvider::PAYMENTPLAN_TYPE) {
-            return $this->cancelPaymentPlanOrderRows();
-        } else {
-            throw new \Exception("This functionality currently does not support this method of payment ($paymentType)");
-        }
-    }
+   
 
     /**
      * Use cancelCardOrderRows() to lower the amount of a Card order by the specified order row amounts using HostedRequests LowerTransaction request

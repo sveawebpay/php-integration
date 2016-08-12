@@ -1,5 +1,6 @@
 <?php
-namespace Svea;
+
+namespace Svea\WebPay\Test\UnitTest\Config;
 
 use Svea\WebPay\Config\SveaConfig;
 

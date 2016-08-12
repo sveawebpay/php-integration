@@ -1,8 +1,7 @@
 <?php
 
 namespace Svea\WebPay\Config;
-
-use Svea\Checkout\Transport\Connector;
+ 
 
 /**
  * The SveaConfig class contains the authorization credentials used in requests
@@ -26,9 +25,7 @@ class SveaConfig
 
     const SWP_TEST_PREPARED_URL = "https://test.sveaekonomi.se/webpay/preparedpayment/";
     const SWP_PROD_PREPARED_URL = "https://webpay.sveaekonomi.se/webpay/preparedpayment/";
-
-    const CHECKOUT_TEST_BASE_URL = Connector::TEST_BASE_URL;
-    const CHECKOUT_PROD_BASE_URL = Connector::PROD_BASE_URL;
+ 
 
     public static function getProdConfig()
     {
@@ -37,8 +34,7 @@ class SveaConfig
                                       array(
                                           ConfigurationProvider::INVOICE_TYPE => array("username" => "", "password" => "", "clientNumber" => ""),
                                           ConfigurationProvider::PAYMENTPLAN_TYPE => array("username" => "", "password" => "", "clientNumber" => ""),
-                                          ConfigurationProvider::HOSTED_TYPE => array("merchantId" => "", "secret" => ""),
-                                          ConfigurationProvider::CHECKOUT => array("merchantId" => '', 'secret' => ''),
+                                          ConfigurationProvider::HOSTED_TYPE => array("merchantId" => "", "secret" => ""), 
                                       )
         );
         $prodConfig["NO"] = array("auth" =>
@@ -83,8 +79,7 @@ class SveaConfig
             ConfigurationProvider::PAYMENTPLAN_TYPE => self::SWP_PROD_WS_URL,
             ConfigurationProvider::HOSTED_ADMIN_TYPE => self::SWP_PROD_HOSTED_ADMIN_URL,
             ConfigurationProvider::ADMIN_TYPE => self::SWP_PROD_ADMIN_URL,
-            ConfigurationProvider::PREPARED_URL => self::SWP_PROD_PREPARED_URL,
-            ConfigurationProvider::CHECKOUT => self::CHECKOUT_PROD_BASE_URL,
+            ConfigurationProvider::PREPARED_URL => self::SWP_PROD_PREPARED_URL, 
         );
 
         $integrationproperties = array(
@@ -144,16 +139,7 @@ class SveaConfig
                               array(
                                   "merchantId" => $merchantId,
                                   "secret" => $shareSecret
-                              ),
-                          // Checkout payment creadentials
-                          // replace with your own, or leave blank
-                          ConfigurationProvider::CHECKOUT =>
-                              array(
-                                  "merchantId" => $merchantId,
-                                  'secret' => $shareSecret,
-                                  "username" => "sverigetest",
-                                  "password" => "sverigetest"
-                              ),
+                              ), 
                       )
             );
 
@@ -199,8 +185,7 @@ class SveaConfig
             ConfigurationProvider::PAYMENTPLAN_TYPE => self::SWP_TEST_WS_URL,
             ConfigurationProvider::HOSTED_ADMIN_TYPE => self::SWP_TEST_HOSTED_ADMIN_URL,
             ConfigurationProvider::ADMIN_TYPE => self::SWP_TEST_ADMIN_URL,
-            ConfigurationProvider::PREPARED_URL => self::SWP_TEST_PREPARED_URL,
-            ConfigurationProvider::CHECKOUT => self::CHECKOUT_TEST_BASE_URL,
+            ConfigurationProvider::PREPARED_URL => self::SWP_TEST_PREPARED_URL, 
         );
 
         $integrationproperties = array(

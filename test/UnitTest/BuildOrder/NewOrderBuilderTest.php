@@ -1,10 +1,12 @@
 <?php
 
+namespace Svea\WebPay\Test\UnitTest\BuildOrder;
+
+use Svea\WebPay\WebPay;
+use Svea\WebPay\WebPayItem;
+use Svea\WebPay\Test\TestUtil;
 use Svea\WebPay\Config\SveaConfig;
 use Svea\WebPay\Constant\PaymentMethod;
-use Svea\WebPay\WebPay;
-use Svea\WebPay\Test\TestUtil;
-use Svea\WebPay\WebPayItem;
 
 /**
  * All functions named test...() will run as tests in PHP-unit framework

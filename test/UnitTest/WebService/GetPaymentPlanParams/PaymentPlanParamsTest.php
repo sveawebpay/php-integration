@@ -1,19 +1,25 @@
 <?php
 
+namespace Svea\WebPay\Test\UnitTest\WebService\GetPaymentPlanParams;
+
 use Svea\WebPay\WebPay;
+use PHPUnit_Framework_TestCase;
+use Svea\WebPay\Config\SveaConfig;
 
 
 /**
  * @author Anneli Halld'n, Daniel Brolund for Svea Webpay
  */
-class PaymentPlanParamsTest extends PHPUnit_Framework_TestCase {
+class PaymentPlanParamsTest extends PHPUnit_Framework_TestCase
+{
 
-    public function testBuildRequest() {
-        $config = \Svea\WebPay\Config\SveaConfig::getDefaultConfig();
+    public function testBuildRequest()
+    {
+        $config = SveaConfig::getDefaultConfig();
         $addressRequest = WebPay::getPaymentPlanParams($config);
         $request = $addressRequest
-                ->setCountryCode("SE")
-                ->prepareRequest();
+            ->setCountryCode("SE")
+            ->prepareRequest();
 
         $this->assertEquals(59999, $request->request->Auth->ClientNumber); //Check all in identity
         $this->assertEquals("sverigetest", $request->request->Auth->Username); //Check all in identity

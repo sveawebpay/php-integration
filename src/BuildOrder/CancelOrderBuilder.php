@@ -22,7 +22,7 @@ use Svea\WebPay\HostedService\HostedAdminRequest\AnnulTransaction;
  *
  * @author Kristian Grossman-Madsen for Svea Svea\WebPay\WebPay
  */
-class CancelOrderBuilder extends CheckoutAdminOrderBuilder
+class CancelOrderBuilder extends PaymentAdminOrderBuilder
 { 
     /**
      * @var ConfigurationProvider $conf
@@ -113,19 +113,4 @@ class CancelOrderBuilder extends CheckoutAdminOrderBuilder
         return $annulTransaction;
     }
 
-    public function cancelCheckoutOrder()
-    {
-        $subsystemInfo = $this->processCheckoutOrderInformation($this->orderId);
-        $paymentType = $subsystemInfo->getPaymentType();
-
-        if (Helper::isCheckoutHostedPaymentType($paymentType)) {
-            return $this->cancelCardOrder();
-        } else if ($paymentType === ConfigurationProvider::INVOICE_TYPE) {
-            return $this->cancelInvoiceOrder();
-        } else if ($paymentType === ConfigurationProvider::PAYMENTPLAN_TYPE) {
-            return $this->cancelPaymentPlanOrder();
-        } else {
-            throw new \Exception("This functionality currently does not support this method of payment ($paymentType)");
-        }
-    }
 }

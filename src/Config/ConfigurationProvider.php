@@ -44,10 +44,6 @@ interface ConfigurationProvider
     const ACCOUNT_TYPE = 'Account';
     const CARD_TYPE = 'Card';
 
-    /*
-     *  Checkout 
-     */
-    const CHECKOUT = 'CHECKOUT';
 
     /**
      * fetch username, used with invoice or payment plan (i.e. Svea WebService Europe API)

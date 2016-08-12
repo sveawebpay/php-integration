@@ -88,38 +88,6 @@ abstract class OrderValidator
 
         return $errors;
     }
-
-    protected function validateCheckoutOrderRows($order, $errors)
-    {
-        /**
-         * @var \Svea\WebPay\BuildOrder\RowBuilders\OrderRow [] $orderRows
-         */
-        $orderRows = $order->orderRows;
-
-        foreach ($orderRows as $row) {
-            if (empty($row->name)) {
-                $errors['missing values'] = "Name must be set in the Svea\WebPay\WebPayItem object. Use functions setName().";
-            }
-            /*if (empty($row->articleNumber)) {
-                $errors['missing values'] = "Article number must be set in the Svea\WebPay\WebPayItem object. Use functions setArticleNumber().";
-            }*/
-        }
-
-        return $errors;
-    }
-
-
-    /**
-     * @param CheckoutOrderBuilder $order
-     * @param array $errors
-     * @return array
-     */
-    protected function validateOrderId(CheckoutOrderBuilder $order, $errors)
-    {
-        if (!is_numeric($order->getId())) {
-            $errors['incorrect OrderId'] = "orderId can't be empty and must be int";
-        }
-
-        return $errors;
-    }
+ 
+ 
 }

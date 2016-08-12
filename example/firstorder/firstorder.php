@@ -1,5 +1,4 @@
 <?php
-
 /**
  * minimal invoice payment example
  *
@@ -14,7 +13,6 @@ use Svea\WebPay\Config\SveaConfig;
 
 error_reporting(E_ALL);
 ini_set('display_errors', 'On');
-
 
 // get configuration object holding the Svea service login credentials
 $myConfig = SveaConfig::getTestConfig();
@@ -66,7 +64,8 @@ echo "<pre>Your request response (the customerIdentity contains the verified inv
 
 print_r($myResponse);
 
-echo "</pre><font color='blue'><pre>
+echo "</pre><font color='blue'><pre>\n
+
 An example of a successful request response. The 'accepted' attribute is true (1), and resultcode/errormessage is not set.
 
 Svea\WebPay\WebService\WebServiceResponse\CreateOrderResponse Object

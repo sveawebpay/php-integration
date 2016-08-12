@@ -34,7 +34,7 @@ use Svea\WebPay\HostedService\HostedAdminRequest\LowerTransaction;
  * the QueryOrderResponse->numberedOrderRows attribute contains the order rows, but
  * note that if the order has been modified after creation these may not be accurate.
  *
- * Then use deliverInvoiceOrderRows() or deliver CardOrderRows or deliverCheckoutOrderRows() to get a request object,
+ * Then use deliverInvoiceOrderRows() or deliver CardOrderRows to get a request object,
  * which ever matches the payment method used in the original order. deliverCardOrderRows
  * Calculates the correct amount to deliver from supplied order rows and when followed by a
  * a ->doRequest() call performs a LowerTransaction followed by a ConfirmTransaction. Note
@@ -45,7 +45,7 @@ use Svea\WebPay\HostedService\HostedAdminRequest\LowerTransaction;
  *
  * @author Kristian Grossman-Madsen for Svea Svea\WebPay\WebPay
  */
-class DeliverOrderRowsBuilder extends CheckoutAdminOrderBuilder
+class DeliverOrderRowsBuilder extends PaymentAdminOrderBuilder
 {
     /**
      * @var ConfigurationProvider $conf
@@ -252,25 +252,7 @@ class DeliverOrderRowsBuilder extends CheckoutAdminOrderBuilder
         return $lowerTransactionRequest;
     }
 
-    /**
-     * Use deliverCheckoutOrderRows() to deliver rows to an Checkout Order.
-     * @return ConfirmTransactionResponse|DeliverOrderRowsRequest
-     * @throws \Svea\WebPay\BuildOrder\Validator\ValidationException
-     * @throws \Exception
-     */
-    public function deliverCheckoutOrderRows()
-    {
-        $subsystemInfo = $this->processCheckoutOrderInformation($this->orderId);
-        $paymentType = $subsystemInfo->getPaymentType();
-
-        if (Helper::isCheckoutHostedPaymentType($paymentType)) {
-            return $this->deliverCardOrderRows();
-        } else if ($paymentType === ConfigurationProvider::INVOICE_TYPE) {
-            return $this->deliverInvoiceOrderRows();
-        } else {
-            throw new \Exception("This functionality currently does not support this method of payment ($paymentType)");
-        }
-    }
+    
 
     /**
      * @internal

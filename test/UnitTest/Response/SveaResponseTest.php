@@ -1,42 +1,48 @@
 <?php
 
-use Svea\WebPay\Config\ConfigurationProvider;
+namespace Svea\WebPay\Test\UnitTest\Response;
+
 use Svea\WebPay\Config\SveaConfig;
 use Svea\WebPay\Response\SveaResponse;
+use Svea\WebPay\Config\ConfigurationProvider;
 
 
 /**
  * @author Kristian Grossman-Madsen for Svea Webpay
  */
-class SveaResponseTest extends \PHPUnit_Framework_TestCase {
+class SveaResponseTest extends \PHPUnit_Framework_TestCase
+{
 
-    public function test_handles_response_which_is_null() {
+    public function test_handles_response_which_is_null()
+    {
         $config = SveaConfig::getDefaultConfig();
 
-        $response = new SveaResponse( NULL, "SE", $config );
-        $this->assertInternalType('string', $response->getResponse() );
-        $this->assertEquals('Response is not recognized.', $response->getResponse() );
+        $response = new SveaResponse(NULL, "SE", $config);
+        $this->assertInternalType('string', $response->getResponse());
+        $this->assertEquals('Response is not recognized.', $response->getResponse());
     }
 
-    public function test_handles_response_which_is_xml() {
+    public function test_handles_response_which_is_xml()
+    {
         $config = SveaConfig::getDefaultConfig();
 
         $message = "string_that_pretends_to_be_an_encoded_xml_response";
 
-        $response = new SveaResponse( $message, "SE", $config );
-        $this->assertInstanceOf('Svea\WebPay\HostedService\HostedResponse\HostedPaymentResponse', $response->getResponse() );
+        $response = new SveaResponse($message, "SE", $config);
+        $this->assertInstanceOf('Svea\WebPay\HostedService\HostedResponse\HostedPaymentResponse', $response->getResponse());
 
     }
 
-    public function test_handles_response_is_SimpleXMLElement_object() {
+    public function test_handles_response_is_SimpleXMLElement_object()
+    {
         $config = SveaConfig::getDefaultConfig();
 
-        $message = (object)array( "CloseOrderEuResult" => (object) array( "Accepted" => "1", "ResultCode" => "0" ) );
+        $message = (object)array("CloseOrderEuResult" => (object)array("Accepted" => "1", "ResultCode" => "0"));
 
-        $this->assertTrue( \is_object($message) );
+        $this->assertTrue(\is_object($message));
 
-        $response = new SveaResponse( $message, "SE", $config );
-        $this->assertInstanceOf('Svea\WebPay\WebService\WebServiceResponse\CloseOrderResult', $response->getResponse() );
+        $response = new SveaResponse($message, "SE", $config);
+        $this->assertInstanceOf('Svea\WebPay\WebService\WebServiceResponse\CloseOrderResult', $response->getResponse());
     }
 
     /**
@@ -47,7 +53,8 @@ class SveaResponseTest extends \PHPUnit_Framework_TestCase {
      * by passing the response post data through Svea\WebPay\Response\SveaResponse() to get a response
      * object matching the original payment request.
      */
-    public function test_successful_test_card_order_has_accepted_non_zero() {
+    public function test_successful_test_card_order_has_accepted_non_zero()
+    {
 
         // getSingleCountryConfig fetches a SveaConfigurationProvider object that implements Svea\WebPay\Config\ConfigurationProvider
         // as we don't set any parameters, the object contains only default values, i.e. the merchantid used is 1130
@@ -72,7 +79,7 @@ class SveaResponseTest extends \PHPUnit_Framework_TestCase {
         $rawresponse['merchantId'] = $merchantId;
 
         // $rawresponse is then put into the Svea\WebPay\Response\SveaResponse constructor along with the country and config object
-        $sveaResponse = new SveaResponse( $rawresponse, "SE", $config);
+        $sveaResponse = new SveaResponse($rawresponse, "SE", $config);
         // the resulting $response HostedPaymentResponse object contains all relevant information about the payment
         $response = $sveaResponse->getResponse();
 
@@ -83,8 +90,8 @@ class SveaResponseTest extends \PHPUnit_Framework_TestCase {
 //        if( empty($response->accepted) ) { //print_r( "test accepted is empty" ); }
 //        if( !empty($response->accepted) ) { //print_r( "test accepted not empty" ); }
 
-        $this->assertInstanceOf('Svea\WebPay\HostedService\HostedResponse\HostedPaymentResponse', $response );
-        $this->assertEquals(1, $response->accepted );
+        $this->assertInstanceOf('Svea\WebPay\HostedService\HostedResponse\HostedPaymentResponse', $response);
+        $this->assertEquals(1, $response->accepted);
 
     }
 }

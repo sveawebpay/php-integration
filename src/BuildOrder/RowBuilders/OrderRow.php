@@ -171,9 +171,7 @@ class OrderRow
      * Optional - long item description
      *
      * Note that this will be merged with the item name when the request is sent to Svea
-     *
-     * Note: this is not used for Checkout order
-     *
+     *     *
      * @param string $descriptionAsString
      * @return $this
      */

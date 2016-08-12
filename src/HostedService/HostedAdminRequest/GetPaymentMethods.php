@@ -22,7 +22,7 @@ class GetPaymentMethods
         $this->config = $config;
     }
 
-    public function setCountryCode($countryCodeAsString)
+    public function setContryCode($countryCodeAsString)
     {
         $this->countryCode = $countryCodeAsString;
 

@@ -43,7 +43,7 @@ use Svea\WebPay\HostedService\HostedAdminRequest\CreditTransaction;
  * Note that for Card and Direct bank orders the serverside order rows will not be updated.
  *
  * Then use either creditInvoiceOrderRows(), creditCardOrderRows() or
- * creditDirectBankOrderRows() or creditCheckoutOrderRows() to get a request object, which ever matches the
+ * creditDirectBankOrderRows() to get a request object, which ever matches the
  * payment method used in the original order.
  *
  * Calling doRequest() on the request object will send the request to Svea and
@@ -51,7 +51,7 @@ use Svea\WebPay\HostedService\HostedAdminRequest\CreditTransaction;
  *
  * @author Kristian Grossman-Madsen for Svea Svea\WebPay\WebPay
  */
-class CreditOrderRowsBuilder extends CheckoutAdminOrderBuilder
+class CreditOrderRowsBuilder extends PaymentAdminOrderBuilder
 {
     /**
      * @var ConfigurationProvider $conf
@@ -185,7 +185,7 @@ class CreditOrderRowsBuilder extends CheckoutAdminOrderBuilder
     /**
      * Required for creditInvoiceOrder() -- must match the invoice distribution type for the order
      *
-     * @param DistributionType $distributionTypeAsConst - 
+     * @param string $distributionTypeAsConst - 
      *                  i.e. Svea\WebPay\Constant\DistributionType::POST|Svea\WebPay\Constant\DistributionType::EMAIL
      * @return $this
      */
@@ -332,27 +332,7 @@ class CreditOrderRowsBuilder extends CheckoutAdminOrderBuilder
         return $creditTransaction;
     }
 
-    /**
-     * Use creditCheckoutOrderRows() to credit a Checkout order
-     * @return CreditInvoiceRowsRequest|CreditPaymentPlanRowsRequest|CreditTransaction
-     * @throws ValidationException
-     * @throws \Exception
-     */
-    public function creditCheckoutOrderRows()
-    {
-        $subsystemInfo = $this->processCheckoutOrderInformation($this->orderId);
-        $paymentType = $subsystemInfo->getPaymentType();
-
-        if (Helper::isCheckoutHostedPaymentType($paymentType)) {
-            return $this->creditCardOrderRows();
-        } else if ($paymentType === ConfigurationProvider::INVOICE_TYPE) {
-            return $this->creditInvoiceOrderRows();
-        } else if ($paymentType === ConfigurationProvider::PAYMENTPLAN_TYPE) {
-            return $this->creditPaymentPlanOrderRows();
-        } else {
-            throw new \Exception("This functionality currently does not support this method of payment ($paymentType)");
-        }
-    }
+    
 
     /**
      * Use creditDirectBankOrderRows() to credit a Direct Bank order by the specified order row amounts using HostedRequests CreditTransaction request

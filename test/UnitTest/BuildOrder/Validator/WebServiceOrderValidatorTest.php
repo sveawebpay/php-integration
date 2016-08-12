@@ -1,50 +1,53 @@
 <?php
 
-use Svea\WebPay\BuildOrder\Validator\ValidationException;
-use Svea\WebPay\Config\SveaConfig;
-use Svea\WebPay\Test\TestUtil;
+namespace Svea\WebPay\Test\UnitTest\BuildOrder\Validator;
+
+use Exception;
 use Svea\WebPay\WebPay;
 use Svea\WebPay\WebPayItem;
+use Svea\WebPay\Test\TestUtil;
+use Svea\WebPay\Config\SveaConfig;
 
 /**
  * @author Anneli Halld'n, Daniel Brolund for Svea Webpay
  */
-class WebServiceOrderValidatorTest extends \PHPUnit_Framework_TestCase {
-
+class WebServiceOrderValidatorTest extends \PHPUnit_Framework_TestCase
+{
     /**
      * @expectedException Svea\WebPay\BuildOrder\Validator\ValidationException
      * @expectedExceptionMessage -missing value : Customer values are required for Invoice and PaymentPlan orders.
-
-    function te_stFailOnMissingCustomerIdentity() {
-        $builder = \Svea\WebPay\WebPay::createOrder($config);
-        $order = $builder
-                ->beginOrderRow()
-                    ->setAmountExVat(100)
-                    ->setVatPercent(20)
-                    ->setQuantity(1)
-                ->endOrderRow()
-                ->setCountryCode("SE")
-                    ->useInvoicePayment();
-        $order->prepareRequest();
-
-    }
-      *
-      */
+     *
+     * function te_stFailOnMissingCustomerIdentity() {
+     * $builder = \Svea\WebPay\WebPay::createOrder($config);
+     * $order = $builder
+     * ->beginOrderRow()
+     * ->setAmountExVat(100)
+     * ->setVatPercent(20)
+     * ->setQuantity(1)
+     * ->endOrderRow()
+     * ->setCountryCode("SE")
+     * ->useInvoicePayment();
+     * $order->prepareRequest();
+     *
+     * }
+     *
+     */
 
     /**
      * @expectedException Svea\WebPay\BuildOrder\Validator\ValidationException
      * @expectedExceptionMessage -duplicated value : Customer is either an individual or a company. You can not use function setNationalIdNumber() in combination with setNationalIdNumber() or setVatNumber().
      */
-    public function t_estFailOnDoubleIdentity() {
+    public function t_estFailOnDoubleIdentity()
+    {
         $config = SveaConfig::getDefaultConfig();
         $builder = WebPay::createOrder($config);
         $order = $builder
-                ->addOrderRow(TestUtil::createHostedOrderRow())
-                ->setCountryCode("SE")
-                ->setOrderDate("Mon, 15 Aug 05 15:52:01 +0000")
-                ->addCustomerDetails(WebPayItem::individualCustomer()->setNationalIdNumber(194605092222))
-                ->addCustomerDetails(WebPayItem::companyCustomer()->setNationalIdNumber(4608142222))
-                ->useInvoicePayment();
+            ->addOrderRow(TestUtil::createHostedOrderRow())
+            ->setCountryCode("SE")
+            ->setOrderDate("Mon, 15 Aug 05 15:52:01 +0000")
+            ->addCustomerDetails(WebPayItem::individualCustomer()->setNationalIdNumber(194605092222))
+            ->addCustomerDetails(WebPayItem::companyCustomer()->setNationalIdNumber(4608142222))
+            ->useInvoicePayment();
 
         $order->prepareRequest();
     }
@@ -53,11 +56,13 @@ class WebServiceOrderValidatorTest extends \PHPUnit_Framework_TestCase {
      * Use to get paymentPlanParams to be able to test PaymentPlanRequest
      * @return type
      */
-    public function getGetPaymentPlanParamsForTesting($config) {
+    public function getGetPaymentPlanParamsForTesting($config)
+    {
         $addressRequest = WebPay::getPaymentPlanParams($config);
         $response = $addressRequest
-                ->setCountryCode("SE")
-                ->doRequest();
+            ->setCountryCode("SE")
+            ->doRequest();
+
         return $response->campaignCodes[0]->campaignCode;
     }
 
@@ -65,16 +70,17 @@ class WebServiceOrderValidatorTest extends \PHPUnit_Framework_TestCase {
      * @expectedException Svea\WebPay\BuildOrder\Validator\ValidationException
      * @expectedExceptionMessage -Wrong customer type : PaymentPlanPayment not allowed for Company customer.
      */
-    public function testFailOnCompanyPaymentPlanPayment() {
+    public function testFailOnCompanyPaymentPlanPayment()
+    {
         $config = SveaConfig::getDefaultConfig();
         $code = $this->getGetPaymentPlanParamsForTesting($config);
         $builder = WebPay::CreateOrder($config);
         $order = $builder
-                ->addOrderRow(TestUtil::createHostedOrderRow())
-                ->setCountryCode("SE")
-                ->setOrderDate("Mon, 15 Aug 05 15:52:01 +0000")
-                ->addCustomerDetails(WebPayItem::companyCustomer()->setNationalIdNumber(4608142222))
-                ->usePaymentPlanPayment('5454');
+            ->addOrderRow(TestUtil::createHostedOrderRow())
+            ->setCountryCode("SE")
+            ->setOrderDate("Mon, 15 Aug 05 15:52:01 +0000")
+            ->addCustomerDetails(WebPayItem::companyCustomer()->setNationalIdNumber(4608142222))
+            ->usePaymentPlanPayment('5454');
 
         $order = $order->prepareRequest();
     }
@@ -83,15 +89,16 @@ class WebServiceOrderValidatorTest extends \PHPUnit_Framework_TestCase {
      * @expectedException Svea\WebPay\BuildOrder\Validator\ValidationException
      * @expectedExceptionMessage -not valid : Given countrycode does not exist in our system.
      */
-    public function testFailOnBadCountryCode() {
+    public function testFailOnBadCountryCode()
+    {
         $config = SveaConfig::getDefaultConfig();
         $builder = WebPay::createOrder($config);
         $order = $builder
-                ->addOrderRow(TestUtil::createHostedOrderRow())
-                 ->setCountryCode("ZZ")
-                 ->setOrderDate("Mon, 15 Aug 05 15:52:01 +0000")
-                 ->addCustomerDetails(WebPayItem::individualCustomer()->setNationalIdNumber(111111))
-                 ->useInvoicePayment();
+            ->addOrderRow(TestUtil::createHostedOrderRow())
+            ->setCountryCode("ZZ")
+            ->setOrderDate("Mon, 15 Aug 05 15:52:01 +0000")
+            ->addCustomerDetails(WebPayItem::individualCustomer()->setNationalIdNumber(111111))
+            ->useInvoicePayment();
 
         $order->prepareRequest();
     }
@@ -100,14 +107,15 @@ class WebServiceOrderValidatorTest extends \PHPUnit_Framework_TestCase {
      * @expectedException Svea\WebPay\BuildOrder\Validator\ValidationException
      * @expectedExceptionMessage -missing value : CountryCode is required. Use function setCountryCode().
      */
-    public function testFailOnMissingCountryCode() {
+    public function testFailOnMissingCountryCode()
+    {
         $config = SveaConfig::getDefaultConfig();
         $builder = WebPay::createOrder($config);
         $order = $builder
-                ->addOrderRow(TestUtil::createHostedOrderRow())
-                ->addCustomerDetails(WebPayItem::individualCustomer()->setNationalIdNumber(111111))
-                ->setOrderDate("Mon, 15 Aug 05 15:52:01 +0000")
-                ->useInvoicePayment();
+            ->addOrderRow(TestUtil::createHostedOrderRow())
+            ->addCustomerDetails(WebPayItem::individualCustomer()->setNationalIdNumber(111111))
+            ->setOrderDate("Mon, 15 Aug 05 15:52:01 +0000")
+            ->useInvoicePayment();
 
         $order->prepareRequest();
     }
@@ -116,14 +124,15 @@ class WebServiceOrderValidatorTest extends \PHPUnit_Framework_TestCase {
      * @expectedException Svea\WebPay\BuildOrder\Validator\ValidationException
      * @expectedExceptionMessage -missing value : NationalIdNumber is required for individual customers when countrycode is SE, NO, DK or FI. Use function setNationalIdNumber().
      */
-    public function testFailOnMissingNationalIdNumberForSeOrder() {
+    public function testFailOnMissingNationalIdNumberForSeOrder()
+    {
         $config = SveaConfig::getDefaultConfig();
         $builder = WebPay::createOrder($config);
         $order = $builder
-                ->setCountryCode("SE")
-                ->setOrderDate("Mon, 15 Aug 05 15:52:01 +0000")
-                ->addCustomerDetails(WebPayItem::individualCustomer()->setName("Tess", "Testson"))
-                ->useInvoicePayment();
+            ->setCountryCode("SE")
+            ->setOrderDate("Mon, 15 Aug 05 15:52:01 +0000")
+            ->addCustomerDetails(WebPayItem::individualCustomer()->setName("Tess", "Testson"))
+            ->useInvoicePayment();
 
         $order->prepareRequest();
     }
@@ -132,30 +141,32 @@ class WebServiceOrderValidatorTest extends \PHPUnit_Framework_TestCase {
      * @expectedException Svea\WebPay\BuildOrder\Validator\ValidationException
      * @expectedExceptionMessage -missing value : NationalIdNumber is required for individual customers when countrycode is SE, NO, DK or FI. Use function setNationalIdNumber().
      */
-    public function testFailOnNationalIdNumberIsEmptyString() {
+    public function testFailOnNationalIdNumberIsEmptyString()
+    {
         $config = SveaConfig::getDefaultConfig();
         $builder = WebPay::createOrder($config);
         $order = $builder
-                ->setCountryCode("SE")
-                ->setOrderDate(date('c'))
-                ->addCustomerDetails(WebPayItem::individualCustomer()->setNationalIdNumber("") )
-                ->useInvoicePayment();
+            ->setCountryCode("SE")
+            ->setOrderDate(date('c'))
+            ->addCustomerDetails(WebPayItem::individualCustomer()->setNationalIdNumber(""))
+            ->useInvoicePayment();
 
         $order->prepareRequest();
     }
-    
+
     /**
      * @expectedException Svea\WebPay\BuildOrder\Validator\ValidationException
      * @expectedExceptionMessage -missing value : OrgNumber is required for company customers when countrycode is SE, NO, DK or FI. Use function setNationalIdNumber().
      */
-    public function testFailOnMissingOrgNumberForCompanyOrderSe() {
+    public function testFailOnMissingOrgNumberForCompanyOrderSe()
+    {
         $config = SveaConfig::getDefaultConfig();
         $builder = WebPay::createOrder($config);
         $order = $builder
-                ->setCountryCode("SE")
-                  ->setOrderDate("Mon, 15 Aug 05 15:52:01 +0000")
-                  ->addCustomerDetails(WebPayItem::companyCustomer()->setCompanyName("Mycompany"))
-                    ->useInvoicePayment();
+            ->setCountryCode("SE")
+            ->setOrderDate("Mon, 15 Aug 05 15:52:01 +0000")
+            ->addCustomerDetails(WebPayItem::companyCustomer()->setCompanyName("Mycompany"))
+            ->useInvoicePayment();
 
         $order->prepareRequest();
     }
@@ -169,13 +180,14 @@ class WebServiceOrderValidatorTest extends \PHPUnit_Framework_TestCase {
      * -missing value : Locality is required for all customers when countrycode is DE. Use function setLocality().
      * -missing value : ZipCode is required for all customers when countrycode is DE. Use function setZipCode().
      */
-    public function testFailOnMissingIdentityValuesForDEPaymentPlanOrder() {
+    public function testFailOnMissingIdentityValuesForDEPaymentPlanOrder()
+    {
         $config = SveaConfig::getDefaultConfig();
         $builder = WebPay::createOrder($config);
         $order = $builder
-                ->setCountryCode("DE")
-                ->setOrderDate("Mon, 15 Aug 05 15:52:01 +0000")
-                ->usePaymentPlanPayment(213060);
+            ->setCountryCode("DE")
+            ->setOrderDate("Mon, 15 Aug 05 15:52:01 +0000")
+            ->usePaymentPlanPayment(213060);
 
         $order->prepareRequest();
     }
@@ -184,20 +196,21 @@ class WebServiceOrderValidatorTest extends \PHPUnit_Framework_TestCase {
      * @expectedException Svea\WebPay\BuildOrder\Validator\ValidationException
      * @expectedExceptionMessage -missing value : BirthDate is required for individual customers when countrycode is DE. Use function setBirthDate().
      */
-    public function testFailOnMissingBirthDateForDeOrder() {
+    public function testFailOnMissingBirthDateForDeOrder()
+    {
         $config = SveaConfig::getDefaultConfig();
         $builder = WebPay::createOrder($config);
         $order = $builder
-                ->setCountryCode("DE")
-                ->setOrderDate("Mon, 15 Aug 05 15:52:01 +0000")
-                ->addCustomerDetails(WebPayItem::individualCustomer()
-                        //->setBirthDate(1923, 12, 12)
-                        ->setName("Tess", "Testson")
-                        ->setStreetAddress("Gatan", 23)
-                        ->setZipCode(9999)
-                        ->setLocality("Stan")
-                )
-                ->useInvoicePayment();
+            ->setCountryCode("DE")
+            ->setOrderDate("Mon, 15 Aug 05 15:52:01 +0000")
+            ->addCustomerDetails(WebPayItem::individualCustomer()
+                //->setBirthDate(1923, 12, 12)
+                ->setName("Tess", "Testson")
+                ->setStreetAddress("Gatan", 23)
+                ->setZipCode(9999)
+                ->setLocality("Stan")
+            )
+            ->useInvoicePayment();
         $order->prepareRequest();
     }
 
@@ -211,14 +224,15 @@ class WebServiceOrderValidatorTest extends \PHPUnit_Framework_TestCase {
      * -missing value : Locality is required for all customers when countrycode is NL. Use function setLocality().
      * -missing value : ZipCode is required for all customers when countrycode is NL. Use function setZipCode().
      */
-    public function testFailOnMissingValuesForNlOrder() {
+    public function testFailOnMissingValuesForNlOrder()
+    {
         $config = SveaConfig::getDefaultConfig();
         $builder = WebPay::createOrder($config);
         $order = $builder
-                ->addOrderRow(TestUtil::createHostedOrderRow())
-                ->setCountryCode("NL")
-                ->setOrderDate("Mon, 15 Aug 05 15:52:01 +0000")
-                ->useInvoicePayment();
+            ->addOrderRow(TestUtil::createHostedOrderRow())
+            ->setCountryCode("NL")
+            ->setOrderDate("Mon, 15 Aug 05 15:52:01 +0000")
+            ->useInvoicePayment();
         //$errorArray = $order->validateOrder();
         ////print_r($errorArray);
         $order->prepareRequest(); //throws esception
@@ -228,21 +242,22 @@ class WebServiceOrderValidatorTest extends \PHPUnit_Framework_TestCase {
      * @expectedException Svea\WebPay\BuildOrder\Validator\ValidationException
      * @expectedExceptionMessage -missing value : Initials is required for individual customers when countrycode is NL. Use function setInitials().
      */
-    public function testFailOnMissingInitialsForNlOrder() {
+    public function testFailOnMissingInitialsForNlOrder()
+    {
         $config = SveaConfig::getDefaultConfig();
         $builder = WebPay::createOrder($config);
         $order = $builder
-                ->setCountryCode("NL")
-                ->setOrderDate("Mon, 15 Aug 05 15:52:01 +0000")
-                ->addCustomerDetails(WebPayItem::individualCustomer()
-                        //->setInitials("SB")
-                        ->setBirthDate(1923, 12, 12)
-                        ->setName("Tess", "Testson")
-                        ->setStreetAddress("Gatan", 23)
-                        ->setZipCode(9999)
-                        ->setLocality("Stan")
-                )
-                ->useInvoicePayment();
+            ->setCountryCode("NL")
+            ->setOrderDate("Mon, 15 Aug 05 15:52:01 +0000")
+            ->addCustomerDetails(WebPayItem::individualCustomer()
+                //->setInitials("SB")
+                ->setBirthDate(1923, 12, 12)
+                ->setName("Tess", "Testson")
+                ->setStreetAddress("Gatan", 23)
+                ->setZipCode(9999)
+                ->setLocality("Stan")
+            )
+            ->useInvoicePayment();
         $order->prepareRequest();
     }
 
@@ -250,14 +265,15 @@ class WebServiceOrderValidatorTest extends \PHPUnit_Framework_TestCase {
      * @expectedException Svea\WebPay\BuildOrder\Validator\ValidationException
      * @expectedExceptionMessage -missing values : OrderRows are required. Use function addOrderRow(Svea\WebPay\WebPayItem::orderRow) to get orderrow setters.
      */
-    public function testFailOnMissingOrderRows() {
+    public function testFailOnMissingOrderRows()
+    {
         $config = SveaConfig::getDefaultConfig();
         $builder = WebPay::createOrder($config);
         $order = $builder
-                ->setCountryCode("SE")
-                ->setOrderDate("Mon, 15 Aug 05 15:52:01 +0000")
-                ->addCustomerDetails(WebPayItem::individualCustomer()->setNationalIdNumber(46111111))
-                ->useInvoicePayment();
+            ->setCountryCode("SE")
+            ->setOrderDate("Mon, 15 Aug 05 15:52:01 +0000")
+            ->addCustomerDetails(WebPayItem::individualCustomer()->setNationalIdNumber(46111111))
+            ->useInvoicePayment();
         $order->prepareRequest();
     }
 
@@ -281,7 +297,8 @@ class WebServiceOrderValidatorTest extends \PHPUnit_Framework_TestCase {
      * @expectedException Svea\WebPay\BuildOrder\Validator\ValidationException
      * @expectedExceptionMessage -missing values : Precisely two of these values must be set in the Svea\WebPay\WebPayItem object:  AmountExVat, AmountIncVat or VatPercent for Orderrow. Use functions setAmountExVat(), setAmountIncVat() or setVatPercent().
      */
-    public function testFailOnOrderRowMissingAllOfAmountExVatAmountIncVatAndVatPercent() {
+    public function testFailOnOrderRowMissingAllOfAmountExVatAmountIncVatAndVatPercent()
+    {
         $config = SveaConfig::getDefaultConfig();
         $builder = WebPay::createOrder($config);
         $order = $builder
@@ -291,15 +308,16 @@ class WebServiceOrderValidatorTest extends \PHPUnit_Framework_TestCase {
             ->setCountryCode("SE")
             ->setOrderDate("Mon, 15 Aug 05 15:52:01 +0000")
             ->addCustomerDetails(WebPayItem::individualCustomer()->setNationalIdNumber(46111111))
-            ->useInvoicePayment()
-        ;
+            ->useInvoicePayment();
         $order->prepareRequest();
     }
+
     /**
      * @expectedException Svea\WebPay\BuildOrder\Validator\ValidationException
      * @expectedExceptionMessage -missing values : Precisely two of these values must be set in the Svea\WebPay\WebPayItem object:  AmountExVat, AmountIncVat or VatPercent for Orderrow. Use functions setAmountExVat(), setAmountIncVat() or setVatPercent().
      */
-    public function testFailOnOrderRowIncludesAllOfAmountExVatAmountIncVatAndVatPercent() {
+    public function testFailOnOrderRowIncludesAllOfAmountExVatAmountIncVatAndVatPercent()
+    {
         $config = SveaConfig::getDefaultConfig();
         $builder = WebPay::createOrder($config);
         $order = $builder
@@ -312,8 +330,7 @@ class WebServiceOrderValidatorTest extends \PHPUnit_Framework_TestCase {
             ->setCountryCode("SE")
             ->setOrderDate("Mon, 15 Aug 05 15:52:01 +0000")
             ->addCustomerDetails(WebPayItem::individualCustomer()->setNationalIdNumber(46111111))
-            ->useInvoicePayment()
-        ;
+            ->useInvoicePayment();
         $order->prepareRequest();
     }
 
@@ -321,16 +338,17 @@ class WebServiceOrderValidatorTest extends \PHPUnit_Framework_TestCase {
      * @expectedException Svea\WebPay\BuildOrder\Validator\ValidationException
      * @expectedExceptionMessage
      * -missing values : OrderDate is Required. Use function setOrderDate().
-    */
-    public function testFailOnMissingOrderDate() {
+     */
+    public function testFailOnMissingOrderDate()
+    {
         $config = SveaConfig::getDefaultConfig();
         $builder = WebPay::createOrder($config);
         $order = $builder
-                ->addOrderRow(TestUtil::createHostedOrderRow())
-                ->setCountryCode("SE")
-                // ->setOrderDate("Mon, 15 Aug 05 15:52:01 +0000")
-                ->addCustomerDetails(WebPayItem::individualCustomer()->setNationalIdNumber(46111111))
-                ->useInvoicePayment();
+            ->addOrderRow(TestUtil::createHostedOrderRow())
+            ->setCountryCode("SE")
+            // ->setOrderDate("Mon, 15 Aug 05 15:52:01 +0000")
+            ->addCustomerDetails(WebPayItem::individualCustomer()->setNationalIdNumber(46111111))
+            ->useInvoicePayment();
         $order->prepareRequest();
     }
 
@@ -339,164 +357,172 @@ class WebServiceOrderValidatorTest extends \PHPUnit_Framework_TestCase {
     /**
      * @expectedException Svea\WebPay\BuildOrder\Validator\ValidationException
      * @expectedExceptionMessage -incorrect datatype : articleNumber is not of type string.
-    */
-    public function testFailOnArticleNumberNotString() {
+     */
+    public function testFailOnArticleNumberNotString()
+    {
         $config = SveaConfig::getDefaultConfig();
         $builder = WebPay::createOrder($config);
         $order = $builder
-                ->addOrderRow(WebPayItem::orderRow()
-                    ->setAmountExVat(100.00)
-                    ->setVatPercent(20)
-                    ->setQuantity(1)
-                    ->setArticleNumber(42)
-                )
-                ->setCountryCode("SE")
-                ->setOrderDate("Mon, 15 Aug 05 15:52:01 +0000")
-                ->addCustomerDetails(WebPayItem::individualCustomer()->setNationalIdNumber(46111111))
-                ->useInvoicePayment();
+            ->addOrderRow(WebPayItem::orderRow()
+                ->setAmountExVat(100.00)
+                ->setVatPercent(20)
+                ->setQuantity(1)
+                ->setArticleNumber(42)
+            )
+            ->setCountryCode("SE")
+            ->setOrderDate("Mon, 15 Aug 05 15:52:01 +0000")
+            ->addCustomerDetails(WebPayItem::individualCustomer()->setNationalIdNumber(46111111))
+            ->useInvoicePayment();
         $order->prepareRequest();
     }
 
     /**
      * @expectedException Svea\WebPay\BuildOrder\Validator\ValidationException
      * @expectedExceptionMessage -incorrect datatype : quantity is not numeric, set as integer or float.
-    */
-    public function testFailOnQuantityNotNumeric() {
+     */
+    public function testFailOnQuantityNotNumeric()
+    {
         $config = SveaConfig::getDefaultConfig();
         $builder = WebPay::createOrder($config);
         $order = $builder
-                ->addOrderRow(WebPayItem::orderRow()
-                    ->setAmountExVat(100.00)
-                    ->setVatPercent(20)
-                    ->setQuantity("1,25")    // note that i.e. "1,25" is numeric 1, so exclude strings for safety
-                )
-                ->setCountryCode("SE")
-                ->setOrderDate("Mon, 15 Aug 05 15:52:01 +0000")
-                ->addCustomerDetails(WebPayItem::individualCustomer()->setNationalIdNumber(46111111))
-                ->useInvoicePayment();
+            ->addOrderRow(WebPayItem::orderRow()
+                ->setAmountExVat(100.00)
+                ->setVatPercent(20)
+                ->setQuantity("1,25")    // note that i.e. "1,25" is numeric 1, so exclude strings for safety
+            )
+            ->setCountryCode("SE")
+            ->setOrderDate("Mon, 15 Aug 05 15:52:01 +0000")
+            ->addCustomerDetails(WebPayItem::individualCustomer()->setNationalIdNumber(46111111))
+            ->useInvoicePayment();
         $order->prepareRequest();
     }
 
-        /**
+    /**
      * @expectedException Svea\WebPay\BuildOrder\Validator\ValidationException
      * @expectedExceptionMessage -incorrect datatype : unit is not of type string.
-    */
-    public function testFailOnUnitNotString() {
+     */
+    public function testFailOnUnitNotString()
+    {
         $config = SveaConfig::getDefaultConfig();
         $builder = WebPay::createOrder($config);
         $order = $builder
-                ->addOrderRow(WebPayItem::orderRow()
-                    ->setAmountExVat(100.00)
-                    ->setVatPercent(20)
-                    ->setQuantity(1)
-                    ->setUnit(1)
-                )
-                ->setCountryCode("SE")
-                ->setOrderDate("Mon, 15 Aug 05 15:52:01 +0000")
-                ->addCustomerDetails(WebPayItem::individualCustomer()->setNationalIdNumber(46111111))
-                ->useInvoicePayment();
+            ->addOrderRow(WebPayItem::orderRow()
+                ->setAmountExVat(100.00)
+                ->setVatPercent(20)
+                ->setQuantity(1)
+                ->setUnit(1)
+            )
+            ->setCountryCode("SE")
+            ->setOrderDate("Mon, 15 Aug 05 15:52:01 +0000")
+            ->addCustomerDetails(WebPayItem::individualCustomer()->setNationalIdNumber(46111111))
+            ->useInvoicePayment();
         $order->prepareRequest();
     }
 
     /**
      * @expectedException Svea\WebPay\BuildOrder\Validator\ValidationException
      * @expectedExceptionMessage -incorrect datatype : amountExVat is not of type float.
-    */
-    public function testFailOnAmountExVatNotFloat() {
+     */
+    public function testFailOnAmountExVatNotFloat()
+    {
         $config = SveaConfig::getDefaultConfig();
         $builder = WebPay::createOrder($config);
         $order = $builder
-                ->addOrderRow(WebPayItem::orderRow()
-                    ->setAmountExVat("100.00")
-                    ->setVatPercent(20)
-                    ->setQuantity(1)
-                )
-                ->setCountryCode("SE")
-                ->setOrderDate("Mon, 15 Aug 05 15:52:01 +0000")
-                ->addCustomerDetails(WebPayItem::individualCustomer()->setNationalIdNumber(46111111))
-                ->useInvoicePayment();
+            ->addOrderRow(WebPayItem::orderRow()
+                ->setAmountExVat("100.00")
+                ->setVatPercent(20)
+                ->setQuantity(1)
+            )
+            ->setCountryCode("SE")
+            ->setOrderDate("Mon, 15 Aug 05 15:52:01 +0000")
+            ->addCustomerDetails(WebPayItem::individualCustomer()->setNationalIdNumber(46111111))
+            ->useInvoicePayment();
         $order->prepareRequest();
     }
 
     /**
      * @expectedException Svea\WebPay\BuildOrder\Validator\ValidationException
      * @expectedExceptionMessage -incorrect datatype : amountIncVat is not of type float.
-    */
-    public function testFailOnAmountIncVatNotFloat() {
+     */
+    public function testFailOnAmountIncVatNotFloat()
+    {
         $config = SveaConfig::getDefaultConfig();
         $builder = WebPay::createOrder($config);
         $order = $builder
-                ->addOrderRow(WebPayItem::orderRow()
-                    ->setAmountIncVat("100.00")
-                    ->setVatPercent(20)
-                    ->setQuantity(1)
-                )
-                ->setCountryCode("SE")
-                ->setOrderDate("Mon, 15 Aug 05 15:52:01 +0000")
-                ->addCustomerDetails(WebPayItem::individualCustomer()->setNationalIdNumber(46111111))
-                ->useInvoicePayment();
+            ->addOrderRow(WebPayItem::orderRow()
+                ->setAmountIncVat("100.00")
+                ->setVatPercent(20)
+                ->setQuantity(1)
+            )
+            ->setCountryCode("SE")
+            ->setOrderDate("Mon, 15 Aug 05 15:52:01 +0000")
+            ->addCustomerDetails(WebPayItem::individualCustomer()->setNationalIdNumber(46111111))
+            ->useInvoicePayment();
         $order->prepareRequest();
     }
 
-  /**
+    /**
      * @expectedException Svea\WebPay\BuildOrder\Validator\ValidationException
      * @expectedExceptionMessage -incorrect datatype : name is not of type string.
-    */
-    public function testFailOnNameNotString() {
+     */
+    public function testFailOnNameNotString()
+    {
         $config = SveaConfig::getDefaultConfig();
         $builder = WebPay::createOrder($config);
         $order = $builder
-                ->addOrderRow(WebPayItem::orderRow()
-                    ->setAmountExVat(100.00)
-                    ->setVatPercent(20)
-                    ->setName(1701)
-                    ->setQuantity(1)
-                )
-                ->setCountryCode("SE")
-                ->setOrderDate("Mon, 15 Aug 05 15:52:01 +0000")
-                ->addCustomerDetails(WebPayItem::individualCustomer()->setNationalIdNumber(46111111))
-                ->useInvoicePayment();
+            ->addOrderRow(WebPayItem::orderRow()
+                ->setAmountExVat(100.00)
+                ->setVatPercent(20)
+                ->setName(1701)
+                ->setQuantity(1)
+            )
+            ->setCountryCode("SE")
+            ->setOrderDate("Mon, 15 Aug 05 15:52:01 +0000")
+            ->addCustomerDetails(WebPayItem::individualCustomer()->setNationalIdNumber(46111111))
+            ->useInvoicePayment();
         $order->prepareRequest();
     }
 
-  /**
+    /**
      * @expectedException Svea\WebPay\BuildOrder\Validator\ValidationException
      * @expectedExceptionMessage -incorrect datatype : description is not of type string.
-    */
-    public function testFailOnDescriptionNotString() {
+     */
+    public function testFailOnDescriptionNotString()
+    {
         $config = SveaConfig::getDefaultConfig();
         $builder = WebPay::createOrder($config);
         $order = $builder
-                ->addOrderRow(WebPayItem::orderRow()
-                    ->setAmountExVat(100.00)
-                    ->setVatPercent(20)
-                    ->setDescription(1701)
-                    ->setQuantity(1)
-                )
-                ->setCountryCode("SE")
-                ->setOrderDate("Mon, 15 Aug 05 15:52:01 +0000")
-                ->addCustomerDetails(WebPayItem::individualCustomer()->setNationalIdNumber(46111111))
-                ->useInvoicePayment();
+            ->addOrderRow(WebPayItem::orderRow()
+                ->setAmountExVat(100.00)
+                ->setVatPercent(20)
+                ->setDescription(1701)
+                ->setQuantity(1)
+            )
+            ->setCountryCode("SE")
+            ->setOrderDate("Mon, 15 Aug 05 15:52:01 +0000")
+            ->addCustomerDetails(WebPayItem::individualCustomer()->setNationalIdNumber(46111111))
+            ->useInvoicePayment();
         $order->prepareRequest();
     }
 
-  /**
+    /**
      * @expectedException Svea\WebPay\BuildOrder\Validator\ValidationException
      * @expectedExceptionMessage -incorrect datatype : vatPercent is not of type int.
-    */
-    public function testFailOnVatNotInt() {
+     */
+    public function testFailOnVatNotInt()
+    {
         $config = SveaConfig::getDefaultConfig();
         $builder = WebPay::createOrder($config);
         $order = $builder
-                ->addOrderRow(WebPayItem::orderRow()
-                    ->setAmountExVat(100.00)
-                    ->setVatPercent(20.33)
-                    ->setQuantity(1)
-                )
-                ->setCountryCode("SE")
-                ->setOrderDate("Mon, 15 Aug 05 15:52:01 +0000")
-                ->addCustomerDetails(WebPayItem::individualCustomer()->setNationalIdNumber(46111111))
-                ->useInvoicePayment();
+            ->addOrderRow(WebPayItem::orderRow()
+                ->setAmountExVat(100.00)
+                ->setVatPercent(20.33)
+                ->setQuantity(1)
+            )
+            ->setCountryCode("SE")
+            ->setOrderDate("Mon, 15 Aug 05 15:52:01 +0000")
+            ->addCustomerDetails(WebPayItem::individualCustomer()->setNationalIdNumber(46111111))
+            ->useInvoicePayment();
         $order->prepareRequest();
     }
 
@@ -508,47 +534,58 @@ class WebServiceOrderValidatorTest extends \PHPUnit_Framework_TestCase {
      * @expectedExceptionMessage
      * -missing parameter: This method requires an Svea\WebPay\Config\ConfigurationProvider object as parameter. Create a class that implements class Svea\WebPay\Config\ConfigurationProvider. Set returnvalues to configuration values. Create an object from that class. Alternative use static function from class SveaConfig e.g. SveaConfig::getDefaultConfig(). You can replace the default config values to return your own config values in the method.
      */
-    public function testFailOnMissingCofigurationProviderCreateOrder(){
+    public function testFailOnMissingCofigurationProviderCreateOrder()
+    {
         $object = WebPay::createOrder();
     }
+
     /**
      * @expectedException Exception
      * @expectedExceptionMessage
      * -missing parameter: This method requires an Svea\WebPay\Config\ConfigurationProvider object as parameter. Create a class that implements class Svea\WebPay\Config\ConfigurationProvider. Set returnvalues to configuration values. Create an object from that class. Alternative use static function from class SveaConfig e.g. SveaConfig::getDefaultConfig(). You can replace the default config values to return your own config values in the method.
      */
-    public function testFailOnMissingCofigurationProviderGetPaymentPlanParams(){
+    public function testFailOnMissingCofigurationProviderGetPaymentPlanParams()
+    {
         $object = WebPay::getPaymentPlanParams();
     }
+
     /**
      * @expectedException Exception
      * @expectedExceptionMessage
      * -missing parameter: This method requires an Svea\WebPay\Config\ConfigurationProvider object as parameter. Create a class that implements class Svea\WebPay\Config\ConfigurationProvider. Set returnvalues to configuration values. Create an object from that class. Alternative use static function from class SveaConfig e.g. SveaConfig::getDefaultConfig(). You can replace the default config values to return your own config values in the method.
      */
-    public function testFailOnMissingCofigurationProviderDeliverOrder(){
+    public function testFailOnMissingCofigurationProviderDeliverOrder()
+    {
         $object = WebPay::deliverOrder();
     }
+
     /**
      * @expectedException Exception
      * @expectedExceptionMessage
      * -missing parameter: This method requires an Svea\WebPay\Config\ConfigurationProvider object as parameter. Create a class that implements class Svea\WebPay\Config\ConfigurationProvider. Set returnvalues to configuration values. Create an object from that class. Alternative use static function from class SveaConfig e.g. SveaConfig::getDefaultConfig(). You can replace the default config values to return your own config values in the method.
      */
-    public function testFailOnMissingCofigurationProviderCloseOrder(){
+    public function testFailOnMissingCofigurationProviderCloseOrder()
+    {
         $object = WebPay::closeOrder();
     }
+
     /**
      * @expectedException Exception
      * @expectedExceptionMessage
      * -missing parameter: This method requires an Svea\WebPay\Config\ConfigurationProvider object as parameter. Create a class that implements class Svea\WebPay\Config\ConfigurationProvider. Set returnvalues to configuration values. Create an object from that class. Alternative use static function from class SveaConfig e.g. SveaConfig::getDefaultConfig(). You can replace the default config values to return your own config values in the method.
      */
-    public function tes_tFailOnMissingCofigurationProviderGetAddresses(){
+    public function tes_tFailOnMissingCofigurationProviderGetAddresses()
+    {
         $object = WebPay::getAddresses();
     }
+
     /**
      * @expectedException Exception
      * @expectedExceptionMessage
      * -missing parameter: This method requires an Svea\WebPay\Config\ConfigurationProvider object as parameter. Create a class that implements class Svea\WebPay\Config\ConfigurationProvider. Set returnvalues to configuration values. Create an object from that class. Alternative use static function from class SveaConfig e.g. SveaConfig::getDefaultConfig(). You can replace the default config values to return your own config values in the method.
      */
-    public function tes_tFailOnMissingCofigurationProviderGetPaymentMethods(){
+    public function tes_tFailOnMissingCofigurationProviderGetPaymentMethods()
+    {
         $object = WebPay::getPaymentMethods();
     }
 

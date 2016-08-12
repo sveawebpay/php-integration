@@ -1,7 +1,12 @@
 <?php
-namespace Svea;
-use Svea\WebPay\HostedService\Payment\CardPayment as CardPayment;
+
+namespace Svea\WebPay\Test\UnitTest\HostedService\Payment;
+
+use Svea\WebPay\WebPay;
+use Svea\WebPay\WebPayItem;
+use Svea\WebPay\Test\TestUtil;
 use Svea\WebPay\Config\SveaConfig;
+use Svea\WebPay\HostedService\Payment\CardPayment as CardPayment;
 
 /**
  * @author Anneli Halld'n, Daniel Brolund for Svea Webpay
@@ -9,9 +14,9 @@ use Svea\WebPay\Config\SveaConfig;
 class CardPaymentTest extends \PHPUnit_Framework_TestCase {
 
     public function testSetAuthorization() {
-        $form = WebPay\WebPay::createOrder(new TestConf())
-                ->addCustomerDetails(WebPay\WebPayItem::individualCustomer()->setNationalIdNumber(194605092222)->setIpAddress("123.123.123"))
-                ->addOrderRow(WebPay\Test\TestUtil::createOrderRow())
+        $form = WebPay::createOrder(new TestConf())
+                ->addCustomerDetails(WebPayItem::individualCustomer()->setNationalIdNumber(194605092222)->setIpAddress("123.123.123"))
+                ->addOrderRow(TestUtil::createOrderRow())
                 ->setCountryCode("SE")
                 ->setClientOrderNumber("33")
                 ->setOrderDate("2012-12-12")
@@ -26,19 +31,19 @@ class CardPaymentTest extends \PHPUnit_Framework_TestCase {
     }
 
     public function testBuildCardPayment() {
-        $rowFactory = new WebPay\Test\TestUtil();
+        $rowFactory = new TestUtil();
         $config = SveaConfig::getDefaultConfig();
-        $form = WebPay\WebPay::createOrder($config)
-                ->addOrderRow(WebPay\Test\TestUtil::createOrderRow())
+        $form = WebPay::createOrder($config)
+                ->addOrderRow(TestUtil::createOrderRow())
                 ->run($rowFactory->buildShippingFee())
-                ->addDiscount(WebPay\WebPayItem::relativeDiscount()
+                ->addDiscount(WebPayItem::relativeDiscount()
                     ->setDiscountId("1")
                     ->setDiscountPercent(50)
                     ->setUnit("st")
                     ->setName('Relative')
                     ->setDescription("RelativeDiscount")
                 )
-                ->addCustomerDetails(WebPay\WebPayItem::companyCustomer()
+                ->addCustomerDetails(WebPayItem::companyCustomer()
                     ->setNationalIdNumber("2345234")
                 )
                 ->setCountryCode("SE")
@@ -64,9 +69,9 @@ class CardPaymentTest extends \PHPUnit_Framework_TestCase {
 
     public function testCardPaymentForEngCustomer() {
         $config = SveaConfig::getDefaultConfig();
-        $rowFactory = new WebPay\Test\TestUtil();
-        $form = WebPay\WebPay::createOrder($config)
-                ->addOrderRow(WebPay\Test\TestUtil::createOrderRow())
+        $rowFactory = new TestUtil();
+        $form = WebPay::createOrder($config)
+                ->addOrderRow(TestUtil::createOrderRow())
                 ->setCountryCode("SE")
                 ->setClientOrderNumber("33")
                 ->setOrderDate("2012-12-12")
@@ -85,22 +90,22 @@ class CardPaymentTest extends \PHPUnit_Framework_TestCase {
 
     public function testBuildCardPaymentWithDiffrentProductVatAndDiscount() {
         $config = SveaConfig::getDefaultConfig();
-        $form = WebPay\WebPay::createOrder($config)
-                ->addOrderRow(WebPay\WebPayItem::orderRow()
+        $form = WebPay::createOrder($config)
+                ->addOrderRow(WebPayItem::orderRow()
                     ->setArticleNumber("1")
                     ->setQuantity(1)
                     ->setAmountExVat(240.00)
                     ->setDescription("CD")
                     ->setVatPercent(25)
                 )
-                ->addOrderRow(WebPay\WebPayItem::orderRow()
+                ->addOrderRow(WebPayItem::orderRow()
                     ->setArticleNumber("1")
                     ->setQuantity(1)
                     ->setAmountExVat(188.68)
                     ->setDescription("Bok")
                     ->setVatPercent(6)
                 )
-                ->addDiscount(WebPay\WebPayItem::fixedDiscount()
+                ->addDiscount(WebPayItem::fixedDiscount()
                     ->setDiscountId("1")
                     ->setAmountIncVat(100.00)
                     ->setUnit("st")
@@ -123,8 +128,8 @@ class CardPaymentTest extends \PHPUnit_Framework_TestCase {
 
     public function testBuildCardPaymentWithAmountIncVatWithVatPercent() {
         $config = SveaConfig::getDefaultConfig();
-        $form = WebPay\WebPay::createOrder($config)
-                ->addOrderRow(WebPay\WebPayItem::orderRow()
+        $form = WebPay::createOrder($config)
+                ->addOrderRow(WebPayItem::orderRow()
                     ->setArticleNumber("1")
                     ->setQuantity(1)
                     ->setAmountIncVat(300.00)
@@ -132,21 +137,21 @@ class CardPaymentTest extends \PHPUnit_Framework_TestCase {
                     ->setDescription("CD")
                     ->setVatPercent(25)
                 )
-                ->addOrderRow(WebPay\WebPayItem::orderRow()
+                ->addOrderRow(WebPayItem::orderRow()
                     ->setArticleNumber("1")
                     ->setQuantity(1)
                     ->setAmountIncVat(200.00)
                     ->setDescription("Bok")
                     ->setVatPercent(6)
                 )
-                ->addDiscount(WebPay\WebPayItem::fixedDiscount()
+                ->addDiscount(WebPayItem::fixedDiscount()
                     ->setDiscountId("1")
                     ->setAmountIncVat(100.00)
                     ->setUnit("st")
                     ->setDescription("testBuildCardPaymentWithAmountIncVatWithVatPercent")
                     ->setName("Fixed")
                 )
-                ->addFee(WebPay\WebPayItem::shippingFee()
+                ->addFee(WebPayItem::shippingFee()
                     ->setShippingId('33')
                     ->setName('shipping')
                     ->setDescription("Specification")
@@ -171,8 +176,8 @@ class CardPaymentTest extends \PHPUnit_Framework_TestCase {
 
     public function testBuildCardPaymentWithAmountExVatWithAmountIncVat() {
         $config = SveaConfig::getDefaultConfig();
-        $form = WebPay\WebPay::createOrder($config)
-                ->addOrderRow(WebPay\WebPayItem::orderRow()
+        $form = WebPay::createOrder($config)
+                ->addOrderRow(WebPayItem::orderRow()
                     ->setArticleNumber("1")
                     ->setQuantity(1)
                     ->setAmountExVat(240.00)
@@ -180,7 +185,7 @@ class CardPaymentTest extends \PHPUnit_Framework_TestCase {
                     ->setDescription("CD")
                     //->setVatPercent(25)
                 )
-                ->addOrderRow(WebPay\WebPayItem::orderRow()
+                ->addOrderRow(WebPayItem::orderRow()
                     ->setArticleNumber("1")
                     ->setQuantity(1)
                     ->setAmountExVat(188.68)
@@ -188,7 +193,7 @@ class CardPaymentTest extends \PHPUnit_Framework_TestCase {
                     ->setDescription("Bok")
                     //->setVatPercent(6)
                 )
-                ->addDiscount(WebPay\WebPayItem::fixedDiscount()
+                ->addDiscount(WebPayItem::fixedDiscount()
                     ->setDiscountId("1")
                     ->setAmountIncVat(100.00)
                     ->setUnit("st")
@@ -214,8 +219,8 @@ class CardPaymentTest extends \PHPUnit_Framework_TestCase {
 
     public function testBuildCardPaymentWithCurrency() {
         $config = SveaConfig::getDefaultConfig();
-        $form = WebPay\WebPay::createOrder($config)
-                ->addOrderRow(WebPay\WebPayItem::orderRow()
+        $form = WebPay::createOrder($config)
+                ->addOrderRow(WebPayItem::orderRow()
                         ->setArticleNumber("1")
                         ->setQuantity(1)
                         ->setAmountExVat(240.00)
@@ -236,15 +241,15 @@ class CardPaymentTest extends \PHPUnit_Framework_TestCase {
 
     public function testBuildCardPaymentWithShippingFee() {
         $config = SveaConfig::getDefaultConfig();
-        $form = WebPay\WebPay::createOrder($config)
-                ->addOrderRow(WebPay\WebPayItem::orderRow()
+        $form = WebPay::createOrder($config)
+                ->addOrderRow(WebPayItem::orderRow()
                         ->setArticleNumber("1")
                         ->setQuantity(1)
                         ->setAmountExVat(240.00)
                         ->setAmountIncVat(300.00)
                         ->setDescription("CD")
                 )
-                ->addFee(WebPay\WebPayItem::shippingFee()
+                ->addFee(WebPayItem::shippingFee()
                         ->setAmountExVat(80)
                         ->setAmountIncVat(100)
                 )
@@ -263,8 +268,8 @@ class CardPaymentTest extends \PHPUnit_Framework_TestCase {
 
     public function testBuildCardPaymentWithDecimalLongPrice() {
         $config = SveaConfig::getDefaultConfig();
-        $form = WebPay\WebPay::createOrder($config)
-                ->addOrderRow(WebPay\WebPayItem::orderRow()
+        $form = WebPay::createOrder($config)
+                ->addOrderRow(WebPayItem::orderRow()
                         ->setArticleNumber("1")
                         ->setQuantity(1)
                         ->setAmountExVat(240.303030)
@@ -285,8 +290,8 @@ class CardPaymentTest extends \PHPUnit_Framework_TestCase {
 
     public function testBuildCardPaymentNLCustomer() {
         $config = SveaConfig::getDefaultConfig();
-        $form = WebPay\WebPay::createOrder($config)
-                ->addOrderRow(WebPay\WebPayItem::orderRow()
+        $form = WebPay::createOrder($config)
+                ->addOrderRow(WebPayItem::orderRow()
                         ->setArticleNumber("1")
                         ->setQuantity(1)
                         ->setAmountExVat(240.303030)
@@ -307,8 +312,8 @@ class CardPaymentTest extends \PHPUnit_Framework_TestCase {
 
     public function testBuildCardPaymentWithAmountAndVatCero() {
         $config = SveaConfig::getDefaultConfig();
-        $form = WebPay\WebPay::createOrder($config)
-                ->addOrderRow(WebPay\WebPayItem::orderRow()
+        $form = WebPay::createOrder($config)
+                ->addOrderRow(WebPayItem::orderRow()
                         ->setArticleNumber("1")
                         ->setQuantity(1)
                         ->setAmountExVat(0.00)
@@ -332,8 +337,8 @@ class CardPaymentTest extends \PHPUnit_Framework_TestCase {
      */
     public function testSetCardPageLanguage() {
         $config = SveaConfig::getDefaultConfig();
-        $form = WebPay\WebPay::createOrder($config)
-                ->addOrderRow(WebPay\WebPayItem::orderRow()
+        $form = WebPay::createOrder($config)
+                ->addOrderRow(WebPayItem::orderRow()
                         ->setArticleNumber("1")
                         ->setQuantity(1)
                         ->setAmountExVat(100.00)
@@ -354,8 +359,8 @@ class CardPaymentTest extends \PHPUnit_Framework_TestCase {
     }
     public function testCallbackUrl() {
         $config = SveaConfig::getDefaultConfig();
-        $form = WebPay\WebPay::createOrder($config)
-                ->addOrderRow(WebPay\WebPayItem::orderRow()
+        $form = WebPay::createOrder($config)
+                ->addOrderRow(WebPayItem::orderRow()
                         ->setArticleNumber("1")
                         ->setQuantity(1)
                         ->setAmountExVat(100.00)
@@ -376,8 +381,8 @@ class CardPaymentTest extends \PHPUnit_Framework_TestCase {
     }
     public function testNegativeOrderrow() {
         $config = SveaConfig::getDefaultConfig();
-        $form = WebPay\WebPay::createOrder($config)
-                ->addOrderRow(WebPay\WebPayItem::orderRow()
+        $form = WebPay::createOrder($config)
+                ->addOrderRow(WebPayItem::orderRow()
                         ->setArticleNumber("1")
                         ->setQuantity(1)
                         ->setAmountExVat(-100.00)
@@ -399,15 +404,15 @@ class CardPaymentTest extends \PHPUnit_Framework_TestCase {
 
     public function test_BuildCardPayment_With_InvoiceFee_ExVat_IncVat() {
         $config = SveaConfig::getDefaultConfig();
-        $form = WebPay\WebPay::createOrder($config)
-                ->addOrderRow(WebPay\WebPayItem::orderRow()
+        $form = WebPay::createOrder($config)
+                ->addOrderRow(WebPayItem::orderRow()
                         ->setArticleNumber("1")
                         ->setQuantity(1)
                         ->setAmountExVat(240.00)
                         ->setAmountIncVat(300.00)
                         ->setDescription("CD")
                 )
-                ->addFee(WebPay\WebPayItem::invoiceFee()
+                ->addFee(WebPayItem::invoiceFee()
                         ->setAmountExVat(80)
                         ->setAmountIncVat(100)
                         ->setName("test_BuildCardPayment_With_InvoiceFee title")
@@ -432,7 +437,7 @@ class CardPaymentTest extends \PHPUnit_Framework_TestCase {
      * test that we can set the subscriptiontype using setSubscriptionType()
      */
     public function test_cardPayment_setSubscriptionType() {
-        $cardPayment = new CardPayment(WebPay\Test\TestUtil::createOrder());
+        $cardPayment = new CardPayment(TestUtil::createOrder());
         $cardPayment->setSubscriptionType(CardPayment::RECURRINGCAPTURE);
 
         $this->assertEquals( CardPayment::RECURRINGCAPTURE, $cardPayment->subscriptionType );
@@ -442,7 +447,7 @@ class CardPaymentTest extends \PHPUnit_Framework_TestCase {
      * test that <subscriptiontype> is included in payment request xml
      */
     public function test_cardPayment_request_xml_includes_subscriptiontype() {
-        $cardPayment = new CardPayment(WebPay\Test\TestUtil::createOrder()->setClientOrderNumber("33"));
+        $cardPayment = new CardPayment(TestUtil::createOrder()->setClientOrderNumber("33"));
         $cardPayment
             ->setSubscriptionType(CardPayment::RECURRINGCAPTURE)
             ->setCallbackUrl("http://myurl.se")

@@ -294,8 +294,8 @@ class Helper
      *
      * This is a helper function provided to calculate the monthly price for the
      * different payment plan options for a given sum. This information may be
-     * used when displaying i.e. payment options to the customer by checkout, or
-     * to display the lowest amount due per month to display on a product level.
+     * used when displaying i.e. to display the lowest amount due per month to 
+     * display on a product level.
      *
      * If the ignoreMaxAndMinFlag is set to true, the returned array also
      * contains the theoretical monthly installments for a given amount, even if
@@ -313,9 +313,5 @@ class Helper
     {
         return new PaymentPlanPricePerMonth($price, $paymentPlanParamsResponseObject, $ignoreMaxAndMinFlag);
     }
-
-    public static function isCheckoutHostedPaymentType($paymentType)
-    {
-        return $paymentType === ConfigurationProvider::CARD_TYPE;
-    }
+ 
 }

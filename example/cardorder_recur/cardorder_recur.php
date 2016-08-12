@@ -7,18 +7,16 @@
 
 require_once '../../vendor/autoload.php';
 
+use Svea\WebPay\Constant\PaymentMethod;
 use Svea\WebPay\WebPay;
 use Svea\WebPay\WebPayItem;
-use Svea\WebPay\Config\SveaConfig;
-use Svea\WebPay\Constant\PaymentMethod;
-use Svea\WebPay\HostedService\Payment\HostedPayment;
 
 error_reporting( E_ALL );
 ini_set('display_errors', 'On');
 
 
 // get config object
-$myConfig = SveaConfig::getTestConfig(); //replace with class holding your merchantid, secretword, et al, adopted from package Config/SveaConfig.php
+$myConfig = \Svea\WebPay\Config\SveaConfig::getTestConfig(); //replace with class holding your merchantid, secretword, et al, adopted from package Config/SveaConfig.php
 
 // Start the order creation process by creating the order builder object by calling Svea\WebPay\WebPay::createOrder():
 $myOrder = WebPay::createOrder( $myConfig );
@@ -43,7 +41,7 @@ $myOrder->addOrderRow(
 $myCardOrderRequest = $myOrder->usePaymentMethod(PaymentMethod::SVEACARDPAY);
 
 // For recurring card payments, use setSubscriptionType() on the request object, one of the subscription types from HostedService\HostedPayment
-$myCardOrderRequest->setSubscriptionType(HostedPayment::RECURRINGCAPTURE);
+$myCardOrderRequest->setSubscriptionType(\Svea\WebPay\HostedService\Payment\HostedPayment::RECURRINGCAPTURE);
 
 // Then set any additional required request attributes as detailed below. (See Svea\PaymentMethodPayment and Svea\HostedPayment classes for details.)
 $myCardOrderRequest
@@ -53,7 +51,7 @@ $myCardOrderRequest
 // Get a payment form object which we can use to send the payment request to Svea
 $myCardOrderPaymentForm = $myCardOrderRequest->getPaymentForm();
 
-// Then send the form to Svea, and receive the response on the landingpage after the customer has completed the card checkout at SveaCardPay
+// Then send the form to Svea, and receive the response on the landingpage after the customer has completed the card payment at SveaCardPay
 echo "<pre>";
 echo "Press submit to send the inital card order request to Svea, and receive a subscription id for use in future recur order requests.";
 print_r( $myCardOrderPaymentForm->completeHtmlFormWithSubmitButton );

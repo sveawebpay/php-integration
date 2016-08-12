@@ -1,53 +1,65 @@
 <?php
 
+namespace Svea\WebPay\Test\UnitTest\AdminService;
+
+use Svea\WebPay\Config\SveaConfig;
+use Svea\WebPay\BuildOrder\OrderBuilder;
+use Svea\WebPay\AdminService\GetOrdersRequest;
+
 /**
  * @author Kristian Grossman-Madsen for Svea Webpay
  */
-class GetOrdersRequestTest extends \PHPUnit_Framework_TestCase {
+class GetOrdersRequestTest extends \PHPUnit_Framework_TestCase
+{
 
     public $builderObject;
-    
-    public function setUp() {        
-        $this->builderObject = new \Svea\WebPay\BuildOrder\OrderBuilder(\Svea\WebPay\Config\SveaConfig::getDefaultConfig());  
+
+    public function setUp()
+    {
+        $this->builderObject = new OrderBuilder(SveaConfig::getDefaultConfig());
         // TODO create classes w/methods for below
         $this->builderObject->orderId = 123456;
     }
-    
-    public function testClassExists() {
-        $getOrdersRequestObject = new \Svea\WebPay\AdminService\GetOrdersRequest( $this->builderObject );
+
+    public function testClassExists()
+    {
+        $getOrdersRequestObject = new GetOrdersRequest($this->builderObject);
         $this->assertInstanceOf('Svea\WebPay\AdminService\GetOrdersRequest', $getOrdersRequestObject);
     }
-    
-    public function test_validate_throws_exception_on_missing_OrderId() {
+
+    public function test_validate_throws_exception_on_missing_OrderId()
+    {
 
         $this->setExpectedException(
-          'Svea\WebPay\BuildOrder\Validator\ValidationException', '-missing value : orderId is required.'
+            'Svea\WebPay\BuildOrder\Validator\ValidationException', '-missing value : orderId is required.'
         );
-        
-        unset( $this->builderObject->orderId );
-        $getOrdersRequestObject = new \Svea\WebPay\AdminService\GetOrdersRequest( $this->builderObject );
+
+        unset($this->builderObject->orderId);
+        $getOrdersRequestObject = new GetOrdersRequest($this->builderObject);
         $request = $getOrdersRequestObject->prepareRequest();
-    }    
+    }
 
-    public function test_validate_throws_exception_on_missing_OrderType() {
+    public function test_validate_throws_exception_on_missing_OrderType()
+    {
 
         $this->setExpectedException(
-          'Svea\WebPay\BuildOrder\Validator\ValidationException', '-missing value : orderType is required.'
+            'Svea\WebPay\BuildOrder\Validator\ValidationException', '-missing value : orderType is required.'
         );
-        
-        unset( $this->builderObject->orderType );
-        $getOrdersRequestObject = new \Svea\WebPay\AdminService\GetOrdersRequest( $this->builderObject );
+
+        unset($this->builderObject->orderType);
+        $getOrdersRequestObject = new GetOrdersRequest($this->builderObject);
         $request = $getOrdersRequestObject->prepareRequest();
-    }    
-    
-    public function test_validate_throws_exception_on_missing_CountryCode() {
+    }
+
+    public function test_validate_throws_exception_on_missing_CountryCode()
+    {
 
         $this->setExpectedException(
-          'Svea\WebPay\BuildOrder\Validator\ValidationException', '-missing value : countryCode is required.'
+            'Svea\WebPay\BuildOrder\Validator\ValidationException', '-missing value : countryCode is required.'
         );
-        
-        unset( $this->builderObject->countryCode );
-        $getOrdersRequestObject = new \Svea\WebPay\AdminService\GetOrdersRequest( $this->builderObject );
+
+        unset($this->builderObject->countryCode);
+        $getOrdersRequestObject = new GetOrdersRequest($this->builderObject);
         $request = $getOrdersRequestObject->prepareRequest();
     }
 }

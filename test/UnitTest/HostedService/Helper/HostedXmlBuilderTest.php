@@ -1,38 +1,50 @@
 <?php
 
+namespace Svea\WebPay\Test\UnitTest\HostedService\Helper;
+
+use Svea\WebPay\Test\UnitTest\HostedService\Payment\FakeHostedPayment;
+use Svea\WebPay\WebPay;
+use Svea\WebPay\Config\SveaConfig;
+use Svea\WebPay\BuildOrder\CreateOrderBuilder;
+use Svea\WebPay\BuildOrder\RowBuilders\OrderRow;
+use Svea\WebPay\Config\SveaConfigurationProvider;
+use Svea\WebPay\BuildOrder\RowBuilders\IndividualCustomer;
 use Svea\WebPay\HostedService\Helper\HostedXmlBuilder as HostedXmlBuilder;
 
 
-class HostedXmlBuilderTest extends \PHPUnit_Framework_TestCase {
-    
+class HostedXmlBuilderTest extends \PHPUnit_Framework_TestCase
+{
+
     private $order;
-    
-    protected function setUp() {        
-        $this->order = \Svea\WebPay\WebPay::createOrder(\Svea\WebPay\Config\SveaConfig::getDefaultConfig());
-     
-        $this->individualCustomer = new \Svea\WebPay\BuildOrder\RowBuilders\IndividualCustomer();
+
+    protected function setUp()
+    {
+        $this->order = WebPay::createOrder(SveaConfig::getDefaultConfig());
+
+        $this->individualCustomer = new IndividualCustomer();
         $this->individualCustomer->setNationalIdNumber("123456");
-        
-        $this->orderRow = new \Svea\WebPay\BuildOrder\RowBuilders\OrderRow();
+
+        $this->orderRow = new OrderRow();
         $this->orderRow->setAmountExVat(100.00);
         $this->orderRow->setVatPercent(25);
         $this->orderRow->setQuantity(2);
     }
-    
-    public function testBasicXml() {
+
+    public function testBasicXml()
+    {
         $this->order->setClientOrderNumber("1234")
-                ->setCountryCode("SE")
-                ->setCurrency("SEK")
-                ->addCustomerDetails($this->individualCustomer)
-                ->addOrderRow($this->orderRow);
-        
+            ->setCountryCode("SE")
+            ->setCurrency("SEK")
+            ->addCustomerDetails($this->individualCustomer)
+            ->addOrderRow($this->orderRow);
+
         $payment = new FakeHostedPayment($this->order);
         $payment->order = $this->order;
         $payment->setReturnUrl("http://myurl.se");
-        
+
         $xmlBuilder = new HostedXmlBuilder();
         $xml = $xmlBuilder->getOrderXML($payment->calculateRequestValues(), $this->order);
-       
+
         $this->assertEquals(1, substr_count($xml, "<payment>"));
         $this->assertEquals(1, substr_count($xml, "<customerrefno>1234</customerrefno>"));
         $this->assertEquals(1, substr_count($xml, "<currency>SEK</currency>"));
@@ -41,7 +53,7 @@ class HostedXmlBuilderTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals(1, substr_count($xml, "<addinvoicefee>FALSE</addinvoicefee>"));
         $this->assertEquals(1, substr_count($xml, "<lang>en</lang>"));
         $this->assertEquals(1, substr_count($xml, '<returnurl>http://myurl.se</returnurl>'));
-        $this->assertEquals(1, substr_count($xml, "<cancelurl/>"));       
+        $this->assertEquals(1, substr_count($xml, "<cancelurl/>"));
         $this->assertEquals(1, substr_count($xml, "<customer>"));
         $this->assertEquals(1, substr_count($xml, "<ssn>123456</ssn>"));
         $this->assertEquals(1, substr_count($xml, "<country>SE</country>"));
@@ -59,8 +71,9 @@ class HostedXmlBuilderTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals(1, substr_count($xml, "</orderrows>"));
         $this->assertEquals(1, substr_count($xml, "</payment>"));
     }
-    
-    public function testXmlWithIndividualCustomer() {
+
+    public function testXmlWithIndividualCustomer()
+    {
         $customer = $this->individualCustomer;
         $customer->setName("Julius", "Caesar");
         $customer->setInitials("JS");
@@ -71,21 +84,21 @@ class HostedXmlBuilderTest extends \PHPUnit_Framework_TestCase {
         $customer->setCoAddress("c/o Eriksson");
         $customer->setZipCode("9999");
         $customer->setLocality("Stan");
-        
-        $this->order = new \Svea\WebPay\BuildOrder\CreateOrderBuilder(new \Svea\WebPay\Config\SveaConfigurationProvider(\Svea\WebPay\Config\SveaConfig::getDefaultConfig()));
+
+        $this->order = new CreateOrderBuilder(new SveaConfigurationProvider(SveaConfig::getDefaultConfig()));
         $this->order->setClientOrderNumber("1234")
-                ->setCountryCode("SE")
-                ->setCurrency("SEK")
-                ->addCustomerDetails($customer)
-                ->addOrderRow($this->orderRow);
-        
+            ->setCountryCode("SE")
+            ->setCurrency("SEK")
+            ->addCustomerDetails($customer)
+            ->addOrderRow($this->orderRow);
+
         $payment = new FakeHostedPayment($this->order);
         $payment->order = $this->order;
         $payment->setReturnUrl("http://myurl.se");
-        
+
         $xmlBuilder = new HostedXmlBuilder();
         $xml = $xmlBuilder->getOrderXML($payment->calculateRequestValues(), $this->order);
-        
+
         $this->assertEquals(1, substr_count($xml, "<ssn>123456</ssn>"));
         $this->assertEquals(1, substr_count($xml, "<firstname>Julius</firstname>"));
         $this->assertEquals(1, substr_count($xml, "<lastname>Caesar</lastname>"));
@@ -99,43 +112,45 @@ class HostedXmlBuilderTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals(1, substr_count($xml, "<city>Stan</city>"));
         $this->assertEquals(1, substr_count($xml, "<country>SE</country>"));
     }
-    
-    public function testXmlWithOrderRow() {
+
+    public function testXmlWithOrderRow()
+    {
         $row = $this->orderRow;
         $row->setArticleNumber("1");
         $row->setName("Product");
         $row->setDescription("Good product");
         $row->setUnit("kg");
-        
+
         $this->order->setClientOrderNumber("1234")
-                ->setCountryCode("SE")
-                ->setCurrency("SEK")
-                ->addCustomerDetails($this->individualCustomer)
-                ->addOrderRow($row);
-        
+            ->setCountryCode("SE")
+            ->setCurrency("SEK")
+            ->addCustomerDetails($this->individualCustomer)
+            ->addOrderRow($row);
+
         $payment = new FakeHostedPayment($this->order);
         $payment->order = $this->order;
         $payment->setReturnUrl("http://myurl.se");
-        
+
         $xmlBuilder = new HostedXmlBuilder();
         $xml = $xmlBuilder->getOrderXML($payment->calculateRequestValues(), $this->order);
-        
+
         $this->assertEquals(1, substr_count($xml, "<sku>1</sku>"));
         $this->assertEquals(1, substr_count($xml, "<name>Product</name>"));
         $this->assertEquals(1, substr_count($xml, "<description>Good product</description>"));
         $this->assertEquals(1, substr_count($xml, "<unit>kg</unit>"));
     }
-    
-    public function testXmlWithCancelUrl() {
+
+    public function testXmlWithCancelUrl()
+    {
         $payment = new FakeHostedPayment($this->order);
         $payment->setCancelUrl("http://www.cancel.com");
-             
+
         $xmlBuilder = new HostedXmlBuilder();
         $xml = $xmlBuilder->getOrderXML($payment->calculateRequestValues(), $this->order);
-        
+
         $this->assertEquals(1, substr_count($xml, "http://www.cancel.com"));
     }
-    
+
 //    public function test_getCreditTransactionXML() {
 //        
 //        // example from webservice api docs
@@ -154,7 +169,7 @@ class HostedXmlBuilderTest extends \PHPUnit_Framework_TestCase {
 //        $this->assertEquals((string)$elements["transactionid"], $xmlMessage->transactionid);
 //        $this->assertEquals((string)$elements["amounttocredit"], $xmlMessage->amounttocredit);
 //    }  
-    
+
 //    public function test_getQueryTransactionXML() {
 //        
 //        // example from webservice api docs

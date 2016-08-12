@@ -2,9 +2,6 @@
 
 namespace Svea\WebPay\AdminService\AdminSoap;
 
-use SoapClient as ASoapClient;
-use SoapVar;
-use stdClass;
 use Svea\WebPay\Helper\Helper;
 use Svea\WebPay\Config\ConfigurationProvider;
 
@@ -29,7 +26,7 @@ class SoapClient
      *
      * @param ConfigurationProvider $config
      * @param string $orderType
-     * @return SoapClient
+     * @return \SoapClient
      */
     public function setSoapClient($config, $orderType)
     {
@@ -44,7 +41,7 @@ class SoapClient
 
         $endpoint = $config->getEndPoint($orderType);
 
-        $client = new ASoapClient(
+        $client = new \SoapClient(
             null,
             array(
                 'location' => $endpoint,
@@ -76,14 +73,16 @@ class SoapClient
      * wrapping of the request contents, so you do not need a "request" SoapVar.
      *
      * @param string $action
-     * @param SoapVar $request
-     * @return StdClass $response
+     * @param \SoapVar $request
+     * @return \StdClass $response
      */
     public function doSoapCall($action, $request)
     {
+        $action = $action;
+        $request = $request;
 
         // wrap the request
-        $wrappedRequest = new SoapVar($request, SOAP_ENC_OBJECT, "-", "--", "request", "http://tempuri.org/");
+        $wrappedRequest = new \SoapVar($request, SOAP_ENC_OBJECT, "-", "--", "request", "http://tempuri.org/");
 
         // do soapcall            
         $response = $this->client->__soapCall($action, array($wrappedRequest),

@@ -24,15 +24,12 @@ use Svea\WebPay\BuildOrder\Validator\ValidationException;
  * Then use either updateInvoiceOrderRows() or updatePaymentPlanOrderRows(),
  * which ever matches the payment method used in the original order request.
  *
- * For Checkout order use updateCheckoutOrderRows(),
- * which ever matches the payment method used in the Checkout process.
- *
  * The final doRequest() will send the updateOrderRows request to Svea, and the
  * resulting response code specifies the outcome of the request.
  *
  * @author Kristian Grossman-Madsen for Svea Svea\WebPay\WebPay
  */
-class UpdateOrderRowsBuilder extends CheckoutAdminOrderBuilder
+class UpdateOrderRowsBuilder extends PaymentAdminOrderBuilder
 {
     /**
      * @var ConfigurationProvider $conf
@@ -103,25 +100,7 @@ class UpdateOrderRowsBuilder extends CheckoutAdminOrderBuilder
         return $this;
     }
 
-    /**
-     * Use updateCheckoutOrderRows() to update a Checkout order
-     * @return UpdateOrderRowsRequest
-     * @throws ValidationException
-     * @throws \Exception
-     */
-    public function updateCheckoutOrderRows()
-    {
-        $subsystemInfo = $this->processCheckoutOrderInformation($this->orderId);
-        $paymentType = $subsystemInfo->getPaymentType();
-
-        if ($paymentType === ConfigurationProvider::INVOICE_TYPE) {
-            return $this->updateInvoiceOrderRows();
-        } else if ($paymentType === ConfigurationProvider::PAYMENTPLAN_TYPE) {
-            return $this->updatePaymentPlanOrderRows();
-        } else {
-            throw new \Exception("This functionality currently does not support this method of payment ($paymentType)");
-        }
-    }
+    
 
     /**
      * Use updateInvoiceOrderRows() to update an Invoice order using AdminServiceRequest UpdateOrderRows request

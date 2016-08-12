@@ -1,24 +1,28 @@
 <?php
 // Integration tests should not need to use the namespace
 
+namespace Svea\WebPay\Test\IntegrationTest\HostedService\HandleOrder;
+
+use Svea\WebPay\WebPay;
 use Svea\WebPay\Config\SveaConfig;
 use Svea\WebPay\Constant\PaymentMethod;
 use Svea\WebPay\Constant\SystemPaymentMethod;
-use Svea\WebPay\WebPay;
 
 
 /**
  * @author Anneli Halld'n, Daniel Brolund for Svea Webpay
  */
-class GetPaymentMethodIntegrationTest extends \PHPUnit_Framework_TestCase {
+class GetPaymentMethodIntegrationTest extends \PHPUnit_Framework_TestCase
+{
 
-    function testGetAllPaymentMethods(){
-                
+    function testGetAllPaymentMethods()
+    {
+
         $config = SveaConfig::getDefaultConfig();
         $response = WebPay::getPaymentMethods($config)
-                ->setCountryCode("SE")
-                ->doRequest();
-         
+            ->setContryCode("SE")
+            ->doRequest();
+
         //print_r( "testGetAllPaymentMethods: "); //print_r( $response );        
         $this->assertEquals(PaymentMethod::BANKAXESS, $response[0]);
         $this->assertEquals(PaymentMethod::NORDEA_SE, $response[1]);
@@ -30,4 +34,5 @@ class GetPaymentMethodIntegrationTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals(PaymentMethod::PAYMENTPLAN, $response[7]);
     }
 }
+
 ?>

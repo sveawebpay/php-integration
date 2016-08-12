@@ -17,14 +17,12 @@ use Svea\WebPay\HostedService\HostedAdminRequest\QueryTransaction;
  * order request.
  *
  * Then get a request object using either queryInvoiceOrder(), queryPaymentPlanOrder(),
- * queryCardOrder(), or queryDirectBankOrder() or for Checkout order
- * use queryCheckoutOrder() which ever matches the payment method
- * used in the original order request, and send the query request to svea using the
+ * queryCardOrder(), or queryDirectBankOrder(), and send the query request to svea using the
  * request object doRequest() method.
  *
  * @author Kristian Grossman-Madsen for Svea Svea\WebPay\WebPay
  */
-class QueryOrderBuilder extends CheckoutAdminOrderBuilder
+class QueryOrderBuilder extends PaymentAdminOrderBuilder
 {
     /**
      * @var ConfigurationProvider $conf
@@ -113,25 +111,5 @@ class QueryOrderBuilder extends CheckoutAdminOrderBuilder
         return $queryTransaction;
     }
 
-    /**
-     * Use queryCheckoutOrder() to query a Checkout order.
-     * @return GetOrdersRequest|QueryTransaction
-     * @throws \Svea\WebPay\BuildOrder\Validator\ValidationException
-     * @throws \Exception
-     */
-    public function queryCheckoutOrder()
-    {
-        $subsystemInfo = $this->processCheckoutOrderInformation($this->orderId);
-        $paymentType = $subsystemInfo->getPaymentType();
-
-        if (Helper::isCheckoutHostedPaymentType($paymentType)) {
-            return $this->queryCardOrder();
-        } else if ($paymentType === ConfigurationProvider::INVOICE_TYPE) {
-            return $this->queryInvoiceOrder();
-        } else if ($paymentType === ConfigurationProvider::PAYMENTPLAN_TYPE) {
-            return $this->queryPaymentPlanOrder();
-        } else {
-            throw new \Exception("This functionality currently does not support this method of payment ($paymentType)");
-        }
-    }
+    
 }

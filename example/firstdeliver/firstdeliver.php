@@ -1,5 +1,4 @@
 <?php
-
 /**
  * minimal deliver invoice order example
  *
@@ -9,11 +8,9 @@
 require_once '../../vendor/autoload.php';
 
 use Svea\WebPay\WebPay;
-use Svea\WebPay\Constant\DistributionType;
 
 error_reporting(E_ALL);
 ini_set('display_errors', 'On');
-
 
 // get configuration object holding the Svea service login credentials
 $myConfig = \Svea\WebPay\Config\SveaConfig::getTestConfig();
@@ -35,7 +32,7 @@ $myOrder = WebPay::deliverOrder($myConfig);
 // We begin by adding any additional information required by the payment method, which for an invoice order means:
 $myOrder->setCountryCode("SE");
 $myOrder->setOrderId($mySveaOrderId);
-$myOrder->setInvoiceDistributionType(DistributionType::POST);
+$myOrder->setInvoiceDistributionType(\Svea\WebPay\Constant\DistributionType::POST);
 
 // We have now completed specifying the order, and wish to send the payment request to Svea. To do so, we first select the invoice payment method:
 $myDeliverOrderRequest = $myOrder->deliverInvoiceOrder();

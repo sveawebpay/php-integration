@@ -61,8 +61,7 @@ class CreateOrderBuilder extends OrderBuilder
 
     /**
      * Use usePaymentMethod to initate a payment bypassing the PayPage completely, going straight to the payment method
-     * specified. This is the preferred way to perform a payment, as it cuts down on the number of payment steps in the
-     * end user checkout flow.
+     * specified. This is the preferred way to perform a payment.
      *
      * You can use Svea\WebPay\WebPay::getPaymentMethods() to get available payment methods. See also the
      * Svea\WebPay\Constant\PaymentMethod class constants.

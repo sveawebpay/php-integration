@@ -56,7 +56,7 @@ class CreditInvoiceRowsRequest extends AdminServiceRequest
             $this->rowNumbers[] = new \SoapVar($rowToCredit, XSD_LONG, null, null, 'long', "http://schemas.microsoft.com/2003/10/Serialization/Arrays");
         }
 
-        $soapRequest = new \Svea\WebPay\AdminService\CreditInvoiceRowsRequest(
+        $soapRequest = new \Svea\WebPay\AdminService\AdminSoap\CreditInvoiceRowsRequest(
             new Authentication(
                 $this->orderBuilder->conf->getUsername(($this->orderBuilder->orderType), $this->orderBuilder->countryCode),
                 $this->orderBuilder->conf->getPassword(($this->orderBuilder->orderType), $this->orderBuilder->countryCode)
