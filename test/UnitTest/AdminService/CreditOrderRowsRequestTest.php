@@ -2,6 +2,7 @@
 
 namespace Svea\WebPay\Test\UnitTest\AdminService;
 
+use Svea\WebPay\Helper\Helper;
 use Svea\WebPay\WebPayItem;
 use Svea\WebPay\WebPayAdmin;
 use Svea\WebPay\Config\SveaConfig;
@@ -102,64 +103,122 @@ class CreditOrderRowsRequestTest extends \PHPUnit_Framework_TestCase
 
     public function test_creditOrderRows_creditCardOrderRowsAsIncvatAndVatPercent()
     {
+        $amount_inc_vat = 350;
+        $vat_percent = 6;
+        $quantity = 2;
+
         $config = SveaConfig::getDefaultConfig();
 
         $orderRows[] = WebPayItem::orderRow()
-            ->setAmountIncVat(123.9876)
-            ->setVatPercent(25)
-            ->setQuantity(1)
+            ->setAmountIncVat($amount_inc_vat)
+            ->setVatPercent($vat_percent)
+            ->setQuantity($quantity)
             ->setDescription("row 1");
 
         $request = WebPayAdmin::creditOrderRows($config)
-            ->setTransactionId()
+            ->setTransactionId(987654)
             ->setCountryCode('SE')
             ->addCreditOrderRows($orderRows)
-            ->creditCardOrderRows()
-            ->prepareRequest();
+            ->creditCardOrderRows();
 
-
+        $expected_amount = Helper::bround($amount_inc_vat * $quantity) * 100;
+        $this->assertEquals($expected_amount, $request->creditAmount);
+        $this->assertEquals('987654', $request->transactionId);
     }
 
     public function test_creditOrderRows_creditCardOrderRowsAsAmountExVatAndVatPercent()
     {
+        $amount_ex_vat = 330.19;
+        $vat_percent = 6;
+        $quantity = 1;
+
         $config = SveaConfig::getDefaultConfig();
 
         $orderRows[] = WebPayItem::orderRow()
-            ->setAmountIncVat(123.9876)
-            ->setVatPercent(25)
-            ->setQuantity(1)
+            ->setAmountExVat($amount_ex_vat)
+            ->setVatPercent($vat_percent)
+            ->setQuantity($quantity)
             ->setDescription("row 1");
 
         $request = WebPayAdmin::creditOrderRows($config)
-            ->setTransactionId()
+            ->setTransactionId(987654)
             ->setCountryCode('SE')
             ->addCreditOrderRows($orderRows)
-            ->creditCardOrderRows()
-            ->prepareRequest();
+            ->creditCardOrderRows();
 
+        $expected_amount = Helper::bround($amount_ex_vat * (1 + $vat_percent / 100) * $quantity) * 100;
+        $this->assertEquals($expected_amount, $request->creditAmount);
+        $this->assertEquals('987654', $request->transactionId);
+    }
 
+    /**
+     * @expectedException \Svea\WebPay\BuildOrder\Validator\ValidationException
+     * @expectedExceptionMessage Order with amountExVat must have vatPercent
+     */
+    public function test_creditOrderRowsCreditCardOrderRowsAsAmountExVatAndWithoutVatPercent()
+    {
+        $amount_ex_vat = 330.19;
+        $quantity = 1;
 
+        $config = SveaConfig::getDefaultConfig();
+
+        $orderRows[] = WebPayItem::orderRow()
+            ->setAmountExVat($amount_ex_vat)
+            ->setQuantity($quantity)
+            ->setDescription("row 1");
+
+        WebPayAdmin::creditOrderRows($config)
+            ->setTransactionId(987654)
+            ->setCountryCode('SE')
+            ->addCreditOrderRows($orderRows)
+            ->creditCardOrderRows();
     }
 
     public function test_creditOrderRows_creditCardOrderRowsAsAmountExVatAndAmountIncVat()
     {
+        $amount_inc_vat = 350;
+        $amount_ex_vat = 330.19;
+        $quantity = 2;
+
         $config = SveaConfig::getDefaultConfig();
 
         $orderRows[] = WebPayItem::orderRow()
-            ->setAmountIncVat(123.9876)
-            ->setAmountExVat(140)
-            ->setQuantity(1)
+            ->setAmountIncVat($amount_inc_vat)
+            ->setAmountExVat($amount_ex_vat)
+            ->setVatPercent(25)
+            ->setQuantity($quantity)
             ->setDescription("row 1");
 
         $request = WebPayAdmin::creditOrderRows($config)
-            ->setTransactionId()
+            ->setTransactionId(987654)
+            ->setCountryCode('SE')
+            ->addCreditOrderRows($orderRows)
+            ->creditCardOrderRows();
+
+        $expected_amount = Helper::bround($amount_inc_vat) * $quantity * 100;
+        $this->assertEquals($expected_amount, $request->creditAmount);
+        $this->assertEquals('987654', $request->transactionId);
+    }
+
+    /**
+     * @expectedException \Svea\WebPay\BuildOrder\Validator\ValidationException
+     * @expectedExceptionMessage amountExVat or amountIncVat must be set
+     */
+    public function test_creditOrderRowsWithoutAmount()
+    {
+
+        $config = SveaConfig::getDefaultConfig();
+
+        $orderRows[] = WebPayItem::orderRow()
+            ->setQuantity(1)
+            ->setDescription("row 1");
+
+        WebPayAdmin::creditOrderRows($config)
+            ->setTransactionId(987654)
             ->setCountryCode('SE')
             ->addCreditOrderRows($orderRows)
             ->creditCardOrderRows()
             ->prepareRequest();
-
-
-
     }
 
     /**
