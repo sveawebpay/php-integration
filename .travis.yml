@@ -15,8 +15,7 @@ branches:
     - master
     - develop
 
-script: phpunit test/UnitTest
+script: vendor\bin\phpunit
 
 before_script:
   - composer install
-  - composer update
