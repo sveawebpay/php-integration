@@ -16,3 +16,6 @@ branches:
     - develop
 
 script: phpunit test/UnitTest
+
+before_script:
+  - composer install --no-dev
