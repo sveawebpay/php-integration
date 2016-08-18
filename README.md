@@ -2,6 +2,12 @@
 
 ## Version 2.3.0
 
+### Current build status
+| Branch                            | Build status                               |
+|---------------------------------- |------------------------------------------- |
+| master (latest release)           | [![Build Status](https://travis-ci.org/sveawebpay/php-integration.png?branch=master)](https://travis-ci.org/sveawebpay/php-integration) |
+| develop                           | [![Build Status](https://travis-ci.org/sveawebpay/php-integration.png?branch=develop)](https://travis-ci.org/sveawebpay/php-integration) |
+
 ## Index <a name="index"></a>
 
 * [I. Introduction](#i-introduction)

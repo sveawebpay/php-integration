@@ -19,3 +19,4 @@ script: phpunit test/UnitTest
 
 before_script:
   - composer install
+  - composer update
