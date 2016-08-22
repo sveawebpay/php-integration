@@ -13,8 +13,7 @@
 function __autoload_svea_php_integration_library_classes($className)
 { 
     $filename = str_replace('Svea\\WebPay\\', '', $className);
-
-    $fullPath = __DIR__ . '\\src\\' . $filename . ".php";
+    $fullPath = str_replace('\\', '/', __DIR__ . '\\' . $filename . ".php");
 
     if (file_exists($fullPath)) {
         include_once $fullPath;
