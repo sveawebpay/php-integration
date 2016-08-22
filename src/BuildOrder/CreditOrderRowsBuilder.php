@@ -383,12 +383,12 @@ class CreditOrderRowsBuilder extends PaymentAdminOrderBuilder
         }
 
         foreach ($this->creditOrderRows as $orderRow) {
-            if ($orderRow->amountExVat && empty($orderRow->vatPercent) && empty($orderRow->amountIncVat)) {
+            if ($orderRow->amountExVat && !isset($orderRow->vatPercent) && !isset($orderRow->amountIncVat)) {
                 $exceptionString = "Order with amountExVat must have vatPercent";
                 throw new ValidationException($exceptionString);
             }
 
-            if (empty($orderRow->amountExVat) && empty($orderRow->amountIncVat)) {
+            if (!isset($orderRow->amountExVat) && !isset($orderRow->amountIncVat)) {
                 $exceptionString = "amountExVat or amountIncVat must be set";
                 throw new ValidationException($exceptionString);
             }
