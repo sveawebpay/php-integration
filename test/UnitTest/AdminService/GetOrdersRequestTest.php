@@ -2,7 +2,7 @@
 
 namespace Svea\WebPay\Test\UnitTest\AdminService;
 
-use Svea\WebPay\Config\SveaConfig;
+use Svea\WebPay\Config\ConfigurationService;
 use Svea\WebPay\BuildOrder\OrderBuilder;
 use Svea\WebPay\AdminService\GetOrdersRequest;
 
@@ -16,7 +16,7 @@ class GetOrdersRequestTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->builderObject = new OrderBuilder(SveaConfig::getDefaultConfig());
+        $this->builderObject = new OrderBuilder(ConfigurationService::getDefaultConfig());
         // TODO create classes w/methods for below
         $this->builderObject->orderId = 123456;
     }

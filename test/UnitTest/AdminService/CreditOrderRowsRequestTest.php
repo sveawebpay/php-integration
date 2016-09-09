@@ -5,7 +5,7 @@ namespace Svea\WebPay\Test\UnitTest\AdminService;
 use Svea\WebPay\Helper\Helper;
 use Svea\WebPay\WebPayItem;
 use Svea\WebPay\WebPayAdmin;
-use Svea\WebPay\Config\SveaConfig;
+use Svea\WebPay\Config\ConfigurationService;
 use Svea\WebPay\Constant\DistributionType;
 
 
@@ -19,7 +19,7 @@ class CreditOrderRowsRequestTest extends \PHPUnit_Framework_TestCase
     // invoice
     public function test_creditOrderRows_creditInvoiceOrderRows_does_not_validate_setOrderId()
     {
-        $creditOrderRowsBuilder = WebPayAdmin::creditOrderRows(SveaConfig::getDefaultConfig())
+        $creditOrderRowsBuilder = WebPayAdmin::creditOrderRows(ConfigurationService::getDefaultConfig())
             ->setInvoiceId(987654)
             ->setInvoiceDistributionType(DistributionType::POST)
             ->setCountryCode('SE')
@@ -33,7 +33,7 @@ class CreditOrderRowsRequestTest extends \PHPUnit_Framework_TestCase
     // card
     public function test_creditOrderRows_creditCardOrderRows_validates_setOrderId()
     {
-        $creditOrderRowsBuilder = WebPayAdmin::creditOrderRows(SveaConfig::getDefaultConfig())
+        $creditOrderRowsBuilder = WebPayAdmin::creditOrderRows(ConfigurationService::getDefaultConfig())
             //->setOrderId(987654)    // i.e. setTransactionId()
             ->setInvoiceDistributionType(DistributionType::POST)
             ->setCountryCode('SE')
@@ -49,7 +49,7 @@ class CreditOrderRowsRequestTest extends \PHPUnit_Framework_TestCase
     // direct bank
     public function test_creditOrderRows_creditDirectBankOrderRows_validates_setOrderId()
     {
-        $creditOrderRowsBuilder = WebPayAdmin::creditOrderRows(SveaConfig::getDefaultConfig())
+        $creditOrderRowsBuilder = WebPayAdmin::creditOrderRows(ConfigurationService::getDefaultConfig())
             //->setTransactionId(987654)    // alias for setOrderId()
             ->setInvoiceDistributionType(DistributionType::POST)
             ->setCountryCode('SE')
@@ -64,7 +64,7 @@ class CreditOrderRowsRequestTest extends \PHPUnit_Framework_TestCase
 
     public function test_creditOrderRows_creditPaymentPlanOrderRows_credit_row_using_row_index()
     {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
 
         $request = WebPayAdmin::creditOrderRows($config)
             ->setContractNumber('123123')
@@ -77,7 +77,7 @@ class CreditOrderRowsRequestTest extends \PHPUnit_Framework_TestCase
 
     public function test_creditOrderRows_creditPyamentplanOrderRows()
     {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
 
         $orderRows[] = WebPayItem::orderRow()
             ->setAmountIncVat(123.9876)
@@ -107,7 +107,7 @@ class CreditOrderRowsRequestTest extends \PHPUnit_Framework_TestCase
         $vat_percent = 6;
         $quantity = 2;
 
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
 
         $orderRows[] = WebPayItem::orderRow()
             ->setAmountIncVat($amount_inc_vat)
@@ -132,7 +132,7 @@ class CreditOrderRowsRequestTest extends \PHPUnit_Framework_TestCase
         $vat_percent = 6;
         $quantity = 1;
 
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
 
         $orderRows[] = WebPayItem::orderRow()
             ->setAmountExVat($amount_ex_vat)
@@ -160,7 +160,7 @@ class CreditOrderRowsRequestTest extends \PHPUnit_Framework_TestCase
         $amount_ex_vat = 330.19;
         $quantity = 1;
 
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
 
         $orderRows[] = WebPayItem::orderRow()
             ->setAmountExVat($amount_ex_vat)
@@ -180,7 +180,7 @@ class CreditOrderRowsRequestTest extends \PHPUnit_Framework_TestCase
         $amount_ex_vat = 330.19;
         $quantity = 2;
 
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
 
         $orderRows[] = WebPayItem::orderRow()
             ->setAmountIncVat($amount_inc_vat)
@@ -207,7 +207,7 @@ class CreditOrderRowsRequestTest extends \PHPUnit_Framework_TestCase
         $quantity = 2;
         $rownumbers = array();
 
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
 
 
         $numberedOrderRow = WebPayItem::numberedOrderRow()
@@ -240,7 +240,7 @@ class CreditOrderRowsRequestTest extends \PHPUnit_Framework_TestCase
         $quantity = 2;
         $rownumbers = array();
 
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
 
 
         $numberedOrderRow = WebPayItem::numberedOrderRow()
@@ -273,7 +273,7 @@ class CreditOrderRowsRequestTest extends \PHPUnit_Framework_TestCase
         $quantity = 2;
         $rownumbers = array();
 
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
 
 
         $numberedOrderRow = WebPayItem::numberedOrderRow()
@@ -306,7 +306,7 @@ class CreditOrderRowsRequestTest extends \PHPUnit_Framework_TestCase
     public function test_creditOrderRowsWithoutAmount()
     {
 
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
 
         $orderRows[] = WebPayItem::orderRow()
             ->setQuantity(1)
@@ -327,7 +327,7 @@ class CreditOrderRowsRequestTest extends \PHPUnit_Framework_TestCase
     public function test_creditOrderRows_creditPyamentplanOrderRows_noDesciription()
     {
 
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
 
         $orderRows[] = WebPayItem::orderRow()
             ->setAmountIncVat(10.00)

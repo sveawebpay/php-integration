@@ -4,7 +4,7 @@ namespace Svea\WebPay\Test\UnitTest\BuildOrder\Validator;
 
 use Svea\WebPay\WebPay;
 use Svea\WebPay\Test\TestUtil;
-use Svea\WebPay\Config\SveaConfig;
+use Svea\WebPay\Config\ConfigurationService;
 use Svea\WebPay\Constant\PaymentMethod;
 
 /**
@@ -19,7 +19,7 @@ class HostedOrderValidatorTest extends \PHPUnit_Framework_TestCase
      */
     public function testFailOnNullCustomerRefNo()
     {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $builder = WebPay::createOrder($config);
         $order = $builder
             ->addOrderRow(TestUtil::createHostedOrderRow())
@@ -37,7 +37,7 @@ class HostedOrderValidatorTest extends \PHPUnit_Framework_TestCase
      */
     public function testFailOnEmptyCustomerRefNo()
     {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $builder = WebPay::createOrder($config);
         $order = $builder
             ->addOrderRow(TestUtil::createHostedOrderRow())
@@ -62,7 +62,7 @@ class HostedOrderValidatorTest extends \PHPUnit_Framework_TestCase
      */
     public function testFailOnMissingCustomerForNL()
     {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $builder = WebPay::createOrder($config);
         $order = $builder
             ->addOrderRow(TestUtil::createHostedOrderRow())
@@ -86,7 +86,7 @@ class HostedOrderValidatorTest extends \PHPUnit_Framework_TestCase
      */
     public function testFailOnMissingCompanyCustomerForNL()
     {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $builder = WebPay::createOrder($config);
         $order = $builder
             ->addOrderRow(TestUtil::createHostedOrderRow())
@@ -105,7 +105,7 @@ class HostedOrderValidatorTest extends \PHPUnit_Framework_TestCase
      */
     public function testFailOnMissingCurrency()
     {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $builder = WebPay::createOrder($config);
         $order = $builder
             ->addOrderRow(TestUtil::createHostedOrderRow())
@@ -123,7 +123,7 @@ class HostedOrderValidatorTest extends \PHPUnit_Framework_TestCase
      */
     public function testFailOnMissingCountryCode()
     {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $builder = WebPay::createOrder($config);
         $order = $builder
             ->addOrderRow(TestUtil::createHostedOrderRow())
@@ -142,7 +142,7 @@ class HostedOrderValidatorTest extends \PHPUnit_Framework_TestCase
      */
     public function testFailOnMissingReturnUrl()
     {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $builder = WebPay::createOrder($config);
         $order = $builder
             ->addOrderRow(TestUtil::createHostedOrderRow())

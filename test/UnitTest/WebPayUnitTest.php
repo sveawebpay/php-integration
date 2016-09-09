@@ -6,7 +6,7 @@ use Exception;
 use Svea\WebPay\WebPay;
 use Svea\WebPay\WebPayItem;
 use Svea\WebPay\Test\TestUtil;
-use Svea\WebPay\Config\SveaConfig;
+use Svea\WebPay\Config\ConfigurationService;
 use Svea\WebPay\Constant\PaymentMethod;
 use Svea\WebPay\Constant\DistributionType;
 
@@ -30,7 +30,7 @@ class WebPayUnitTest extends \PHPUnit_Framework_TestCase
     // paypage
     public function test_createOrder_useInvoicePayment_returns_InvoicePayment()
     {
-        $createOrder = WebPay::createOrder(SveaConfig::getDefaultConfig());
+        $createOrder = WebPay::createOrder(ConfigurationService::getDefaultConfig());
         // we should set attributes here if real request
         $request = $createOrder->useInvoicePayment();
         $this->assertInstanceOf("Svea\WebPay\WebService\Payment\InvoicePayment", $request);
@@ -38,35 +38,35 @@ class WebPayUnitTest extends \PHPUnit_Framework_TestCase
 
     public function test_createOrder_usePaymentPlanPayment_returns_PaymentPlanPayment()
     {
-        $createOrder = WebPay::createOrder(SveaConfig::getDefaultConfig());
+        $createOrder = WebPay::createOrder(ConfigurationService::getDefaultConfig());
         $request = $createOrder->usePaymentPlanPayment(TestUtil::getGetPaymentPlanParamsForTesting());
         $this->assertInstanceOf("Svea\WebPay\WebService\Payment\PaymentPlanPayment", $request);
     }
 
     public function test_createOrder_usePayPageCardOnly_returns_CardPayment()
     {
-        $createOrder = WebPay::createOrder(SveaConfig::getDefaultConfig());
+        $createOrder = WebPay::createOrder(ConfigurationService::getDefaultConfig());
         $request = $createOrder->usePayPageCardOnly();
         $this->assertInstanceOf("Svea\WebPay\HostedService\Payment\CardPayment", $request);
     }
 
     public function test_createOrder_usePayPageDirectBankOnly_returns_DirectPayment()
     {
-        $createOrder = WebPay::createOrder(SveaConfig::getDefaultConfig());
+        $createOrder = WebPay::createOrder(ConfigurationService::getDefaultConfig());
         $request = $createOrder->usePayPageDirectBankOnly();
         $this->assertInstanceOf("Svea\WebPay\HostedService\Payment\DirectPayment", $request);
     }
 
     public function test_createOrder_usePaymentMethod_returns_PaymentMethodPayment()
     {
-        $createOrder = WebPay::createOrder(SveaConfig::getDefaultConfig());
+        $createOrder = WebPay::createOrder(ConfigurationService::getDefaultConfig());
         $request = $createOrder->usePaymentMethod("mocked_paymentMethod");
         $this->assertInstanceOf("Svea\WebPay\HostedService\Payment\PaymentMethodPayment", $request);
     }
 
     public function test_createOrder_usePayPage_returns_PayPagePayment()
     {
-        $createOrder = WebPay::createOrder(SveaConfig::getDefaultConfig());
+        $createOrder = WebPay::createOrder(ConfigurationService::getDefaultConfig());
         $request = $createOrder->usePayPage();
         $this->assertInstanceOf("Svea\WebPay\HostedService\Payment\PayPagePayment", $request);
     }
@@ -74,7 +74,7 @@ class WebPayUnitTest extends \PHPUnit_Framework_TestCase
     // individualCustomer validation - common        
     function test_validates_missing_required_method_for_useInvoicePayment_IndividualCustomer_SE_addOrderRow()
     {
-        $order = WebPay::createOrder(SveaConfig::getDefaultConfig())
+        $order = WebPay::createOrder(ConfigurationService::getDefaultConfig())
             //->addOrderRow( 
             //    Svea\WebPay\WebPayItem::orderRow()
             //        ->setQuantity(1.0)
@@ -98,7 +98,7 @@ class WebPayUnitTest extends \PHPUnit_Framework_TestCase
 
     function test_validates_missing_required_method_for_useInvoicePayment_IndividualCustomer_SE_addCustomerDetails()
     {
-        $order = WebPay::createOrder(SveaConfig::getDefaultConfig())
+        $order = WebPay::createOrder(ConfigurationService::getDefaultConfig())
             ->addOrderRow(
                 WebPayItem::orderRow()
                     ->setQuantity(1.0)
@@ -122,7 +122,7 @@ class WebPayUnitTest extends \PHPUnit_Framework_TestCase
 
     function test_validates_missing_required_method_for_useInvoicePayment_IndividualCustomer_SE_setCountryCode()
     {
-        $order = WebPay::createOrder(SveaConfig::getDefaultConfig())
+        $order = WebPay::createOrder(ConfigurationService::getDefaultConfig())
             ->addOrderRow(
                 WebPayItem::orderRow()
                     ->setQuantity(1.0)
@@ -146,7 +146,7 @@ class WebPayUnitTest extends \PHPUnit_Framework_TestCase
 
     function test_validates_missing_required_method_for_useInvoicePayment_IndividualCustomer_SE_setOrderDate()
     {
-        $order = WebPay::createOrder(SveaConfig::getDefaultConfig())
+        $order = WebPay::createOrder(ConfigurationService::getDefaultConfig())
             ->addOrderRow(
                 WebPayItem::orderRow()
                     ->setQuantity(1.0)
@@ -172,7 +172,7 @@ class WebPayUnitTest extends \PHPUnit_Framework_TestCase
     // IndividualCustomer validation
     function test_validates_all_required_methods_for_createOrder_useInvoicePayment_IndividualCustomer_SE()
     {
-        $order = WebPay::createOrder(SveaConfig::getDefaultConfig())
+        $order = WebPay::createOrder(ConfigurationService::getDefaultConfig())
             ->addOrderRow(
                 WebPayItem::orderRow()
                     ->setQuantity(1.0)
@@ -196,7 +196,7 @@ class WebPayUnitTest extends \PHPUnit_Framework_TestCase
 
     function test_validates_missing_required_method_for_useInvoicePayment_IndividualCustomer_missing_credentials_SE()
     {
-        $order = WebPay::createOrder(SveaConfig::getDefaultConfig())
+        $order = WebPay::createOrder(ConfigurationService::getDefaultConfig())
             ->addOrderRow(
                 WebPayItem::orderRow()
                     ->setQuantity(1.0)
@@ -226,7 +226,7 @@ class WebPayUnitTest extends \PHPUnit_Framework_TestCase
     // IndividualCustomer validation
     function test_validates_all_required_methods_for_createOrder_useInvoicePayment_IndividualCustomer_NO()
     {
-        $order = WebPay::createOrder(SveaConfig::getDefaultConfig())
+        $order = WebPay::createOrder(ConfigurationService::getDefaultConfig())
             ->addOrderRow(
                 WebPayItem::orderRow()
                     ->setQuantity(1.0)
@@ -250,7 +250,7 @@ class WebPayUnitTest extends \PHPUnit_Framework_TestCase
 
     function test_validates_missing_required_method_for_useInvoicePayment_IndividualCustomer_missing_credentials_NO()
     {
-        $order = WebPay::createOrder(SveaConfig::getDefaultConfig())
+        $order = WebPay::createOrder(ConfigurationService::getDefaultConfig())
             ->addOrderRow(
                 WebPayItem::orderRow()
                     ->setQuantity(1.0)
@@ -278,7 +278,7 @@ class WebPayUnitTest extends \PHPUnit_Framework_TestCase
     // IndividualCustomer validation
     function test_validates_all_required_methods_for_createOrder_useInvoicePayment_IndividualCustomer_DK()
     {
-        $order = WebPay::createOrder(SveaConfig::getDefaultConfig())
+        $order = WebPay::createOrder(ConfigurationService::getDefaultConfig())
             ->addOrderRow(
                 WebPayItem::orderRow()
                     ->setQuantity(1.0)
@@ -302,7 +302,7 @@ class WebPayUnitTest extends \PHPUnit_Framework_TestCase
 
     function test_validates_missing_required_method_for_useInvoicePayment_IndividualCustomer_missing_credentials_DK()
     {
-        $order = WebPay::createOrder(SveaConfig::getDefaultConfig())
+        $order = WebPay::createOrder(ConfigurationService::getDefaultConfig())
             ->addOrderRow(
                 WebPayItem::orderRow()
                     ->setQuantity(1.0)
@@ -330,7 +330,7 @@ class WebPayUnitTest extends \PHPUnit_Framework_TestCase
     // IndividualCustomer validation
     function test_validates_all_required_methods_for_createOrder_useInvoicePayment_IndividualCustomer_FI()
     {
-        $order = WebPay::createOrder(SveaConfig::getDefaultConfig())
+        $order = WebPay::createOrder(ConfigurationService::getDefaultConfig())
             ->addOrderRow(
                 WebPayItem::orderRow()
                     ->setQuantity(1.0)
@@ -354,7 +354,7 @@ class WebPayUnitTest extends \PHPUnit_Framework_TestCase
 
     function test_validates_missing_required_method_for_useInvoicePayment_IndividualCustomer_missing_credentials_FI()
     {
-        $order = WebPay::createOrder(SveaConfig::getDefaultConfig())
+        $order = WebPay::createOrder(ConfigurationService::getDefaultConfig())
             ->addOrderRow(
                 WebPayItem::orderRow()
                     ->setQuantity(1.0)
@@ -382,7 +382,7 @@ class WebPayUnitTest extends \PHPUnit_Framework_TestCase
     // IndividualCustomer validation
     function test_validates_all_required_methods_for_createOrder_useInvoicePayment_IndividualCustomer_DE()
     {
-        $order = WebPay::createOrder(SveaConfig::getDefaultConfig())
+        $order = WebPay::createOrder(ConfigurationService::getDefaultConfig())
             ->addOrderRow(
                 WebPayItem::orderRow()
                     ->setQuantity(1.0)
@@ -415,7 +415,7 @@ class WebPayUnitTest extends \PHPUnit_Framework_TestCase
 
     function test_validates_missing_required_method_for_useInvoicePayment_IndividualCustomer_missing_credentials_DE()
     {
-        $order = WebPay::createOrder(SveaConfig::getDefaultConfig())
+        $order = WebPay::createOrder(ConfigurationService::getDefaultConfig())
             ->addOrderRow(
                 WebPayItem::orderRow()
                     ->setQuantity(1.0)
@@ -447,7 +447,7 @@ class WebPayUnitTest extends \PHPUnit_Framework_TestCase
     // IndividualCustomer validation
     function test_validates_all_required_methods_for_createOrder_useInvoicePayment_IndividualCustomer_NL()
     {
-        $order = WebPay::createOrder(SveaConfig::getDefaultConfig())
+        $order = WebPay::createOrder(ConfigurationService::getDefaultConfig())
             ->addOrderRow(
                 WebPayItem::orderRow()
                     ->setQuantity(1.0)
@@ -482,7 +482,7 @@ class WebPayUnitTest extends \PHPUnit_Framework_TestCase
 
     function test_validates_missing_required_method_for_useInvoicePayment_IndividualCustomer_missing_credentials_NL()
     {
-        $order = WebPay::createOrder(SveaConfig::getDefaultConfig())
+        $order = WebPay::createOrder(ConfigurationService::getDefaultConfig())
             ->addOrderRow(
                 WebPayItem::orderRow()
                     ->setQuantity(1.0)
@@ -517,7 +517,7 @@ class WebPayUnitTest extends \PHPUnit_Framework_TestCase
     // deliverInvoiceOrder
     public function test_deliverOrder_deliverInvoiceOrder_without_order_rows_goes_against_adminservice_DeliverOrders()
     {
-        $deliverOrder = WebPay::deliverOrder(SveaConfig::getDefaultConfig());
+        $deliverOrder = WebPay::deliverOrder(ConfigurationService::getDefaultConfig());
         $request = $deliverOrder->deliverInvoiceOrder();
         $this->assertInstanceOf("Svea\WebPay\AdminService\DeliverOrdersRequest", $request);
         $this->assertEquals("Invoice", $request->orderBuilder->orderType);
@@ -525,7 +525,7 @@ class WebPayUnitTest extends \PHPUnit_Framework_TestCase
 
     public function test_deliverOrder_deliverInvoiceOrder_with_order_rows_goes_against_DeliverOrderEU()
     {
-        $deliverOrder = WebPay::deliverOrder(SveaConfig::getDefaultConfig());
+        $deliverOrder = WebPay::deliverOrder(ConfigurationService::getDefaultConfig());
         $deliverOrder->addOrderRow(WebPayItem::orderRow());
         $request = $deliverOrder->deliverInvoiceOrder();
         $this->assertInstanceOf("Svea\WebPay\WebService\HandleOrder\DeliverInvoice", $request);         // WebService\DeliverInvoice => soap call DeliverOrderEU  
@@ -534,7 +534,7 @@ class WebPayUnitTest extends \PHPUnit_Framework_TestCase
     // deliverPaymentPlanOrder
     public function test_deliverOrder_deliverPaymentPlanOrder_without_order_rows_goes_against_DeliverOrderEU()
     {
-        $deliverOrder = WebPay::deliverOrder(SveaConfig::getDefaultConfig());
+        $deliverOrder = WebPay::deliverOrder(ConfigurationService::getDefaultConfig());
         $request = $deliverOrder->deliverPaymentPlanOrder();
         $this->assertInstanceOf("Svea\WebPay\WebService\HandleOrder\DeliverPaymentPlan", $request);
         $this->assertEquals("PaymentPlan", $request->orderBuilder->orderType);
@@ -542,7 +542,7 @@ class WebPayUnitTest extends \PHPUnit_Framework_TestCase
 
     public function test_deliverOrder_deliverPaymentPlanOrder_with_order_rows_goes_against_DeliverOrderEU()
     {
-        $deliverOrder = WebPay::deliverOrder(SveaConfig::getDefaultConfig());
+        $deliverOrder = WebPay::deliverOrder(ConfigurationService::getDefaultConfig());
         $deliverOrder->addOrderRow(WebPayItem::orderRow());   // order rows are ignored by DeliverOrderEU, can't partially deliver PaymentPlan
         $request = $deliverOrder->deliverPaymentPlanOrder();
         $this->assertInstanceOf("Svea\WebPay\WebService\HandleOrder\DeliverPaymentPlan", $request);
@@ -551,7 +551,7 @@ class WebPayUnitTest extends \PHPUnit_Framework_TestCase
     // card
     public function test_deliverOrder_deliverCardOrder_returns_ConfirmTransaction()
     {
-        $deliverOrder = WebPay::deliverOrder(SveaConfig::getDefaultConfig());
+        $deliverOrder = WebPay::deliverOrder(ConfigurationService::getDefaultConfig());
         $deliverOrder->addOrderRow(WebPayItem::orderRow());
         $request = $deliverOrder->deliverCardOrder();
         $this->assertInstanceOf("Svea\WebPay\HostedService\HostedAdminRequest\ConfirmTransaction", $request);
@@ -569,7 +569,7 @@ class WebPayUnitTest extends \PHPUnit_Framework_TestCase
     /// listPaymentMethods
     function test_validates_all_required_methods_for_listPaymentMethods()
     {
-        $order = WebPay::listPaymentMethods(SveaConfig::getDefaultConfig())
+        $order = WebPay::listPaymentMethods(ConfigurationService::getDefaultConfig())
             ->setCountryCode("SE");
         try {
             $order->prepareRequest();
@@ -581,7 +581,7 @@ class WebPayUnitTest extends \PHPUnit_Framework_TestCase
 
     function test_validates_missing_required_method_for_listPaymentMethods_setCountryCode()
     {
-        $order = WebPay::listPaymentMethods(SveaConfig::getDefaultConfig())//->setCountryCode("SE")
+        $order = WebPay::listPaymentMethods(ConfigurationService::getDefaultConfig())//->setCountryCode("SE")
         ;
 
         $this->setExpectedException(
@@ -594,14 +594,14 @@ class WebPayUnitTest extends \PHPUnit_Framework_TestCase
     /// Svea\WebPay\WebPay::getAddresses()
     public function test_getAddresses_returns_GetAddresses()
     {
-        $request = WebPay::getAddresses(SveaConfig::getDefaultConfig());
+        $request = WebPay::getAddresses(ConfigurationService::getDefaultConfig());
         $this->assertInstanceOf("Svea\WebPay\WebService\GetAddress\GetAddresses", $request);
     }
 
     /// Svea\WebPay\WebPay::getPaymentPlanParams()
     public function test_getPaymentPlanParams_returns_GetPaymentPlanParams()
     {
-        $request = WebPay::getPaymentPlanParams(SveaConfig::getDefaultConfig());
+        $request = WebPay::getPaymentPlanParams(ConfigurationService::getDefaultConfig());
         $this->assertInstanceOf("Svea\WebPay\WebService\GetPaymentPlanParams\GetPaymentPlanParams", $request);
     }
 
@@ -609,7 +609,7 @@ class WebPayUnitTest extends \PHPUnit_Framework_TestCase
     // Verify that orderRows may be specified with zero amount (INT-581) when creating an order
     public function test_createOrder_useInvoicePayment_allows_orderRow_with_zero_amount()
     {
-        $createOrder = WebPay::createOrder(SveaConfig::getDefaultConfig())
+        $createOrder = WebPay::createOrder(ConfigurationService::getDefaultConfig())
             ->addOrderRow(
                 WebPayItem::orderRow()
                     ->setQuantity(0.0)
@@ -636,7 +636,7 @@ class WebPayUnitTest extends \PHPUnit_Framework_TestCase
 
     public function test_createOrder_usePaymentPlanPayment_allows_orderRow_with_zero_amount()
     {
-        $createOrder = WebPay::createOrder(SveaConfig::getDefaultConfig())
+        $createOrder = WebPay::createOrder(ConfigurationService::getDefaultConfig())
             ->addOrderRow(
                 WebPayItem::orderRow()
                     ->setQuantity(0.0)
@@ -663,7 +663,7 @@ class WebPayUnitTest extends \PHPUnit_Framework_TestCase
 
     public function test_createOrder_usePaymentMethod_KORTCERT_allows_orderRow_with_zero_amount()
     {
-        $createOrder = WebPay::createOrder(SveaConfig::getDefaultConfig())
+        $createOrder = WebPay::createOrder(ConfigurationService::getDefaultConfig())
             ->addOrderRow(
                 WebPayItem::orderRow()
                     ->setQuantity(0.0)
@@ -691,7 +691,7 @@ class WebPayUnitTest extends \PHPUnit_Framework_TestCase
     public function test_deliverOrder_deliverInvoiceOrder_allows_orderRow_with_zero_amount()
     {
         $dummyorderid = 123456;
-        $deliverOrderBuilder = WebPay::deliverOrder(SveaConfig::getDefaultConfig())
+        $deliverOrderBuilder = WebPay::deliverOrder(ConfigurationService::getDefaultConfig())
             ->setOrderId($dummyorderid)
             ->setCountryCode("SE")
             ->setInvoiceDistributionType(DistributionType::POST)
@@ -713,7 +713,7 @@ class WebPayUnitTest extends \PHPUnit_Framework_TestCase
     public function test_deliverOrder_deliverPaymentPlanOrder_allows_orderRow_with_zero_amount()
     {
         $dummyorderid = 123456;
-        $deliverOrderBuilder = WebPay::deliverOrder(SveaConfig::getDefaultConfig())
+        $deliverOrderBuilder = WebPay::deliverOrder(ConfigurationService::getDefaultConfig())
             ->setOrderId($dummyorderid)
             ->setCountryCode("SE")
             ->setInvoiceDistributionType(DistributionType::POST)
@@ -735,7 +735,7 @@ class WebPayUnitTest extends \PHPUnit_Framework_TestCase
     public function test_deliverOrder_deliverCardOrder_allows_orderRow_with_zero_amount()
     {
         $dummyorderid = 123456;
-        $deliverOrderBuilder = WebPay::deliverOrder(SveaConfig::getDefaultConfig())
+        $deliverOrderBuilder = WebPay::deliverOrder(ConfigurationService::getDefaultConfig())
             ->setOrderId($dummyorderid)
             ->setCountryCode("SE")
             ->setInvoiceDistributionType(DistributionType::POST)

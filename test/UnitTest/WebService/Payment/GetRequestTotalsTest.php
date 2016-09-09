@@ -6,7 +6,7 @@ use Svea\WebPay\WebPayItem;
 use Svea\WebPay\Test\TestUtil;
 use Svea\WebPay\Helper\Helper;
 use PHPUnit_Framework_TestCase;
-use Svea\WebPay\Config\SveaConfig;
+use Svea\WebPay\Config\ConfigurationService;
 
 
 class GetRequestTotalsTest extends PHPUnit_Framework_TestCase
@@ -14,7 +14,7 @@ class GetRequestTotalsTest extends PHPUnit_Framework_TestCase
 
     function test_get_invoice_total_amount_before_createorder()
     {
-        $order = WebPay::createOrder(SveaConfig::getDefaultConfig())
+        $order = WebPay::createOrder(ConfigurationService::getDefaultConfig())
             ->addCustomerDetails(WebPayItem::individualCustomer()->setNationalIdNumber(194605092222))
             ->setCountryCode("SE")
             ->setCustomerReference("33")
@@ -45,7 +45,7 @@ class GetRequestTotalsTest extends PHPUnit_Framework_TestCase
 
     function test_get_invoice_total_amount_before_createorder_creates_discount_rows_using_incvat_and_vatpercent()
     {
-        $order = WebPay::createOrder(SveaConfig::getDefaultConfig())
+        $order = WebPay::createOrder(ConfigurationService::getDefaultConfig())
             ->addCustomerDetails(WebPayItem::individualCustomer()->setNationalIdNumber(194605092222))
             ->setCountryCode("SE")
             ->setCustomerReference("33")
@@ -78,7 +78,7 @@ class GetRequestTotalsTest extends PHPUnit_Framework_TestCase
 
     private static function create_only_incvat_order_and_fee_rows_order()
     {
-        $order = WebPay::createOrder(SveaConfig::getDefaultConfig())
+        $order = WebPay::createOrder(ConfigurationService::getDefaultConfig())
             ->addCustomerDetails(WebPayItem::individualCustomer()->setNationalIdNumber(194605092222))
             ->setCountryCode("SE")
             ->setCustomerReference("33")
@@ -224,7 +224,7 @@ class GetRequestTotalsTest extends PHPUnit_Framework_TestCase
     /// example of getRequestTotals() not matching service --------------------------------------------------------------------------
     public function test_integrationtest_reference_1400_00_inc_behaviour()
     {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $request = WebPay::createOrder($config)
             ->addOrderRow(
                 WebPayItem::orderRow()
@@ -243,7 +243,7 @@ class GetRequestTotalsTest extends PHPUnit_Framework_TestCase
 
     public function test_integrationtest_reference_1321_00_ex_behaviour()
     {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $request = WebPay::createOrder($config)
             ->addOrderRow(
                 WebPayItem::orderRow()
@@ -262,7 +262,7 @@ class GetRequestTotalsTest extends PHPUnit_Framework_TestCase
 
     public function test_getRequestTotals_reference_1400_00_inc_behaviour()
     {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $order = WebPay::createOrder($config)
             ->addOrderRow(
                 WebPayItem::orderRow()
@@ -282,7 +282,7 @@ class GetRequestTotalsTest extends PHPUnit_Framework_TestCase
 
     public function test_getRequestTotals_reference_1400_26_inc_behaviour()
     {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $order = WebPay::createOrder($config)
             ->addOrderRow(
                 WebPayItem::orderRow()
@@ -302,7 +302,7 @@ class GetRequestTotalsTest extends PHPUnit_Framework_TestCase
 
     public function test_getRequestTotals_reference_1321_00_ex_behaviour()
     {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $order = WebPay::createOrder($config)
             ->addOrderRow(
                 WebPayItem::orderRow()

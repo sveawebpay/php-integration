@@ -5,7 +5,7 @@ namespace Svea\WebPay\Test\UnitTest\AdminService;
 use Svea\WebPay\WebPayItem;
 use Svea\WebPay\WebPayAdmin;
 use Svea\WebPay\Test\TestUtil;
-use Svea\WebPay\Config\SveaConfig;
+use Svea\WebPay\Config\ConfigurationService;
 use Svea\WebPay\BuildOrder\OrderBuilder;
 use Svea\WebPay\Config\ConfigurationProvider;
 use Svea\WebPay\AdminService\AddOrderRowsRequest;
@@ -21,7 +21,7 @@ class AddOrderRowsRequestTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->builderObject = new OrderBuilder(SveaConfig::getDefaultConfig());
+        $this->builderObject = new OrderBuilder(ConfigurationService::getDefaultConfig());
         $this->builderObject->orderId = 123456;
         $this->builderObject->orderType = ConfigurationProvider::INVOICE_TYPE;
         $this->builderObject->countryCode = "SE";
@@ -399,7 +399,7 @@ class AddOrderRowsRequestTest extends \PHPUnit_Framework_TestCase
 
     public function test_add_single_orderRow_as_exvat()
     {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
 
         $request = WebPayAdmin::addOrderRows($config)
             ->setOrderId('sveaOrderId')
@@ -427,7 +427,7 @@ class AddOrderRowsRequestTest extends \PHPUnit_Framework_TestCase
             ->setVatPercent(24)
             ->setAmountExVat(10.00)
             ->setQuantity(1);
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
 
         $request = WebPayAdmin::addOrderRows($config)
             ->setOrderId('sveaOrderId')
@@ -444,7 +444,7 @@ class AddOrderRowsRequestTest extends \PHPUnit_Framework_TestCase
 
     public function test_add_single_orderRow_as_incvat()
     {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
 
         $request = WebPayAdmin::addOrderRows($config)
             ->setOrderId('sveaOrderId')
@@ -472,7 +472,7 @@ class AddOrderRowsRequestTest extends \PHPUnit_Framework_TestCase
             ->setVatPercent(24)
             ->setAmountIncVat(12.39876)
             ->setQuantity(1);
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
 
         $request = WebPayAdmin::addOrderRows($config)
             ->setOrderId('sveaOrderId')
@@ -489,7 +489,7 @@ class AddOrderRowsRequestTest extends \PHPUnit_Framework_TestCase
 
     public function test_add_single_orderRow_as_incvat_and_exvat()
     {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
 
         $request = WebPayAdmin::addOrderRows($config)
             ->setOrderId('sveaOrderId')
@@ -517,7 +517,7 @@ class AddOrderRowsRequestTest extends \PHPUnit_Framework_TestCase
             ->setAmountExVat(9.999)
             ->setAmountIncVat(12.39876)
             ->setQuantity(1);
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
 
         $request = WebPayAdmin::addOrderRows($config)
             ->setOrderId('sveaOrderId')
@@ -547,7 +547,7 @@ class AddOrderRowsRequestTest extends \PHPUnit_Framework_TestCase
             ->setVatPercent(24)
             ->setQuantity(1);
 
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
 
         $request = WebPayAdmin::addOrderRows($config)
             ->setOrderId('sveaOrderId')
@@ -579,7 +579,7 @@ class AddOrderRowsRequestTest extends \PHPUnit_Framework_TestCase
             ->setVatPercent(24)
             ->setQuantity(1);
 
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
 
         $request = WebPayAdmin::addOrderRows($config)
             ->setOrderId('sveaOrderId')

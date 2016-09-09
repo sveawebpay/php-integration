@@ -4,7 +4,7 @@ namespace Svea\WebPay\Test\UnitTest\HostedService\Helper;
 
 use Svea\WebPay\Test\UnitTest\HostedService\Payment\FakeHostedPayment;
 use Svea\WebPay\WebPay;
-use Svea\WebPay\Config\SveaConfig;
+use Svea\WebPay\Config\ConfigurationService;
 use Svea\WebPay\BuildOrder\CreateOrderBuilder;
 use Svea\WebPay\BuildOrder\RowBuilders\OrderRow;
 use Svea\WebPay\Config\SveaConfigurationProvider;
@@ -19,7 +19,7 @@ class HostedXmlBuilderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->order = WebPay::createOrder(SveaConfig::getDefaultConfig());
+        $this->order = WebPay::createOrder(ConfigurationService::getDefaultConfig());
 
         $this->individualCustomer = new IndividualCustomer();
         $this->individualCustomer->setNationalIdNumber("123456");
@@ -85,7 +85,7 @@ class HostedXmlBuilderTest extends \PHPUnit_Framework_TestCase
         $customer->setZipCode("9999");
         $customer->setLocality("Stan");
 
-        $this->order = new CreateOrderBuilder(new SveaConfigurationProvider(SveaConfig::getDefaultConfig()));
+        $this->order = new CreateOrderBuilder(new SveaConfigurationProvider(ConfigurationService::getDefaultConfig()));
         $this->order->setClientOrderNumber("1234")
             ->setCountryCode("SE")
             ->setCurrency("SEK")

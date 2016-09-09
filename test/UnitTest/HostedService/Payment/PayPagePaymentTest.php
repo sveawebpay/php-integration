@@ -5,7 +5,7 @@ namespace Svea\WebPay\Test\UnitTest\HostedService\Payment;
 use Svea\WebPay\WebPay;
 use Svea\WebPay\WebPayItem;
 use Svea\WebPay\Test\TestUtil;
-use Svea\WebPay\Config\SveaConfig;
+use Svea\WebPay\Config\ConfigurationService;
 use Svea\WebPay\Constant\PaymentMethod;
 use Svea\WebPay\Constant\SystemPaymentMethod;
 
@@ -16,7 +16,7 @@ use Svea\WebPay\Constant\SystemPaymentMethod;
 class PayPagePaymentTest extends \PHPUnit_Framework_TestCase {
 
     public function testBuildPayPagePaymentWithExcludepaymentMethods() {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $rowFactory = new TestUtil();
         $form = WebPay::createOrder($config)
             ->addOrderRow(TestUtil::createOrderRow())
@@ -51,7 +51,7 @@ class PayPagePaymentTest extends \PHPUnit_Framework_TestCase {
     }
 
     public function testpayPagePaymentExcludeCardPayments() {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $rowFactory = new TestUtil();
         $form = WebPay::createOrder($config)
             ->addOrderRow(TestUtil::createOrderRow())
@@ -78,7 +78,7 @@ class PayPagePaymentTest extends \PHPUnit_Framework_TestCase {
     }
 
     public function testExcludeDirectPaymentMethods() {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $rowFactory = new TestUtil();
         $form = WebPay::createOrder($config)
             ->addOrderRow(TestUtil::createOrderRow())
@@ -105,7 +105,7 @@ class PayPagePaymentTest extends \PHPUnit_Framework_TestCase {
     }
 
     public function testpayPagePaymentIncludePaymentMethods() {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $rowFactory = new TestUtil();
         $form = WebPay::createOrder($config)
             ->addOrderRow(TestUtil::createOrderRow())
@@ -133,7 +133,7 @@ class PayPagePaymentTest extends \PHPUnit_Framework_TestCase {
     }
 
     public function testBuildPayPagePaymentVatIsCero() {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $rowFactory = new TestUtil();
          $form = WebPay::createOrder($config)
                 ->addOrderRow(WebPayItem::orderRow()
@@ -156,7 +156,7 @@ class PayPagePaymentTest extends \PHPUnit_Framework_TestCase {
     }
     
     public function testBuildPayPagePaymentCallBackUrl() {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $rowFactory = new TestUtil();
          $form = WebPay::createOrder($config)
                 ->addOrderRow(WebPayItem::orderRow()

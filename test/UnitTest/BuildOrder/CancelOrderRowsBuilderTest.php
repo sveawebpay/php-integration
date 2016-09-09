@@ -2,7 +2,7 @@
 
 namespace Svea\WebPay\Test\UnitTest\BuildOrder;
 
-use Svea\WebPay\Config\SveaConfig;
+use Svea\WebPay\Config\ConfigurationService;
 use Svea\WebPay\BuildOrder\CancelOrderRowsBuilder;
 use Svea\WebPay\BuildOrder\RowBuilders\NumberedOrderRow;
 
@@ -16,7 +16,7 @@ class CancelOrderRowsBuilderTest extends \PHPUnit_Framework_TestCase
 
     function setUp()
     {
-        $this->cancelOrderRowsObject = new CancelOrderRowsBuilder(SveaConfig::getDefaultConfig());
+        $this->cancelOrderRowsObject = new CancelOrderRowsBuilder(ConfigurationService::getDefaultConfig());
     }
 
     public function test_cancelOrderRowsBuilder_class_exists()

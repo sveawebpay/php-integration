@@ -2,7 +2,7 @@
 namespace Svea\WebPay\Test\UnitTest\HostedService\Payment;
 
 use Exception;
-use Svea\WebPay\Config\SveaConfig;
+use Svea\WebPay\Config\ConfigurationService;
 use Svea\WebPay\Config\ConfigurationProvider;
 
 /**
@@ -20,13 +20,13 @@ class TestConf implements ConfigurationProvider
     {
         $type = strtoupper($type);
         if ($type == "HOSTED") {
-            return SveaConfig::SWP_PROD_URL;;
+            return ConfigurationService::SWP_PROD_URL;;
         } elseif ($type == "INVOICE" || $type == "PAYMENTPLAN") {
-            return SveaConfig::SWP_PROD_WS_URL;
+            return ConfigurationService::SWP_PROD_WS_URL;
         } elseif ($type == "HOSTED_ADMIN") {
-            return SveaConfig::SWP_PROD_HOSTED_ADMIN_URL;
+            return ConfigurationService::SWP_PROD_HOSTED_ADMIN_URL;
         } elseif ($type == "ADMIN") {
-            return SveaConfig::SWP_PROD_ADMIN_URL;
+            return ConfigurationService::SWP_PROD_ADMIN_URL;
         } else {
             throw new Exception('Invalid type. Accepted values: INVOICE, PAYMENTPLAN, HOSTED_ADMIN or HOSTED');
         }

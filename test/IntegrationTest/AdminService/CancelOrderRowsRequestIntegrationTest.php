@@ -3,7 +3,7 @@
 namespace Svea\WebPay\Test\IntegrationTest\AdminService;
 
 use PHPUnit_Framework_TestCase;
-use Svea\WebPay\Config\SveaConfig;
+use Svea\WebPay\Config\ConfigurationService;
 use Svea\WebPay\Test\TestUtil;
 use Svea\WebPay\WebPayAdmin;
 use Svea\WebPay\WebPayItem;
@@ -42,7 +42,7 @@ class CancelOrderRowsRequestIntegrationTest extends PHPUnit_Framework_TestCase
         $myOrderId = $orderResponse->sveaOrderId;
 
         // cancel first row in order
-        $cancelOrderRowsRequest = WebPayAdmin::cancelOrderRows(SveaConfig::getDefaultConfig());
+        $cancelOrderRowsRequest = WebPayAdmin::cancelOrderRows(ConfigurationService::getDefaultConfig());
         $cancelOrderRowsRequest->setCountryCode($country);
         $cancelOrderRowsRequest->setOrderId($myOrderId);
         $cancelOrderRowsRequest->setRowToCancel(1);
@@ -81,7 +81,7 @@ class CancelOrderRowsRequestIntegrationTest extends PHPUnit_Framework_TestCase
         $myOrderId = $orderResponse->sveaOrderId;
 
         // cancel first row in order                
-        $cancelOrderRowsRequest = WebPayAdmin::cancelOrderRows(SveaConfig::getDefaultConfig());
+        $cancelOrderRowsRequest = WebPayAdmin::cancelOrderRows(ConfigurationService::getDefaultConfig());
         $cancelOrderRowsRequest->setCountryCode($country);
         $cancelOrderRowsRequest->setOrderId($myOrderId);
         $cancelOrderRowsRequest->setRowToCancel(1);
@@ -120,7 +120,7 @@ class CancelOrderRowsRequestIntegrationTest extends PHPUnit_Framework_TestCase
         $myOrderId = $orderResponse->sveaOrderId;
 
         // cancel first row in order                
-        $cancelOrderRowsRequest = WebPayAdmin::cancelOrderRows(SveaConfig::getDefaultConfig());
+        $cancelOrderRowsRequest = WebPayAdmin::cancelOrderRows(ConfigurationService::getDefaultConfig());
         $cancelOrderRowsRequest->setCountryCode($country);
         $cancelOrderRowsRequest->setOrderId($myOrderId);
         $cancelOrderRowsRequest->setRowsToCancel(array(1, 2));

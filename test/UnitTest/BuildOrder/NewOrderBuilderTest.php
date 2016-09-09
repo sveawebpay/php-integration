@@ -5,7 +5,7 @@ namespace Svea\WebPay\Test\UnitTest\BuildOrder;
 use Svea\WebPay\WebPay;
 use Svea\WebPay\WebPayItem;
 use Svea\WebPay\Test\TestUtil;
-use Svea\WebPay\Config\SveaConfig;
+use Svea\WebPay\Config\ConfigurationService;
 use Svea\WebPay\Constant\PaymentMethod;
 
 /**
@@ -18,7 +18,7 @@ class NewOrderBuilderTest extends \PHPUnit_Framework_TestCase
     public function testNewInvoiceOrderCompanyAddresselector()
     {
         $addresselector = $this->getAddressForTesting();
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $request = WebPay::createOrder($config);
         $request = $request
             ->addOrderRow(TestUtil::createOrderRow());
@@ -38,7 +38,7 @@ class NewOrderBuilderTest extends \PHPUnit_Framework_TestCase
      */
     public function getAddressForTesting()
     {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $addressRequest = WebPay::getAddresses($config);
         $request = $addressRequest
             ->setOrderTypeInvoice()
@@ -51,7 +51,7 @@ class NewOrderBuilderTest extends \PHPUnit_Framework_TestCase
 
     public function testNewInvoiceOrderWithOrderRow()
     {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $request = WebPay::createOrder($config);
         $request = $request
             ->addOrderRow(TestUtil::createOrderRow());
@@ -86,7 +86,7 @@ class NewOrderBuilderTest extends \PHPUnit_Framework_TestCase
             ->setUnit("st")
             ->setVatPercent(25)
             ->setDiscountPercent(0);
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $request = WebPay::createOrder($config)
             ->addOrderRow($orderRows)
             ->addCustomerDetails(WebPayItem::individualCustomer()->setNationalIdNumber(194605092222))
@@ -102,7 +102,7 @@ class NewOrderBuilderTest extends \PHPUnit_Framework_TestCase
 
     public function testOrderWithShippingFee()
     {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $request = WebPay::createOrder($config);
         $request = $request
             ->addOrderRow(TestUtil::createOrderRow())
@@ -135,7 +135,7 @@ class NewOrderBuilderTest extends \PHPUnit_Framework_TestCase
 
     public function testOrderWithShippingFeeZero()
     {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $request = WebPay::createOrder($config);
         $request = $request
             ->addOrderRow(TestUtil::createOrderRow())
@@ -168,7 +168,7 @@ class NewOrderBuilderTest extends \PHPUnit_Framework_TestCase
 
     public function testOrderWithShippingFeeZeroVat()
     {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $request = WebPay::createOrder($config);
         $request = $request
             ->addOrderRow(TestUtil::createOrderRow())
@@ -201,7 +201,7 @@ class NewOrderBuilderTest extends \PHPUnit_Framework_TestCase
 
     public function testOrderWithInvoiceFee()
     {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $request = WebPay::createOrder($config);
         $request = $request
             ->addOrderRow(TestUtil::createOrderRow())
@@ -233,7 +233,7 @@ class NewOrderBuilderTest extends \PHPUnit_Framework_TestCase
 
     public function testOrderWithFixedDiscount()
     {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $request = WebPay::createOrder($config);
         $request = $request
             ->addOrderRow(TestUtil::createOrderRow())
@@ -264,7 +264,7 @@ class NewOrderBuilderTest extends \PHPUnit_Framework_TestCase
 
     public function testOrderWithRelativeDiscount()
     {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $request = WebPay::createOrder($config);
         $request = $request
             ->addOrderRow(TestUtil::createOrderRow())
@@ -296,7 +296,7 @@ class NewOrderBuilderTest extends \PHPUnit_Framework_TestCase
 
     public function testBuildOrderWithIndividualCustomer()
     {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $request = WebPay::createOrder($config);
         $request = $request
             ->addOrderRow(TestUtil::createOrderRow())
@@ -332,7 +332,7 @@ class NewOrderBuilderTest extends \PHPUnit_Framework_TestCase
 
     public function testBuildOrderWithCompanyCustomer()
     {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $request = WebPay::createOrder($config);
         $request = $request
             ->addOrderRow(TestUtil::createOrderRow())
@@ -360,7 +360,7 @@ class NewOrderBuilderTest extends \PHPUnit_Framework_TestCase
 
     public function testBuildOrderWithCompanyCustomerDE()
     {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $request = WebPay::createOrder($config);
         $request = $request
             ->addOrderRow(TestUtil::createOrderRow())
@@ -390,7 +390,7 @@ class NewOrderBuilderTest extends \PHPUnit_Framework_TestCase
 
     public function testAmountsZero()
     {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $request = WebPay::createOrder($config);
         $request = $request
             ->addOrderRow(
@@ -416,7 +416,7 @@ class NewOrderBuilderTest extends \PHPUnit_Framework_TestCase
 
     public function testAmountIncVatZero()
     {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $request = WebPay::createOrder($config);
         $request = $request
             ->addOrderRow(
@@ -442,7 +442,7 @@ class NewOrderBuilderTest extends \PHPUnit_Framework_TestCase
 
     public function testAmountExVatZero()
     {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $request = WebPay::createOrder($config);
         $request = $request
             ->addOrderRow(
@@ -468,7 +468,7 @@ class NewOrderBuilderTest extends \PHPUnit_Framework_TestCase
 
     public function testOrderRowsInOrderAsAdded()
     {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $request = WebPay::createOrder($config);
         $request = $request
             ->addOrderRow(
@@ -509,7 +509,7 @@ class NewOrderBuilderTest extends \PHPUnit_Framework_TestCase
 
     public function testOrderRowsInOrderAsAdded2()
     {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $request = WebPay::createOrder($config);
         $request = $request
             ->addFee(WebPayItem::shippingFee()
@@ -550,7 +550,7 @@ class NewOrderBuilderTest extends \PHPUnit_Framework_TestCase
 
     public function testOrderRowsInOrderAsAddedOnHosted()
     {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $request = WebPay::createOrder($config);
         $form = $request
             ->addOrderRow(
@@ -593,7 +593,7 @@ class NewOrderBuilderTest extends \PHPUnit_Framework_TestCase
 
     public function testOrderRowsInOrderAsAdded2OnHosted()
     {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $request = WebPay::createOrder($config);
         $form = $request
             ->addFee(WebPayItem::shippingFee()

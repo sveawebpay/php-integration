@@ -3,7 +3,7 @@
 namespace Svea\WebPay\HostedService\HostedResponse\HostedAdminResponse;
 
 use SimpleXMLElement;
-use Svea\WebPay\Config\SveaConfig;
+use Svea\WebPay\Config\ConfigurationService;
 use Svea\WebPay\Config\ConfigurationProvider;
 use Svea\WebPay\Config\SveaConfigurationProvider;
 use Svea\WebPay\HostedService\HostedResponse\HostedResponse;
@@ -75,7 +75,7 @@ class HostedAdminResponse extends HostedResponse
         // getPaymentUrl/preparepayment request
         if (property_exists($hostedAdminResponse, "preparedpayment")) {
             $url = $this->config->getEndpoint(SveaConfigurationProvider::PREPARED_URL);
-            $testurl = SveaConfig::SWP_TEST_PREPARED_URL;
+            $testurl = ConfigurationService::SWP_TEST_PREPARED_URL;
 
             $this->id = (string)$hostedAdminResponse->preparedpayment->id;
             $this->created = (string)$hostedAdminResponse->preparedpayment->created;

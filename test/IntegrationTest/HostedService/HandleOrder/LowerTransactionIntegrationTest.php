@@ -2,7 +2,7 @@
 
 namespace Svea\WebPay\Test\IntegrationTest\HostedService\HandleOrder;
 
-use Svea\WebPay\Config\SveaConfig;
+use Svea\WebPay\Config\ConfigurationService;
 use Svea\WebPay\HostedService\HostedAdminRequest\LowerTransaction as LowerTransaction;
 
 
@@ -25,7 +25,7 @@ class LowerTransactionIntegrationTest extends \PHPUnit_Framework_TestCase
         $transactionId = 987654;
         $amountToLower = 100;
 
-        $request = new LowerTransaction(SveaConfig::getDefaultConfig());
+        $request = new LowerTransaction(ConfigurationService::getDefaultConfig());
         $request->transactionId = $transactionId;
         $request->amountToLower = $amountToLower;
         $request->countryCode = "SE";
@@ -69,7 +69,7 @@ class LowerTransactionIntegrationTest extends \PHPUnit_Framework_TestCase
         $transactionId = 587951;
         $amountToLower = 100;   // TODO also check that status if lower by entire amount == ANNULLED
 
-        $request = new LowerTransaction(SveaConfig::getDefaultConfig());
+        $request = new LowerTransaction(ConfigurationService::getDefaultConfig());
         $request->transactionId = $transactionId;
         $request->amountToLower = $amountToLower;
         $request->countryCode = "SE";
@@ -104,7 +104,7 @@ class LowerTransactionIntegrationTest extends \PHPUnit_Framework_TestCase
         // Set the below to match the transaction, then run the test.
         $transactionId = 586184;
 
-        $lowerTransactionRequest = new LowerTransaction(SveaConfig::getDefaultConfig());
+        $lowerTransactionRequest = new LowerTransaction(ConfigurationService::getDefaultConfig());
         $lowerTransactionRequest->countryCode = "SE";
         $lowerTransactionRequest->transactionId = $transactionId;
         $lowerTransactionRequest->amountToLower = "1";

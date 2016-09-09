@@ -3,7 +3,7 @@
 namespace Svea\WebPay\Test\IntegrationTest\BuildOrder;
 
 use PHPUnit_Framework_TestCase;
-use Svea\WebPay\Config\SveaConfig;
+use Svea\WebPay\Config\ConfigurationService;
 use Svea\WebPay\Test\TestUtil;
 use Svea\WebPay\WebPay;
 use Svea\WebPay\WebPayItem;
@@ -29,7 +29,7 @@ class CreateOrderBuilderIntegrationTest extends PHPUnit_Framework_TestCase
     public function test_createOrder_Paymentplan_SE_Accepted()
     {
 
-        $order = WebPay::createOrder(SveaConfig::getDefaultConfig())
+        $order = WebPay::createOrder(ConfigurationService::getDefaultConfig())
             ->addOrderRow(WebPayItem::orderRow()
                 ->setQuantity(1)
                 ->setAmountExVat(1000.00)

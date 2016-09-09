@@ -2,7 +2,7 @@
 
 namespace Svea\WebPay\Test\UnitTest\Response;
 
-use Svea\WebPay\Config\SveaConfig;
+use Svea\WebPay\Config\ConfigurationService;
 use Svea\WebPay\Response\SveaResponse;
 use Svea\WebPay\Config\ConfigurationProvider;
 
@@ -15,7 +15,7 @@ class SveaResponseTest extends \PHPUnit_Framework_TestCase
 
     public function test_handles_response_which_is_null()
     {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
 
         $response = new SveaResponse(NULL, "SE", $config);
         $this->assertInternalType('string', $response->getResponse());
@@ -24,7 +24,7 @@ class SveaResponseTest extends \PHPUnit_Framework_TestCase
 
     public function test_handles_response_which_is_xml()
     {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
 
         $message = "string_that_pretends_to_be_an_encoded_xml_response";
 
@@ -35,7 +35,7 @@ class SveaResponseTest extends \PHPUnit_Framework_TestCase
 
     public function test_handles_response_is_SimpleXMLElement_object()
     {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
 
         $message = (object)array("CloseOrderEuResult" => (object)array("Accepted" => "1", "ResultCode" => "0"));
 
@@ -58,7 +58,7 @@ class SveaResponseTest extends \PHPUnit_Framework_TestCase
 
         // getSingleCountryConfig fetches a SveaConfigurationProvider object that implements Svea\WebPay\Config\ConfigurationProvider
         // as we don't set any parameters, the object contains only default values, i.e. the merchantid used is 1130
-        $config = SveaConfig::getSingleCountryConfig(
+        $config = ConfigurationService::getSingleCountryConfig(
             null, //SE
             null, null, null,
             null, null, null,

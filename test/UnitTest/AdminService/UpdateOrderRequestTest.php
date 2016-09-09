@@ -3,7 +3,7 @@
 namespace Svea\WebPay\Test\UnitTest\AdminService;
 
 use Svea\WebPay\WebPayAdmin;
-use Svea\WebPay\Config\SveaConfig;
+use Svea\WebPay\Config\ConfigurationService;
 
 
 /**
@@ -23,7 +23,7 @@ class UpdateOrderRequestTest extends \PHPUnit_Framework_TestCase
     public function test_updateorder_clientnr_invoice()
     {
         print_r(strlen($this->notes));
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $request = WebPayAdmin::updateOrder($config)//only need clientid
         ->setCountryCode('SE')//req for config
         ->setOrderId('test')
@@ -36,7 +36,7 @@ class UpdateOrderRequestTest extends \PHPUnit_Framework_TestCase
 
     public function test_updateorder_addnotes_invoice()
     {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $request = WebPayAdmin::updateOrder($config)//only need clientid
         ->setCountryCode('SE')//req for config
         ->setOrderId('test')
@@ -49,7 +49,7 @@ class UpdateOrderRequestTest extends \PHPUnit_Framework_TestCase
 
     public function test_updateorder_clientnr_paymentplan()
     {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $request = WebPayAdmin::updateOrder($config)//only need clientid
         ->setCountryCode('SE')//req for config
         ->setOrderId('test')
@@ -62,7 +62,7 @@ class UpdateOrderRequestTest extends \PHPUnit_Framework_TestCase
 
     public function test_updateorder_addnotes_paymentplan()
     {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $request = WebPayAdmin::updateOrder($config)//only need clientid
         ->setCountryCode('SE')//req for config
         ->setOrderId('test')
@@ -80,7 +80,7 @@ class UpdateOrderRequestTest extends \PHPUnit_Framework_TestCase
      */
     public function test_updateorder_addnotes_chars_validate_invoice()
     {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $request = WebPayAdmin::updateOrder($config)//only need clientid
         ->setCountryCode('SE')//req for config
         ->setOrderId('test')

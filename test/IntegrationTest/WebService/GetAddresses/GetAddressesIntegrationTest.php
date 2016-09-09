@@ -4,7 +4,7 @@
 namespace Svea\WebPay\Test\IntegrationTest\WebService\GetAddress;
 
 use PHPUnit_Framework_TestCase;
-use Svea\WebPay\Config\SveaConfig;
+use Svea\WebPay\Config\ConfigurationService;
 use Svea\WebPay\WebService\GetAddress\GetAddresses as GetAddresses;
 
 
@@ -19,7 +19,7 @@ class GetAddressesIntegrationTest extends PHPUnit_Framework_TestCase
 
     public function SetUp()
     {
-        $this->config = SveaConfig::getDefaultConfig();
+        $this->config = ConfigurationService::getDefaultConfig();
         $this->addressRequest = new GetAddresses($this->config);
     }
 

@@ -4,7 +4,7 @@ namespace Svea\WebPay\Test\UnitTest\WebService\GetPaymentPlanParams;
 
 use Svea\WebPay\WebPay;
 use PHPUnit_Framework_TestCase;
-use Svea\WebPay\Config\SveaConfig;
+use Svea\WebPay\Config\ConfigurationService;
 
 
 /**
@@ -15,7 +15,7 @@ class PaymentPlanParamsTest extends PHPUnit_Framework_TestCase
 
     public function testBuildRequest()
     {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $addressRequest = WebPay::getPaymentPlanParams($config);
         $request = $addressRequest
             ->setCountryCode("SE")

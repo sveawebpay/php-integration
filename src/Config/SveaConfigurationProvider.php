@@ -10,9 +10,9 @@ use Svea\WebPay\HostedService\Helper\InvalidCountryException;
  * SveaConfigurationProvider implements the Svea\WebPay\Config\ConfigurationProvider interface.
  *
  * This class expects to be initialised with an array listing the various
- * configuration settings, see SveaConfig for details on the array structure.
+ * configuration settings, see config_prod.php or config_test.php for details on the array structure.e.
  *
- * The class is used as Default to get the settings in SveaConfig
+ * The class is used as Default to get the settings from config files
  * The class can be used as an example when creating your own
  * class implementing the Svea\WebPay\Config\ConfigurationProvider interface.
  * The class should return the right authorization values
@@ -26,9 +26,7 @@ class SveaConfigurationProvider implements ConfigurationProvider
 
     /**
      * This class expects to be initialised with an array listing the various
-     * configuration settings, see SveaConfig for details on the array structure.
-     *
-     * @see \Svea\SveaConfig::getTestConfig() \Svea\WebPay\Config\SveaConfig::getTestConfig()
+     * configuration settings, see config_prod.php or config_test.php for details on the array structure.
      *
      * @param array $environmentConfig
      */

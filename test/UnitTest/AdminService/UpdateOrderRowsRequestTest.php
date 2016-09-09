@@ -4,7 +4,7 @@ namespace Svea\WebPay\Test\UnitTest\AdminService;
 
 use Svea\WebPay\WebPayItem;
 use Svea\WebPay\WebPayAdmin;
-use Svea\WebPay\Config\SveaConfig;
+use Svea\WebPay\Config\ConfigurationService;
 
 
 /**
@@ -15,7 +15,7 @@ class UpdateOrderRowsRequestTest extends \PHPUnit_Framework_TestCase
 
     public function test_add_single_orderRow_as_exvat()
     {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $request = WebPayAdmin::updateOrderRows($config)
             ->setCountryCode('SE')
             ->setOrderId('test')
@@ -33,7 +33,7 @@ class UpdateOrderRowsRequestTest extends \PHPUnit_Framework_TestCase
 
     public function test_add_single_orderRow_as_incvat_and_vatpercent()
     {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $request = WebPayAdmin::updateOrderRows($config)
             ->setCountryCode('SE')
             ->setOrderId('test')
@@ -52,7 +52,7 @@ class UpdateOrderRowsRequestTest extends \PHPUnit_Framework_TestCase
 
     public function test_add_single_orderRow_as_incvat_and_exvat()
     {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $request = WebPayAdmin::updateOrderRows($config)
             ->setCountryCode('SE')
             ->setOrderId('test')
@@ -71,7 +71,7 @@ class UpdateOrderRowsRequestTest extends \PHPUnit_Framework_TestCase
 
     public function test_add_single_orderRow_mixed_types_1()
     {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $request = WebPayAdmin::updateOrderRows($config)
             ->setCountryCode('SE')
             ->setOrderId('test')
@@ -98,7 +98,7 @@ class UpdateOrderRowsRequestTest extends \PHPUnit_Framework_TestCase
 
     public function test_add_single_orderRow_mixed_types_2()
     {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $request = WebPayAdmin::updateOrderRows($config)
             ->setCountryCode('SE')
             ->setOrderId('test')
@@ -125,7 +125,7 @@ class UpdateOrderRowsRequestTest extends \PHPUnit_Framework_TestCase
 
     public function test_add_single_orderRow_mixed_types_3()
     {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $request = WebPayAdmin::updateOrderRows($config)
             ->setCountryCode('SE')
             ->setOrderId('test')
@@ -164,7 +164,7 @@ class UpdateOrderRowsRequestTest extends \PHPUnit_Framework_TestCase
      */
     public function test_add_single_orderRow_missing_rownumber()
     {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $request = WebPayAdmin::updateOrderRows($config)
             ->setCountryCode('SE')
             ->setOrderId('test')

@@ -6,7 +6,7 @@ use PHPUnit_Framework_TestCase;
 use Svea\WebPay\AdminService\CancelOrderRequest;
 use Svea\WebPay\BuildOrder\CancelOrderBuilder;
 use Svea\WebPay\Config\ConfigurationProvider;
-use Svea\WebPay\Config\SveaConfig;
+use Svea\WebPay\Config\ConfigurationService;
 
 /**
  * @author Kristian Grossman-Madsen for Svea Webpay
@@ -31,7 +31,7 @@ class CancelOrderRequestIntegrationTest extends PHPUnit_Framework_TestCase
         $sveaOrderIdToClose = 349698;
         $orderType = ConfigurationProvider::INVOICE_TYPE;
 
-        $cancelOrderBuilder = new CancelOrderBuilder(SveaConfig::getDefaultConfig());
+        $cancelOrderBuilder = new CancelOrderBuilder(ConfigurationService::getDefaultConfig());
         $cancelOrderBuilder->setCountryCode($countryCode);
         $cancelOrderBuilder->setOrderId($sveaOrderIdToClose);
         $cancelOrderBuilder->orderType = $orderType;

@@ -5,7 +5,7 @@ namespace Svea\WebPay\Test\UnitTest\HostedService\Payment;
 use Svea\WebPay\WebPay;
 use Svea\WebPay\WebPayItem;
 use PHPUnit_Framework_TestCase;
-use Svea\WebPay\Config\SveaConfig;
+use Svea\WebPay\Config\ConfigurationService;
 use Svea\WebPay\Constant\PaymentMethod;
 
 /**
@@ -18,7 +18,7 @@ class FixedDiscountVatCalculationTest extends PHPUnit_Framework_TestCase
     {
 //    print_r("\n\n-----test_bv_order_sent_incvat_two_decimals_with_both_discounts()\n");
 
-        $order = WebPay::createOrder(SveaConfig::getDefaultConfig())
+        $order = WebPay::createOrder(ConfigurationService::getDefaultConfig())
             ->addCustomerDetails(WebPayItem::individualCustomer()->setNationalIdNumber(194605092222))
             ->setCountryCode("SE")
             ->setCustomerReference("1337")
@@ -118,7 +118,7 @@ class FixedDiscountVatCalculationTest extends PHPUnit_Framework_TestCase
     {
 //    print_r("\n\n-----test_bv_order_sent_incvat_two_decimals_with_both_discounts_with_amount_only()\n");
 
-        $order = WebPay::createOrder(SveaConfig::getDefaultConfig())
+        $order = WebPay::createOrder(ConfigurationService::getDefaultConfig())
             ->addCustomerDetails(WebPayItem::individualCustomer()->setNationalIdNumber(194605092222))
             ->setCountryCode("SE")
             ->setCustomerReference("1337")

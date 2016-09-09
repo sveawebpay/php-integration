@@ -4,7 +4,7 @@ namespace Svea\WebPay\Test\UnitTest\WebService\HandleOrder;
 
 use Svea\WebPay\WebPay;
 use PHPUnit_Framework_TestCase;
-use Svea\WebPay\Config\SveaConfig;
+use Svea\WebPay\Config\ConfigurationService;
 
 
 /**
@@ -15,7 +15,7 @@ class CloseOrderTest extends PHPUnit_Framework_TestCase
 
     public function testCloseInvoiceOrder()
     {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $orderBuilder = WebPay::closeOrder($config);
         $request = $orderBuilder
             ->setOrderId("id")
@@ -28,7 +28,7 @@ class CloseOrderTest extends PHPUnit_Framework_TestCase
 
     public function testClosePaymentPlanOrder()
     {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $orderBuilder = WebPay::closeOrder($config);
         $request = $orderBuilder
             ->setCountryCode("SE")

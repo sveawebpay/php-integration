@@ -2,7 +2,7 @@
 
 namespace Svea\WebPay\BuildOrder;
 
-use Svea\WebPay\Config\SveaConfig;
+use Svea\WebPay\Config\ConfigurationService;
 use Svea\WebPay\Config\ConfigurationProvider;
 use Svea\WebPay\WebService\HandleOrder\CloseOrder;
 
@@ -12,7 +12,7 @@ use Svea\WebPay\WebService\HandleOrder\CloseOrder;
 class CloseOrderBuilder
 {
     /**
-     * @var SveaConfig
+     * @var ConfigurationService
      */
     public $conf;
 

@@ -6,7 +6,7 @@ use Svea\WebPay\WebPay;
 use Svea\WebPay\WebPayItem;
 use Svea\WebPay\Test\TestUtil;
 use PHPUnit_Framework_TestCase;
-use Svea\WebPay\Config\SveaConfig;
+use Svea\WebPay\Config\ConfigurationService;
 
 
 /**
@@ -21,7 +21,7 @@ class PaymentPlanTest extends PHPUnit_Framework_TestCase
      */
     public function getGetPaymentPlanParamsForTesting()
     {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $addressRequest = WebPay::getPaymentPlanParams($config);
         $response = $addressRequest
             ->setCountryCode("SE")
@@ -32,7 +32,7 @@ class PaymentPlanTest extends PHPUnit_Framework_TestCase
 
     public function testPaymentPlanRequestObjectSpecifics()
     {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $rowFactory = new TestUtil();
         $request = WebPay::createOrder($config)
             ->addOrderRow(TestUtil::createOrderRow())
@@ -52,7 +52,7 @@ class PaymentPlanTest extends PHPUnit_Framework_TestCase
 
     public function testInvoiceRequestObjectWithRelativeDiscountOnTwoProducts()
     {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $request = WebPay::createOrder($config)
             ->addOrderRow(WebPayItem::orderRow()
                 ->setArticleNumber("1")
@@ -85,7 +85,7 @@ class PaymentPlanTest extends PHPUnit_Framework_TestCase
 
     public function testPaymentPlanWithPriceAsDecimal()
     {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $campaign = $this->getGetPaymentPlanParamsForTesting();
         $request = WebPay::createOrder($config)
             ->addOrderRow(WebPayItem::orderRow()
@@ -116,7 +116,7 @@ class PaymentPlanTest extends PHPUnit_Framework_TestCase
 
     public function testDiscountSetAsExVatWhenPriceSetAsExVatAndVatPercent()
     {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $campaign = $this->getGetPaymentPlanParamsForTesting();
         $request = WebPay::createOrder($config)
             ->addOrderRow(
@@ -141,7 +141,7 @@ class PaymentPlanTest extends PHPUnit_Framework_TestCase
 
     public function testDiscountSetAsExVatAndVatPercentWhenPriceSetAsExVatAndVatPercent()
     {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $campaign = $this->getGetPaymentPlanParamsForTesting();
         $request = WebPay::createOrder($config)
             ->addOrderRow(
@@ -168,7 +168,7 @@ class PaymentPlanTest extends PHPUnit_Framework_TestCase
 
     public function testDiscountPercentAndVatPercentWhenPriceSetAsExVatAndVatPercent()
     {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $campaign = $this->getGetPaymentPlanParamsForTesting();
         $request = WebPay::createOrder($config)
             ->addOrderRow(
@@ -195,7 +195,7 @@ class PaymentPlanTest extends PHPUnit_Framework_TestCase
 
     public function testFeeSetAsExVatAndVatPercentWhenPriceSetAsExVatAndVatPercent()
     {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $campaign = $this->getGetPaymentPlanParamsForTesting();
         $request = WebPay::createOrder($config)
             ->addOrderRow(
@@ -224,7 +224,7 @@ class PaymentPlanTest extends PHPUnit_Framework_TestCase
 
     public function testOrderRowPriceSetAsInkVatAndVatPercentSetAmountAsIncVat()
     {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $campaign = $this->getGetPaymentPlanParamsForTesting();
         $request = WebPay::createOrder($config)
             ->addOrderRow(
@@ -247,7 +247,7 @@ class PaymentPlanTest extends PHPUnit_Framework_TestCase
 
     public function testFeeSetAsIncVatAndVatPercentWhenPriceSetAsIncVatAndVatPercent()
     {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $campaign = $this->getGetPaymentPlanParamsForTesting();
         $request = WebPay::createOrder($config)
             ->addOrderRow(
@@ -283,7 +283,7 @@ class PaymentPlanTest extends PHPUnit_Framework_TestCase
 
     public function testDiscountSetAsIncVatWhenPriceSetAsIncVatAndVatPercent()
     {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $campaign = $this->getGetPaymentPlanParamsForTesting();
         $request = WebPay::createOrder($config)
             ->addOrderRow(
@@ -311,7 +311,7 @@ class PaymentPlanTest extends PHPUnit_Framework_TestCase
 
     public function testDiscountSetAsExVatAndVatPercentWhenPriceSetAsIncVatAndVatPercent()
     {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $campaign = $this->getGetPaymentPlanParamsForTesting();
         $request = WebPay::createOrder($config)
             ->addOrderRow(
@@ -341,7 +341,7 @@ class PaymentPlanTest extends PHPUnit_Framework_TestCase
 
     public function testDiscountPercentAndVatPercentWhenPriceSetAsIncVatAndVatPercent()
     {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $campaign = $this->getGetPaymentPlanParamsForTesting();
         $request = WebPay::createOrder($config)
             ->addOrderRow(

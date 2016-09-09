@@ -6,7 +6,7 @@ use PHPUnit_Framework_TestCase;
 use Svea\WebPay\AdminService\DeliverOrdersRequest;
 use Svea\WebPay\BuildOrder\DeliverOrderBuilder;
 use Svea\WebPay\Config\ConfigurationProvider;
-use Svea\WebPay\Config\SveaConfig;
+use Svea\WebPay\Config\ConfigurationService;
 use Svea\WebPay\Constant\DistributionType;
 use Svea\WebPay\Test\TestUtil;
 
@@ -34,7 +34,7 @@ class DeliverOrdersRequestIntegrationTest extends PHPUnit_Framework_TestCase
         $sveaOrderIdToDeliver = 349699; // need to exist, be closed
         $orderType = ConfigurationProvider::INVOICE_TYPE;
 
-        $DeliverOrderBuilder = new DeliverOrderBuilder(SveaConfig::getDefaultConfig());
+        $DeliverOrderBuilder = new DeliverOrderBuilder(ConfigurationService::getDefaultConfig());
         $DeliverOrderBuilder->setCountryCode($countryCode);
         $DeliverOrderBuilder->setOrderId($sveaOrderIdToDeliver);
         $DeliverOrderBuilder->setInvoiceDistributionType(DistributionType::POST);
@@ -65,7 +65,7 @@ class DeliverOrdersRequestIntegrationTest extends PHPUnit_Framework_TestCase
         $myOrderId = $orderResponse->sveaOrderId;
 
         // deliver order
-        $DeliverOrderBuilder = new DeliverOrderBuilder(SveaConfig::getDefaultConfig());
+        $DeliverOrderBuilder = new DeliverOrderBuilder(ConfigurationService::getDefaultConfig());
         $DeliverOrderBuilder->setCountryCode($country);
         $DeliverOrderBuilder->setOrderId($myOrderId);
         $DeliverOrderBuilder->setInvoiceDistributionType(DistributionType::POST);

@@ -3,7 +3,7 @@
 namespace Svea\WebPay\Test\IntegrationTest\AdminService;
  
 use PHPUnit_Framework_TestCase;
-use Svea\WebPay\Config\SveaConfig;
+use Svea\WebPay\Config\ConfigurationService;
 use Svea\WebPay\Test\TestUtil;
 use Svea\WebPay\WebPay;
 use Svea\WebPay\WebPayAdmin;
@@ -22,7 +22,7 @@ class CreditAmountRequestIntegrationTest extends PHPUnit_Framework_TestCase
     /** helper function, returns invoice for delivered order with one row, sent with PriceIncludingVat flag set to true */
     public function get_orderInfo_sent_inc_vat($amount, $vat, $quantity, $is_paymentplan = NULL)
     {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         if ($is_paymentplan)
             $campaignCode = TestUtil::getGetPaymentPlanParamsForTesting();
 
@@ -56,7 +56,7 @@ class CreditAmountRequestIntegrationTest extends PHPUnit_Framework_TestCase
     /** helper function, returns invoice for delivered order with one row, sent with PriceIncludingVat flag set to false */
     public function get_orderInfo_sent_ex_vat($amount, $vat, $quantity, $is_paymentplan = NULL)
     {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         if ($is_paymentplan)
             $campaignCode = TestUtil::getGetPaymentPlanParamsForTesting();
 
@@ -91,7 +91,7 @@ class CreditAmountRequestIntegrationTest extends PHPUnit_Framework_TestCase
 
     public function test_creditAmount_creditPaymentPlan_on_order_ex_vat()
     {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
 
         $orderInfo = $this->get_orderInfo_sent_ex_vat(999.99, 24, 1, TRUE);
         $credit = WebPayAdmin::creditAmount($config)
@@ -107,7 +107,7 @@ class CreditAmountRequestIntegrationTest extends PHPUnit_Framework_TestCase
 
     public function test_creditAmount_creditPaymentPlan_on_order_inc_vat()
     {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
 
         $orderInfo = $this->get_orderInfo_sent_inc_vat(1000.00, 25, 1, TRUE);
         $credit = WebPayAdmin::creditAmount($config)
@@ -122,7 +122,7 @@ class CreditAmountRequestIntegrationTest extends PHPUnit_Framework_TestCase
 
     public function test_creditAmount_creditPaymentPlan_amount_exceeds_orderamount()
     {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
 
         $orderInfo = $this->get_orderInfo_sent_inc_vat(1000.00, 25, 1, TRUE);
         $credit = WebPayAdmin::creditAmount($config)

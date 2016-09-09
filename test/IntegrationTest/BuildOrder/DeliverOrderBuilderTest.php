@@ -3,7 +3,7 @@
 namespace Svea\WebPay\Test\IntegrationTest\BuildOrder;
 
 use PHPUnit_Framework_TestCase;
-use Svea\WebPay\Config\SveaConfig;
+use Svea\WebPay\Config\ConfigurationService;
 use Svea\WebPay\Constant\DistributionType;
 use Svea\WebPay\WebPay;
 use Svea\WebPay\WebPayItem;
@@ -28,7 +28,7 @@ class DeliverOrderBuilderIntegrationTest extends PHPUnit_Framework_TestCase
 
         $orderId = $response->sveaOrderId;
 
-        $DeliverOrderBuilder = WebPay::deliverOrder(SveaConfig::getDefaultConfig())
+        $DeliverOrderBuilder = WebPay::deliverOrder(ConfigurationService::getDefaultConfig())
             ->addOrderRow(TestUtil::createOrderRow())
             ->setCountryCode("SE")
             ->setOrderId($orderId)
@@ -50,7 +50,7 @@ class DeliverOrderBuilderIntegrationTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(1, $createResponse->accepted);
 
         $orderId = $createResponse->sveaOrderId;
-        $DeliverOrderBuilder = WebPay::deliverOrder(SveaConfig::getDefaultConfig())
+        $DeliverOrderBuilder = WebPay::deliverOrder(ConfigurationService::getDefaultConfig())
             //->addOrderRow( Svea\WebPay\Test\TestUtil::createOrderRow() )
             ->setCountryCode("SE")
             ->setOrderId($orderId)
@@ -109,7 +109,7 @@ class DeliverOrderBuilderIntegrationTest extends PHPUnit_Framework_TestCase
     public function test_deliverOrder_deliverPaymentPlanOrder_with_orderrows_use_DeliverOrderEU_and_is_accepted()
     {
 
-        $order = WebPay::createOrder(SveaConfig::getDefaultConfig())
+        $order = WebPay::createOrder(ConfigurationService::getDefaultConfig())
             ->addOrderRow(WebPayItem::orderRow()
                 ->setQuantity(1)
                 ->setAmountExVat(1000.00)
@@ -125,7 +125,7 @@ class DeliverOrderBuilderIntegrationTest extends PHPUnit_Framework_TestCase
 
         $orderId = $response->sveaOrderId;
 
-        $DeliverOrderBuilder = WebPay::deliverOrder(SveaConfig::getDefaultConfig())
+        $DeliverOrderBuilder = WebPay::deliverOrder(ConfigurationService::getDefaultConfig())
             ->addOrderRow(WebPayItem::orderRow()
                 ->setQuantity(1)
                 ->setAmountExVat(1000.00)
@@ -144,7 +144,7 @@ class DeliverOrderBuilderIntegrationTest extends PHPUnit_Framework_TestCase
     public function test_deliverOrder_deliverPaymentPlanOrder_without_orderrows_use_DeliverOrderEU_and_is_accepted()
     {
 
-        $order = WebPay::createOrder(SveaConfig::getDefaultConfig())
+        $order = WebPay::createOrder(ConfigurationService::getDefaultConfig())
             ->addOrderRow(WebPayItem::orderRow()
                 ->setQuantity(1)
                 ->setAmountExVat(1000.00)
@@ -160,7 +160,7 @@ class DeliverOrderBuilderIntegrationTest extends PHPUnit_Framework_TestCase
 
         $orderId = $response->sveaOrderId;
 
-        $DeliverOrderBuilder = WebPay::deliverOrder(SveaConfig::getDefaultConfig())
+        $DeliverOrderBuilder = WebPay::deliverOrder(ConfigurationService::getDefaultConfig())
             //->addOrderRow( Svea\WebPay\WebPayItem::orderRow()
             //    ->setQuantity(1)
             //    ->setAmountExVat(1000.00)
@@ -188,7 +188,7 @@ class DeliverOrderBuilderIntegrationTest extends PHPUnit_Framework_TestCase
 
         $orderId = 585714;  // pre-existing card transactionId with status AUTHORIZED  
 
-        $DeliverOrderBuilder = WebPay::deliverOrder(SveaConfig::getDefaultConfig())
+        $DeliverOrderBuilder = WebPay::deliverOrder(ConfigurationService::getDefaultConfig())
             ->setCountryCode("SE")
             ->setOrderId($orderId);
 

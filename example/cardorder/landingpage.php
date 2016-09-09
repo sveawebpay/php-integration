@@ -15,7 +15,7 @@ ini_set('display_errors', 'On');
 
 
 // get config object
-$myConfig = \Svea\WebPay\Config\SveaConfig::getTestConfig();
+$myConfig = \Svea\WebPay\Config\ConfigurationService::getTestConfig();
 
 $countryCode = "SE"; // should match request countryCode
 

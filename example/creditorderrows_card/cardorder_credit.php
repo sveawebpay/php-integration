@@ -9,14 +9,14 @@ require_once '../../vendor/autoload.php';
 
 use Svea\WebPay\WebPay;
 use Svea\WebPay\WebPayItem;
-use Svea\WebPay\Config\SveaConfig;
+use Svea\WebPay\Config\ConfigurationService;
 use Svea\WebPay\Constant\PaymentMethod;
 
 error_reporting(E_ALL);
 ini_set('display_errors', 'On');
 
 // get config object
-$myConfig = SveaConfig::getTestConfig(); //replace with class holding your merchantid, secretword, et al, adopted from package Config/SveaConfig.php
+$myConfig = ConfigurationService::getTestConfig(); // add your Svea credentials into config_prod.php or config_test.php file
 
 // Start the order creation process by creating the order builder object by calling Svea\WebPay\WebPay::createOrder():
 $myOrder = WebPay::createOrder($myConfig);

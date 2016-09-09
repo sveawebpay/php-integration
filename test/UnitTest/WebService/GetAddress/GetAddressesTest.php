@@ -4,7 +4,7 @@ namespace Svea\WebPay\Test\UnitTest\WebService\GetAddress;
 
 use Svea\WebPay\WebPay;
 use PHPUnit_Framework_TestCase;
-use Svea\WebPay\Config\SveaConfig;
+use Svea\WebPay\Config\ConfigurationService;
 use Svea\WebPay\Config\ConfigurationProvider;
 
 
@@ -16,7 +16,7 @@ class GetAddressesTest extends PHPUnit_Framework_TestCase
 
     public function testBuildRequest()
     {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $addressRequest = WebPay::getAddresses($config);
         $addressRequest
             ->setCountryCode("SE")
@@ -27,7 +27,7 @@ class GetAddressesTest extends PHPUnit_Framework_TestCase
 
     public function testPrepareRequestPrivate()
     {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $addressRequest = WebPay::getAddresses($config);
         $request = $addressRequest
             ->setOrderTypeInvoice()
@@ -45,7 +45,7 @@ class GetAddressesTest extends PHPUnit_Framework_TestCase
 
     public function testPrepareRequestCompany()
     {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $addressRequest = WebPay::getAddresses($config);
         $request = $addressRequest
             ->setOrderTypeInvoice()
@@ -69,7 +69,7 @@ class GetAddressesTest extends PHPUnit_Framework_TestCase
         );
 
 
-        $request = WebPay::getAddresses(SveaConfig::getDefaultConfig())
+        $request = WebPay::getAddresses(ConfigurationService::getDefaultConfig())
             //->setCountryCode( "SE" )
             ->setCustomerIdentifier("4605092222")
             ->getIndividualAddresses()
@@ -82,7 +82,7 @@ class GetAddressesTest extends PHPUnit_Framework_TestCase
             'Svea\WebPay\BuildOrder\Validator\ValidationException', "customerIdentifier is required. Use function setCustomerIdentifer()."
         );
 
-        $request = WebPay::getAddresses(SveaConfig::getDefaultConfig())
+        $request = WebPay::getAddresses(ConfigurationService::getDefaultConfig())
             ->setCountryCode("SE")
             //->setCustomerIdentifier("4605092222")
             ->getIndividualAddresses()
@@ -95,7 +95,7 @@ class GetAddressesTest extends PHPUnit_Framework_TestCase
             'Svea\WebPay\BuildOrder\Validator\ValidationException', "customerIdentifier is required. Use function setCustomerIdentifer()."
         );
 
-        $request = WebPay::getAddresses(SveaConfig::getDefaultConfig())
+        $request = WebPay::getAddresses(ConfigurationService::getDefaultConfig())
             ->setCountryCode("SE")
             //->setCustomerIdentifier("4605092222")
             ->getCompanyAddresses()
@@ -108,7 +108,7 @@ class GetAddressesTest extends PHPUnit_Framework_TestCase
             'Svea\WebPay\BuildOrder\Validator\ValidationException', "missing authentication credentials. Check configuration."
         );
 
-        $request = WebPay::getAddresses(SveaConfig::getDefaultConfig());
+        $request = WebPay::getAddresses(ConfigurationService::getDefaultConfig());
 
         // clear both payment method credentials for SE
         $request->conf->conf['credentials']['SE']['auth']['Invoice']['username'] = null;
@@ -128,7 +128,7 @@ class GetAddressesTest extends PHPUnit_Framework_TestCase
     public function test_checkAndSetConfiguredPaymentMethod_finds_invoice_configuration()
     {
 
-        $request = WebPay::getAddresses(SveaConfig::getDefaultConfig());
+        $request = WebPay::getAddresses(ConfigurationService::getDefaultConfig());
 
         // clear both payment method credentials for SE
         $request->conf->conf['credentials']['SE']['auth']['Invoice']['username'] = null;
@@ -150,7 +150,7 @@ class GetAddressesTest extends PHPUnit_Framework_TestCase
     public function test_checkAndSetConfiguredPaymentMethod_finds_paymentplan_configuration()
     {
 
-        $request = WebPay::getAddresses(SveaConfig::getDefaultConfig());
+        $request = WebPay::getAddresses(ConfigurationService::getDefaultConfig());
 
         // clear both payment method credentials for SE
 //        $request->conf->conf['credentials']['SE']['auth']['Invoice']['username'] = null;        

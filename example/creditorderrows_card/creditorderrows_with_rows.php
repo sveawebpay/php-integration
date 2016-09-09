@@ -7,14 +7,14 @@
 
 require_once '../../vendor/autoload.php';
 
-use Svea\WebPay\Config\SveaConfig;
+use Svea\WebPay\Config\ConfigurationService;
 use Svea\WebPay\WebPayAdmin;
 
 error_reporting( E_ALL );
 ini_set('display_errors', 'On');
 
 // get config object
-$myConfig = SveaConfig::getTestConfig(); //replace with class holding your merchantid, secretword, et al, adopted from package Config/SveaConfig.php
+$myConfig = ConfigurationService::getTestConfig(); // add your Svea credentials into config_prod.php or config_test.php file
 
 // We wish to credit the entire card order. To do so, we need to credit the order with an amount equal to the original order total.
 // This can be done by either :

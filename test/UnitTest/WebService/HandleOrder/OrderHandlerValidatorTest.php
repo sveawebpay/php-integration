@@ -6,7 +6,7 @@ use Svea\WebPay\WebPay;
 use Svea\WebPay\WebPayItem;
 use Svea\WebPay\Test\TestUtil;
 use PHPUnit_Framework_TestCase;
-use Svea\WebPay\Config\SveaConfig;
+use Svea\WebPay\Config\ConfigurationService;
 use Svea\WebPay\BuildOrder\DeliverOrderBuilder;
 use Svea\WebPay\WebService\HandleOrder\DeliverInvoice;
 
@@ -23,7 +23,7 @@ class OrderHandlerValidatorTest extends PHPUnit_Framework_TestCase
      */
     public function test_deliverPaymentPlanOrder_with_missing_OrderId_raises_exception()
     {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $builder = WebPay::deliverOrder($config);
         $object = $builder;
 
@@ -33,7 +33,7 @@ class OrderHandlerValidatorTest extends PHPUnit_Framework_TestCase
 
     public function test_deliverPaymentPlanOrder_with_missing_invoiceDistributionType_validates_OK()
     {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $builder = WebPay::deliverOrder($config);
         $request = $builder
             ->setOrderId(123456)
@@ -49,7 +49,7 @@ class OrderHandlerValidatorTest extends PHPUnit_Framework_TestCase
      */
     public function test_deliverInvoiceOrder_with_missing_invoiceDistributionType_raises_exception()
     {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $builder = WebPay::deliverOrder($config);
         $request = $builder
             ->setOrderId(123456)
@@ -65,7 +65,7 @@ class OrderHandlerValidatorTest extends PHPUnit_Framework_TestCase
      */
     public function testFailOnMissingInvoiceDetailsOnInvoiceDeliver()
     {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $builder = WebPay::deliverOrder($config);
         $object = $builder
             ->addOrderRow(TestUtil::createOrderRow())
@@ -91,7 +91,7 @@ class OrderHandlerValidatorTest extends PHPUnit_Framework_TestCase
      */
     public function testFailOnMissingOrderRowsOnInvoiceDeliver()
     {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $builder = new DeliverOrderBuilder($config);
         $builder
             ->setOrderId('id')

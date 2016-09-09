@@ -3,7 +3,7 @@
 
 namespace Svea\WebPay\Test\IntegrationTest\Helper;
 
-use Svea\WebPay\Config\SveaConfig;
+use Svea\WebPay\Config\ConfigurationService;
 use Svea\WebPay\Helper\Helper;
 use Svea\WebPay\WebPay;
 use Svea\WebPay\WebPayItem;
@@ -20,7 +20,7 @@ class HelperIntegrationTest extends \PHPUnit_Framework_TestCase
      */
     public function test_splitMeanToTwoTaxRatesToFormatFixedDiscountRows_TwoRatesInOrder()
     {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $order = WebPay::createOrder($config);
         $order->addOrderRow(WebPayItem::orderRow()
             ->setAmountExVat(100.00)
@@ -64,7 +64,7 @@ class HelperIntegrationTest extends \PHPUnit_Framework_TestCase
      */
     public function test_splitMeanToTwoTaxRatesToFormatFixedDiscountRows_OneRateInOrder()
     {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $order = WebPay::createOrder($config);
         $order->addOrderRow(WebPayItem::orderRow()
             ->setAmountExVat(100.00)
@@ -96,7 +96,7 @@ class HelperIntegrationTest extends \PHPUnit_Framework_TestCase
     public function test_paymentPlanPricePerMonth_returns_PaymentPlanPricePerMonth()
     {
         $campaigns =
-            WebPay::getPaymentPlanParams(SveaConfig::getDefaultConfig())
+            WebPay::getPaymentPlanParams(ConfigurationService::getDefaultConfig())
                 ->setCountryCode("SE")
                 ->doRequest();
         $this->assertTrue($campaigns->accepted);

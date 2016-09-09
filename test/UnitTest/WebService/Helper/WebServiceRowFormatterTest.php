@@ -6,7 +6,7 @@ use Svea\WebPay\WebPay;
 use Svea\WebPay\WebPayItem;
 use Svea\WebPay\Helper\Helper;
 use PHPUnit_Framework_TestCase;
-use Svea\WebPay\Config\SveaConfig;
+use Svea\WebPay\Config\ConfigurationService;
 use Svea\WebPay\WebService\Helper\WebServiceRowFormatter as WebServiceRowFormatter;
 
 
@@ -43,7 +43,7 @@ class WebServiceRowFormatterTest extends PHPUnit_Framework_TestCase
 
     public function test_FormatOrderRows_includes_all_attributes_in_formatted_rows()
     {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $order = WebPay::createOrder($config);
         $order->addOrderRow(WebPayItem::orderRow()
             ->setArticleNumber("0")
@@ -72,7 +72,7 @@ class WebServiceRowFormatterTest extends PHPUnit_Framework_TestCase
 
     public function test_FormatShippingFeeRows_includes_all_attributes_in_formatted_rows()
     {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $order = WebPay::createOrder($config);
         $order->addFee(WebPayItem::shippingFee()
             ->setShippingId("0")
@@ -100,7 +100,7 @@ class WebServiceRowFormatterTest extends PHPUnit_Framework_TestCase
 
     public function test_FormatInvoiceFeeRows_includes_all_attributes_in_formatted_rows()
     {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $order = WebPay::createOrder($config);
         $order->addFee(WebPayItem::invoiceFee()
             ->setName("Tess")
@@ -128,7 +128,7 @@ class WebServiceRowFormatterTest extends PHPUnit_Framework_TestCase
     // FixedDiscountRow specified using only amountExVat
     public function test_FixedDiscount_specified_using_amountExVat_in_order_with_single_vat_rate()
     {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $order = WebPay::createOrder($config);
         $order->addOrderRow(WebPayItem::orderRow()
             // cover all three ways to specify items here: iv+vp, ev+vp, iv+ev
@@ -170,7 +170,7 @@ class WebServiceRowFormatterTest extends PHPUnit_Framework_TestCase
     // FixedDiscountRow specified using only amountExVat => split discount excl. vat over the diffrent tax rates present in order
     public function test_FixedDiscount_specified_using_amountExVat_in_order_with_multiple_vat_rates()
     {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $order = WebPay::createOrder($config);
         $order->addOrderRow(WebPayItem::orderRow()
             ->setName("product with price 100 @25% = 125")
@@ -220,7 +220,7 @@ class WebServiceRowFormatterTest extends PHPUnit_Framework_TestCase
     // FixedDiscountRow specified using only amountIncVat => split discount incl. vat over the diffrent tax rates present in order
     public function test_FixedDiscount_specified_using_amountIncVat_in_order_with_single_vat_rate()
     {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $order = WebPay::createOrder($config);
         $order->addOrderRow(WebPayItem::orderRow()
             ->setAmountExVat(4.0)
@@ -262,7 +262,7 @@ class WebServiceRowFormatterTest extends PHPUnit_Framework_TestCase
     // two discount order rows, one for each vat rate
     public function test_FixedDiscount_specified_using_amountIncVat_in_order_with_multiple_vat_rates()
     {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $order = WebPay::createOrder($config);
         $order->addOrderRow(WebPayItem::orderRow()
             ->setAmountExVat(100.00)
@@ -310,7 +310,7 @@ class WebServiceRowFormatterTest extends PHPUnit_Framework_TestCase
     // FixedDiscount should only look at vat rates from order item rows, not shipping or invoice fees
     public function test_FixedDiscount_specified_using_amountIncVat_are_calculated_from_order_item_rows_only()
     {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $order = WebPay::createOrder($config);
         $order->addOrderRow(WebPayItem::orderRow()
             ->setAmountExVat(100.00)
@@ -355,7 +355,7 @@ class WebServiceRowFormatterTest extends PHPUnit_Framework_TestCase
     // FixedDiscount should only look at vat rates from order item rows, not shipping or invoice fees
     public function test_FixedDiscount_specified_using_amountExVat_are_calculated_from_order_item_rows_only()
     {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $order = WebPay::createOrder($config);
         $order->addOrderRow(WebPayItem::orderRow()
             ->setAmountExVat(100.00)
@@ -399,7 +399,7 @@ class WebServiceRowFormatterTest extends PHPUnit_Framework_TestCase
     public function test_FixedDiscount_specified_using_amountExVat_are_calculated_from_order_item_rows_only_multiple_vat_rates()
     {
         // FixedDiscountRow specified using only amountExVat => split discount excl. vat over the diffrent tax rates present in order
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $order = WebPay::createOrder($config);
         $order->addOrderRow(WebPayItem::orderRow()
             ->setName("product with price 100 @25% = 125")
@@ -453,7 +453,7 @@ class WebServiceRowFormatterTest extends PHPUnit_Framework_TestCase
 
     public function test_FixedDiscount_specified_using_amountIncVat_are_calculated_from_order_item_rows_only_multiple_vat_rates()
     {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $order = WebPay::createOrder($config);
         $order->addOrderRow(WebPayItem::orderRow()
             ->setAmountExVat(100.00)
@@ -508,7 +508,7 @@ class WebServiceRowFormatterTest extends PHPUnit_Framework_TestCase
     // amountIncVat and vatPercent => add as single row with specified vat rate only
     public function test_FixedDiscount_specified_using_amountIncVat_and_vatPercent()
     {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $order = WebPay::createOrder($config);
         $order->addOrderRow(WebPayItem::orderRow()
             ->setAmountExVat(100.00)
@@ -548,7 +548,7 @@ class WebServiceRowFormatterTest extends PHPUnit_Framework_TestCase
     // amountExVat and vatPercent => add as single row with specified vat rate only
     public function test_FixedDiscount_specified_using_amountExVat_and_vatPercent()
     {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $order = WebPay::createOrder($config);
         $order->addOrderRow(WebPayItem::orderRow()
             ->setAmountExVat(100.00)
@@ -593,7 +593,7 @@ class WebServiceRowFormatterTest extends PHPUnit_Framework_TestCase
 
     public function test_RelativeDiscount_in_order_with_single_vat_rate()
     {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $order = WebPay::createOrder($config);
         $order->addOrderRow(WebPayItem::orderRow()
             ->setAmountExVat(4.0)
@@ -633,7 +633,7 @@ class WebServiceRowFormatterTest extends PHPUnit_Framework_TestCase
 
     public function test_RelativeDiscount_in_order_with_multiple_vat_rates()
     {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $order = WebPay::createOrder($config);
         $order->addOrderRow(WebPayItem::orderRow()
             ->setAmountExVat(100.00)
@@ -693,7 +693,7 @@ class WebServiceRowFormatterTest extends PHPUnit_Framework_TestCase
     // two discount order rows, one for each vat rate
     public function testFormatRelativeDiscountRows_WithDifferentVatRatesPresent()
     {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $order = WebPay::createOrder($config);
         $order->addOrderRow(WebPayItem::orderRow()
             ->setAmountExVat(100.00)
@@ -742,7 +742,7 @@ class WebServiceRowFormatterTest extends PHPUnit_Framework_TestCase
      */
     public function test_regressiontest_for_float_to_int_conversion_errorS()
     {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $order = WebPay::createOrder($config);
         $order->addOrderRow(WebPayItem::orderRow()
             ->setAmountExVat(100.00)

@@ -6,7 +6,7 @@ use PHPUnit_Framework_TestCase;
 use Svea\WebPay\AdminService\GetOrdersRequest;
 use Svea\WebPay\BuildOrder\QueryOrderBuilder;
 use Svea\WebPay\Config\ConfigurationProvider;
-use Svea\WebPay\Config\SveaConfig;
+use Svea\WebPay\Config\ConfigurationService;
 use Svea\WebPay\Test\TestUtil;
 use Svea\WebPay\WebPay;
 use Svea\WebPay\WebPayAdmin;
@@ -36,7 +36,7 @@ class GetOrdersRequestIntegrationTest extends PHPUnit_Framework_TestCase
         $sveaOrderIdToGet = 348629;
         $orderType = ConfigurationProvider::INVOICE_TYPE;
 
-        $getOrdersBuilder = new QueryOrderBuilder(SveaConfig::getDefaultConfig());
+        $getOrdersBuilder = new QueryOrderBuilder(ConfigurationService::getDefaultConfig());
         $getOrdersBuilder->setOrderId($sveaOrderIdToGet);
         $getOrdersBuilder->setCountryCode($countryCode);
         $getOrdersBuilder->orderType = $orderType;
@@ -263,7 +263,7 @@ class GetOrdersRequestIntegrationTest extends PHPUnit_Framework_TestCase
         $sveaOrderIdToGet = $orderResponse->sveaOrderId;
         $orderType = ConfigurationProvider::INVOICE_TYPE;
 
-        $getOrdersBuilder = new QueryOrderBuilder(SveaConfig::getDefaultConfig());
+        $getOrdersBuilder = new QueryOrderBuilder(ConfigurationService::getDefaultConfig());
         $getOrdersBuilder->setOrderId($sveaOrderIdToGet);
         $getOrdersBuilder->setCountryCode($countryCode);
         $getOrdersBuilder->orderType = $orderType;
@@ -346,7 +346,7 @@ class GetOrdersRequestIntegrationTest extends PHPUnit_Framework_TestCase
         $sveaOrderIdToGet = $orderResponse->sveaOrderId;
         $orderType = ConfigurationProvider::INVOICE_TYPE;
 
-        $getOrdersBuilder = new QueryOrderBuilder(SveaConfig::getDefaultConfig());
+        $getOrdersBuilder = new QueryOrderBuilder(ConfigurationService::getDefaultConfig());
         $getOrdersBuilder->setOrderId($sveaOrderIdToGet);
         $getOrdersBuilder->setCountryCode($countryCode);
         $getOrdersBuilder->orderType = $orderType;
@@ -418,7 +418,7 @@ class GetOrdersRequestIntegrationTest extends PHPUnit_Framework_TestCase
         //        $orderResponse = $order->usePaymentPlanPayment( Svea\WebPay\Test\TestUtil::getGetPaymentPlanParamsForTesting($country) )->doRequest();
         //        $this->assertEquals(1, $orderResponse->accepted);
         //
-        $getOrdersBuilder = new QueryOrderBuilder(SveaConfig::getDefaultConfig());
+        $getOrdersBuilder = new QueryOrderBuilder(ConfigurationService::getDefaultConfig());
         //$getOrdersBuilder->setOrderId($orderResponse->sveaOrderId);
         $getOrdersBuilder->setOrderId(414812);
         $getOrdersBuilder->setCountryCode($country);
@@ -576,7 +576,7 @@ class GetOrdersRequestIntegrationTest extends PHPUnit_Framework_TestCase
 
     function test_orderrow_response_incvat()
     {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $orderResponse = WebPay::createOrder($config)
             ->addOrderRow(
                 WebPayItem::orderRow()
@@ -605,7 +605,7 @@ class GetOrdersRequestIntegrationTest extends PHPUnit_Framework_TestCase
 
     function test_orderrow_response_exvat()
     {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $orderResponse = WebPay::createOrder($config)
             ->addOrderRow(
                 WebPayItem::orderRow()

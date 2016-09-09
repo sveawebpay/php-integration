@@ -23,12 +23,10 @@ use Svea\WebPay\HostedService\Helper\InvalidCountryException;
  *
  * Svea provides a sample implementation in the SveaConfigurationProvider class.
  *
- * Instead of writing your own class, you may copy the provided SveaConfig.php
- * file, edit the prodConfig and testConfig arrays, and instantiate your config
- * object from the modified class to use the package with your Svea credentials.
+ * You may customize configuration parameters into config_prod.php and config_test.php files
+ * with your Svea credentials.
  *
  * @see \Svea\SveaConfigurationProvider \Svea\WebPay\Config\SveaConfigurationProvider
- * @see \Svea\WebPay\SveaConfig \Svea\WebPay\Config\SveaConfig
  *
  * @author anne-hal
  */
@@ -97,7 +95,7 @@ interface ConfigurationProvider
     public function getSecret($type, $country);
 
     /**
-     * Constants for the endpoint url found in the class SveaConfig.php
+     * Constants for the endpoint url found in the class ConfigurationService.php
      * getEndPoint() should return an url corresponding to $type.
      *
      * @param string $type one of Svea\WebPay\Config\ConfigurationProvider::HOSTED_TYPE, ::INVOICE_TYPE, ::PAYMENTPLAN_TYPE, ::HOSTED_ADMIN_TYPE, ::ADMIN_TYPE

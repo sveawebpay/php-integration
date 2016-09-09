@@ -13,7 +13,7 @@ error_reporting(E_ALL);
 ini_set('display_errors', 'On');
 
 // get configuration object holding the Svea service login credentials
-$myConfig = \Svea\WebPay\Config\SveaConfig::getTestConfig();
+$myConfig = \Svea\WebPay\Config\ConfigurationService::getTestConfig();
 
 // We assume that you've previously run the firstorder.php file and successfully made a createOrder request to Svea using the invoice payment method.
 // The svea order id returned in the request response was then written to the file sveaorderid.txt in the firstorder/ folder 

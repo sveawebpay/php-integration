@@ -6,7 +6,7 @@ use Svea\WebPay\WebPay;
 use Svea\WebPay\WebPayItem;
 use Svea\WebPay\Helper\Helper;
 use PHPUnit_Framework_TestCase;
-use Svea\WebPay\Config\SveaConfig;
+use Svea\WebPay\Config\ConfigurationService;
 
 
 /**
@@ -28,7 +28,7 @@ class CreateInvoiceOrderUnitTest extends PHPUnit_Framework_TestCase
     public function setUp()
     {   // run before each test, in effect resetting the default order
 
-        $this->order = WebPay::createOrder(SveaConfig::getDefaultConfig())
+        $this->order = WebPay::createOrder(ConfigurationService::getDefaultConfig())
             ->addCustomerDetails(WebPayItem::individualCustomer()->setNationalIdNumber(194605092222))
             ->setCountryCode("SE")
             ->setOrderDate(date('c'));
@@ -859,7 +859,7 @@ class CreateInvoiceOrderUnitTest extends PHPUnit_Framework_TestCase
 
     public function test_add_publickey_for_company_customer()
     {
-        $config = SveaConfig::getTestConfig();
+        $config = ConfigurationService::getTestConfig();
         $order = WebPay::createOrder($config)
             ->addCustomerDetails(
                 WebPayItem::companyCustomer()
@@ -872,7 +872,7 @@ class CreateInvoiceOrderUnitTest extends PHPUnit_Framework_TestCase
 
     public function test_add_publickey_for_private_customer()
     {
-        $config = SveaConfig::getTestConfig();
+        $config = ConfigurationService::getTestConfig();
         $order = WebPay::createOrder($config)
             ->addCustomerDetails(
                 WebPayItem::individualCustomer()
@@ -885,7 +885,7 @@ class CreateInvoiceOrderUnitTest extends PHPUnit_Framework_TestCase
 
     public function test_add_publickey_for_company_customer_full_request()
     {
-        $config = SveaConfig::getTestConfig();
+        $config = ConfigurationService::getTestConfig();
         $order = WebPay::createOrder($config)
             ->addCustomerDetails(
                 WebPayItem::companyCustomer()
@@ -909,7 +909,7 @@ class CreateInvoiceOrderUnitTest extends PHPUnit_Framework_TestCase
 
     public function test_add_publickey_for_private_customer_full_request()
     {
-        $config = SveaConfig::getTestConfig();
+        $config = ConfigurationService::getTestConfig();
         $order = WebPay::createOrder($config)
             ->addCustomerDetails(
                 WebPayItem::companyCustomer()

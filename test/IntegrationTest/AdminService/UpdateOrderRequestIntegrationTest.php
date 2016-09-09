@@ -3,7 +3,7 @@
 namespace Svea\WebPay\Test\IntegrationTest\AdminService;
 
 use PHPUnit_Framework_TestCase;
-use Svea\WebPay\Config\SveaConfig;
+use Svea\WebPay\Config\ConfigurationService;
 use Svea\WebPay\Test\TestUtil;
 use Svea\WebPay\WebPay;
 use Svea\WebPay\WebPayAdmin;
@@ -22,7 +22,7 @@ class UpdateOrderRequestIntegrationTest extends PHPUnit_Framework_TestCase
 
     public function test_add_new_clientordernumber_invoice()
     {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $orderResponse = WebPay::createOrder($config)
             ->addOrderRow(
                 WebPayItem::orderRow()
@@ -56,7 +56,7 @@ class UpdateOrderRequestIntegrationTest extends PHPUnit_Framework_TestCase
 
     public function test_add_new_notes_invoice()
     {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $orderResponse = WebPay::createOrder($config)
             ->addOrderRow(
                 WebPayItem::orderRow()

@@ -5,7 +5,7 @@ namespace Svea\WebPay\Test\UnitTest\HostedService\Payment;
 use Svea\WebPay\WebPay;
 use Svea\WebPay\WebPayItem;
 use Svea\WebPay\Test\TestUtil;
-use Svea\WebPay\Config\SveaConfig;
+use Svea\WebPay\Config\ConfigurationService;
 use Svea\WebPay\Constant\PaymentMethod;
 use Svea\WebPay\Constant\SystemPaymentMethod;
 
@@ -16,7 +16,7 @@ use Svea\WebPay\Constant\SystemPaymentMethod;
 class PaymentMethodTest extends \PHPUnit_Framework_TestCase{
 
      public function testPayPagePaymentWithSetPaymentMethod() {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
          $rowFactory = new TestUtil();
         $form = WebPay::createOrder($config)
             ->addOrderRow(TestUtil::createOrderRow())
@@ -42,7 +42,7 @@ class PaymentMethodTest extends \PHPUnit_Framework_TestCase{
     }
 
     public function testPayPagePaymentWithSetPaymentMethodInvoice() {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $rowFactory = new TestUtil();
         $form = WebPay::createOrder($config)
             ->addOrderRow(TestUtil::createOrderRow())
@@ -70,7 +70,7 @@ class PaymentMethodTest extends \PHPUnit_Framework_TestCase{
     }
 
     public function testPaymentMethodInvoiceNL() {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $form = WebPay::createOrder($config)
             ->addOrderRow(TestUtil::createOrderRow())
             ->addCustomerDetails(WebPayItem::individualCustomer()
@@ -98,7 +98,7 @@ class PaymentMethodTest extends \PHPUnit_Framework_TestCase{
         $this->assertEquals("Sneider", $xmlMessage->customer->firstname);
     }
     public function testPaymentMethodInvoiceNLCallbackUrl() {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $form = WebPay::createOrder($config)
             ->addOrderRow(TestUtil::createOrderRow())
             ->addCustomerDetails(WebPayItem::individualCustomer()

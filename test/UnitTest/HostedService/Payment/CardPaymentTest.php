@@ -5,7 +5,7 @@ namespace Svea\WebPay\Test\UnitTest\HostedService\Payment;
 use Svea\WebPay\WebPay;
 use Svea\WebPay\WebPayItem;
 use Svea\WebPay\Test\TestUtil;
-use Svea\WebPay\Config\SveaConfig;
+use Svea\WebPay\Config\ConfigurationService;
 use Svea\WebPay\HostedService\Payment\CardPayment as CardPayment;
 
 /**
@@ -32,7 +32,7 @@ class CardPaymentTest extends \PHPUnit_Framework_TestCase {
 
     public function testBuildCardPayment() {
         $rowFactory = new TestUtil();
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $form = WebPay::createOrder($config)
                 ->addOrderRow(TestUtil::createOrderRow())
                 ->run($rowFactory->buildShippingFee())
@@ -68,7 +68,7 @@ class CardPaymentTest extends \PHPUnit_Framework_TestCase {
     }
 
     public function testCardPaymentForEngCustomer() {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $rowFactory = new TestUtil();
         $form = WebPay::createOrder($config)
                 ->addOrderRow(TestUtil::createOrderRow())
@@ -89,7 +89,7 @@ class CardPaymentTest extends \PHPUnit_Framework_TestCase {
     }
 
     public function testBuildCardPaymentWithDiffrentProductVatAndDiscount() {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $form = WebPay::createOrder($config)
                 ->addOrderRow(WebPayItem::orderRow()
                     ->setArticleNumber("1")
@@ -127,7 +127,7 @@ class CardPaymentTest extends \PHPUnit_Framework_TestCase {
     }
 
     public function testBuildCardPaymentWithAmountIncVatWithVatPercent() {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $form = WebPay::createOrder($config)
                 ->addOrderRow(WebPayItem::orderRow()
                     ->setArticleNumber("1")
@@ -175,7 +175,7 @@ class CardPaymentTest extends \PHPUnit_Framework_TestCase {
     }
 
     public function testBuildCardPaymentWithAmountExVatWithAmountIncVat() {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $form = WebPay::createOrder($config)
                 ->addOrderRow(WebPayItem::orderRow()
                     ->setArticleNumber("1")
@@ -218,7 +218,7 @@ class CardPaymentTest extends \PHPUnit_Framework_TestCase {
     }
 
     public function testBuildCardPaymentWithCurrency() {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $form = WebPay::createOrder($config)
                 ->addOrderRow(WebPayItem::orderRow()
                         ->setArticleNumber("1")
@@ -240,7 +240,7 @@ class CardPaymentTest extends \PHPUnit_Framework_TestCase {
     }
 
     public function testBuildCardPaymentWithShippingFee() {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $form = WebPay::createOrder($config)
                 ->addOrderRow(WebPayItem::orderRow()
                         ->setArticleNumber("1")
@@ -267,7 +267,7 @@ class CardPaymentTest extends \PHPUnit_Framework_TestCase {
     }
 
     public function testBuildCardPaymentWithDecimalLongPrice() {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $form = WebPay::createOrder($config)
                 ->addOrderRow(WebPayItem::orderRow()
                         ->setArticleNumber("1")
@@ -289,7 +289,7 @@ class CardPaymentTest extends \PHPUnit_Framework_TestCase {
     }
 
     public function testBuildCardPaymentNLCustomer() {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $form = WebPay::createOrder($config)
                 ->addOrderRow(WebPayItem::orderRow()
                         ->setArticleNumber("1")
@@ -311,7 +311,7 @@ class CardPaymentTest extends \PHPUnit_Framework_TestCase {
     }
 
     public function testBuildCardPaymentWithAmountAndVatCero() {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $form = WebPay::createOrder($config)
                 ->addOrderRow(WebPayItem::orderRow()
                         ->setArticleNumber("1")
@@ -336,7 +336,7 @@ class CardPaymentTest extends \PHPUnit_Framework_TestCase {
      * new feature 2013-10-08
      */
     public function testSetCardPageLanguage() {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $form = WebPay::createOrder($config)
                 ->addOrderRow(WebPayItem::orderRow()
                         ->setArticleNumber("1")
@@ -358,7 +358,7 @@ class CardPaymentTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals("sv", $xmlMessage->lang);
     }
     public function testCallbackUrl() {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $form = WebPay::createOrder($config)
                 ->addOrderRow(WebPayItem::orderRow()
                         ->setArticleNumber("1")
@@ -380,7 +380,7 @@ class CardPaymentTest extends \PHPUnit_Framework_TestCase {
 
     }
     public function testNegativeOrderrow() {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $form = WebPay::createOrder($config)
                 ->addOrderRow(WebPayItem::orderRow()
                         ->setArticleNumber("1")
@@ -403,7 +403,7 @@ class CardPaymentTest extends \PHPUnit_Framework_TestCase {
     }
 
     public function test_BuildCardPayment_With_InvoiceFee_ExVat_IncVat() {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $form = WebPay::createOrder($config)
                 ->addOrderRow(WebPayItem::orderRow()
                         ->setArticleNumber("1")

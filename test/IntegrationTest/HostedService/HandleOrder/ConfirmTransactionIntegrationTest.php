@@ -3,7 +3,7 @@
 namespace Svea\WebPay\Test\IntegrationTest\HostedService\HandleOrder;
 
 use Svea\WebPay\Test\TestUtil;
-use Svea\WebPay\Config\SveaConfig;
+use Svea\WebPay\Config\ConfigurationService;
 use Svea\WebPay\Constant\PaymentMethod;
 use Svea\WebPay\HostedService\HostedAdminRequest\ConfirmTransaction as ConfirmTransaction;
 
@@ -68,7 +68,7 @@ class ConfirmTransactionIntegrationTest extends \PHPUnit_Framework_TestCase
         $transactionId = 987654;
         $captureDate = "2014-03-21";
 
-        $request = new ConfirmTransaction(SveaConfig::getDefaultConfig());
+        $request = new ConfirmTransaction(ConfigurationService::getDefaultConfig());
         $request->transactionId = $transactionId;
         $request->captureDate = $captureDate;
         $request->countryCode = "SE";
@@ -100,7 +100,7 @@ class ConfirmTransactionIntegrationTest extends \PHPUnit_Framework_TestCase
         $transactionId = 587950;
         $captureDate = date('c');
 
-        $request = new ConfirmTransaction(SveaConfig::getDefaultConfig());
+        $request = new ConfirmTransaction(ConfigurationService::getDefaultConfig());
         $request->transactionId = $transactionId;
         $request->captureDate = $captureDate;
         $request->countryCode = "SE";

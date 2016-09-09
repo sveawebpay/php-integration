@@ -16,7 +16,7 @@ ini_set('display_errors', 'On');
 
 
 // get config object
-$myConfig = \Svea\WebPay\Config\SveaConfig::getTestConfig(); //replace with class holding your merchantid, secretword, et al, adopted from package Config/SveaConfig.php
+$myConfig = \Svea\WebPay\Config\ConfigurationService::getTestConfig(); // add your Svea credentials into config_prod.php or config_test.php file
 
 // We assume that you've collected the following information about the order in your shop:
 

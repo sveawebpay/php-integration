@@ -2,7 +2,7 @@
 namespace Svea\WebPay\Test\IntegrationTest\WebService\HandleOrder;
 
 use PHPUnit_Framework_TestCase;
-use Svea\WebPay\Config\SveaConfig;
+use Svea\WebPay\Config\ConfigurationService;
 use Svea\WebPay\Test\TestUtil;
 use Svea\WebPay\WebPay;
 use Svea\WebPay\WebPayItem;
@@ -19,7 +19,7 @@ class CloseOrderIntegrationTest extends PHPUnit_Framework_TestCase
      */
     private function getInvoiceOrderId()
     {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $request = WebPay::createOrder($config)
             ->addOrderRow(TestUtil::createOrderRow())
             ->addCustomerDetails(WebPayItem::individualCustomer()->setNationalIdNumber(194605092222))
@@ -36,7 +36,7 @@ class CloseOrderIntegrationTest extends PHPUnit_Framework_TestCase
 
     public function testCloseInvoiceOrder()
     {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $orderId = $this->getInvoiceOrderId();
         $orderBuilder = WebPay::closeOrder($config);
         $request = $orderBuilder
@@ -54,7 +54,7 @@ class CloseOrderIntegrationTest extends PHPUnit_Framework_TestCase
      */
     public function testCloseInvoiceOrder_missing_setOrderId_throws_ValidationException()
     {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $orderId = $this->getInvoiceOrderId();
         $orderBuilder = WebPay::closeOrder($config);
         $request = $orderBuilder

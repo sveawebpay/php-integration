@@ -5,7 +5,7 @@ namespace Svea\WebPay\Test\UnitTest\HostedService\HandleOrder;
 use SimpleXMLElement;
 use PHPUnit_Framework_Assert;
 use PHPUnit_Framework_TestCase;
-use Svea\WebPay\Config\SveaConfig;
+use Svea\WebPay\Config\ConfigurationService;
 use Svea\WebPay\Config\ConfigurationProvider;
 use Svea\WebPay\HostedService\HostedAdminRequest\AnnulTransaction as AnnulTransaction;
 
@@ -21,7 +21,7 @@ class AnnulTransactionTest extends PHPUnit_Framework_TestCase
     // fixture, run once before each test method
     protected function setUp()
     {
-        $this->configObject = SveaConfig::getDefaultConfig();
+        $this->configObject = ConfigurationService::getDefaultConfig();
         $this->annulObject = new AnnulTransaction($this->configObject);
     }
 

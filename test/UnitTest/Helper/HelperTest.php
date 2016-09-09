@@ -6,7 +6,7 @@ use Svea\WebPay\WebPay;
 use Svea\WebPay\WebPayItem;
 use Svea\WebPay\Helper\Helper;
 use Svea\WebPay\Test\TestUtil;
-use Svea\WebPay\Config\SveaConfig;
+use Svea\WebPay\Config\ConfigurationService;
 
 class HelperTest extends \PHPUnit_Framework_TestCase
 {
@@ -118,7 +118,7 @@ class HelperTest extends \PHPUnit_Framework_TestCase
 
     function test_getAllTaxRatesInOrder_returnType()
     {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $order = WebPay::createOrder($config);
         $order->addOrderRow(WebPayItem::orderRow()
             ->setAmountExVat(100.00)
@@ -133,7 +133,7 @@ class HelperTest extends \PHPUnit_Framework_TestCase
 
     function test_getAllTaxRatesInOrder_getOneRate()
     {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $order = WebPay::createOrder($config);
         $order->addOrderRow(WebPayItem::orderRow()
             ->setAmountExVat(100.00)
@@ -149,7 +149,7 @@ class HelperTest extends \PHPUnit_Framework_TestCase
 
     function test_getAllTaxRatesInOrder_getTwoRates()
     {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $order = WebPay::createOrder($config);
         $order->addOrderRow(WebPayItem::orderRow()
             ->setAmountExVat(100.00)
@@ -244,7 +244,7 @@ class HelperTest extends \PHPUnit_Framework_TestCase
             $discountAmount, $discountMeanVatPercent, $discountName, $discountDescription, $allowedTaxRates, $discountGivenExVat
         );
 
-        $order = WebPay::createOrder(SveaConfig::getDefaultConfig())
+        $order = WebPay::createOrder(ConfigurationService::getDefaultConfig())
             ->addOrderRow(
                 WebPayItem::orderRow()
                     ->setAmountIncVat(125.00)
@@ -275,7 +275,7 @@ class HelperTest extends \PHPUnit_Framework_TestCase
             $discountAmount, $discountMeanVatPercent, $discountName, $discountDescription, $allowedTaxRates, $discountGivenExVat
         );
 
-        $order = WebPay::createOrder(SveaConfig::getDefaultConfig())
+        $order = WebPay::createOrder(ConfigurationService::getDefaultConfig())
             ->addOrderRow(
                 WebPayItem::orderRow()
                     ->setAmountExVat(100.00)
@@ -378,7 +378,7 @@ class HelperTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(2, count($discountRows));
 
-        $order = WebPay::createOrder(SveaConfig::getDefaultConfig())
+        $order = WebPay::createOrder(ConfigurationService::getDefaultConfig())
             ->addOrderRow(
                 WebPayItem::orderRow()
                     ->setAmountIncVat(125.00)
@@ -410,7 +410,7 @@ class HelperTest extends \PHPUnit_Framework_TestCase
             $discountAmount, $discountMeanVatPercent, $discountName, $discountDescription, $allowedTaxRates, $discountGivenExVat
         );
 
-        $order = WebPay::createOrder(SveaConfig::getDefaultConfig())
+        $order = WebPay::createOrder(ConfigurationService::getDefaultConfig())
             ->addOrderRow(
                 WebPayItem::orderRow()
                     ->setAmountExVat(100.00)

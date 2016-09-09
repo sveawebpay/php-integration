@@ -2,7 +2,7 @@
 
 namespace Svea\WebPay\Test\UnitTest\BuildOrder;
 
-use Svea\WebPay\Config\SveaConfig;
+use Svea\WebPay\Config\ConfigurationService;
 use Svea\WebPay\BuildOrder\DeliverOrderBuilder;
 
 /**
@@ -15,7 +15,7 @@ class DeliverOrderBuilderTest extends \PHPUnit_Framework_TestCase
 
     function setUp()
     {
-        $this->deliverOrderObject = new DeliverOrderBuilder(SveaConfig::getDefaultConfig());
+        $this->deliverOrderObject = new DeliverOrderBuilder(ConfigurationService::getDefaultConfig());
     }
 
     public function test_DeliverOrderBuilder_class_exists()

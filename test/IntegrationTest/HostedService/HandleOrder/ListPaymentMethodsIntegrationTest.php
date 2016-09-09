@@ -3,7 +3,7 @@
 
 namespace Svea\WebPay\Test\IntegrationTest\HostedService\HandleOrder;
 
-use Svea\WebPay\Config\SveaConfig;
+use Svea\WebPay\Config\ConfigurationService;
 use Svea\WebPay\Constant\PaymentMethod;
 use Svea\WebPay\Constant\SystemPaymentMethod;
 use Svea\WebPay\HostedService\HostedAdminRequest\ListPaymentMethods;
@@ -20,7 +20,7 @@ class ListPaymentMethodsIntegrationTest extends \PHPUnit_Framework_TestCase
     function test_listPaymentMethods_request_success()
     {
 
-        $request = new ListPaymentMethods(SveaConfig::getDefaultConfig());
+        $request = new ListPaymentMethods(ConfigurationService::getDefaultConfig());
         $request->countryCode = "SE";
         $response = $request->doRequest();
 

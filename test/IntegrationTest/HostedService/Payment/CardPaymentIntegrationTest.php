@@ -6,7 +6,7 @@ namespace Svea\WebPay\Test\IntegrationTest\HostedService\Payment;
 use Svea\WebPay\WebPay;
 use Svea\WebPay\WebPayItem;
 use Svea\WebPay\Test\TestUtil;
-use Svea\WebPay\Config\SveaConfig;
+use Svea\WebPay\Config\ConfigurationService;
 
 
 /**
@@ -17,7 +17,7 @@ class CardPaymentIntegrationTest extends \PHPUnit_Framework_TestCase
 
     public function test_createOrder_usePayPage_redirects_to_paypage()
     {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $rowFactory = new TestUtil();
         $form = WebPay::createOrder($config)
             ->addOrderRow(TestUtil::createOrderRow())

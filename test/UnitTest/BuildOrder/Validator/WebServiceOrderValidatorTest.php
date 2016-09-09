@@ -6,7 +6,7 @@ use Exception;
 use Svea\WebPay\WebPay;
 use Svea\WebPay\WebPayItem;
 use Svea\WebPay\Test\TestUtil;
-use Svea\WebPay\Config\SveaConfig;
+use Svea\WebPay\Config\ConfigurationService;
 
 /**
  * @author Anneli Halld'n, Daniel Brolund for Svea Webpay
@@ -39,7 +39,7 @@ class WebServiceOrderValidatorTest extends \PHPUnit_Framework_TestCase
      */
     public function t_estFailOnDoubleIdentity()
     {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $builder = WebPay::createOrder($config);
         $order = $builder
             ->addOrderRow(TestUtil::createHostedOrderRow())
@@ -72,7 +72,7 @@ class WebServiceOrderValidatorTest extends \PHPUnit_Framework_TestCase
      */
     public function testFailOnCompanyPaymentPlanPayment()
     {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $code = $this->getGetPaymentPlanParamsForTesting($config);
         $builder = WebPay::CreateOrder($config);
         $order = $builder
@@ -91,7 +91,7 @@ class WebServiceOrderValidatorTest extends \PHPUnit_Framework_TestCase
      */
     public function testFailOnBadCountryCode()
     {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $builder = WebPay::createOrder($config);
         $order = $builder
             ->addOrderRow(TestUtil::createHostedOrderRow())
@@ -109,7 +109,7 @@ class WebServiceOrderValidatorTest extends \PHPUnit_Framework_TestCase
      */
     public function testFailOnMissingCountryCode()
     {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $builder = WebPay::createOrder($config);
         $order = $builder
             ->addOrderRow(TestUtil::createHostedOrderRow())
@@ -126,7 +126,7 @@ class WebServiceOrderValidatorTest extends \PHPUnit_Framework_TestCase
      */
     public function testFailOnMissingNationalIdNumberForSeOrder()
     {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $builder = WebPay::createOrder($config);
         $order = $builder
             ->setCountryCode("SE")
@@ -143,7 +143,7 @@ class WebServiceOrderValidatorTest extends \PHPUnit_Framework_TestCase
      */
     public function testFailOnNationalIdNumberIsEmptyString()
     {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $builder = WebPay::createOrder($config);
         $order = $builder
             ->setCountryCode("SE")
@@ -160,7 +160,7 @@ class WebServiceOrderValidatorTest extends \PHPUnit_Framework_TestCase
      */
     public function testFailOnMissingOrgNumberForCompanyOrderSe()
     {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $builder = WebPay::createOrder($config);
         $order = $builder
             ->setCountryCode("SE")
@@ -182,7 +182,7 @@ class WebServiceOrderValidatorTest extends \PHPUnit_Framework_TestCase
      */
     public function testFailOnMissingIdentityValuesForDEPaymentPlanOrder()
     {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $builder = WebPay::createOrder($config);
         $order = $builder
             ->setCountryCode("DE")
@@ -198,7 +198,7 @@ class WebServiceOrderValidatorTest extends \PHPUnit_Framework_TestCase
      */
     public function testFailOnMissingBirthDateForDeOrder()
     {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $builder = WebPay::createOrder($config);
         $order = $builder
             ->setCountryCode("DE")
@@ -226,7 +226,7 @@ class WebServiceOrderValidatorTest extends \PHPUnit_Framework_TestCase
      */
     public function testFailOnMissingValuesForNlOrder()
     {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $builder = WebPay::createOrder($config);
         $order = $builder
             ->addOrderRow(TestUtil::createHostedOrderRow())
@@ -244,7 +244,7 @@ class WebServiceOrderValidatorTest extends \PHPUnit_Framework_TestCase
      */
     public function testFailOnMissingInitialsForNlOrder()
     {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $builder = WebPay::createOrder($config);
         $order = $builder
             ->setCountryCode("NL")
@@ -267,7 +267,7 @@ class WebServiceOrderValidatorTest extends \PHPUnit_Framework_TestCase
      */
     public function testFailOnMissingOrderRows()
     {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $builder = WebPay::createOrder($config);
         $order = $builder
             ->setCountryCode("SE")
@@ -299,7 +299,7 @@ class WebServiceOrderValidatorTest extends \PHPUnit_Framework_TestCase
      */
     public function testFailOnOrderRowMissingAllOfAmountExVatAmountIncVatAndVatPercent()
     {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $builder = WebPay::createOrder($config);
         $order = $builder
             ->addOrderRow(WebPayItem::orderRow()
@@ -318,7 +318,7 @@ class WebServiceOrderValidatorTest extends \PHPUnit_Framework_TestCase
      */
     public function testFailOnOrderRowIncludesAllOfAmountExVatAmountIncVatAndVatPercent()
     {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $builder = WebPay::createOrder($config);
         $order = $builder
             ->addOrderRow(WebPayItem::orderRow()
@@ -341,7 +341,7 @@ class WebServiceOrderValidatorTest extends \PHPUnit_Framework_TestCase
      */
     public function testFailOnMissingOrderDate()
     {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $builder = WebPay::createOrder($config);
         $order = $builder
             ->addOrderRow(TestUtil::createHostedOrderRow())
@@ -360,7 +360,7 @@ class WebServiceOrderValidatorTest extends \PHPUnit_Framework_TestCase
      */
     public function testFailOnArticleNumberNotString()
     {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $builder = WebPay::createOrder($config);
         $order = $builder
             ->addOrderRow(WebPayItem::orderRow()
@@ -382,7 +382,7 @@ class WebServiceOrderValidatorTest extends \PHPUnit_Framework_TestCase
      */
     public function testFailOnQuantityNotNumeric()
     {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $builder = WebPay::createOrder($config);
         $order = $builder
             ->addOrderRow(WebPayItem::orderRow()
@@ -403,7 +403,7 @@ class WebServiceOrderValidatorTest extends \PHPUnit_Framework_TestCase
      */
     public function testFailOnUnitNotString()
     {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $builder = WebPay::createOrder($config);
         $order = $builder
             ->addOrderRow(WebPayItem::orderRow()
@@ -425,7 +425,7 @@ class WebServiceOrderValidatorTest extends \PHPUnit_Framework_TestCase
      */
     public function testFailOnAmountExVatNotFloat()
     {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $builder = WebPay::createOrder($config);
         $order = $builder
             ->addOrderRow(WebPayItem::orderRow()
@@ -446,7 +446,7 @@ class WebServiceOrderValidatorTest extends \PHPUnit_Framework_TestCase
      */
     public function testFailOnAmountIncVatNotFloat()
     {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $builder = WebPay::createOrder($config);
         $order = $builder
             ->addOrderRow(WebPayItem::orderRow()
@@ -467,7 +467,7 @@ class WebServiceOrderValidatorTest extends \PHPUnit_Framework_TestCase
      */
     public function testFailOnNameNotString()
     {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $builder = WebPay::createOrder($config);
         $order = $builder
             ->addOrderRow(WebPayItem::orderRow()
@@ -489,7 +489,7 @@ class WebServiceOrderValidatorTest extends \PHPUnit_Framework_TestCase
      */
     public function testFailOnDescriptionNotString()
     {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $builder = WebPay::createOrder($config);
         $order = $builder
             ->addOrderRow(WebPayItem::orderRow()
@@ -511,7 +511,7 @@ class WebServiceOrderValidatorTest extends \PHPUnit_Framework_TestCase
      */
     public function testFailOnVatNotInt()
     {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $builder = WebPay::createOrder($config);
         $order = $builder
             ->addOrderRow(WebPayItem::orderRow()
@@ -532,7 +532,7 @@ class WebServiceOrderValidatorTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException Exception
      * @expectedExceptionMessage
-     * -missing parameter: This method requires an Svea\WebPay\Config\ConfigurationProvider object as parameter. Create a class that implements class Svea\WebPay\Config\ConfigurationProvider. Set returnvalues to configuration values. Create an object from that class. Alternative use static function from class SveaConfig e.g. SveaConfig::getDefaultConfig(). You can replace the default config values to return your own config values in the method.
+     * -missing parameter: This method requires an Svea\WebPay\Config\ConfigurationProvider object as parameter. Create a class that implements class Svea\WebPay\Config\ConfigurationProvider. Set returnvalues to configuration values. Create an object from that class. Alternative use static function from class ConfigurationService e.g. ConfigurationService::getDefaultConfig(). You can replace the default config values into config files to return your own config values.');
      */
     public function testFailOnMissingCofigurationProviderCreateOrder()
     {
@@ -542,7 +542,7 @@ class WebServiceOrderValidatorTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException Exception
      * @expectedExceptionMessage
-     * -missing parameter: This method requires an Svea\WebPay\Config\ConfigurationProvider object as parameter. Create a class that implements class Svea\WebPay\Config\ConfigurationProvider. Set returnvalues to configuration values. Create an object from that class. Alternative use static function from class SveaConfig e.g. SveaConfig::getDefaultConfig(). You can replace the default config values to return your own config values in the method.
+     * -missing parameter: This method requires an Svea\WebPay\Config\ConfigurationProvider object as parameter. Create a class that implements class Svea\WebPay\Config\ConfigurationProvider. Set returnvalues to configuration values. Create an object from that class. Alternative use static function from class ConfigurationService e.g. ConfigurationService::getDefaultConfig(). You can replace the default config values into config files to return your own config values.');
      */
     public function testFailOnMissingCofigurationProviderGetPaymentPlanParams()
     {
@@ -552,7 +552,7 @@ class WebServiceOrderValidatorTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException Exception
      * @expectedExceptionMessage
-     * -missing parameter: This method requires an Svea\WebPay\Config\ConfigurationProvider object as parameter. Create a class that implements class Svea\WebPay\Config\ConfigurationProvider. Set returnvalues to configuration values. Create an object from that class. Alternative use static function from class SveaConfig e.g. SveaConfig::getDefaultConfig(). You can replace the default config values to return your own config values in the method.
+     * -missing parameter: This method requires an Svea\WebPay\Config\ConfigurationProvider object as parameter. Create a class that implements class Svea\WebPay\Config\ConfigurationProvider. Set returnvalues to configuration values. Create an object from that class. Alternative use static function from class ConfigurationService e.g. ConfigurationService::getDefaultConfig(). You can replace the default config values into config files to return your own config values.');
      */
     public function testFailOnMissingCofigurationProviderDeliverOrder()
     {
@@ -562,7 +562,7 @@ class WebServiceOrderValidatorTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException Exception
      * @expectedExceptionMessage
-     * -missing parameter: This method requires an Svea\WebPay\Config\ConfigurationProvider object as parameter. Create a class that implements class Svea\WebPay\Config\ConfigurationProvider. Set returnvalues to configuration values. Create an object from that class. Alternative use static function from class SveaConfig e.g. SveaConfig::getDefaultConfig(). You can replace the default config values to return your own config values in the method.
+     * -missing parameter: This method requires an Svea\WebPay\Config\ConfigurationProvider object as parameter. Create a class that implements class Svea\WebPay\Config\ConfigurationProvider. Set returnvalues to configuration values. Create an object from that class. Alternative use static function from class ConfigurationService e.g. ConfigurationService::getDefaultConfig(). You can replace the default config values into config files to return your own config values.');
      */
     public function testFailOnMissingCofigurationProviderCloseOrder()
     {
@@ -572,7 +572,7 @@ class WebServiceOrderValidatorTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException Exception
      * @expectedExceptionMessage
-     * -missing parameter: This method requires an Svea\WebPay\Config\ConfigurationProvider object as parameter. Create a class that implements class Svea\WebPay\Config\ConfigurationProvider. Set returnvalues to configuration values. Create an object from that class. Alternative use static function from class SveaConfig e.g. SveaConfig::getDefaultConfig(). You can replace the default config values to return your own config values in the method.
+     * -missing parameter: This method requires an Svea\WebPay\Config\ConfigurationProvider object as parameter. Create a class that implements class Svea\WebPay\Config\ConfigurationProvider. Set returnvalues to configuration values. Create an object from that class. Alternative use static function from class ConfigurationService e.g. ConfigurationService::getDefaultConfig(). You can replace the default config values into config files to return your own config values.');
      */
     public function tes_tFailOnMissingCofigurationProviderGetAddresses()
     {
@@ -582,7 +582,7 @@ class WebServiceOrderValidatorTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException Exception
      * @expectedExceptionMessage
-     * -missing parameter: This method requires an Svea\WebPay\Config\ConfigurationProvider object as parameter. Create a class that implements class Svea\WebPay\Config\ConfigurationProvider. Set returnvalues to configuration values. Create an object from that class. Alternative use static function from class SveaConfig e.g. SveaConfig::getDefaultConfig(). You can replace the default config values to return your own config values in the method.
+     * -missing parameter: This method requires an Svea\WebPay\Config\ConfigurationProvider object as parameter. Create a class that implements class Svea\WebPay\Config\ConfigurationProvider. Set returnvalues to configuration values. Create an object from that class. Alternative use static function from class ConfigurationService e.g. ConfigurationService::getDefaultConfig(). You can replace the default config values into config files to return your own config values.');
      */
     public function tes_tFailOnMissingCofigurationProviderGetPaymentMethods()
     {

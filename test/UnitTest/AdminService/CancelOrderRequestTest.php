@@ -2,7 +2,7 @@
 
 namespace Svea\WebPay\Test\UnitTest\AdminService;
 
-use Svea\WebPay\Config\SveaConfig;
+use Svea\WebPay\Config\ConfigurationService;
 use Svea\WebPay\Config\ConfigurationProvider;
 use Svea\WebPay\BuildOrder\CancelOrderBuilder;
 use Svea\WebPay\AdminService\CancelOrderRequest;
@@ -17,14 +17,14 @@ class CancelOrderRequestTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->builderObject = new CancelOrderBuilder(SveaConfig::getDefaultConfig());
+        $this->builderObject = new CancelOrderBuilder(ConfigurationService::getDefaultConfig());
         $this->builderObject->setOrderId(123456);
         $this->builderObject->orderType = ConfigurationProvider::INVOICE_TYPE;
     }
 
     public function testClassExists()
     {
-        $cancelOrderRequestObject = new CancelOrderRequest(new CancelOrderBuilder(SveaConfig::getDefaultConfig()));
+        $cancelOrderRequestObject = new CancelOrderRequest(new CancelOrderBuilder(ConfigurationService::getDefaultConfig()));
         $this->assertInstanceOf('Svea\WebPay\AdminService\CancelOrderRequest', $cancelOrderRequestObject);
     }
 

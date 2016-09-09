@@ -2,7 +2,7 @@
 
 namespace Svea\WebPay\Test\UnitTest\BuildOrder;
 
-use Svea\WebPay\Config\SveaConfig;
+use Svea\WebPay\Config\ConfigurationService;
 use Svea\WebPay\BuildOrder\QueryOrderBuilder;
 use Svea\WebPay\Config\ConfigurationProvider;
 
@@ -16,7 +16,7 @@ class QueryOrderBuilderTest extends \PHPUnit_Framework_TestCase
 
     function setUp()
     {
-        $this->queryOrderObject = new QueryOrderBuilder(SveaConfig::getDefaultConfig());
+        $this->queryOrderObject = new QueryOrderBuilder(ConfigurationService::getDefaultConfig());
     }
 
     public function test_queryOrderBuilder_class_exists()

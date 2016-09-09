@@ -2,7 +2,7 @@
 // Integration tests should not need to use the namespace
 namespace Svea\WebPay\Test\IntegrationTest\HostedService\HandleOrder;
 
-use Svea\WebPay\Config\SveaConfig;
+use Svea\WebPay\Config\ConfigurationService;
 use Svea\WebPay\HostedService\HostedAdminRequest\RecurTransaction;
 use Svea\WebPay\HostedService\HostedAdminRequest\QueryTransaction as QueryTransaction;
 
@@ -25,7 +25,7 @@ class QueryTransactionIntegrationTest extends \PHPUnit_Framework_TestCase
 
         $transactionId = 987654;
 
-        $request = new QueryTransaction(SveaConfig::getDefaultConfig());
+        $request = new QueryTransaction(ConfigurationService::getDefaultConfig());
         $request->transactionId = $transactionId;
         $request->countryCode = "SE";
         $response = $request->doRequest();
@@ -64,7 +64,7 @@ class QueryTransactionIntegrationTest extends \PHPUnit_Framework_TestCase
         // Set the below to match the transaction, then run the test.
         $transactionId = 587401;
 
-        $request = new QueryTransaction(SveaConfig::getDefaultConfig());
+        $request = new QueryTransaction(ConfigurationService::getDefaultConfig());
         $request->transactionId = $transactionId;
         $request->countryCode = "SE";
         $response = $request->doRequest();
@@ -296,7 +296,7 @@ class QueryTransactionIntegrationTest extends \PHPUnit_Framework_TestCase
         // Set the below to match the transaction, then run the test.
         $transactionId = 581497;
 
-        $request = new QueryTransaction(SveaConfig::getDefaultConfig());
+        $request = new QueryTransaction(ConfigurationService::getDefaultConfig());
         $request->transactionId = $transactionId;
         $request->countryCode = "SE";
         $response = $request->doRequest();
@@ -424,7 +424,7 @@ class QueryTransactionIntegrationTest extends \PHPUnit_Framework_TestCase
         // Set the below to match the transaction, then run the test.
         $transactionId = 586076;
 
-        $request = new QueryTransaction(SveaConfig::getDefaultConfig());
+        $request = new QueryTransaction(ConfigurationService::getDefaultConfig());
         $request->transactionId = $transactionId;
         $request->countryCode = "SE";
         $response = $request->doRequest();
@@ -608,7 +608,7 @@ class QueryTransactionIntegrationTest extends \PHPUnit_Framework_TestCase
         // Set the below to match the transaction, then run the test.
         $transactionId = 582690;
 
-        $request = new QueryTransaction(SveaConfig::getDefaultConfig());
+        $request = new QueryTransaction(ConfigurationService::getDefaultConfig());
         $request->transactionId = $transactionId;
         $request->countryCode = "SE";
         $response = $request->doRequest();
@@ -734,7 +734,7 @@ class QueryTransactionIntegrationTest extends \PHPUnit_Framework_TestCase
         //    [statuscode] => 0
         //)
 
-        $request = new QueryTransaction(SveaConfig::getDefaultConfig());
+        $request = new QueryTransaction(ConfigurationService::getDefaultConfig());
         $request->transactionId = $transactionId;
         $request->countryCode = "SE";
         $response = $request->doRequest();
@@ -776,7 +776,7 @@ class QueryTransactionIntegrationTest extends \PHPUnit_Framework_TestCase
         $new_customerrefno = "test_manual_recurring_payment_step_1 " . date('c');
 
         // below is actual test, shouldn't need to change it
-        $request = new RecurTransaction(SveaConfig::getDefaultConfig());
+        $request = new RecurTransaction(ConfigurationService::getDefaultConfig());
         $request->countryCode = "SE";
         $request->subscriptionId = $subscriptionId;
         $request->currency = $currency;
@@ -854,7 +854,7 @@ class QueryTransactionIntegrationTest extends \PHPUnit_Framework_TestCase
         //    [statuscode] => 0
         //)
 
-        $request = new QueryTransaction(SveaConfig::getDefaultConfig());
+        $request = new QueryTransaction(ConfigurationService::getDefaultConfig());
         $request->transactionId = $transactionId;
         $request->countryCode = "SE";
         $queryResponse = $request->doRequest();

@@ -9,13 +9,13 @@ require_once '../../vendor/autoload.php';
 
 use Svea\WebPay\WebPay;
 use Svea\WebPay\WebPayItem;
-use Svea\WebPay\Config\SveaConfig;
+use Svea\WebPay\Config\ConfigurationService;
 
 error_reporting(E_ALL);
 ini_set('display_errors', 'On');
 
 // get configuration object holding the Svea service login credentials
-$myConfig = SveaConfig::getTestConfig();
+$myConfig = ConfigurationService::getTestConfig();
 
 // We assume that you've collected the following information about the order in your shop: 
 // The shop cart contains one item "Billy" which cost 700,99 kr excluding vat (25%).

@@ -3,7 +3,7 @@
 
 namespace Svea\WebPay\Test\IntegrationTest\WebService\Payment;
 
-use Svea\WebPay\Config\SveaConfig;
+use Svea\WebPay\Config\ConfigurationService;
 use Svea\WebPay\WebPay;
 use Svea\WebPay\WebPayItem;
 use Svea\WebPay\Test\TestUtil;
@@ -18,7 +18,7 @@ class PaymentPlanPaymentIntegrationTest extends PHPUnit_Framework_TestCase
 
     public function testPaymentPlanRequestReturnsAcceptedResult()
     {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $campaigncode = TestUtil::getGetPaymentPlanParamsForTesting();
         $request = WebPay::createOrder($config)
             ->addOrderRow(WebPayItem::orderRow()

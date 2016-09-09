@@ -2,7 +2,7 @@
 
 namespace Svea\WebPay\Test\IntegrationTest\HostedService\HandleOrder;
 
-use Svea\WebPay\Config\SveaConfig;
+use Svea\WebPay\Config\ConfigurationService;
 use Svea\WebPay\HostedService\HostedAdminRequest\RecurTransaction as RecurTransaction;
 
 
@@ -27,7 +27,7 @@ class RecurTransactionIntegrationTest extends \PHPUnit_Framework_TestCase
         $currency = "SEK";
         $amount = 100;
 
-        $request = new RecurTransaction(SveaConfig::getDefaultConfig());
+        $request = new RecurTransaction(ConfigurationService::getDefaultConfig());
         $request->subscriptionId = $subscriptionId;
         $request->customerRefNo = $customerRefNo;
         $request->amount = $amount;
@@ -82,7 +82,7 @@ class RecurTransactionIntegrationTest extends \PHPUnit_Framework_TestCase
         $new_clientOrderNumber = "test_recur_" . date('c');
 
         // below is actual test, shouldn't need to change it
-        $request = new RecurTransaction(SveaConfig::getDefaultConfig());
+        $request = new RecurTransaction(ConfigurationService::getDefaultConfig());
         $request->subscriptionId = $subscriptionId;
         $request->customerRefNo = $new_clientOrderNumber;
         $request->amount = $new_amount;

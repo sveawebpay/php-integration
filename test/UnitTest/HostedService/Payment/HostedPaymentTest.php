@@ -6,7 +6,7 @@ use Exception;
 use Svea\WebPay\WebPay;
 use Svea\WebPay\WebPayItem;
 use Svea\WebPay\Test\TestUtil;
-use Svea\WebPay\Config\SveaConfig;
+use Svea\WebPay\Config\ConfigurationService;
 use Svea\WebPay\Constant\PaymentMethod;
 use Svea\WebPay\BuildOrder\CreateOrderBuilder;
 use Svea\WebPay\Config\SveaConfigurationProvider;
@@ -73,7 +73,7 @@ class HostedPaymentTest extends \PHPUnit_Framework_TestCase {
      *
      */
     public function testCalculateRequestValues_CorrectTotalAmountFromMultipleItems_ItemsDefinedWithExVatAndVatPercent() {
-        $order = new CreateOrderBuilder(new SveaConfigurationProvider(SveaConfig::getDefaultConfig()));
+        $order = new CreateOrderBuilder(new SveaConfigurationProvider(ConfigurationService::getDefaultConfig()));
         $order->
             addOrderRow(WebPayItem::orderRow()
                 ->setArticleNumber("0")
@@ -98,7 +98,7 @@ class HostedPaymentTest extends \PHPUnit_Framework_TestCase {
     }
 
     public function testCalculateRequestValues_CorrectTotalAmountFromMultipleItems_ItemsDefinedWithIncVatAndVatPercent() {
-        $order = new CreateOrderBuilder(new SveaConfigurationProvider(SveaConfig::getDefaultConfig()));
+        $order = new CreateOrderBuilder(new SveaConfigurationProvider(ConfigurationService::getDefaultConfig()));
         $order->
             addOrderRow(WebPayItem::orderRow()
                 ->setArticleNumber("0")
@@ -123,7 +123,7 @@ class HostedPaymentTest extends \PHPUnit_Framework_TestCase {
     }
 
     public function testCalculateRequestValues_CorrectTotalAmountFromMultipleItems_ItemsDefinedWithExVatAndIncVat() {
-        $order = new CreateOrderBuilder(new SveaConfigurationProvider(SveaConfig::getDefaultConfig()));
+        $order = new CreateOrderBuilder(new SveaConfigurationProvider(ConfigurationService::getDefaultConfig()));
         $order->
             addOrderRow(WebPayItem::orderRow()
                 ->setArticleNumber("0")
@@ -152,7 +152,7 @@ class HostedPaymentTest extends \PHPUnit_Framework_TestCase {
 
     // calculated fixed discount vat rate, single vat rate in order
     public function testCalculateRequestValues_CorrectTotalAmountFromMultipleItems_WithFixedDiscountIncVatOnly() {
-        $order = new CreateOrderBuilder(new SveaConfigurationProvider(SveaConfig::getDefaultConfig()));
+        $order = new CreateOrderBuilder(new SveaConfigurationProvider(ConfigurationService::getDefaultConfig()));
         $order
             ->addOrderRow(WebPayItem::orderRow()
                 ->setAmountExVat(69.99)
@@ -177,7 +177,7 @@ class HostedPaymentTest extends \PHPUnit_Framework_TestCase {
 
     // explicit fixed discount vat rate, , single vat rate in order
     public function testCalculateRequestValues_CorrectTotalAmountFromMultipleItems_WithFixedDiscountIncVatAndVatPercent() {
-        $order = new CreateOrderBuilder(new SveaConfigurationProvider(SveaConfig::getDefaultConfig()));
+        $order = new CreateOrderBuilder(new SveaConfigurationProvider(ConfigurationService::getDefaultConfig()));
         $order
             ->addOrderRow(WebPayItem::orderRow()
                 ->setAmountExVat(69.99)
@@ -203,7 +203,7 @@ class HostedPaymentTest extends \PHPUnit_Framework_TestCase {
 
     // calculated fixed discount vat rate, multiple vat rate in order
     public function testCalculateRequestValues_CorrectTotalAmount_WithFixedDiscountIncVatOnly_WithDifferentVatRatesPresent() {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $order = WebPay::createOrder($config);
         $order
             ->addOrderRow(WebPayItem::orderRow()
@@ -237,7 +237,7 @@ class HostedPaymentTest extends \PHPUnit_Framework_TestCase {
 
     // explicit fixed discount vat rate, multiple vat rate in order
     public function testCalculateRequestValues_CorrectTotalAmount_WithFixedDiscountIncVatAndVatPercent_WithDifferentVatRatesPresent() {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $order = WebPay::createOrder($config);
         $order
             ->addOrderRow(WebPayItem::orderRow()
@@ -268,7 +268,7 @@ class HostedPaymentTest extends \PHPUnit_Framework_TestCase {
     }
 
     public function testCalculateRequestValues_CorrectTotalAmount_WithFixedDiscountExVatAndVatPercent_WithDifferentVatRatesPresent() {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $order = WebPay::createOrder($config);
         $order
             ->addOrderRow(WebPayItem::orderRow()
@@ -299,7 +299,7 @@ class HostedPaymentTest extends \PHPUnit_Framework_TestCase {
     }
 
     public function testCalculateRequestValues_CorrectTotalAmount_WithFixedDiscountExVatAndIncVat_WithDifferentVatRatesPresent() {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $order = WebPay::createOrder($config);
         $order
             ->addOrderRow(WebPayItem::orderRow()
@@ -331,7 +331,7 @@ class HostedPaymentTest extends \PHPUnit_Framework_TestCase {
 
     // calculated relative discount vat rate, single vat rate in order
     public function testCalculateRequestValues_CorrectTotalAmountFromMultipleItems_WithRelativeDiscount_WithDifferentVatRatesPresent() {
-        $order = new CreateOrderBuilder(new SveaConfigurationProvider(SveaConfig::getDefaultConfig()));
+        $order = new CreateOrderBuilder(new SveaConfigurationProvider(ConfigurationService::getDefaultConfig()));
         $order
             ->addOrderRow(WebPayItem::orderRow()
                 ->setAmountExVat(69.99)
@@ -356,7 +356,7 @@ class HostedPaymentTest extends \PHPUnit_Framework_TestCase {
 
     // calculated relative discount vat rate, single vat rate in order
     public function testCalculateRequestValues_CorrectTotalAmountFromMultipleItems_WithRelativeDiscount_WithDifferentVatRatesPresent2() {
-        $order = new CreateOrderBuilder(new SveaConfigurationProvider(SveaConfig::getDefaultConfig()));
+        $order = new CreateOrderBuilder(new SveaConfigurationProvider(ConfigurationService::getDefaultConfig()));
         $order
             ->addOrderRow(WebPayItem::orderRow()
                 ->setAmountExVat(69.99)
@@ -381,7 +381,7 @@ class HostedPaymentTest extends \PHPUnit_Framework_TestCase {
 
     // calculated relative discount vat rate, multiple vat rate in order
     public function testCalculateRequestValues_CorrectTotalAmount_WithRelativeDiscount_WithDifferentVatRatesPresent() {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $order = WebPay::createOrder($config);
         $order
             ->addOrderRow(WebPayItem::orderRow()
@@ -437,7 +437,7 @@ class HostedPaymentTest extends \PHPUnit_Framework_TestCase {
      * @expectedExceptionMessage Invalid or missing Country code
      */
     function test_usepaymentmethodpayment_without_countrycode_required_fail_when_using_defaultconfig () {
-        $order = WebPay::createOrder(SveaConfig::getDefaultConfig());
+        $order = WebPay::createOrder(ConfigurationService::getDefaultConfig());
         $order->addOrderRow(WebPayItem::orderRow()
                 ->setAmountExVat(100.00)
                 ->setVatPercent(25)

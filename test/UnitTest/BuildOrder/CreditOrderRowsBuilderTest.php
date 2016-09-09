@@ -2,7 +2,7 @@
 
 namespace Svea\WebPay\Test\UnitTest\BuildOrder;
 
-use Svea\WebPay\Config\SveaConfig;
+use Svea\WebPay\Config\ConfigurationService;
 use Svea\WebPay\Constant\DistributionType;
 use Svea\WebPay\BuildOrder\CreditOrderRowsBuilder;
 use Svea\WebPay\BuildOrder\RowBuilders\NumberedOrderRow;
@@ -18,7 +18,7 @@ class CreditOrderRowsBuilderTest extends \PHPUnit_Framework_TestCase
 
     function setUp()
     {
-        $this->creditOrderRowsObject = new CreditOrderRowsBuilder(SveaConfig::getDefaultConfig());
+        $this->creditOrderRowsObject = new CreditOrderRowsBuilder(ConfigurationService::getDefaultConfig());
     }
 
     public function test_creditOrderRowsBuilder_class_exists()

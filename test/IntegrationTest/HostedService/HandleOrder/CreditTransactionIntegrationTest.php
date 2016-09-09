@@ -2,7 +2,7 @@
 
 namespace Svea\WebPay\Test\IntegrationTest\HostedService\HandleOrder;
 
-use Svea\WebPay\Config\SveaConfig;
+use Svea\WebPay\Config\ConfigurationService;
 use Svea\WebPay\HostedService\HostedAdminRequest\CreditTransaction as CreditTransaction;
 
 
@@ -25,7 +25,7 @@ class CreditTransactionIntegrationTest extends \PHPUnit_Framework_TestCase
         $transactionId = 987654;
         $amount = 100;
 
-        $request = new CreditTransaction(SveaConfig::getDefaultConfig());
+        $request = new CreditTransaction(ConfigurationService::getDefaultConfig());
         $request->transactionId = $transactionId;
         $request->creditAmount = $amount;
         $request->countryCode = "SE";
@@ -56,7 +56,7 @@ class CreditTransactionIntegrationTest extends \PHPUnit_Framework_TestCase
         $transactionId = 587949;
         $amount = 100;
 
-        $request = new CreditTransaction(SveaConfig::getDefaultConfig());
+        $request = new CreditTransaction(ConfigurationService::getDefaultConfig());
         $request->transactionId = $transactionId;
         $request->creditAmount = $amount;
         $request->countryCode = "SE";

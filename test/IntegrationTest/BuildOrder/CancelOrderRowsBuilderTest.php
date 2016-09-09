@@ -6,7 +6,7 @@ use PHPUnit_Framework_TestCase;
 use Svea\WebPay\WebPayItem;
 use Svea\WebPay\WebPayAdmin;
 use Svea\WebPay\Test\TestUtil;
-use Svea\WebPay\Config\SveaConfig;
+use Svea\WebPay\Config\ConfigurationService;
 use Svea\WebPay\BuildOrder\CancelOrderRowsBuilder;
 
 
@@ -36,7 +36,7 @@ class CancelOrderRowsBuilderIntegrationTest extends PHPUnit_Framework_TestCase
 
         $this->assertEquals(1, $orderResponse->accepted);
 
-        $cancelBuilder = new CancelOrderRowsBuilder(SveaConfig::getDefaultConfig());
+        $cancelBuilder = new CancelOrderRowsBuilder(ConfigurationService::getDefaultConfig());
         $cancelResponse = $cancelBuilder
             ->setOrderId($orderResponse->sveaOrderId)
             ->setCountryCode($country)
@@ -59,7 +59,7 @@ class CancelOrderRowsBuilderIntegrationTest extends PHPUnit_Framework_TestCase
 
         $this->assertEquals(1, $orderResponse->accepted);
 
-        $cancelBuilder = new CancelOrderRowsBuilder(SveaConfig::getDefaultConfig());
+        $cancelBuilder = new CancelOrderRowsBuilder(ConfigurationService::getDefaultConfig());
         $cancelResponse = $cancelBuilder
             ->setOrderId($orderResponse->sveaOrderId)
             ->setCountryCode($country)
@@ -82,7 +82,7 @@ class CancelOrderRowsBuilderIntegrationTest extends PHPUnit_Framework_TestCase
 
         $this->assertEquals(1, $orderResponse->accepted);
 
-        $cancelBuilder = new CancelOrderRowsBuilder(SveaConfig::getDefaultConfig());
+        $cancelBuilder = new CancelOrderRowsBuilder(ConfigurationService::getDefaultConfig());
         $cancelResponse = $cancelBuilder
             ->setOrderId($orderResponse->sveaOrderId)
             ->setCountryCode($country)
@@ -163,7 +163,7 @@ class CancelOrderRowsBuilderIntegrationTest extends PHPUnit_Framework_TestCase
         $country = "SE";
 
         // query orderrows
-        $queryOrderBuilder = WebPayAdmin::queryOrder(Svea\SveaConfig::getDefaultConfig())
+        $queryOrderBuilder = WebPayAdmin::queryOrder(ConfigurationService::getDefaultConfig())
             ->setOrderId($createdOrderId)
             ->setCountryCode($country);
         $queryResponse = $queryOrderBuilder->queryCardOrder()->doRequest();
@@ -177,7 +177,7 @@ class CancelOrderRowsBuilderIntegrationTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(25000, $queryResponse->authorizedamount);
 
         // cancel first order row
-        $cancelBuilder = new CancelOrderRowsBuilder(SveaConfig::getDefaultConfig());
+        $cancelBuilder = new CancelOrderRowsBuilder(ConfigurationService::getDefaultConfig());
         $cancelOrderRowsBuilder = $cancelBuilder
             ->setOrderId($createdOrderId)
             ->setCountryCode($country)
@@ -187,7 +187,7 @@ class CancelOrderRowsBuilderIntegrationTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(1, $cancelOrderRowsResponse->accepted);
 
         // query orderrows
-        $queryOrderBuilder = WebPayAdmin::queryOrder(SveaConfig::getDefaultConfig())
+        $queryOrderBuilder = WebPayAdmin::queryOrder(ConfigurationService::getDefaultConfig())
             ->setOrderId($createdOrderId)
             ->setCountryCode($country);
 
@@ -285,7 +285,7 @@ class CancelOrderRowsBuilderIntegrationTest extends PHPUnit_Framework_TestCase
         $country = "SE";
 
         // query orderrows
-        $queryOrderBuilder = WebPayAdmin::queryOrder(SveaConfig::getDefaultConfig())
+        $queryOrderBuilder = WebPayAdmin::queryOrder(ConfigurationService::getDefaultConfig())
             ->setOrderId($createdOrderId)
             ->setCountryCode($country);
         $queryResponse = $queryOrderBuilder->queryCardOrder()->doRequest();
@@ -301,7 +301,7 @@ class CancelOrderRowsBuilderIntegrationTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(48700, $queryResponse->authorizedamount);
 
         // cancel second, third order row
-        $cancelBuilder = new CancelOrderRowsBuilder(SveaConfig::getDefaultConfig());
+        $cancelBuilder = new CancelOrderRowsBuilder(ConfigurationService::getDefaultConfig());
         $cancelOrderRowsBuilder = $cancelBuilder
             ->setOrderId($createdOrderId)
             ->setCountryCode($country)
@@ -311,7 +311,7 @@ class CancelOrderRowsBuilderIntegrationTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(1, $cancelOrderRowsResponse->accepted);
 
         // query orderrows
-        $queryOrderBuilder = WebPayAdmin::queryOrder(SveaConfig::getDefaultConfig())
+        $queryOrderBuilder = WebPayAdmin::queryOrder(ConfigurationService::getDefaultConfig())
             ->setOrderId($createdOrderId)
             ->setCountryCode($country);
 

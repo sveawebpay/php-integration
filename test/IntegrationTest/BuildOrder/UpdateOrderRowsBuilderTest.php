@@ -4,7 +4,7 @@ namespace Svea\WebPay\Test\IntegrationTest\BuildOrder;
 
 use PHPUnit_Framework_TestCase;
 use Svea\WebPay\BuildOrder\RowBuilders\NumberedOrderRow;
-use Svea\WebPay\Config\SveaConfig;
+use Svea\WebPay\Config\ConfigurationService;
 use Svea\WebPay\Test\TestUtil;
 use Svea\WebPay\WebPayAdmin;
 use Svea\WebPay\WebPayItem;
@@ -55,7 +55,7 @@ class UpdateOrderRowsBuilderIntegrationTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(1, $orderResponse->accepted);
 
         // update all attributes for a numbered orderRow   
-        $updateOrderRowsResponse = WebPayAdmin::updateOrderRows(SveaConfig::getDefaultConfig())
+        $updateOrderRowsResponse = WebPayAdmin::updateOrderRows(ConfigurationService::getDefaultConfig())
             ->setOrderId($orderResponse->sveaOrderId)
             ->setCountryCode($country)
             ->updateOrderRow(WebPayItem::numberedOrderRow()
@@ -119,7 +119,7 @@ class UpdateOrderRowsBuilderIntegrationTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(1, $orderResponse->accepted);
 
         // update all attributes for a numbered orderRow   
-        $updateOrderRowsResponse = WebPayAdmin::updateOrderRows(SveaConfig::getDefaultConfig())
+        $updateOrderRowsResponse = WebPayAdmin::updateOrderRows(ConfigurationService::getDefaultConfig())
             ->setOrderId($orderResponse->sveaOrderId)
             ->setCountryCode($country)
             ->updateOrderRow(WebPayItem::numberedOrderRow()
@@ -210,7 +210,7 @@ class UpdateOrderRowsBuilderIntegrationTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(1, $orderResponse->accepted);
 
         // update all attributes for a numbered orderRow   
-        $updateOrderRowsResponse = WebPayAdmin::updateOrderRows(SveaConfig::getDefaultConfig())
+        $updateOrderRowsResponse = WebPayAdmin::updateOrderRows(ConfigurationService::getDefaultConfig())
             ->setOrderId($orderResponse->sveaOrderId)
             ->setCountryCode($country)
             ->updateOrderRow(WebPayItem::numberedOrderRow()
@@ -301,7 +301,7 @@ class UpdateOrderRowsBuilderIntegrationTest extends PHPUnit_Framework_TestCase
 //        $this->assertEquals(1, $orderResponse->accepted);
 
         // update all attributes for a numbered orderRow   
-        $updateOrderRowsResponse = WebPayAdmin::updateOrderRows(SveaConfig::getDefaultConfig())
+        $updateOrderRowsResponse = WebPayAdmin::updateOrderRows(ConfigurationService::getDefaultConfig())
             ->setOrderId(364183)
             ->setCountryCode($country)
             ->updateOrderRow(WebPayItem::numberedOrderRow()

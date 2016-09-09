@@ -2,7 +2,7 @@
 namespace Svea\WebPay\Test\IntegrationTest\WebService\GetPaymentPlanParams;
 
 use PHPUnit_Framework_TestCase;
-use Svea\WebPay\Config\SveaConfig;
+use Svea\WebPay\Config\ConfigurationService;
 use Svea\WebPay\WebService\GetPaymentPlanParams\GetPaymentPlanParams as GetPaymentPlanParams;
 use Svea\WebPay\WebService\GetPaymentPlanParams\PaymentPlanPricePerMonth as PaymentPlanPricePerMonth;
 
@@ -15,7 +15,7 @@ class PaymentPlanPricePerMonthTest extends PHPUnit_Framework_TestCase
 
     private function getGetPaymentPlanParamsResponseForTesting()
     {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $addressRequest = new GetPaymentPlanParams($config);
         $response = $addressRequest
             ->setCountryCode("SE")

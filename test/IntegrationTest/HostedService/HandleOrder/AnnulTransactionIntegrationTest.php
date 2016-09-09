@@ -1,7 +1,7 @@
 <?php
 namespace Svea\WebPay\Test\IntegrationTest\HostedService\HandleOrder;
 
-use Svea\WebPay\Config\SveaConfig;
+use Svea\WebPay\Config\ConfigurationService;
 use Svea\WebPay\HostedService\HostedAdminRequest\AnnulTransaction as AnnulTransaction;
 
 
@@ -23,7 +23,7 @@ class AnnulTransactionIntegrationTest extends \PHPUnit_Framework_TestCase
 
         $transactionId = 987654;
 
-        $request = new AnnulTransaction(SveaConfig::getDefaultConfig());
+        $request = new AnnulTransaction(ConfigurationService::getDefaultConfig());
         $request->transactionId = $transactionId;
         $request->countryCode = "SE";
         $response = $request->doRequest();
@@ -53,7 +53,7 @@ class AnnulTransactionIntegrationTest extends \PHPUnit_Framework_TestCase
         $customerrefno = "794";
         $transactionId = 587947;
 
-        $request = new AnnulTransaction(SveaConfig::getDefaultConfig());
+        $request = new AnnulTransaction(ConfigurationService::getDefaultConfig());
         $request->transactionId = $transactionId;
         $request->countryCode = "SE";
         $response = $request->doRequest();

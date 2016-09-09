@@ -7,14 +7,14 @@
 
 require_once '../../vendor/autoload.php';
 
-use Svea\WebPay\Config\SveaConfig;
+use Svea\WebPay\Config\ConfigurationService;
 use Svea\WebPay\Response\SveaResponse;
 
 error_reporting(E_ALL);
 ini_set('display_errors', 'On');
 
 // get config object
-$myConfig = SveaConfig::getTestConfig();
+$myConfig = ConfigurationService::getTestConfig();
 
 $countryCode = "SE"; // should match request countryCode
 

@@ -6,7 +6,7 @@ namespace Svea\WebPay\Test;
 use Exception;
 use Svea\WebPay\WebPay;
 use Svea\WebPay\WebPayItem;
-use Svea\WebPay\Config\SveaConfig;
+use Svea\WebPay\Config\ConfigurationService;
 
 /**
  * @author Jonas Lith, Kristian Grossman-Madsen, Anneli Halld'n for Svea Svea\WebPay\WebPay
@@ -28,7 +28,7 @@ class TestUtil
             $customer = TestUtil::createIndividualCustomer("SE");
         }
 
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
 
         $orderObject = WebPay::createOrder($config)
             ->addOrderRow(TestUtil::createOrderRow())
@@ -138,7 +138,7 @@ class TestUtil
             $customer = TestUtil::createIndividualCustomer("SE");
         }
 
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
 
         $orderObject = WebPay::createOrder($config)
             ->addCustomerDetails($customer)
@@ -241,7 +241,7 @@ class TestUtil
      */
     public static function getGetPaymentPlanParamsForTesting($country = "SE")
     {
-        $addressRequest = WebPay::getPaymentPlanParams(SveaConfig::getDefaultConfig());
+        $addressRequest = WebPay::getPaymentPlanParams(ConfigurationService::getDefaultConfig());
         $response = $addressRequest
             ->setCountryCode($country)
             ->doRequest();

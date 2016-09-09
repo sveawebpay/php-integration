@@ -110,16 +110,16 @@ In order to make use of the Svea services you need to supply your account creden
 You should have received the above credentials from Svea when creating a service account. If not, please contact your Svea account manager.
 
 ### 1.4 Using your account credentials with the package <a name="i1-4"></a>
-The WebPay and WebPayAdmin entrypoint methods all require a config object when called. The easiest way to get such an object is to use the SveaConfig::getDefaultConfig() method. Per default, it returns a config object with the Svea test account credentials as used by the integration package test suite.
+The WebPay and WebPayAdmin entrypoint methods all require a config object when called. The easiest way to get such an object is to use the SveaService::getDefaultConfig() method. Per default, it returns a config object with the Svea test account credentials as used by the integration package test suite.
 
-In order to use your own account credentials, either edit the SveaConfig.php file with your actual account credentials, or implement the ConfigurationProvider interface in a class of your own -- your implementation could for instance fetch the needed credentials from a database in place of the SveaConfig.php file.
+In order to use your own account credentials, either edit the config_test.php or config_prod.php file (depending on the desired environment) with your actual account credentials, or implement the ConfigurationProvider interface in a class of your own -- your implementation could for instance fetch the needed credentials from a database in place of the config files.
 
 ### 1.5 Additional integration properties configuration <a name="i1-5"></a>
-You should also add information about your integration platform (i.e. Magento, OpenCart, or MyAwesomeECommerceSystem etc.), platform version and providing company. See ConfigurationProvider getIntegrationPlatform(), getIntegrationVersion() and getIntegrationCompany() methods, or the SveaConfig integrationproperties array. When configured, the integration properties information will be passed to Svea alongside the various service requests.
+You should also add information about your integration platform (i.e. Magento, OpenCart, or MyAwesomeECommerceSystem etc.), platform version and providing company. See ConfigurationProvider getIntegrationPlatform(), getIntegrationVersion() and getIntegrationCompany() methods, or add that information into config files. When configured, the integration properties information will be passed to Svea alongside the various service requests.
 
-See the provided example of how to customise the SveaConfig.php in the <a href="http://github.com/sveawebpay/php-integration/blob/master/example/config_getaddresses/" target="_blank">example/config_getaddresses/</a> folder.
+See the provided example of how to customise the config files in the <a href="http://github.com/sveawebpay/php-integration/blob/master/example/config_getaddresses/" target="_blank">example/config_getaddresses/</a> folder.
 
-See further the <a href="http://sveawebpay.github.io/php-integration/api/classes/ConfigurationProvider.html" target="_blank">ConfigurationProvider</a> interface and the provided <a href="http://github.com/sveawebpay/php-integration/blob/master/src/Config/SveaConfig.php" target="_blank">SveaConfig.php example file</a>.
+See further the <a href="http://sveawebpay.github.io/php-integration/api/classes/ConfigurationProvider.html" target="_blank">ConfigurationProvider</a> interface and the provided <a href="http://github.com/sveawebpay/php-integration/blob/master/src/Config/config_test.php" target="_blank">example of config file</a>.
 
 [Back to top](#index)
 
@@ -135,7 +135,7 @@ The following is a complete example of how to place an order using the invoice p
 require( "Includes.php" );
 
 // get configuration object holding the Svea service login credentials
-$myConfig = Svea\SveaConfig::getTestConfig();
+$myConfig = Svea\WebPay\Config\ConfigurationService::getTestConfig();
 
 // We assume that you've collected the following information about the order in your shop:
 // The shop cart contains one item "Billy" which cost 700,99 kr excluding vat (25%).
@@ -943,7 +943,7 @@ The following is a minimal example of how to deliver in its entirety an invoice 
 require( "Includes.php" );
 
 // get configuration object holding the Svea service login credentials
-$myConfig = Svea\SveaConfig::getTestConfig();
+$myConfig = Svea\WebPay\Config\ConfigurationService::getTestConfig();
 
 // We assume that you've previously run the firstorder.php file and successfully made a createOrder request to Svea using the invoice payment method.
 $mySveaOrderId = "123456";

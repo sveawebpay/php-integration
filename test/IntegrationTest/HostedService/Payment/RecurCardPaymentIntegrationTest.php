@@ -4,7 +4,7 @@
 namespace Svea\WebPay\Test\IntegrationTest\HostedService\Payment;
 
 use Svea\WebPay\Test\TestUtil;
-use Svea\WebPay\Config\SveaConfig;
+use Svea\WebPay\Config\ConfigurationService;
 use Svea\WebPay\HostedService\HostedAdminRequest\RecurTransaction;
 use Svea\WebPay\HostedService\Payment\CardPayment;
 
@@ -90,7 +90,7 @@ class RecurCardPaymentIntegrationTest extends \PHPUnit_Framework_TestCase
         $new_customerrefno = "test_manual_recurring_payment_step_1 " . date('c');
 
         // below is actual test, shouldn't need to change it
-        $request = new RecurTransaction(SveaConfig::getDefaultConfig());
+        $request = new RecurTransaction(ConfigurationService::getDefaultConfig());
         $request->countryCode = "SE";
         $request->subscriptionId = $subscriptionid;
         $request->currency = $currency;

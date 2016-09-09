@@ -10,14 +10,14 @@ require_once '../../vendor/autoload.php';
 use Svea\WebPay\WebPay;
 use Svea\WebPay\WebPayItem;
 use Svea\WebPay\Helper\Helper;
-use Svea\WebPay\Config\SveaConfig;
+use Svea\WebPay\Config\ConfigurationService;
 
 error_reporting(E_ALL);
 ini_set('display_errors', 'On');
 
 
 // get config object
-$myConfig = SveaConfig::getTestConfig(); //replace with class holding your merchantid, secretword, et al, adopted from package Config/SveaConfig.php
+$myConfig = ConfigurationService::getTestConfig();
 
 // We assume that you've collected the following information about the order in your shop:
 

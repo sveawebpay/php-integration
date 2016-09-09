@@ -6,7 +6,7 @@ use Exception;
 use Svea\WebPay\WebPay;
 use Svea\WebPay\WebPayItem;
 use Svea\WebPay\Test\TestUtil;
-use Svea\WebPay\Config\SveaConfig;
+use Svea\WebPay\Config\ConfigurationService;
 use Svea\WebPay\Constant\SystemPaymentMethod;
 
 
@@ -20,7 +20,7 @@ class DirectPaymentTest extends \PHPUnit_Framework_TestCase {
      * @expectedExceptionMessage Invalid or missing Country code
      */
     public function testFailOnWrongCountryCodeInConfig() {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $rowFactory = new TestUtil();
         $form = WebPay::createOrder($config)
                 ->addOrderRow(TestUtil::createOrderRow())
@@ -47,7 +47,7 @@ class DirectPaymentTest extends \PHPUnit_Framework_TestCase {
     }
 
     public function testConfigureExcludedPaymentMethods() {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $rowFactory = new TestUtil();
         $form = WebPay::createOrder($config)
                 ->addOrderRow(TestUtil::createOrderRow())
@@ -76,7 +76,7 @@ class DirectPaymentTest extends \PHPUnit_Framework_TestCase {
     }
 
     public function testBuildDirectBankPayment() {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $rowFactory = new TestUtil();
         $form = WebPay::createOrder($config)
                 ->addOrderRow(TestUtil::createOrderRow())
@@ -115,7 +115,7 @@ class DirectPaymentTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals('-12500', $xmlMessage->orderrows->row[2]->amount);
     }
     public function testBuildDirectBankPaymentCallBackUrl() {
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $rowFactory = new TestUtil();
         $form = WebPay::createOrder($config)
                 ->addOrderRow(TestUtil::createOrderRow())

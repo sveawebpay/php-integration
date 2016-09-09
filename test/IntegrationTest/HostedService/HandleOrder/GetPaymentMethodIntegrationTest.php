@@ -4,7 +4,7 @@
 namespace Svea\WebPay\Test\IntegrationTest\HostedService\HandleOrder;
 
 use Svea\WebPay\WebPay;
-use Svea\WebPay\Config\SveaConfig;
+use Svea\WebPay\Config\ConfigurationService;
 use Svea\WebPay\Constant\PaymentMethod;
 use Svea\WebPay\Constant\SystemPaymentMethod;
 
@@ -18,7 +18,7 @@ class GetPaymentMethodIntegrationTest extends \PHPUnit_Framework_TestCase
     function testGetAllPaymentMethods()
     {
 
-        $config = SveaConfig::getDefaultConfig();
+        $config = ConfigurationService::getDefaultConfig();
         $response = WebPay::getPaymentMethods($config)
             ->setContryCode("SE")
             ->doRequest();

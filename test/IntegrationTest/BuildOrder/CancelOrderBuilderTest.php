@@ -6,7 +6,7 @@ use PHPUnit_Framework_TestCase;
 use Svea\WebPay\WebPayItem;
 use Svea\WebPay\WebPayAdmin;
 use Svea\WebPay\Test\TestUtil;
-use Svea\WebPay\Config\SveaConfig; 
+use Svea\WebPay\Config\ConfigurationService;
 
 
 /**
@@ -24,7 +24,7 @@ class CancelOrderBuilderIntegrationTest extends PHPUnit_Framework_TestCase
 
         $this->assertEquals(1, $orderResponse->accepted);
 
-        $cancelResponse = WebPayAdmin::cancelOrder(SveaConfig::getDefaultConfig())
+        $cancelResponse = WebPayAdmin::cancelOrder(ConfigurationService::getDefaultConfig())
             ->setOrderId($orderResponse->sveaOrderId)
             ->setCountryCode($country)
             ->cancelInvoiceOrder()
@@ -46,7 +46,7 @@ class CancelOrderBuilderIntegrationTest extends PHPUnit_Framework_TestCase
 
         $this->assertEquals(1, $orderResponse->accepted);
 
-        $cancelResponse = WebPayAdmin::cancelOrder(SveaConfig::getDefaultConfig())
+        $cancelResponse = WebPayAdmin::cancelOrder(ConfigurationService::getDefaultConfig())
             ->setOrderId($orderResponse->sveaOrderId)
             ->setCountryCode($country)
             ->cancelPaymentPlanOrder()
@@ -73,7 +73,7 @@ class CancelOrderBuilderIntegrationTest extends PHPUnit_Framework_TestCase
         $customerrefno = "test_1396964349955";
         $transactionId = 580658;
 
-        $request = WebPayAdmin::cancelOrder(SveaConfig::getDefaultConfig())
+        $request = WebPayAdmin::cancelOrder(ConfigurationService::getDefaultConfig())
             ->setOrderId($transactionId)
             ->setCountryCode("SE")
             ->cancelCardOrder()
