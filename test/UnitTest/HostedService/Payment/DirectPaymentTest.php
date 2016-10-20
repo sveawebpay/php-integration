@@ -15,37 +15,6 @@ use Svea\WebPay\Constant\SystemPaymentMethod;
  */
 class DirectPaymentTest extends \PHPUnit_Framework_TestCase {
 
-     /**
-     * @expectedException Exception
-     * @expectedExceptionMessage Invalid or missing Country code
-     */
-    public function testFailOnWrongCountryCodeInConfig() {
-        $config = ConfigurationService::getDefaultConfig();
-        $rowFactory = new TestUtil();
-        $form = WebPay::createOrder($config)
-                ->addOrderRow(TestUtil::createOrderRow())
-            ->run($rowFactory->buildShippingFee())
-            ->addCustomerDetails(WebPayItem::individualCustomer()
-                    ->setNationalIdNumber(194605092222)
-                    )
-            ->setCountryCode("ZZ")
-            ->setClientOrderNumber("33")
-            ->setOrderDate("2012-12-12")
-            ->setCurrency("SEK")
-            ->usePayPageDirectBankOnly()
-                ->setReturnUrl("http://myurl.se")
-                ->getPaymentForm();
-        /**
-        $xmlMessage = new \SimpleXMLElement($form->xmlMessage);
-
-        $this->assertEquals('KORTCERT', $xmlMessage->excludepaymentmethods->exclude[0]);
-        $this->assertEquals('KORTSKRILL', $xmlMessage->excludepaymentmethods->exclude[1]);
-        $this->assertEquals('PAYPAL', $xmlMessage->excludepaymentmethods->exclude[2]);
-       // $this->assertEquals('SKRILL', $xmlMessage->excludepaymentmethods->exclude[3]);
-         *
-         */
-    }
-
     public function testConfigureExcludedPaymentMethods() {
         $config = ConfigurationService::getDefaultConfig();
         $rowFactory = new TestUtil();

@@ -55,7 +55,21 @@ class SveaConfigurationProvider implements ConfigurationProvider
      */
     private function getCredentialsProperty($property, $type, $country)
     {
+        if ($property === 'merchantId' || $property === 'secret') {
+            if (array_key_exists($property, $this->conf['credentials']['common']['auth'][$type]) === false) {
+                $this->throwInvalidCredentialProperty();
+            }
+
+            return $this->conf['credentials']['common']['auth'][$type][$property];
+        } else {
+            return $this->getCredentialsPropertyByCountry($property, $type, $country);
+        }
+    }
+
+    private function getCredentialsPropertyByCountry($property, $type, $country)
+    {
         $uCountry = strtoupper($country);
+
         if (array_key_exists($uCountry, $this->conf['credentials']) == FALSE) {
             $this->throwInvalidCountryException();
         } elseif (array_key_exists($type, $this->conf['credentials'][$uCountry]['auth']) == FALSE) {
@@ -71,6 +85,14 @@ class SveaConfigurationProvider implements ConfigurationProvider
     private function throwInvalidCountryException()
     {
         throw new InvalidCountryException('Invalid or missing Country code');
+    }
+
+    /**
+     * @throws Exception
+     */
+    private function throwInvalidCredentialProperty()
+    {
+        throw new Exception('Invalid or missing Credential property');
     }
 
     /**

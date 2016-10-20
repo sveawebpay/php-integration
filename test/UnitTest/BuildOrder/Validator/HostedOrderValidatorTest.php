@@ -118,25 +118,6 @@ class HostedOrderValidatorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Svea\WebPay\HostedService\Helper\InvalidCountryException
-     * @expectedExceptionMessage Invalid or missing Country code
-     */
-    public function testFailOnMissingCountryCode()
-    {
-        $config = ConfigurationService::getDefaultConfig();
-        $builder = WebPay::createOrder($config);
-        $order = $builder
-            ->addOrderRow(TestUtil::createHostedOrderRow())
-            //->setCountryCode("SE")
-            ->setCurrency("SEK")
-            ->setClientOrderNumber("34")
-            ->usePayPageCardOnly()
-            ->setReturnUrl("myurl.se");
-
-        $order->getPaymentForm();
-    }
-
-    /**
      * @expectedException Svea\WebPay\BuildOrder\Validator\ValidationException
      * @expectedExceptionMessage -missing value : ReturnUrl is required. Use function setReturnUrl().
      */

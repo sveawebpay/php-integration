@@ -432,21 +432,4 @@ class HostedPaymentTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals (null, $order->countryCode);
     }
 
-     /**
-     * @expectedException Exception
-     * @expectedExceptionMessage Invalid or missing Country code
-     */
-    function test_usepaymentmethodpayment_without_countrycode_required_fail_when_using_defaultconfig () {
-        $order = WebPay::createOrder(ConfigurationService::getDefaultConfig());
-        $order->addOrderRow(WebPayItem::orderRow()
-                ->setAmountExVat(100.00)
-                ->setVatPercent(25)
-                ->setQuantity(2))
-                ->setCurrency('SEK')
-                ->setClientOrderNumber('1010101')
-                ->usePaymentMethod(PaymentMethod::KORTCERT)
-                ->setReturnUrl('testurl.com')
-                ->getPaymentForm();
-    }
-
 }

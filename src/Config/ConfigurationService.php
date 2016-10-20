@@ -119,6 +119,11 @@ class ConfigurationService
             )
         );
 
+        $singleCountryConfig['common']['auth'][ConfigurationProvider::HOSTED_TYPE] = array(
+            "merchantId" => $merchantId,
+            "secret" => $secret
+        );
+
         // return a ConfigurationProvider object
         return new SveaConfigurationProvider(
             array("url" => $urls, "credentials" => $singleCountryConfig, "integrationproperties" => $integrationProperties)
@@ -133,6 +138,7 @@ class ConfigurationService
         $credentials = $config['credentials'];
 
         $commonCredentials = $config['commonCredentials'];
+        $credentialParams['common'] = array();
         foreach ($credentials as $countryCode => $configPerCountry) {
             $credentialParams[$countryCode] = array('auth' => array());
             foreach ($configPerCountry as $paymentType => $configPerType) {
@@ -140,6 +146,8 @@ class ConfigurationService
             }
             $credentialParams[$countryCode]['auth'][ConfigurationProvider::HOSTED_TYPE] = $commonCredentials;
         }
+
+        $credentialParams['common']['auth'][ConfigurationProvider::HOSTED_TYPE] = $commonCredentials;
 
         $integrationProperties = $config['integrationParams'];
 
