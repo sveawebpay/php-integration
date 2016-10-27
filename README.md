@@ -96,13 +96,26 @@ the above section 1.x text is taken from the Svea\WebPay\WebPay/Svea\WebPay\WebP
 
 ## 1. Installing and configuration <a name="i1"></a>
 
+In command line
+
+    composer require svea/webpay
+
+or add this part to your composer.json
+
+```json
+    {
+        "require": {
+            "svea/webpay": "dev-master"
+        }
+    }
+```
+
 ### 1.2 Using Library
 
 When library is pulled into project, it will be stored into vendor directory
 under `svea` name.
 
-In working files you will need to include one of two files, `vendor/autoload.php` if you are working with composer or
-`includes.php` file that is under src/ directory in this library if you are not using composer.
+In working files you will need to include file `vendor/autoload.php`
 
 ### 1.3 Configuration <a name="i1-3"></a>
 In order to make use of the Svea services you need to supply your account credentials to authorize yourself against the Svea services. For the Invoice and Payment Plan payment methods, the credentials consist of a set of Username, Password and Client number (one set for each country and service type). For Card and Direct Bank payment methods,  the credentials consist of a (single) set of Merchant id and Secret Word.
@@ -131,8 +144,7 @@ The following is a complete example of how to place an order using the invoice p
 
 ```php
 <?php
-// include the Svea PHP integration package files
-require( "Includes.php" );
+require_once 'vendor/autoload.php';
 
 // get configuration object holding the Svea service login credentials
 $myConfig = Svea\WebPay\Config\ConfigurationService::getTestConfig();
@@ -939,8 +951,7 @@ The following is a minimal example of how to deliver in its entirety an invoice 
 
 ```php
 <?php
-// Include Svea PHP integration package.
-require( "Includes.php" );
+require_once 'vendor/autoload.php';
 
 // get configuration object holding the Svea service login credentials
 $myConfig = Svea\WebPay\Config\ConfigurationService::getTestConfig();
