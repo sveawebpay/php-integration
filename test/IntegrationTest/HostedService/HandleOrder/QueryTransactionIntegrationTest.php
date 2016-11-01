@@ -47,9 +47,9 @@ class QueryTransactionIntegrationTest extends \PHPUnit_Framework_TestCase
     {
 
         // Stop here and mark this test as incomplete.
-//        $this->markTestIncomplete(
-//            'test_manual_parsing_of_queried_payment_order_works'
-//        );
+        $this->markTestIncomplete(
+            'test_manual_parsing_of_queried_payment_order_works'
+        );
 
         // 1. go to https://test.sveaekonomi.se/webpay-admin/admin/start.xhtml 
         // 2. go to verktyg -> betalning
@@ -279,9 +279,9 @@ class QueryTransactionIntegrationTest extends \PHPUnit_Framework_TestCase
     {
 
         // Stop here and mark this test as incomplete.
-//        $this->markTestIncomplete(
-//            'test_manual_parsing_of_queried_recur_order_without_orderrows_works'
-//        );               
+        $this->markTestIncomplete(
+            'test_manual_parsing_of_queried_recur_order_without_orderrows_works'
+        );
 
         // 1. go to https://test.sveaekonomi.se/webpay-admin/admin/start.xhtml 
         // 2. go to verktyg -> betalning
@@ -411,9 +411,9 @@ class QueryTransactionIntegrationTest extends \PHPUnit_Framework_TestCase
     function test_manual_parsing_of_queried_preparepayment_order_works()
     {
         // Stop here and mark this test as incomplete.
-//        $this->markTestIncomplete(
-//            'test_manual_parsing_of_queried_recur_order_without_orderrows_works'
-//        );               
+        $this->markTestIncomplete(
+            'test_manual_parsing_of_queried_recur_order_without_orderrows_works'
+        );
 
         // 1. See Svea\WebPay\Test\IntegrationTest\HostedService\Payment\CardPaymentURLIntegrationTest::test_manual_CardPayment_getPaymentUrl():
         // 2. run the test, and get the subscription paymenturl from the output
