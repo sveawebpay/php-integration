@@ -1,12 +1,12 @@
 {
-  "name": "svea/webpay",
-  "description": "php webpay integration lib",
+  "name": "sveaekonomi/webpay",
+  "description": "Php integration library for webpay payments and admin functionality.",
   "minimum-stability": "dev",
-  "license": "proprietary",
+  "license": "Apache-2.0",
   "authors": [
     {
-      "name": "Svea Ekonomi",
-      "email": "integration@svea.com"
+      "name": "Svea Ekonomi AB",
+      "email": "support-webpay@sveaekonomi.se"
     }
   ],
   "require": {
