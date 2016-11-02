@@ -1,6 +1,6 @@
 # Svea PHP Integration Package Documentation
 
-## Version 2.3.0
+## Version 3.0.0
 
 ### Current build status
 | Branch                            | Build status                               |
@@ -189,8 +189,8 @@ $myResponse = $myInvoiceOrderRequest->doRequest();
 
 
 // If the response attribute accepted is true, the payment succeeded.
-if($myResponse->accepted == true) 
-{ 
+if($myResponse->accepted == true)
+{
     echo "Invoice payment succeeded!";
 };
 
@@ -1204,14 +1204,14 @@ the request using the CancelOrderBuilder methods:
 ...
     $request = WebPayAdmin->cancelOrder($config)
          ->setOrderId()		// required for all order except. use SveaOrderId recieved with createOrder response
-         ->setTransactionId()	// optional, card or direct bank only, alias for setOrderId        
+         ->setTransactionId()	// optional, card or direct bank only, alias for setOrderId
          ->setCountryCode()	// required, use same country code as in createOrder request
     ;
     // then select the corresponding request class and send request
     $response = $request->cancelInvoiceOrder()->doRequest();        // returns CloseOrderResponse
     $response = $request->cancelPaymentPlanOrder()->doRequest();    // returns CloseOrderResponse
     $response = $request->cancelCardOrder()->doRequest();           // returns AnnulTransactionResponse
-  
+
 ...
 ```
 
