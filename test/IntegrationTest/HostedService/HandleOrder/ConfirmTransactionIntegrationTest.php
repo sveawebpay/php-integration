@@ -1,110 +1,118 @@
 <?php
-use Svea\HostedService\ConfirmTransaction as ConfirmTransaction;
 
-$root = realpath(dirname(__FILE__));
-require_once $root . '/../../../../src/Includes.php';
-require_once $root . '/../../../TestUtil.php';
+namespace Svea\WebPay\Test\IntegrationTest\HostedService\HandleOrder;
+
+use Svea\WebPay\Test\TestUtil;
+use Svea\WebPay\Config\ConfigurationService;
+use Svea\WebPay\Constant\PaymentMethod;
+use Svea\WebPay\HostedService\HostedAdminRequest\ConfirmTransaction as ConfirmTransaction;
+
 
 /**
- * ConfirmTransactionIntegrationTest 
- * 
- * @author Kristian Grossman-Madsen for Svea WebPay
+ * Svea\WebPay\Test\IntegrationTest\HostedService\HandleOrder\ConfirmTransactionIntegrationTest
+ *
+ * @author Kristian Grossman-Madsen for Svea Svea\WebPay\WebPay
  */
-class ConfirmTransactionIntegrationTest extends \PHPUnit_Framework_TestCase {
- 
-   /**
-     * test_confirmTransaction_card_success creates an order using card payment, 
+class ConfirmTransactionIntegrationTest extends \PHPUnit_Framework_TestCase
+{
+
+    /**
+     * test_confirmTransaction_card_success creates an order using card payment,
      * pays using card & receives a transaction id, then confirms the transaction
-     * 
+     *
      * used as acceptance criteria/smoke test for credit transaction feature
      */
-    function test_confirmTransaction_card_success() { 
-      
+    function test_confirmTransaction_card_success()
+    {
+
         // not yet implemented, requires webdriver support
 
         // Stop here and mark this test as incomplete.
         $this->markTestIncomplete(
-          'not yet implemented, requires webdriver support'
+            'not yet implemented, requires webdriver support'
         );
-        
+
         // also, needs to have SUCCESS status set on transaction
 
         // set up order (from testUtil?)
         $order = TestUtil::createOrder();
-        
+
         // pay with card, receive transactionId
         $form = $order
-            ->UsePaymentMethod( PaymentMethod::KORTCERT )
+            ->UsePaymentMethod(PaymentMethod::KORTCERT)
             ->setReturnUrl("http://myurl.se")
             //->setCancelUrl()
             //->setCardPageLanguage("SE")
             ->getPaymentForm();
-        
+
         $url = "https://test.sveaekonomi.se/webpay/payment";
 
-        // do request modeled on CardPaymentIntegrationTest.php
-                
+        // do request modeled on Svea\WebPay\Test\IntegrationTest\HostedService\Payment\CardPaymentIntegrationTest.php
+
         // make sure the transaction has status AUTHORIZED at Svea
-        
+
         // confirm transcation using above the transaction transactionId
-        
+
         // assert response from confirmTransaction equals success
     }
-    
-    
+
+
     /**
-     * test_confirm_card_transaction_not_found 
-     * 
+     * test_confirm_card_transaction_not_found
+     *
      * used as initial acceptance criteria for credit transaction feature
-     */  
-    function test_confirm_card_transaction_not_found() {
-             
+     */
+    function test_confirm_card_transaction_not_found()
+    {
+
         $transactionId = 987654;
         $captureDate = "2014-03-21";
 
-        $request = new ConfirmTransaction( Svea\SveaConfig::getDefaultConfig() );
+        $request = new ConfirmTransaction(ConfigurationService::getDefaultConfig());
         $request->transactionId = $transactionId;
         $request->captureDate = $captureDate;
         $request->countryCode = "SE";
         $response = $request->doRequest();
 
-        $this->assertInstanceOf( "Svea\HostedService\ConfirmTransactionResponse", $response );
-        
+        $this->assertInstanceOf("Svea\WebPay\HostedService\HostedResponse\HostedAdminResponse\ConfirmTransactionResponse", $response);
+
         // if we receive an error from the service, the integration test passes
-        $this->assertEquals( 0, $response->accepted );
-        $this->assertEquals( "128 (NO_SUCH_TRANS)", $response->resultcode );    
+        $this->assertEquals(0, $response->accepted);
+        $this->assertEquals("128 (NO_SUCH_TRANS)", $response->resultcode);
     }
-    
+
     /**
-     * test_manual_credit_card 
-     * 
+     * test_manual_credit_card
+     *
      * run this manually after you've performed a card transaction and have set
      * the transaction status to success using the tools in the logg admin.
-     */  
-    function test_manual_confirm_card() {
-        
+     */
+    function test_manual_confirm_card()
+    {
+
         // Stop here and mark this test as incomplete.
         $this->markTestIncomplete(
-          'skeleton for manual test of confirm card transaction'
+            'skeleton for manual test of confirm card transaction'
         );
-        
+
         // Set the below to match the transaction, then run the test.
         $clientOrderNumber = "798";
         $transactionId = 587950;
         $captureDate = date('c');
-                
-        $request = new ConfirmTransaction( Svea\SveaConfig::getDefaultConfig() );
+
+        $request = new ConfirmTransaction(ConfigurationService::getDefaultConfig());
         $request->transactionId = $transactionId;
         $request->captureDate = $captureDate;
         $request->countryCode = "SE";
-        $response = $request->doRequest();     
-        
+        $response = $request->doRequest();
+
         //print_r( $response );
-        $this->assertInstanceOf( "Svea\HostedService\ConfirmTransactionResponse", $response );     
-        $this->assertEquals( 1, $response->accepted );        
-        $this->assertStringMatchesFormat( "%d", $response->transactionId);   // %d => an unsigned integer value
-        
-        $this->assertEquals( $clientOrderNumber, $response->clientOrderNumber );  
-    }    
+        $this->assertInstanceOf("Svea\WebPay\HostedService\HostedResponse\HostedAdminResponse\ConfirmTransactionResponse", $response);
+        $this->assertEquals(1, $response->accepted);
+        $this->assertStringMatchesFormat("%d", $response->transactionId);   // %d => an unsigned integer value
+
+        $this->assertEquals($clientOrderNumber, $response->clientOrderNumber);
+    }
 }
+
 ?>

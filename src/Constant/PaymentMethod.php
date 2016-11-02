@@ -1,14 +1,16 @@
 <?php
-// PaymentMethod is excluded from the Svea namespace
+
+namespace Svea\WebPay\Constant;
 
 /**
- * PaymentMethod is a container for the various payment method constant strings
+ * Svea\WebPay\Constant\PaymentMethod is a container for the various payment method constant strings
  *
  */
-abstract class PaymentMethod {
-
+abstract class PaymentMethod
+{
     const INVOICE = 'INVOICE';
     const PAYMENTPLAN = 'PAYMENTPLAN';
+    
     //DIRECT
     const BANKAXESS = 'BANKAXESS';
     const AKTIA_FI = 'DBAKTIAFI';
@@ -26,13 +28,16 @@ abstract class PaymentMethod {
     const SPANKKI_FI = 'DBSPANKKIFI';
     const SWEDBANK_SE = 'DBSWEDBANKSE';
     const TAPIOLA_FI = 'DBTAPIOLAFI';
+    
     //PaymentMethodType::CARD
     const KORTCERT = 'KORTCERT';
     const SVEACARDPAY = 'SVEACARDPAY';
     const SKRILL = 'SKRILL';
     const KORTWN = 'KORTWN';
+    
     //PREPAID
     const MICRODEB = 'MICRODEB';
+    
     //PSP
     const PAYGROUND = 'PAYGROUND';
     const PAYPAL = 'PAYPAL';

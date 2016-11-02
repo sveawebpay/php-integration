@@ -1,0 +1,23 @@
+{
+  "name": "sveaekonomi/webpay",
+  "description": "Php integration library for webpay and admin functionality.",
+  "license": "Apache-2.0",
+  "authors": [
+    {
+      "name": "Svea Ekonomi AB",
+      "email": "support-webpay@sveaekonomi.se"
+    }
+  ],
+  "require": {
+    "php": ">=5.3.0",
+    "ext-curl": "*"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "4.8"
+  },
+  "autoload": {
+    "psr-4": {
+      "Svea\\WebPay\\": "src"
+    }
+  }
+}

@@ -1,62 +1,65 @@
 <?php
-namespace Svea;
 
-$root = realpath(dirname(__FILE__));
-require_once $root . '/../../../../test/UnitTest/BuildOrder/OrderBuilderTest.php';
+namespace Svea\WebPay\Test\UnitTest\HostedService\Payment;
 
-$root = realpath(dirname(__FILE__));
-require_once $root . '/../../../TestUtil.php';
+use Svea\WebPay\WebPay;
+use Svea\WebPay\WebPayItem;
+use Svea\WebPay\Test\TestUtil;
+use Svea\WebPay\Config\ConfigurationService;
+use Svea\WebPay\Constant\PaymentMethod;
+use Svea\WebPay\Constant\SystemPaymentMethod;
+
 
 /**
- * @author anne-hal, Kristian Grossman-Madsen for Svea WebPay
+ * @author anne-hal, Kristian Grossman-Madsen for Svea Svea\WebPay\WebPay
  */
 class PaymentMethodTest extends \PHPUnit_Framework_TestCase{
 
      public function testPayPagePaymentWithSetPaymentMethod() {
-        $config = SveaConfig::getDefaultConfig();
-         $rowFactory = new \TestUtil();
-        $form = \WebPay::createOrder($config)
-            ->addOrderRow(\TestUtil::createOrderRow())
+        $config = ConfigurationService::getDefaultConfig();
+         $rowFactory = new TestUtil();
+        $form = WebPay::createOrder($config)
+            ->addOrderRow(TestUtil::createOrderRow())
             ->run($rowFactory->buildShippingFee())
-            ->addDiscount(\WebPayItem::relativeDiscount()
+            ->addDiscount(WebPayItem::relativeDiscount()
                     ->setDiscountId("1")
                     ->setDiscountPercent(50)
                     ->setUnit("st")
                     ->setName('Relative')
                     ->setDescription("RelativeDiscount")
             )
-            ->addCustomerDetails(\WebPayItem::individualCustomer()->setNationalIdNumber(194605092222))
+            ->addCustomerDetails(WebPayItem::individualCustomer()->setNationalIdNumber(194605092222))
             ->setCountryCode("SE")
             ->setClientOrderNumber("33")
             ->setOrderDate("2012-12-12")
             ->setCurrency("SEK")
-            ->usePaymentMethod(\PaymentMethod::KORTCERT)
+            ->usePaymentMethod(PaymentMethod::KORTCERT)
             ->setReturnUrl("http://myurl.se")
             ->getPaymentForm();
 
         $xmlMessage = new \SimpleXMLElement($form->xmlMessage);
-        $this->assertEquals(\PaymentMethod::KORTCERT, $xmlMessage->paymentmethod[0]);
+        $this->assertEquals(PaymentMethod::KORTCERT, $xmlMessage->paymentmethod[0]);
     }
 
     public function testPayPagePaymentWithSetPaymentMethodInvoice() {
-        $config = SveaConfig::getDefaultConfig();
-        $rowFactory = new \TestUtil();
-        $form = \WebPay::createOrder($config)
-            ->addOrderRow(\TestUtil::createOrderRow())
+        $config = ConfigurationService::getDefaultConfig();
+        $rowFactory = new TestUtil();
+        $form = WebPay::createOrder($config)
+            ->addOrderRow(TestUtil::createOrderRow())
             ->run($rowFactory->buildShippingFee())
-            ->addDiscount(\WebPayItem::relativeDiscount()
+            ->addDiscount(WebPayItem::relativeDiscount()
                     ->setDiscountId("1")
                     ->setDiscountPercent(50)
                     ->setUnit("st")
                     ->setName('Relative')
                     ->setDescription("RelativeDiscount")
             )
-            ->addCustomerDetails(\WebPayItem::companyCustomer()->setNationalIdNumber(4608142222))
+            ->addCustomerDetails(WebPayItem::companyCustomer()->setNationalIdNumber(4608142222))
             ->setCountryCode("SE")
             ->setClientOrderNumber("33")
             ->setOrderDate("2012-12-12")
             ->setCurrency("SEK")
-            ->usePaymentMethod(\PaymentMethod::INVOICE)
+            ->usePaymentMethod(PaymentMethod::INVOICE)
                 ->setReturnUrl("http://myurl.se")
                 ->getPaymentForm();
 
@@ -67,10 +70,10 @@ class PaymentMethodTest extends \PHPUnit_Framework_TestCase{
     }
 
     public function testPaymentMethodInvoiceNL() {
-        $config = SveaConfig::getDefaultConfig();
-        $form = \WebPay::createOrder($config)
-            ->addOrderRow(\TestUtil::createOrderRow())
-            ->addCustomerDetails(\WebPayItem::individualCustomer()
+        $config = ConfigurationService::getDefaultConfig();
+        $form = WebPay::createOrder($config)
+            ->addOrderRow(TestUtil::createOrderRow())
+            ->addCustomerDetails(WebPayItem::individualCustomer()
                     ->setInitials("SB")
                     ->setBirthDate(1923, 12, 12)
                     ->setName("Sneider", "Boasman")
@@ -86,7 +89,7 @@ class PaymentMethodTest extends \PHPUnit_Framework_TestCase{
             ->setClientOrderNumber("33")
             ->setOrderDate("2012-12-12")
             ->setCurrency("SEK")
-            ->usePaymentMethod(\PaymentMethod::INVOICE)
+            ->usePaymentMethod(PaymentMethod::INVOICE)
                 ->setReturnUrl("http://myurl.se")
                 ->getPaymentForm();
 
@@ -95,10 +98,10 @@ class PaymentMethodTest extends \PHPUnit_Framework_TestCase{
         $this->assertEquals("Sneider", $xmlMessage->customer->firstname);
     }
     public function testPaymentMethodInvoiceNLCallbackUrl() {
-        $config = SveaConfig::getDefaultConfig();
-        $form = \WebPay::createOrder($config)
-            ->addOrderRow(\TestUtil::createOrderRow())
-            ->addCustomerDetails(\WebPayItem::individualCustomer()
+        $config = ConfigurationService::getDefaultConfig();
+        $form = WebPay::createOrder($config)
+            ->addOrderRow(TestUtil::createOrderRow())
+            ->addCustomerDetails(WebPayItem::individualCustomer()
                     ->setInitials("SB")
                     ->setBirthDate(1923, 12, 12)
                     ->setName("Sneider", "Boasman")
@@ -114,7 +117,7 @@ class PaymentMethodTest extends \PHPUnit_Framework_TestCase{
             ->setClientOrderNumber("33")
             ->setOrderDate("2012-12-12")
             ->setCurrency("SEK")
-            ->usePaymentMethod(\PaymentMethod::INVOICE)
+            ->usePaymentMethod(PaymentMethod::INVOICE)
             ->setReturnUrl("http://myurl.se")
             ->setCallbackUrl("http://myurl.se")
             ->getPaymentForm();

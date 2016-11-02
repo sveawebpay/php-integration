@@ -2,17 +2,19 @@
 /**
  * example file, how to credit an existing card order using the queried original order rows 
  * 
- * @author Kristian Grossman-Madsen for Svea WebPay
+ * @author Kristian Grossman-Madsen for Svea Svea\WebPay\WebPay
  */
+
+require_once '../../vendor/autoload.php';
+
+use Svea\WebPay\Config\ConfigurationService;
+use Svea\WebPay\WebPayAdmin;
+
 error_reporting( E_ALL );
 ini_set('display_errors', 'On');
 
-// Include Svea PHP integration package.
-$svea_directory = "../../src/";
-require_once( $svea_directory . "Includes.php" );
-
 // get config object
-$myConfig = Svea\SveaConfig::getTestConfig(); //replace with class holding your merchantid, secretword, et al, adopted from package Config/SveaConfig.php
+$myConfig = ConfigurationService::getTestConfig(); // add your Svea credentials into config_prod.php or config_test.php file
 
 // We wish to credit the entire card order. To do so, we need to credit the order with an amount equal to the original order total.
 // This can be done by either :
@@ -45,7 +47,7 @@ $secondCreditOrderRowsBuilder
 // To credit specific order rows, you pass the order rows numbers you wish to credit using setRowsToCredit().
 // For card orders, you also need to pass in the numbered order rows themselves using addNumberedOrderRows(). 
 
-// You can use the WebPayAdmin::queryCardOrder() entrypoint method to get a copy of the original order rows sent to Svea.
+// You can use the Svea\WebPay\WebPayAdmin::queryCardOrder() entrypoint method to get a copy of the original order rows sent to Svea.
 // Note that these order rows does not update following a successful credit order rows request, even though the
 // QueryTransactionResponse field creditedamount returned by a queryOrder request will reflect the current credit status.  
 //
@@ -86,7 +88,7 @@ print_r( $myCreditResponse );
 echo "\n</pre><font color='red'><pre>\n\n
 An example of a non-successful credit request response, where the card order had not yet been processed (i.e. Svea transactionstatus doesn't equal SUCCESS).
 
-the creditCardOrderRows() response:Svea\HostedService\CreditTransactionResponse Object
+the creditCardOrderRows() response:Svea\WebPay\HostedService\HostedResponse\HostedAdminResponse\CreditTransactionResponse Object
 (
     [customerrefno] => order #2014-08-26T13:49:48 02:00
     [accepted] => 0
@@ -96,7 +98,7 @@ the creditCardOrderRows() response:Svea\HostedService\CreditTransactionResponse 
 
 An example of a non-successful credit request response, where the card order has already been credited for the full amount.
 
-the creditCardOrderRows() response:Svea\HostedService\CreditTransactionResponse Object
+the creditCardOrderRows() response:Svea\WebPay\HostedService\HostedResponse\HostedAdminResponse\CreditTransactionResponse Object
 (
     [customerrefno] => order #2014-08-26T14:28:33 02:00
     [accepted] => 0
@@ -107,7 +109,7 @@ the creditCardOrderRows() response:Svea\HostedService\CreditTransactionResponse 
 echo "\n</pre><font color='blue'><pre>\n\n
 An example of a non-successful credit request response, where the card order has been first confirmed and then processed to status SUCCESS in bank.
 
-the creditCardOrderRows() response:Svea\HostedService\CreditTransactionResponse Object
+the creditCardOrderRows() response:Svea\WebPay\HostedService\HostedResponse\HostedAdminResponse\CreditTransactionResponse Object
 (
     [customerrefno] => order #2014-08-26T14:28:33 02:00
     [accepted] => 1
@@ -115,11 +117,11 @@ the creditCardOrderRows() response:Svea\HostedService\CreditTransactionResponse 
     [errormessage] => 
 )
 
-The following is the result of a WebPayAdmin::queryOrder for the above order, as you can see the entire authorized/captured amount has been credited:
+The following is the result of a Svea\WebPay\WebPayAdmin::queryOrder for the above order, as you can see the entire authorized/captured amount has been credited:
 
 </pre>
 <pre><font color='black'>
-Svea\HostedService\QueryTransactionResponse Object
+Svea\WebPay\HostedService\HostedResponse\HostedAdminResponse\QueryTransactionResponse Object
 (
     [transactionId] => 589756
     [clientOrderNumber] => order #2014-11-20T16:00:34 01:00
@@ -137,7 +139,7 @@ Svea\HostedService\QueryTransactionResponse Object
     [paymentMethod] => KORTCERT
     [numberedOrderRows] => Array
         (
-            [0] => Svea\NumberedOrderRow Object
+            [0] => Svea\WebPay\BuildOrder\RowBuilders\NumberedOrderRow Object
                 (
                     [creditInvoiceId] => 
                     [invoiceId] => 
@@ -155,7 +157,7 @@ Svea\HostedService\QueryTransactionResponse Object
                     [vatDiscount] => 0
                 )
 
-            [1] => Svea\NumberedOrderRow Object
+            [1] => Svea\WebPay\BuildOrder\RowBuilders\NumberedOrderRow Object
                 (
                     [creditInvoiceId] => 
                     [invoiceId] => 
@@ -173,7 +175,7 @@ Svea\HostedService\QueryTransactionResponse Object
                     [vatDiscount] => 0
                 )
 
-            [2] => Svea\NumberedOrderRow Object
+            [2] => Svea\WebPay\BuildOrder\RowBuilders\NumberedOrderRow Object
                 (
                     [creditInvoiceId] => 
                     [invoiceId] => 

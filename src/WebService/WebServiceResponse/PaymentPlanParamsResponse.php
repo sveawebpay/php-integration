@@ -1,7 +1,8 @@
 <?php
-namespace Svea\WebService;
 
-require_once 'WebServiceResponse.php';
+namespace Svea\WebPay\WebService\WebServiceResponse;
+
+use Svea\WebPay\WebService\WebServiceResponse\CampaignCode\CampaignCode;
 
 /**
  * Handles the Svea Webservice GetPyamentPlanParamsEU request response.
@@ -31,13 +32,19 @@ require_once 'WebServiceResponse.php';
  *
  * @author anne-hal, Kristian Grossman-Madsen
  */
-class PaymentPlanParamsResponse extends WebServiceResponse{
-
-    /** @var \Svea\WebService\CampaignCode $campaignCodes  array of CampaignCode */
+class PaymentPlanParamsResponse extends WebServiceResponse
+{
+    /** 
+     * @var CampaignCode[] $campaignCodes - array of CampaignCode 
+     */
     public $campaignCodes = array();
 
-    public function __construct($response) {
-
+    /**
+     * PaymentPlanParamsResponse constructor.
+     * @param $response
+     */
+    public function __construct($response)
+    {
         // was request accepted?
         $this->accepted = $response->GetPaymentPlanParamsEuResult->Accepted;
 
@@ -47,7 +54,7 @@ class PaymentPlanParamsResponse extends WebServiceResponse{
 
         // set response attributes
         if ($this->accepted == 1) {
-            if(is_array($response->GetPaymentPlanParamsEuResult->CampaignCodes->CampaignCodeInfo)){
+            if (is_array($response->GetPaymentPlanParamsEuResult->CampaignCodes->CampaignCodeInfo)) {
                 foreach ($response->GetPaymentPlanParamsEuResult->CampaignCodes->CampaignCodeInfo as $code) {
                     $campaign = new CampaignCode();
                     $campaign->campaignCode = $code->CampaignCode;                      // numeric campaign code identifier
@@ -66,23 +73,23 @@ class PaymentPlanParamsResponse extends WebServiceResponse{
                     array_push($this->campaignCodes, $campaign);                        // add to available campaign payment plans array
                 }
             } else {
-                   $campaign = new CampaignCode();
-                    $campaign->campaignCode = $response->GetPaymentPlanParamsEuResult->CampaignCodes->CampaignCodeInfo->CampaignCode;                      // numeric campaign code identifier
-                    $campaign->description = $response->GetPaymentPlanParamsEuResult->CampaignCodes->CampaignCodeInfo->Description;                        // localised description string
-                    $campaign->paymentPlanType = $response->GetPaymentPlanParamsEuResult->CampaignCodes->CampaignCodeInfo->PaymentPlanType;                // human readable identifier (not guaranteed unique)
-                    $campaign->contractLengthInMonths = $response->GetPaymentPlanParamsEuResult->CampaignCodes->CampaignCodeInfo->ContractLengthInMonths;
-                    $campaign->monthlyAnnuityFactor = $response->GetPaymentPlanParamsEuResult->CampaignCodes->CampaignCodeInfo->MonthlyAnnuityFactor;      // pricePerMonth = price * monthlyAnnuityFactor + notificationFee
-                    $campaign->initialFee = $response->GetPaymentPlanParamsEuResult->CampaignCodes->CampaignCodeInfo->InitialFee;
-                    $campaign->notificationFee = $response->GetPaymentPlanParamsEuResult->CampaignCodes->CampaignCodeInfo->NotificationFee;
-                    $campaign->interestRatePercent = $response->GetPaymentPlanParamsEuResult->CampaignCodes->CampaignCodeInfo->InterestRatePercent;
-                    $campaign->numberOfInterestFreeMonths = $response->GetPaymentPlanParamsEuResult->CampaignCodes->CampaignCodeInfo->NumberOfInterestFreeMonths;
-                    $campaign->numberOfPaymentFreeMonths = $response->GetPaymentPlanParamsEuResult->CampaignCodes->CampaignCodeInfo->NumberOfPaymentFreeMonths;
-                    $campaign->fromAmount = $response->GetPaymentPlanParamsEuResult->CampaignCodes->CampaignCodeInfo->FromAmount;                          // amount lower limit for plan availability
-                    $campaign->toAmount = $response->GetPaymentPlanParamsEuResult->CampaignCodes->CampaignCodeInfo->ToAmount;                              // amount upper limit for plan availability
+                $campaign = new CampaignCode();
+                $campaign->campaignCode = $response->GetPaymentPlanParamsEuResult->CampaignCodes->CampaignCodeInfo->CampaignCode;                      // numeric campaign code identifier
+                $campaign->description = $response->GetPaymentPlanParamsEuResult->CampaignCodes->CampaignCodeInfo->Description;                        // localised description string
+                $campaign->paymentPlanType = $response->GetPaymentPlanParamsEuResult->CampaignCodes->CampaignCodeInfo->PaymentPlanType;                // human readable identifier (not guaranteed unique)
+                $campaign->contractLengthInMonths = $response->GetPaymentPlanParamsEuResult->CampaignCodes->CampaignCodeInfo->ContractLengthInMonths;
+                $campaign->monthlyAnnuityFactor = $response->GetPaymentPlanParamsEuResult->CampaignCodes->CampaignCodeInfo->MonthlyAnnuityFactor;      // pricePerMonth = price * monthlyAnnuityFactor + notificationFee
+                $campaign->initialFee = $response->GetPaymentPlanParamsEuResult->CampaignCodes->CampaignCodeInfo->InitialFee;
+                $campaign->notificationFee = $response->GetPaymentPlanParamsEuResult->CampaignCodes->CampaignCodeInfo->NotificationFee;
+                $campaign->interestRatePercent = $response->GetPaymentPlanParamsEuResult->CampaignCodes->CampaignCodeInfo->InterestRatePercent;
+                $campaign->numberOfInterestFreeMonths = $response->GetPaymentPlanParamsEuResult->CampaignCodes->CampaignCodeInfo->NumberOfInterestFreeMonths;
+                $campaign->numberOfPaymentFreeMonths = $response->GetPaymentPlanParamsEuResult->CampaignCodes->CampaignCodeInfo->NumberOfPaymentFreeMonths;
+                $campaign->fromAmount = $response->GetPaymentPlanParamsEuResult->CampaignCodes->CampaignCodeInfo->FromAmount;                          // amount lower limit for plan availability
+                $campaign->toAmount = $response->GetPaymentPlanParamsEuResult->CampaignCodes->CampaignCodeInfo->ToAmount;                              // amount upper limit for plan availability
 
-                    array_push($this->campaignCodes, $campaign);
+                array_push($this->campaignCodes, $campaign);
             }
-
         }
     }
+    
 }

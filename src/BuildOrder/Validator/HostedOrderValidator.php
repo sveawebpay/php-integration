@@ -1,69 +1,79 @@
 <?php
-namespace Svea;
 
-require_once SVEA_REQUEST_DIR . '/Includes.php';
-require_once 'OrderValidator.php';
+namespace Svea\WebPay\BuildOrder\Validator;
 
 /**
  * @author Anneli Halld'n, Daniel Brolund for Svea Webpay
  */
-class HostedOrderValidator extends OrderValidator {
-
+class HostedOrderValidator extends OrderValidator
+{
     public $errors = array();
+
     protected $isCompany = false;
 
     /**
      * @param type $order
      * @return array $errors
      */
-    public function validate($order) {
+    public function validate($order)
+    {
         if (isset($order->orgNumber) || isset($order->companyVatNumber) || isset($order->companyName)) {
             $this->isCompany = TRUE;
         }
 
-        $this->errors = $this->validateClientOrderNumber($order,$this->errors);
-        $this->errors = $this->validateCurrency($order,$this->errors);
+        $this->errors = $this->validateClientOrderNumber($order, $this->errors);
+        $this->errors = $this->validateCurrency($order, $this->errors);
 //        $this->errors = $this->validateCountryCode($order, $this->errors); //should be optional for hosted payment because not used
-        $this->errors = $this->validateRequiredFieldsForOrder($order,$this->errors);
-        $this->errors = $this->validateOrderRows($order,$this->errors);
+        $this->errors = $this->validateRequiredFieldsForOrder($order, $this->errors);
+        $this->errors = $this->validateOrderRows($order, $this->errors);
 
         return $this->errors;
     }
 
     /**
      * @param type $order
-     * @param type $errors
+     * @param array $errors
+     * @return array
      */
-    private function validateClientOrderNumber($order,$errors) {
+    private function validateClientOrderNumber($order, $errors)
+    {
         if (isset($order->clientOrderNumber) == false || "" == $order->clientOrderNumber) {
             $errors['missing value'] = "ClientOrderNumber is required. Use function setClientOrderNumber().";
         }
+
         return $errors;
     }
 
     /**
      * @param type $order
      * @param type $errors
+     * @return type
      */
-    private function validateCurrency($order,$errors) {
-         if (isset($order->currency) == false) {
+    private function validateCurrency($order, $errors)
+    {
+        if (isset($order->currency) == false) {
             $errors['missing value'] = "Currency is required. Use function setCurrency().";
         }
+
         return $errors;
     }
 
     /**
      * @param type $order
      * @param type $errors
+     * @return type
      */
-    private function validateCountryCode($order,$errors) {
-         if (isset($order->countryCode) == false) {
+    private function validateCountryCode($order, $errors)
+    {
+        if (isset($order->countryCode) == false) {
             $errors['missing value'] = "CountryCode is required. Use function setCountryCode().";
         }
+
         return $errors;
     }
 
-    public function validateEuroCustomer($order, $errors) {
+    public function validateEuroCustomer($order, $errors)
+    {
         if (isset($order->customerIdentity->initials) == false && $this->isCompany == FALSE && $order->countryCode == "NL") {
             $errors['missing value'] = "Initials is required for INVOICE and PAYMENTPLAN payments for individual customers when countrycode is NL. Use function setInitials().";
         }

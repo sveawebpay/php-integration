@@ -1,11 +1,12 @@
 <?php
-namespace Svea;
+
+namespace Svea\WebPay\Constant;
 
 /**
  * Constants for Hosted payments
  */
-abstract class SystemPaymentMethod {
-
+abstract class SystemPaymentMethod
+{
     //PaymentMethodType::DIRECT
     const BANKAXESS = 'BANKAXESS';
     const DBAKTIAFI = 'DBAKTIAFI';
@@ -23,17 +24,21 @@ abstract class SystemPaymentMethod {
     const DBSPANKKIFI = 'DBSPANKKIFI';
     const DBSWEDBANKSE = 'DBSWEDBANKSE';
     const DBTAPIOLAFI = 'DBTAPIOLAFI';
+
     //PaymentMethodType::CARD
     const KORTCERT = 'KORTCERT';
     const SVEACARDPAY = 'SVEACARDPAY';
 
     const SKRILL = 'SKRILL';
     const KORTWN = 'KORTWN';
+
     //PREPAID
     const MICRODEB = 'MICRODEB';
+
     //PSP
     const PAYGROUND = 'PAYGROUND';
     const PAYPAL = 'PAYPAL';
+
     //PaymentMethodType::INVOICE
     const INVOICESE = 'SVEAINVOICESE';
     const PAYMENTPLANSE = 'SVEASPLITSE';
@@ -43,6 +48,7 @@ abstract class SystemPaymentMethod {
     const INVOICE_FI = 'SVEAINVOICEEU_FI';
     const INVOICE_NL = 'SVEAINVOICEEU_NL';
     const INVOICE_DE = 'SVEAINVOICEEU_DE';
+
     //PaymentMethodType::PAYMENTPLAN
     const PAYMENTPLAN_SE = 'SVEASPLITEU_SE';
     const PAYMENTPLAN_NO = 'SVEASPLITEU_NO';

@@ -1,30 +1,34 @@
 <?php
-use \Svea\WebService\GetPaymentPlanParams as GetPaymentPlanParams;
+namespace Svea\WebPay\Test\IntegrationTest\WebService\GetPaymentPlanParams;
 
-$root = realpath(dirname(__FILE__));
-require_once $root . '/../../../../src/Includes.php';
+use PHPUnit_Framework_TestCase;
+use Svea\WebPay\Config\ConfigurationService;
+use Svea\WebPay\WebService\GetPaymentPlanParams\GetPaymentPlanParams as GetPaymentPlanParams;
 
 /**
  * @author Jonas Lith
  */
-class GetPaymentPlanParamsIntegrationTest extends PHPUnit_Framework_TestCase {
+class GetPaymentPlanParamsIntegrationTest extends PHPUnit_Framework_TestCase
+{
 
-    public function testPaymentPlanParamsResult() {
-        $config = Svea\SveaConfig::getDefaultConfig();
+    public function testPaymentPlanParamsResult()
+    {
+        $config = ConfigurationService::getDefaultConfig();
         $paymentPlanRequest = new GetPaymentPlanParams($config);
         $request = $paymentPlanRequest
-                ->setCountryCode("SE")
-                ->doRequest();
+            ->setCountryCode("SE")
+            ->doRequest();
 
         $this->assertEquals(1, $request->accepted);
     }
 
-    public function testResultGetPaymentPlanParams() {
-        $config = Svea\SveaConfig::getDefaultConfig();
+    public function testResultGetPaymentPlanParams()
+    {
+        $config = ConfigurationService::getDefaultConfig();
         $paymentPlanRequest = new GetPaymentPlanParams($config);
         $request = $paymentPlanRequest
-                ->setCountryCode("SE")
-                ->doRequest();
+            ->setCountryCode("SE")
+            ->doRequest();
 
         $this->assertEquals(1, $request->accepted);
         $this->assertEquals(0, $request->resultcode);
@@ -44,7 +48,7 @@ class GetPaymentPlanParamsIntegrationTest extends PHPUnit_Framework_TestCase {
     //outcommented cause need to use client with only one campaign to test
 //    public function testResultGetPaymentPlanParams_only_one_campaign() {
 //
-//        $paymentPlanRequest = new GetPaymentPlanParams(\Svea\SveaConfig::getTestConfig());
+//        $paymentPlanRequest = new GetPaymentPlanParams(\Svea\WebPay\Config\ConfigurationService::getTestConfig());
 //        $request = $paymentPlanRequest
 //                ->setCountryCode("SE")
 //                ->doRequest();

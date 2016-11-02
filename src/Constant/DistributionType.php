@@ -1,13 +1,14 @@
 <?php
-// DistributionType is excluded from the Svea namespace
+
+namespace Svea\WebPay\Constant;
 
 /**
  *constants for InvoiceDistributionType
  *
  * @author anne-hal
  */
-abstract class DistributionType {
-
+abstract class DistributionType
+{ 
     const POST = "Post";
     const EMAIL = "Email";
 }

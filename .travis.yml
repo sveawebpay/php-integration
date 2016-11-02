@@ -15,4 +15,7 @@ branches:
     - master
     - develop
 
-script: phpunit test/UnitTest
+script: phpunit
+
+before_script:
+  - composer install --no-dev

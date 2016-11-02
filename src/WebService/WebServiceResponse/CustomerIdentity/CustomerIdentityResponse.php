@@ -1,41 +1,67 @@
 <?php
-namespace Svea\WebService;
+
+namespace Svea\WebPay\WebService\WebServiceResponse\CustomerIdentity;
 
 /**
  *  CustomerIdentityResponse structure
  *
- *  @author Anneli Halld'n, Daniel Brolund, Kristian Grossman-Madsen for Svea Webpay
+ * @author Anneli Halld'n, Daniel Brolund, Kristian Grossman-Madsen for Svea Webpay
  */
-class CustomerIdentityResponse {
-
-    /** @var string $customerType  one of { Person, Business } */
+class CustomerIdentityResponse
+{
+    /**
+     * @var string $customerType one of { Person, Business }
+     */
     public $customerType;
-    /** @var string $nationalIdNumber */
-    public $nationalIdNumber;
-    /** @var string $phoneNumber */
-    public $phoneNumber;
-    /** @var string $fullName */
-    public $fullName;
-    /** @var string $street */
-    public $street;
-    /** @var string $coAddress */
-    public $coAddress;
-    /** @var string $zipCode */
-    public $zipCode;
-    /** @var string $locality */
-    public $locality;
-    /** @var string $publicKey */
-    public $publicKey;
 
+    /**
+     * @var string $nationalIdNumber
+     */
+    public $nationalIdNumber;
+
+    /**
+     * @var string $phoneNumber
+     */
+    public $phoneNumber;
+
+    /**
+     * @var string $fullName
+     */
+    public $fullName;
+
+    /**
+     * @var string $street
+     */
+    public $street;
+
+    /**
+     * @var string $coAddress
+     */
+    public $coAddress;
+
+    /**
+     * @var string $zipCode
+     */
+    public $zipCode;
+
+    /**
+     * @var string $locality
+     */
+    public $locality;
+
+    /**
+     * @var string $publicKey
+     */
+    public $publicKey;
 
     /**
      * populates the CustomerIdentityResponse object
      *
-     * @param object $customer -- response from either legacy GetAddresses or CreateOrderEU
+     * @param object $customer -- response from either legacy GetAddress or CreateOrderEU
      */
-    function __construct( $customer ) {
-
-        if( isset($customer->BusinessType) ) { // GetAddressesResponse (Legacy webservice)
+    function __construct($customer)
+    {
+        if (isset($customer->BusinessType)) { // GetAddressesResponse (Legacy webservice)
 
             $this->customerType = $customer->BusinessType;
             $this->nationalIdNumber = isset($customer->SecurityNumber) ? $customer->SecurityNumber : "";
@@ -47,8 +73,7 @@ class CustomerIdentityResponse {
             $this->coAddress = isset($customer->AddressLine1) ? $customer->AddressLine1 : "";
             $this->zipCode = isset($customer->Postcode) ? $customer->Postcode : "";
             $this->locality = isset($customer->Postarea) ? $customer->Postarea : "";
-        }
-        else { // CreateOrderResponse (EU webservice)
+        } else { // CreateOrderResponse (EU webservice)
             $this->customerType = isset($customer->CustomerType) ? $customer->CustomerType : "";
             $this->nationalIdNumber = isset($customer->NationalIdNumber) ? $customer->NationalIdNumber : "";
             $this->phoneNumber = isset($customer->PhoneNumber) ? $customer->PhoneNumber : "";

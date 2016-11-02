@@ -1,10 +1,19 @@
 <?php
-namespace Svea;
 
-require_once SVEA_REQUEST_DIR . '/Includes.php';
+namespace Svea\WebPay\BuildOrder;
+
+use Svea\WebPay\Helper\Helper;
+use Svea\WebPay\Constant\DistributionType;
+use Svea\WebPay\Config\ConfigurationProvider;
+use Svea\WebPay\BuildOrder\RowBuilders\OrderRow;
+use Svea\WebPay\AdminService\CreditInvoiceRowsRequest;
+use Svea\WebPay\BuildOrder\RowBuilders\NumberedOrderRow;
+use Svea\WebPay\BuildOrder\Validator\ValidationException;
+use Svea\WebPay\AdminService\CreditPaymentPlanRowsRequest;
+use Svea\WebPay\HostedService\HostedAdminRequest\CreditTransaction;
 
 /**
- * The WebPayAdmin::creditOrderRows entrypoint method is used to credit rows in an order after it has been delivered.
+ * The Svea\WebPay\WebPayAdmin::creditOrderRows entrypoint method is used to credit rows in an order after it has been delivered.
  * Supports Invoice, Card and Direct Bank orders. (To credit a Payment Plan order, contact Svea customer service.)
  *
  * To credit an order row in full, you specify the index of the order row to
@@ -28,7 +37,7 @@ require_once SVEA_REQUEST_DIR . '/Includes.php';
  * For card or direct bank orders, it is required to use addNumberedOrderRow()
  * or addNumberedOrderRows() to pass in a copy of the serverside order row data.
  *
- * You can use the WebPayAdmin::queryOrder() entrypoint to get information about the order,
+ * You can use the Svea\WebPay\WebPayAdmin::queryOrder() entrypoint to get information about the order,
  * the queryOrder response numberedOrderRows attribute contains the order rows with numbers.
  * For invoice orders, the serverside order rows is updated after a creditOrderRows request.
  * Note that for Card and Direct bank orders the serverside order rows will not be updated.
@@ -40,42 +49,68 @@ require_once SVEA_REQUEST_DIR . '/Includes.php';
  * Calling doRequest() on the request object will send the request to Svea and
  * return either a CreditOrderRowsResponse or a CreditTransactionResponse.
  *
- * @author Kristian Grossman-Madsen for Svea WebPay
+ * @author Kristian Grossman-Madsen for Svea Svea\WebPay\WebPay
  */
-class CreditOrderRowsBuilder {
-
-    /** @var ConfigurationProvider $conf  */
+class CreditOrderRowsBuilder extends PaymentAdminOrderBuilder
+{
+    /**
+     * @var ConfigurationProvider $conf
+     */
     public $conf;
 
-    /** @var string $orderType -- one of ConfigurationProvider::INVOICE_TYPE, PAYMENTPLAN_TYPE, ::HOSTED_ADMIN_TYPE */
+    /**
+     * @var string $orderType -- one of Svea\WebPay\Config\ConfigurationProvider::INVOICE_TYPE, PAYMENTPLAN_TYPE, ::HOSTED_ADMIN_TYPE
+     */
     public $orderType;
 
-    /** @var OrderRows[] $creditOrderRows  any additional new order rows to credit */
+    /**
+     * @var OrderRow[] $creditOrderRows any additional new order rows to credit
+     */
     public $creditOrderRows;
 
-    /** @var int[] $rowsToCredit  array of original order row indexes to credit */
+    /**
+     * @var int[] $rowsToCredit array of original order row indexes to credit
+     */
     public $rowsToCredit;
 
-    /** @var NumberedOrderRows[] $numberedOrderRows  numbered order rows passed in for hosted service orders */
+    /**
+     * @var NumberedOrderRow[] $numberedOrderRows numbered order rows passed in for hosted service orders
+     */
     public $numberedOrderRows;
 
-    /** @var string @invoiceId  invoice id as returned in the deliverOrder request response. Invoice orders only. */
+    /**
+     * @var string @invoiceId  invoice id as returned in the deliverOrder request response. Invoice orders only.
+     */
     public $invoiceId;
 
-    /** @var string @contractNumber  contract number as returned in the deliverOrder request response. PaymentPlan orders only. */
+    /**
+     * @var string @contractNumber  contract number as returned in the deliverOrder request response.
+     * PaymentPlan orders only.
+     */
     public $contractNumber;
 
-    /** @var string $orderId  card/direct bank order transaction id as returned in the createOrder request response,  */
+    /**
+     * @var string $orderId card/direct bank order transaction id as returned in the createOrder request response,
+     */
     public $orderId;
 
-    /** @var string $countryCode */
+    /**
+     * @var string $countryCode
+     */
     public $countryCode;
 
-    /**@var string  "Post" or "Email" */
+    /**
+     * @var string  "Post" or "Email"
+     */
     public $distributionType;
 
-    public function __construct($config) {
-        $this->conf = $config;
+    /**
+     * CreditOrderRowsBuilder constructor.
+     * @param $config
+     */
+    public function __construct($config)
+    {
+        parent::__construct($config);
         $this->creditOrderRows = array();
         $this->rowsToCredit = array();
         $this->numberedOrderRows = array();
@@ -90,7 +125,8 @@ class CreditOrderRowsBuilder {
      * @param string $countryCodeAsString
      * @return $this
      */
-    public function setCountryCode($countryCodeAsString) {
+    public function setCountryCode($countryCodeAsString)
+    {
         $this->countryCode = $countryCodeAsString;
         return $this;
     }
@@ -102,10 +138,12 @@ class CreditOrderRowsBuilder {
      * @param string $invoiceIdAsString
      * @return $this
      */
-    public function setInvoiceId($invoiceIdAsString) {
+    public function setInvoiceId($invoiceIdAsString)
+    {
         $this->invoiceId = $invoiceIdAsString;
         return $this;
     }
+
     /**
      * PaymentPlan only
      * Required for creditPaymentPlanOrder() -- use contract number recieved with deliverOrder response.
@@ -113,7 +151,8 @@ class CreditOrderRowsBuilder {
      * @param string $contractNumberAsString
      * @return $this
      */
-    public function setContractNumber($contractNumberAsString) {
+    public function setContractNumber($contractNumberAsString)
+    {
         $this->contractNumber = $contractNumberAsString;
         return $this;
     }
@@ -124,7 +163,8 @@ class CreditOrderRowsBuilder {
      * @param string $orderIdAsString
      * @return $this
      */
-    public function setOrderId($orderIdAsString) {
+    public function setOrderId($orderIdAsString)
+    {
         $this->orderId = $orderIdAsString;
         return $this;
     }
@@ -137,17 +177,20 @@ class CreditOrderRowsBuilder {
      * @param string $orderIdAsString
      * @return $this
      */
-    public function setTransactionId($orderIdAsString) {
+    public function setTransactionId($orderIdAsString)
+    {
         return $this->setOrderId($orderIdAsString);
     }
 
     /**
      * Required for creditInvoiceOrder() -- must match the invoice distribution type for the order
      *
-     * @param string DistributionType $distributionTypeAsConst  i.e. DistributionType::POST|DistributionType::EMAIL
+     * @param string $distributionTypeAsConst - 
+     *                  i.e. Svea\WebPay\Constant\DistributionType::POST|Svea\WebPay\Constant\DistributionType::EMAIL
      * @return $this
      */
-    public function setInvoiceDistributionType($distributionTypeAsConst) {
+    public function setInvoiceDistributionType($distributionTypeAsConst)
+    {
         $this->distributionType = $distributionTypeAsConst;
         return $this;
     }
@@ -161,7 +204,8 @@ class CreditOrderRowsBuilder {
      * @param string $rowNumber
      * @return $this
      */
-    public function setRowToCredit( $rowNumber ) {
+    public function setRowToCredit($rowNumber)
+    {
         $this->rowsToCredit[] = $rowNumber;
         return $this;
     }
@@ -172,8 +216,9 @@ class CreditOrderRowsBuilder {
      * @param int[] $rowNumbers
      * @return $this
      */
-    public function setRowsToCredit( $rowNumbers ) {
-        $this->rowsToCredit = array_merge( $this->rowsToCredit, $rowNumbers );
+    public function setRowsToCredit($rowNumbers)
+    {
+        $this->rowsToCredit = array_merge($this->rowsToCredit, $rowNumbers);
         return $this;
     }
 
@@ -185,7 +230,8 @@ class CreditOrderRowsBuilder {
      * @param OrderRow $row
      * @return $this
      */
-    public function addCreditOrderRow( $row ) {
+    public function addCreditOrderRow($row)
+    {
         $this->creditOrderRows[] = $row;
         return $this;
     }
@@ -196,8 +242,9 @@ class CreditOrderRowsBuilder {
      * @param OrderRow[] $rows
      * @return $this
      */
-    public function addCreditOrderRows( $rows ) {
-        $this->creditOrderRows = array_merge( $this->creditOrderRows, $rows );
+    public function addCreditOrderRows($rows)
+    {
+        $this->creditOrderRows = array_merge($this->creditOrderRows, $rows);
         return $this;
     }
 
@@ -208,7 +255,7 @@ class CreditOrderRowsBuilder {
      * along with the request. The rows are then matched with the order rows specified
      * using setRow(s)ToCredit().
      *
-     * Use the WebPayAdmin::queryOrder() entrypoint to get information about the order,
+     * Use the Svea\WebPay\WebPayAdmin::queryOrder() entrypoint to get information about the order,
      * the queryOrder response numberedOrderRows attribute contains the order rows and
      * their numbers.
      *
@@ -217,10 +264,11 @@ class CreditOrderRowsBuilder {
      * fetched using the queryOrder method, but if the order has been edited after
      * creation they may not be accurate.
      *
-     * @param \Svea\NumberedOrderRow $numberedOrderRows instance of NumberedOrderRow
+     * @param \Svea\WebPay\BuildOrder\RowBuilders\NumberedOrderRow $numberedOrderRow instance of NumberedOrderRow
      * @return $this
      */
-    public function addNumberedOrderRow( $numberedOrderRow ) {
+    public function addNumberedOrderRow($numberedOrderRow)
+    {
         $this->numberedOrderRows[] = $numberedOrderRow;
         return $this;
     }
@@ -228,116 +276,154 @@ class CreditOrderRowsBuilder {
     /**
      * CreditCardOrderRows, CreditDirectBankOrderRows: Optional - convenience method to provide several numbered order rows at once.
      *
-     * @param \Svea\NumberedOrderRow[] $numberedOrderRows array of NumberedOrderRow
+     * @param \Svea\WebPay\BuildOrder\RowBuilders\NumberedOrderRow[] $numberedOrderRows array of NumberedOrderRow
      * @return $this
      */
-    public function addNumberedOrderRows( $numberedOrderRows ) {
-        $this->numberedOrderRows = array_merge( $this->numberedOrderRows, $numberedOrderRows );
+    public function addNumberedOrderRows($numberedOrderRows)
+    {
+        $this->numberedOrderRows = array_merge($this->numberedOrderRows, $numberedOrderRows);
         return $this;
     }
 
     /**
      * Use creditInvoiceOrderRows() to credit rows to an Invoice order using AdminServiceRequest CreditOrderRows request
-     * @return \Svea\AdminService\CreditInvoiceRowsRequest
+     * @return CreditInvoiceRowsRequest
      */
-    public function creditInvoiceOrderRows() {
-        $this->orderType = \ConfigurationProvider::INVOICE_TYPE;
+    public function creditInvoiceOrderRows()
+    {
+        $this->orderType = ConfigurationProvider::INVOICE_TYPE;
 
         // validation is done in CreditInvoiceRowsRequest
 
-        return new AdminService\CreditInvoiceRowsRequest($this);
+        return new CreditInvoiceRowsRequest($this);
     }
 
     /**
-     * Use creditPaymentPlanOrderRows() to cancel rows to a delivered Payment plan using AdminServiceRequest CreditOrderRows request
-     * @return \Svea\AdminService\CreditPaymentPlanRowsRequest
+     * Use CreditPaymentPlanOrderRows() to cancel rows to a delivered Payment plan using AdminServiceRequest CreditOrderRows request
+     * @return CreditPaymentPlanRowsRequest
      */
-    public function creditPaymentPlanOrderRows() {
-        $this->orderType = \ConfigurationProvider::PAYMENTPLAN_TYPE;
-
-        // validation is done in CreditPaymentPlanRowsRequest
+    public function creditPaymentPlanOrderRows()
+    {
+        $this->orderType = ConfigurationProvider::PAYMENTPLAN_TYPE;
+        
         //Credit Paymentplan request is really cancelPaymentPlanRows but wrapped as creditPaymentPlanRows
-        return new AdminService\CreditPaymentPlanRowsRequest($this);
+        return new CreditPaymentPlanRowsRequest($this);
     }
 
     /**
      * Use creditCardOrderRows() to credit a Card order by the specified order row amounts using HostedRequests CreditTransaction request
      *
-     * @return \Svea\HostedService\CreditTransaction
+     * @return CreditTransaction
      * @throws ValidationException  if addNumberedOrderRows() has not been used.
      */
-    public function creditCardOrderRows() {
-        $this->orderType = \ConfigurationProvider::HOSTED_ADMIN_TYPE;
+    public function creditCardOrderRows()
+    {
+        $this->orderType = ConfigurationProvider::HOSTED_ADMIN_TYPE;
 
         // we need to validate card on this level before translating attributes to those relevant to hosted admin functions
         $this->validateCreditCardOrderRows();
 
-        $sumOfRowAmounts = $this->calculateSumOfRowAmounts( $this->rowsToCredit, $this->numberedOrderRows, $this->creditOrderRows );
+        $sumOfRowAmounts = $this->calculateSumOfRowAmounts($this->rowsToCredit, $this->numberedOrderRows, $this->creditOrderRows);
 
-        $creditTransaction = new HostedService\CreditTransaction($this->conf);
+        $creditTransaction = new CreditTransaction($this->conf);
         $creditTransaction->transactionId = $this->orderId;
-        $creditTransaction->creditAmount = $sumOfRowAmounts*100; // *100, as setAmountToLower wants minor currency
+        $creditTransaction->creditAmount = Helper::bround($sumOfRowAmounts, 2) * 100; // *100, as setAmountToLower wants minor currency
         $creditTransaction->countryCode = $this->countryCode;
         return $creditTransaction;
     }
 
+    
+
     /**
      * Use creditDirectBankOrderRows() to credit a Direct Bank order by the specified order row amounts using HostedRequests CreditTransaction request
      *
-     * @return \Svea\HostedService\CreditTransaction
-     * @throws ValidationException  if addNumberedOrderRows() has not been used.
+     * @return CreditTransaction
+     * @throws \Svea\WebPay\BuildOrder\Validator\ValidationException  if addNumberedOrderRows() has not been used.
      */
-    public function creditDirectBankOrderRows() {
+    public function creditDirectBankOrderRows()
+    {
         return $this->creditCardOrderRows();
     }
 
     /**
      * @internal
      */
-    private function validateCreditCardOrderRows() {
-        if( !isset($this->orderId) ) {
+    private function validateCreditCardOrderRows()
+    {
+        if (!isset($this->orderId)) {
             $exceptionString = "orderId is required for creditCardOrderRows(). Use method setOrderId().";
             throw new ValidationException($exceptionString);
         }
 
-        if( !isset($this->countryCode) ) {
+        if (!isset($this->countryCode)) {
             $exceptionString = "countryCode is required for creditCardOrderRows(). Use method setCountryCode().";
             throw new ValidationException($exceptionString);
         }
 
-        if( (count($this->rowsToCredit) == 0) && (count($this->creditOrderRows) == 0) ) {
+        if ((count($this->rowsToCredit) == 0) && (count($this->creditOrderRows) == 0)) {
             $exceptionString = "at least one of rowsToCredit or creditOrderRows must be set. Use setRowToCredit() or addCreditOrderRow().";
             throw new ValidationException($exceptionString);
         }
 
-        if( (count($this->rowsToCredit) > 0) && ( (count($this->rowsToCredit) != count($this->numberedOrderRows)) ) ) {
+        if ((count($this->rowsToCredit) > 0) && ((count($this->rowsToCredit) != count($this->numberedOrderRows)))) {
             $exceptionString = "every entry in rowsToCredit must have a corresponding numberedOrderRows. Use setRowsToCredit() and addNumberedOrderRow().";
             throw new ValidationException($exceptionString);
         }
 
         // validate that indexes matches entries
-        $numberedOrderRowNumbers = array_map( function($nrow){ return $nrow->rowNumber; }, $this->numberedOrderRows );
+        $numberedOrderRowNumbers = array_map(function ($nrow) {
+            return $nrow->rowNumber;
+        }, $this->numberedOrderRows);
 
-        foreach( $this->rowsToCredit as $index ) {
-            if( !in_array($index, $numberedOrderRowNumbers) ) {
+        foreach ($this->rowsToCredit as $index) {
+            if (!in_array($index, $numberedOrderRowNumbers)) {
                 $exceptionString = "every entry in rowsToCredit must match a numberedOrderRows. Use setRowsToCredit() and addNumberedOrderRow().";
-            throw new ValidationException($exceptionString);
+                throw new ValidationException($exceptionString);
+            }
+        }
+
+        foreach ($this->creditOrderRows as $orderRow) {
+            if ($orderRow->amountExVat && !isset($orderRow->vatPercent) && !isset($orderRow->amountIncVat)) {
+                $exceptionString = "Order with amountExVat must have vatPercent";
+                throw new ValidationException($exceptionString);
+            }
+
+            if (!isset($orderRow->amountExVat) && !isset($orderRow->amountIncVat)) {
+                $exceptionString = "amountExVat or amountIncVat must be set";
+                throw new ValidationException($exceptionString);
             }
         }
     }
 
-    /** @internal */
-    private function calculateSumOfRowAmounts( $rowIndexes, $numberedRows, $creditOrderRows ) {
+
+
+    /**
+     * @param $rowIndexes
+     * @param $numberedRows
+     * @param $creditOrderRows
+     * @return float
+     */
+    private function calculateSumOfRowAmounts($rowIndexes, $numberedRows, $creditOrderRows)
+    {
         $sum = 0.0;
-        $unique_indexes = array_unique( $rowIndexes );
-        foreach( $numberedRows as $numberedRow) {
-            if( in_array($numberedRow->rowNumber,$unique_indexes) ) {
-                $sum += ($numberedRow->quantity * ($numberedRow->amountExVat * (1 + ($numberedRow->vatPercent/100))));
+        $unique_indexes = array_unique($rowIndexes);
+        foreach ($numberedRows as $numberedRow) {
+
+            if (in_array($numberedRow->rowNumber, $unique_indexes)) {
+                if ($numberedRow->amountIncVat) {
+                    $sum += $numberedRow->quantity * $numberedRow->amountIncVat;
+                } else {
+                    $sum += ($numberedRow->quantity * ($numberedRow->amountExVat * (1 + ($numberedRow->vatPercent / 100))));
+                }
             }
         }
-        if( count($creditOrderRows) > 0 ) {
-            foreach( $creditOrderRows as $creditOrderRow) {
-                $sum += ($creditOrderRow->quantity * ($creditOrderRow->amountExVat * (1 + ($creditOrderRow->vatPercent/100))));
+        if (count($creditOrderRows) > 0) {
+            foreach ($creditOrderRows as $creditOrderRow) {
+                if ($creditOrderRow->amountIncVat) {
+                    $sum += $creditOrderRow->quantity * $creditOrderRow->amountIncVat;
+                } else {
+                    $sum += ($creditOrderRow->quantity * ($creditOrderRow->amountExVat * (1 + ($creditOrderRow->vatPercent / 100))));
+                }
             }
         }
         return $sum;
