@@ -184,7 +184,7 @@ class Helper
         // @todo change this to properly defined information
         $library_properties = array(
             'library_name' => 'PHP Integration Package',
-            'library_version' => '2.3.0',
+            'library_version' => '3.0.0',
         );
 
         return $library_properties;
@@ -294,7 +294,7 @@ class Helper
      *
      * This is a helper function provided to calculate the monthly price for the
      * different payment plan options for a given sum. This information may be
-     * used when displaying i.e. to display the lowest amount due per month to 
+     * used when displaying i.e. to display the lowest amount due per month to
      * display on a product level.
      *
      * If the ignoreMaxAndMinFlag is set to true, the returned array also
@@ -313,5 +313,5 @@ class Helper
     {
         return new PaymentPlanPricePerMonth($price, $paymentPlanParamsResponseObject, $ignoreMaxAndMinFlag);
     }
- 
+
 }
