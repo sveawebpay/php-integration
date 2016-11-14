@@ -13,10 +13,11 @@
 * [I. Introduction](#i-introduction)
 * [1. Installing and configuration](#i1)
     * [1.1 Requirements](#i1-1)
-    * [1.2 Using Library](#i1-2)
-    * [1.3 Configuration](#i1-3)
-    * [1.4 Using your account credentials with the package](#i1-4)
-    * [1.5 Additional integration properties configuration](#i1-5)
+    * [1.2 Installation](#i1-2)
+    * [1.3 Using Library](#i1-3)
+    * [1.4 Configuration](#i1-4)
+    * [1.5 Using your account credentials with the package](#i1-5)
+    * [1.6 Additional integration properties configuration](#i1-6)
 * [2. "Hello World"](#i2)
 * [3. Building an order](#i3)
     * [3.1 Order builder](#i3-1)
@@ -104,22 +105,34 @@ the above section 1.x text is taken from the Svea\WebPay\WebPay/Svea\WebPay\WebP
 ### 1.1 Requirements<a name="i1-1"></a>
 The integration package requires <a href="https://getcomposer.org/download/">Composer</a>.
 
-### 1.2 Using Library<a name="i1-2"></a>
+### 1.2 Installation<a name="i1-2"></a>
+To install the library, include the package as a requirement in your composer.json file
+```
+{
+    "require": {
+        "sveaekonomi/webpay": "^3.0"
+    }
+}
+```
+or by typing into command line 
+`composer require sveaekonomi/webpay`.
 
+
+### 1.3 Using Library<a name="i1-3"></a>
 When library is pulled into project, it will be stored into vendor directory
-under `svea` name.
+under `sveaekonomi` name.
 
-### 1.3 Configuration <a name="i1-3"></a>
+### 1.4 Configuration <a name="i1-4"></a>
 In order to make use of the Svea services you need to supply your account credentials to authorize yourself against the Svea services. For the Invoice and Payment Plan payment methods, the credentials consist of a set of Username, Password and Client number (one set for each country and service type). For Card and Direct Bank payment methods,  the credentials consist of a (single) set of Merchant id and Secret Word.
 
 You should have received the above credentials from Svea when creating a service account. If not, please contact your Svea account manager.
 
-### 1.4 Using your account credentials with the package <a name="i1-4"></a>
+### 1.5 Using your account credentials with the package <a name="i1-5"></a>
 The WebPay and WebPayAdmin entrypoint methods all require a config object when called. The easiest way to get such an object is to use the ConfigurationService::getDefaultConfig() method. Per default, it returns a config object with the Svea test account credentials as used by the integration package test suite.
 
 In order to use your own account credentials, either edit the config_test.php or config_prod.php file (depending on the desired environment) with your actual account credentials, or implement the ConfigurationProvider interface in a class of your own -- your implementation could for instance fetch the needed credentials from a database in place of the config files.
 
-### 1.5 Additional integration properties configuration <a name="i1-5"></a>
+### 1.6 Additional integration properties configuration <a name="i1-6"></a>
 You should also add information about your integration platform (i.e. Magento, OpenCart, or MyAwesomeECommerceSystem etc.), platform version and providing company. See ConfigurationProvider getIntegrationPlatform(), getIntegrationVersion() and getIntegrationCompany() methods, or add that information into config files. When configured, the integration properties information will be passed to Svea alongside the various service requests.
 
 See the provided example of how to customise the config files in the <a href="http://github.com/sveawebpay/php-integration/blob/master/example/config_getaddresses/" target="_blank">example/config_getaddresses/</a> folder.
