@@ -6,6 +6,7 @@ use Svea\WebPay\BuildOrder\CreditOrderRowsBuilder;
 use Svea\WebPay\AdminService\AdminSoap\Authentication;
 use Svea\WebPay\AdminService\AdminSoap\CancellationRow;
 use Svea\WebPay\BuildOrder\Validator\ValidationException;
+use Svea\WebPay\Helper\Helper;
 use Svea\WebPay\WebService\Helper\WebServiceRowFormatter;
 use Svea\WebPay\AdminService\AdminSoap\CancelPaymentPlanRowsRequest;
 
@@ -52,7 +53,7 @@ class CreditPaymentPlanRowsRequest extends AdminServiceRequest
                 $this->orderBuilder->conf->getPassword(($this->orderBuilder->orderType), $this->orderBuilder->countryCode)
             ),
             $this->orderRows,
-            $this->orderBuilder->conf->getClientNumber(($this->orderBuilder->orderType), $this->orderBuilder->countryCode),
+            Helper::getClientNumber($this->orderBuilder->conf, $this->orderBuilder->orderType, $this->orderBuilder->countryCode),
             $this->orderBuilder->contractNumber
         );
 

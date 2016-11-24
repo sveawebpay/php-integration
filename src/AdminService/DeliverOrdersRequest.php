@@ -6,6 +6,7 @@ use Svea\WebPay\BuildOrder\DeliverOrderBuilder;
 use Svea\WebPay\AdminService\AdminSoap\Authentication;
 use Svea\WebPay\AdminService\AdminSoap\OrdersToDeliver;
 use Svea\WebPay\AdminService\AdminSoap\DeliverOrderInformation;
+use Svea\WebPay\Helper\Helper;
 
 /**
  * Admin Service DeliverOrdersRequest class
@@ -44,7 +45,7 @@ class DeliverOrdersRequest extends AdminServiceRequest
             $this->orderBuilder->distributionType,
             new OrdersToDeliver(
                 new DeliverOrderInformation(
-                    $this->orderBuilder->conf->getClientNumber($this->orderBuilder->orderType, $this->orderBuilder->countryCode),
+                    Helper::getClientNumber($this->orderBuilder->conf, $this->orderBuilder->orderType, $this->orderBuilder->countryCode),
                     AdminServiceRequest::CamelCaseOrderType($this->orderBuilder->orderType),
                     $this->orderBuilder->orderId
                 )

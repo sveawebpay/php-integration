@@ -3,6 +3,7 @@
 namespace Svea\WebPay\BuildOrder;
 
 use Svea\WebPay\AdminService\UpdateOrderRowsRequest;
+use Svea\WebPay\Checkout\Service\Admin\UpdateOrderRowsService;
 use Svea\WebPay\Config\ConfigurationProvider;
 use Svea\WebPay\BuildOrder\RowBuilders\NumberedOrderRow;
 use Svea\WebPay\BuildOrder\Validator\ValidationException;
@@ -24,12 +25,15 @@ use Svea\WebPay\BuildOrder\Validator\ValidationException;
  * Then use either updateInvoiceOrderRows() or updatePaymentPlanOrderRows(),
  * which ever matches the payment method used in the original order request.
  *
+ * For Checkout order use updateCheckoutOrderRows(),
+ * which ever matches the payment method used in the Checkout process.
+ *
  * The final doRequest() will send the updateOrderRows request to Svea, and the
  * resulting response code specifies the outcome of the request.
  *
  * @author Kristian Grossman-Madsen for Svea Svea\WebPay\WebPay
  */
-class UpdateOrderRowsBuilder extends PaymentAdminOrderBuilder
+class UpdateOrderRowsBuilder extends CheckoutAdminOrderBuilder
 {
     /**
      * @var ConfigurationProvider $conf
@@ -60,8 +64,18 @@ class UpdateOrderRowsBuilder extends PaymentAdminOrderBuilder
      */
     public function __construct($config)
     {
-        parent::__construct($config);
+        $this->conf = $config;
         $this->numberedOrderRows = array();
+    }
+
+    /**
+     * Required. Use SveaOrderId recieved with createOrder response.
+     * @param string $orderIdAsString
+     * @return $this
+     */
+    public function setOrderId($orderIdAsString) {
+        $this->orderId = $orderIdAsString;
+        return $this;
     }
 
     /**
@@ -95,12 +109,10 @@ class UpdateOrderRowsBuilder extends PaymentAdminOrderBuilder
      */
     public function updateOrderRows($rows)
     {
-        array_merge($this->numberedOrderRows, $rows);
+        $this->numberedOrderRows = array_merge($this->numberedOrderRows, $rows);
 
         return $this;
     }
-
-    
 
     /**
      * Use updateInvoiceOrderRows() to update an Invoice order using AdminServiceRequest UpdateOrderRows request
@@ -122,5 +134,10 @@ class UpdateOrderRowsBuilder extends PaymentAdminOrderBuilder
         $this->orderType = ConfigurationProvider::PAYMENTPLAN_TYPE;
 
         return new UpdateOrderRowsRequest($this);
+    }
+
+    public function updateCheckoutOrderRows()
+    {
+        return new UpdateOrderRowsService($this);
     }
 }

@@ -184,7 +184,7 @@ class Helper
         // @todo change this to properly defined information
         $library_properties = array(
             'library_name' => 'PHP Integration Package',
-            'library_version' => '3.0.0',
+            'library_version' => '3.1.0',
         );
 
         return $library_properties;
@@ -294,8 +294,8 @@ class Helper
      *
      * This is a helper function provided to calculate the monthly price for the
      * different payment plan options for a given sum. This information may be
-     * used when displaying i.e. to display the lowest amount due per month to
-     * display on a product level.
+     * used when displaying i.e. payment options to the customer by checkout, or
+     * to display the lowest amount due per month to display on a product level.
      *
      * If the ignoreMaxAndMinFlag is set to true, the returned array also
      * contains the theoretical monthly installments for a given amount, even if
@@ -314,4 +314,14 @@ class Helper
         return new PaymentPlanPricePerMonth($price, $paymentPlanParamsResponseObject, $ignoreMaxAndMinFlag);
     }
 
+    public static function getClientNumber($configProvider, $orderType, $countryCode)
+    {
+        if (isset($GLOBALS['sveaClientNumber'])) {
+            $clientNumber = $GLOBALS['sveaClientNumber'];
+        } else {
+            $clientNumber = $configProvider->getClientNumber($orderType, $countryCode);
+        }
+
+        return $clientNumber;
+    }
 }

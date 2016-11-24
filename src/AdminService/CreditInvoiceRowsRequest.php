@@ -5,6 +5,7 @@ namespace Svea\WebPay\AdminService;
 use Svea\WebPay\AdminService\AdminSoap\Authentication;
 use Svea\WebPay\BuildOrder\CreditOrderRowsBuilder;
 use Svea\WebPay\BuildOrder\Validator\ValidationException;
+use Svea\WebPay\Helper\Helper;
 
 /**
  * Admin Service CreditOrderRowsRequest class
@@ -61,7 +62,7 @@ class CreditInvoiceRowsRequest extends AdminServiceRequest
                 $this->orderBuilder->conf->getUsername(($this->orderBuilder->orderType), $this->orderBuilder->countryCode),
                 $this->orderBuilder->conf->getPassword(($this->orderBuilder->orderType), $this->orderBuilder->countryCode)
             ),
-            $this->orderBuilder->conf->getClientNumber(($this->orderBuilder->orderType), $this->orderBuilder->countryCode),
+            Helper::getClientNumber($this->orderBuilder->conf, $this->orderBuilder->orderType, $this->orderBuilder->countryCode),
             $this->orderBuilder->distributionType,
             $this->orderBuilder->invoiceId,
             $this->orderRows,

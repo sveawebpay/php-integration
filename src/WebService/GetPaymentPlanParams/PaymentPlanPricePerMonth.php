@@ -7,7 +7,8 @@ namespace Svea\WebPay\WebService\GetPaymentPlanParams;
  *
  * This is a helper function provided to calculate the monthly price for the
  * different payment plan options for a given sum. This information may be used
- * when displaying i.e. the lowest amount due per month to display on a product level.
+ * when displaying i.e. payment options to the customer by checkout, or to
+ * display the lowest amount due per month to display on a product level.
  *
  * The returned instance of PaymentPlanPricePerMonth contains an array "values",
  * where each element in turn contains an array of campaign code, description &

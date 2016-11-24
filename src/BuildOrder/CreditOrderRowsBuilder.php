@@ -2,8 +2,8 @@
 
 namespace Svea\WebPay\BuildOrder;
 
+use Svea\WebPay\Checkout\Service\Admin\CreditOrderRowsService;
 use Svea\WebPay\Helper\Helper;
-use Svea\WebPay\Constant\DistributionType;
 use Svea\WebPay\Config\ConfigurationProvider;
 use Svea\WebPay\BuildOrder\RowBuilders\OrderRow;
 use Svea\WebPay\AdminService\CreditInvoiceRowsRequest;
@@ -51,7 +51,7 @@ use Svea\WebPay\HostedService\HostedAdminRequest\CreditTransaction;
  *
  * @author Kristian Grossman-Madsen for Svea Svea\WebPay\WebPay
  */
-class CreditOrderRowsBuilder extends PaymentAdminOrderBuilder
+class CreditOrderRowsBuilder extends CheckoutAdminOrderBuilder
 {
     /**
      * @var ConfigurationProvider $conf
@@ -110,7 +110,7 @@ class CreditOrderRowsBuilder extends PaymentAdminOrderBuilder
      */
     public function __construct($config)
     {
-        parent::__construct($config);
+        $this->conf = $config;
         $this->creditOrderRows = array();
         $this->rowsToCredit = array();
         $this->numberedOrderRows = array();
@@ -185,7 +185,7 @@ class CreditOrderRowsBuilder extends PaymentAdminOrderBuilder
     /**
      * Required for creditInvoiceOrder() -- must match the invoice distribution type for the order
      *
-     * @param string $distributionTypeAsConst - 
+     * @param string $distributionTypeAsConst -
      *                  i.e. Svea\WebPay\Constant\DistributionType::POST|Svea\WebPay\Constant\DistributionType::EMAIL
      * @return $this
      */
@@ -305,7 +305,7 @@ class CreditOrderRowsBuilder extends PaymentAdminOrderBuilder
     public function creditPaymentPlanOrderRows()
     {
         $this->orderType = ConfigurationProvider::PAYMENTPLAN_TYPE;
-        
+
         //Credit Paymentplan request is really cancelPaymentPlanRows but wrapped as creditPaymentPlanRows
         return new CreditPaymentPlanRowsRequest($this);
     }
@@ -332,7 +332,27 @@ class CreditOrderRowsBuilder extends PaymentAdminOrderBuilder
         return $creditTransaction;
     }
 
-    
+    /**
+     * Use creditCheckoutOrderRows() to credit a Checkout order rows
+     * @return CreditOrderRowsService
+     * @throws ValidationException
+     * @throws \Exception
+     */
+    public function creditCheckoutOrderRows()
+    {
+        return new CreditOrderRowsService($this);
+    }
+
+    /**
+     * Use creditCheckoutOrderWithNewOrderRow() to credit a Checkout order with new credit Row
+     * @return CreditOrderRowsService
+     * @throws ValidationException
+     * @throws \Exception
+     */
+    public function creditCheckoutOrderWithNewOrderRow()
+    {
+        return new CreditOrderRowsService($this, true);
+    }
 
     /**
      * Use creditDirectBankOrderRows() to credit a Direct Bank order by the specified order row amounts using HostedRequests CreditTransaction request
@@ -395,8 +415,6 @@ class CreditOrderRowsBuilder extends PaymentAdminOrderBuilder
         }
     }
 
-
-
     /**
      * @param $rowIndexes
      * @param $numberedRows
@@ -408,7 +426,6 @@ class CreditOrderRowsBuilder extends PaymentAdminOrderBuilder
         $sum = 0.0;
         $unique_indexes = array_unique($rowIndexes);
         foreach ($numberedRows as $numberedRow) {
-
             if (in_array($numberedRow->rowNumber, $unique_indexes)) {
                 if ($numberedRow->amountIncVat) {
                     $sum += $numberedRow->quantity * $numberedRow->amountIncVat;

@@ -110,6 +110,8 @@ class ShippingFee
      *
      * Order row item price excluding taxes, expressed as a float value.
      *
+     * This action is not allowed for Checkout payment
+     *
      * @param float $amountAsFloat
      * @return $this
      */

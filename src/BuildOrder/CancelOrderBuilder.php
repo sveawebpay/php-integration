@@ -2,6 +2,7 @@
 
 namespace Svea\WebPay\BuildOrder;
 
+use Svea\WebPay\Checkout\Service\Admin\CancelOrderService;
 use Svea\WebPay\Helper\Helper;
 use Svea\WebPay\Config\ConfigurationProvider;
 use Svea\WebPay\WebService\HandleOrder\CloseOrder;
@@ -22,7 +23,7 @@ use Svea\WebPay\HostedService\HostedAdminRequest\AnnulTransaction;
  *
  * @author Kristian Grossman-Madsen for Svea Svea\WebPay\WebPay
  */
-class CancelOrderBuilder extends PaymentAdminOrderBuilder
+class CancelOrderBuilder extends CheckoutAdminOrderBuilder
 { 
     /**
      * @var ConfigurationProvider $conf
@@ -50,8 +51,7 @@ class CancelOrderBuilder extends PaymentAdminOrderBuilder
      * @param string $transactionIdAsString
      * @return $this
      */
-    public function setTransactionId($transactionIdAsString)
-    {
+    public function setTransactionId($transactionIdAsString) {
         return $this->setOrderId($transactionIdAsString);
     }
 
@@ -67,6 +67,8 @@ class CancelOrderBuilder extends PaymentAdminOrderBuilder
 
         return $this;
     }
+
+
 
     /**
      * Use cancelInvoiceOrder() to close an Invoice order.
@@ -113,4 +115,13 @@ class CancelOrderBuilder extends PaymentAdminOrderBuilder
         return $annulTransaction;
     }
 
+    public function cancelCheckoutOrder()
+    {
+        return new CancelOrderService($this);
+    }
+
+    public function cancelCheckoutOrderAmount()
+    {
+        return new CancelOrderService($this, true);
+    }
 }

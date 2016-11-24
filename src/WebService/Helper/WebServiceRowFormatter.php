@@ -318,9 +318,12 @@ class WebServiceRowFormatter
             $orderRow->VatPercent = $this->calculateVatPercentFromPriceExVatAndPriceIncVat($row->amountIncVat, $row->amountExVat);
             $orderRow->PriceIncludingVat = $this->priceIncludingVat ? TRUE : FALSE;
         }
-        $this->newRows[] = $orderRow;
 
-        return $orderRow;
+        if (!empty($row->name)) {
+            $orderRow->Name = $row->name;
+        }
+
+        $this->newRows[] = $orderRow;
     }
 
     protected function formatInvoiceFeeRows($row)
@@ -359,9 +362,12 @@ class WebServiceRowFormatter
             $orderRow->VatPercent = $this->calculateVatPercentFromPriceExVatAndPriceIncVat($row->amountIncVat, $row->amountExVat);
             $orderRow->PriceIncludingVat = $this->priceIncludingVat ? TRUE : FALSE;
         }
-        $this->newRows[] = $orderRow;
 
-        return $orderRow;
+        if (!empty($row->name)) {
+            $orderRow->Name = $row->name;
+        }
+
+        $this->newRows[] = $orderRow;
     }
 
     protected function formatFixedDiscountRows($row)
@@ -369,15 +375,11 @@ class WebServiceRowFormatter
         // only amountIncVat (i.e. amount) was specified:
         if (isset($row->amount) && !isset($row->vatPercent) && !isset($row->amountExVat)) {
             $this->newRows = array_merge($this->newRows, $this->formatFixedDiscountSpecifiedAsAmountIncVatOnly($row));
-
-            return $row;
         }
 
         // only amountExVat was specified:
         if (!isset($row->amount) && !isset($row->vatPercent) && isset($row->amountExVat)) {
             $this->newRows = array_merge($this->newRows, $this->formatFixedDiscountSpecifiedAsAmountExVatOnly($row));
-
-            return $row;
         }
 
         // amountIncVat (i.e. amount) and vatPercent is set, so we use that vatPercent:
@@ -407,9 +409,11 @@ class WebServiceRowFormatter
             $orderRow->VatPercent = $vatRate;
             $orderRow->PriceIncludingVat = $this->priceIncludingVat ? TRUE : FALSE;
 
-            $this->newRows[] = $orderRow;
+            if (!empty($row->name)) {
+                $orderRow->Name = $row->name;
+            }
 
-            return $orderRow;
+            $this->newRows[] = $orderRow;
         }
 
         // amountExVat (i.e. amount) and vatPercent is set, so we use that vatPercent:
@@ -437,9 +441,11 @@ class WebServiceRowFormatter
             $orderRow->VatPercent = $vatRate;
             $orderRow->PriceIncludingVat = $this->priceIncludingVat ? TRUE : FALSE;
 
-            $this->newRows[] = $orderRow;
+            if (!empty($row->name)) {
+                $orderRow->Name = $row->name;
+            }
 
-            return $orderRow;
+            $this->newRows[] = $orderRow;
         }
     }
 

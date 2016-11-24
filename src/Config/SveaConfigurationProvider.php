@@ -204,4 +204,23 @@ class SveaConfigurationProvider implements ConfigurationProvider
         return $integrationcompany;
     }
 
+    /**
+     * fetch Checkout Merchant id, used for Checkout order type
+     *
+     * @return string
+     */
+    public function getCheckoutMerchantId()
+    {
+        return $this->getCredentialsProperty('checkoutMerchantId', ConfigurationProvider::CHECKOUT, 'SE');
+    }
+
+    /**
+     * fetch Checkout Secret word, used for Checkout order type
+     *
+     * @return string
+     */
+    public function getCheckoutSecret()
+    {
+        return $this->getCredentialsProperty('checkoutSecret', ConfigurationProvider::CHECKOUT, 'SE');
+    }
 }

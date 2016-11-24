@@ -6,6 +6,7 @@ use Svea\WebPay\BuildOrder\QueryOrderBuilder;
 use Svea\WebPay\AdminService\AdminSoap\Authentication;
 use Svea\WebPay\AdminService\AdminSoap\OrdersToRetrieve;
 use Svea\WebPay\AdminService\AdminSoap\GetOrderInformation;
+use Svea\WebPay\Helper\Helper;
 
 /**
  * Handles Admin Webservice GetOrdersRequest
@@ -43,7 +44,7 @@ class GetOrdersRequest extends AdminServiceRequest
             ),
             new OrdersToRetrieve(
                 new GetOrderInformation(
-                    $this->orderBuilder->conf->getClientNumber(($this->orderBuilder->orderType), $this->orderBuilder->countryCode),
+                    Helper::getClientNumber($this->orderBuilder->conf, $this->orderBuilder->orderType, $this->orderBuilder->countryCode),
                     $this->orderBuilder->orderId
                 )
             )

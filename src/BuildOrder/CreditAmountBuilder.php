@@ -3,6 +3,7 @@
 namespace Svea\WebPay\BuildOrder;
 
 use Svea\WebPay\AdminService\CreditAmountRequest;
+use Svea\WebPay\Checkout\Service\Admin\CreditOrderAmountService;
 use Svea\WebPay\Config\ConfigurationProvider;
 use Svea\WebPay\BuildOrder\Validator\ValidationException;
 
@@ -10,7 +11,7 @@ use Svea\WebPay\BuildOrder\Validator\ValidationException;
  * The Svea\WebPay\WebPayAdmin::creditAmount entrypoint method is used to credit an amount in an order after it has
  * been delivered. Supports Payment Plan order.
  */
-class CreditAmountBuilder extends PaymentAdminOrderBuilder
+class CreditAmountBuilder extends CheckoutAdminOrderBuilder
 {
     /**
      * @var ConfigurationProvider $conf
@@ -43,6 +44,10 @@ class CreditAmountBuilder extends PaymentAdminOrderBuilder
      * @var string $description
      */
     public $description;
+
+    public function __construct($config) {
+        $this->conf = $config;
+    }
 
     /**
      * Required
@@ -103,7 +108,7 @@ class CreditAmountBuilder extends PaymentAdminOrderBuilder
     /**
      * Use creditPaymentPlanAmount() to cancel amount to a delivered Payment plan using AdminServiceRequest
      * CreditAmount request
-     * @return CancelAmountRequest
+     * @return CreditAmountRequest
      */
     public function creditPaymentPlanAmount()
     {
@@ -113,5 +118,14 @@ class CreditAmountBuilder extends PaymentAdminOrderBuilder
         return new CreditAmountRequest($this);
     }
 
-    
+    /**
+     * Use creditCheckoutAmount() to cancel amount to a Checkout order
+     * @return CreditOrderAmountService
+     * @throws ValidationException
+     * @throws \Exception
+     */
+    public function creditCheckoutAmount()
+    {
+        return new CreditOrderAmountService($this);
+    }
 }

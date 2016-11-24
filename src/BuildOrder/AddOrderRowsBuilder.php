@@ -3,6 +3,7 @@
 namespace Svea\WebPay\BuildOrder;
 
 use Svea\WebPay\AdminService\AddOrderRowsRequest;
+use Svea\WebPay\Checkout\Service\Admin\AddOrderRowService;
 use Svea\WebPay\Config\ConfigurationProvider;
 use Svea\WebPay\BuildOrder\RowBuilders\OrderRow;
 use Svea\WebPay\BuildOrder\Validator\ValidationException;
@@ -14,7 +15,7 @@ use Svea\WebPay\BuildOrder\Validator\ValidationException;
  * For Invoice and Payment Plan orders, the order row status of the order is updated
  * to reflect the added order rows.
  *
- * Use setOrderId() to specify the Svea order id, this is the order id returned
+ * Use se   tOrderId() to specify the Svea order id, this is the order id returned
  * with the original create order request response.
  *
  * Use setCountryCode() to specify the country code matching the original create
@@ -30,7 +31,7 @@ use Svea\WebPay\BuildOrder\Validator\ValidationException;
  *
  * @author Kristian Grossman-Madsen for Svea Svea\WebPay\WebPay
  */
-class AddOrderRowsBuilder extends PaymentAdminOrderBuilder
+class AddOrderRowsBuilder extends CheckoutAdminOrderBuilder
 {
     /**
      * @var ConfigurationProvider $conf
@@ -67,6 +68,16 @@ class AddOrderRowsBuilder extends PaymentAdminOrderBuilder
     {
         parent::__construct($config);
         $this->orderRows = array();
+    }
+
+    /**
+     * Required. Use SveaOrderId recieved with createOrder response.
+     * @param string $orderIdAsString
+     * @return $this
+     */
+    public function setOrderId($orderIdAsString) {
+        $this->orderId = $orderIdAsString;
+        return $this;
     }
 
     /**
@@ -122,5 +133,14 @@ class AddOrderRowsBuilder extends PaymentAdminOrderBuilder
         return new AddOrderRowsRequest($this);
     }
 
-    
+    /**
+     * Use addCheckoutOrderRows() to add rows to a Checkout order
+     * @return AddOrderRowService
+     * @throws ValidationException
+     * @throws \Exception
+     */
+    public function addCheckoutOrderRows()
+    {
+        return new AddOrderRowService($this);
+    }
 }

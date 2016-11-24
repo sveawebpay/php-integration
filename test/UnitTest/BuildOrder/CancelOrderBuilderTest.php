@@ -78,5 +78,4 @@ class CancelOrderBuilderTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf("Svea\WebPay\HostedService\HostedAdminRequest\AnnulTransaction", $annulTransactionObject);
     }
-
 }

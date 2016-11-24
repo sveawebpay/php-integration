@@ -4,6 +4,8 @@ namespace Svea\WebPay\BuildOrder;
 
 use Svea\WebPay\AdminService\CancelOrderRowsRequest;
 use Svea\WebPay\BuildOrder\RowBuilders\NumberedOrderRow;
+use Svea\WebPay\Checkout\Service\Admin\CancelOrderRowService;
+use Svea\WebPay\Checkout\Service\Admin\CancelOrderService;
 use Svea\WebPay\Helper\Helper;
 use Svea\WebPay\Config\ConfigurationProvider;
 use Svea\WebPay\BuildOrder\Validator\ValidationException;
@@ -36,7 +38,7 @@ use Svea\WebPay\HostedService\HostedAdminRequest\LowerTransaction;
  * Note: if card order rows has been changed (i.e. credited, cancelled) after initial creation,
  * the returned rows may not be accurate.)
  *
- * Then use either cancelInvoiceOrderRows(), cancelPaymentPlanOrderRows or cancelCardOrderRows
+ * Then use either cancelInvoiceOrderRows(), cancelPaymentPlanOrderRows or cancelCardOrderRows,
  * which ever matches the payment method used in the original order request.
  *
  * The final doRequest() will send the queryOrder request to Svea, and the
@@ -44,7 +46,7 @@ use Svea\WebPay\HostedService\HostedAdminRequest\LowerTransaction;
  *
  * @author Kristian Grossman-Madsen for Svea Svea\WebPay\WebPay
  */
-class CancelOrderRowsBuilder extends PaymentAdminOrderBuilder
+class CancelOrderRowsBuilder extends CheckoutAdminOrderBuilder
 {
 
     /**
@@ -85,7 +87,6 @@ class CancelOrderRowsBuilder extends PaymentAdminOrderBuilder
     public function __construct($config)
     {
         parent::__construct($config);
-
         $this->rowsToCancel = array();
         $this->numberedOrderRows = array();
     }
@@ -160,6 +161,17 @@ class CancelOrderRowsBuilder extends PaymentAdminOrderBuilder
     }
 
     /**
+     * Use cancelCheckoutOrderRows() to cancel a Checkout Order
+     * @return CancelOrderRowService
+     * @throws ValidationException
+     * @throws \Exception
+     */
+    public function cancelCheckoutOrderRows()
+    {
+        return new CancelOrderRowService($this);
+    }
+
+    /**
      * Optional - Convenience method to provide several numbered order rows at once.
      *
      * @param \Svea\WebPay\BuildOrder\RowBuilders\NumberedOrderRow[] $numberedOrderRows array of NumberedOrderRow
@@ -171,8 +183,6 @@ class CancelOrderRowsBuilder extends PaymentAdminOrderBuilder
 
         return $this;
     }
-
-   
 
     /**
      * Use cancelCardOrderRows() to lower the amount of a Card order by the specified order row amounts using HostedRequests LowerTransaction request

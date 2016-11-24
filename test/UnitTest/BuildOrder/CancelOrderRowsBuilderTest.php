@@ -112,4 +112,17 @@ class CancelOrderRowsBuilderTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf("Svea\WebPay\HostedService\HostedAdminRequest\LowerTransaction", $request);
     }
+    
+    
+    public function returnProduct()
+    {
+        $mockedNumberedOrderRow = new NumberedOrderRow();
+        $mockedNumberedOrderRow
+            ->setAmountExVat(100.00)// recommended to specify price using AmountExVat & VatPercent
+            ->setVatPercent(25)// recommended to specify price using AmountExVat & VatPercent
+            ->setQuantity(1)// required
+            ->setRowNumber(1);
+
+        return $mockedNumberedOrderRow;
+    }
 }

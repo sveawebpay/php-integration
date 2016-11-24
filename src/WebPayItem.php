@@ -9,7 +9,8 @@ use Svea\WebPay\BuildOrder\RowBuilders\InvoiceFee;
 use Svea\WebPay\BuildOrder\RowBuilders\NumberedOrderRow;
 use Svea\WebPay\BuildOrder\RowBuilders\OrderRow;
 use Svea\WebPay\BuildOrder\RowBuilders\RelativeDiscount;
-use Svea\WebPay\BuildOrder\RowBuilders\ShippingFee; 
+use Svea\WebPay\BuildOrder\RowBuilders\ShippingFee;
+use Svea\WebPay\Checkout\Model\PresetValue;
 
 /**
  * The Svea\WebPay\WebPayItem class provides entrypoint methods to the different row items
@@ -242,5 +243,19 @@ class WebPayItem
     {
         return new CompanyCustomer();
     }
- 
+
+    /**
+     * Use Svea\WebPay\WebPayItem::presetValue() to add individual preset value information to an order
+     *
+     * These information are important for creating order via checkout method
+     *
+     * $presetValue = new Svea\WebPay\WebPay::presetValue()
+     *      ->setValueAs
+     *
+     * @return \Svea\WebPay\Checkout\Model\PresetValue
+     */
+    public static function presetValue()
+    {
+        return new PresetValue();
+    }
 }

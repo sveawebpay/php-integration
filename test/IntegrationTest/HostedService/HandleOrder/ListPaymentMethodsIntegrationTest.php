@@ -19,10 +19,6 @@ class ListPaymentMethodsIntegrationTest extends \PHPUnit_Framework_TestCase
 
     function test_listPaymentMethods_request_success()
     {
-        // Stop here and mark this test as incomplete.
-        $this->markTestIncomplete(
-            'depends on configured payment methods on client'
-        );
 
         $request = new ListPaymentMethods(ConfigurationService::getDefaultConfig());
         $request->countryCode = "SE";

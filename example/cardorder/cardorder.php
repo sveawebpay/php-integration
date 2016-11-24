@@ -7,6 +7,7 @@
 
 require_once '../../vendor/autoload.php';
 
+use Svea\WebPay\Config\ConfigurationService;
 use Svea\WebPay\Constant\PaymentMethod;
 use Svea\WebPay\WebPay;
 use Svea\WebPay\WebPayItem;
@@ -16,7 +17,7 @@ ini_set('display_errors', 'On');
 
 
 // get config object
-$myConfig = \Svea\WebPay\Config\ConfigurationService::getTestConfig(); // add your Svea credentials into config_prod.php or config_test.php file
+$myConfig = ConfigurationService::getTestConfig(); // add your Svea credentials into config_prod.php or config_test.php file
 
 // We assume that you've collected the following information about the order in your shop:
 
@@ -91,7 +92,7 @@ $myCardOrderRequest
 // Get a payment form object which you can use to send the payment request to Svea
 $myCardOrderPaymentForm = $myCardOrderRequest->getPaymentForm();
 
-// Then send the form to Svea, and receive the response on the landingpage after the customer has completed the card payment SveaCardPay
+// Then send the form to Svea, and receive the response on the landingpage after the customer has completed the card checkout SveaCardPay
 echo "<pre>";
 print_r( "press submit to send the card payment request to Svea");
 print_r( $myCardOrderPaymentForm->completeHtmlFormWithSubmitButton );
