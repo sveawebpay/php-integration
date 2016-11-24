@@ -1,4 +1,0 @@
-[submodule "gh-pages"]
-	path = gh-pages
-	url = https://github.com/sveawebpay/php-integration-new.git
-	branch = gh-pages
