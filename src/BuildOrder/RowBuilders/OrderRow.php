@@ -25,6 +25,11 @@ class OrderRow
     public $unit;
 
     /**
+     * @var string $temporaryReference - Option parameter.
+     */
+    public $temporaryReference;
+
+    /**
      * @var float $amountExVat
      */
     public $amountExVat;
@@ -98,10 +103,25 @@ class OrderRow
     }
 
     /**
+     * Optional - Can be used when creating or updating an order.
+     *              The returned rows will have their corresponding temporary reference as they were given in the in-data.
+     *              It will not be stored and will not be returned in GetOrder.
+     * @param $temporaryReference
+     * @return $this
+     */
+    public function setTemporaryReference($temporaryReference)
+    {
+        $this->temporaryReference = $temporaryReference;
+        return $this;
+    }
+
+    /**
      * Recommended - precisely two of these values must be set in the Svea\WebPay\WebPayItem object:  AmountExVat, AmountIncVat or VatPercent for Orderrow.
      * Use functions setAmountExVat(), setAmountIncVat() or setVatPercent(). The recommended is to use setAmountExVat() and setVatPercent().
      *
      * Order row item price excluding taxes, expressed as a float value.
+     *
+     * This action is not allowed for Checkout payment
      *
      * @param float $amountAsFloat
      * @return $this
@@ -171,7 +191,9 @@ class OrderRow
      * Optional - long item description
      *
      * Note that this will be merged with the item name when the request is sent to Svea
-     *     *
+     *
+     * Note: this is not used for Checkout order
+     *
      * @param string $descriptionAsString
      * @return $this
      */

@@ -6,6 +6,7 @@ use Svea\WebPay\BuildOrder\UpdateOrderBuilder;
 use Svea\WebPay\BuildOrder\UpdateOrderRowsBuilder;
 use Svea\WebPay\AdminService\AdminSoap\Authentication;
 use Svea\WebPay\BuildOrder\Validator\ValidationException;
+use Svea\WebPay\Helper\Helper;
 
 /**
  * Admin Service UpdateOrderRequest class
@@ -39,7 +40,7 @@ class UpdateOrderRequest extends AdminServiceRequest
                 $this->orderBuilder->conf->getUsername(($this->orderBuilder->orderType), $this->orderBuilder->countryCode),
                 $this->orderBuilder->conf->getPassword(($this->orderBuilder->orderType), $this->orderBuilder->countryCode)
             ),
-            $this->orderBuilder->conf->getClientNumber(($this->orderBuilder->orderType), $this->orderBuilder->countryCode),
+            Helper::getClientNumber($this->orderBuilder->conf, $this->orderBuilder->orderType, $this->orderBuilder->countryCode),
             AdminServiceRequest::CamelCaseOrderType($this->orderBuilder->orderType),
             $this->orderBuilder->orderId,
             $this->orderBuilder->clientOrderNumber,

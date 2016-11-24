@@ -2,6 +2,7 @@
 
 namespace Svea\WebPay\Test\UnitTest\BuildOrder;
 
+use Svea\WebPay\BuildOrder\RowBuilders\NumberedOrderRow;
 use Svea\WebPay\Config\ConfigurationService;
 use Svea\WebPay\Constant\DistributionType;
 use Svea\WebPay\BuildOrder\DeliverOrderRowsBuilder;
@@ -118,5 +119,18 @@ class DeliverOrderRowsBuilderTest extends \PHPUnit_Framework_TestCase
         ;
 
         $deliverOrderRowsObject->deliverInvoiceOrderRows();
+    }
+
+
+    public function returnProduct()
+    {
+        $mockedNumberedOrderRow = new NumberedOrderRow();
+        $mockedNumberedOrderRow
+            ->setAmountExVat(100.00)// recommended to specify price using AmountExVat & VatPercent
+            ->setVatPercent(25)// recommended to specify price using AmountExVat & VatPercent
+            ->setQuantity(1)// required
+            ->setRowNumber(1);
+
+        return $mockedNumberedOrderRow;
     }
 }

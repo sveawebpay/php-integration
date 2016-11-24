@@ -2,6 +2,7 @@
 
 namespace Svea\WebPay\Test\UnitTest\Config;
 
+use Svea\WebPay\Helper\Helper;
 use Svea\WebPay\WebPay;
 use Svea\WebPay\WebPayItem;
 use Svea\WebPay\Test\TestUtil;
@@ -48,11 +49,11 @@ class SveaConfigTest extends \PHPUnit_Framework_TestCase {
         $this->assertInstanceOf('Svea\WebPay\Config\ConfigurationProvider', $config );
         $this->assertEquals("sverigetest", $config->getUsername(ConfigurationProvider::INVOICE_TYPE, "SE") );
         $this->assertEquals("sverigetest", $config->getPassword(ConfigurationProvider::INVOICE_TYPE, "SE") );
-        $this->assertEquals("79021", $config->getClientNumber(ConfigurationProvider::INVOICE_TYPE, "SE") );
+        $this->assertEquals("79021", Helper::getClientNumber($config, ConfigurationProvider::INVOICE_TYPE, "SE"));
         $this->assertEquals(ConfigurationService::SWP_TEST_WS_URL, $config->getEndPoint(ConfigurationProvider::INVOICE_TYPE));
         $this->assertEquals("sverigetest", $config->getUsername(ConfigurationProvider::PAYMENTPLAN_TYPE, "SE") );
         $this->assertEquals("sverigetest", $config->getPassword(ConfigurationProvider::PAYMENTPLAN_TYPE, "SE") );
-        $this->assertEquals("59999", $config->getClientNumber(ConfigurationProvider::PAYMENTPLAN_TYPE, "SE") );
+        $this->assertEquals("59999", Helper::getClientNumber($config, ConfigurationProvider::PAYMENTPLAN_TYPE, "SE"));
         $this->assertEquals(ConfigurationService::SWP_TEST_WS_URL, $config->getEndPoint(ConfigurationProvider::PAYMENTPLAN_TYPE));
         $this->assertEquals("1130", $config->getMerchantId(ConfigurationProvider::HOSTED_TYPE, "SE"));
         $this->assertEquals($secret, $config->getSecret(ConfigurationProvider::HOSTED_TYPE, "SE"));
@@ -72,11 +73,11 @@ class SveaConfigTest extends \PHPUnit_Framework_TestCase {
         $this->assertInstanceOf('Svea\WebPay\Config\ConfigurationProvider', $config );
         $this->assertEquals("norgetest2", $config->getUsername(ConfigurationProvider::INVOICE_TYPE, "NO") );
         $this->assertEquals("norgetest2", $config->getPassword(ConfigurationProvider::INVOICE_TYPE, "NO") );
-        $this->assertEquals("33308", $config->getClientNumber(ConfigurationProvider::INVOICE_TYPE, "NO") );
+        $this->assertEquals("33308", Helper::getClientNumber($config, ConfigurationProvider::INVOICE_TYPE, "NO"));
         $this->assertEquals(ConfigurationService::SWP_PROD_WS_URL, $config->getEndPoint(ConfigurationProvider::INVOICE_TYPE));
         $this->assertEquals("norgetest2", $config->getUsername(ConfigurationProvider::PAYMENTPLAN_TYPE, "NO") );
         $this->assertEquals("norgetest2", $config->getPassword(ConfigurationProvider::PAYMENTPLAN_TYPE, "NO") );
-        $this->assertEquals("32503", $config->getClientNumber(ConfigurationProvider::PAYMENTPLAN_TYPE, "NO") );
+        $this->assertEquals("32503", Helper::getClientNumber($config, ConfigurationProvider::PAYMENTPLAN_TYPE, "NO"));
         $this->assertEquals(ConfigurationService::SWP_PROD_WS_URL, $config->getEndPoint(ConfigurationProvider::PAYMENTPLAN_TYPE));
         $this->assertEquals("1701", $config->getMerchantId(ConfigurationProvider::HOSTED_TYPE, "NO") );
         $this->assertEquals("foo", $config->getSecret(ConfigurationProvider::HOSTED_TYPE, "NO"));

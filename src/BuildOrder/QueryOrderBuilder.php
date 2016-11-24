@@ -3,6 +3,7 @@
 namespace Svea\WebPay\BuildOrder;
 
 use Svea\WebPay\AdminService\GetOrdersRequest;
+use Svea\WebPay\Checkout\Service\Admin\GetOrderService;
 use Svea\WebPay\Helper\Helper;
 use Svea\WebPay\Config\ConfigurationProvider;
 use Svea\WebPay\HostedService\HostedAdminRequest\QueryTransaction;
@@ -17,12 +18,14 @@ use Svea\WebPay\HostedService\HostedAdminRequest\QueryTransaction;
  * order request.
  *
  * Then get a request object using either queryInvoiceOrder(), queryPaymentPlanOrder(),
- * queryCardOrder(), or queryDirectBankOrder(), and send the query request to svea using the
+ * queryCardOrder(), or queryDirectBankOrder() or for Checkout order
+ * use queryCheckoutOrder() which ever matches the payment method
+ * used in the original order request, and send the query request to svea using the
  * request object doRequest() method.
  *
  * @author Kristian Grossman-Madsen for Svea Svea\WebPay\WebPay
  */
-class QueryOrderBuilder extends PaymentAdminOrderBuilder
+class QueryOrderBuilder extends CheckoutAdminOrderBuilder
 {
     /**
      * @var ConfigurationProvider $conf
@@ -44,13 +47,25 @@ class QueryOrderBuilder extends PaymentAdminOrderBuilder
      */
     public $orderType;
 
+    public function __construct($config) {
+        $this->conf = $config;
+    }
+
+    /**
+     * Required for invoice or part payment orders -- use the order id (transaction id) recieved with the createOrder response.
+     * @param string $orderIdAsString
+     * @return $this
+     */
+    public function setOrderId($orderIdAsString) {
+        $this->orderId = $orderIdAsString;
+        return $this;
+    }
     /**
      * Optional -- alias for setOrderId().
      * @param string $transactionIdAsString
      * @return $this
      */
-    public function setTransactionId($transactionIdAsString)
-    {
+    public function setTransactionId($transactionIdAsString) {
         return $this->setOrderId($transactionIdAsString);
     }
 
@@ -111,5 +126,8 @@ class QueryOrderBuilder extends PaymentAdminOrderBuilder
         return $queryTransaction;
     }
 
-    
+    public function queryCheckoutOrder()
+    {
+        return new GetOrderService($this);
+    }
 }

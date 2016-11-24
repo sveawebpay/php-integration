@@ -17,7 +17,7 @@ ini_set('display_errors', 'On');
 
 
 // get config object
-$myConfig = ConfigurationService::getTestConfig();
+$myConfig = ConfigurationService::getTestConfig(); // add your Svea credentials into config_prod.php or config_test.php file
 
 // We assume that you've collected the following information about the order in your shop:
 

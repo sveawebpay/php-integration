@@ -97,5 +97,17 @@ class NumberedOrderRow extends OrderRow
     {
         $this->status = $status;
         return $this;
-    } 
+    }
+
+    /**
+     * This is alias for setRowNUmber
+     * Optional.
+     * @param int $rowId
+     * @return $this
+     */
+    public function setRowId($rowId)
+    {
+        $this->rowNumber = $rowId;
+        return $this;
+    }
 }

@@ -17,10 +17,6 @@ class GetPaymentMethodIntegrationTest extends \PHPUnit_Framework_TestCase
 
     function testGetAllPaymentMethods()
     {
-        // Stop here and mark this test as incomplete.
-        $this->markTestIncomplete(
-            'depends on configured payment methods on client'
-        );
 
         $config = ConfigurationService::getDefaultConfig();
         $response = WebPay::getPaymentMethods($config)

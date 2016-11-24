@@ -9,7 +9,7 @@ use Svea\WebPay\Config\ConfigurationProvider;
  * Update order in a non-delivered invoice or payment plan order.
  * (Card and Direct Bank orders are not supported.)
  */
-class UpdateOrderBuilder extends PaymentAdminOrderBuilder
+class UpdateOrderBuilder extends CheckoutAdminOrderBuilder
 {
     /**
      * @var ConfigurationProvider $conf
@@ -40,6 +40,20 @@ class UpdateOrderBuilder extends PaymentAdminOrderBuilder
      * @var string $notes
      */
     public $notes = null;
+
+    public function __construct($config) {
+        $this->conf = $config;
+    }
+
+    /**
+     * Required. Use SveaOrderId recieved with createOrder response.
+     * @param string $orderIdAsString
+     * @return $this
+     */
+    public function setOrderId($orderIdAsString) {
+        $this->orderId = $orderIdAsString;
+        return $this;
+    }
 
     /**
      * Required. Use same countryCode as in createOrder request.
@@ -76,8 +90,6 @@ class UpdateOrderBuilder extends PaymentAdminOrderBuilder
 
         return $this;
     }
-
-    
 
     /**
      * Use updateInvoiceOrder() to update an Invoice order using AdminServiceRequest UpdateOrder request

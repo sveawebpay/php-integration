@@ -5,7 +5,8 @@ namespace Svea\WebPay\HostedService\HostedResponse\HostedAdminResponse;
 use SimpleXMLElement;
 use Svea\WebPay\Constant\PaymentMethod;
 use Svea\WebPay\Config\ConfigurationProvider;
-use Svea\WebPay\HostedService\Helper\InvalidTypeException; 
+use Svea\WebPay\Helper\Helper;
+use Svea\WebPay\HostedService\Helper\InvalidTypeException;
 
 /**
  * ListPaymentMethodsResponse handles the getpaymentmethods transaction response
@@ -63,7 +64,7 @@ class ListPaymentMethodsResponse extends HostedAdminResponse
 
         //Add Invoice and Paymentplan. If there is a clientnumber for i.e. invoice, we assume you have invoice payments configured at Svea
         try {
-            $clientIdInvoice = $this->config->getClientNumber(ConfigurationProvider::INVOICE_TYPE, $this->countryCode);
+            $clientIdInvoice = Helper::getClientNumber($this->config, ConfigurationProvider::INVOICE_TYPE, $this->countryCode);
 
             if (is_numeric($clientIdInvoice) && strlen($clientIdInvoice) > 0) {
                 $this->paymentmethods[] = PaymentMethod::INVOICE;
@@ -73,7 +74,7 @@ class ListPaymentMethodsResponse extends HostedAdminResponse
         }
 
         try {
-            $clientIdPaymentPlan = $this->config->getClientNumber(ConfigurationProvider::PAYMENTPLAN_TYPE, $this->countryCode);
+            $clientIdPaymentPlan = Helper::getClientNumber($this->config, ConfigurationProvider::PAYMENTPLAN_TYPE, $this->countryCode);
 
             if (is_numeric($clientIdPaymentPlan) && strlen($clientIdPaymentPlan) > 0) {
                 $this->paymentmethods[] = PaymentMethod::PAYMENTPLAN;

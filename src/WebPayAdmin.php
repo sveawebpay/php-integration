@@ -4,6 +4,7 @@
 namespace Svea\WebPay;
 
 use Svea\WebPay\BuildOrder\QueryOrderBuilder;
+use Svea\WebPay\BuildOrder\QueryTaskInfoBuilder;
 use Svea\WebPay\Config\ConfigurationProvider;
 use Svea\WebPay\BuildOrder\CancelOrderBuilder;
 use Svea\WebPay\BuildOrder\UpdateOrderBuilder;
@@ -80,9 +81,9 @@ class WebPayAdmin
      * @return \Svea\WebPay\BuildOrder\CancelOrderBuilder
      * @throws \Svea\WebPay\BuildOrder\Validator\ValidationException
      */
-    public static function cancelOrder($config = NULL)
+    public static function cancelOrder($config = null)
     {
-        if ($config == NULL) {
+        if ($config == null) {
             self::throwMissingConfigException();
         }
 
@@ -92,7 +93,11 @@ class WebPayAdmin
     /** helper function, throws exception if no config is given */
     private static function throwMissingConfigException()
     {
-        throw new ValidationException('-missing parameter: This method requires an Svea\WebPay\Config\ConfigurationProvider object as parameter. Create a class that implements class Svea\WebPay\Config\ConfigurationProvider. Set returnvalues to configuration values. Create an object from that class. Alternative use static function from class ConfigurationService e.g. ConfigurationService::getDefaultConfig(). You can replace the default config values into config files to return your own config values.');
+        throw new ValidationException('-missing parameter: This method requires an Svea\WebPay\Config\ConfigurationProvider 
+        object as parameter. Create a class that implements class Svea\WebPay\Config\ConfigurationProvider. 
+        Set returnvalues to configuration values. Create an object from that class. 
+        Alternative use static function from class ConfigurationService e.g. ConfigurationService::getDefaultConfig(). 
+        You can replace the default config values into config files to return your own config values.');
     }
 
     /**
@@ -125,9 +130,9 @@ class WebPayAdmin
      * @return \Svea\WebPay\BuildOrder\QueryOrderBuilder
      * @throws \Svea\WebPay\BuildOrder\Validator\ValidationException
      */
-    public static function queryOrder($config = NULL)
+    public static function queryOrder($config = null)
     {
-        if ($config == NULL) {
+        if ($config == null) {
             self::throwMissingConfigException();
         }
 
@@ -174,9 +179,9 @@ class WebPayAdmin
      * @return \Svea\WebPay\BuildOrder\CancelOrderRowsBuilder
      * @throws \Svea\WebPay\BuildOrder\Validator\ValidationException
      */
-    public static function cancelOrderRows($config = NULL)
+    public static function cancelOrderRows($config = null)
     {
-        if ($config == NULL) {
+        if ($config == null) {
             self::throwMissingConfigException();
         }
 
@@ -227,16 +232,16 @@ class WebPayAdmin
      * @return \Svea\WebPay\BuildOrder\CreditOrderRowsBuilder
      * @throws \Svea\WebPay\BuildOrder\Validator\ValidationException
      *
-     * @see \Svea\CreditOrderRowsBuilder \Svea\WebPay\BuildOrder\CreditOrderRowsBuilder
-     * @see \Svea\AdminService\CreditInvoiceRowsResponse \Svea\WebPay\AdminService\AdminServiceResponse\CreditInvoiceRowsResponse
-     * @see \Svea\AdminService\CreditPaymentPlanResponse  \Svea\WebPay\AdminService\AdminServiceResponse\CreditPaymentPlanResponse
-     * @see \Svea\HostedService\CreditTransactionResponse \Svea\WebPay\HostedService\HostedResponse\HostedAdminResponse\CreditTransactionResponse
+     * @see    \Svea\CreditOrderRowsBuilder \Svea\WebPay\BuildOrder\CreditOrderRowsBuilder
+     * @see    \Svea\AdminService\CreditInvoiceRowsResponse \Svea\WebPay\AdminService\AdminServiceResponse\CreditInvoiceRowsResponse
+     * @see    \Svea\AdminService\CreditPaymentPlanResponse  \Svea\WebPay\AdminService\AdminServiceResponse\CreditPaymentPlanResponse
+     * @see    \Svea\HostedService\CreditTransactionResponse \Svea\WebPay\HostedService\HostedResponse\HostedAdminResponse\CreditTransactionResponse
      *
      * @author Kristian Grossman-Madsen for Svea Svea\WebPay\WebPay
      */
-    public static function creditOrderRows($config = NULL)
+    public static function creditOrderRows($config = null)
     {
-        if ($config == NULL) {
+        if ($config == null) {
             self::throwMissingConfigException();
         }
 
@@ -267,9 +272,9 @@ class WebPayAdmin
      *
      * @author  ann-hal for Svea Ekonomi Ab | Svea\WebPay\WebPay
      */
-    public static function creditAmount($config = NULL)
+    public static function creditAmount($config = null)
     {
-        if ($config == NULL) {
+        if ($config == null) {
             self::throwMissingConfigException();
         }
 
@@ -300,9 +305,9 @@ class WebPayAdmin
      * @return \Svea\WebPay\BuildOrder\AddOrderRowsBuilder
      * @throws \Svea\WebPay\BuildOrder\Validator\ValidationException
      */
-    public static function addOrderRows($config = NULL)
+    public static function addOrderRows($config = null)
     {
-        if ($config == NULL) {
+        if ($config == null) {
             self::throwMissingConfigException();
         }
 
@@ -343,16 +348,16 @@ class WebPayAdmin
      *
      * @author Kristian Grossman-Madsen
      *
-     * @see \Svea\UpdateOrderRowsBuilder \Svea\WebPay\BuildOrder\UpdateOrderRowsBuilder
-     * @see \Svea\AdminService\UpdateOrderRowsResponse \Svea\WebPay\AdminService\AdminServiceResponse\UpdateOrderRowsResponse
+     * @see    \Svea\UpdateOrderRowsBuilder \Svea\WebPay\BuildOrder\UpdateOrderRowsBuilder
+     * @see    \Svea\AdminService\UpdateOrderRowsResponse \Svea\WebPay\AdminService\AdminServiceResponse\UpdateOrderRowsResponse
      *
      * @param \Svea\WebPay\Config\ConfigurationProvider $config instance implementing Svea\WebPay\Config\ConfigurationProvider
      * @return \Svea\WebPay\BuildOrder\UpdateOrderRowsBuilder
      * @throws \Svea\WebPay\BuildOrder\Validator\ValidationException
      */
-    public static function updateOrderRows($config = NULL)
+    public static function updateOrderRows($config = null)
     {
-        if ($config == NULL) {
+        if ($config == null) {
             self::throwMissingConfigException();
         }
 
@@ -394,9 +399,9 @@ class WebPayAdmin
      * @return \Svea\WebPay\BuildOrder\UpdateOrderBuilder
      * @throws \Svea\WebPay\BuildOrder\Validator\ValidationException
      */
-    public static function updateOrder($config = NULL)
+    public static function updateOrder($config = null)
     {
-        if ($config == NULL) {
+        if ($config == null) {
             self::throwMissingConfigException();
         }
 
@@ -445,13 +450,42 @@ class WebPayAdmin
      * @return \Svea\WebPay\BuildOrder\DeliverOrderRowsBuilder
      * @throws \Svea\WebPay\BuildOrder\Validator\ValidationException
      */
-    public static function deliverOrderRows($config = NULL)
+    public static function deliverOrderRows($config = null)
     {
-        if ($config == NULL) {
+        if ($config == null) {
             self::throwMissingConfigException();
         }
 
         return new DeliverOrderRowsBuilder($config);
+    }
+
+
+    /**
+     * The Svea\WebPay\WebPayAdmin::queryTaskInfo entry point method is used to retrieve information regarding desired task.
+     *
+     * For Invoice orders, the order row status is updated at Svea following each successful request.
+     *
+     *  ...
+     *      $request = Svea\WebPay\WebPayAdmin::queryTaskInfo($config)
+     *          ->setTaskUrl($taskUrl);
+     *
+     *      // then select the corresponding request class and send request
+     *      $response = $request->queryTaskInfo()->doRequest();       // returns TaskInfoResponse
+     * ...
+     *
+     * @see \Svea\DeliverOrderRowsBuilder \Svea\WebPay\BuildOrder\DeliverOrderRowsBuilder
+     *
+     * @param ConfigurationProvider $config instance implementing Svea\WebPay\Config\ConfigurationProvider
+     * @return \Svea\WebPay\BuildOrder\QueryTaskInfoBuilder
+     * @throws \Svea\WebPay\BuildOrder\Validator\ValidationException
+     */
+    public static function queryTaskInfo($config = null)
+    {
+        if ($config == null) {
+            self::throwMissingConfigException();
+        }
+
+        return new QueryTaskInfoBuilder($config);
     }
 
 }

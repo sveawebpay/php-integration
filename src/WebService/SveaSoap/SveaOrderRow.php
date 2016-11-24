@@ -13,6 +13,7 @@ class SveaOrderRow
     public $PricePerUnit;
     public $NumberOfUnits;
     public $Unit;
+    public $TemporaryReference;
     public $VatPercent;
     public $DiscountPercent;
     public $PriceIncludingVat;

@@ -3,11 +3,13 @@
 
 namespace Svea\WebPay;
 
+use Svea\WebPay\Checkout\CheckoutOrderEntry;
 use Svea\WebPay\BuildOrder\CloseOrderBuilder;
 use Svea\WebPay\Config\ConfigurationProvider;
 use Svea\WebPay\BuildOrder\CreateOrderBuilder;
 use Svea\WebPay\BuildOrder\DeliverOrderBuilder;
 use Svea\WebPay\WebService\GetAddress\GetAddresses;
+use Svea\WebPay\Checkout\Helper\CheckoutOrderBuilder;
 use Svea\WebPay\BuildOrder\Validator\ValidationException;
 use Svea\WebPay\HostedService\HostedAdminRequest\GetPaymentMethods;
 use Svea\WebPay\HostedService\HostedAdminRequest\ListPaymentMethods;
@@ -277,7 +279,22 @@ class WebPay
 
         return new CloseOrderBuilder($config);
     }
- 
+
+    /**
+     * @param null $config
+     * @return CheckoutOrderEntry
+     * @throws \Svea\WebPay\BuildOrder\Validator\ValidationException
+     */
+    public static function checkout($config = null)
+    {
+        if ($config === null) {
+            WebPay::throwMissingConfigException();
+        }
+
+        $checkoutOrderBuilder = new CheckoutOrderBuilder($config);
+
+        return new CheckoutOrderEntry($checkoutOrderBuilder);
+    }
 
     /**
      * The Svea\WebPay\WebPay::listPaymentMethods method is used to fetch all available paymentmethods configured for a given country.

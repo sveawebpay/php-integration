@@ -154,6 +154,8 @@ class FixedDiscount
      * See WebServiceRowFormaterTest, test_FixedDiscount_specified_using_amountExVat_in_order_with_multiple_vat_rates()
      * for an example.
      *
+     * This action is not allowed for Checkout payment
+     *
      * @param float $amountExVatAsFloat
      *
      * @return $this

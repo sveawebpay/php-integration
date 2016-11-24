@@ -1,6 +1,8 @@
 <?php
 
 namespace Svea\WebPay\BuildOrder\Validator;
+use Svea\WebPay\Checkout\Helper\CheckoutOrderBuilder;
+use Svea\WebPay\Checkout\Validation\ExVatRestrictionValidator;
 
 /**
  * OrderValidator is called by prepareRequest and doRequest methods. It checks
@@ -88,6 +90,62 @@ abstract class OrderValidator
 
         return $errors;
     }
- 
- 
+
+    /**
+    * @param $order
+    * @param $errors
+    * @return mixed
+    *
+    * Validate all rows - products and shipping and discount or voucher rows
+    * Because that we use rows instead of orderRows
+    *
+    */
+    protected function validateCheckoutOrderRows($order, $errors)
+    {
+        /**
+         * * @var \Svea\WebPay\BuildOrder\RowBuilders\OrderRow [] $rows
+         */
+        $orderRows = $order->rows;
+
+        if (count($orderRows) === 0) {
+            $orderRows = $order->orderRows;
+        }
+
+        foreach ($orderRows as $row) {
+            if (empty($row->name)) {
+                $errors['missing values'] = "Name must be set in the Svea\\WebPay\\WebPayItem object. Use functions setName().";
+            }
+        }
+
+        return $errors;
+    }
+
+
+    /**
+     * @param CheckoutOrderBuilder $order
+     * @param array $errors
+     * @return array
+     */
+    protected function validateOrderId(CheckoutOrderBuilder $order, $errors)
+    {
+        if (!is_numeric($order->getId()) || !is_int($order->getId())) {
+            $errors['incorrect OrderId'] = "orderId can't be empty and must be int";
+        }
+
+        return $errors;
+    }
+
+
+    /**
+     * @param CheckoutOrderBuilder $order
+     * @param array $errors
+     * @return mixed
+     */
+    public function restrictExVatValue(CheckoutOrderBuilder $order, $errors)
+    {
+        $exVatValidator = new ExVatRestrictionValidator();
+        $errors = $exVatValidator->validate($order, $errors);
+
+        return $errors;
+    }
 }

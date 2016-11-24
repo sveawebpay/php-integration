@@ -3,6 +3,7 @@
 namespace Svea\WebPay\WebService\HandleOrder;
 
 use Svea\WebPay\BuildOrder\CloseOrderBuilder;
+use Svea\WebPay\Helper\Helper;
 use Svea\WebPay\WebService\SveaSoap\SveaAuth;
 use Svea\WebPay\BuildOrder\DeliverOrderBuilder;
 use Svea\WebPay\BuildOrder\Validator\ValidationException;
@@ -59,7 +60,7 @@ abstract class HandleOrder
         return new SveaAuth(
             $this->orderBuilder->conf->getUsername($this->orderBuilder->orderType, $this->orderBuilder->countryCode),
             $this->orderBuilder->conf->getPassword($this->orderBuilder->orderType, $this->orderBuilder->countryCode),
-            $this->orderBuilder->conf->getClientNumber($this->orderBuilder->orderType, $this->orderBuilder->countryCode)
+            Helper::getClientNumber($this->orderBuilder->conf, $this->orderBuilder->orderType, $this->orderBuilder->countryCode)
         );
     } // validate is defined by subclasses, should validate all order fields required for call is present
 }

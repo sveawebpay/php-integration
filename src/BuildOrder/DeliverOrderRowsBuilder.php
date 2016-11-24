@@ -3,11 +3,12 @@
 namespace Svea\WebPay\BuildOrder;
 
 use Svea\WebPay\AdminService\DeliverOrderRowsRequest;
-use Svea\WebPay\Helper\Helper;
+use Svea\WebPay\Checkout\Service\Admin\DeliverOrderService;
 use Svea\WebPay\Constant\DistributionType;
 use Svea\WebPay\Config\ConfigurationProvider;
 use Svea\WebPay\BuildOrder\Validator\ValidationException;
 use Svea\WebPay\HostedService\HostedAdminRequest\LowerTransaction;
+use Svea\WebPay\HostedService\HostedResponse\HostedAdminResponse\ConfirmTransactionResponse;
 
 /**
  * The Svea\WebPay\WebPayAdmin::deliverOrderRows entrypoint method is used to partially deliver an
@@ -45,7 +46,7 @@ use Svea\WebPay\HostedService\HostedAdminRequest\LowerTransaction;
  *
  * @author Kristian Grossman-Madsen for Svea Svea\WebPay\WebPay
  */
-class DeliverOrderRowsBuilder extends PaymentAdminOrderBuilder
+class DeliverOrderRowsBuilder extends CheckoutAdminOrderBuilder
 {
     /**
      * @var ConfigurationProvider $conf
@@ -76,6 +77,8 @@ class DeliverOrderRowsBuilder extends PaymentAdminOrderBuilder
      * @var int[] $rowsToDeliver array of original order row indexes to deliver
      */
     public $rowsToDeliver;
+
+    public $numberedOrderRows;
 
     /**
      * DeliverOrderRowsBuilder constructor.
@@ -252,7 +255,27 @@ class DeliverOrderRowsBuilder extends PaymentAdminOrderBuilder
         return $lowerTransactionRequest;
     }
 
-    
+    /**
+     * Use deliverCheckoutOrderRows() to deliver rows to an Checkout Order.
+     * @return DeliverOrderService
+     * @throws \Svea\WebPay\BuildOrder\Validator\ValidationException
+     * @throws \Exception
+     */
+    public function deliverCheckoutOrderRows()
+    {
+        return new DeliverOrderService($this, true);
+    }
+
+    /**
+     * Use deliverCheckoutOrder() to deliver whole Checkout Order.
+     * @return DeliverOrderService
+     * @throws \Svea\WebPay\BuildOrder\Validator\ValidationException
+     * @throws \Exception
+     */
+    public function deliverCheckoutOrder()
+    {
+        return new DeliverOrderService($this);
+    }
 
     /**
      * @internal

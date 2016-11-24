@@ -41,7 +41,13 @@ interface ConfigurationProvider
     const PREPARED_URL = 'PREPARED';
     const ACCOUNT_TYPE = 'Account';
     const CARD_TYPE = 'Card';
+    const DIRECT_BANK = 'DirectBank';
 
+    /*
+     *  Checkout 
+     */
+    const CHECKOUT = 'CHECKOUT';
+    const CHECKOUT_ADMIN = 'CHECKOUT_ADMIN';
 
     /**
      * fetch username, used with invoice or payment plan (i.e. Svea WebService Europe API)
@@ -101,6 +107,20 @@ interface ConfigurationProvider
      * @param string $type one of Svea\WebPay\Config\ConfigurationProvider::HOSTED_TYPE, ::INVOICE_TYPE, ::PAYMENTPLAN_TYPE, ::HOSTED_ADMIN_TYPE, ::ADMIN_TYPE
      */
     public function getEndPoint($type);
+
+    /**
+     * fetch Checkout Merchant id, used for Checkout order type
+     *
+     * @return string
+     */
+    public function getCheckoutMerchantId();
+
+    /**
+     * fetch Checkout Secret word, used for Checkout order type
+     *
+     * @return string
+     */
+    public function getCheckoutSecret();
 
     /**
      * Use this to provide information about your integration platform (i.e. Magento, OpenCart et al), that will be sent to Svea with every service

@@ -46,7 +46,7 @@ use Svea\WebPay\HostedService\HostedAdminRequest\ConfirmTransaction;
  *
  * @author Kristian Grossman-Madsen, Anneli Halld'n, Daniel Brolund for Svea Webpay
  */
-class DeliverOrderBuilder extends OrderBuilder
+class DeliverOrderBuilder  extends CheckoutAdminOrderBuilder
 {
     /**
      * @var string $orderId order id/transaction id as returned in the createOrder request response,

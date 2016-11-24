@@ -2,17 +2,20 @@
 
 namespace Svea\WebPay\BuildOrder;
 
-use Svea\WebPay\Config\SveaConfigurationProvider;
-use Svea\WebPay\Checkout\Model\CheckoutSubsystemInfo;
-use Svea\WebPay\BuildOrder\Validator\ValidationException;
-use Svea\WebPay\Checkout\Config\CheckoutConfigurationProvider;
-use Svea\WebPay\Checkout\Service\Connection\CheckoutServiceConnection;
-
 /**
  * Class CheckoutAdminOrderBuilder
  * @package Svea
+ *
+ * CheckoutAdminOrderBuilder is the class used as helper to create input data for Checkout Admin functions
+ *
+ * Use setCheckoutOrderId() to specify the Svea Checkout order id, this is the order id returned
+ * with the original create Checkout order request response.
+ *
+ * Use setDeliveryId() to specify the delivery Id. This delivery id is returned on delivery checkout order request
+ *
+ * @author Savo Garovic for Svea WebPay
  */
-class CheckoutAdminOrderBuilder
+class CheckoutAdminOrderBuilder extends OrderBuilder
 {
     /**
      * @var string $orderId
@@ -20,87 +23,11 @@ class CheckoutAdminOrderBuilder
     public $orderId;
 
     /**
-     * @var SveaConfigurationProvider
+     * @var integer $deliveryId
      */
-    public $conf;
+    public $deliveryId;
 
-    /**
-     * @var string $countryCode
-     */
-    public $countryCode;
-
-    /**
-     * CheckoutAdminOrderBuilder constructor.
-     * @param $configProvider
-     */
-    public function __construct($configProvider)
-    {
-        $this->conf = $configProvider;
-    }
-
-    /**
-     * Use Svea orderId to get Checkout subsystem information
-     * Set SveaOrderId instead of checkoutOrderId and override clientId in configuration with subsystem clientId
-     *
-     * @param $sveaOrderId
-     * @return CheckoutSubsystemInfo
-     * @throws \Svea\WebPay\BuildOrder\Validator\ValidationException
-     * @throws \Exception
-     */
-    public function processCheckoutOrderInformation($sveaOrderId)
-    {
-        if (empty($sveaOrderId)) {
-            throw new ValidationException('CheckoutOrderId is required!, use setCheckoutOrderId()');
-        }
-
-        $checkoutServiceConnection = new CheckoutServiceConnection($this->conf, $this->countryCode);
-
-        try {
-            $subsystemInfo = $checkoutServiceConnection->getCheckoutSubsystemInfo($sveaOrderId);
-        } catch (\Exception $ex) {
-            throw new  \Exception($ex->getMessage());
-        }
-
-        $confProvider = $this->conf;
-        $checkoutConfigurationProvider = new CheckoutConfigurationProvider($confProvider->conf);
-        $this->conf = $checkoutConfigurationProvider;
-
-        $this->orderId = $subsystemInfo->getSveaOrderId();
-        $this->setClientNumberConfigurationValue($subsystemInfo->getClientId());
-
-        $transactionId = $subsystemInfo->getTransactionId();
-        if (!empty($transactionId)) {
-            $this->setTransactionId($transactionId);
-        }
-
-        return $subsystemInfo;
-    }
-
-    /**
-     * @param $clientNumber
-     */
-    private function setClientNumberConfigurationValue($clientNumber)
-    {
-        $this->conf->setClientNumber($clientNumber);
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getOrderId()
-    {
-        return $this->orderId;
-    }
-
-    /**
-     * @param mixed $orderId
-     * @return $this
-     */
-    public function setOrderId($orderId)
-    {
-        $this->orderId = $orderId;
-        return $this;
-    }
+    public $amountIncVat;
 
     /**
      * @return string
@@ -108,16 +35,6 @@ class CheckoutAdminOrderBuilder
     public function getCountryCode()
     {
         return $this->countryCode;
-    }
-
-    /**
-     * @param $countryCodeAsString
-     * @return $this
-     */
-    public function setCountryCode($countryCodeAsString)
-    {
-        $this->countryCode = $countryCodeAsString;
-        return $this;
     }
 
     /**
@@ -138,5 +55,35 @@ class CheckoutAdminOrderBuilder
     public function setCheckoutOrderId($checkoutOrderId)
     {
         return $this->setOrderId($checkoutOrderId);
+    }
+
+    /**
+     * @param mixed $orderId
+     * @return $this
+     */
+    public function setOrderId($orderId)
+    {
+        $this->orderId = $orderId;
+        return $this;
+    }
+
+    /**
+     * @param mixed $deliveryId
+     * @return $this
+     */
+    public function setDeliveryId($deliveryId)
+    {
+        $this->deliveryId = $deliveryId;
+        return $this;
+    }
+
+    /**
+     * @param mixed $amountIncVat
+     * @return $this
+     */
+    public function setAmountIncVat($amountIncVat)
+    {
+        $this->amountIncVat = $amountIncVat;
+        return $this;
     }
 }

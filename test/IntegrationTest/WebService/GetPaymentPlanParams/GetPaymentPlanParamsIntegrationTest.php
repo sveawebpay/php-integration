@@ -48,7 +48,7 @@ class GetPaymentPlanParamsIntegrationTest extends PHPUnit_Framework_TestCase
     //outcommented cause need to use client with only one campaign to test
 //    public function testResultGetPaymentPlanParams_only_one_campaign() {
 //
-//        $paymentPlanRequest = new GetPaymentPlanParams(\Svea\WebPay\Config\ConfigurationService::getTestConfig());
+//        $paymentPlanRequest = new GetPaymentPlanParams(Svea\WebPay\Config\ConfigurationService::getTestConfig());
 //        $request = $paymentPlanRequest
 //                ->setCountryCode("SE")
 //                ->doRequest();

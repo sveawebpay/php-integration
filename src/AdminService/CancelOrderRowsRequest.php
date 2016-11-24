@@ -4,6 +4,7 @@ namespace Svea\WebPay\AdminService;
 
 use SoapVar;
 use Svea\WebPay\AdminService\AdminSoap\Authentication;
+use Svea\WebPay\Helper\Helper;
 
 /**
  * Admin Service CancelOrderRowsRequest class
@@ -44,7 +45,7 @@ class CancelOrderRowsRequest extends AdminServiceRequest
                 $this->orderBuilder->conf->getUsername(($this->orderBuilder->orderType), $this->orderBuilder->countryCode),
                 $this->orderBuilder->conf->getPassword(($this->orderBuilder->orderType), $this->orderBuilder->countryCode)
             ),
-            $this->orderBuilder->conf->getClientNumber(($this->orderBuilder->orderType), $this->orderBuilder->countryCode),
+            Helper::getClientNumber($this->orderBuilder->conf, $this->orderBuilder->orderType, $this->orderBuilder->countryCode),
             new SoapVar($orderRowNumbers, SOAP_ENC_OBJECT),
             AdminServiceRequest::CamelCaseOrderType($this->orderBuilder->orderType),
             $this->orderBuilder->orderId
