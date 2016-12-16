@@ -121,14 +121,14 @@ If you wish to run the package test suite, PHPUnit 3.7 is required.
 
 First of run the following command in your command-line interface:
 
-    Composer require svea/webpay
+    Composer require sveaekonomi/webpay
 
 or add this part to your composer.json:
 
 ```json
     {
         "require": {
-            "svea/webpay": "dev-master"
+            "sveaekonomi/webpay": "dev-master"
         }
     }
 ```
