@@ -1879,7 +1879,7 @@ $request = WebPayAdmin::deliverOrderRows($config)
    ->setTransactionId()	            // required if order is card and isn't made in the checkout
    ->setCountryCode()      		    // required
    ->setInvoiceDistributionType()   // required for invoice only
-   ->setRowToDeliver()	   		    // required, index of original order rows you wish to cancel
+   ->setRowToDeliver()	   		    // required, index of original order rows you wish to deliver
    ->addNumberedOrderRow()		    // required for card orders, should match original row indexes
 ;
 // then select the corresponding request class and send request
