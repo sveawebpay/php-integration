@@ -17,8 +17,8 @@ return array(
         'secret' => '8a9cece566e808da63c6f07ff415ff9e127909d000d259aba24daa2fed6d9e3f8b0b62e8ad1fa91c7d7cd6fc3352deaae66cdb533123edf127ad7d1f4c77e7a3'
     ),
     'checkoutCredentials' => array(
-        'checkoutMerchantId' => '100001',
-        'checkoutSecret' => '3862e010913d7c44f104ddb4b2881f810b50d5385244571c3327802e241140cc692522c04aa21c942793c8a69a8e55ca7b6131d9ac2a2ae2f4f7c52634fe30d1',
+        'checkoutMerchantId' => '100002',
+        'checkoutSecret' => '3862e010913d7c44f104ddb4b2881f810b50d5385244571c3327802e241140cc692522c04aa21c942793c8a69a8e55ca7b6131d9ac2a2ae2f4f7c52634fe30d2',
     ),
     'defaultCountryCode' => 'SE',
     'credentials' => array(

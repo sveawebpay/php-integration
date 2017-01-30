@@ -60,16 +60,16 @@ class UpdateOrderRowsService extends AdminImplementationService
         foreach ($rowData as $orderRowKey => $orderRowValue) {
             switch ($orderRowKey) {
                 case 'amountIncVat':
-                    $requestOrderRow['unitPrice'] = intval(Helper::bround($orderRowValue, 2) * 100);
+                    $requestOrderRow['unitPrice'] = intval((string)Helper::bround($orderRowValue, 2) * 100);
                     break;
                 case 'vatPercent':
-                    $requestOrderRow['vatPercent'] = intval(Helper::bround($orderRowValue, 2) * 100);
+                    $requestOrderRow['vatPercent'] = intval((string)Helper::bround($orderRowValue, 2) * 100);
                     break;
                 case 'discountPercent':
-                    $requestOrderRow['discountPercent'] = intval(Helper::bround($orderRowValue, 2) * 100);
+                    $requestOrderRow['discountPercent'] = intval((string)Helper::bround($orderRowValue, 2) * 100);
                     break;
                 case 'quantity':
-                    $requestOrderRow['quantity'] = intval(Helper::bround($orderRowValue, 2) * 100);
+                    $requestOrderRow['quantity'] = intval((string)Helper::bround($orderRowValue, 2) * 100);
                     break;
                 default:
                     $requestOrderRow[$orderRowKey] = $orderRowValue;

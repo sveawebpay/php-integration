@@ -313,15 +313,4 @@ class Helper
     {
         return new PaymentPlanPricePerMonth($price, $paymentPlanParamsResponseObject, $ignoreMaxAndMinFlag);
     }
-
-    public static function getClientNumber($configProvider, $orderType, $countryCode)
-    {
-        if (isset($GLOBALS['sveaClientNumber'])) {
-            $clientNumber = $GLOBALS['sveaClientNumber'];
-        } else {
-            $clientNumber = $configProvider->getClientNumber($orderType, $countryCode);
-        }
-
-        return $clientNumber;
-    }
 }

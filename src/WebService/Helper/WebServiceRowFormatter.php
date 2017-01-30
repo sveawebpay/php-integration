@@ -469,6 +469,10 @@ class WebServiceRowFormatter
                 $orderRow->ArticleNumber = $discountRow->discountId;
             }
 
+            if (!empty($discountRow->name)) {
+                $orderRow->Name = $discountRow->name;
+            }
+
             $orderRow->Description = $this->formatRowNameAndDescription($discountRow);
 
             if (sizeof($this->totalAmountPerVatRateIncVat) > 1) {  // add tax rate for split discount to description
@@ -521,6 +525,11 @@ class WebServiceRowFormatter
             if (isset($discountRow->unit)) {
                 $orderRow->Unit = $discountRow->unit;
             }
+
+            if (!empty($discountRow->name)) {
+                $orderRow->Name = $discountRow->name;
+            }
+
             $orderRow->DiscountPercent = 0; //no discount on discount
             $orderRow->NumberOfUnits = 1; //only one discount per row
 
@@ -560,6 +569,10 @@ class WebServiceRowFormatter
             }
             if (isset($row->unit)) {
                 $orderRow->Unit = $row->unit;
+            }
+
+            if (!empty($row->name)) {
+                $orderRow->Name = $row->name;
             }
 
             $amountAtThisVatRateExVat = $amountAtThisVatRateIncVat - $amountAtThisVatRateIncVat * (1 - (1 / (1 + $vatRate / 100)));   // calculate "reverse vat", i.e. 25% => 20%

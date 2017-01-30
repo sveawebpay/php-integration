@@ -50,7 +50,7 @@ class CreditOrderAmountService extends AdminImplementationService
         );
         $amount = $this->adminBuilder->amountIncVat;
         $minorCreditAmount = Helper::bround($amount, 2) * 100;
-        $requestData['creditedAmount'] = intval($minorCreditAmount);
+        $requestData['creditedAmount'] = intval((string)$minorCreditAmount);
 
         return $requestData;
     }

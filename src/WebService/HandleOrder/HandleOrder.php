@@ -60,7 +60,7 @@ abstract class HandleOrder
         return new SveaAuth(
             $this->orderBuilder->conf->getUsername($this->orderBuilder->orderType, $this->orderBuilder->countryCode),
             $this->orderBuilder->conf->getPassword($this->orderBuilder->orderType, $this->orderBuilder->countryCode),
-            Helper::getClientNumber($this->orderBuilder->conf, $this->orderBuilder->orderType, $this->orderBuilder->countryCode)
+            $this->orderBuilder->conf->getClientNumber($this->orderBuilder->orderType, $this->orderBuilder->countryCode)
         );
     } // validate is defined by subclasses, should validate all order fields required for call is present
 }

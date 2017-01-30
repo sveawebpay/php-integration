@@ -113,7 +113,7 @@ class WebServicePayment
         $auth = new SveaAuth();
         $auth->Username = $this->order->conf->getUsername($this->orderType, $this->order->countryCode);
         $auth->Password = $this->order->conf->getPassword($this->orderType, $this->order->countryCode);
-        $auth->ClientNumber = Helper::getClientNumber($this->order->conf, $this->orderType, $this->order->countryCode);
+        $auth->ClientNumber = $this->order->conf->getClientNumber($this->orderType, $this->order->countryCode);
 
         return $auth;
     }

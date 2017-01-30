@@ -64,7 +64,7 @@ class ListPaymentMethodsResponse extends HostedAdminResponse
 
         //Add Invoice and Paymentplan. If there is a clientnumber for i.e. invoice, we assume you have invoice payments configured at Svea
         try {
-            $clientIdInvoice = Helper::getClientNumber($this->config, ConfigurationProvider::INVOICE_TYPE, $this->countryCode);
+            $clientIdInvoice = $this->config->getClientNumber(ConfigurationProvider::INVOICE_TYPE,  $this->countryCode);
 
             if (is_numeric($clientIdInvoice) && strlen($clientIdInvoice) > 0) {
                 $this->paymentmethods[] = PaymentMethod::INVOICE;
@@ -74,7 +74,7 @@ class ListPaymentMethodsResponse extends HostedAdminResponse
         }
 
         try {
-            $clientIdPaymentPlan = Helper::getClientNumber($this->config, ConfigurationProvider::PAYMENTPLAN_TYPE, $this->countryCode);
+            $clientIdPaymentPlan = $this->config->getClientNumber(ConfigurationProvider::PAYMENTPLAN_TYPE, $this->countryCode);
 
             if (is_numeric($clientIdPaymentPlan) && strlen($clientIdPaymentPlan) > 0) {
                 $this->paymentmethods[] = PaymentMethod::PAYMENTPLAN;

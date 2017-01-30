@@ -66,7 +66,7 @@ class CancelOrderService extends AdminImplementationService
         if ($this->isCancelAmount === true) {
             $amount = $this->adminBuilder->amountIncVat;
             $minorCurrencyAmount = Helper::bround($amount, 2) * 100;
-            $requestData['cancelledAmount'] = intval($minorCurrencyAmount);
+            $requestData['cancelledAmount'] = intval((string)$minorCurrencyAmount);;
         }
 
         return $requestData;

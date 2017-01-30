@@ -109,6 +109,7 @@ class CheckoutRowFormatter extends WebServiceRowFormatter
             $row->PricePerUnit = Helper::bround($row->PricePerUnit, 2) * 100;
         }
 
+        // @todo - check if this should be from 1-100 or like minor currency
         if (isset($row->DiscountPercent)) {
             $row->DiscountPercent = Helper::bround($row->DiscountPercent, 2) * 100;
         }

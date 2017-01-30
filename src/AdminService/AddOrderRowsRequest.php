@@ -51,7 +51,7 @@ class AddOrderRowsRequest extends AdminServiceRequest
                 $this->orderBuilder->conf->getUsername(($this->orderBuilder->orderType), $this->orderBuilder->countryCode),
                 $this->orderBuilder->conf->getPassword(($this->orderBuilder->orderType), $this->orderBuilder->countryCode)
             ),
-            Helper::getClientNumber($this->orderBuilder->conf, $this->orderBuilder->orderType, $this->orderBuilder->countryCode),
+            $this->orderBuilder->conf->getClientNumber(($this->orderBuilder->orderType), $this->orderBuilder->countryCode),
             new SoapVar($orderRows, SOAP_ENC_OBJECT),
             AdminServiceRequest::CamelCaseOrderType($this->orderBuilder->orderType),
             $this->orderBuilder->orderId
