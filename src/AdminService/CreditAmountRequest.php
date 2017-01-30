@@ -50,7 +50,7 @@ class CreditAmountRequest extends AdminServiceRequest
             ),
             $this->orderBuilder->amountIncVat,
             $this->orderBuilder->description,
-            Helper::getClientNumber($this->orderBuilder->conf, $this->orderBuilder->orderType, $this->orderBuilder->countryCode),
+            $this->orderBuilder->conf->getPassword(($this->orderBuilder->orderType), $this->orderBuilder->countryCode),
             $this->orderBuilder->contractNumber
 
         );

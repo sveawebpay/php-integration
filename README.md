@@ -1,6 +1,6 @@
 # Svea PHP Integration Package Documentation
 
-## Version 3.1.0
+## Version 3.1.1
 
 ### Current build status
 | Branch                    received| Build status                               |
@@ -53,15 +53,17 @@
     * [6.6 WebPay::listPaymentMethods()](#i6-6)
     * [6.7 WebPay::checkout()](#i6-7)
 * [7. WebPayAdmin entrypoint method reference](#i7)
-    * [7.1 WebPayAdmin::cancelOrder()](#i7-1)
-    * [7.2 WebPayAdmin::queryOrder()](#i7-2)
-    * [7.3 WebPayAdmin::cancelOrderRows()](#i7-3)
-    * [7.4 WebPayAdmin::creditOrderRows()](#i7-4)
-    * [7.5 WebPayAdmin::addOrderRows()](#i7-5)
-    * [7.6 WebPayAdmin::updateOrderRows()](#i7-6)
-    * [7.7 WebPayAdmin::deliverOrderRows()](#i7-7)
-    * [7.8 WebPayAdmin::updateOrder()](#i7-8)
-    * [7.9 WebPayAdmin::creditAmount()](#i7-9)
+    * [7.1 WebPayAdmin::queryTaskInfo](#i7-1)
+    * [7.2 WebPayAdmin::cancelOrder()](#i7-2)
+    * [7.3 WebPayAdmin::queryOrder()](#i7-3)
+    * [7.4 WebPayAdmin::cancelOrderRows()](#i7-4)
+    * [7.5 WebPayAdmin::creditOrderRows()](#i7-5)
+    * [7.6 WebPayAdmin::addOrderRows()](#i7-6)
+    * [7.7 WebPayAdmin::updateOrderRows()](#i7-7)
+    * [7.8 WebPayAdmin::deliverOrderRows()](#i7-8)
+    * [7.9 WebPayAdmin::updateOrder()](#i7-9)
+    * [7.10 WebPayAdmin::creditAmount()](#i7-10)
+    * [7.11 WebPayAdmin::creditOrderRows()](#i7-11)
 * [8. SveaResponse and response classes](#i8)
     * [8.1. Parsing an asynchronous service response](#i8-1)
     * [8.2. Response accepted and result code](#i8-2)
@@ -137,7 +139,7 @@ and then run this command in your command-line interface:
 
     composer update
 
-Doing this will pull the library into your project and store it in the `vendor` folder with the name `svea`.
+Doing this will pull the library into your project and store it in the `vendor` folder with the name `sveaekonomi`.
 
 When you are working with files that will use the library you need to include `vendor/autoload.php`
 
@@ -1840,7 +1842,7 @@ Calling doRequest() on the request object will send the request to Svea and retu
 ```php
 <?php
 ...
-$request = WebPayAdmin->updateOrderRows($config)
+$request = WebPayAdmin::updateOrderRows($config)
     ->setCheckoutOrderId()  // required if it's a checkout order
     ->setOrderId()		    // required if it's not a checkout order
     ->setCountryCode()      // required

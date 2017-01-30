@@ -44,7 +44,7 @@ class GetOrdersRequest extends AdminServiceRequest
             ),
             new OrdersToRetrieve(
                 new GetOrderInformation(
-                    Helper::getClientNumber($this->orderBuilder->conf, $this->orderBuilder->orderType, $this->orderBuilder->countryCode),
+                    $this->orderBuilder->conf->getClientNumber( ($this->orderBuilder->orderType), $this->orderBuilder->countryCode ),
                     $this->orderBuilder->orderId
                 )
             )

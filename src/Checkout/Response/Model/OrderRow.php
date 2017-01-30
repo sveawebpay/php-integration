@@ -7,44 +7,49 @@ class OrderRow
     const MINOR_CURRENCY = 100;
 
     /**
+     * @var int $rowId
+     */
+    private $rowId;
+
+    /**
      * @var int $articleNumber
      */
-    private $articleNumber;//  = 321
+    private $articleNumber;
 
     /**
      * @var string $name
      */
-    private $name;//  = Fork
+    private $name;
 
     /**
      * @var int $quantity
      */
-    private $quantity;//  = 200
+    private $quantity;
 
     /**
      * @var int $unitPrice
      */
-    private $unitPrice;//  = 1000
+    private $unitPrice;
 
     /**
      * @var int $discountPercent
      */
-    private $discountPercent;//  = 0
+    private $discountPercent;
 
     /**
      * @var int $vatPercent
      */
-    private $vatPercent;//  = 2500
+    private $vatPercent;
 
     /**
      * @var string $unit
      */
-    private $unit;//  =
+    private $unit;
 
     /**
      * @var int $temporaryReference
      */
-    private $temporaryReference;//  = 231
+    private $temporaryReference;
 
 
     public function map($data)
@@ -57,19 +62,21 @@ class OrderRow
         $this->vatPercent = $data['VatPercent'];
         $this->temporaryReference = $data['TemporaryReference'];
         $this->unit = $data['Unit'];
+        $this->rowId = $data['RowNumber'];
     }
 
     public function getRefactoredData()
     {
         return array(
             'ArticleNumber' => $this->articleNumber,
-            'Name'  => $this->name,
-            'Quantity'  => $this->quantity / $this::MINOR_CURRENCY,
+            'Name' => $this->name,
+            'Quantity' => $this->quantity / $this::MINOR_CURRENCY,
             'UnitPrice' => $this->unitPrice / $this::MINOR_CURRENCY,
             'VatPercent' => $this->vatPercent / $this::MINOR_CURRENCY,
             'DiscountPercent' => $this->discountPercent,
             'Unit' => $this->unit,
-            'TemporaryReference'    => $this->temporaryReference,
+            'TemporaryReference' => $this->temporaryReference,
+            'RowId' => $this->rowId
         );
     }
 }

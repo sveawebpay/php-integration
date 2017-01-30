@@ -184,7 +184,7 @@ class Helper
         // @todo change this to properly defined information
         $library_properties = array(
             'library_name' => 'PHP Integration Package',
-            'library_version' => '3.1.0',
+            'library_version' => '3.1.1',
         );
 
         return $library_properties;
@@ -312,16 +312,5 @@ class Helper
     public static function paymentPlanPricePerMonth($price, $paymentPlanParamsResponseObject, $ignoreMaxAndMinFlag = false)
     {
         return new PaymentPlanPricePerMonth($price, $paymentPlanParamsResponseObject, $ignoreMaxAndMinFlag);
-    }
-
-    public static function getClientNumber($configProvider, $orderType, $countryCode)
-    {
-        if (isset($GLOBALS['sveaClientNumber'])) {
-            $clientNumber = $GLOBALS['sveaClientNumber'];
-        } else {
-            $clientNumber = $configProvider->getClientNumber($orderType, $countryCode);
-        }
-
-        return $clientNumber;
     }
 }

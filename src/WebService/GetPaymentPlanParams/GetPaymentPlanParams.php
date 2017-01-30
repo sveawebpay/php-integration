@@ -69,7 +69,7 @@ class GetPaymentPlanParams
         $auth = new SveaAuth(
             $this->conf->getUsername(ConfigurationProvider::PAYMENTPLAN_TYPE, $this->countryCode),
             $this->conf->getPassword(ConfigurationProvider::PAYMENTPLAN_TYPE, $this->countryCode),
-            Helper::getClientNumber($this->conf, ConfigurationProvider::PAYMENTPLAN_TYPE, $this->countryCode)
+            $this->conf->getClientNumber(ConfigurationProvider::PAYMENTPLAN_TYPE, $this->countryCode)
         );
 
         $object = new SveaRequest();

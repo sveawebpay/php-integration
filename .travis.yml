@@ -18,4 +18,4 @@ branches:
 script: phpunit
 
 before_script:
-  - composer update --no-dev
+  - composer install --no-dev

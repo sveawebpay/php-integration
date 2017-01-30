@@ -57,8 +57,10 @@ class UpdateOrderRowValidator extends OrderValidator
                     $errors['bad discount percent'] = "Discount percent must be integer in value range of 0-99";
                 }
             }
-            if (!is_float($row->amountIncVat) && $row->amountIncVat !== 0) {
-                $errors['missing values'] = "This function support only amountIncVat you need to use ->setAmountIncVat()";
+            if (isset($row->amountIncVat)) {
+                if (!is_float($row->amountIncVat) && $row->amountIncVat !== 0) {
+                    $errors['missing values'] = "amountIncVat is not of type float.";
+                }
             }
         }
 

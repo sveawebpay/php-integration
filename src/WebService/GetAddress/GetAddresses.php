@@ -185,7 +185,7 @@ class GetAddresses
         $auth = new SveaAuth(
             $this->conf->getUsername($this->orderType, $this->countryCode),
             $this->conf->getPassword($this->orderType, $this->countryCode),
-            Helper::getClientNumber($this->conf, $this->orderType, $this->countryCode)
+            $this->conf->getClientNumber($this->orderType, $this->countryCode)
         );
 
         $address = new SveaAddress(
@@ -254,7 +254,7 @@ class GetAddresses
             try {
                 $u = $this->conf->getUsername($orderType, $this->countryCode);
                 $p = $this->conf->getPassword($orderType, $this->countryCode);
-                $c = Helper::getClientNumber($this->conf, $orderType, $this->countryCode);
+                $c = $this->conf->getClientNumber($orderType, $this->countryCode);
             } catch (InvalidTypeException $e) {         // thrown if no config found
                 // go on
             }
@@ -266,7 +266,7 @@ class GetAddresses
             try {
                 $u = $this->conf->getUsername($orderType, $this->countryCode);
                 $p = $this->conf->getPassword($orderType, $this->countryCode);
-                $c = Helper::getClientNumber($this->conf, $orderType, $this->countryCode);
+                $c = $this->conf->getClientNumber($orderType, $this->countryCode);
             } catch (InvalidTypeException $e) {
                 return null;                                // i.e. will throw exception in validation
             }

@@ -1,6 +1,7 @@
 To update gh-pages documentation.
-1. Make changes in index.md
-2. Commit and push.
+1. Change location to branch gh-pages. Note! cd gh-pages, not checkout gh-pages
+2. Make changes in index.md
+3. Commit and push.
 The changes will be included in the next release.
 
 if gh-pages is empty when cloning repo:
@@ -8,6 +9,7 @@ if gh-pages is empty when cloning repo:
 git submodule update --init gh-pages
 2. In the gh-pages repo
 git pull -u origin gh-pages
+git checkout gh-pages
 
 
 

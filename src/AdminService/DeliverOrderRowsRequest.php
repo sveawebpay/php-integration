@@ -52,7 +52,7 @@ class DeliverOrderRowsRequest extends AdminServiceRequest
             $this->orderBuilder->distributionType,
 
             new OrderToDeliver(
-                Helper::getClientNumber($this->orderBuilder->conf, $this->orderBuilder->orderType, $this->orderBuilder->countryCode),
+                $this->orderBuilder->conf->getClientNumber(($this->orderBuilder->orderType), $this->orderBuilder->countryCode),
                 AdminServiceRequest::CamelCaseOrderType($this->orderBuilder->orderType),
                 $this->orderBuilder->orderId
             ),

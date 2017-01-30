@@ -102,9 +102,9 @@ class CreditOrderRowsService extends AdminImplementationService
 
             $requestData['newCreditRow'] = array(
                 'name' => $orderRow->name,
-                'quantity' => intval(Helper::bround($orderRow->quantity, 2) * 100),
-                'unitPrice' => intval(Helper::bround($orderRow->amountIncVat, 2) * 100),
-                'vatPercent' => intval(Helper::bround($orderRow->vatPercent, 2) * 100)
+                'quantity'   => intval((string)Helper::bround($orderRow->quantity, 2) * 100),
+                'unitPrice'  => intval((string)Helper::bround($orderRow->amountIncVat, 2) * 100),
+                'vatPercent' => intval((string)Helper::bround($orderRow->vatPercent, 2) * 100)
             );
         }
 

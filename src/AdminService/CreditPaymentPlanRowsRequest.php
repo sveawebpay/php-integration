@@ -53,7 +53,7 @@ class CreditPaymentPlanRowsRequest extends AdminServiceRequest
                 $this->orderBuilder->conf->getPassword(($this->orderBuilder->orderType), $this->orderBuilder->countryCode)
             ),
             $this->orderRows,
-            Helper::getClientNumber($this->orderBuilder->conf, $this->orderBuilder->orderType, $this->orderBuilder->countryCode),
+            $this->orderBuilder->conf->getClientNumber(($this->orderBuilder->orderType), $this->orderBuilder->countryCode),
             $this->orderBuilder->contractNumber
         );
 

@@ -41,7 +41,7 @@ class CancelOrderRequest extends AdminServiceRequest {
                 ),
                 $this->orderBuilder->orderId, 
                 AdminServiceRequest::CamelCaseOrderType( $this->orderBuilder->orderType ),
-                Helper::getClientNumber($this->orderBuilder->conf, $this->orderBuilder->orderType, $this->orderBuilder->countryCode)
+                $this->orderBuilder->conf->getPassword(($this->orderBuilder->orderType), $this->orderBuilder->countryCode)
         );
         
         return $soapRequest;
