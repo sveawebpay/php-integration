@@ -1,5 +1,6 @@
 {
   "name": "sveaekonomi/webpay",
+  "version": "3.1.1",
   "description": "Php integration library for webpay and admin functionality.",
   "license": "Apache-2.0",
   "authors": [
