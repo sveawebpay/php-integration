@@ -752,7 +752,7 @@ merchantSettings, Customer and the Gui for the checkout.
 |-------------------------------|----------------------|-------------|
 | MerchantSettings              | MerchantSettings     | Specific merchant URIs |
 | Cart                          | Cart                 | A cart-object containing the OrderRows |
-| Gui                           | Gui                  | See Gui data structure in the [*connection library*](https://github.com/sveawebpay/php-checkout-integration) |
+| Gui                           | Gui                  | See Gui data structure in the [*connection library*](https://github.com/sveawebpay/php-checkout) |
 | Customer                      | Customer             | Identified Customer of the order. |
 | ShippingAddress               | Address              | Shipping Address of identified customer. |
 | BillingAddress                | Address              | Billing Address of identified customer. |
@@ -767,7 +767,7 @@ merchantSettings, Customer and the Gui for the checkout.
 | PhoneNumber                   | String               | The customer’s phone number |
 | PaymentType                   | String               | The final payment method for the order. Will only have a value when the order is locked, otherwise null. |
 
-See section 7 in the [*connection library*](https://github.com/sveawebpay/php-checkout-integration) for more details regarding the data structures.
+See section 7 in the [*connection library*](https://github.com/sveawebpay/php-checkout) for more details regarding the data structures.
 
 Sample response
 ```
@@ -1519,7 +1519,7 @@ The WebPayAdmin class methods are used to administrate orders after they have be
 
 When administrating orders that are made through the checkout you set the CheckoutOrderId instead of using the sveaOrderId or TransactionID. Use [7.3 WebPayAdmin::queryOrder](#i7-3) in order to find out which actions that can be performed on a checkout order. The examples assumes that the action can be performed on that order.
 
-All response objects from the checkout can be find in the [*connection library*](https://github.com/sveawebpay/php-checkout-integration).
+All response objects from the checkout can be find in the [*connection library*](https://github.com/sveawebpay/php-checkout).
 
 See all full examples in the example folder.
 
@@ -1909,7 +1909,7 @@ Calling doRequest() on the request object will send the request to Svea and retu
 ```php
 <?php
 ...
-$request = WebPayAdmin.updateOrder($config)
+$request = WebPayAdmin::updateOrder($config)
     ->setOrderId()		     // required for invoice and payment plan orders made without the checkout
     ->setCountryCode()       // required
     ->setClientOrderNumber() // optional String(32)
@@ -2004,7 +2004,7 @@ All synchronous Payment responses returns a SveaResponse object.
 
 All Asynchronous responses from the payment gateway returns xml, but can be parsed and MAC validated through the SveaResponse class.
 
-All response objects from the checkout can be find in the [*connection library*](https://github.com/sveawebpay/php-checkout-integration).
+All response objects from the checkout can be find in the [*connection library*](https://github.com/sveawebpay/php-checkout).
 
 ### 8.1. Parsing an asynchronous service response <a name="i8-1"></a>
 All synchronous Payment service request responses are parsed by *SveaResponse* and structured into response objects by the request method itself. You do not need to invoke the SveaResponse object to for synchronous service requests.
