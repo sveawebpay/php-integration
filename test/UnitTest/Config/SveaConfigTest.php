@@ -42,19 +42,28 @@ class SveaConfigTest extends \PHPUnit_Framework_TestCase {
                 null, // SE
                 null, null, null, //invoice 79021
                 null, null, null, //partpayment 59999
+                null, null, null, //accountCredit 58702
                 null, null, // merchantid 1130
                 null // test
         );        
 
         $this->assertInstanceOf('Svea\WebPay\Config\ConfigurationProvider', $config );
+
         $this->assertEquals("sverigetest", $config->getUsername(ConfigurationProvider::INVOICE_TYPE, "SE") );
         $this->assertEquals("sverigetest", $config->getPassword(ConfigurationProvider::INVOICE_TYPE, "SE") );
         $this->assertEquals("79021", $config->getClientNumber(ConfigurationProvider::INVOICE_TYPE, "SE"));
         $this->assertEquals(ConfigurationService::SWP_TEST_WS_URL, $config->getEndPoint(ConfigurationProvider::INVOICE_TYPE));
+
         $this->assertEquals("sverigetest", $config->getUsername(ConfigurationProvider::PAYMENTPLAN_TYPE, "SE") );
         $this->assertEquals("sverigetest", $config->getPassword(ConfigurationProvider::PAYMENTPLAN_TYPE, "SE") );
         $this->assertEquals("59999", $config->getClientNumber(ConfigurationProvider::PAYMENTPLAN_TYPE, "SE"));
         $this->assertEquals(ConfigurationService::SWP_TEST_WS_URL, $config->getEndPoint(ConfigurationProvider::PAYMENTPLAN_TYPE));
+
+        $this->assertEquals("sverigetest", $config->getUsername(ConfigurationProvider::ACCOUNTCREDIT_TYPE, "SE") );
+        $this->assertEquals("sverigetest", $config->getPassword(ConfigurationProvider::ACCOUNTCREDIT_TYPE, "SE") );
+        $this->assertEquals("58702", $config->getClientNumber(ConfigurationProvider::ACCOUNTCREDIT_TYPE, "SE"));
+        $this->assertEquals(ConfigurationService::SWP_TEST_WS_URL, $config->getEndPoint(ConfigurationProvider::ACCOUNTCREDIT_TYPE));
+
         $this->assertEquals("1130", $config->getMerchantId(ConfigurationProvider::HOSTED_TYPE, "SE"));
         $this->assertEquals($secret, $config->getSecret(ConfigurationProvider::HOSTED_TYPE, "SE"));
         $this->assertEquals(ConfigurationService::SWP_TEST_URL, $config->getEndPoint(ConfigurationProvider::HOSTED_TYPE));
@@ -66,6 +75,7 @@ class SveaConfigTest extends \PHPUnit_Framework_TestCase {
                 "NO",
                 "norgetest2", "norgetest2", "33308",
                 "norgetest2", "norgetest2", "32503",
+                "sverigetest", "sverigetest", "58702",
                 "1701", "foo",
                 true // $prod = true
         );        
@@ -79,6 +89,10 @@ class SveaConfigTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals("norgetest2", $config->getPassword(ConfigurationProvider::PAYMENTPLAN_TYPE, "NO") );
         $this->assertEquals("32503", $config->getClientNumber(ConfigurationProvider::PAYMENTPLAN_TYPE, "NO"));
         $this->assertEquals(ConfigurationService::SWP_PROD_WS_URL, $config->getEndPoint(ConfigurationProvider::PAYMENTPLAN_TYPE));
+        $this->assertEquals("sverigetest", $config->getUsername(ConfigurationProvider::ACCOUNTCREDIT_TYPE, "NO") );
+        $this->assertEquals("sverigetest", $config->getPassword(ConfigurationProvider::ACCOUNTCREDIT_TYPE, "NO") );
+        $this->assertEquals("58702", $config->getClientNumber(ConfigurationProvider::ACCOUNTCREDIT_TYPE, "NO"));
+        $this->assertEquals(ConfigurationService::SWP_PROD_WS_URL, $config->getEndPoint(ConfigurationProvider::ACCOUNTCREDIT_TYPE));
         $this->assertEquals("1701", $config->getMerchantId(ConfigurationProvider::HOSTED_TYPE, "NO") );
         $this->assertEquals("foo", $config->getSecret(ConfigurationProvider::HOSTED_TYPE, "NO"));
         $this->assertEquals(ConfigurationService::SWP_PROD_URL, $config->getEndPoint(ConfigurationProvider::HOSTED_TYPE));
@@ -92,6 +106,7 @@ class SveaConfigTest extends \PHPUnit_Framework_TestCase {
                 null, // SE
                 null, null, null, //invoice 79021
                 null, null, null, //partpayment 59999
+                null, null, null, //accountcredit 58702
                 null, null, // merchantid 1130
                 null // test
         );        

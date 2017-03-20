@@ -3,6 +3,7 @@
 namespace Svea\WebPay\BuildOrder;
 
 use Svea\WebPay\HostedService\Payment\CardPayment;
+use Svea\WebPay\WebService\Payment\AccountCredit;
 use Svea\WebPay\WebService\Payment\InvoicePayment;
 use Svea\WebPay\HostedService\Payment\DirectPayment;
 use Svea\WebPay\HostedService\Payment\PayPagePayment;
@@ -57,6 +58,24 @@ class CreateOrderBuilder extends OrderBuilder
         $this->sendAutomaticGiroPaymentForm = $sendAutomaticGiroPaymentFormAsBool;
 
         return new PaymentPlanPayment($this);
+    }
+
+    /**
+     * Use useAccountCredit to initate a Account Credit payment.
+     *
+     * You can use Svea\WebPay\WebPay::getAccountCreditParams() to get available campaign codes (payment plans).
+     *
+     *
+     * @see \WebPay::getAccountCreditParams() Svea\WebPay\WebPay::getAccountCreditParams()
+     *
+     * @param string $campaignCode
+     * @return AccountCredit
+     */
+    public function useAccountCredit($campaignCode)
+    {
+        $this->campaignCode = $campaignCode;
+
+        return new AccountCredit($this);
     }
 
     /**
@@ -131,7 +150,7 @@ class CreateOrderBuilder extends OrderBuilder
      */
     public function run($func)
     {
-        $func($this);
+        call_user_func($func, $this);
 
         return $this;
     }

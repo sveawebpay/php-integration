@@ -69,6 +69,18 @@ class QueryOrderBuilderTest extends \PHPUnit_Framework_TestCase
 
     }
 
+    public function test_queryOrderBuilder_queryAccountCreditOrder_returns_GetOrdersRequest_with_correct_orderType()
+    {
+        $orderId = "123456";
+        $paymentMethod = ConfigurationProvider::ACCOUNTCREDIT_TYPE;   // todo check these ws ConfigProvicer::ACCOUNTCREDIT_TYPE et al...
+
+        $queryOrderObject = $this->queryOrderObject->setOrderId($orderId)->queryAccountCreditOder();
+
+        $this->assertInstanceOf("Svea\WebPay\AdminService\GetOrdersRequest", $queryOrderObject);
+        $this->assertEquals($paymentMethod, $queryOrderObject->orderBuilder->orderType);
+
+    }
+
     public function test_queryOrderBuilder_queryCardOrder_returns_QueryTransaction()
     {
         $orderId = "123456";

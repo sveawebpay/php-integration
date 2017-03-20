@@ -34,6 +34,11 @@ return array(
                 'password' => '',
                 'clientNumber' => ''
             ),
+            ConfigurationProvider::ACCOUNTCREDIT_TYPE => array(
+                'username' => '',
+                'password' => '',
+                'clientNumber' => ''
+            ),
             ConfigurationProvider::CHECKOUT => array(
                 'username' => '',
                 'password' => ''
@@ -49,6 +54,11 @@ return array(
                 'username' => '',
                 'password' => '',
                 'clientNumber' => ''
+            ),
+            ConfigurationProvider::ACCOUNTCREDIT_TYPE => array(
+                'username' => '',
+                'password' => '',
+                'clientNumber' => ''
             )
         ),
         'FI' => array(
@@ -58,6 +68,11 @@ return array(
                 'clientNumber' => ''
             ),
             ConfigurationProvider::PAYMENTPLAN_TYPE => array(
+                'username' => '',
+                'password' => '',
+                'clientNumber' => ''
+            ),
+            ConfigurationProvider::ACCOUNTCREDIT_TYPE => array(
                 'username' => '',
                 'password' => '',
                 'clientNumber' => ''
@@ -73,6 +88,11 @@ return array(
                 'username' => '',
                 'password' => '',
                 'clientNumber' => ''
+            ),
+            ConfigurationProvider::ACCOUNTCREDIT_TYPE => array(
+                'username' => '',
+                'password' => '',
+                'clientNumber' => ''
             )
         ),
         'NL' => array(
@@ -85,6 +105,11 @@ return array(
                 'username' => '',
                 'password' => '',
                 'clientNumber' => ''
+            ),
+            ConfigurationProvider::ACCOUNTCREDIT_TYPE => array(
+                'username' => '',
+                'password' => '',
+                'clientNumber' => ''
             )
         ),
         'DE' => array(
@@ -94,6 +119,11 @@ return array(
                 'clientNumber' => ''
             ),
             ConfigurationProvider::PAYMENTPLAN_TYPE => array(
+                'username' => '',
+                'password' => '',
+                'clientNumber' => ''
+            ),
+            ConfigurationProvider::ACCOUNTCREDIT_TYPE => array(
                 'username' => '',
                 'password' => '',
                 'clientNumber' => ''

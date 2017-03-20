@@ -71,14 +71,19 @@ class ConfigurationService
      * @param string $paymentPlanUsername
      * @param string $paymentPlanPassword
      * @param string $paymentPlanClientNo
+     * @param string $accountCreditUsername
+     * @param string $accountCreditPassword
+     * @param string $accountCreditClientNo
      * @param string $merchantId
      * @param string $secret
      * @param bool $prod
      * @return SveaConfigurationProvider
      */
     public static function getSingleCountryConfig(
-        $countryCode, $invoiceUsername, $invoicePassword, $invoiceClientNo,
+        $countryCode,
+        $invoiceUsername, $invoicePassword, $invoiceClientNo,
         $paymentPlanUsername, $paymentPlanPassword, $paymentPlanClientNo,
+        $accountCreditUsername, $accountCreditPassword, $accountCreditClientNo,
         $merchantId, $secret, $prod)
     {
         $prod = ($prod == null) ? false : $prod;
@@ -104,6 +109,11 @@ class ConfigurationService
         $paymentPlanPassword = ($paymentPlanPassword == null) ? $configPerPPType['password'] : $paymentPlanPassword;
         $paymentPlanClientNo = ($paymentPlanClientNo == null) ? $configPerPPType['clientNumber'] : $paymentPlanClientNo;
 
+        $configPerAccCredType = $configPerCountry[ConfigurationProvider::ACCOUNTCREDIT_TYPE];
+        $accountCreditUsername = ($accountCreditUsername == null) ? $configPerAccCredType['username'] : $accountCreditUsername;
+        $accountCreditPassword = ($accountCreditPassword == null) ? $configPerAccCredType['password'] : $accountCreditPassword;
+        $accountCreditClientNo = ($accountCreditClientNo == null) ? $configPerAccCredType['clientNumber'] : $accountCreditClientNo;
+
         $merchantId = ($merchantId == null) ? $defaultMerchantId : $merchantId;
         $secret = ($secret == null) ? $defaultSecretWord : $secret;
 
@@ -119,6 +129,11 @@ class ConfigurationService
                     "username" => $paymentPlanUsername,
                     "password" => $paymentPlanPassword,
                     "clientNumber" => $paymentPlanClientNo
+                ),
+                ConfigurationProvider::ACCOUNTCREDIT_TYPE => array(
+                    "username" => $accountCreditUsername,
+                    "password" => $accountCreditPassword,
+                    "clientNumber" => $accountCreditClientNo
                 ),
                 ConfigurationProvider::HOSTED_TYPE => array(
                     "merchantId" => $merchantId,
@@ -191,6 +206,7 @@ class ConfigurationService
             ConfigurationProvider::HOSTED_TYPE => self::SWP_TEST_URL,
             ConfigurationProvider::INVOICE_TYPE => self::SWP_TEST_WS_URL,
             ConfigurationProvider::PAYMENTPLAN_TYPE => self::SWP_TEST_WS_URL,
+            ConfigurationProvider::ACCOUNTCREDIT_TYPE => self::SWP_TEST_WS_URL,
             ConfigurationProvider::HOSTED_ADMIN_TYPE => self::SWP_TEST_HOSTED_ADMIN_URL,
             ConfigurationProvider::ADMIN_TYPE => self::SWP_TEST_ADMIN_URL,
             ConfigurationProvider::PREPARED_URL => self::SWP_TEST_PREPARED_URL,
@@ -205,6 +221,7 @@ class ConfigurationService
             ConfigurationProvider::HOSTED_TYPE => self::SWP_PROD_URL,
             ConfigurationProvider::INVOICE_TYPE => self::SWP_PROD_WS_URL,
             ConfigurationProvider::PAYMENTPLAN_TYPE => self::SWP_PROD_WS_URL,
+            ConfigurationProvider::ACCOUNTCREDIT_TYPE => self::SWP_PROD_WS_URL,
             ConfigurationProvider::HOSTED_ADMIN_TYPE => self::SWP_PROD_HOSTED_ADMIN_URL,
             ConfigurationProvider::ADMIN_TYPE => self::SWP_PROD_ADMIN_URL,
             ConfigurationProvider::PREPARED_URL => self::SWP_PROD_PREPARED_URL,

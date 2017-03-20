@@ -216,6 +216,20 @@ class DeliverOrderRowsBuilder extends CheckoutAdminOrderBuilder
     }
 
     /**
+     * Use deliverAccountCreditOrderRows() to deliver rows to an AccountCredit order using AdminServiceRequest DeliverOrderRows
+     * request
+     * @return DeliverOrderRowsRequest
+     */
+    public function deliverAccountCreditOrderRows()
+    {
+        $this->orderType = ConfigurationProvider::ACCOUNTCREDIT_TYPE;
+
+        $this->validateDeliverInvoiceOrderRows();
+
+        return new DeliverOrderRowsRequest($this);
+    }
+
+    /**
      * Use deliverCardOrderRows() to deliver rows to an Card order using HostedService requests.
      *
      * Then use deliverInvoiceOrderRows() or deliver CardOrderRows to get a request object,

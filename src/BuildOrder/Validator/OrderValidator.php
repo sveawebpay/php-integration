@@ -56,8 +56,8 @@ abstract class OrderValidator
                 }
 
                 // force correct order type of present attributes, see class OrderRow 
-                if (isset($row->vatDiscount) && !is_int($row->vatDiscount))
-                    $errors['incorrect datatype'] = "vatDiscount is not of type int.";
+                if (isset($row->vatDiscount) && !(is_int($row->vatDiscount) || is_float($row->vatDiscount)))
+                    $errors['incorrect datatype'] = "vatDiscount is not of type int or float.";
 
                 if (isset($row->articleNumber) && !is_string($row->articleNumber))
                     $errors['incorrect datatype'] = 'articleNumber is not of type string.';
@@ -68,11 +68,11 @@ abstract class OrderValidator
                 if (isset($row->unit) && !is_string($row->unit))
                     $errors['incorrect datatype'] = 'unit is not of type string.';
 
-                if (isset($row->amountExVat) && !is_float($row->amountExVat))
-                    $errors['incorrect datatype'] = 'amountExVat is not of type float.';
+                if (isset($row->amountExVat) && !(is_int($row->amountExVat) || is_float($row->amountExVat)))
+                    $errors['incorrect datatype'] = 'amountExVat is not of type float or int.';
 
-                if (isset($row->amountIncVat) && !is_float($row->amountIncVat))
-                    $errors['incorrect datatype'] = 'amountIncVat is not of type float.';
+                if (isset($row->amountIncVat) && !(is_int($row->amountIncVat) || is_float($row->amountIncVat)))
+                    $errors['incorrect datatype'] = 'amountIncVat is not of type float or int.';
 
                 if (isset($row->name) && !is_string($row->name))
                     $errors['incorrect datatype'] = 'name is not of type string.';
@@ -80,10 +80,10 @@ abstract class OrderValidator
                 if (isset($row->description) && !is_string($row->description))
                     $errors['incorrect datatype'] = 'description is not of type string.';
 
-                if (isset($row->vatPercent) && !is_int($row->vatPercent))
+                if (isset($row->vatPercent) && !(is_int($row->vatPercent) || is_float($row->vatPercent)))
                     $errors['incorrect datatype'] = "vatPercent is not of type int.";
 
-                if (isset($row->discountPercent) && !is_int($row->discountPercent))
+                if (isset($row->discountPercent) && !(is_int($row->discountPercent) || is_float($row->discountPercent)))
                     $errors['incorrect datatype'] = "discountPercent is not of type int.";
             }
         }

@@ -59,6 +59,19 @@ class DeliverOrderRowsBuilderTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf("Svea\WebPay\AdminService\deliverOrderRowsRequest", $deliverOrderRowsObject);
     }
 
+    public function test_deliverOrderRowsBuilder_deliverAccountCreditRowsBuilder_returns_deliverOrderRowsRequest()
+    {
+        $deliverOrderRowsObject = $this->deliverOrderRowsObject
+            ->setCountryCode("SE")
+            ->setOrderId(123456)
+            ->setInvoiceDistributionType(DistributionType::POST)
+            ->setRowTodeliver(1)
+            ->deliverAccountCreditOrderRows();
+
+        $this->assertInstanceOf("Svea\WebPay\AdminService\deliverOrderRowsRequest", $deliverOrderRowsObject);
+    }
+
+
     /// validations
 
     public function test_deliverInvoiceOrderRows_throws_ValidationException_on_missing_setCountryCode()

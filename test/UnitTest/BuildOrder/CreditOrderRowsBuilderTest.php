@@ -156,4 +156,13 @@ class CreditOrderRowsBuilderTest extends \PHPUnit_Framework_TestCase
 
         return $mockedNumberedOrderRow;
     }
+
+    public function test_if_creditAccountCreditOrderRows_returns_appropriate_class()
+    {
+        $orderId = "123456";
+        $creditOrderRowsObject = $this->creditOrderRowsObject->setOrderId($orderId)->creditPaymentPlanOrderRows();
+
+        $this->assertInstanceOf("Svea\WebPay\AdminService\CreditPaymentPlanRowsRequest", $creditOrderRowsObject);
+    }
+
 }

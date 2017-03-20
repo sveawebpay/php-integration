@@ -14,6 +14,7 @@ class ConfigurationProviderTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals("sverigetest", $config->getPassword("PaymentPlan","SE"));
         $this->assertEquals("16997", $config->getClientNumber("PaymentPlan","DE"));
         $this->assertEquals("1130", $config->getMerchantId("HOSTED", "NL"));
+        $this->assertEquals("58702", $config->getClientNumber("AccountCredit", "SE"));
         $this->assertEquals("https://webservices.sveaekonomi.se/webpay_test/SveaWebPay.asmx?WSDL", $config->getEndPoint("Invoice"));
     }
 }

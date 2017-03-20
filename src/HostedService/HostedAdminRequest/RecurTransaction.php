@@ -32,6 +32,11 @@ class RecurTransaction extends HostedRequest
      */
     public $amount;
 
+    /**
+     * @var string $vat Required. Use minor currency (i.e. 25% => 2500 in minor currency)
+     */
+    public $vat;
+
     /** 
      * @var string $currency Optional. 
      */
@@ -98,6 +103,9 @@ class RecurTransaction extends HostedRequest
         $XMLWriter->writeElement("amount", $this->amount);
         $XMLWriter->writeElement("customerrefno", $this->customerRefNo);
         $XMLWriter->writeElement("subscriptionid", $this->subscriptionId);
+        if (isset($this->vat)) {
+            $XMLWriter->writeElement("vat", $this->vat);
+        }
         if (isset($this->currency)) {
             $XMLWriter->writeElement("currency", $this->currency);
         }

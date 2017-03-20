@@ -5,6 +5,7 @@ namespace Svea\WebPay\BuildOrder;
 use Svea\WebPay\Constant\DistributionType;
 use Svea\WebPay\Config\ConfigurationProvider;
 use Svea\WebPay\AdminService\DeliverOrdersRequest;
+use Svea\WebPay\WebService\HandleOrder\DeliverAccountCredit;
 use Svea\WebPay\WebService\HandleOrder\DeliverInvoice;
 use Svea\WebPay\WebService\HandleOrder\DeliverPaymentPlan;
 use Svea\WebPay\HostedService\HostedAdminRequest\ConfirmTransaction;
@@ -76,7 +77,7 @@ class DeliverOrderBuilder  extends CheckoutAdminOrderBuilder
 
     /**
      * @var string
-     * \Svea\WebPay\Config\ConfigurationProvider::INVOICE_TYPE, ::PAYMENTPLAN_TYPE or ::HOSTED_TYPE
+     * \Svea\WebPay\Config\ConfigurationProvider::INVOICE_TYPE, ::PAYMENTPLAN_TYPE, ::ACCOUNTCREDIT_TYPE or ::HOSTED_TYPE
      */
     public $orderType;
 
@@ -210,6 +211,22 @@ class DeliverOrderBuilder  extends CheckoutAdminOrderBuilder
         $this->distributionType = DistributionType::POST;
 
         return new DeliverPaymentPlan($this);
+    }
+
+    /**
+     * deliverAccountCreditOrder prepares the AccountPlan order for delivery.
+     * @return DeliverAccountCredit
+     */
+    public function deliverAccountCreditOrder()
+    {
+        if (count($this->orderRows) > 0) {
+            return new DeliverInvoice($this);
+        } else {
+            $this->orderType = ConfigurationProvider::ACCOUNTCREDIT_TYPE;
+
+            return new DeliverOrdersRequest($this);
+        }
+
     }
 
     /**

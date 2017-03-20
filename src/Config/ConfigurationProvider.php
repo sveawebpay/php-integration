@@ -42,6 +42,7 @@ interface ConfigurationProvider
     const ACCOUNT_TYPE = 'Account';
     const CARD_TYPE = 'Card';
     const DIRECT_BANK = 'DirectBank';
+    const ACCOUNTCREDIT_TYPE = 'AccountCredit';
 
     /*
      *  Checkout 

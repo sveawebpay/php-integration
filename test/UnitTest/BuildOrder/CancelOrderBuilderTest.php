@@ -78,4 +78,14 @@ class CancelOrderBuilderTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf("Svea\WebPay\HostedService\HostedAdminRequest\AnnulTransaction", $annulTransactionObject);
     }
+
+    public function test_CancelOrderBuilder_AccountCredit_returns_CloseOrder_with_correct_orderType()
+    {
+        $orderId = "123456";
+
+        $closeOrderObject = $this->cancelOrderObject->setOrderId($orderId)->cancelAccountCreditOrder();
+
+        $this->assertInstanceOf("Svea\WebPay\WebService\HandleOrder\CloseOrder", $closeOrderObject);
+        $this->assertEquals(ConfigurationProvider::ACCOUNTCREDIT_TYPE, $closeOrderObject->orderBuilder->orderType);
+    }
 }

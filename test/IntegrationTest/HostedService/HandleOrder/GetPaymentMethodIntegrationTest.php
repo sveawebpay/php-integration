@@ -17,6 +17,7 @@ class GetPaymentMethodIntegrationTest extends \PHPUnit_Framework_TestCase
 
     function testGetAllPaymentMethods()
     {
+        $this->markTestSkipped("deprecated function.");
 
         $config = ConfigurationService::getDefaultConfig();
         $response = WebPay::getPaymentMethods($config)

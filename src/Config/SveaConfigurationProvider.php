@@ -36,7 +36,7 @@ class SveaConfigurationProvider implements ConfigurationProvider
     }
 
     /**
-     * @param string $type one of { \Svea\WebPay\Config\ConfigurationProvider::HOSTED_TYPE, ::INVOICE_TYPE, ::PAYMENTPLAN_TYPE }
+     * @param string $type one of { \Svea\WebPay\Config\ConfigurationProvider::HOSTED_TYPE, ::INVOICE_TYPE, ::PAYMENTPLAN_TYPE, ::ACCOUNTCREDIT_TYPE }
      * @param string $country
      * @return string
      * @throws Exception
@@ -48,7 +48,9 @@ class SveaConfigurationProvider implements ConfigurationProvider
 
     /**
      * @param string $property
-     * @param ConfigurationProvider ::HOSTED_TYPE | ConfigurationProvider::INVOICE_TYPE | ConfigurationProvider::PAYMENTPLAN_TYPE $type
+     * @param ConfigurationProvider ::HOSTED_TYPE | ConfigurationProvider::INVOICE_TYPE
+     *                                            | ConfigurationProvider::PAYMENTPLAN_TYPE
+     *                                            | ConfigurationProvider::ACCOUNTCREDIT_TYPE $type
      * @param string $country
      * @return string
      * @throws Exception
@@ -105,7 +107,7 @@ class SveaConfigurationProvider implements ConfigurationProvider
     }
 
     /**
-     * @param string $type one of { \Svea\WebPay\Config\ConfigurationProvider::HOSTED_TYPE, ::INVOICE_TYPE, ::PAYMENTPLAN_TYPE }
+     * @param string $type one of { \Svea\WebPay\Config\ConfigurationProvider::HOSTED_TYPE, ::INVOICE_TYPE, ::PAYMENTPLAN_TYPE, ::ACCOUNTCREDIT_TYPE }
      * @param string $country
      * @return string
      * @throws Exception
@@ -116,7 +118,7 @@ class SveaConfigurationProvider implements ConfigurationProvider
     }
 
     /**
-     * @param string $type one of { \Svea\WebPay\Config\ConfigurationProvider::HOSTED_TYPE, ::INVOICE_TYPE, ::PAYMENTPLAN_TYPE }
+     * @param string $type one of { \Svea\WebPay\Config\ConfigurationProvider::HOSTED_TYPE, ::INVOICE_TYPE, ::PAYMENTPLAN_TYPE, ::ACCOUNTCREDIT_TYPE }
      * @param string $country
      * @return string
      * @throws Exception
@@ -127,7 +129,7 @@ class SveaConfigurationProvider implements ConfigurationProvider
     }
 
     /**
-     * @param string $type one of { \Svea\WebPay\Config\ConfigurationProvider::HOSTED_TYPE, ::INVOICE_TYPE, ::PAYMENTPLAN_TYPE }
+     * @param string $type one of { \Svea\WebPay\Config\ConfigurationProvider::HOSTED_TYPE, ::INVOICE_TYPE, ::PAYMENTPLAN_TYPE, ::ACCOUNTCREDIT_TYPE }
      * @param string $country
      * @return string
      * @throws Exception
@@ -138,7 +140,7 @@ class SveaConfigurationProvider implements ConfigurationProvider
     }
 
     /**
-     * @param string $type one of { ConfigurationProvider::HOSTED_TYPE, ::INVOICE_TYPE, ::PAYMENTPLAN_TYPE }
+     * @param string $type one of { ConfigurationProvider::HOSTED_TYPE, ::INVOICE_TYPE, ::PAYMENTPLAN_TYPE, ::ACCOUNTCREDIT_TYPE }
      * @param string $country
      * @return string
      * @throws Exception
@@ -149,7 +151,7 @@ class SveaConfigurationProvider implements ConfigurationProvider
     }
 
     /**
-     * @param string $type one of { ConfigurationProvider::HOSTED_TYPE, ::INVOICE_TYPE, ::PAYMENTPLAN_TYPE, ::HOSTED_ADMIN_TYPE, ::ADMIN_TYPE}
+     * @param string $type one of { ConfigurationProvider::HOSTED_TYPE, ::INVOICE_TYPE, ::PAYMENTPLAN_TYPE,, ::ACCOUNTCREDIT_TYPE ::HOSTED_ADMIN_TYPE, ::ADMIN_TYPE}
      * @return string
      * @throws Exception
      */

@@ -1,6 +1,6 @@
 # Svea PHP Integration Package Documentation
 
-## Version 3.1.1
+## Version 3.2.0
 
 ### Current build status
 | Branch                    received| Build status                               |
@@ -33,7 +33,8 @@
     * [4.4 Direct bank payment](#i4-4)
     * [4.5 Using the Svea PayPage](#i4-5)
     * [4.6 Svea Checkout](#i4-6)
-    * [4.7 Examples](#i4-7)
+    * [4.7 Account Credit](#i4-7)
+    * [4.8 Examples](#i4-8)
 * [5. WebPayItem reference](#i5)
     * [5.1 Specifying item price](#i5-1)
     * [5.2 WebPayItem::orderRow()](#i5-2)
@@ -51,7 +52,8 @@
     * [6.4 WebPay::getPaymentPlanParams()](#i6-4)
     * [6.5 WebPay::paymentPlanPricePerMonth()](#i6-5)
     * [6.6 WebPay::listPaymentMethods()](#i6-6)
-    * [6.7 WebPay::checkout()](#i6-7)
+    * [6.7 WebPay::getAccountCreditParams()](#i6-7)
+    * [6.8 WebPay::checkout()](#i6-8)
 * [7. WebPayAdmin entrypoint method reference](#i7)
     * [7.1 WebPayAdmin::queryTaskInfo](#i7-1)
     * [7.2 WebPayAdmin::cancelOrder()](#i7-2)
@@ -641,7 +643,9 @@ If you set preset values, the values will be populated in the checkout gui form 
 ```
 
 #### 4.6.1.2 Order Rows
-
+To be able to connect the Svea order row Id with your order row id you can use the setTemporaryReference function.
+The Svea order row id will be returned in the create order response.
+By setting the setTemporaryReference you will also get the temporary reference in the response.
 
 ```php
     <?php
@@ -655,7 +659,7 @@ If you set preset values, the values will be populated in the checkout gui form 
         ->setQuantity(1)
         ->setDiscountPercent(20)
         ->setArticleNumber('123')
-        ->setTemporaryReference('230') // optional
+        ->setTemporaryReference('230') // optional. Checkout orders only. Will not be applicable for other order types.
         ->setName('Fork');
 
     $secondBoughtItem = WebPayItem::orderRow()
@@ -664,7 +668,7 @@ If you set preset values, the values will be populated in the checkout gui form 
         ->setQuantity(2)
         ->setDescription('Korv med bröd')
         ->setArticleNumber('321')
-        ->setTemporaryReference('231') // optional
+        ->setTemporaryReference('231') // optional. Checkout orders only. Will not be applicable for other order types.
         ->setName('Fork');
 
     $discountItem = WebPayItem::fixedDiscount()
@@ -731,7 +735,7 @@ Returns full order response.
         ->setQuantity(1)
         ->setDescription("Billy")
         ->setArticleNumber("123456789A")
-        ->setTemporaryReference('230') // optional
+        ->setTemporaryReference('230') // optional. Checkout orders only. Will not be applicable for other order types.
         ->setName('Fork');
 
     $secondBoughtItem = WebPayItem::orderRow()
@@ -740,7 +744,7 @@ Returns full order response.
         ->setQuantity(2)
         ->setDescription("Korv med bröd")
         ->setArticleNumber("123456789B")
-        ->setTemporaryReference('231') // optional
+        ->setTemporaryReference('231') // optional. Checkout orders only. Will not be applicable for other order types.
         ->setName('Fork');
 
     $orderBuilder->addOrderRow($firstBoughtItem);
@@ -844,20 +848,47 @@ When your server receives a callback it's a notification that something has chan
 
 [Back to top](#index)
 
+### 4.7 Account Credit <a name="i4-7"></a>
 
-### 4.7 Examples  <a name="i4-7"></a>
+Select ->useAccountCredit() to perform an accountCredit payment.
 
-#### 4.7.1 Svea checkout order
+```php
+<?php
+...
+$order = WebPay::createOrder($config);
+$order
+    ->addOrderRow( ...                      // required, one or more
+    ->addCustomerDetails( ...               // required, individualCustomer or companyCustomer
+    ->setCountryCode("SE")                  // required* Optional for hosted payments when using implementation of ConfigurationProvider Interface
+    ->setCurrency("SEK")                    // required
+    ->setOrderDate("2012-12-12")            // required
+;
+$request = $order->useAccountCredit("111111");     // required campaign code, see example for getting campaigns
+$response = $request->doRequest();
+...
+```
+
+Another complete, runnable example of an invoice order can be found in the <a href="http://github.com/sveawebpay/php-integration/blob/master/example/accountcredit/" target="_blank">example/accountcredit</a> folder.
+
+
+
+### 4.8 Examples  <a name="i4-8"></a>
+
+#### 4.8.1 Svea checkout order
 Full Checkout examples order can be found in the [example/checkout](example/checkout) folder.
 
-#### 4.7.2 Svea invoice order
+#### 4.8.2 Svea invoice order
 An example of a synchronous (invoice) order can be found in the [example/invoiceorder](example/invoiceorder) folder.
 
-#### 4.7.3 Card order
+#### 4.8.3 Card order
 An example of an asynchronous card order can be found in the [example/cardorder](example/cardorder) folder.
 
-#### 4.7.4 Recurring card order
+#### 4.8.4 Recurring card order
 An example of an recurring card order, both the setup transaction and a recurring payment, can be found in the [example/cardorder_recur](example/cardorder_recur) folder.
+
+#### 4.8.5 Svea Account Credit
+An example of an recurring card order, both the setup transaction and a recurring payment, can be found in the [example/accoutncredit(example/accoutncredit) folder.
+
 
 [Back to top](#index)
 
@@ -1173,10 +1204,10 @@ provide more information about the transaction using DeliverOrderBuilder methods
 <?php
 ...
 $request = WebPay::deliverOrder($config)
-   ->setOrderId()                  // invoice or payment plan only, required
+   ->setOrderId()                  // invoice, payment plan and accountCredit only - required
    ->setTransactionId()            // card only, optional, alias for setOrderId
    ->setCountryCode()              // required
-   ->setInvoiceDistributionType()  // invoice only, required
+   ->setInvoiceDistributionType()  // invoice only and accountCredit, required
    ->setNumberOfCreditDays()       // invoice only, optional
    ->setCaptureDate()              // card only, optional
    ->addOrderRow()                 // deprecated, optional -- use WebPayAdmin::deliverOrderRows instead
@@ -1186,6 +1217,7 @@ $request = WebPay::deliverOrder($config)
 $response = $request->deliverInvoiceOrder()->doRequest();       // returns DeliverOrdersResponse (no rows) or DeliverOrderResult (with rows)
 $response = $request->deliverPaymentPlanOrder()->doRequest();   // returns DeliverOrdersResponse (no rows) or DeliverOrderResult (with rows)
 $response = $request->deliverCardOrder()->doRequest();          // returns ConfirmTransactionResponse
+$response = $request->deliverAccountCreditOrder()->doRequest(); // returns DeliverOrderResponse
 ...
 ```
 
@@ -1385,13 +1417,14 @@ $response = $request->getIndividualAddresses()->doRequest();    // returns GetAd
 $response = $request->getCompanyAddresses()->doRequest();       // returns GetAddressesResponse
 ```
 
-#### 6.3.3 getAddresses request example (old style, deprecated)
+#### 6.3.3 getAddresses request example
 ```php
 <?php
 $response = WebPay::getAddresses( $config )
    ->setCountryCode("SE")                  // Required -- supply the country code that corresponds to the account credentials used
    ->setOrderTypeInvoice()                 // Required -- use invoice account credentials for getAddresses lookup
-   ->setIndividual("194605092222")         // Required -- lookup the address of a private individual
+   ->setCustomerIdentifier("194605092222") // Required -- lookup the address
+   ->getIndividualAddresses()              // get private individual address
    ->doRequest();
    ;
 ```
@@ -1458,10 +1491,27 @@ $methods = WebPay::listPaymentMethods( $config )
 ```
 Following the ->doRequest call you receive an instance of ListPaymentMethodsResponse.
 
-### 6.7 WebPay::checkout() <a name="i6-7"></a>
+### 6.7 WebPay::getAccountCreditParams() <a name="i6-7"></a>
+The WebPay::getAccountCreditParams method is used to fetch all available campaigns for configured country
+
+#### 6.7.1 Usage
+
+```php
+<?php
+...
+
+$campaigns = WebPay::getAccountCreditParams( $config )
+    ->setCountryCode('SE')  // required
+    ->doRequest();
+...
+```
+Following the ->doRequest call you receive an instance of AccountCreditParamsResponse.
+
+
+### 6.8 WebPay::checkout() <a name="i6-7"></a>
 The WebPay::checkout method is used to call all available Svea Checkout functionality.
 
-#### 6.7.1 Creating orders
+#### 6.8.1 Creating orders
 Use the WebPay::checkout()->createOrder() method to create a new Checkout order.
 
 ```php
@@ -1580,6 +1630,7 @@ $response = $request->cancelInvoiceOrder()->doRequest();        // returns Close
 $response = $request->cancelPaymentPlanOrder()->doRequest();    // returns CloseOrderResponse
 $response = $request->cancelCardOrder()->doRequest();           // returns AnnulTransactionResponse
 $response = $request->cancelCheckoutOrder()->doRequest();       // returns empty content for valid response
+$response = $request->cancelAccountCreditOrder()->doRequest();  // returns CloseOrderResponse
 ...
 ```
 
@@ -1620,6 +1671,7 @@ $response = $request->queryPaymentPlanOrder()->doRequest(); // returns GetOrders
 $response = $request->queryCardOrder()->doRequest();        // returns QueryTransactionResponse
 $response = $request->queryDirectBankOrder()->doRequest();  // returns QueryTransactionResponse
 $response = $request->queryCheckoutOrder()->doRequest();    // returns formatted array response with order information
+$response = $request->queryAccountCreditOrder()->doRequest(); // returns GetOrderResponse
 ...
 ```
 
@@ -1731,7 +1783,7 @@ $request = WebPayAdmin::creditOrderRows($config)
   ->setInvoiceId()                // required for invoice
   ->setInvoiceDistributionType()  // required for invoice
   ->setContractNumber()           // required for payment plan
-  ->setOrderId()                  // required for card and direct bank
+  ->setOrderId()                  // required for card, direct bank and accountCredit
   ->setCountryCode()              // required
   ->addCreditOrderRow()           // optional, use to specify a new credit row, i.e. for amounts not present in the original order
   ->addCreditOrderRows()          // optional
@@ -1746,6 +1798,8 @@ $response = $request->creditPaymentplanOrderRows()->doRequest(); // returns Cred
 $response = $request->creditCardOrderRows()->doRequest();        // returns CreditTransactionResponse
 $response = $request->creditDirectBankOrderRows()->doRequest();  // returns CreditTransactionResponse
 $response = $request->creditCheckoutOrderRows()->doRequest();
+$response = $request->creditAccountCreditOrderRows()->doRequest(); // returns CreditIOrderRowsResponse
+
 ...
 ```
 
@@ -1782,7 +1836,7 @@ when doing the createOrder request, and use for this purpose.
 For invoice orders, the server-side order rows is updated after a creditOrderRows request.
 Note that for Card and Direct bank orders the server-side order rows will not be updated.
 
-Then use either creditInvoiceOrderRows(), creditPaymentPlanOrderRows(), creditCardOrderRows() or
+Then use either creditInvoiceOrderRows(),creditAccountCreditOrderRows(), creditPaymentPlanOrderRows(), creditCardOrderRows() or
 creditDirectBankOrderRows() to get a request object, which ever matches the
 payment method used in the original order.
 

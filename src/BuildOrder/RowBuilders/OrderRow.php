@@ -106,6 +106,7 @@ class OrderRow
      * Optional - Can be used when creating or updating an order.
      *              The returned rows will have their corresponding temporary reference as they were given in the in-data.
      *              It will not be stored and will not be returned in GetOrder.
+     * Checkout orders only. Will not be applicable for other order types.
      * @param $temporaryReference
      * @return $this
      */

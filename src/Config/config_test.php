@@ -33,6 +33,11 @@ return array(
                 'password' => 'sverigetest',
                 'clientNumber' => 59999
             ),
+            ConfigurationProvider::ACCOUNTCREDIT_TYPE => array(
+                'username' => 'sverigetest',
+                'password' => 'sverigetest',
+                'clientNumber' => 58702
+            ),
             ConfigurationProvider::CHECKOUT => array(
                 'username' => 'sverigetest',
                 'password' => 'sverigetest'
@@ -48,6 +53,11 @@ return array(
                 'username' => 'norgetest2',
                 'password' => 'norgetest2',
                 'clientNumber' => 32503
+            ),
+            ConfigurationProvider::ACCOUNTCREDIT_TYPE => array(
+                'username' => '',
+                'password' => '',
+                'clientNumber' => ''
             )
         ),
         'FI' => array(
@@ -60,6 +70,11 @@ return array(
                 'username' => 'finlandtest2',
                 'password' => 'finlandtest2',
                 'clientNumber' => 27136
+            ),
+            ConfigurationProvider::ACCOUNTCREDIT_TYPE => array(
+                'username' => '',
+                'password' => '',
+                'clientNumber' => ''
             )
         ),
         'DK' => array(
@@ -72,6 +87,11 @@ return array(
                 'username' => 'danmarktest2',
                 'password' => 'danmarktest2',
                 'clientNumber' => 64008
+            ),
+            ConfigurationProvider::ACCOUNTCREDIT_TYPE => array(
+                'username' => '',
+                'password' => '',
+                'clientNumber' => ''
             )
         ),
         'NL' => array(
@@ -84,6 +104,11 @@ return array(
                 'username' => 'hollandtest',
                 'password' => 'hollandtest',
                 'clientNumber' => 86997
+            ),
+            ConfigurationProvider::ACCOUNTCREDIT_TYPE => array(
+                'username' => '',
+                'password' => '',
+                'clientNumber' => ''
             )
         ),
         'DE' => array(
@@ -96,6 +121,11 @@ return array(
                 'username' => 'germanytest',
                 'password' => 'germanytest',
                 'clientNumber' => 16997
+            ),
+            ConfigurationProvider::ACCOUNTCREDIT_TYPE => array(
+                'username' => '',
+                'password' => '',
+                'clientNumber' => ''
             )
         )
     )

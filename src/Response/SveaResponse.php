@@ -3,11 +3,14 @@
 namespace Svea\WebPay\Response;
 
 use Exception;
+use Svea\WebPay\AdminService\AdminServiceResponse\CancelAccountCreditRows;
+use Svea\WebPay\AdminService\AdminServiceResponse\GetAccountCreditsResponse;
 use Svea\WebPay\Config\SveaConfigurationProvider;
 use Svea\WebPay\WebService\WebServiceResponse\CloseOrderResult;
 use Svea\WebPay\WebService\WebServiceResponse\DeliverOrderResult;
 use Svea\WebPay\WebService\WebServiceResponse\CreateOrderResponse;
 use Svea\WebPay\WebService\WebServiceResponse\GetAddressesResponse;
+use Svea\WebPay\HostedService\HostedResponse\HostedPaymentResponse;
 use Svea\WebPay\AdminService\AdminServiceResponse\GetOrdersResponse;
 use Svea\WebPay\AdminService\AdminServiceResponse\CancelOrderResponse;
 use Svea\WebPay\AdminService\AdminServiceResponse\UpdateOrderResponse;
@@ -16,11 +19,12 @@ use Svea\WebPay\WebService\WebServiceResponse\PaymentPlanParamsResponse;
 use Svea\WebPay\AdminService\AdminServiceResponse\DeliverOrdersResponse;
 use Svea\WebPay\AdminService\AdminServiceResponse\DeliverPartialResponse;
 use Svea\WebPay\AdminService\AdminServiceResponse\UpdateOrderRowsResponse;
+use Svea\WebPay\WebService\WebServiceResponse\AccountCreditParamsResponse;
 use Svea\WebPay\AdminService\AdminServiceResponse\CancelOrderRowsResponse;
 use Svea\WebPay\AdminService\AdminServiceResponse\CreditInvoiceRowsResponse;
 use Svea\WebPay\AdminService\AdminServiceResponse\CreditPaymentPlanResponse;
+use Svea\WebPay\AdminService\AdminServiceResponse\CancelAccountCreditAmount;
 use Svea\WebPay\HostedService\HostedResponse\HostedAdminResponse\HostedAdminResponse;
-use Svea\WebPay\HostedService\HostedResponse\HostedPaymentResponse;
 
 
 /**
@@ -84,6 +88,8 @@ class SveaResponse
                 $this->response = new PaymentPlanParamsResponse($message);
             } elseif (property_exists($message, "DeliverOrderEuResult")) {
                 $this->response = new DeliverOrderResult($message);
+            } elseif (property_exists($message, "GetAccountCreditParamsEuResult")) {
+                $this->response = new AccountCreditParamsResponse($message);
             } elseif (property_exists($message, "CloseOrderEuResult")) {
                 $this->response = new CloseOrderResult($message);
             } // $method is set for i.e. AdminService requests
@@ -98,6 +104,9 @@ class SveaResponse
                         break;
                     case "GetOrders":
                         $this->response = new GetOrdersResponse($message);
+                        break;
+                    case "GetAccountCredits":
+                        $this->response = new GetAccountCreditsResponse($message);
                         break;
                     case "CancelOrderRows":
                         $this->response = new CancelOrderRowsResponse($message);
@@ -123,7 +132,12 @@ class SveaResponse
                     case "CancelPaymentPlanAmount":
                         $this->response = new CreditPaymentPlanResponse($message);
                         break;
-
+                    case "CancelAccountCreditAmount":
+                        $this->response = new CancelAccountCreditAmount($message);
+                        break;
+                    case "CancelAccountCreditRows":
+                        $this->response = new CancelAccountCreditRows($message);
+                        break;
                     default:
                         throw new Exception("unknown method: $method");
                         break;

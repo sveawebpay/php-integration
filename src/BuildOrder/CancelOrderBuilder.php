@@ -42,7 +42,7 @@ class CancelOrderBuilder extends CheckoutAdminOrderBuilder
     public $countryCode;
 
     /**
-     * @var ConfigurationProvider::INVOICE_TYPE or ::PAYMENTPLAN_TYPE
+     * @var ConfigurationProvider::INVOICE_TYPE, ::ACCCOUNTCREDIT_TYPE or ::PAYMENTPLAN_TYPE
      */
     public $orderType;
 
@@ -94,6 +94,20 @@ class CancelOrderBuilder extends CheckoutAdminOrderBuilder
     public function cancelPaymentPlanOrder()
     {
         $this->orderType = ConfigurationProvider::PAYMENTPLAN_TYPE;
+
+        return new CloseOrder($this);
+    }
+
+    /**
+     * Use cancelAccountCreditOrder() to close a AccountCredit order.
+     *
+     * Use the method corresponding to the original createOrder payment method.
+     *
+     * @return CloseOrder
+     */
+    public function cancelAccountCreditOrder()
+    {
+        $this->orderType = ConfigurationProvider::ACCOUNTCREDIT_TYPE;
 
         return new CloseOrder($this);
     }

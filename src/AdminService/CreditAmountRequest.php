@@ -100,8 +100,8 @@ class CreditAmountRequest extends AdminServiceRequest
     {
         if (!isset($this->orderBuilder->amountIncVat) || $this->orderBuilder->amountIncVat <= 0) {
             $errors[] = array('incorrect value' => "amountIncVat is too small.");
-        } elseif (isset($this->orderBuilder->amountIncVat) && !is_float($this->orderBuilder->amountIncVat)) {
-            $errors[] = array('incorrect datatype' => "amountIncVat is not of type float.");
+        } elseif (isset($this->orderBuilder->amountIncVat) && !(is_float($this->orderBuilder->amountIncVat) || is_int($this->orderBuilder->amountIncVat))) {
+            $errors[] = array('incorrect datatype' => "amountIncVat is not of type float or float.");
         }
 
         return $errors;

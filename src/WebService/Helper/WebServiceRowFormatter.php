@@ -323,6 +323,10 @@ class WebServiceRowFormatter
             $orderRow->Name = $row->name;
         }
 
+        if (isset($row->temporaryReference)) {
+            $orderRow->TemporaryReference = $row->temporaryReference;
+        }
+
         $this->newRows[] = $orderRow;
     }
 
@@ -365,6 +369,10 @@ class WebServiceRowFormatter
 
         if (!empty($row->name)) {
             $orderRow->Name = $row->name;
+        }
+
+        if (isset($row->temporaryReference)) {
+            $orderRow->TemporaryReference = $row->temporaryReference;
         }
 
         $this->newRows[] = $orderRow;
@@ -413,6 +421,10 @@ class WebServiceRowFormatter
                 $orderRow->Name = $row->name;
             }
 
+            if (isset($row->temporaryReference)) {
+                $orderRow->TemporaryReference = $row->temporaryReference;
+            }
+
             $this->newRows[] = $orderRow;
         }
 
@@ -445,6 +457,10 @@ class WebServiceRowFormatter
                 $orderRow->Name = $row->name;
             }
 
+            if (isset($row->temporaryReference)) {
+                $orderRow->TemporaryReference = $row->temporaryReference;
+            }
+
             $this->newRows[] = $orderRow;
         }
     }
@@ -471,6 +487,10 @@ class WebServiceRowFormatter
 
             if (!empty($discountRow->name)) {
                 $orderRow->Name = $discountRow->name;
+            }
+
+            if (isset($discountRow->temporaryReference)) {
+                $orderRow->TemporaryReference = $discountRow->temporaryReference;
             }
 
             $orderRow->Description = $this->formatRowNameAndDescription($discountRow);
@@ -530,6 +550,10 @@ class WebServiceRowFormatter
                 $orderRow->Name = $discountRow->name;
             }
 
+            if (isset($discountRow->temporaryReference)) {
+                $orderRow->TemporaryReference = $discountRow->temporaryReference;
+            }
+
             $orderRow->DiscountPercent = 0; //no discount on discount
             $orderRow->NumberOfUnits = 1; //only one discount per row
 
@@ -573,6 +597,10 @@ class WebServiceRowFormatter
 
             if (!empty($row->name)) {
                 $orderRow->Name = $row->name;
+            }
+
+            if (isset($row->temporaryReference)) {
+                $orderRow->TemporaryReference = $row->temporaryReference;
             }
 
             $amountAtThisVatRateExVat = $amountAtThisVatRateIncVat - $amountAtThisVatRateIncVat * (1 - (1 / (1 + $vatRate / 100)));   // calculate "reverse vat", i.e. 25% => 20%

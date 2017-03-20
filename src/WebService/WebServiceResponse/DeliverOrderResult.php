@@ -78,6 +78,11 @@ class DeliverOrderResult extends WebServiceResponse
             } elseif (property_exists($response->DeliverOrderEuResult->DeliverOrderResult, "PaymentPlanResultDetails")) {
                 $this->contractNumber = $response->DeliverOrderEuResult->DeliverOrderResult->PaymentPlanResultDetails->ContractNumber;
             }
+            // - specific for accountCredit
+            if(property_exists($response->DeliverOrderEuResult->DeliverOrderResult, "DeliveryReferenceNumber"))
+            {
+                $this->deliveryReferenceNumber = $response->DeliverOrderEuResult->DeliverOrderResult->DeliveryReferenceNumber;
+            }
         }
     }
 }

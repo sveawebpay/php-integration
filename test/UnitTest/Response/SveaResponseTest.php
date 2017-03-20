@@ -62,6 +62,7 @@ class SveaResponseTest extends \PHPUnit_Framework_TestCase
             null, //SE
             null, null, null,
             null, null, null,
+            null, null, null,
             null, null,
             false // $prod = false
         );

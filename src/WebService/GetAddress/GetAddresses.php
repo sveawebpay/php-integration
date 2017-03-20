@@ -22,6 +22,7 @@ use Svea\WebPay\WebService\WebServiceResponse\GetAddressesResponse;
  * ->setCompany()                       (deprecated -- lookup the addresses associated with a legal entity (i.e. company)
  * ->setOrderTypeInvoice()              (deprecated -- supply the method that corresponds to the account credentials used for the address lookup)
  * ->setOrderTypePaymentPlan()          (deprecated -- supply the method that corresponds to the account credentials used for the address lookup)
+ * ->setOrderTypeAccountCredit()        (deprecated -- supply the method that corresponds to the account credentials used for the address lookup)
  *
  * @author Anneli Halld'n, Daniel Brolund, Kristian Grossman-Madsen for Svea Svea\WebPay\WebPay
  */
@@ -129,7 +130,7 @@ class GetAddresses
 
     /**
      * @deprecated 2.2
-     * Required - you need call the method that corresponds to the account credentials (i.e. invoice or paymentplan) used for the address lookup.
+     * Required - you need call the method that corresponds to the account credentials (i.e. invoice, accountCredit or paymentplan) used for the address lookup.
      * @return $this
      */
     public function setOrderTypeInvoice()
@@ -141,12 +142,19 @@ class GetAddresses
 
     /**
      * @deprecated 2.2
-     * Required - you need call the method that corresponds to the account credentials (i.e. invoice or paymentplan) used for the address lookup.
+     * Required - you need call the method that corresponds to the account credentials (i.e. invoice, accountCredit or paymentplan) used for the address lookup.
      * @return $this
      */
     public function setOrderTypePaymentPlan()
     {
         $this->orderType = ConfigurationProvider::PAYMENTPLAN_TYPE;
+
+        return $this;
+    }
+
+    public function setOrderTypeAccountCredit()
+    {
+        $this->orderType = ConfigurationProvider::ACCOUNTCREDIT_TYPE;
 
         return $this;
     }
@@ -260,6 +268,19 @@ class GetAddresses
             }
             if (isset($u) && isset($p) && isset($c)) {
                 return ConfigurationProvider::INVOICE_TYPE;
+            }
+
+            // set for accountCredit
+            $orderType = ConfigurationProvider::ACCOUNTCREDIT_TYPE;
+            try {
+                $u = $this->conf->getUsername($orderType, $this->countryCode);
+                $p = $this->conf->getPassword($orderType, $this->countryCode);
+                $c = $this->conf->getClientNumber($orderType, $this->countryCode);
+            } catch (InvalidTypeException $e) {         // thrown if no config found
+                // go on
+            }
+            if (isset($u) && isset($p) && isset($c)) {
+                return ConfigurationProvider::ACCOUNTCREDIT_TYPE;
             }
 
             $orderType = ConfigurationProvider::PAYMENTPLAN_TYPE;

@@ -93,6 +93,14 @@ class CancelOrderRowsBuilderTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf("Svea\WebPay\AdminService\CancelOrderRowsRequest", $cancelOrderRowsObject);
     }
 
+    public function test_cancelOrderRowsBuilder_cancelAccountCreditOrderRowsBuilder_returns_CancelOrderRowsRequest()
+    {
+        $orderId = "123456";
+        $cancelOrderRowsObject = $this->cancelOrderRowsObject->setOrderId($orderId)->cancelAccountCreditOrderRows();
+
+        $this->assertInstanceOf("Svea\WebPay\AdminService\CancelOrderRowsRequest", $cancelOrderRowsObject);
+    }
+
     public function test_cancelOrderRowsBuilder_cancelCardOrderRowsBuilder_returns_LowerTransaction()
     {
         $orderId = "123456";
@@ -112,8 +120,28 @@ class CancelOrderRowsBuilderTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf("Svea\WebPay\HostedService\HostedAdminRequest\LowerTransaction", $request);
     }
-    
-    
+
+    public function test_cancelOrderRowsBuilder_cancelAccountCreditRowsBuilder_returns_LowerTransaction()
+    {
+        $orderId = "123456";
+        $mockedNumberedOrderRow = new NumberedOrderRow();
+        $mockedNumberedOrderRow
+            ->setAmountExVat(100.00)// recommended to specify price using AmountExVat & VatPercent
+            ->setVatPercent(25)// recommended to specify price using AmountExVat & VatPercent
+            ->setQuantity(1)// required
+            ->setRowNumber(1);
+
+        $cancelOrderRowsObject = $this->cancelOrderRowsObject
+            ->setOrderId($orderId)
+            ->addNumberedOrderRow($mockedNumberedOrderRow)
+            ->setRowToCancel(1);
+
+        $request = $cancelOrderRowsObject->cancelCardOrderRows();
+
+        $this->assertInstanceOf("Svea\WebPay\HostedService\HostedAdminRequest\LowerTransaction", $request);
+    }
+
+
     public function returnProduct()
     {
         $mockedNumberedOrderRow = new NumberedOrderRow();

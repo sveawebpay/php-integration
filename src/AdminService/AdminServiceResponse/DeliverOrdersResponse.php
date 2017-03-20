@@ -42,6 +42,11 @@ class DeliverOrdersResponse extends AdminServiceResponse
     public $orderId;
 
     /**
+     * @var int $deliveryReferenceNumber - this is accountCredit specific, and its returned on order delivery
+     */
+    public $deliveryReferenceNumber;
+
+    /**
      * DeliverOrdersResponse constructor.
      * @param $message
      */
@@ -65,6 +70,12 @@ class DeliverOrdersResponse extends AdminServiceResponse
 
             if ($message->OrdersDelivered->DeliverOrderResult->OrderType == ConfigurationProvider::PAYMENTPLAN_TYPE) {
                 $this->contractNumber = $message->OrdersDelivered->DeliverOrderResult->DeliveryReferenceNumber;
+            }
+
+            // - specific for accountCredit
+            if(property_exists($message->OrdersDelivered->DeliverOrderResult, "DeliveryReferenceNumber"))
+            {
+                $this->deliveryReferenceNumber = $message->OrdersDelivered->DeliverOrderResult->DeliveryReferenceNumber;
             }
 
             $this->orderType = $message->OrdersDelivered->DeliverOrderResult->OrderType;

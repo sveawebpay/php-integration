@@ -43,7 +43,8 @@ class NewOrderBuilderTest extends \PHPUnit_Framework_TestCase
         $request = $addressRequest
             ->setOrderTypeInvoice()
             ->setCountryCode("SE")
-            ->setCompany(4608142222)
+            ->setCustomerIdentifier(4608142222)
+            ->getCompanyAddresses()
             ->doRequest();
 
         return $request->customerIdentity[0]->addressSelector;

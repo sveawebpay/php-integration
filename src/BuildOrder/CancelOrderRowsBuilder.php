@@ -250,4 +250,15 @@ class CancelOrderRowsBuilder extends CheckoutAdminOrderBuilder
 
         return new CancelOrderRowsRequest($this);
     }
+
+    /**
+     * Use cancelAccountCreditOrderRows() to cancel a AccountCredit order using AdminServiceRequest CancelOrderRows request
+     * @return CancelOrderRowsRequest
+     */
+    public function cancelAccountCreditOrderRows()
+    {
+        $this->orderType = ConfigurationProvider::ACCOUNTCREDIT_TYPE;
+
+        return new CancelOrderRowsRequest($this);
+    }
 }

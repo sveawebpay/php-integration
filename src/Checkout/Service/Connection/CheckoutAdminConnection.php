@@ -4,6 +4,7 @@ namespace Svea\WebPay\Checkout\Service\Connection;
 
 use Svea\Checkout\CheckoutAdminClient;
 use Svea\Checkout\Transport\Connector;
+use Svea\WebPay\Checkout\Response\CheckoutAdminResponseHelper;
 use Svea\WebPay\Config\ConfigurationProvider;
 
 class CheckoutAdminConnection
@@ -37,7 +38,7 @@ class CheckoutAdminConnection
 
     public function getOrder($requestData)
     {
-        return $this->checkoutClient->getOrder($requestData);
+        return CheckoutAdminResponseHelper::processResponse($this->checkoutClient->getOrder($requestData));
     }
 
     public function deliverOrder($requestData)

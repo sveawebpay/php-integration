@@ -91,6 +91,14 @@ class SveaDoRequest
         return $this->client->GetPaymentPlanParamsEu($builder->object_to_array($auth));
     }
 
+
+    public function GetAccountCreditParamsEu($auth)
+    {
+        $builder = new SveaSoapArrayBuilder();
+
+        return $this->client->GetAccountCreditParamsEu($builder->object_to_array($auth));
+    }
+
 //    /**
 //     *
 //     * @param type $deliverdata Object containing SveaAuth and DeliverOrderInformation

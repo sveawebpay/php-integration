@@ -2,6 +2,7 @@
 
 namespace Svea\WebPay\BuildOrder;
 
+use Svea\WebPay\AdminService\AdminSoap\AccountCredit\AccountCreditInformation;
 use Svea\WebPay\AdminService\GetOrdersRequest;
 use Svea\WebPay\Checkout\Service\Admin\GetOrderService;
 use Svea\WebPay\Helper\Helper;
@@ -99,6 +100,13 @@ class QueryOrderBuilder extends CheckoutAdminOrderBuilder
         $this->orderType = ConfigurationProvider::PAYMENTPLAN_TYPE;
         return new GetOrdersRequest($this);
     }
+
+    public function queryAccountCreditOder()
+    {
+        $this->orderType = ConfigurationProvider::ACCOUNTCREDIT_TYPE;
+        return new GetOrdersRequest($this);
+    }
+
 
     /**
      * Use queryCardOrder() to query a Card order.

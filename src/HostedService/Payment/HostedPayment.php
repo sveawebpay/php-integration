@@ -438,6 +438,7 @@ class HostedPayment
         $request = new RecurTransaction($this->order->conf);
         $request->currency = $this->order->currency;
         $request->amount = $this->request['amount'];
+        $request->vat = $this->request['totalVat'];
         $request->customerRefNo = $this->order->clientOrderNumber;
         $request->countryCode = $this->order->countryCode;
         $request->subscriptionId = $this->subscriptionId;

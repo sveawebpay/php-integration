@@ -19,6 +19,7 @@ class ListPaymentMethodsIntegrationTest extends \PHPUnit_Framework_TestCase
 
     function test_listPaymentMethods_request_success()
     {
+        $this->markTestSkipped('deprecated');
 
         $request = new ListPaymentMethods(ConfigurationService::getDefaultConfig());
         $request->countryCode = "SE";

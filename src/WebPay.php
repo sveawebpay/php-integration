@@ -8,6 +8,7 @@ use Svea\WebPay\BuildOrder\CloseOrderBuilder;
 use Svea\WebPay\Config\ConfigurationProvider;
 use Svea\WebPay\BuildOrder\CreateOrderBuilder;
 use Svea\WebPay\BuildOrder\DeliverOrderBuilder;
+use Svea\WebPay\WebService\GetAccountCreditParams\GetAccountCreditParams;
 use Svea\WebPay\WebService\GetAddress\GetAddresses;
 use Svea\WebPay\Checkout\Helper\CheckoutOrderBuilder;
 use Svea\WebPay\BuildOrder\Validator\ValidationException;
@@ -143,10 +144,10 @@ class WebPay
      *      $response = $request->deliverPaymentPlanOrder()->doRequest();   // returns DeliverOrdersResponse (no rows) or DeliverOrderResult (with rows)
      *      $response = $request->deliverCardOrder()->doRequest();          // returns ConfirmTransactionResponse
      *
-     * @see \Svea\DeliverOrderBuilder \Svea\WebPay\BuildOrder\DeliverOrderBuilder
-     * @see \Svea\AdminService\DeliverOrdersResponse \Svea\WebPay\AdminService\AdminServiceResponse\DeliverOrdersResponse
-     * @see \Svea\WebService\DeliverOrderResult \Svea\WebPay\WebService\WebServiceResponse\DeliverOrderResult
-     * @see \Svea\HostedService\ConfirmTransactionResponse \Svea\WebPay\HostedService\HostedResponse\HostedAdminResponse\ConfirmTransactionResponse
+     * @see \Svea\WebPay\DeliverOrderBuilder \Svea\WebPay\BuildOrder\DeliverOrderBuilder
+     * @see \Svea\WebPay\AdminService\DeliverOrdersResponse \Svea\WebPay\AdminService\AdminServiceResponse\DeliverOrdersResponse
+     * @see \Svea\WebPay\WebService\WebServiceResponse\DeliverOrderResult
+     * @see \Svea\WebPay\HostedService\ConfirmTransactionResponse \Svea\WebPay\HostedService\HostedResponse\HostedAdminResponse\ConfirmTransactionResponse
      *
      * @param ConfigurationProvider $config instance implementing Svea\WebPay\Config\ConfigurationProvider Interface
      * @return \Svea\WebPay\BuildOrder\DeliverOrderBuilder
@@ -203,7 +204,7 @@ class WebPay
      *      $response = $request->getIndividualAddresses()->doRequest();    // returns GetAddressesResponse
      *      $response = $request->getCompanyAddresses()->doRequest();       // returns GetAddressesResponse
      *
-     * @see Svea\WebService\GetAddress Svea\WebPay\WebService\GetAddress\GetAddress
+     * @see Svea\WebPay\WebService\GetAddress\GetAddress
      * @return \Svea\WebPay\WebService\WebServiceResponse\GetAddressesResponse Svea\WebPay\WebService\WebServiceResponse\GetAddressesResponse
      * @param ConfigurationProvider $config instance implementing Svea\WebPay\Config\ConfigurationProvider Interface
      * @throws \Svea\WebPay\BuildOrder\Validator\ValidationException
@@ -234,6 +235,25 @@ class WebPay
         }
 
         return new GetPaymentPlanParams($config);
+    }
+
+    /**
+     * getAccountCreditParams -- fetch current campaigns (AccountCredit) for the given client, used by i.e. accountCredit orders
+     *
+     * See the GetAccountCreditParams request class for more info on required methods,
+     * how to send the request to Svea, as well as the final response type.
+     *
+     * @return \Svea\WebPay\WebService\GetAccountCreditParams\GetAccountCreditParams
+     * @param ConfigurationProvider $config instance implementing Svea\WebPay\Config\ConfigurationProvider
+     * @throws \Svea\WebPay\BuildOrder\Validator\ValidationException
+     */
+    public static function getAccountCreditParams($config = NULL)
+    {
+        if ($config == NULL) {
+            WebPay::throwMissingConfigException();
+        }
+
+        return new GetAccountCreditParams($config);
     }
 
     /**
@@ -309,8 +329,8 @@ class WebPay
      *
      * Following the ->doRequest call you receive an instance of ListPaymentMethodsResponse.
      *
-     * @see \Svea\HostedService\ListPaymentMethods \Svea\WebPay\HostedService\HostedAdminRequest\ListPaymentMethods
-     * @see \Svea\HostedService\ListPaymentMethodsResponse \Svea\WebPay\HostedService\HostedResponse\HostedAdminResponse\ListPaymentMethodsResponse
+     * @see \Svea\WebPay\HostedService\ListPaymentMethods \Svea\WebPay\HostedService\HostedAdminRequest\ListPaymentMethods
+     * @see \Svea\WebPay\HostedService\ListPaymentMethodsResponse \Svea\WebPay\HostedService\HostedResponse\HostedAdminResponse\ListPaymentMethodsResponse
      *
      * @param ConfigurationProvider $config
      * @return \Svea\WebPay\HostedService\HostedAdminRequest\ListPaymentMethods

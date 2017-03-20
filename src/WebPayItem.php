@@ -53,8 +53,8 @@ class WebPayItem
      *          ->setAmountIncVat(125.00)       // optional, use precisely two of the price specification methods
      *          ->setQuantity(2)                // required
      *          ->setUnit("pcs.")               // optional
-     *          ->setName('name')               // optional, invoice & payment plan orders will merge "name" with "description"
-     *          ->setDescription("description") // optional, invoice & payment plan orders will merge "name" with "description"
+     *          ->setName('name')               // optional, invoice, accountCredit & payment plan orders will merge "name" with "description"
+     *          ->setDescription("description") // optional, invoice, accountCredit & payment plan orders will merge "name" with "description"
      *          ->setArticleNumber("1")         // optional
      *          ->setDiscountPercent(0)         // optional
      *      );
@@ -194,17 +194,17 @@ class WebPayItem
      * unless you're using getPaymentUrl() to set up a prepared payment.)
      *
      *  IndividualCustomer individual = Svea\WebPay\WebPayItem::individualCustomer()
-     *      ->setNationalIdNumber() // Numeric    // invoice, paymentplan: required for customers in SE, NO, DK, FI
-     *      ->setName()             // String    // invoice, paymentplan: required, use (firstname, lastname) for customers in NL and DE
-     *      ->setBirthDate()        // Numeric    // invoice, paymentplan: required for individual customers in NL and DE
-     *      ->setInitials()         // String    // invoice, paymentplan: required for individual customers in NL
-     *      ->setCoAddress()        // String    // invoice, paymentplan: optional
-     *      ->setStreetAddress()    // String    // invoice, paymentplan: required, use (street, housenumber) in NL and DE
-     *      ->setZipCode)           // String    // invoice, paymentplan: required in NL and DE
-     *      ->setLocality()         // String    // invoice, paymentplan: required in NL and DE
-     *      ->setPhoneNumber()      // String    // invoice, paymentplan: optional but desirable
-     *      ->setEmail()            // String    // invoice, paymentplan: optional but desirable
-     *      ->setIpAddress()        // String    // invoice, paymentplan: optional but desirable; card: required for getPaymentUrl() orders only
+     *      ->setNationalIdNumber() // Numeric    // invoice, accountCredit, paymentplan: required for customers in SE, NO, DK, FI
+     *      ->setName()             // String    // invoice, accountCredit, paymentplan: required, use (firstname, lastname) for customers in NL and DE
+     *      ->setBirthDate()        // Numeric    // invoice, accountCredit, paymentplan: required for individual customers in NL and DE
+     *      ->setInitials()         // String    // invoice, accountCredit, paymentplan: required for individual customers in NL
+     *      ->setCoAddress()        // String    // invoice, accountCredit, paymentplan: optional
+     *      ->setStreetAddress()    // String    // invoice, accountCredit, paymentplan: required, use (street, housenumber) in NL and DE
+     *      ->setZipCode)           // String    // invoice, accountCredit, paymentplan: required in NL and DE
+     *      ->setLocality()         // String    // invoice, accountCredit, paymentplan: required in NL and DE
+     *      ->setPhoneNumber()      // String    // invoice, accountCredit, paymentplan: optional but desirable
+     *      ->setEmail()            // String    // invoice, accountCredit, paymentplan: optional but desirable
+     *      ->setIpAddress()        // String    // invoice, accountCredit, paymentplan: optional but desirable; card: required for getPaymentUrl() orders only
      *  ;
      *
      * @return \Svea\WebPay\BuildOrder\RowBuilders\IndividualCustomer

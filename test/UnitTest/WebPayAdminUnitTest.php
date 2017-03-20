@@ -118,6 +118,7 @@ class WebPayAdminUnitTest extends \PHPUnit_Framework_TestCase
                 "SE",
                 "foo", "bar", "123456", // invoice
                 "foo", "bar", "123456", // paymentplan
+                "foo", "bar", "123456", // accountplan
                 "1200", // merchantid, secret
                 "27f18bfcbe4d7f39971cb3460fbe7234a82fb48f985cf22a068fa1a685fe7e6f93c7d0d92fee4e8fd7dc0c9f11e2507300e675220ee85679afa681407ee2416d",
                 false // prod = false

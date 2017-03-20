@@ -45,7 +45,7 @@ class QueryTransactionIntegrationTest extends \PHPUnit_Framework_TestCase
      */
     function test_manual_parsing_of_queried_payment_order_works()
     {
-
+        $this->markTestSkipped('deprecated.');
         // Stop here and mark this test as incomplete.
 //        $this->markTestIncomplete(
 //            'test_manual_parsing_of_queried_payment_order_works'
@@ -277,7 +277,7 @@ class QueryTransactionIntegrationTest extends \PHPUnit_Framework_TestCase
 
     function test_manual_parsing_of_queried_recur_order_without_orderrows_works()
     {
-
+        $this->markTestSkipped('deprecated');
         // Stop here and mark this test as incomplete.
 //        $this->markTestIncomplete(
 //            'test_manual_parsing_of_queried_recur_order_without_orderrows_works'
@@ -410,6 +410,7 @@ class QueryTransactionIntegrationTest extends \PHPUnit_Framework_TestCase
     // TODO not updated
     function test_manual_parsing_of_queried_preparepayment_order_works()
     {
+        $this->markTestSkipped('deprecated');
         // Stop here and mark this test as incomplete.
 //        $this->markTestIncomplete(
 //            'test_manual_parsing_of_queried_recur_order_without_orderrows_works'

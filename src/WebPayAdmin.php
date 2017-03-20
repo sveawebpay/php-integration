@@ -3,6 +3,8 @@
 
 namespace Svea\WebPay;
 
+use Svea\WebPay\AdminService\SearchOrdersRequest;
+use Svea\WebPay\BuildOrder\AccountCreditQueryBuilder;
 use Svea\WebPay\BuildOrder\QueryOrderBuilder;
 use Svea\WebPay\BuildOrder\QueryTaskInfoBuilder;
 use Svea\WebPay\Config\ConfigurationProvider;
@@ -141,9 +143,9 @@ class WebPayAdmin
 
     /**
      * The Svea\WebPay\WebPayAdmin::cancelOrderRows entrypoint method is used to cancel rows in an order before it has been delivered.
-     * Supports Invoice, Payment Plan and Card orders. (Direct Bank orders are not supported, see CreditOrderRows instead.)
+     * Supports Invoice, AccountCredit, Payment Plan and Card orders. (Direct Bank orders are not supported, see CreditOrderRows instead.)
      *
-     * For Invoice and Payment Plan orders, the order row status is updated at Svea following each successful request.
+     * For Invoice, AccountCredit and Payment Plan orders, the order row status is updated at Svea following each successful request.
      *
      * For card orders, the request can only be sent once, and if all original order rows are cancelled, the order then receives status ANNULLED at Svea.
      *
@@ -250,7 +252,7 @@ class WebPayAdmin
 
     /**
      * The Svea\WebPay\WebPayAdmin::creditAmount entrypoint method is used to credit an amount in an order after it has been delivered.
-     * Supports PaymentPlan
+     * Supports PaymentPlan and AccountCredit
      *
      *
      * Get an order builder instance using the Svea\WebPay\WebPayAdmin::creditAmount entrypoint, then provide more information about the

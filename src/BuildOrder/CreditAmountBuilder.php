@@ -2,6 +2,7 @@
 
 namespace Svea\WebPay\BuildOrder;
 
+use Svea\WebPay\AdminService\CreditAmountAccountCreditRequest;
 use Svea\WebPay\AdminService\CreditAmountRequest;
 use Svea\WebPay\Checkout\Service\Admin\CreditOrderAmountService;
 use Svea\WebPay\Config\ConfigurationProvider;
@@ -116,6 +117,19 @@ class CreditAmountBuilder extends CheckoutAdminOrderBuilder
 
         // CreditPaymentPlan amount is really a CancelPaymentPlanAmount in API but wrapped in lib
         return new CreditAmountRequest($this);
+    }
+
+    /**
+     * Use creditAccountCreditAmount() to cancel amount to a delivered AccountCredit using AdminServiceRequest
+     * CreditAmount request
+     *
+     * @return CreditAmountAccountCreditRequest
+     */
+    public function creditAccountCredit()
+    {
+        $this->orderType = ConfigurationProvider::ACCOUNTCREDIT_TYPE;
+
+        return new CreditAmountAccountCreditRequest($this);
     }
 
     /**

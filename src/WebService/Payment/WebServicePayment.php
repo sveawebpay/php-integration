@@ -16,7 +16,7 @@ use Svea\WebPay\BuildOrder\Validator\WebServiceOrderValidator;
 use Svea\WebPay\WebService\SveaSoap\SveaCreateOrderInformation;
 
 /**
- * Parent to InvoicePayment and PaymentPlanPaymentHandles class
+ * Parent to InvoicePayment, AccountCredit and PaymentPlanPaymentHandles class
  * Prepares and sends $order with php SOAP
  * Uses svea_soap package to build object formatted for SveaWebPay Europe Web service API
  * Object is sent with SveaDoPayment class in svea_soap package by PHP SoapClient
@@ -118,28 +118,6 @@ class WebServicePayment
         return $auth;
     }
 
-    /**
-     * Format Order row with svea_soap package and calculate vat
-     * @param type $rows
-     * @return \SveaCreateOrderInformation
-     */
-    protected function formatOrderInformationWithOrderRows($rows)
-    {
-        $orderInformation = new SveaCreateOrderInformation(
-            (isset($this->order->campaignCode) ? $this->order->campaignCode : ""),
-            (isset($this->order->sendAutomaticGiroPaymentForm) ? $this->order->sendAutomaticGiroPaymentForm : 0)
-        );
-
-        // rewrite order rows to soap_class order rows
-        $formatter = new WebServiceRowFormatter($this->order);
-        $formattedOrderRows = $formatter->formatRows();
-
-        foreach ($formattedOrderRows as $formattedOrderRow) {
-            $orderInformation->addOrderRow($formattedOrderRow);
-        }
-
-        return $orderInformation;
-    }
 
     /**
      * if CustomerIdentity is created by addCustomerDetails()
@@ -206,6 +184,7 @@ class WebServicePayment
         $individualCustomerIdentity->CountryCode = $this->order->countryCode;
         $individualCustomerIdentity->CustomerType = $isCompany ? "Company" : "Individual";
         $individualCustomerIdentity->PublicKey = isset($this->order->customerIdentity->publicKey) ? $this->order->customerIdentity->publicKey : "";
+
 
         return $individualCustomerIdentity;
     }

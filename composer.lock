@@ -4,21 +4,21 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "9b185f522ac2ffbc5201819923725562",
-    "content-hash": "2036fef4d971e3f1135fa434ae055d40",
+    "hash": "d077aa247e0f8b8e88e32efdc8f21873",
+    "content-hash": "f05a2567ba23805166357d85b6b4404e",
     "packages": [
         {
             "name": "sveaekonomi/checkout",
-            "version": "1.0.0",
+            "version": "1.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sveawebpay/php-checkout.git",
-                "reference": "c58818a0f7c60a77352b871bc971b3e0a96fe954"
+                "reference": "855f35714dcc0cfa2520f3a5ce31442c33535bd8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sveawebpay/php-checkout/zipball/c58818a0f7c60a77352b871bc971b3e0a96fe954",
-                "reference": "c58818a0f7c60a77352b871bc971b3e0a96fe954",
+                "url": "https://api.github.com/repos/sveawebpay/php-checkout/zipball/855f35714dcc0cfa2520f3a5ce31442c33535bd8",
+                "reference": "855f35714dcc0cfa2520f3a5ce31442c33535bd8",
                 "shasum": ""
             },
             "require": {
@@ -51,7 +51,7 @@
                 }
             ],
             "description": "Php integration library for Svea Checkout",
-            "time": "2016-11-24 13:39:42"
+            "time": "2017-01-30 09:37:30"
         }
     ],
     "packages-dev": [
@@ -563,16 +563,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "4.8.34",
+            "version": "4.8.35",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "7eb45205d27edd94bd2b3614085ea158bd1e2bca"
+                "reference": "791b1a67c25af50e230f841ee7a9c6eba507dc87"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/7eb45205d27edd94bd2b3614085ea158bd1e2bca",
-                "reference": "7eb45205d27edd94bd2b3614085ea158bd1e2bca",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/791b1a67c25af50e230f841ee7a9c6eba507dc87",
+                "reference": "791b1a67c25af50e230f841ee7a9c6eba507dc87",
                 "shasum": ""
             },
             "require": {
@@ -631,7 +631,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2017-01-26 16:15:36"
+            "time": "2017-02-06 05:18:07"
         },
         {
             "name": "phpunit/phpunit-mock-objects",
@@ -1063,16 +1063,16 @@
         },
         {
             "name": "symfony/yaml",
-            "version": "v3.2.2",
+            "version": "v3.2.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/yaml.git",
-                "reference": "50eadbd7926e31842893c957eca362b21592a97d"
+                "reference": "e1718c6bf57e1efbb8793ada951584b2ab27775b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/yaml/zipball/50eadbd7926e31842893c957eca362b21592a97d",
-                "reference": "50eadbd7926e31842893c957eca362b21592a97d",
+                "url": "https://api.github.com/repos/symfony/yaml/zipball/e1718c6bf57e1efbb8793ada951584b2ab27775b",
+                "reference": "e1718c6bf57e1efbb8793ada951584b2ab27775b",
                 "shasum": ""
             },
             "require": {
@@ -1114,7 +1114,7 @@
             ],
             "description": "Symfony Yaml Component",
             "homepage": "https://symfony.com",
-            "time": "2017-01-03 13:51:32"
+            "time": "2017-01-21 17:06:35"
         },
         {
             "name": "webmozart/assert",

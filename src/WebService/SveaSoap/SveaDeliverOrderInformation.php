@@ -18,5 +18,8 @@ class SveaDeliverOrderInformation
         if ($orderType == ConfigurationProvider::INVOICE_TYPE) {
             $this->DeliverInvoiceDetails = "";
         }
+        else if ($orderType == ConfigurationProvider::ACCOUNTCREDIT_TYPE) {
+            $this->DeliverAccountCreditDetails = "";
+        }
     }
 }

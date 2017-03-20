@@ -57,6 +57,11 @@ class ShippingFee
     public $discountPercent;
 
     /**
+     * @var string $temporaryReference - Option parameter.
+     */
+    public $temporaryReference;
+
+    /**
      * ShippingFee constructor.
      */
     function __construct()
@@ -179,6 +184,20 @@ class ShippingFee
     public function setDiscountPercent($discountPercentAsInt)
     {
         $this->discountPercent = $discountPercentAsInt;
+        return $this;
+    }
+
+    /**
+     * Optional - Can be used when creating or updating an order.
+     *              The returned rows will have their corresponding temporary reference as they were given in the in-data.
+     *              It will not be stored and will not be returned in GetOrder.
+     * Checkout orders only. Will not be applicable for other order types.
+     * @param $temporaryReference
+     * @return $this
+     */
+    public function setTemporaryReference($temporaryReference)
+    {
+        $this->temporaryReference = $temporaryReference;
         return $this;
     }
 }

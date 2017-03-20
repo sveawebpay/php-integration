@@ -421,7 +421,7 @@ class WebServiceOrderValidatorTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException Svea\WebPay\BuildOrder\Validator\ValidationException
-     * @expectedExceptionMessage -incorrect datatype : amountExVat is not of type float.
+     * @expectedExceptionMessage -incorrect datatype : amountExVat is not of type float or int.
      */
     public function testFailOnAmountExVatNotFloat()
     {
@@ -442,7 +442,7 @@ class WebServiceOrderValidatorTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException Svea\WebPay\BuildOrder\Validator\ValidationException
-     * @expectedExceptionMessage -incorrect datatype : amountIncVat is not of type float.
+     * @expectedExceptionMessage -incorrect datatype : amountIncVat is not of type float or int.
      */
     public function testFailOnAmountIncVatNotFloat()
     {
@@ -511,6 +511,11 @@ class WebServiceOrderValidatorTest extends \PHPUnit_Framework_TestCase
      */
     public function testFailOnVatNotInt()
     {
+        // Stop here and mark this test as incomplete.
+        $this->markTestIncomplete(
+            'vatPercent can be int and float now'
+        );
+
         $config = ConfigurationService::getDefaultConfig();
         $builder = WebPay::createOrder($config);
         $order = $builder

@@ -2,6 +2,7 @@
 
 namespace Svea\WebPay\BuildOrder;
 
+use Svea\WebPay\AdminService\CreditAccountCreditRowsRequest;
 use Svea\WebPay\Checkout\Service\Admin\CreditOrderRowsService;
 use Svea\WebPay\Helper\Helper;
 use Svea\WebPay\Config\ConfigurationProvider;
@@ -141,6 +142,16 @@ class CreditOrderRowsBuilder extends CheckoutAdminOrderBuilder
     public function setInvoiceId($invoiceIdAsString)
     {
         $this->invoiceId = $invoiceIdAsString;
+        return $this;
+    }
+
+    /**
+     * @param mixed $amountIncVat
+     * @return $this
+     */
+    public function setAmountIncVat($amountIncVat)
+    {
+        $this->amountIncVat = $amountIncVat;
         return $this;
     }
 
@@ -308,6 +319,17 @@ class CreditOrderRowsBuilder extends CheckoutAdminOrderBuilder
 
         //Credit Paymentplan request is really cancelPaymentPlanRows but wrapped as creditPaymentPlanRows
         return new CreditPaymentPlanRowsRequest($this);
+    }
+
+    /**
+     * Use creditAccountCreditOrderRows() to cancel rows to a delivered Account Credit using AdminServiceRequest CreditOrderRows request
+     * @return CreditAccountCreditRowsRequest
+     */
+    public function creditAccountCreditOrderRows()
+    {
+        $this->orderType = ConfigurationProvider::ACCOUNTCREDIT_TYPE;
+
+        return new CreditAccountCreditRowsRequest($this);
     }
 
     /**

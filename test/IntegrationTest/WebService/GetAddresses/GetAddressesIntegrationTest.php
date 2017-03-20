@@ -29,7 +29,8 @@ class GetAddressesIntegrationTest extends PHPUnit_Framework_TestCase
         $request = $this->addressRequest
             ->setOrderTypeInvoice()
             ->setCountryCode("SE")
-            ->setIndividual("194605092222")
+            ->setCustomerIdentifier("194605092222")
+            ->getIndividualAddresses()
             ->doRequest();
         $this->assertEquals(1, $request->accepted);
     }
@@ -39,7 +40,8 @@ class GetAddressesIntegrationTest extends PHPUnit_Framework_TestCase
         $request = $this->addressRequest
             ->setOrderTypeInvoice()
             ->setCountryCode("SE")
-            ->setCompany("4608142222")
+            ->setCustomerIdentifier("4608142222")
+            ->getCompanyAddresses()
             ->doRequest();
         $this->assertEquals(1, $request->accepted);
     }
@@ -49,7 +51,8 @@ class GetAddressesIntegrationTest extends PHPUnit_Framework_TestCase
         $request = $this->addressRequest
             ->setOrderTypePaymentPlan()
             ->setCountryCode("SE")
-            ->setCompany("4608142222")
+            ->setCustomerIdentifier("4608142222")
+            ->getCompanyAddresses()
             ->doRequest();
         $this->assertEquals(1, $request->accepted);
     }
@@ -59,7 +62,8 @@ class GetAddressesIntegrationTest extends PHPUnit_Framework_TestCase
         $request = $this->addressRequest
             ->setOrderTypeInvoice()
             ->setCountryCode("SE")
-            ->setCompany("4608142222")
+            ->setCustomerIdentifier("4608142222")
+            ->getCompanyAddresses()
             ->doRequest();
         $this->assertEquals(1, $request->accepted);
     }
@@ -69,7 +73,8 @@ class GetAddressesIntegrationTest extends PHPUnit_Framework_TestCase
         $request = $this->addressRequest
             ->setOrderTypeInvoice()
             ->setCountryCode("SE")
-            ->setIndividual("4608142222")// setIndividual w/Company SSN
+            ->setCustomerIdentifier("4608142222")
+            ->getIndividualAddresses()
             ->doRequest();
         $this->assertEquals(0, $request->accepted);
         $this->assertEquals("NoSuchEntity", $request->resultcode);
@@ -80,7 +85,8 @@ class GetAddressesIntegrationTest extends PHPUnit_Framework_TestCase
         $request = $this->addressRequest
             ->setOrderTypeInvoice()
             ->setCountryCode("SE")
-            ->setIndividual("4608142222")// setIndividual w/Company SSN
+            ->setCustomerIdentifier("4608142222")
+            ->getIndividualAddresses()
             ->doRequest();
         $this->assertEquals(0, $request->accepted);
         $this->assertEquals("NoSuchEntity", $request->resultcode);
@@ -92,7 +98,8 @@ class GetAddressesIntegrationTest extends PHPUnit_Framework_TestCase
         $request = $this->addressRequest
             ->setOrderTypeInvoice()
             ->setCountryCode("SE")
-            ->setIndividual("194605092222")
+            ->setCustomerIdentifier("194605092222")
+            ->getIndividualAddresses()
             ->doRequest();
 
         $this->assertEquals(1, $request->accepted);
@@ -118,7 +125,8 @@ class GetAddressesIntegrationTest extends PHPUnit_Framework_TestCase
         $request = $this->addressRequest
             ->setOrderTypeInvoice()
             ->setCountryCode("SE")
-            ->setCompany("194608142222")// 12 digit orgnr should start with 16 or be 10 digits.
+            ->setCustomerIdentifier("194608142222")// 12 digit orgnr should start with 16 or be 10 digits.
+            ->getCompanyAddresses()
             ->doRequest();
 
         $this->assertEquals(1, $request->accepted);
@@ -155,7 +163,8 @@ class GetAddressesIntegrationTest extends PHPUnit_Framework_TestCase
         $request = $this->addressRequest
             ->setOrderTypeInvoice()
             ->setCountryCode("SE")
-            ->setIndividual("194605092222")
+            ->setCustomerIdentifier("194605092222")
+            ->getIndividualAddresses()
             ->doRequest();
 
         $this->assertEquals(1, $request->accepted);
@@ -168,7 +177,8 @@ class GetAddressesIntegrationTest extends PHPUnit_Framework_TestCase
         $request = $this->addressRequest
             ->setOrderTypeInvoice()
             ->setCountryCode("DK")
-            ->setIndividual("2603692503")
+            ->setCustomerIdentifier("2603692503")
+            ->getIndividualAddresses()
             ->doRequest();
 
         $this->assertEquals(1, $request->accepted);
@@ -181,7 +191,8 @@ class GetAddressesIntegrationTest extends PHPUnit_Framework_TestCase
         $request = $this->addressRequest
             ->setOrderTypeInvoice()
             ->setCountryCode("SE")
-            ->setCompany("4608142222")
+            ->setCustomerIdentifier("4608142222")
+            ->getCompanyAddresses()
             ->doRequest();
 
         $this->assertEquals(1, $request->accepted);
@@ -194,7 +205,8 @@ class GetAddressesIntegrationTest extends PHPUnit_Framework_TestCase
         $request = $this->addressRequest
             ->setOrderTypeInvoice()
             ->setCountryCode("DK")
-            ->setCompany("99999993")
+            ->setCustomerIdentifier("99999993")
+            ->getCompanyAddresses()
             ->doRequest();
 
         $this->assertEquals(1, $request->accepted);
@@ -207,7 +219,8 @@ class GetAddressesIntegrationTest extends PHPUnit_Framework_TestCase
         $request = $this->addressRequest
             ->setOrderTypeInvoice()
             ->setCountryCode("NO")
-            ->setCompany("923313850")
+            ->setCustomerIdentifier("923313850")
+            ->getCompanyAddresses()
             ->doRequest();
 
         $this->assertEquals(1, $request->accepted);
@@ -220,7 +233,8 @@ class GetAddressesIntegrationTest extends PHPUnit_Framework_TestCase
         $request = $this->addressRequest
             ->setOrderTypeInvoice()
             ->setCountryCode("NO")
-            ->setCompany("17054512066")
+            ->setCustomerIdentifier("17054512066")
+            ->getCompanyAddresses()
             ->doRequest();
 
         //disabled oct-13
@@ -234,7 +248,8 @@ class GetAddressesIntegrationTest extends PHPUnit_Framework_TestCase
         $request = $this->addressRequest
             ->setOrderTypeInvoice()
             ->setCountryCode("DE")
-            ->setIndividual("foo")
+            ->setCustomerIdentifier("foo")
+            ->getIndividualAddresses()
             ->doRequest();
 
         $this->assertEquals(0, $request->accepted);
@@ -247,7 +262,8 @@ class GetAddressesIntegrationTest extends PHPUnit_Framework_TestCase
         $request = $this->addressRequest
             ->setOrderTypeInvoice()
             ->setCountryCode("DE")
-            ->setCompany("19680403")
+            ->setCustomerIdentifier("19680403")
+            ->getCompanyAddresses()
             ->doRequest();
 
         $this->assertEquals(0, $request->accepted);
@@ -261,7 +277,8 @@ class GetAddressesIntegrationTest extends PHPUnit_Framework_TestCase
         $request = $this->addressRequest
             ->setOrderTypeInvoice()
             ->setCountryCode("NL")
-            ->setIndividual("foo")
+            ->setCustomerIdentifier("foo")
+            ->getIndividualAddresses()
             ->doRequest();
 
         $this->assertEquals(0, $request->accepted);
@@ -274,7 +291,8 @@ class GetAddressesIntegrationTest extends PHPUnit_Framework_TestCase
         $request = $this->addressRequest
             ->setOrderTypeInvoice()
             ->setCountryCode("NL")
-            ->setCompany("19550307")
+            ->setCustomerIdentifier("19550307")
+            ->getCompanyAddresses()
             ->doRequest();
 
         $this->assertEquals(0, $request->accepted);

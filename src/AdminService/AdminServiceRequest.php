@@ -50,6 +50,9 @@ abstract class AdminServiceRequest
             case ConfigurationProvider::PAYMENTPLAN_TYPE:
                 return "PaymentPlan";
                 break;
+            case ConfigurationProvider::ACCOUNTCREDIT_TYPE:
+                return "AccountCredit";
+                break;
             default:
                 return $orderTypeAsConst;
         }
@@ -63,7 +66,6 @@ abstract class AdminServiceRequest
      */
     public function doRequest($resendOrderWithFlippedPriceIncludingVat = false)
     {
-
         $requestObject = $this->prepareRequest($resendOrderWithFlippedPriceIncludingVat);
 
         $soapClient = new SoapClient($this->orderBuilder->conf, ConfigurationProvider::ADMIN_TYPE);
