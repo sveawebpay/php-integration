@@ -47,15 +47,13 @@ class CheckoutAdminResponseHelper
                 $delivery['Credits'] = self::convertCredits($credits);
             }
 
-            foreach ($credits as $deliveryOrderRow) {
-                $newDeliveryOrderRows[] = self::convertMinorCurrencyValues($deliveryOrderRow);
-            }
-
             $deliveryOrderRows = $delivery['OrderRows'];
             $newDeliveryOrderRows = array();
 
-            foreach ($deliveryOrderRows as $deliveryOrderRow) {
-                $newDeliveryOrderRows[] = self::convertMinorCurrencyValues($deliveryOrderRow);
+            if (is_array($deliveryOrderRows)) {
+                foreach ($deliveryOrderRows as $deliveryOrderRow) {
+                    $newDeliveryOrderRows[] = self::convertMinorCurrencyValues($deliveryOrderRow);
+                }
             }
 
             $delivery['OrderRows'] = $newDeliveryOrderRows;
@@ -77,8 +75,10 @@ class CheckoutAdminResponseHelper
             $creditOrderRows = $credit['OrderRows'];
             $newCreditOrderRows = array();
 
-            foreach ($creditOrderRows as $creditOrderRow) {
-                $newCreditOrderRows[] = self::convertMinorCurrencyValues($creditOrderRow);
+            if (is_array($creditOrderRows)) {
+                foreach ($creditOrderRows as $creditOrderRow) {
+                    $newCreditOrderRows[] = self::convertMinorCurrencyValues($creditOrderRow);
+                }
             }
 
             $credit['OrderRows'] = $newCreditOrderRows;

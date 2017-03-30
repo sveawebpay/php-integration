@@ -38,7 +38,8 @@ $getAddressesForIndividualSE = "4605092222";
 $useCredentialsForCountry = "SE";
 
 // Populate the request object
-$request->setIndividual($getAddressesForIndividualSE);
+$request->setCustomerIdentifier($getAddressesForIndividualSE);
+$request->getIndividualAddresses();
 $request->setCountryCode($useCredentialsForCountry);
 $request->setOrderTypeInvoice();
 
@@ -55,7 +56,8 @@ $companyRequest = WebPay::getAddresses($myConfig);
 
 $getAddressesForCompanyNO = 923313850;
 
-$companyRequest->setCompany($getAddressesForCompanyNO);
+$companyRequest->setCustomerIdentifier($getAddressesForCompanyNO);
+$companyRequest->getCompanyAddresses();
 $companyRequest->setCountryCode("NO");
 $companyRequest->setOrderTypeInvoice();
 

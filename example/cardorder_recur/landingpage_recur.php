@@ -19,7 +19,7 @@ $myConfig = ConfigurationService::getTestConfig();
 $countryCode = "SE"; // should match request countryCode
 
 // the raw request response is posted to the returnurl (this page) from Svea.
-$rawResponse = $_POST;
+$rawResponse = $_REQUEST;
 
 // decode the raw response by passing it through the Svea\WebPay\Response\SveaResponse class
 $myResponse = new SveaResponse($rawResponse, $countryCode, $myConfig);
