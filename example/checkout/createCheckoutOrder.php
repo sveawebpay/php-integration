@@ -70,12 +70,14 @@ $secondBoughtItem = WebPayItem::orderRow()
 $discountItem = WebPayItem::fixedDiscount()
     ->setName('Promo coupon')
     ->setVatPercent(25)
+    ->setTemporaryReference('123')
 //    ->setAmountExVat(12.32)   // - this action is not allowed for checkout
     ->setAmountIncVat(20.00);
 
 $shippingItem = WebPayItem::shippingFee()
     ->setAmountIncVat(17.60)
     ->setVatPercent(25)
+    ->setTemporaryReference('123')
 //    ->setAmountExVat(25.32)   // - this action is not allowed for checkout
     ->setName('incvatShippingFee');
 
