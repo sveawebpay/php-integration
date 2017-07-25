@@ -48,7 +48,8 @@ class DirectPayment extends HostedPayment
         //card
         $methods[] = SystemPaymentMethod::KORTCERT;
         $methods[] = SystemPaymentMethod::SKRILL;
-        
+        $methods[] = SystemPaymentMethod::SVEACARDPAY;
+
         //other
         $methods[] = SystemPaymentMethod::PAYPAL;
 
