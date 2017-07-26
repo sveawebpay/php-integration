@@ -41,7 +41,7 @@ class DirectPaymentTest extends \PHPUnit_Framework_TestCase {
 
         $this->assertEquals( SystemPaymentMethod::KORTCERT, $xmlMessage->excludepaymentmethods->exclude[14] );
         $this->assertEquals( SystemPaymentMethod::SKRILL, $xmlMessage->excludepaymentmethods->exclude[15] );
-        $this->assertEquals( SystemPaymentMethod::PAYPAL, $xmlMessage->excludepaymentmethods->exclude[16] );        
+        $this->assertEquals( SystemPaymentMethod::PAYPAL, $xmlMessage->excludepaymentmethods->exclude[17] );
     }
 
     public function testBuildDirectBankPayment() {
