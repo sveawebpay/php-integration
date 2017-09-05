@@ -281,8 +281,8 @@ class HostedPayment
      * [errormessage] =>
      * [id] => //the order id
      * [created]
-     * [url] => https://webpay.sveaekonomi.se/webpay/preparedpayment/xxxxx Will return test or prod url depending on where the order was created
-     * [testurl] => https://test.sveaekonomi.se/webpay/preparedpayment/xxxxx Deprecated! Not valid if the order is created in prod.
+     * [url] => https://webpaypaymentgateway.svea.com/webpay/preparedpayment/xxxxx Will return test or prod url depending on where the order was created
+     * [testurl] => https://webpaypaymentgatewaytest.svea.com/webpay/preparedpayment/xxxxx Deprecated! Not valid if the order is created in prod.
      * @throws ValidationException
      */
     public function getPaymentUrl()

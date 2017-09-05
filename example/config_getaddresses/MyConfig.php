@@ -8,12 +8,12 @@ use Svea\WebPay\Config\SveaConfigurationProvider;
 class MyConfig
 {    // changed the class name to MyConfig
 
-    const SWP_TEST_URL = "https://test.sveaekonomi.se/webpay/payment";
-    const SWP_PROD_URL = "https://webpay.sveaekonomi.se/webpay/payment";
+    const SWP_TEST_URL = "https://webpaypaymentgatewaytest.svea.com/webpay/payment";
+    const SWP_PROD_URL = "https://webpaypaymentgateway.svea.com/webpay/payment";
     const SWP_TEST_WS_URL = "https://webservices.sveaekonomi.se/webpay_test/SveaWebPay.asmx?WSDL";
     const SWP_PROD_WS_URL = "https://webservices.sveaekonomi.se/webpay/SveaWebPay.asmx?WSDL";
-    const SWP_TEST_HOSTED_ADMIN_URL = "https://test.sveaekonomi.se/webpay/rest/";
-    const SWP_PROD_HOSTED_ADMIN_URL = "https://webpay.sveaekonomi.se/webpay/rest/";
+    const SWP_TEST_HOSTED_ADMIN_URL = "https://webpaypaymentgatewaytest.svea.com/webpay/rest/";
+    const SWP_PROD_HOSTED_ADMIN_URL = "https://webpaypaymentgateway.svea.com/webpay/rest/";
     const SWP_TEST_ADMIN_URL = "https://partnerweb.sveaekonomi.se/WebPayAdminService_test/AdminService.svc/backward"; // /backward => SOAP 1.1
     const SWP_PROD_ADMIN_URL = "https://partnerweb.sveaekonomi.se/WebPayAdminService/AdminService.svc/backward"; // /backward => SOAP 1.1
 

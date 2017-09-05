@@ -104,7 +104,7 @@ class GetAddressesIntegrationTest extends PHPUnit_Framework_TestCase
 
         $this->assertEquals(1, $request->accepted);
         $this->assertEquals('Accepted', $request->resultcode);
-        $this->assertEquals('5F445B19E8C87954904FB7531A51AEE57C5E9413', $request->customerIdentity[0]->addressSelector);
+        $this->assertEquals('2BD497E1A2126A6755AC59D673EA5BD28DBCDC6B', $request->customerIdentity[0]->addressSelector);
         $this->assertEquals('Person', $request->customerIdentity[0]->customerType);
         $this->assertEquals('08 - 111 111 11', $request->customerIdentity[0]->phoneNumber);
         $this->assertEquals('Persson, Tess T', $request->customerIdentity[0]->fullName);

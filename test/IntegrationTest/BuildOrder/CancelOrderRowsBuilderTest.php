@@ -111,7 +111,7 @@ class CancelOrderRowsBuilderIntegrationTest extends PHPUnit_Framework_TestCase
         // 4. enter the transactionid into test_manual_queryOrder_queryCard_order_step_2() below and run the test
 
         $orderLanguage = "sv";
-        $returnUrl = "https://test.sveaekonomi.se/webpay-admin/admin/merchantresponsetest.xhtml";
+        $returnUrl = "https://webpaypaymentgatewaytest.svea.com/webpay-admin/admin/merchantresponsetest.xhtml";
         $ipAddress = "127.0.0.1";
 
         // create order w/three rows
