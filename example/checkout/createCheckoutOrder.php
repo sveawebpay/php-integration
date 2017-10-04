@@ -29,6 +29,7 @@ $orderBuilder->setCountryCode('SE')// customer country, we recommend basing this
     ->setConfirmationUri('http://localhost:51925/checkout/confirm')
     ->setPushUri('https://svea.com/push.aspx?sid=123&svea_order=123')
     ->setTermsUri('http://localhost:51898/terms')
+    ->setValidationCallbackUri('http://localhost:51898/validation-callback')
     ->setLocale($locale);
 
 $presetPhoneNumber = WebPayItem::presetValue()

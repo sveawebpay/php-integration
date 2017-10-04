@@ -32,6 +32,11 @@ class MerchantSettings
     private $pushUri;
 
     /**
+     * @var string $validationCallbackUri
+     */
+    private $validationCallbackUri;
+
+    /**
      * MerchantSettings constructor.
      */
     public function __construct()
@@ -116,16 +121,36 @@ class MerchantSettings
     }
 
     /**
+     * @return string
+     */
+    public function getValidationCallbackUri()
+    {
+        return $this->validationCallbackUri;
+    }
+
+    /**
+     * @param string $validationCallbackUri
+     * @return MerchantSettings
+     */
+    public function setValidationCallbackUri($validationCallbackUri)
+    {
+        $this->validationCallbackUri = $validationCallbackUri;
+
+        return $this;
+    }
+
+    /**
      * Return structured merchant urls
      * @return array
      */
-    public function getMerchantSettings()
+    public function toArray()
     {
         return array(
             'termsUri' => $this->getTermsUri(),
             'checkoutUri' => $this->getCheckoutUri(),
             'confirmationUri' => $this->getConfirmationUri(),
-            'pushUri' => $this->getPushUri()
+            'pushUri' => $this->getPushUri(),
+            'checkoutValidationCallBackUri' => $this->getValidationCallbackUri()
         );
     }
      

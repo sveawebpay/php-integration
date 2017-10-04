@@ -154,6 +154,17 @@ class CheckoutOrderBuilder extends OrderBuilder
     }
 
     /**
+     * @param string $validationCallbackUri
+     * @return $this
+     */
+    public function setValidationCallbackUri($validationCallbackUri)
+    {
+        $this->merchantSettings->setValidationCallbackUri($validationCallbackUri);
+
+        return $this;
+    }
+
+    /**
      * @return string
      */
     public function getLocale()
