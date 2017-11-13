@@ -31,7 +31,7 @@ abstract class AdminImplementationService
     public function __construct(CheckoutAdminOrderBuilder $adminBuilder)
     {
         $this->adminBuilder = $adminBuilder;
-        $this->checkoutAdminConnection = new CheckoutAdminConnection($adminBuilder->conf);
+        $this->checkoutAdminConnection = new CheckoutAdminConnection($adminBuilder->conf, $adminBuilder->countryCode);
     }
 
     /**

@@ -44,40 +44,12 @@ class CreateOrderBuilderIntegrationTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(1, $response->accepted);
     }
 
+    // CreateOrderBuilder card payment method
+    // see Svea\WebPay\Test\IntegrationTest\HostedService\Payment\CardPaymentURLIntegrationTest->test_manual_CardPayment_getPaymentUrl()
 
-    public function test_createCheckoutOrder_ValidationCallbackUri_Accepted()
-    {
-        $validationCallbackUri = 'http://localhost:51898/validation-callback';
-        $myConfig = ConfigurationService::getTestConfig();
-
-        $locale = 'sv-Se';
-
-        $orderBuilder = WebPay::checkout($myConfig);
-
-        $orderBuilder->setCountryCode('SE')// customer country, we recommend basing this on the customer billing address
-        ->setCurrency('SEK')
-            ->setClientOrderNumber(rand(270000, 670000))
-            ->setCheckoutUri('http://localhost:51925/')
-            ->setConfirmationUri('http://localhost:51925/checkout/confirm')
-            ->setPushUri('https://svea.com/push.aspx?sid=123&svea_order=123')
-            ->setTermsUri('http://localhost:51898/terms')
-            ->setValidationCallbackUri($validationCallbackUri)
-            ->setLocale($locale);
+    // CreateOrderBuilder direct bank payment method   //TODO    
 
 
-        $firstBoughtItem = WebPayItem::orderRow()
-            ->setAmountIncVat(100.00)
-            ->setVatPercent(25)
-            ->setQuantity(1)
-            ->setArticleNumber('123')
-            ->setTemporaryReference('230')
-            ->setName('Fork');
-
-        $orderBuilder->addOrderRow($firstBoughtItem);
-
-        $response = $orderBuilder->createOrder();
-        $this->assertEquals($validationCallbackUri, $response['MerchantSettings']['CheckoutValidationCallBackUri']);
-    }
 }
 
 

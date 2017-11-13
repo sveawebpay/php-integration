@@ -25,12 +25,18 @@ class CheckoutAdminConnection
     protected $checkoutClient;
 
     /**
+     * @var CheckoutAdminClient
+     */
+    protected $countryCode;
+
+    /**
      * CheckoutServiceConnection constructor.
      * @param $config
      */
-    public function __construct(ConfigurationProvider $config)
+    public function __construct(ConfigurationProvider $config, $countryCode = NULL)
     {
         $this->config = $config;
+        $this->countryCode = $countryCode;
 
         $this->setConnector();
         $this->setClient();
@@ -95,8 +101,8 @@ class CheckoutAdminConnection
     private function setConnector()
     {
         $this->connector = Connector::init(
-            $this->config->getCheckoutMerchantId(),
-            $this->config->getCheckoutSecret(),
+            $this->config->getCheckoutMerchantId($this->countryCode),
+            $this->config->getCheckoutSecret($this->countryCode),
             $this->config->getEndPoint(ConfigurationProvider::CHECKOUT_ADMIN)
         );
     }

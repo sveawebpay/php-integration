@@ -1,6 +1,6 @@
 {
   "name": "sveaekonomi/webpay",
-  "version": "3.2.5",
+  "version": "3.3.0",
   "description": "Php integration library for webpay and admin functionality.",
   "license": "Apache-2.0",
   "authors": [
@@ -9,8 +9,17 @@
       "email": "support-webpay@sveaekonomi.se"
     }
   ],
+  "config": {
+    "secure-http": false
+  },
+  "repositories": [
+    {
+      "type": "git",
+      "url": "http://tfs.ia.corp.svea.com:8080/tfs/Projects/Svea.WebPay.Extensions/_git/php-checkout"
+    }
+  ],
   "require": {
-    "sveaekonomi/checkout": "^1.0.0",
+    "sveaekonomi/checkout": "dev-develop",
     "php": ">=5.3.0",
     "ext-curl": "*",
     "ext-soap": "*"

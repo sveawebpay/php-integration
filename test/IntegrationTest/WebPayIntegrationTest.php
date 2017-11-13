@@ -414,4 +414,51 @@ class WebPayIntegrationTest extends PHPUnit_Framework_TestCase
 //        $this->assertEquals(213060, $pricesPerMonth->values[0]['campaignCode']); //don't test to be flexible
         $this->assertEquals(2029, $pricesPerMonth->values[0]['pricePerMonth']);
     }
+
+    public function test_Checkout_SveaConfigurationProvider()
+    {
+        $responseSE = WebPay::checkout(ConfigurationService::getTestConfig())
+            ->setCountryCode("SE")
+            ->setCurrency("SEK")
+            ->setLocale("sv-se")
+            ->setCheckoutUri("http://localhost")
+            ->setTermsUri("http://localhost")
+            ->setPushUri("http://localhost")
+            ->setConfirmationUri("http://localhost")
+            ->setClientOrderNumber("PHP_IntegrationTest_" . rand(0, 10000000))
+            ->addOrderRow(WebPayItem::orderRow()
+            ->setArticleNumber("1")
+                ->setQuantity(2)
+                ->setAmountIncVat(1000.00)
+                ->setDescription("Specification")
+                ->setName('Prod')
+                ->setUnit("st")
+                ->setVatPercent(25)
+                ->setDiscountPercent(0)
+            )->createOrder();
+
+        $this->assertEquals($responseSE['CountryCode'], "SE");
+
+        $responseNO = WebPay::checkout(ConfigurationService::getTestConfig())
+            ->setCountryCode("NO")
+            ->setCurrency("NOK")
+            ->setLocale("nn-no")
+            ->setCheckoutUri("http://localhost")
+            ->setTermsUri("http://localhost")
+            ->setPushUri("http://localhost")
+            ->setConfirmationUri("http://localhost")
+            ->setClientOrderNumber("PHP_IntegrationTest_" .rand(0, 10000000))
+            ->addOrderRow(WebPayItem::orderRow()
+            ->setArticleNumber("1")
+                ->setQuantity(2)
+                ->setAmountIncVat(1000.00)
+                ->setDescription("Specification")
+                ->setName('Prod')
+                ->setUnit("st")
+                ->setVatPercent(25)
+                ->setDiscountPercent(0)
+            )->createOrder();
+
+        $this->assertEquals($responseNO['CountryCode'], "NO");
+    }
 }

@@ -81,7 +81,7 @@ class CreateOrderService extends CheckoutService
         $data['countryCode'] = $order->countryCode;
         $data['locale'] = $order->getLocale();
 
-        $data['merchantSettings'] = $order->getMerchantSettings()->toArray();
+        $data['merchantSettings'] = $order->getMerchantSettings()->getMerchantSettings();
 
         $data['clientOrderNumber'] = $order->getClientOrderNumber();
 

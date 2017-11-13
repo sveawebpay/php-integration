@@ -1,6 +1,6 @@
 # Svea PHP Integration Package Documentation
 
-## Version 3.2.5
+## Version 3.3.0
 
 ### Current build status
 | Branch                    received| Build status                               |
@@ -626,7 +626,6 @@ Example for populating order with required fields.
         ->setConfirmationUri('http://localhost:51925/checkout/confirm') //required
         ->setPushUri('https://svea.com/push.aspx?sid=123&svea_order=123') //required
         ->setTermsUri('http://localhost:51898/terms') //required
-        ->setValidationCallbackUri('http://localhost:51898/validation-callback') // optional
         ->setLocale('sv-Se'); // required
   ```
 
@@ -1528,7 +1527,6 @@ $order = WebPay::checkout($config)
   ->setConfirmationUri("http://localhost:51925/checkout/confirm")     // required Merchant settings (confirmation uri)
   ->setPushUri("https://svea.com/push.aspx?sid=123&svea_order=123")   // required Merchant settings (push uri)
   ->setTermsUri("http://localhost:51898/terms")                       // required Merchant settings (terms uri)
-  ->setValidationCallbackUri('http://localhost:51898/validation-callback') // optional Merchant settings (validation uri)
   ->setLocale('sv-SE')                                                // required for Svea Checkout
   ->createOrder()                                                     // Create new Checkout order
    ;

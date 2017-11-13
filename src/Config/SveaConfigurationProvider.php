@@ -211,9 +211,16 @@ class SveaConfigurationProvider implements ConfigurationProvider
      *
      * @return string
      */
-    public function getCheckoutMerchantId()
+    public function getCheckoutMerchantId($country = NULL)
     {
-        return $this->getCredentialsProperty('checkoutMerchantId', ConfigurationProvider::CHECKOUT, 'SE');
+        if($country != NULL)
+        {
+            return $this->getCredentialsProperty('checkoutMerchantId', ConfigurationProvider::CHECKOUT, $country);
+        }
+        else
+        {
+            return $this->getCredentialsProperty('checkoutMerchantId', ConfigurationProvider::CHECKOUT, 'SE');
+        }
     }
 
     /**
@@ -221,8 +228,15 @@ class SveaConfigurationProvider implements ConfigurationProvider
      *
      * @return string
      */
-    public function getCheckoutSecret()
+    public function getCheckoutSecret($country = NULL)
     {
-        return $this->getCredentialsProperty('checkoutSecret', ConfigurationProvider::CHECKOUT, 'SE');
+        if($country != NULL)
+        {
+            return $this->getCredentialsProperty('checkoutSecret', ConfigurationProvider::CHECKOUT, $country);
+        }
+        else
+        {
+            return $this->getCredentialsProperty('checkoutSecret', ConfigurationProvider::CHECKOUT, 'SE');
+        }
     }
 }

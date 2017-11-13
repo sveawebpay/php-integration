@@ -39,8 +39,8 @@ return array(
                 'clientNumber' => 58702
             ),
             ConfigurationProvider::CHECKOUT => array(
-                'username' => 'sverigetest',
-                'password' => 'sverigetest'
+                'checkoutMerchantId' => '124842', // Swedish test merchant
+                'checkoutSecret' => '1NDxpT2WQ4PW6Ud95rLWKD98xVr45Q8O9Vd52nomC7U9B18jp7lHCu7nsiTJO1NWXjSx26vE41jJ4rul7FUP1cGKXm4wakxt3iF7k63ayleb1xX9Di2wW46t9felsSPW'
             )
         ),
         'NO' => array(
@@ -58,6 +58,10 @@ return array(
                 'username' => '',
                 'password' => '',
                 'clientNumber' => ''
+            ),
+            ConfigurationProvider::CHECKOUT => array(
+                'checkoutMerchantId' => '124941', // Norwegian test merchant
+                'checkoutSecret' => 'XDyrnJnhbvmOch6brKPbF6mVx4NG7Wqzzhm92tsrx3H2IB3m82QxqwM4EUz5Cq9X8kEPpfZxzayB4pfkVEAC2uemgEikIUTf3v1pHxAuRlGuycWt6XyKkjBm9oQxR6pG'
             )
         ),
         'FI' => array(
@@ -75,6 +79,10 @@ return array(
                 'username' => '',
                 'password' => '',
                 'clientNumber' => ''
+            ),
+            ConfigurationProvider::CHECKOUT => array(
+                'checkoutMerchantId' => '', // No finnish test merchant yet
+                'checkoutSecret' => ''
             )
         ),
         'DK' => array(

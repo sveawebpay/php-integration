@@ -114,14 +114,14 @@ interface ConfigurationProvider
      *
      * @return string
      */
-    public function getCheckoutMerchantId();
+    public function getCheckoutMerchantId($country = NULL);
 
     /**
      * fetch Checkout Secret word, used for Checkout order type
      *
      * @return string
      */
-    public function getCheckoutSecret();
+    public function getCheckoutSecret($country = NULL);
 
     /**
      * Use this to provide information about your integration platform (i.e. Magento, OpenCart et al), that will be sent to Svea with every service

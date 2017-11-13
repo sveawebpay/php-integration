@@ -52,8 +52,8 @@ class CheckoutServiceConnection implements ServiceConnection
     private function setConnector()
     {
         $this->connector = Connector::init(
-            $this->config->getCheckoutMerchantId(),
-            $this->config->getCheckoutSecret(),
+            $this->config->getCheckoutMerchantId(strtolower($this->countryCode)),
+            $this->config->getCheckoutSecret(strtolower($this->countryCode)),
             $this->config->getEndPoint(ConfigurationProvider::CHECKOUT)
         );
     }

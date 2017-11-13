@@ -59,6 +59,10 @@ return array(
                 'username' => '',
                 'password' => '',
                 'clientNumber' => ''
+            ),
+            ConfigurationProvider::CHECKOUT => array(
+                'username' => '',
+                'password' => ''
             )
         ),
         'FI' => array(
@@ -76,6 +80,10 @@ return array(
                 'username' => '',
                 'password' => '',
                 'clientNumber' => ''
+            ),
+            ConfigurationProvider::CHECKOUT => array(
+                'username' => '',
+                'password' => ''
             )
         ),
         'DK' => array(

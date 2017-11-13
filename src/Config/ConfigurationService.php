@@ -171,7 +171,7 @@ class ConfigurationService
         foreach ($credentials as $countryCode => $configPerCountry) {
             $credentialParams[$countryCode] = array('auth' => array());
             foreach ($configPerCountry as $paymentType => $configPerType) {
-                if ($paymentType === ConfigurationProvider::CHECKOUT) {
+                if ($paymentType === ConfigurationProvider::CHECKOUT && ($countryCode == "DE" || $countryCode  == "NL")) {
                     $configPerType = array_merge($configPerType, $checkoutCredentials);
                 }
                 $credentialParams[$countryCode]['auth'][$paymentType] = $configPerType;
