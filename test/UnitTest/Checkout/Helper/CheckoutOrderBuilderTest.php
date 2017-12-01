@@ -86,5 +86,14 @@ class CheckoutOrderBuilderTest extends TestCase
         $this->assertEquals($this->order->getLocale(), 'sv-Se');
     }
 
+    /**
+     * @test
+     */
+    public function setValidationCallbackUri()
+    {
+        $validationCallbackUri = 'http://localhost:51898/validation-callback';
+        $this->order->setValidationCallbackUri($validationCallbackUri);
+        $this->assertEquals($this->order->getMerchantSettings()->getValidationCallbackUri(), $validationCallbackUri);
+    }
 
 }

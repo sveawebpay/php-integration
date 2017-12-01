@@ -184,7 +184,7 @@ class Helper
         // @todo change this to properly defined information
         $library_properties = array(
             'library_name' => 'PHP Integration Package',
-            'library_version' => '3.2.1',
+            'library_version' => '3.3.1',
         );
 
         return $library_properties;

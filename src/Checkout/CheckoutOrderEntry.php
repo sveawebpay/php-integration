@@ -120,6 +120,17 @@ class CheckoutOrderEntry
     }
 
     /**
+     * @param string $validationCallbackUri
+     * @return $this
+     */
+     public function setValidationCallbackUri($validationCallbackUri)
+    {
+        $this->checkoutOrderBuilder->setValidationCallbackUri($validationCallbackUri);
+
+        return $this;
+    }
+
+    /**
      * Required for get and update methods
      * @param $id
      * @return $this
