@@ -1544,8 +1544,10 @@ Use the WebPay::checkout()->getOrder() method to get existing Checkout order inf
 $locale = 'sv-SE';
 
 $order = WebPay::checkout($config)
-  ->setId(50)             // required Checkout order ID
-  ->getOrder()            // Get existing Checkout order
+  ->setCountryCode('SE')   // required locale field
+  ->setCheckoutOrderId(50) // required Checkout order ID
+  ->getOrder()             // Get existing Checkout order
+
 ;
 ...
 ```
@@ -1559,10 +1561,10 @@ Use the WebPay::checkout()->updateOrder() method to update existing Checkout ord
 $locale = 'sv-SE';
 
 $order = WebPay::checkout($config)
-  ->setId(5)                           // required Checkout order ID
-  ->addOrderRow($orderRow)             // see WebPayItem::orderRow
-  ->updateOrder()                      // Update existing Checkout order
-;
+  ->setCountryCode('SE')   // required locale field
+  ->setCheckoutOrderId(50) // required Checkout order ID
+  ->addOrderRow($orderRow) // see WebPayItem::orderRow
+  ->updateOrder();         // Update existing Checkout order
 ...
 ```
 
