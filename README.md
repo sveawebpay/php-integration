@@ -1,6 +1,6 @@
 # Svea PHP Integration Package Documentation
 
-## Version 3.3.1
+## Version 3.3.2
 
 ### Current build status
 | Branch                    received| Build status                               |
