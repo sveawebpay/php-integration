@@ -205,7 +205,7 @@ class WebPay
      *      $response = $request->getCompanyAddresses()->doRequest();       // returns GetAddressesResponse
      *
      * @see Svea\WebPay\WebService\GetAddress\GetAddress
-     * @return \Svea\WebPay\WebService\WebServiceResponse\GetAddressesResponse Svea\WebPay\WebService\WebServiceResponse\GetAddressesResponse
+     * @return \Svea\WebPay\WebService\GetAddress\GetAddresses
      * @param ConfigurationProvider $config instance implementing Svea\WebPay\Config\ConfigurationProvider Interface
      * @throws \Svea\WebPay\BuildOrder\Validator\ValidationException
      */
