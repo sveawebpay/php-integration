@@ -125,21 +125,7 @@ If you wish to run the package test suite, PHPUnit 3.7 is required.
 
 First of run the following command in your command-line interface:
 
-    Composer require sveaekonomi/webpay
-
-or add this part to your composer.json:
-
-```json
-    {
-        "require": {
-            "sveaekonomi/webpay": "dev-master"
-        }
-    }
-```
-
-and then run this command in your command-line interface:
-
-    composer update
+    composer require sveaekonomi/webpay
 
 Doing this will pull the library into your project and store it in the `vendor` folder with the name `sveaekonomi`.
 
