@@ -100,7 +100,11 @@ class WebPay
         return new CreateOrderBuilder($config);
     }
 
-    /** helper function, throws exception if no config is given */
+    /**
+     * Helper function, throws exception if no config is given.
+     *
+     * @throws ValidationException
+     */
     private static function throwMissingConfigException()
     {
         throw new ValidationException('-missing parameter: This method requires an Svea\WebPay\Config\ConfigurationProvider object as parameter. Create a class that implements class Svea\WebPay\Config\ConfigurationProvider. Set returnvalues to configuration values. Create an object from that class. Alternative use static function from class ConfigurationService e.g. ConfigurationService::getDefaultConfig(). You can replace the default config values into config files to return your own config values.');
@@ -205,7 +209,7 @@ class WebPay
      *      $response = $request->getCompanyAddresses()->doRequest();       // returns GetAddressesResponse
      *
      * @see Svea\WebPay\WebService\GetAddress\GetAddress
-     * @return \Svea\WebPay\WebService\WebServiceResponse\GetAddressesResponse Svea\WebPay\WebService\WebServiceResponse\GetAddressesResponse
+     * @return \Svea\WebPay\WebService\GetAddress\GetAddresses
      * @param ConfigurationProvider $config instance implementing Svea\WebPay\Config\ConfigurationProvider Interface
      * @throws \Svea\WebPay\BuildOrder\Validator\ValidationException
      */
