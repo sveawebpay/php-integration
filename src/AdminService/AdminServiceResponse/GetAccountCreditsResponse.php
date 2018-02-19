@@ -82,7 +82,7 @@ class GetAccountCreditsResponse
 
                 $this->customer->setNationalIdNumber($order->Customer->NationalIdNumber);
                 $this->customer->setInitials($order->Customer->IndividualIdentity->Initials);
-                if (isset($order->Customer->IndividualIdentity->BirthDate)) { // setBirthDate is picky about the argument format
+                if (isset($order->Customer->IndividualIdentity->BirthDate) && $order->Customer->IndividualIdentity->BirthDate) { // setBirthDate is picky about the argument format
                     $this->customer->setBirthDate($order->Customer->IndividualIdentity->BirthDate);
                 }
                 $this->customer->setName($order->Customer->IndividualIdentity->FirstName, $order->Customer->IndividualIdentity->LastName); // sets firstName, lastName if present
