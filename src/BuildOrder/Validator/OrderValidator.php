@@ -127,14 +127,58 @@ abstract class OrderValidator
      * @return array
      */
     protected function validateOrderId(CheckoutOrderBuilder $order, $errors)
-    {
-        if (!is_numeric($order->getId()) || !is_int($order->getId())) {
-            $errors['incorrect OrderId'] = "orderId can't be empty and must be int";
-        }
+{
+    if (!is_numeric($order->getId()) || !is_int($order->getId())) {
+        $errors['incorrect OrderId'] = "orderId can't be empty and must be int";
+    }
 
+    return $errors;
+}
+
+    /**
+     * @param CheckoutOrderBuilder $request
+     * @param array $errors
+     * @return array
+     */
+    protected function validatePresetIsCompanyIsBoolean($request, $errors)
+    {
+        if (count($request->getPresetValues()) > 0) {
+            foreach ($request->getPresetValues() as $presetValue) {
+                if(strtolower($presetValue->getTypeName()) == 'iscompany')
+                {
+                    if(!is_bool($presetValue->getValue()))
+                    {
+                        $errors['incorrect type'] = "isCompany must be of type boolean";
+                    }
+                }
+            }
+        }
         return $errors;
     }
 
+    /**
+     * @param CheckoutOrderBuilder $request
+     * @param array $errors
+     * @return array
+     */
+    protected function validatePresetIsCompanyIsSet($request, $errors)
+    {
+        if(count($request->getPresetValues()) == 0)
+        {
+            $errors['missing value'] = "isCompany presetValue is not set";
+        }
+        else
+        {
+            foreach ($request->getPresetValues() as $presetValue) {
+                if (strtolower($presetValue->getTypeName()) == 'iscompany') {
+                    if ($presetValue->getValue() === null) {
+                        $errors['missing value'] = "isCompany value is null";
+                    }
+                }
+            }
+        }
+        return $errors;
+    }
 
     /**
      * @param CheckoutOrderBuilder $order

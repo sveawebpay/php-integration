@@ -1,7 +1,5 @@
 # Svea PHP Integration Package Documentation
 
-## Version 3.3.2
-
 ### Current build status
 | Branch                    received| Build status                               |
 |---------------------------------- |------------------------------------------- |
@@ -827,13 +825,106 @@ page where you want to display the IFramed checkout. The Layout is a String defi
 echo $response['Gui']['Snippet']
 ```
 
-##### Callbacks
-Two callbacks, at two different stages in the consumers order flow, are sent as POST to the pushUri with the checkout order id.
+#### 4.6.6 Callbacks
+Callbacks are sent multiple times during the order flow, the callbacks are sent as POST to the pushUri with the checkout order id.
 eg. http://localhost:63473/shop/orderCallback/{checkout.order.uri}
 
 When your server receives a callback it's a notification that something has changed in the order. Make a GetOrder request to get the latest order data.
 
+#### 4.6.7 GetAvailablePartPaymentCampaigns <a name="i4-6-4"></a>
+
+[See full request example](example/checkout/getAvailablePartPaymentCampaigns.php)
+
+GetAvailablePartPaymentCampaigns can be used to fetch campaigns that can be stored and used to calculate how much a certain product will cost if the customer would want to buy the product on a certain campaign.
+
+Example request:
+```php
+<?php
+    $orderBuilder = WebPay::checkout($myConfig);
+
+    $presetValueIsCompany = \Svea\WebPay\WebPayItem::presetValue()
+        ->setTypeName(\Svea\WebPay\Checkout\Model\PresetValue::IS_COMPANY)
+        ->setValue(false)
+        ->setIsReadonly(true);
+
+    $orderBuilder->setCountryCode('SE')
+        ->addPresetValue($presetValueIsCompany);
+
+    $response = $orderBuilder->getAvailablePartPaymentCampaigns();
+```
+
 [Back to top](#index)
+
+Example response:
+```php
+<?php
+Array
+(
+    [0] => Array
+        (
+            [CampaignCode] => 213060
+            [ContractLengthInMonths] => 3
+            [Description] => Köp nu betala om 3 månader (räntefritt)
+            [FromAmount] => 1000
+            [InitialFee] => 100
+            [InterestRatePercent] => 0
+            [MonthlyAnnuityFactor] => 1
+            [NotificationFee] => 29
+            [NumberOfInterestFreeMonths] => 3
+            [NumberOfPaymentFreeMonths] => 3
+            [PaymentPlanType] => 2
+            [ToAmount] => 50000
+        )
+        
+    [1] => Array
+        (
+            [CampaignCode] => 223065
+            [ContractLengthInMonths] => 3
+            [Description] => Black Friday - Cyber Monday
+            [FromAmount] => 120
+            [InitialFee] => 0
+            [InterestRatePercent] => 0
+            [MonthlyAnnuityFactor] => 1
+            [NotificationFee] => 0
+            [NumberOfInterestFreeMonths] => 3
+            [NumberOfPaymentFreeMonths] => 3
+            [PaymentPlanType] => 2
+            [ToAmount] => 30000
+        )
+    [2] => Array
+        (
+            [CampaignCode] => 310012
+            [ContractLengthInMonths] => 12
+            [Description] => Dela upp betalningen på 12 månader (räntefritt)
+            [FromAmount] => 1000
+            [InitialFee] => 295
+            [InterestRatePercent] => 0
+            [MonthlyAnnuityFactor] => 0.083333333333333
+            [NotificationFee] => 35
+            [NumberOfInterestFreeMonths] => 12
+            [NumberOfPaymentFreeMonths] => 0
+            [PaymentPlanType] => 1
+            [ToAmount] => 30000
+        )
+    [3] => Array
+            (
+                [CampaignCode] => 410012
+                [ContractLengthInMonths] => 12
+                [Description] => Dela upp betalningen på 12 månader
+                [FromAmount] => 100
+                [InitialFee] => 0
+                [InterestRatePercent] => 19.9
+                [MonthlyAnnuityFactor] => 0.092586652785396
+                [NotificationFee] => 29
+                [NumberOfInterestFreeMonths] => 0
+                [NumberOfPaymentFreeMonths] => 0
+                [PaymentPlanType] => 0
+                [ToAmount] => 30000
+            )
+)
+```
+
+For information about the campaigns please see [CampaignCodeInfo](https://github.com/sveawebpay/php-checkout#811-campaigncodeinfo)
 
 ### 4.7 Account Credit <a name="i4-7"></a>
 

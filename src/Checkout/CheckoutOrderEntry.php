@@ -65,6 +65,18 @@ class CheckoutOrderEntry
     }
 
     /**
+     * Returns all campaigns that is available on the merchant
+     *
+     * @return array
+     */
+    public function getAvailablePartPaymentCampaigns()
+    {
+        $getAvailablePartPaymentCampaigns = $this->checkoutOrderBuilder->getAvailablePartPaymentCampaigns();
+
+        return $getAvailablePartPaymentCampaigns;
+    }
+
+    /**
      * @param string $checkoutUri
      * @return $this
      */

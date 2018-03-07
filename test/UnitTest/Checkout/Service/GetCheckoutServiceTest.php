@@ -7,7 +7,7 @@ use Svea\WebPay\Test\UnitTest\Checkout\TestCase;
 use Svea\WebPay\Checkout\Service\CheckoutService;
 
 /**
- * Class CreateCheckoutServiceTest
+ * Class GetCheckoutServiceTest
  * @package Svea\Svea\WebPay\WebPay\Test\UnitTest\Checkout\Service
  */
 class GetCheckoutServiceTest extends TestCase

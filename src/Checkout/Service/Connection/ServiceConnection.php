@@ -11,5 +11,5 @@ interface ServiceConnection
     public function create($requestData);
     public function get($requestData);
     public function update($requestData);
-    public function getCheckoutSubsystemInfo($requestData);
+    public function getAvailablePartPaymentCampaigns($requestData);
 }
