@@ -1606,11 +1606,14 @@ $order = WebPay::checkout($config)
   ->setPushUri("https://svea.com/push.aspx?sid=123&svea_order=123")   // required Merchant settings (push uri)
   ->setTermsUri("http://localhost:51898/terms")                       // required Merchant settings (terms uri)
   ->setValidationCallbackUri('http://localhost:51898/validation-callback') // optional Merchant settings (validation uri)
+  ->setPartnerKey('77FB33EC-505D-4CCF-AA21-D9DF50DC8344')             // optional GUID for partners to Svea, leave blank if you're unsure what this does 
   ->setLocale('sv-SE')                                                // required for Svea Checkout
   ->createOrder()                                                     // Create new Checkout order
    ;
 ...
 ```
+
+Contact Svea if you're a partner that needs a partnerKey, it's not required but it's good for tracking statistics for mutual merchants
 
 #### 6.7.2 Getting information from orders
 Use the WebPay::checkout()->getOrder() method to get existing Checkout order information.

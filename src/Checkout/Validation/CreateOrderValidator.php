@@ -31,6 +31,25 @@ class CreateOrderValidator extends OrderValidator
 
         $errors = $this->validateMerchantSettings($order, $errors);
 
+        $errors = $this->validatePartnerKey($order, $errors);
+
+        return $errors;
+    }
+
+    /**
+     * @param CheckoutOrderBuilder $order
+     * @param array $errors
+     * @return array
+     */
+    private function validatePartnerKey($order, $errors)
+    {
+        $guid = $order->getPartnerKey();
+        if($guid != null)
+        {
+            if (!preg_match('/^\{?[A-Z0-9]{8}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{12}\}?$/', $guid)) {
+                $errors['invalidFormatPartnerKey'] = "partnerKey is not in guid-format. The partnerKey is provided by Svea. If you're a partner to Svea and wish to use the partnerKey, please contact Svea in order to receive a guid.";
+            }
+        }
         return $errors;
     }
 

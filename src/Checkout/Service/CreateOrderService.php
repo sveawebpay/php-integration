@@ -91,6 +91,11 @@ class CreateOrderService extends CheckoutService
             }
         }
 
+        if ($order->getPartnerKey() != null)
+        {
+            $data['partnerKey'] = $order->getPartnerKey();
+        }
+
         return $data;
     }
 }

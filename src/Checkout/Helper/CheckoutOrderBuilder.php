@@ -40,6 +40,11 @@ class CheckoutOrderBuilder extends OrderBuilder
     protected $presetValues = array();
 
     /**
+     * @var string $partnerKey
+     */
+    protected $partnerKey;
+
+    /**
      * CheckoutOrderBuilder constructor.
      * @param \Svea\WebPay\Config\ConfigurationProvider $config
      */
@@ -275,5 +280,27 @@ class CheckoutOrderBuilder extends OrderBuilder
         $this->presetValues [] = $presetValues;
 
         return $this;
+    }
+
+    /**
+     * Sets a partnerKey which is provided by Svea.
+     * Optional to use
+     * @param string $partnerKey
+     * @return $this
+     */
+    public function setPartnerKey($partnerKey)
+    {
+        $this->partnerKey = $partnerKey;
+
+        return $this;
+    }
+
+    /**
+     * Returns a partnerKey
+     * @return string
+     */
+    public function getPartnerKey()
+    {
+        return $this->partnerKey;
     }
 }

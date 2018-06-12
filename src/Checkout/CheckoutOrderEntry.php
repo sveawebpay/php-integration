@@ -179,6 +179,19 @@ class CheckoutOrderEntry
     }
 
     /**
+     * Sets a partnerKey that's provided by Svea
+     *
+     * @param string $partnerKey
+     * @return $this
+     */
+    public function setPartnerKey($partnerKey)
+    {
+        $this->checkoutOrderBuilder->setPartnerKey($partnerKey);
+
+        return $this;
+    }
+
+    /**
      * Required - set order country code, we recommend basing this on the customer billing address
      *
      * For orders using the invoice or payment plan payment methods, you need to supply a country code that corresponds
