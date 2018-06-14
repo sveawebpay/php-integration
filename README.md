@@ -79,20 +79,23 @@
 
 ## I. Introduction
 
+#### Short note on Svea Checkout
+
+If you want a lightweight integration package that only includes the checkout, you can  use the [php-checkout](https://github.com/sveawebpay/php-checkout/) integration package instead.
+
+Read more about how to integrate Svea Checkout in the section [6.7 WebPay::checkout()](#i6-7) and if you wish to see more detailed data structures, see this [documentation](https://checkoutapi.svea.com/docs/html/reference/web-api/data-types/index.htm).
+
+
 ### Svea API
 
-**New!** The WebPay class now includes an entrypoint to the Svea Checkout.
-
-If you want a lightweight installation with only the checkout, you can also use the [php-checkout-integration library instead](https://github.com/sveawebpay/php-checkout-integration/blob/master/README.md)
-Read more in the section [6.7 WebPay::checkout()](#i6-7) and if you wish to see more detailed data structures, please see the documentation in the [*connection library*](https://github.com/sveawebpay/php-checkout-integration).
-
-The WebPay class methods contains the functions needed to create orders and perform payment requests using Svea payment methods. It contains methods to define order contents, send order requests, as well as support methods needed to do this.
+The WebPay class contains the methods required to create orders and perform payment requests. It contains methods to define order contents, send order requests, as well as support methods.
 
 The WebPayAdmin class methods are used to administrate orders after they have been accepted by Svea.
 It includes methods that update, deliver, cancel and credit orders et.al. and can administrate all types of orders.
 
 ### Package design philosophy
-In general, a request using the Svea API starts out with you creating an instance of an order builder class, which is then built up with data using fluent method calls. At a certain point, a method is used to select which service the request will go against. This method then returns an instance of a service request class which handles the specifics of building the request, which in turn returns an instance of the corresponding service response class for inspection.
+In general, a request using the Svea API starts out with you creating an instance of an order builder class, which is then built up with data using fluent method calls.
+At a certain point, a method is used to select which service the request will go against. This method then returns an instance of a service request class which handles the specifics of building the request, which in turn returns an instance of the corresponding service response class for inspection.
 
 The WebPay API consists of the entrypoint methods in the WebPay and WebPayAdmin classes. These instantiate builder classes in the Svea namespace. Given i.e. an order builder instance, you then use method calls to populate it with order rows and customer identifiction data. You then choose the payment method and get a request class in return. You then send the request and get a service response from Svea in return. In general, the request classes will validate that all required builder class attributes are present, and if not will throw an exception stating what methods are missing for the request in question.
 
@@ -109,17 +112,13 @@ The package is built as a fluent API so you can use method chaining when utilisi
 
 ## 1. Installing and configuration <a name="i1"></a>
 
-### 1.1 Requirements<a name="i1-1"></a>
+### 1.1 Requirements <a name="i1-1"></a>
 This integration package has the following requirements:
-* PHP 5.3 or higher
+* PHP 5.3 or higher (5.6+ recommended)
 * <a href="https://getcomposer.org/download/">Composer</a>
-* SOAP needs to be enabled
+* SOAP needs to be enabled on your Web server
 
-Svea Checkout requires [**jQuery**](https://jquery.com) in order to be able to load the IFrame.
-
-If you wish to run the package test suite, PHPUnit 3.7 is required.
-
-### 1.2 Installation<a name="i1-2"></a>
+### 1.2 Installation <a name="i1-2"></a>
 
 First of run the following command in your command-line interface:
 
@@ -130,9 +129,11 @@ Doing this will pull the library into your project and store it in the `vendor` 
 When you are working with files that will use the library you need to include `vendor/autoload.php`
 
 ### 1.3 Configuration <a name="i1-3"></a>
-In order to make use of the Svea services you need to supply your account credentials to authorize yourself against the Svea services. For the Invoice and Payment Plan payment methods, the credentials consist of a set of Username, Password and Client number (one set for each country and service type). For Card and Direct Bank payment methods, and also for using the Checkout, the credentials consist of a (single) set of Merchant id and Secret Word.
+In order to use Svea's services you need to authenticate yourself using the credentials provided by Svea. If you're just going to use the stage environment, you can use the credentials that is provided within the integration package.
 
-You should have received the above credentials from Svea when creating a service account. If not, please contact your Svea account manager.
+For the Invoice, Payment Plan and Account credit payment methods, the credentials consist of a set of Username, Password and Client number (one set for each country and service type).
+
+For Card and Direct Bank payments and also for using the Checkout, the credentials consist of a (single) set of a Merchant ID and Secret Word.
 
 ### 1.4 Using your account credentials with the package <a name="i1-4"></a>
 The WebPay and WebPayAdmin entrypoint methods all require a config object when called. The easiest way to get such an object is to use the ConfigurationService::getDefaultConfig() method. Per default, it returns a config object with the Svea test account credentials as used by the integration package test suite.
@@ -140,7 +141,9 @@ The WebPay and WebPayAdmin entrypoint methods all require a config object when c
 In order to use your own account credentials, either edit the config_test.php or config_prod.php file (depending on the desired environment) with your actual account credentials, or implement the ConfigurationProvider interface in a class of your own -- your implementation could for instance fetch the needed credentials from a database in place of the config files.
 
 ### 1.5 Additional integration properties configuration <a name="i1-5"></a>
-You should also add information about your integration platform (i.e. Magento, OpenCart, or MyAwesomeECommerceSystem etc.), platform version and providing company. See ConfigurationProvider getIntegrationPlatform(), getIntegrationVersion() and getIntegrationCompany() methods, or add that information into config files. When configured, the integration properties information will be passed to Svea alongside the various service requests.
+You should also add information about your integration platform (i.e. Magento, OpenCart, or MyAwesomeECommerceSystem etc.), platform version and providing company. See ConfigurationProvider getIntegrationPlatform(), getIntegrationVersion() and getIntegrationCompany() methods, or add that information into the config files.
+
+When configured, the integration properties information will be passed to Svea alongside the various service requests.
 
 See the provided example of how to customize the config files in the <a href="http://github.com/sveawebpay/php-integration/blob/master/example/config_getaddresses/" target="_blank">example/config_getaddresses/</a> folder.
 
