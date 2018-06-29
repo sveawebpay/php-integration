@@ -510,7 +510,7 @@ $form = $order
 ### 4.5 Using the Svea PayPage   <a name="i4-5"></a>
 
 #### 4.5.1 Bypassing payment method selection
-Go direct to specified payment method, bypassing the *PayPage* completely. By specifying payment method you eliminate one step in the payment process.
+Directly go to specified payment method, bypassing the *PayPage* completely. By specifying payment method you eliminate one step in the payment process.
 
 You can use `WebPay::listPaymentMethods()` to get the various payment methods available.
 
@@ -581,7 +581,7 @@ You can customise which payment methods to display, using the PayPagePayment met
 Available payment methods are listed in the PaymentMethod class and the [Appendix](#appendix).
 
 ### 4.6 Svea Checkout <a name="i4-6"></a>
-The checkout offers a complete solution with a variety of payment methods. The underlying systems for the checkout is our payment plan, invoice, account payments. 
+The checkout offers a complete solution with a variety of payment methods. The underlying systems for the checkout is our payment plan, invoice and account payments. 
 Also including our own payment gateway with PCI level 1 for card payments. 
 The checkout supports both B2C and B2B payments, fast customer identification and caches customers behaviour.
 
@@ -987,7 +987,7 @@ Note that while it is possible to add multiples of fee and discount rows, the pa
 Also, for relative discounts, or fixed discounts specified using only setAmountIncVat() or only setAmountExVat() there may be several discount rows added, should the order include more than one different vat rate. It is not recommended to specify more than one relative discount row per order, or more than one fixed discount specified using only setAmountIncVat() or only setAmountExVat().
 
 ### 5.1 Specifying item price <a name="i5-1"></a>
-Specify item price using precisely two of these methods in order to specify the item price and tax rate: `setAmountIncVat()`, `setVatPercent()` and `setAmountExVat()`.
+Use precisely two of these methods in order to specify the item price and tax rate: `setAmountIncVat()`, `setVatPercent()` and `setAmountExVat()`.
 
 The recommended way to specify an item price is by using the setAmountIncVat() and setVatPercent() methods. This will ensure that the total order amount and vat sums precisely match the amount and vat specified in the order items.
 
@@ -1030,7 +1030,7 @@ $orderrow = WebPayItem::orderRow()
 The WebPayItem::shippingFee() entrypoint method is used to specify order shipping fee rows.
 It is not required to have a shipping fee row in an order.
 
-Specify the item price using precisely two of these methods in order to specify the item price and tax rate:
+Use precisely two of these methods in order to specify the item price and tax rate:
 setAmountExVat(), setAmountIncVat() and setVatPercent(). We recommend using setAmountExVat() and setVatPercentage().
 
 ```php
@@ -1054,7 +1054,7 @@ $shippingFee = WebPayItem::shippingFee()
 The WebPayItem::invoiceFee() entrypoint method is used to specify fees associated with a payment method (i.e. invoice fee).
 It is not required to have an invoice fee row in an order.
 
-Specify the item price using precisely two of these methods in order to specify the item price and tax rate:
+Use precisely two of these methods in order to specify the item price and tax rate:
 setAmountExVat(), setAmountIncVat() and setVatPercent(). We recommend using setAmountExVat() and setVatPercentage().
 
 ```php
@@ -1126,7 +1126,7 @@ $relativeDiscount = WebPayItem::relativeDiscount()
 Use WebPayItem::individualCustomer() to add individual customer information to an order.
 
 #### 5.7.1 Using IndividualCustomer when specifying an order
-Note that "required" below as a requirement only when using the invoice or payment plan payment methods, and that the required attributes vary between countries.
+Note that "required" below is a requirement only when using the invoice or payment plan payment methods, and that the required attributes vary between countries.
 
 (For card and direct bank orders, adding customer information to the order is optional, unless you're using getPaymentUrl() to set up a prepared payment.)
 
@@ -1153,7 +1153,7 @@ $individual = WebPayItem::individualCustomer()
 ### 5.8 WebPayItem::companyCustomer() <a name="i5-8"></a>
 Use WebPayItem::companyCustomer() to add individual customer information to an order.
 
-Note that "required" below as a requirement only when using the invoice or payment plan payment methods, and that the required attributes vary between countries.
+Note that "required" below is a requirement only when using the invoice or payment plan payment methods, and that the required attributes vary between countries.
 
 (For card and direct bank orders, adding customer information to the order is optional, unless you're using getPaymentUrl() to set up a prepared payment.)
 
@@ -1413,7 +1413,7 @@ Example (cont. from 6.2.3.2):
 
 ### 6.3 WebPay::getAddresses() <a name="i6-3"></a>
 
-The WebPay::getAddresses() entrypoint is used to fetch a list validated addresses associated with a given customer identity. This list can in turn be used to i.e. verify that an order delivery address matches the invoice address used by Svea for invoice and payment plan orders. Only applicable for SE, NO and DK customers. Note that in Norway, company customers only are supported.
+The WebPay::getAddresses() entrypoint is used to fetch a list validated addresses associated with a given customer identity. This list can in turn be used to i.e. verify that an order delivery address matches the invoice address used by Svea for invoice and payment plan orders. Only applicable for SE, NO and DK customers. Note that in Norway, only company customers are supported.
 
 Get an request class instance using the WebPay::getAddresses entrypoint, then provide more information about the transaction and send the request using the
 request class methods:
