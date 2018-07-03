@@ -313,4 +313,30 @@ class Helper
     {
         return new PaymentPlanPricePerMonth($price, $paymentPlanParamsResponseObject, $ignoreMaxAndMinFlag);
     }
+
+    public static function getCardPayCurrencies()
+    {
+        $currencyList = array(
+            "SEK",
+            "NOK",
+            "DKK",
+            "EUR",
+            "USD",
+            "GBP",
+            "PLN"
+            );
+        return $currencyList;
+    }
+
+    public static function isCardPayCurrency($currency)
+    {
+        foreach(self::getCardPayCurrencies() as $cardPayCurrency)
+        {
+            if(strtoupper($currency) === $cardPayCurrency)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
 }

@@ -537,4 +537,15 @@ class HelperTest extends \PHPUnit_Framework_TestCase
 
     }
 
+    function test_validCardPayCurrency()
+    {
+        $var = Helper::isCardPayCurrency("SEK");
+        $this->assertEquals(true, $var);
+    }
+
+    function test_invalidCardPayCurrency()
+    {
+        $var = Helper::isCardPayCurrency("XXX");
+        $this->assertEquals(false, $var);
+    }
 }
