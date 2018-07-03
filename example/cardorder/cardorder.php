@@ -38,7 +38,6 @@ $myOrder = WebPay::createOrder( $myConfig );
 
 // You then add information to the order object by using the methods in the Svea\WebPay\BuildOrder\CreateOrderBuilder class.
 // For a Card order, the following methods are required:
-$myOrder->setCountryCode("SE");                         // customer country, we recommend basing this on the customer billing address
 $myOrder->setCurrency("SEK");                           // order currency
 $myOrder->setClientOrderNumber( "order #".date('c') );  // required - use a not previously sent client side order identifier, i.e. "order #20140519-371"
 

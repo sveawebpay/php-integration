@@ -1,7 +1,7 @@
 # Svea PHP Integration Package Documentation
 
 ### Current build status
-| Branch                    received| Build status                               |
+| Branch                            | Build status                               |
 |---------------------------------- |------------------------------------------- |
 | master (latest release)           | [![Build Status](https://travis-ci.org/sveawebpay/php-integration.png?branch=master)](https://travis-ci.org/sveawebpay/php-integration) |
 | develop                           | [![Build Status](https://travis-ci.org/sveawebpay/php-integration.png?branch=develop)](https://travis-ci.org/sveawebpay/php-integration) |

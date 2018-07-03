@@ -17,13 +17,19 @@ ini_set('display_errors', 'On');
 // get config object
 $myConfig = \Svea\WebPay\Config\ConfigurationService::getTestConfig();
 
-$countryCode = "SE"; // should match request countryCode
 
 // the raw request response is posted to the returnurl (this page) from Svea.
-$rawResponse = $_POST;
+$rawResponse = $_REQUEST;
 
 // decode the raw response by passing it through the Svea\WebPay\Response\SveaResponse class
-$myResponse = new SveaResponse( $rawResponse, $countryCode, $myConfig );
+try
+{
+    $myResponse = new SveaResponse($rawResponse, $countryCode = NULL, $myConfig);
+}
+catch (Exception $e)
+{
+    echo $e->getMessage();
+}
 
 // The decoded response is available through the ->getResponse() method.
 // Check the response attribute 'accepted' for true to see if the request succeeded, if not, see the attributes resultcode and/or errormessage
