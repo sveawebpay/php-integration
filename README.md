@@ -1416,7 +1416,7 @@ Example (cont. from 6.2.3.2):
 
 ### 6.3 WebPay::getAddresses() <a name="i6-3"></a>
 
-The WebPay::getAddresses() entrypoint is used to fetch a list validated addresses associated with a given customer identity. This list can in turn be used to i.e. verify that an order delivery address matches the invoice address used by Svea for invoice and payment plan orders. Only applicable for SE, NO and DK customers. Note that in Norway, company customers only are supported.
+The WebPay::getAddresses() entrypoint is used to fetch a list validated addresses associated with a given customer identity. This list can in turn be used to i.e. verify that an order delivery address matches the invoice address used by Svea for invoice and payment plan orders. Only applicable for SE, NO and DK customers. Note that in Norway, only company customers are supported.
 
 Get an request class instance using the WebPay::getAddresses entrypoint, then provide more information about the transaction and send the request using the
 request class methods:
