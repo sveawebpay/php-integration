@@ -32,6 +32,7 @@ abstract class PaymentMethod
     //PaymentMethodType::CARD
     const KORTCERT = 'KORTCERT';
     const SVEACARDPAY = 'SVEACARDPAY';
+    const SVEACARDPAY_PF = 'SVEACARDPAY_PF';
     const SKRILL = 'SKRILL';
     const KORTWN = 'KORTWN';
     

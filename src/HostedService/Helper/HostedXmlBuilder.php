@@ -93,7 +93,15 @@ class HostedXmlBuilder
         $this->serializeOrderRows($request['rows']); // orderrows
 
         // customer -- optional
-        $this->serializeCustomer($order);          // customer          // -- used by Invoice payment
+        if(isset($request['paymentMethod']))
+        {
+            $this->serializeCustomer($order, $request['paymentMethod']);          // customer          // -- used by Invoice payment
+        }
+        else
+        {
+            $this->serializeCustomer($order);          // customer          // -- used by Invoice payment
+        }
+
         $this->XMLWriter->writeElement("iscompany", $this->isCompany);  // -- used by invoice payment
         $this->XMLWriter->writeElement("addinvoicefee", "FALSE");       // -- used by invoice payment
         // iscompany -- optional
@@ -191,79 +199,87 @@ class HostedXmlBuilder
         $this->XMLWriter->endElement();
     }
 
-    private function serializeCustomer($order)
+    private function serializeCustomer($order, $paymentMethod = NULL)
     {
         $this->XMLWriter->startElement("customer");
-        //nordic country individual
-        if (isset($order->customerIdentity->ssn)) {
-            $this->XMLWriter->writeElement("ssn", $order->customerIdentity->ssn);
-        } elseif (isset($order->customerIdentity->birthDate)) {
-            $this->XMLWriter->writeElement("ssn", $order->customerIdentity->birthDate);
-        }
 
-        //customer identity for NL and DE when choosing invoice or paymentplan
-
-        if (isset($order->customerIdentity->firstname)) {
-            $this->XMLWriter->writeElement("firstname", $order->customerIdentity->firstname);
-        }
-
-        if (isset($order->customerIdentity->lastname)) {
-            $this->XMLWriter->writeElement("lastname", $order->customerIdentity->lastname);
-        }
-
-        if (isset($order->customerIdentity->initials)) {
-            $this->XMLWriter->writeElement("initials", $order->customerIdentity->initials);
-        }
-
-        if (isset($order->customerIdentity->street)) {
-            $this->XMLWriter->writeElement("address", $order->customerIdentity->street);
-        }
-
-        if (isset($order->customerIdentity->coAddress)) {
-            $this->XMLWriter->writeElement("address2", $order->customerIdentity->coAddress);
-        }
-
-        if (isset($order->customerIdentity->housenumber)) {
-            $this->XMLWriter->writeElement("housenumber", $order->customerIdentity->housenumber);
-        }
-
-        if (isset($order->customerIdentity->zipCode)) {
-            $this->XMLWriter->writeElement("zip", $order->customerIdentity->zipCode);
-        }
-
-        if (isset($order->customerIdentity->locality)) {
-            $this->XMLWriter->writeElement("city", $order->customerIdentity->locality);
-        }
-
-        if (isset($order->countryCode)) {
+        if(isset($paymentMethod) && $paymentMethod == "SVEACARDPAY_PF")
+        {
+            $this->XMLWriter->writeElement("unknowncustomer", "true");
             $this->XMLWriter->writeElement("country", $order->countryCode);
         }
-
-        if (isset($order->customerIdentity->phonenumber)) {
-            $this->XMLWriter->writeElement("phone", $order->customerIdentity->phonenumber);
-        }
-
-        if (isset($order->customerIdentity->email)) {
-            $this->XMLWriter->writeElement("email", $order->customerIdentity->email);
-        }
-
-        if (isset($order->customerIdentity->orgNumber) || isset($order->customerIdentity->companyVatNumber)) {
-            if (isset($order->customerIdentity->orgNumber)) {
-                $this->XMLWriter->writeElement("ssn", $order->customerIdentity->orgNumber);
-            } else {
-                $this->XMLWriter->writeElement("vatnumber", $order->customerIdentity->companyVatNumber); // -- used by Invoice payment
+        else {
+            //nordic country individual
+            if (isset($order->customerIdentity->ssn)) {
+                $this->XMLWriter->writeElement("ssn", $order->customerIdentity->ssn);
+            } elseif (isset($order->customerIdentity->birthDate)) {
+                $this->XMLWriter->writeElement("ssn", $order->customerIdentity->birthDate);
             }
 
-            // companyname      // -- used by Invoice payment
-            // companyid        // -- used by Invoice payment
+            //customer identity for NL and DE when choosing invoice or paymentplan
 
-            $this->isCompany = "TRUE";
-        }
+            if (isset($order->customerIdentity->firstname)) {
+                $this->XMLWriter->writeElement("firstname", $order->customerIdentity->firstname);
+            }
 
-        $this->XMLWriter->endElement();
+            if (isset($order->customerIdentity->lastname)) {
+                $this->XMLWriter->writeElement("lastname", $order->customerIdentity->lastname);
+            }
 
-        if (isset($order->customerIdentity->addressSelector)) {
-            $this->XMLWriter->writeElement("addressid", $order->customerIdentity->addressSelector);    // -- used by Invoice payment
+            if (isset($order->customerIdentity->initials)) {
+                $this->XMLWriter->writeElement("initials", $order->customerIdentity->initials);
+            }
+
+            if (isset($order->customerIdentity->street)) {
+                $this->XMLWriter->writeElement("address", $order->customerIdentity->street);
+            }
+
+            if (isset($order->customerIdentity->coAddress)) {
+                $this->XMLWriter->writeElement("address2", $order->customerIdentity->coAddress);
+            }
+
+            if (isset($order->customerIdentity->housenumber)) {
+                $this->XMLWriter->writeElement("housenumber", $order->customerIdentity->housenumber);
+            }
+
+            if (isset($order->customerIdentity->zipCode)) {
+                $this->XMLWriter->writeElement("zip", $order->customerIdentity->zipCode);
+            }
+
+            if (isset($order->customerIdentity->locality)) {
+                $this->XMLWriter->writeElement("city", $order->customerIdentity->locality);
+            }
+
+            if (isset($order->countryCode)) {
+                $this->XMLWriter->writeElement("country", $order->countryCode);
+            }
+
+            if (isset($order->customerIdentity->phonenumber)) {
+                $this->XMLWriter->writeElement("phone", $order->customerIdentity->phonenumber);
+            }
+
+            if (isset($order->customerIdentity->email)) {
+                $this->XMLWriter->writeElement("email", $order->customerIdentity->email);
+            }
+
+            if (isset($order->customerIdentity->orgNumber) || isset($order->customerIdentity->companyVatNumber)) {
+                if (isset($order->customerIdentity->orgNumber)) {
+                    $this->XMLWriter->writeElement("ssn", $order->customerIdentity->orgNumber);
+                } else {
+                    $this->XMLWriter->writeElement("vatnumber", $order->customerIdentity->companyVatNumber); // -- used by Invoice payment
+                }
+
+                // companyname      // -- used by Invoice payment
+                // companyid        // -- used by Invoice payment
+
+                $this->isCompany = "TRUE";
+            }
+
+            $this->XMLWriter->endElement();
+
+            if (isset($order->customerIdentity->addressSelector)) {
+                $this->XMLWriter->writeElement("addressid", $order->customerIdentity->addressSelector);    // -- used by Invoice payment
+            }
         }
     }
 

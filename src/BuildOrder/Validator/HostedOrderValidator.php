@@ -24,9 +24,9 @@ class HostedOrderValidator extends OrderValidator
 
         $this->errors = $this->validateClientOrderNumber($order->order, $this->errors);
         $this->errors = $this->validateCurrency($order, $this->errors);
-//        $this->errors = $this->validateCountryCode($order, $this->errors); //should be optional for hosted payment because not used
+        $this->errors = $this->validateCountryCode($order, $this->errors); //should be optional for hosted payment because not used
         $this->errors = $this->validateRequiredFieldsForOrder($order->order, $this->errors);
-        $this->errors = $this->validateOrderRows($order->order, $this->errors);
+        $this->errors = $this->validateOrderRows($order, $this->errors);
 
         return $this->errors;
     }
@@ -75,8 +75,8 @@ class HostedOrderValidator extends OrderValidator
      */
     private function validateCountryCode($order, $errors)
     {
-        if (isset($order->countryCode) == false) {
-            $errors['missing value'] = "CountryCode is required. Use function setCountryCode().";
+        if (isset($order->order->countryCode) == false && isset($order->paymentMethod) && $order->paymentMethod == "SVEACARDPAY_PF") {
+            $errors['missing value'] = "CountryCode is required for SVEACARDPAY_PF. Use function setCountryCode().";
         }
 
         return $errors;

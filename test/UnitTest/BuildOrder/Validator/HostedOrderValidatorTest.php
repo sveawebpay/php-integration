@@ -152,4 +152,21 @@ class HostedOrderValidatorTest extends \PHPUnit_Framework_TestCase
 
         $order->getPaymentForm();
     }
+
+    /**
+     * @expectedException Svea\WebPay\BuildOrder\Validator\ValidationException
+     * @expectedExceptionMessage -missing value : CountryCode is required for SVEACARDPAY_PF. Use function setCountryCode().
+     */
+    public function testNullCountryCodeWithCardPayPF()
+    {
+        $config = ConfigurationService::getDefaultConfig();
+        $builder = WebPay::createOrder($config);
+        $order = $builder
+            ->addOrderRow(TestUtil::createHostedOrderRow())
+            ->setCurrency("SEK")
+            ->setClientOrderNumber("34")
+            ->usePaymentMethod("SVEACARDPAY_PF");
+
+        $order->getPaymentForm();
+    }
 }
