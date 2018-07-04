@@ -219,7 +219,7 @@ class HostedPayment
     public function validateOrder()
     {
         $validator = new HostedOrderValidator();
-        $errors = $validator->validate($this->order);
+        $errors = $validator->validate($this);
         if (($this->order->countryCode == "NL" || $this->order->countryCode == "DE") && isset($this->paymentMethod)) {
             if (isset($this->paymentMethod) &&
                 ($this->paymentMethod == PaymentMethod::INVOICE || $this->paymentMethod == PaymentMethod::PAYMENTPLAN)
