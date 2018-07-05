@@ -40,7 +40,6 @@ $myOrder = WebPay::createOrder( $myConfig );
 // For a Card order, the following methods are required:
 $myOrder->setCurrency("SEK");                           // order currency
 $myOrder->setClientOrderNumber( "order #".date('c') );  // required - use a not previously sent client side order identifier, i.e. "order #20140519-371"
-
 // You may also chain fluent methods together:
 $myOrder
         ->setCustomerReference("customer #123")         // optional - This should contain a customer reference, as in "customer #123".

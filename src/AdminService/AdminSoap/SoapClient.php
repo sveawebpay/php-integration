@@ -21,7 +21,7 @@ class SoapClient
 
     /**
      * When used from PHP, the SveaWebPay Administration Service requires some configuration.
-     * getSoapClient() takes the config and eturns a SoapClient with a working set
+     * getSoapClient() takes the config and returns a SoapClient with a working set
      * of options, bypassing the server wsdl.
      *
      * @param ConfigurationProvider $config
@@ -78,9 +78,6 @@ class SoapClient
      */
     public function doSoapCall($action, $request)
     {
-        $action = $action;
-        $request = $request;
-
         // wrap the request
         $wrappedRequest = new \SoapVar($request, SOAP_ENC_OBJECT, "-", "--", "request", "http://tempuri.org/");
 
