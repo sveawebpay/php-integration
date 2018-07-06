@@ -53,10 +53,9 @@ class GetPaymentPlanParams
     public function doRequest()
     {
         $requestObject = $this->prepareRequest();
-        $request = new SveaDoRequest($this->conf, ConfigurationProvider::PAYMENTPLAN_TYPE);
-        $response = $request->GetPaymentPlanParamsEu($requestObject);
+        $request = new SveaDoRequest($this->conf, ConfigurationProvider::PAYMENTPLAN_TYPE, "GetPaymentPlanParamsEu", $requestObject);
 
-        $responseObject = new SveaResponse($response, "");
+        $responseObject = new SveaResponse($request->result, "");
 
         return $responseObject->response;
     }

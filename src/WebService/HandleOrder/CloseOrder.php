@@ -30,9 +30,8 @@ class CloseOrder extends HandleOrder
     public function doRequest()
     {
         $requestObject = $this->prepareRequest();
-        $request = new SveaDoRequest($this->orderBuilder->conf, $this->orderBuilder->orderType);
-        $response = $request->CloseOrderEu($requestObject);
-        $responseObject = new SveaResponse($response, "");
+        $request = new SveaDoRequest($this->orderBuilder->conf, $this->orderBuilder->orderType, "CloseOrderEu", $requestObject);
+        $responseObject = new SveaResponse($request->result, "");
 
         return $responseObject->response;
     }

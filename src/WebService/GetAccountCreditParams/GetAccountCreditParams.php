@@ -53,10 +53,9 @@ class GetAccountCreditParams
     public function doRequest()
     {
         $requestObject = $this->prepareRequest();
-        $request = new SveaDoRequest($this->conf, ConfigurationProvider::ACCOUNTCREDIT_TYPE);
-        $response = $request->GetAccountCreditParamsEu($requestObject);
+        $request = new SveaDoRequest($this->conf, ConfigurationProvider::ACCOUNTCREDIT_TYPE, "GetAccountCreditParamsEu", $requestObject);
 
-        $responseObject = new SveaResponse($response, "");
+        $responseObject = new SveaResponse($request->result, "");
 
         return $responseObject->response;
     }

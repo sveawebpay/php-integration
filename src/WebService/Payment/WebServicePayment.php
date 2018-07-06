@@ -47,10 +47,8 @@ class WebServicePayment
     public function doRequest()
     {
         $object = $this->prepareRequest();
-        $request = new SveaDoRequest($this->order->conf, $this->orderType);
-        $svea_req = $request->CreateOrderEu($object);
-
-        $response = new SveaResponse($svea_req, "");
+        $request = new SveaDoRequest($this->order->conf, $this->orderType, "CreateOrderEu", $object);
+        $response = new SveaResponse($request->result, "");
 
         return $response->getResponse();
     }

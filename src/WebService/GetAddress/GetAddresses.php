@@ -165,13 +165,8 @@ class GetAddresses
      */
     public function doRequest()
     {
-        $this->request = $this->prepareRequest();
-
-        $request = new SveaDoRequest($this->conf, $this->orderType);
-
-        $svea_req = $request->GetAddresses($this->request);
-
-        $response = new SveaResponse($svea_req, "");
+        $request = new SveaDoRequest($this->conf, $this->orderType, "GetAddresses", $this->prepareRequest());
+        $response = new SveaResponse($request->result, "");
 
         return $response->response;
     }
