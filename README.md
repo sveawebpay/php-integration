@@ -2295,9 +2295,28 @@ Price (excl. VAT)   Price (incl. VAT)	Totalt netto	VAT%	Sum (incl. VAT)
 
 Which is about as exact as we can get. (Unfortunately there is no way to introduce a discount of vat only, as you need to pay vat on the entire 1321 kr, regardless on the total amount actually charged to the customer.)
 
-`getRequestTotal()` for webservice requests returns the sums calculated for the ordeRrows as it will be handled in our systems. Returns an array with total_exvat, total_incvat and total_vat.
+`getRequestTotal()` for webservice requests returns the sums calculated for the orderRows as it will be handled in our systems. Returns an array with total_exvat, total_incvat and total_vat.
 
 [Back to top](#index)
+
+### 9.3 Logging Raw HTTP Requests <a name="i9-3"></a>
+
+You're able to fetch raw http logs to help debug problems that might occur, to enable logging you just have to call the enableLogging method on the request that you're building like this:
+
+Request:
+```php
+<?php>
+$svea_order_id = 1048731;
+
+$svea_query = WebPayAdmin::queryOrder(ConfigurationService::getTestConfig())
+    ->setOrderId($svea_order_id)
+    ->setCountryCode('SE')
+    ->enableLogging(true)
+    ->queryAccountCreditOrder()
+    ->doRequest();
+```
+
+The logs will then be defined in the response.
 
 ## 10. Frequently Asked Questions <a name="i10"></a>
 
