@@ -12,10 +12,11 @@ class CreditPaymentPlanResponse extends AdminServiceResponse
     /**
      * CreditPaymentPlanResponse constructor.
      * @param $message
+     * @param $logs
      */
-    function __construct($message)
+    function __construct($message, $logs)
     {
-        $this->formatObject($message);
+        $this->formatObject($message, $logs);
     }
 }
 

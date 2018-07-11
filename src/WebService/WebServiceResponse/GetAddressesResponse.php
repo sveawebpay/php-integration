@@ -43,8 +43,9 @@ class GetAddressesResponse extends WebServiceResponse
     /**
      * GetAddressesResponse constructor.
      * @param $response
+     * @param $logs
      */
-    public function __construct($response)
+    public function __construct($response, $logs)
     {
         // was request accepted?
         if ($response->GetAddressesResult->RejectionCode == "Error") {
@@ -52,6 +53,12 @@ class GetAddressesResponse extends WebServiceResponse
         } else {
             $this->accepted = $response->GetAddressesResult->Accepted;
         }
+
+        if(isset($logs))
+        {
+            $this->logs = $logs;
+        }
+
         $this->resultcode = $response->GetAddressesResult->RejectionCode;
         $this->errormessage = isset($response->GetAddressesResult->ErrorMessage) ? $response->GetAddressesResult->ErrorMessage : "";
 

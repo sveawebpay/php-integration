@@ -12,8 +12,9 @@ ini_set('display_errors', 'On');
 
 $ppCampaign = WebPay::getPaymentPlanParams(ConfigurationService::getDefaultConfig());
 
-$campaigns = $ppCampaign->setCountryCode('SE')
-                        ->doRequest();
+$ppCampaign->enableLogging(true);
 
-//var_dump($campaigns->campaignCodes);
-var_dump($campaigns->campaignCodes);
+$campaigns = $ppCampaign->setCountryCode('SE')
+    ->doRequest();
+
+echo "<pre>" . print_r($campaigns, true) . "</pre>";

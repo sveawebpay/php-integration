@@ -35,6 +35,7 @@ class GetAddresses
     public $companyId;
     public $ssn;
     public $testmode = false;
+    public $logging = false;
 
     /**
      * @param ConfigurationProvider $config
@@ -42,6 +43,12 @@ class GetAddresses
     function __construct($config)
     {
         $this->conf = $config;
+    }
+
+    public function enableLogging($logging)
+    {
+        $this->logging = $logging;
+        return $this;
     }
 
     /**
@@ -165,8 +172,8 @@ class GetAddresses
      */
     public function doRequest()
     {
-        $request = new SveaDoRequest($this->conf, $this->orderType, "GetAddresses", $this->prepareRequest());
-        $response = new SveaResponse($request->result, "");
+        $request = new SveaDoRequest($this->conf, $this->orderType, "GetAddresses", $this->prepareRequest(), $this->logging);
+        $response = new SveaResponse($request->result['requestResult'], "", NULL, NULL, isset($request->result['logs']) ? $request->result['logs'] : NULL);
 
         return $response->response;
     }

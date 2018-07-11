@@ -88,4 +88,9 @@ class SoapClient
 
         return $response;
     }
+
+    public function getClient()
+    {
+        return $this->client;
+    }
 }

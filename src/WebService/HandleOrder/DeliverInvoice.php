@@ -42,12 +42,12 @@ class DeliverInvoice extends HandleOrder
     {
         $requestObject = $this->prepareRequest();
         $priceIncludingVat = $requestObject->request->DeliverOrderInformation->DeliverInvoiceDetails->OrderRows['OrderRow'][0]->PriceIncludingVat;
-        $request = new SveaDoRequest($this->orderBuilder->conf, $this->orderBuilder->orderType, "DeliverOrderEu", $requestObject);
-        $responseObject = new SveaResponse($request->result, "");
+        $request = new SveaDoRequest($this->orderBuilder->conf, $this->orderBuilder->orderType, "DeliverOrderEu", $requestObject, $this->orderBuilder->logging);
+        $responseObject = new SveaResponse($request->result['requestResult'], "", NULL, NULL, isset($request->result['logs']) ? $request->result['logs'] : NULL);
         if ($responseObject->response->resultcode == "50036") {
             $requestObject = $this->prepareRequest($priceIncludingVat);
-            $request = new SveaDoRequest($this->orderBuilder->conf, $this->orderBuilder->orderType, "DeliverOrderEu", $requestObject);
-            $responseObject = new SveaResponse($request->result, "");
+            $request = new SveaDoRequest($this->orderBuilder->conf, $this->orderBuilder->orderType, "DeliverOrderEu", $requestObject, $this->orderBuilder->logging);
+            $responseObject = new SveaResponse($request->result['requestResult'], "", NULL, NULL, isset($request->result['logs']) ? $request->result['logs'] : NULL);
         }
 
         return $responseObject->response;

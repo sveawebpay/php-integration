@@ -42,11 +42,17 @@ class PaymentPlanParamsResponse extends WebServiceResponse
     /**
      * PaymentPlanParamsResponse constructor.
      * @param $response
+     * @param $logs
      */
-    public function __construct($response)
+    public function __construct($response, $logs)
     {
         // was request accepted?
         $this->accepted = $response->GetPaymentPlanParamsEuResult->Accepted;
+
+        if(isset($logs))
+        {
+            $this->logs = $logs;
+        }
 
         // set response resultcode & errormessage, if any
         $this->resultcode = $response->GetPaymentPlanParamsEuResult->ResultCode;

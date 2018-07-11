@@ -47,8 +47,10 @@ class WebServicePayment
     public function doRequest()
     {
         $object = $this->prepareRequest();
-        $request = new SveaDoRequest($this->order->conf, $this->orderType, "CreateOrderEu", $object);
-        $response = new SveaResponse($request->result, "");
+
+        $request = new SveaDoRequest($this->order->conf, $this->orderType, "CreateOrderEu", $object, $this->order->logging);
+        $response = new SveaResponse($request->result['requestResult'], "", NULL, NULL, isset($request->result['logs']) ? $request->result['logs'] : NULL);
+
 
         return $response->getResponse();
     }
@@ -73,7 +75,7 @@ class WebServicePayment
         // create soap order object, set authorization
         $sveaOrder = new SveaOrder;
         $sveaOrder->Auth = $this->getPasswordBasedAuthorization();
-        //make orderrows and put in CreateOrderInfromation
+        //make orderrows and put in CreateOrderInformation
         $orderinformation = $this->formatOrderInformationWithOrderRows($this->order->orderRows);
 
         //parallel ways of creating customer

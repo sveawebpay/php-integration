@@ -26,12 +26,20 @@ class GetPaymentPlanParams
     public $object;
     public $conf;
     public $countryCode;
+    public $logging;
 
     function __construct($config)
     {
         $this->conf = $config;
     }
 
+    /*
+     * Enables raw HTTP logs
+     */
+    public function enableLogging($logging)
+    {
+        $this->logging = $logging;
+    }
     /**
      * Required
      *
@@ -53,9 +61,9 @@ class GetPaymentPlanParams
     public function doRequest()
     {
         $requestObject = $this->prepareRequest();
-        $request = new SveaDoRequest($this->conf, ConfigurationProvider::PAYMENTPLAN_TYPE, "GetPaymentPlanParamsEu", $requestObject);
+        $request = new SveaDoRequest($this->conf, ConfigurationProvider::PAYMENTPLAN_TYPE, "GetPaymentPlanParamsEu", $requestObject, $this->logging);
 
-        $responseObject = new SveaResponse($request->result, "");
+        $responseObject = new SveaResponse($request->result['requestResult'], "", NULL, NULL, isset($request->result['logs']) ? $request->result['logs'] : NULL);
 
         return $responseObject->response;
     }

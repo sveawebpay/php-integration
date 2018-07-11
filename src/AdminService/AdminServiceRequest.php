@@ -14,7 +14,7 @@ use Svea\WebPay\WebService\Helper\WebServiceRowFormatter;
 /**
  * AdminServiceRequest is the parent of all admin webservice requests.
  *
- * @author Kristian Grossman-Madsen
+ * @author Kristian Grossman-Madsen, Fredrik Sundell
  */
 abstract class AdminServiceRequest
 {
@@ -34,6 +34,8 @@ abstract class AdminServiceRequest
     protected $priceIncludingVat;
 
     protected $resendOrderVat = NULL;
+
+    public $logging = false;
 
     /**
      * the integration package Svea\WebPay\Config\ConfigurationProvider::INVOICE_TYPE and ::PAYMENTPLAN_TYPE constants are all caps, whereas the admin service
@@ -69,8 +71,31 @@ abstract class AdminServiceRequest
         $requestObject = $this->prepareRequest($resendOrderWithFlippedPriceIncludingVat);
 
         $soapClient = new SoapClient($this->orderBuilder->conf, ConfigurationProvider::ADMIN_TYPE);
+        if($this->orderBuilder->logging == true)
+        {
+            $timestampStart = time();
+            $microtimeStart = microtime(true);
+        }
         $soapResponse = $soapClient->doSoapCall($this->action, $requestObject);
-        $sveaResponse = new SveaResponse($soapResponse, null, null, $this->action);
+        if($this->orderBuilder->logging == true)
+        {
+            $logs = array(
+                "logs" => array(
+                    "request" => array(
+                        "timestamp" => $timestampStart,
+                        "headers" => $soapClient->getClient()->__getLastRequestHeaders(),
+                        "body" => htmlentities($soapClient->getClient()->__getLastRequest())
+                    ),
+                    "response" => array(
+                        "timestamp" => time(),
+                        "headers" => $soapClient->getClient()->__getLastResponseHeaders(),
+                        "body" => htmlentities($soapClient->getClient()->__getLastResponse()),
+                        "dataAmount" => strlen($soapClient->getClient()->__getLastResponseHeaders()) + strlen($soapClient->getClient()->__getLastResponse()),
+                        "duration" => round(microtime(true) - $microtimeStart, 3)
+                    )
+                ));
+        }
+        $sveaResponse = new SveaResponse($soapResponse, null, null, $this->action, isset($logs['logs']) ? $logs['logs'] : NULL);
         $response = $sveaResponse->getResponse();
 
         // iff error 50036, flip priceIncludingVat and resend enforcing flipped value
@@ -220,5 +245,12 @@ abstract class AdminServiceRequest
         }
 
         return $numberedOrderRows;
+    }
+
+    public function enableLogging($logging)
+    {
+        $this->logging = $logging;
+
+        return $this;
     }
 }

@@ -7,7 +7,7 @@ namespace Svea\WebPay\WebService\WebServiceResponse;
  * child response classes parses the service response and sets public attributes
  * that may be inspected.
  *
- * @author Anneli Halld'n, Daniel Brolund, Kristian Grossman-Madsen for Svea Svea\WebPay\WebPay
+ * @author Anneli Halld'n, Daniel Brolund, Kristian Grossman-Madsen, Fredrik Sundell for Svea Webpay
  */
 abstract class WebServiceResponse
 {
@@ -25,4 +25,9 @@ abstract class WebServiceResponse
      * @var int $resultcode response specific result code
      */
     public $resultcode;
+
+    /**
+     * @var array $logs Raw HTTP request / response logs
+     */
+    public $logs;
 }

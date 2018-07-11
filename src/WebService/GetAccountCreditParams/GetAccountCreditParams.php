@@ -26,6 +26,7 @@ class GetAccountCreditParams
     public $object;
     public $conf;
     public $countryCode;
+    public $logging = false;
 
     function __construct($config)
     {
@@ -46,6 +47,19 @@ class GetAccountCreditParams
     }
 
     /**
+     * Optional
+     *
+     * @param bool $logging
+     * @return $this
+     */
+    public function enableLogging($logging)
+    {
+        $this->logging = $logging;
+
+        return $this;
+    }
+
+    /**
      * Prepares and sends request
      *
      * @return \Svea\WebPay\WebService\WebServiceResponse\PaymentPlanParamsResponse
@@ -53,9 +67,9 @@ class GetAccountCreditParams
     public function doRequest()
     {
         $requestObject = $this->prepareRequest();
-        $request = new SveaDoRequest($this->conf, ConfigurationProvider::ACCOUNTCREDIT_TYPE, "GetAccountCreditParamsEu", $requestObject);
+        $request = new SveaDoRequest($this->conf, ConfigurationProvider::ACCOUNTCREDIT_TYPE, "GetAccountCreditParamsEu", $requestObject, $this->logging);
 
-        $responseObject = new SveaResponse($request->result, "");
+        $responseObject = new SveaResponse($request->result['requestResult'], "", NULL, NULL,isset($request->result['logs']) ? $request->result['logs'] : NULL);
 
         return $responseObject->response;
     }

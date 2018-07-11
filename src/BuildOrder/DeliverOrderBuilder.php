@@ -220,7 +220,7 @@ class DeliverOrderBuilder  extends CheckoutAdminOrderBuilder
     public function deliverAccountCreditOrder()
     {
         if (count($this->orderRows) > 0) {
-            return new DeliverInvoice($this);
+            return new DeliverAccountCredit($this);
         } else {
             $this->orderType = ConfigurationProvider::ACCOUNTCREDIT_TYPE;
 

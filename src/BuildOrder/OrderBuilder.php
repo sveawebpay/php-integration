@@ -18,6 +18,10 @@ class OrderBuilder
     public $testmode = false;
 
     /**
+     * @var boolean
+     */
+    public $logging = false;
+    /**
      * @var ConfigurationProvider $conf
      */
     public $conf;
@@ -272,6 +276,19 @@ class OrderBuilder
     public function setOrderDate($orderDateAsString)
     {
         $this->orderDate = $orderDateAsString;
+
+        return $this;
+    }
+
+    /**
+     * Enables/disables logging for raw HTTP requests / responses
+     *
+     * @param boolean $status, if true then raw requests / responses will be logged on the order. Disabled by default.
+     * @return $this
+     */
+    public function enableLogging($status)
+    {
+        $this->logging = $status;
 
         return $this;
     }

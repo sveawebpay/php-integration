@@ -11,10 +11,9 @@ ini_set('display_errors', 'On');
 $svea_order_id = 1048731;
 
 $svea_query = WebPayAdmin::queryOrder(ConfigurationService::getTestConfig())
-//$svea_query = WebPayAdmin::queryOrder(ConfigurationService::getDefaultConfig())
     ->setOrderId($svea_order_id)
     ->setCountryCode('SE')
-    ->queryAccountCreditOder()
+    ->queryAccountCreditOrder()
     ->doRequest();
 
 var_dump($svea_query);

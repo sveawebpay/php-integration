@@ -55,8 +55,9 @@ class CreateOrderResponse extends WebServiceResponse
     /**
      * CreateOrderResponse constructor.
      * @param $response
+     * @param $logs
      */
-    public function __construct($response)
+    public function __construct($response, $logs = NULL)
     {
         // was request accepted?
         $this->accepted = $response->CreateOrderEuResult->Accepted;
@@ -64,6 +65,11 @@ class CreateOrderResponse extends WebServiceResponse
 
         // set response resultcode
         $this->resultcode = $response->CreateOrderEuResult->ResultCode;
+
+        if(isset($logs))
+        {
+            $this->logs = $logs;
+        }
 
         // set response attributes        
         if ($this->accepted == 1) {

@@ -64,7 +64,7 @@ class AccountCreditQueryBuilder extends CheckoutAdminOrderBuilder
         return $this->clientAccountCreditInformation;
     }
 
-    public function queryAccountCreditOder()
+    public function queryAccountCreditOrder()
     {
         $this->orderType = ConfigurationProvider::ACCOUNTCREDIT_TYPE;
         return new SearchOrdersRequest($this);

@@ -101,7 +101,7 @@ class QueryOrderBuilder extends CheckoutAdminOrderBuilder
         return new GetOrdersRequest($this);
     }
 
-    public function queryAccountCreditOder()
+    public function queryAccountCreditOrder()
     {
         $this->orderType = ConfigurationProvider::ACCOUNTCREDIT_TYPE;
         return new GetOrdersRequest($this);

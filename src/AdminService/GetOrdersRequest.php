@@ -18,7 +18,6 @@ class GetOrdersRequest extends AdminServiceRequest
      * @var QueryOrderBuilder $orderBuilder
      */
     public $orderBuilder;
-
     /**
      * @param QueryOrderBuilder $builder
      */

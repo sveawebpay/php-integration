@@ -10,19 +10,21 @@ class UpdateOrderResponse extends AdminServiceResponse
     /**
      * UpdateOrderResponse constructor.
      * @param $message
+     * @param $logs
      */
-    function __construct($message)
+    function __construct($message, $logs)
     {
-        $this->formatObject($message);
+        $this->formatObject($message, $logs);
     }
 
     /**
      * Parses response and sets attributes.
      * @param $message
+     * @param $logs
      */
-    protected function formatObject($message)
+    protected function formatObject($message, $logs)
     {
-        parent::formatObject($message);
+        parent::formatObject($message, $logs);
 
         if ($this->accepted == 1) {
             // nothing to do for updateOrderRequest response

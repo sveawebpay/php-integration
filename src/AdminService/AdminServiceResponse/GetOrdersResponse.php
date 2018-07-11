@@ -10,7 +10,7 @@ use Svea\WebPay\BuildOrder\RowBuilders\IndividualCustomer;
 /**
  * Handles the Svea Admin Web Service GetOrders request response.
  *
- * @author Kristian Grossman-Madsen
+ * @author Kristian Grossman-Madsen, Fredrik Sundell
  */
 class GetOrdersResponse extends AdminServiceResponse
 {
@@ -135,17 +135,18 @@ class GetOrdersResponse extends AdminServiceResponse
     /**
      * GetOrdersResponse constructor.
      * @param $message
+     * @param $logs
      */
-    function __construct($message)
+    function __construct($message, $logs)
     {
-        $this->formatObject($message);
+        $this->formatObject($message, $logs);
     }
 
-    protected function formatObject($message)
+    protected function formatObject($message, $logs)
     {
 
         // was request accepted?
-        parent::formatObject($message);
+        parent::formatObject($message, $logs);
 
         // if successful, set deliverOrderResult, using the same attributes as for DeliverOrderEU?
         if ($this->accepted == 1) {

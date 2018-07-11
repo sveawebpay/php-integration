@@ -48,6 +48,7 @@ $customerInformation->setNationalIdNumber("194605092222");
 $myOrder->addCustomerDetails($customerInformation);
 
 // We have now completed specifying the order, and wish to send the payment request to Svea. To do so, we first select the invoice payment method:
+$myOrder->enableLogging(false);
 $myInvoiceOrderRequest = $myOrder->useInvoicePayment();
 
 // Then send the request to Svea using the doRequest method, and immediately receive a service response object back
@@ -63,6 +64,8 @@ if ($myResponse->accepted == true) {
 echo "<pre>Your request response (the customerIdentity contains the verified invoice address, which should match the order shipping address used):\n\n";
 
 print_r($myResponse);
+
+
 
 echo "</pre><font color='blue'><pre>\n
 
