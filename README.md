@@ -70,6 +70,7 @@
 * [9. Helper Class and Additional Developer Resources and Notes](#i9)
     * [9.1 Helper::paymentPlanPricePerMonth()](#i9-1)
     * [9.2 Request validateOrder(), prepareRequest(), getRequestTotals() methods](#i9-2)
+    * [9.3 Logging Raw HTTP Requests](#i9-3)
 * [10. Frequently Asked Questions](#i10)
     * [10.1 Supported currencies](#i10-1)
     * [10.2 Other payment method credentials](#i10-2)
@@ -2317,6 +2318,8 @@ $svea_query = WebPayAdmin::queryOrder(ConfigurationService::getTestConfig())
 ```
 
 The logs will then be defined in the response.
+
+Note: This will only work with requests sent by SOAP.
 
 ## 10. Frequently Asked Questions <a name="i10"></a>
 
