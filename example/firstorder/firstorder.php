@@ -47,8 +47,15 @@ $customerInformation->setNationalIdNumber("194605092222");
 // Add the customer to the order: 
 $myOrder->addCustomerDetails($customerInformation);
 
+/*$myOrder->setOrderDeliveryAddress(
+    WebPayItem::OrderDeliveryAddress()
+    ->setStreetAddress("Testvägen 1")
+    ->setZipCode(12345)
+    ->setFullName("Hejsan")
+    ->setCountryCode('SE'));
+*/
 // We have now completed specifying the order, and wish to send the payment request to Svea. To do so, we first select the invoice payment method:
-$myOrder->enableLogging(false);
+$myOrder->enableLogging(true);
 $myInvoiceOrderRequest = $myOrder->useInvoicePayment();
 
 // Then send the request to Svea using the doRequest method, and immediately receive a service response object back

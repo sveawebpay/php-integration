@@ -86,12 +86,29 @@ class OrderBuilder
      */
     public $clientOrderNumber;
 
+    /*
+     * @var \Svea\WebPay\BuildOrder\RowBuilders\OrderDeliveryAddress
+     */
+    public $orderDeliveryAddress;
+
     /**
      * @param ConfigurationProvider $config
      */
     public function __construct($config)
     {
         $this->conf = $config;
+    }
+
+    /*
+     * Optional
+     * @param \Svea\WebPay\BuildOrder\RowBuilders\OrderDeliveryAddress
+     * @return $this
+     */
+    public function setOrderDeliveryAddress($orderDeliveryAddressObject)
+    {
+        $this->orderDeliveryAddress = $orderDeliveryAddressObject;
+
+        return $this;
     }
 
     /**

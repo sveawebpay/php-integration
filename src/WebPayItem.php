@@ -7,6 +7,7 @@ use Svea\WebPay\BuildOrder\RowBuilders\FixedDiscount;
 use Svea\WebPay\BuildOrder\RowBuilders\IndividualCustomer;
 use Svea\WebPay\BuildOrder\RowBuilders\InvoiceFee;
 use Svea\WebPay\BuildOrder\RowBuilders\NumberedOrderRow;
+use Svea\WebPay\BuildOrder\RowBuilders\OrderDeliveryAddress;
 use Svea\WebPay\BuildOrder\RowBuilders\OrderRow;
 use Svea\WebPay\BuildOrder\RowBuilders\RelativeDiscount;
 use Svea\WebPay\BuildOrder\RowBuilders\ShippingFee;
@@ -37,6 +38,10 @@ use Svea\WebPay\Checkout\Model\PresetValue;
 class WebPayItem
 {
 
+    public static function orderDeliveryAddress()
+    {
+        return new OrderDeliveryAddress();
+    }
     /**
      * The Svea\WebPay\WebPayItem::orderRow() entrypoint method is used to specify order items like products and services.
      * It is required to have a minimum of one order row in an order.
