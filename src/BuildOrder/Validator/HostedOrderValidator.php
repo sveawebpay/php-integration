@@ -2,7 +2,7 @@
 
 namespace Svea\WebPay\BuildOrder\Validator;
 
-use Svea\Webpay\Helper\Helper;
+use Svea\WebPay\Helper\Helper;
 /**
  * @author Anneli Halld'n, Daniel Brolund, Fredrik Sundell for Svea Webpay
  */
