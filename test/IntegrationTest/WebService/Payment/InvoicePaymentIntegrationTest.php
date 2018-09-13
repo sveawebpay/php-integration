@@ -176,7 +176,7 @@ class InvoicePaymentIntegrationTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * NL vat rates are 6%, 21% (as of 131018, see http://www.government.nl/issues/taxation/vat-and-excise-duty)
+     * NL vat rates are 6%, 21% (as of 131018, see https://www.government.nl/topics/vat/vat-rates-and-exemptions)
      */
     public function t___estNLInvoicePaymentAcceptsVatRates()
     {
