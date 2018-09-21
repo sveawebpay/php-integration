@@ -298,4 +298,15 @@ class GetAddressesIntegrationTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(0, $request->accepted);
         $this->assertEquals('Error', $request->resultcode);
     }
+
+    public function test_GetAddresses_checkAndSetConfiguredPaymentMethod_Accepted()
+    {
+        $request =$this->addressRequest
+            ->setCountryCode("SE")
+            ->setCustomerIdentifier("4605092222")
+            ->getIndividualAddresses()
+            ->doRequest();
+        $this->assertEquals(1,$request->accepted);
+    }
+
 }
