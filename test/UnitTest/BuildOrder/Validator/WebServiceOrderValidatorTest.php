@@ -3,6 +3,8 @@
 namespace Svea\WebPay\Test\UnitTest\BuildOrder\Validator;
 
 use Exception;
+use Svea\WebPay\Config\ConfigurationProvider;
+use Svea\WebPay\Constant\DistributionType;
 use Svea\WebPay\WebPay;
 use Svea\WebPay\WebPayItem;
 use Svea\WebPay\Test\TestUtil;
@@ -592,6 +594,21 @@ class WebServiceOrderValidatorTest extends \PHPUnit_Framework_TestCase
     public function tes_tFailOnMissingCofigurationProviderGetPaymentMethods()
     {
         $object = WebPay::getPaymentMethods();
+    }
+
+    /**
+     * @expectedException Exception
+     * @expectedExceptionMessage -missing value : distributionType EInvoiceB2B is only allowed for Norway.
+     */
+    public function testFailOnIncorrectCountryCodeForInvoiceB2B()
+    {
+        $config = ConfigurationService::getDefaultConfig();
+        $object = WebPay::deliverOrder($config)
+            ->setCountryCode("NO")
+            ->setInvoiceDistributionType(DistributionType::EINVOICEB2B)
+            ->setOrderId(1)
+            ->deliverInvoiceOrder()
+            ->prepareRequest();
     }
 
 }
