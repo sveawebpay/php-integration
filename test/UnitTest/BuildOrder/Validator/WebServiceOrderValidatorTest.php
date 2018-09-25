@@ -538,60 +538,54 @@ class WebServiceOrderValidatorTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException Exception
-     * @expectedExceptionMessage
-     * -missing parameter: This method requires an Svea\WebPay\Config\ConfigurationProvider object as parameter. Create a class that implements class Svea\WebPay\Config\ConfigurationProvider. Set returnvalues to configuration values. Create an object from that class. Alternative use static function from class ConfigurationService e.g. ConfigurationService::getDefaultConfig(). You can replace the default config values into config files to return your own config values.');
+     * @expectedExceptionMessage -missing parameter: This method requires an Svea\WebPay\Config\ConfigurationProvider object as parameter. Create a class that implements class Svea\WebPay\Config\ConfigurationProvider. Set returnvalues to configuration values. Create an object from that class. Alternative use static function from class ConfigurationService e.g. ConfigurationService::getDefaultConfig(). You can replace the default config values into config files to return your own config values.
      */
-    public function testFailOnMissingCofigurationProviderCreateOrder()
+    public function testFailOnMissingConfigurationProviderCreateOrder()
     {
         $object = WebPay::createOrder();
     }
 
     /**
      * @expectedException Exception
-     * @expectedExceptionMessage
-     * -missing parameter: This method requires an Svea\WebPay\Config\ConfigurationProvider object as parameter. Create a class that implements class Svea\WebPay\Config\ConfigurationProvider. Set returnvalues to configuration values. Create an object from that class. Alternative use static function from class ConfigurationService e.g. ConfigurationService::getDefaultConfig(). You can replace the default config values into config files to return your own config values.');
+     * @expectedExceptionMessage -missing parameter: This method requires an Svea\WebPay\Config\ConfigurationProvider object as parameter. Create a class that implements class Svea\WebPay\Config\ConfigurationProvider. Set returnvalues to configuration values. Create an object from that class. Alternative use static function from class ConfigurationService e.g. ConfigurationService::getDefaultConfig(). You can replace the default config values into config files to return your own config values.
      */
-    public function testFailOnMissingCofigurationProviderGetPaymentPlanParams()
+    public function testFailOnMissingConfigurationProviderGetPaymentPlanParams()
     {
         $object = WebPay::getPaymentPlanParams();
     }
 
     /**
      * @expectedException Exception
-     * @expectedExceptionMessage
-     * -missing parameter: This method requires an Svea\WebPay\Config\ConfigurationProvider object as parameter. Create a class that implements class Svea\WebPay\Config\ConfigurationProvider. Set returnvalues to configuration values. Create an object from that class. Alternative use static function from class ConfigurationService e.g. ConfigurationService::getDefaultConfig(). You can replace the default config values into config files to return your own config values.');
+     * @expectedExceptionMessage -missing parameter: This method requires an Svea\WebPay\Config\ConfigurationProvider object as parameter. Create a class that implements class Svea\WebPay\Config\ConfigurationProvider. Set returnvalues to configuration values. Create an object from that class. Alternative use static function from class ConfigurationService e.g. ConfigurationService::getDefaultConfig(). You can replace the default config values into config files to return your own config values.
      */
-    public function testFailOnMissingCofigurationProviderDeliverOrder()
+    public function testFailOnMissingConfigurationProviderDeliverOrder()
     {
         $object = WebPay::deliverOrder();
     }
 
     /**
      * @expectedException Exception
-     * @expectedExceptionMessage
-     * -missing parameter: This method requires an Svea\WebPay\Config\ConfigurationProvider object as parameter. Create a class that implements class Svea\WebPay\Config\ConfigurationProvider. Set returnvalues to configuration values. Create an object from that class. Alternative use static function from class ConfigurationService e.g. ConfigurationService::getDefaultConfig(). You can replace the default config values into config files to return your own config values.');
+     * @expectedExceptionMessage -missing parameter: This method requires an Svea\WebPay\Config\ConfigurationProvider object as parameter. Create a class that implements class Svea\WebPay\Config\ConfigurationProvider. Set returnvalues to configuration values. Create an object from that class. Alternative use static function from class ConfigurationService e.g. ConfigurationService::getDefaultConfig(). You can replace the default config values into config files to return your own config values.
      */
-    public function testFailOnMissingCofigurationProviderCloseOrder()
+    public function testFailOnMissingConfigurationProviderCloseOrder()
     {
         $object = WebPay::closeOrder();
     }
 
     /**
      * @expectedException Exception
-     * @expectedExceptionMessage
-     * -missing parameter: This method requires an Svea\WebPay\Config\ConfigurationProvider object as parameter. Create a class that implements class Svea\WebPay\Config\ConfigurationProvider. Set returnvalues to configuration values. Create an object from that class. Alternative use static function from class ConfigurationService e.g. ConfigurationService::getDefaultConfig(). You can replace the default config values into config files to return your own config values.');
+     * @expectedExceptionMessage -missing parameter: This method requires an Svea\WebPay\Config\ConfigurationProvider object as parameter. Create a class that implements class Svea\WebPay\Config\ConfigurationProvider. Set returnvalues to configuration values. Create an object from that class. Alternative use static function from class ConfigurationService e.g. ConfigurationService::getDefaultConfig(). You can replace the default config values into config files to return your own config values.
      */
-    public function tes_tFailOnMissingCofigurationProviderGetAddresses()
+    public function testFailOnMissingConfigurationProviderGetAddresses()
     {
         $object = WebPay::getAddresses();
     }
 
     /**
      * @expectedException Exception
-     * @expectedExceptionMessage
-     * -missing parameter: This method requires an Svea\WebPay\Config\ConfigurationProvider object as parameter. Create a class that implements class Svea\WebPay\Config\ConfigurationProvider. Set returnvalues to configuration values. Create an object from that class. Alternative use static function from class ConfigurationService e.g. ConfigurationService::getDefaultConfig(). You can replace the default config values into config files to return your own config values.');
+     * @expectedExceptionMessage -missing parameter: This method requires an Svea\WebPay\Config\ConfigurationProvider object as parameter. Create a class that implements class Svea\WebPay\Config\ConfigurationProvider. Set returnvalues to configuration values. Create an object from that class. Alternative use static function from class ConfigurationService e.g. ConfigurationService::getDefaultConfig(). You can replace the default config values into config files to return your own config values.
      */
-    public function tes_tFailOnMissingCofigurationProviderGetPaymentMethods()
+    public function testFailOnMissingConfigurationProviderGetPaymentMethods()
     {
         $object = WebPay::getPaymentMethods();
     }
@@ -604,7 +598,7 @@ class WebServiceOrderValidatorTest extends \PHPUnit_Framework_TestCase
     {
         $config = ConfigurationService::getDefaultConfig();
         $object = WebPay::deliverOrder($config)
-            ->setCountryCode("NO")
+            ->setCountryCode("SE")
             ->setInvoiceDistributionType(DistributionType::EINVOICEB2B)
             ->setOrderId(1)
             ->deliverInvoiceOrder()
