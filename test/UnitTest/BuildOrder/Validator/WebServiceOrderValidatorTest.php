@@ -592,7 +592,7 @@ class WebServiceOrderValidatorTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException Exception
-     * @expectedExceptionMessage -missing value : distributionType EInvoiceB2B is only allowed for Norway.
+     * @expectedExceptionMessage -incorrect value : distributionType EInvoiceB2B is only allowed for Norway.
      */
     public function testFailOnIncorrectCountryCodeForInvoiceB2B()
     {
