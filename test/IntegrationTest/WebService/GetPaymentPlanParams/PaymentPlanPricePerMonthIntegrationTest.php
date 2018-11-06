@@ -45,4 +45,11 @@ class PaymentPlanPricePerMonthTest extends PHPUnit_Framework_TestCase
         $response = new PaymentPlanPricePerMonth(200, $params, true);
         $this->assertNotEmpty($response->values);
     }
+
+    function testPaymentPlanPricePerMonth_returns_paymentPlanType()
+    {
+        $params = $this->getGetPaymentPlanParamsResponseForTesting();
+        $response = new PaymentPlanPricePerMonth(200, $params, true);
+        $this->assertArrayHasKey("paymentPlanType", $response->values[0]);
+    }
 }
