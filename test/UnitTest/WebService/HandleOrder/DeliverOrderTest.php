@@ -43,6 +43,23 @@ class DeliverOrderTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('Post', $request->request->DeliverOrderInformation->DeliverInvoiceDetails->InvoiceDistributionType);
     }
 
+    public function testDeliverInvoiceDistributionTypeEInvoiceB2B()
+    {
+        $config = ConfigurationService::getDefaultConfig();
+        $orderBuilder = WebPay::deliverOrder($config);
+        $request = $orderBuilder
+            ->addOrderRow(TestUtil::createOrderRow())
+            ->setOrderId("id")
+            ->setNumberOfCreditDays(1)
+            ->setCountryCode("NO")
+            ->setInvoiceDistributionType(DistributionType::EINVOICEB2B)
+            ->setCreditInvoice("id")
+            ->deliverInvoiceOrder()
+            ->prepareRequest();
+
+        $this->assertEquals('EInvoiceB2B', $request->request->DeliverOrderInformation->DeliverInvoiceDetails->InvoiceDistributionType);
+    }
+
     public function testDeliverInvoiceOrder()
     {
         $config = ConfigurationService::getDefaultConfig();

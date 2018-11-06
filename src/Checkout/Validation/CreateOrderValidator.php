@@ -67,14 +67,13 @@ class CreateOrderValidator extends OrderValidator
             $errors['incorrectCountryCode'] = "countryCode must be defined, and string of alphabetic characters";
         }
 
-        if ($order->currency === null ||
-            !ctype_alpha($order->currency) ||
-            count($order->currency) === 0
+        if (isset($order->currency) === false ||
+            !ctype_alpha($order->currency)
         ) {
             $errors['incorrectCurrency'] = "currency must be defined, and must be string of alphabetic characters";
         }
 
-        if ($order->getLocale() === null || count($order->getLocale()) === 0) {
+        if ($order->getLocale() === null) {
             $errors['incorrectLocale'] = "locale must be defined";
         }
         

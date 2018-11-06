@@ -6,6 +6,8 @@ use Svea\WebPay\BuildOrder\DeliverOrderBuilder;
 use Svea\WebPay\AdminService\AdminSoap\Authentication;
 use Svea\WebPay\AdminService\AdminSoap\OrdersToDeliver;
 use Svea\WebPay\AdminService\AdminSoap\DeliverOrderInformation;
+use Svea\WebPay\Config\ConfigurationProvider;
+use Svea\WebPay\Constant\DistributionType;
 use Svea\WebPay\Helper\Helper;
 
 /**
@@ -70,6 +72,16 @@ class DeliverOrdersRequest extends AdminServiceRequest
     {
         if (isset($this->orderBuilder->distributionType) == FALSE) {
             $errors[] = array('missing value' => "distributionType is required.");
+        }
+        else
+        {
+            if(isset($this->orderBuilder->orderType) == TRUE && $this->orderBuilder->orderType == ConfigurationProvider::INVOICE_TYPE)
+            {
+                if(isset($this->orderBuilder->distributionType) == TRUE && $this->orderBuilder->distributionType == DistributionType::EINVOICEB2B && $this->orderBuilder->countryCode != "NO")
+                {
+                    $errors[] = array('incorrect value' => "distributionType EInvoiceB2B is only allowed for Norway.");
+                }
+            }
         }
 
         return $errors;

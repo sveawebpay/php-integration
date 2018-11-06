@@ -55,6 +55,10 @@ class PaymentPlanPricePerMonth
                             $pair[$key] = $val;
                         }
 
+                        if ($key == "paymentPlanType") {
+                            $pair[$key] = $val;
+                        }
+
                     }
                     array_push($this->values, $pair);
                 }
