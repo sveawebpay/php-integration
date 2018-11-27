@@ -19,11 +19,11 @@ class CheckoutAdminResponseHelper
         $orderRows = $response['OrderRows'];
         $deliveries = $response['Deliveries'];
 
-        if (count($deliveries) > 0) {
+        if (isset($deliveries)) {
             $response['Deliveries'] = self::convertDeliveries($deliveries);
         }
 
-        if (count($orderRows) > 0) {
+        if (isset($orderRows)) {
             $response['OrderRows'] = self::convertOrderRows($orderRows);
         }
 
@@ -43,7 +43,7 @@ class CheckoutAdminResponseHelper
             }
 
             $credits = $delivery['Credits'];
-            if (count($credits) > 0) {
+            if (isset($credits)) {
                 $delivery['Credits'] = self::convertCredits($credits);
             }
 
