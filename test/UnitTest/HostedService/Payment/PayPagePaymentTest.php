@@ -13,7 +13,7 @@ use Svea\WebPay\Constant\SystemPaymentMethod;
 /**
  * @author Anneli Halld'n, Daniel Brolund for Svea Webpay
  */
-class PayPagePaymentTest extends \PHPUnit_Framework_TestCase {
+class PayPagePaymentTest extends \PHPUnit\Framework\TestCase {
 
     public function testBuildPayPagePaymentWithExcludepaymentMethods() {
         $config = ConfigurationService::getDefaultConfig();

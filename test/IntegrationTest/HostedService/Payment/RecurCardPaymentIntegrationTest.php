@@ -12,7 +12,7 @@ use Svea\WebPay\HostedService\Payment\CardPayment;
 /**
  * @author Kristian Grossman-Madsen for Svea Svea\WebPay\WebPay
  */
-class RecurCardPaymentIntegrationTest extends \PHPUnit_Framework_TestCase
+class RecurCardPaymentIntegrationTest extends \PHPUnit\Framework\TestCase
 {
 
     /**

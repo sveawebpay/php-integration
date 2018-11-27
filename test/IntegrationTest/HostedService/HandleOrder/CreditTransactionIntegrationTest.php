@@ -11,7 +11,7 @@ use Svea\WebPay\HostedService\HostedAdminRequest\CreditTransaction as CreditTran
  *
  * @author Kristian Grossman-Madsen for Svea Svea\WebPay\WebPay
  */
-class CreditTransactionIntegrationTest extends \PHPUnit_Framework_TestCase
+class CreditTransactionIntegrationTest extends \PHPUnit\Framework\TestCase
 {
 
     /**

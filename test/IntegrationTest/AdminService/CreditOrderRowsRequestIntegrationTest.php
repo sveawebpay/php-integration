@@ -2,7 +2,7 @@
 
 namespace Svea\WebPay\Test\IntegrationTest\AdminService;
 
-use PHPUnit_Framework_TestCase;
+use \PHPUnit\Framework\TestCase;
 use Svea\WebPay\Config\ConfigurationService;
 use Svea\WebPay\Constant\DistributionType;
 use Svea\WebPay\Test\TestUtil;
@@ -17,7 +17,7 @@ use Svea\WebPay\WebPayItem;
 /**
  * @author Kristian Grossman-Madsen for Svea Svea\WebPay\WebPay
  */
-class CreditOrderRowsRequestIntegrationTest extends PHPUnit_Framework_TestCase
+class CreditOrderRowsRequestIntegrationTest extends \PHPUnit\Framework\TestCase
 {
 
     /** helper function, returns invoice for delivered order with one row, sent with PriceIncludingVat flag set to true */

@@ -6,7 +6,7 @@ namespace Svea\WebPay\Test\IntegrationTest\WebService\HandleOrder;
 use Svea\WebPay\WebPay;
 use Svea\WebPay\WebPayItem;
 use Svea\WebPay\Test\TestUtil;
-use PHPUnit_Framework_TestCase;
+use \PHPUnit\Framework\TestCase;
 use Svea\WebPay\Config\ConfigurationService;
 use Svea\WebPay\Constant\DistributionType;
 use Svea\WebPay\BuildOrder\DeliverOrderBuilder;
@@ -16,7 +16,7 @@ use Svea\WebPay\WebService\HandleOrder\DeliverInvoice;
 /**
  * @author jona-lit
  */
-class DeliverInvoiceIntegrationTest extends PHPUnit_Framework_TestCase
+class DeliverInvoiceIntegrationTest extends \PHPUnit\Framework\TestCase
 {
 
     /**

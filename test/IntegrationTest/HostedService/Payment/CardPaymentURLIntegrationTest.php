@@ -10,7 +10,7 @@ use Svea\WebPay\Constant\PaymentMethod;
 /**
  * @author Kristian Grossman-Madsen for Svea Webpay
  */
-class CardPaymentURLIntegrationTest extends \PHPUnit_Framework_TestCase
+class CardPaymentURLIntegrationTest extends \PHPUnit\Framework\TestCase
 {
 
     /**

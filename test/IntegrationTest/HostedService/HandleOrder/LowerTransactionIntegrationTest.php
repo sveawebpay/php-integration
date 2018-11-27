@@ -11,7 +11,7 @@ use Svea\WebPay\HostedService\HostedAdminRequest\LowerTransaction as LowerTransa
  *
  * @author Kristian Grossman-Madsen for Svea Svea\WebPay\WebPay
  */
-class LowerTransactionIntegrationTest extends \PHPUnit_Framework_TestCase
+class LowerTransactionIntegrationTest extends \PHPUnit\Framework\TestCase
 {
 
     /**

@@ -14,7 +14,7 @@ use Svea\WebPay\HostedService\HostedAdminRequest\ListPaymentMethods;
  *
  * @author Kristian Grossman-Madsen for Svea Svea\WebPay\WebPay
  */
-class ListPaymentMethodsIntegrationTest extends \PHPUnit_Framework_TestCase
+class ListPaymentMethodsIntegrationTest extends \PHPUnit\Framework\TestCase
 {
 
     function test_listPaymentMethods_request_success()

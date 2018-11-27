@@ -2,7 +2,7 @@
 
 namespace Svea\WebPay\Test\IntegrationTest\BuildOrder;
 
-use PHPUnit_Framework_TestCase;
+use \PHPUnit\Framework\TestCase;
 use Svea\WebPay\WebPayItem;
 use Svea\WebPay\WebPayAdmin;
 use Svea\WebPay\Test\TestUtil;
@@ -12,7 +12,7 @@ use Svea\WebPay\Config\ConfigurationService;
 /**
  * @author Kristian Grossman-Madsen for Svea Svea\WebPay\WebPay
  */
-class CancelOrderBuilderIntegrationTest extends PHPUnit_Framework_TestCase
+class CancelOrderBuilderIntegrationTest extends \PHPUnit\Framework\TestCase
 {
 
     // CancelOrderBuilder endpoints: cancelInvoiceOrder(), cancelPaymentPlanOrder(), cancelCardOrder()

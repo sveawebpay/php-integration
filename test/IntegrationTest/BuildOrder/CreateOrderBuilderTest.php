@@ -2,7 +2,7 @@
 
 namespace Svea\WebPay\Test\IntegrationTest\BuildOrder;
 
-use PHPUnit_Framework_TestCase;
+use \PHPUnit\Framework\TestCase;
 use Svea\WebPay\Config\ConfigurationService;
 use Svea\WebPay\Test\TestUtil;
 use Svea\WebPay\WebPay;
@@ -15,7 +15,7 @@ use Svea\WebPay\WebPayItem;
  *
  * @author Kristian Grossman-Madsen for Svea Svea\WebPay\WebPay
  */
-class CreateOrderBuilderIntegrationTest extends PHPUnit_Framework_TestCase
+class CreateOrderBuilderIntegrationTest extends \PHPUnit\Framework\TestCase
 {
 
     public function test_createOrder_Invoice_SE_Accepted()

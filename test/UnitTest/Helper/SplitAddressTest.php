@@ -4,7 +4,7 @@ namespace Svea\WebPay\Test\UnitTest\Helper;
 
 use Svea\WebPay\Helper\Helper;
 
-class SplitAddressTest extends \PHPUnit_Framework_TestCase
+class SplitAddressTest extends \PHPUnit\Framework\TestCase
 {
 
     function debugPrintSplitStreetAddressOutput($address)

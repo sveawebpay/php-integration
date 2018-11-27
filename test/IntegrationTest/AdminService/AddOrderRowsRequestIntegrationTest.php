@@ -2,7 +2,7 @@
 
 namespace Svea\WebPay\Test\IntegrationTest\AdminService;
 
-use PHPUnit_Framework_TestCase;
+use \PHPUnit\Framework\TestCase;
 use Svea\WebPay\AdminService\AddOrderRowsRequest;
 use Svea\WebPay\BuildOrder\OrderBuilder;
 use Svea\WebPay\Config\ConfigurationProvider;
@@ -16,7 +16,7 @@ use Svea\WebPay\WebPayItem;
 /**
  * @author Kristian Grossman-Madsen for Svea Webpay
  */
-class AddOrderRowsRequestIntegrationTest extends PHPUnit_Framework_TestCase
+class AddOrderRowsRequestIntegrationTest extends \PHPUnit\Framework\TestCase
 {
 
     public $builderObject;

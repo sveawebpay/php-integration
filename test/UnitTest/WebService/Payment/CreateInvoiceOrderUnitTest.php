@@ -5,7 +5,7 @@ namespace Svea\WebPay\Test\UnitTest\WebService\Payment;
 use Svea\WebPay\WebPay;
 use Svea\WebPay\WebPayItem;
 use Svea\WebPay\Helper\Helper;
-use PHPUnit_Framework_TestCase;
+use \PHPUnit\Framework\TestCase;
 use Svea\WebPay\Config\ConfigurationService;
 
 
@@ -13,7 +13,7 @@ use Svea\WebPay\Config\ConfigurationService;
  * Tests ported from Java webservice/payment/Svea\WebPay\Test\UnitTest\WebService\Payment\CreateInvoiceOrderUnitTest.java for INTG-550
  * @author Kristian Grossman-Madsen for Svea Webpay
  */
-class CreateInvoiceOrderUnitTest extends PHPUnit_Framework_TestCase
+class CreateInvoiceOrderUnitTest extends \PHPUnit\Framework\TestCase
 {
     var $order;
     var $exvatRow;

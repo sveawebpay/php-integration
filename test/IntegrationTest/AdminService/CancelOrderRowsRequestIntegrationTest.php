@@ -2,7 +2,7 @@
 
 namespace Svea\WebPay\Test\IntegrationTest\AdminService;
 
-use PHPUnit_Framework_TestCase;
+use \PHPUnit\Framework\TestCase;
 use Svea\WebPay\Config\ConfigurationService;
 use Svea\WebPay\Test\TestUtil;
 use Svea\WebPay\WebPayAdmin;
@@ -12,7 +12,7 @@ use Svea\WebPay\WebPayItem;
 /**
  * @author Kristian Grossman-Madsen for Svea Webpay
  */
-class CancelOrderRowsRequestIntegrationTest extends PHPUnit_Framework_TestCase
+class CancelOrderRowsRequestIntegrationTest extends \PHPUnit\Framework\TestCase
 {
 
     public function test_cancel_single_invoice_orderRow_()

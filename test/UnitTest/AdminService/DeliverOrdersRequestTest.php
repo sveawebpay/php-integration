@@ -11,7 +11,7 @@ use Svea\WebPay\AdminService\DeliverOrdersRequest;
 /**
  * @author Kristian Grossman-Madsen for Svea Webpay
  */
-class DeliverOrdersRequestTest extends \PHPUnit_Framework_TestCase
+class DeliverOrdersRequestTest extends \PHPUnit\Framework\TestCase
 {
 
     public $builderObject;

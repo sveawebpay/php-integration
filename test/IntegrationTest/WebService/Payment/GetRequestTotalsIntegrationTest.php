@@ -6,14 +6,14 @@ use Svea\WebPay\WebPay;
 use Svea\WebPay\WebPayItem;
 use Svea\WebPay\Helper\Helper;
 use Svea\WebPay\Test\TestUtil;
-use PHPUnit_Framework_TestCase;
+use \PHPUnit\Framework\TestCase;
 use Svea\WebPay\Config\ConfigurationService;
 
 
 /**
  * @author Kristian Grossman-Madsen
  */
-class GetRequestTotalsIntegrationTest extends PHPUnit_Framework_TestCase
+class GetRequestTotalsIntegrationTest extends \PHPUnit\Framework\TestCase
 {
 
     function test_get_invoice_total_amount_before_createorder()

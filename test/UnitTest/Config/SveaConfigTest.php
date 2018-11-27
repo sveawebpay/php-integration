@@ -10,7 +10,7 @@ use Svea\WebPay\Config\ConfigurationService;
 use Svea\WebPay\Config\ConfigurationProvider;
 
 
-class SveaConfigTest extends \PHPUnit_Framework_TestCase {
+class SveaConfigTest extends \PHPUnit\Framework\TestCase {
 
     function testSveaConfigNotFound(){
         $config = ConfigurationService::getTestConfig();

@@ -13,7 +13,7 @@ use Svea\WebPay\Config\ConfigurationService;
 /**
  * @author Anneli Halld'n, Daniel Brolund for Svea Webpay
  */
-class WebServiceOrderValidatorTest extends \PHPUnit_Framework_TestCase
+class WebServiceOrderValidatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @expectedException Svea\WebPay\BuildOrder\Validator\ValidationException

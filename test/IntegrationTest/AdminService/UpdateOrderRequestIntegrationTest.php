@@ -2,7 +2,7 @@
 
 namespace Svea\WebPay\Test\IntegrationTest\AdminService;
 
-use PHPUnit_Framework_TestCase;
+use \PHPUnit\Framework\TestCase;
 use Svea\WebPay\Config\ConfigurationService;
 use Svea\WebPay\Test\TestUtil;
 use Svea\WebPay\WebPay;
@@ -13,7 +13,7 @@ use Svea\WebPay\WebPayItem;
 /**
  * @author Kristian Grossman-Madsen for Svea Webpay
  */
-class UpdateOrderRequestIntegrationTest extends PHPUnit_Framework_TestCase
+class UpdateOrderRequestIntegrationTest extends \PHPUnit\Framework\TestCase
 {
 
     public $notes = 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit.

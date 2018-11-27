@@ -12,7 +12,7 @@ use Svea\WebPay\Constant\DistributionType;
 /**
  * @author Kristian Grossman-Madsen for Svea Webpay
  */
-class CreditOrderRowsRequestTest extends \PHPUnit_Framework_TestCase
+class CreditOrderRowsRequestTest extends \PHPUnit\Framework\TestCase
 {
 
     /// characterising test for INTG-462

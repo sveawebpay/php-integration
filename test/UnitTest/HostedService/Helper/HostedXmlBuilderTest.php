@@ -12,7 +12,7 @@ use Svea\WebPay\BuildOrder\RowBuilders\IndividualCustomer;
 use Svea\WebPay\HostedService\Helper\HostedXmlBuilder as HostedXmlBuilder;
 
 
-class HostedXmlBuilderTest extends \PHPUnit_Framework_TestCase
+class HostedXmlBuilderTest extends \PHPUnit\Framework\TestCase
 {
 
     private $order;

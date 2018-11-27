@@ -3,14 +3,14 @@
 namespace Svea\WebPay\Test\UnitTest\WebService\HandleOrder;
 
 use Svea\WebPay\WebPay;
-use PHPUnit_Framework_TestCase;
+use \PHPUnit\Framework\TestCase;
 use Svea\WebPay\Config\ConfigurationService;
 
 
 /**
  * @author Anneli Halld'n, Daniel Brolund for Svea Webpay
  */
-class CloseOrderTest extends PHPUnit_Framework_TestCase
+class CloseOrderTest extends \PHPUnit\Framework\TestCase
 {
 
     public function testCloseInvoiceOrder()

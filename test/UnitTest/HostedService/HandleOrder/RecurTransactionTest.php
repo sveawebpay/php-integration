@@ -4,7 +4,7 @@ namespace Svea\WebPay\Test\UnitTest\HostedService\HandleOrder;
 
 use SimpleXMLElement;
 use PHPUnit_Framework_Assert;
-use PHPUnit_Framework_TestCase;
+use \PHPUnit\Framework\TestCase;
 use Svea\WebPay\Config\ConfigurationService;
 use Svea\WebPay\Config\ConfigurationProvider;
 use Svea\WebPay\HostedService\HostedAdminRequest\RecurTransaction;
@@ -13,7 +13,7 @@ use Svea\WebPay\HostedService\HostedAdminRequest\RecurTransaction;
 /**
  * @author Kristian Grossman-Madsen for Svea Webpay
  */
-class RecurTransactionTest extends PHPUnit_Framework_TestCase
+class RecurTransactionTest extends \PHPUnit\Framework\TestCase
 {
 
     protected $configObject;

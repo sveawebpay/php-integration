@@ -2,7 +2,7 @@
 
 namespace Svea\WebPay\Test\IntegrationTest\AdminService;
 
-use PHPUnit_Framework_TestCase;
+use \PHPUnit\Framework\TestCase;
 use Svea\WebPay\Config\ConfigurationService;
 use Svea\WebPay\Constant\DistributionType;
 use Svea\WebPay\HostedService\HostedAdminRequest\ConfirmTransaction;
@@ -14,7 +14,7 @@ use Svea\WebPay\WebPayItem;
 /**
  * @author Kristian Grossman-Madsen for Svea Webpay
  */
-class DeliverOrderRowsRequestIntegrationTest extends PHPUnit_Framework_TestCase
+class DeliverOrderRowsRequestIntegrationTest extends \PHPUnit\Framework\TestCase
 {
 
     public function test_deliver_single_invoice_orderRow_returns_accepted_with_invoiceId()

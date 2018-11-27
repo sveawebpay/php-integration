@@ -11,7 +11,7 @@ use Svea\WebPay\BuildOrder\DeliverOrderRowsBuilder;
 /**
  * @author Kristian Grossman-Madsen for Svea Webpay
  */
-class DeliverOrderRowsBuilderTest extends \PHPUnit_Framework_TestCase
+class DeliverOrderRowsBuilderTest extends \PHPUnit\Framework\TestCase
 {
 
     protected $deliverOrderRowsObject;

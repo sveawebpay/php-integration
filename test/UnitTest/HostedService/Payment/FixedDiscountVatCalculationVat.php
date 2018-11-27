@@ -4,14 +4,14 @@ namespace Svea\WebPay\Test\UnitTest\HostedService\Payment;
 
 use Svea\WebPay\WebPay;
 use Svea\WebPay\WebPayItem;
-use PHPUnit_Framework_TestCase;
+use \PHPUnit\Framework\TestCase;
 use Svea\WebPay\Config\ConfigurationService;
 use Svea\WebPay\Constant\PaymentMethod;
 
 /**
  * @author Kristian Grossman-Madsen
  */
-class FixedDiscountVatCalculationTest extends PHPUnit_Framework_TestCase
+class FixedDiscountVatCalculationTest extends \PHPUnit\Framework\TestCase
 {
 
     public function test_bv_order_sent_incvat_two_decimals_with_both_discounts()

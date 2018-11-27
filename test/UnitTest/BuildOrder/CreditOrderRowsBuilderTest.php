@@ -11,7 +11,7 @@ use Svea\WebPay\BuildOrder\RowBuilders\NumberedOrderRow;
 /**
  * @author Kristian Grossman-Madsen for Svea Webpay
  */
-class CreditOrderRowsBuilderTest extends \PHPUnit_Framework_TestCase
+class CreditOrderRowsBuilderTest extends \PHPUnit\Framework\TestCase
 {
 
     protected $creditOrderRowsObject;

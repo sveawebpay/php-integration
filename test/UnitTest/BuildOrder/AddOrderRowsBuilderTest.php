@@ -10,7 +10,7 @@ use Svea\WebPay\BuildOrder\AddOrderRowsBuilder;
 /**
  * @author Kristian Grossman-Madsen for Svea Svea\WebPay\WebPay
  */
-class AddOrderRowsBuilderTest extends \PHPUnit_Framework_TestCase
+class AddOrderRowsBuilderTest extends \PHPUnit\Framework\TestCase
 {
 
     protected $addOrderRowsObject;

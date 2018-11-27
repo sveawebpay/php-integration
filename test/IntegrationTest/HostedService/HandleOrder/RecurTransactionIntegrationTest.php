@@ -11,7 +11,7 @@ use Svea\WebPay\HostedService\HostedAdminRequest\RecurTransaction as RecurTransa
  *
  * @author Kristian Grossman-Madsen for Svea Svea\WebPay\WebPay
  */
-class RecurTransactionIntegrationTest extends \PHPUnit_Framework_TestCase
+class RecurTransactionIntegrationTest extends \PHPUnit\Framework\TestCase
 {
 
     /**

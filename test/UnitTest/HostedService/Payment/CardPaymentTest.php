@@ -11,7 +11,7 @@ use Svea\WebPay\HostedService\Payment\CardPayment as CardPayment;
 /**
  * @author Anneli Halld'n, Daniel Brolund for Svea Webpay
  */
-class CardPaymentTest extends \PHPUnit_Framework_TestCase {
+class CardPaymentTest extends \PHPUnit\Framework\TestCase {
 
     public function testSetAuthorization() {
         $form = WebPay::createOrder(new TestConf())

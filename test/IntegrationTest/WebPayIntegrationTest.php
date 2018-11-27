@@ -3,7 +3,7 @@
 
 namespace Svea\WebPay\Test\IntegrationTest;
 
-use PHPUnit_Framework_TestCase;
+use \PHPUnit\Framework\TestCase;
 use Svea\WebPay\Config\ConfigurationService;
 use Svea\WebPay\Constant\DistributionType;
 use Svea\WebPay\Constant\PaymentMethod;
@@ -15,7 +15,7 @@ use Svea\WebPay\WebPayItem;
 /**
  * @author Kristian Grossman-Madsen for Svea Svea\WebPay\WebPay
  */
-class WebPayIntegrationTest extends PHPUnit_Framework_TestCase
+class WebPayIntegrationTest extends \PHPUnit\Framework\TestCase
 {
 
     /// Svea\WebPay\WebPay::createOrder() --------------------------------------------------

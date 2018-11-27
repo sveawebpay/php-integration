@@ -12,7 +12,7 @@ use Svea\WebPay\Constant\PaymentMethod;
  * All functions named test...() will run as tests in PHP-unit framework
  * @author Anneli Halld'n, Daniel Brolund for Svea Webpay
  */
-class NewOrderBuilderTest extends \PHPUnit_Framework_TestCase
+class NewOrderBuilderTest extends \PHPUnit\Framework\TestCase
 {
 
     public function testNewInvoiceOrderCompanyAddresselector()

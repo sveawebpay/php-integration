@@ -9,7 +9,7 @@ use Svea\WebPay\AdminService\GetOrdersRequest;
 /**
  * @author Kristian Grossman-Madsen for Svea Webpay
  */
-class GetOrdersRequestTest extends \PHPUnit_Framework_TestCase
+class GetOrdersRequestTest extends \PHPUnit\Framework\TestCase
 {
 
     public $builderObject;

@@ -10,7 +10,7 @@ use Svea\WebPay\AdminService\DeliverOrderRowsRequest;
 /**
  * @author Kristian Grossman-Madsen for Svea Webpay
  */
-class DeliverOrderRowsRequestTest extends \PHPUnit_Framework_TestCase
+class DeliverOrderRowsRequestTest extends \PHPUnit\Framework\TestCase
 {
 
     public $builderObject;

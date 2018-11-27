@@ -4,14 +4,14 @@ namespace Svea\WebPay\Test\UnitTest\WebService\Payment;
 
 use Svea\WebPay\WebPay;
 use Svea\WebPay\WebPayItem;
-use PHPUnit_Framework_TestCase;
+use \PHPUnit\Framework\TestCase;
 use Svea\WebPay\Config\ConfigurationService;
 
 
 /**
  * @author Kristian Grossman-Madsen
  */
-class FixedDiscountRowsTest extends PHPUnit_Framework_TestCase
+class FixedDiscountRowsTest extends \PHPUnit\Framework\TestCase
 {
 
     /**

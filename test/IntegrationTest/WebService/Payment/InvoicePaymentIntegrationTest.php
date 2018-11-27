@@ -7,7 +7,7 @@ use Svea\WebPay\WebPay;
 use Svea\WebPay\WebPayItem;
 use Svea\WebPay\WebPayAdmin;
 use Svea\WebPay\Test\TestUtil;
-use PHPUnit_Framework_TestCase;
+use \PHPUnit\Framework\TestCase;
 use Svea\WebPay\Config\ConfigurationService;
 use Svea\WebPay\WebService\WebServiceResponse\CustomerIdentity\CreateOrderIdentity;
 
@@ -15,7 +15,7 @@ use Svea\WebPay\WebService\WebServiceResponse\CustomerIdentity\CreateOrderIdenti
 /**
  * @author Anneli Halld'n, Daniel Brolund, Kristian Grossman-Madsen for Svea Webpay
  */
-class InvoicePaymentIntegrationTest extends PHPUnit_Framework_TestCase
+class InvoicePaymentIntegrationTest extends \PHPUnit\Framework\TestCase
 {
 
     public function testInvoiceRequestAccepted()

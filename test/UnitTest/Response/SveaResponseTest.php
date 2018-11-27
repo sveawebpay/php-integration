@@ -10,7 +10,7 @@ use Svea\WebPay\Config\ConfigurationProvider;
 /**
  * @author Kristian Grossman-Madsen for Svea Webpay
  */
-class SveaResponseTest extends \PHPUnit_Framework_TestCase
+class SveaResponseTest extends \PHPUnit\Framework\TestCase
 {
 
     public function test_handles_response_which_is_null()

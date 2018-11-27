@@ -6,7 +6,7 @@ use Svea\WebPay\Config\ConfigurationService;
 use Svea\WebPay\Helper\Helper;
 
 
-class ConfigurationProviderTest extends \PHPUnit_Framework_TestCase {
+class ConfigurationProviderTest extends \PHPUnit\Framework\TestCase {
     
     public function testDefaultTestConfig() {
         $config = ConfigurationService::getDefaultConfig();

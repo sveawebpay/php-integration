@@ -9,7 +9,7 @@ use Svea\WebPay\BuildOrder\RowBuilders\NumberedOrderRow;
 /**
  * @author Kristian Grossman-Madsen for Svea Webpay
  */
-class CancelOrderRowsBuilderTest extends \PHPUnit_Framework_TestCase
+class CancelOrderRowsBuilderTest extends \PHPUnit\Framework\TestCase
 {
 
     protected $cancelOrderRowsObject;

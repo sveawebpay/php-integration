@@ -12,7 +12,7 @@ use Svea\WebPay\HostedService\Helper\HostedRowFormatter as HostedRowFormatter;
 /**
  * @author Kristian Grossman-Madsen et al for Svea Webpay
  */
-class HostedRowFormatterTest extends \PHPUnit_Framework_TestCase
+class HostedRowFormatterTest extends \PHPUnit\Framework\TestCase
 {
 
     private $order;

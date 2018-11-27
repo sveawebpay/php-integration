@@ -12,7 +12,7 @@ use Svea\WebPay\BuildOrder\CreateOrderBuilder;
 use Svea\WebPay\Config\SveaConfigurationProvider;
 use Svea\WebPay\HostedService\Helper\HostedRowFormatter as HostedRowFormatter;
 
-class HostedPaymentTest extends \PHPUnit_Framework_TestCase {
+class HostedPaymentTest extends \PHPUnit\Framework\TestCase {
 
     // TODO move tests of setXXX from subclasses of HostedPayment here
 

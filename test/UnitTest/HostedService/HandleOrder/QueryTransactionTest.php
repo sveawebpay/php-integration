@@ -4,7 +4,7 @@ namespace Svea\WebPay\Test\UnitTest\HostedService\HandleOrder;
 
 use SimpleXMLElement;
 use PHPUnit_Framework_Assert;
-use PHPUnit_Framework_TestCase;
+use \PHPUnit\Framework\TestCase;
 use Svea\WebPay\Config\ConfigurationService;
 use Svea\WebPay\Config\ConfigurationProvider;
 use Svea\WebPay\HostedService\HostedAdminRequest\QueryTransaction;
@@ -13,7 +13,7 @@ use Svea\WebPay\HostedService\HostedAdminRequest\QueryTransaction;
 /**
  * @author Kristian Grossman-Madsen for Svea Webpay
  */
-class QueryTransactionTest extends PHPUnit_Framework_TestCase
+class QueryTransactionTest extends \PHPUnit\Framework\TestCase
 {
 
     protected $configObject;

@@ -2,7 +2,7 @@
 
 namespace Svea\WebPay\Test\IntegrationTest\AdminService;
 
-use PHPUnit_Framework_TestCase;
+use \PHPUnit\Framework\TestCase;
 use Svea\WebPay\Config\ConfigurationService;
 use Svea\WebPay\Test\TestUtil;
 use Svea\WebPay\WebPay;
@@ -13,7 +13,7 @@ use Svea\WebPay\WebPayItem;
 /**
  * @author Kristian Grossman-Madsen for Svea Webpay
  */
-class UpdateOrderRowsRequestIntegrationTest extends PHPUnit_Framework_TestCase
+class UpdateOrderRowsRequestIntegrationTest extends \PHPUnit\Framework\TestCase
 {
 
     public function test_update_orderRow_as_exvat_and_vatpercent()

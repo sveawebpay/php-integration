@@ -10,7 +10,7 @@ use Svea\WebPay\Config\ConfigurationService;
 use Svea\WebPay\Config\ConfigurationProvider;
 use Svea\WebPay\BuildOrder\CreditOrderRowsBuilder;
 
-class CreditAmountAccountCreditTestextends extends  \PHPUnit_Framework_TestCase
+class CreditAmountAccountCreditTestextends extends  \PHPUnit\Framework\TestCase
 {
     public $builderObject;
 

@@ -14,7 +14,7 @@ use Svea\WebPay\Config\ConfigurationProvider;
 /**
  * @author Kristian Grossman-Madsen for Svea Webpay
  */
-class WebPayAdminUnitTest extends \PHPUnit_Framework_TestCase
+class WebPayAdminUnitTest extends \PHPUnit\Framework\TestCase
 {
 
     public function test_WebPayAdmin_class_exists()

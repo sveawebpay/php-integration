@@ -8,7 +8,7 @@ use Svea\WebPay\Helper\Helper;
 use Svea\WebPay\Test\TestUtil;
 use Svea\WebPay\Config\ConfigurationService;
 
-class HelperTest extends \PHPUnit_Framework_TestCase
+class HelperTest extends \PHPUnit\Framework\TestCase
 {
 
     // Helper::bround() is an alias for round(x,0,PHP_ROUND_HALF_EVEN)

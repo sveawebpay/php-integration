@@ -10,7 +10,7 @@ use Svea\WebPay\AdminService\CancelOrderRowsRequest;
 /**
  * @author Kristian Grossman-Madsen for Svea Webpay
  */
-class CancelOrderRowsRequestTest extends \PHPUnit_Framework_TestCase
+class CancelOrderRowsRequestTest extends \PHPUnit\Framework\TestCase
 {
 
     public $builderObject;

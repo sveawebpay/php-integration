@@ -16,7 +16,7 @@ use Svea\WebPay\Constant\DistributionType;
  *
  * @author Kristian Grossman-Madsen for Svea Svea\WebPay\WebPay
  */
-class WebPayUnitTest extends \PHPUnit_Framework_TestCase
+class WebPayUnitTest extends \PHPUnit\Framework\TestCase
 {
 
 

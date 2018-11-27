@@ -12,7 +12,7 @@ use Svea\WebPay\WebService\Helper\WebServiceRowFormatter;
 /**
  * @author Kristian Grossman-Madsen for Svea Webpay
  */
-class HelperIntegrationTest extends \PHPUnit_Framework_TestCase
+class HelperIntegrationTest extends \PHPUnit\Framework\TestCase
 {
 
     /**

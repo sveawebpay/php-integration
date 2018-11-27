@@ -14,7 +14,7 @@ use Svea\WebPay\AdminService\AddOrderRowsRequest;
 /**
  * @author Kristian Grossman-Madsen for Svea Webpay
  */
-class AddOrderRowsRequestTest extends \PHPUnit_Framework_TestCase
+class AddOrderRowsRequestTest extends \PHPUnit\Framework\TestCase
 {
 
     public $builderObject;

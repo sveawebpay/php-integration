@@ -9,7 +9,7 @@ use Svea\WebPay\Config\ConfigurationProvider;
 /**
  * @author Kristian Grossman-Madsen for Svea Webpay
  */
-class QueryOrderBuilderTest extends \PHPUnit_Framework_TestCase
+class QueryOrderBuilderTest extends \PHPUnit\Framework\TestCase
 {
 
     protected $queryOrderObject;
