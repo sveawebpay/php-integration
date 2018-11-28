@@ -30,7 +30,7 @@ class CreditTransactionTest extends \PHPUnit\Framework\TestCase
     function test_class_exists()
     {
         $this->assertInstanceOf("Svea\WebPay\HostedService\HostedAdminRequest\CreditTransaction", $this->creditObject);
-        $this->assertEquals("credit", PHPUnit_Framework_Assert::readAttribute($this->creditObject, 'method'));
+        $this->assertEquals("credit", \PHPUnit\Framework\Assert::readAttribute($this->creditObject, 'method'));
     }
 
     function test_prepareRequest_array_contains_mac_merchantid_message()
@@ -88,14 +88,12 @@ class CreditTransactionTest extends \PHPUnit\Framework\TestCase
 
     }
 
+    /**
+     * @expectedException Svea\WebPay\BuildOrder\Validator\ValidationException
+     * @expectedExceptionMessage -missing value : transactionId is required. Use function setTransactionId() with the SveaOrderId from the createOrder response.
+     */
     function test_prepareRequest_missing_transactionId_throws_exception()
     {
-
-        $this->setExpectedException(
-            'Svea\WebPay\BuildOrder\Validator\ValidationException',
-            '-missing value : transactionId is required. Use function setTransactionId() with the SveaOrderId from the createOrder response.'
-        );
-
         $creditAmount = 100;
         $this->creditObject->creditAmount = $creditAmount;
 
@@ -105,14 +103,12 @@ class CreditTransactionTest extends \PHPUnit\Framework\TestCase
         $form = $this->creditObject->prepareRequest();
     }
 
+    /**
+     * @expectedException Svea\WebPay\BuildOrder\Validator\ValidationException
+     * @expectedExceptionMessage -missing value : creditAmount is required. Use function setCreditAmount().
+     */
     function test_prepareRequest_missing_creditAmount_throws_exception()
     {
-
-        $this->setExpectedException(
-            'Svea\WebPay\BuildOrder\Validator\ValidationException',
-            '-missing value : creditAmount is required. Use function setCreditAmount().'
-        );
-
         $transactionId = 987654;
         $this->creditObject->transactionId = $transactionId;
 

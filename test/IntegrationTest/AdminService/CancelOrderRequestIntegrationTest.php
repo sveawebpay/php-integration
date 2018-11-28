@@ -23,9 +23,9 @@ class CancelOrderRequestIntegrationTest extends \PHPUnit\Framework\TestCase
     {
 
         // Stop here and mark this test as incomplete.
-//        $this->markTestIncomplete(
-//            'skeleton for test_manual_CancelOrderRequest'
-//        );
+        $this->markTestIncomplete(
+            'skeleton for test_manual_CancelOrderRequest'
+        );
 
         $countryCode = "SE";
         $sveaOrderIdToClose = 349698;

@@ -61,11 +61,11 @@ class AddOrderRowsBuilderTest extends \PHPUnit\Framework\TestCase
         $this->assertInstanceOf("Svea\WebPay\AdminService\AddOrderRowsRequest", $addOrderRowsObject);
     }
 
+    /**
+     * @expectedException Svea\WebPay\BuildOrder\Validator\ValidationException
+     */
     public function test_addOrderRowsBuilder_missing_orderRows_throws_exception()
     {
-
-        $this->setExpectedException('Svea\WebPay\BuildOrder\Validator\ValidationException');
-
         $orderId = "123456";
         $addOrderRowsObject = $this->addOrderRowsObject
             ->setOrderId($orderId)

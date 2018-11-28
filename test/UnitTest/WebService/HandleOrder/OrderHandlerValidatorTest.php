@@ -33,14 +33,21 @@ class OrderHandlerValidatorTest extends \PHPUnit\Framework\TestCase
 
     public function test_deliverPaymentPlanOrder_with_missing_invoiceDistributionType_validates_OK()
     {
-        $config = ConfigurationService::getDefaultConfig();
-        $builder = WebPay::deliverOrder($config);
-        $request = $builder
-            ->setOrderId(123456)
-            ->setCountryCode("SE")
-            ->addOrderRow(TestUtil::createOrderRow())
-            ->deliverPaymentPlanOrder()
-            ->prepareRequest();
+        try {
+            $config = ConfigurationService::getDefaultConfig();
+            $builder = WebPay::deliverOrder($config);
+            $request = $builder
+                ->setOrderId(123456)
+                ->setCountryCode("SE")
+                ->addOrderRow(TestUtil::createOrderRow())
+                ->deliverPaymentPlanOrder()
+                ->prepareRequest();
+            $this->assertTrue(true);
+        } catch (Exception $e) {
+            // fail on validation error
+            $this->fail("Unexpected validation exception: " . $e->getMessage());
+        }
+
     }
 
     /**

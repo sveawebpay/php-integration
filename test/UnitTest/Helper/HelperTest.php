@@ -502,6 +502,9 @@ class HelperTest extends \PHPUnit\Framework\TestCase
 
 
     //  11A. mean inc to two tax rates, 50+6/3 = 18,67% => 19%
+    /**
+     * @doesNotPerformAssertions
+     */
     function test_splitMeanAcrossTaxRates_11a()
     {
         $discountAmount = 119.0;
@@ -520,6 +523,9 @@ class HelperTest extends \PHPUnit\Framework\TestCase
     }
 
     //  11B. mean inc to two tax rates, 50+6/3 = 18,67%
+    /**
+     * @doesNotPerformAssertions
+     */
     function test_splitMeanAcrossTaxRates_11b()
     {
         $discountAmount = 118.67;

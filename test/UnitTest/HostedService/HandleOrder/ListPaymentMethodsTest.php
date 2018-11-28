@@ -30,7 +30,7 @@ class ListPaymentMethodsTest extends \PHPUnit\Framework\TestCase
     function test_class_exists()
     {
         $this->assertInstanceOf("Svea\WebPay\HostedService\HostedAdminRequest\ListPaymentMethods", $this->listpaymentmethodObject);
-        $this->assertEquals("getpaymentmethods", PHPUnit_Framework_Assert::readAttribute($this->listpaymentmethodObject, 'method'));
+        $this->assertEquals("getpaymentmethods", \PHPUnit\Framework\Assert::readAttribute($this->listpaymentmethodObject, 'method'));
     }
 
     function test_prepareRequest_array_contains_mac_merchantid_message()

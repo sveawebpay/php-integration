@@ -29,7 +29,7 @@ class AnnulTransactionTest extends \PHPUnit\Framework\TestCase
     function test_class_exists()
     {
         $this->assertInstanceOf("Svea\WebPay\HostedService\HostedAdminRequest\AnnulTransaction", $this->annulObject);
-        $this->assertEquals("annul", PHPUnit_Framework_Assert::readAttribute($this->annulObject, 'method'));
+        $this->assertEquals("annul", \PHPUnit\Framework\Assert::readAttribute($this->annulObject, 'method'));
     }
 
     function test_prepareRequest_array_contains_mac_merchantid_message()
@@ -79,14 +79,12 @@ class AnnulTransactionTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals((string)$transactionId, $xmlMessage->transactionid);
     }
 
+    /**
+     * @expectedException Svea\WebPay\BuildOrder\Validator\ValidationException
+     * @expectedExceptionMessage -missing value : transactionId is required. Use function setTransactionId() with the SveaOrderId from the createOrder response.
+     */
     function test_prepareRequest_missing_transactionId_throws_exception()
     {
-
-        $this->setExpectedException(
-            'Svea\WebPay\BuildOrder\Validator\ValidationException',
-            '-missing value : transactionId is required. Use function setTransactionId() with the SveaOrderId from the createOrder response.'
-        );
-
         $countryCode = "SE";
         $this->annulObject->countryCode = $countryCode;
 

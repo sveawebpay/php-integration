@@ -30,14 +30,14 @@ class QueryTransactionTest extends \PHPUnit\Framework\TestCase
     function test_class_exists()
     {
         $this->assertInstanceOf("Svea\WebPay\HostedService\HostedAdminRequest\QueryTransaction", $this->queryObject);
-        $this->assertEquals("querytransactionid", PHPUnit_Framework_Assert::readAttribute($this->queryObject, 'method'));
+        $this->assertEquals("querytransactionid", \PHPUnit\Framework\Assert::readAttribute($this->queryObject, 'method'));
     }
 
     function test_setCountryCode()
     {
         $countryCode = "SE";
         $this->queryObject->countryCode = $countryCode;
-        $this->assertEquals($countryCode, PHPUnit_Framework_Assert::readAttribute($this->queryObject, 'countryCode'));
+        $this->assertEquals($countryCode, \PHPUnit\Framework\Assert::readAttribute($this->queryObject, 'countryCode'));
     }
 
     function test_prepareRequest_array_contains_mac_merchantid_message()
@@ -87,14 +87,12 @@ class QueryTransactionTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals((string)$transactionId, $xmlMessage->transactionid);
     }
 
+    /**
+     * @expectedException Svea\WebPay\BuildOrder\Validator\ValidationException
+     * @expectedExceptionMessage -missing value : transactionId is required. Use function setTransactionId() with the SveaOrderId from the createOrder response.
+     */
     function test_prepareRequest_missing_transactionId_throws_exception()
     {
-
-        $this->setExpectedException(
-            'Svea\WebPay\BuildOrder\Validator\ValidationException',
-            '-missing value : transactionId is required. Use function setTransactionId() with the SveaOrderId from the createOrder response.'
-        );
-
         $countryCode = "SE";
         $this->queryObject->countryCode = $countryCode;
 

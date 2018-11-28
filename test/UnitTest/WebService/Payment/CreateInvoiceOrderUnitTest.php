@@ -150,7 +150,13 @@ class CreateInvoiceOrderUnitTest extends \PHPUnit\Framework\TestCase
         $order->addFee($this->exvatInvoiceFee);
         $order->addFee($this->exvatShippingFee);
 
-        $request = $order->useInvoicePayment()->prepareRequest();
+        try {
+            $request = $order->useInvoicePayment()->prepareRequest();
+            $this->assertTrue(true);
+        } catch (Exception $e) {
+            // fail on validation error
+            $this->fail("Unexpected validation exception: " . $e->getMessage());
+        }
     }
 
     public function test_that_createOrder_with_mixed_orderRow_and_Fee_price_specifications_does_not_throw_validation_error()
@@ -162,7 +168,13 @@ class CreateInvoiceOrderUnitTest extends \PHPUnit\Framework\TestCase
         $order->addFee($this->exvatInvoiceFee);
         $order->addFee($this->exvatShippingFee);
 
-        $request = $order->useInvoicePayment()->prepareRequest();
+        try {
+            $request = $order->useInvoicePayment()->prepareRequest();
+            $this->assertTrue(true);
+        } catch (Exception $e) {
+            // fail on validation error
+            $this->fail("Unexpected validation exception: " . $e->getMessage());
+        }
     }
 
     //if no mixed specification types, default to sending order as incvat
