@@ -242,7 +242,7 @@ class UpdateOrderRowsBuilderIntegrationTest extends \PHPUnit\Framework\TestCase
                     WebPayItem::numberedOrderRow()
                         ->setArticleNumber("30")
                         ->setQuantity(3)
-                        ->setAmountExVat(30.00)
+                        ->setAmountExVat(500.00)
                         ->setVatPercent(25)
                         ->setDescription("K3 Specification")
                         ->setName('K3 Name')

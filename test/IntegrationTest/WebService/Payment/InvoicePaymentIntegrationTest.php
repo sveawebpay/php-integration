@@ -39,6 +39,8 @@ class InvoicePaymentIntegrationTest extends \PHPUnit\Framework\TestCase
 
     public function testInvoiceRequestNLAcceptedWithDoubleHousenumber()
     {
+        $this->markTestIncomplete("NL flow not maintained by webpay-dev");
+
         $config = ConfigurationService::getDefaultConfig();
         $request = WebPay::createOrder($config)
             ->addOrderRow(TestUtil::createOrderRow())
@@ -64,6 +66,8 @@ class InvoicePaymentIntegrationTest extends \PHPUnit\Framework\TestCase
 
     public function testInvoiceRequestUsingISO8601dateAccepted()
     {
+        $this->markTestIncomplete("NL flow not maintained by webpay-dev");
+
         $config = ConfigurationService::getDefaultConfig();
         $request = WebPay::createOrder($config)
             ->addOrderRow(TestUtil::createOrderRow())
@@ -938,7 +942,7 @@ class InvoicePaymentIntegrationTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(1, $response->accepted);
         $this->assertTrue($response->customerIdentity instanceof CreateOrderIdentity);
         // verify returned address
-        $this->assertEquals("Normann Ola", $response->customerIdentity->fullName);    // Note: order may vary between countries, given by UC
+        $this->assertEquals("Ola Normann", $response->customerIdentity->fullName);    // Note: order may vary between countries, given by UC
         $this->assertEquals("Testveien 2", $response->customerIdentity->street);
         $this->assertEquals("", $response->customerIdentity->coAddress);
         $this->assertEquals("359", $response->customerIdentity->zipCode);
@@ -967,7 +971,7 @@ class InvoicePaymentIntegrationTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(1, $response->accepted);
         $this->assertTrue($response->customerIdentity instanceof CreateOrderIdentity);
         // verify returned address
-        $this->assertEquals("Jensen Hanne", $response->customerIdentity->fullName);    // Note: order may vary between countries, given by UC
+        $this->assertEquals("Hanne Jensen", $response->customerIdentity->fullName);    // Note: order may vary between countries, given by UC
         $this->assertEquals("Testvejen 42", $response->customerIdentity->street);
         $this->assertEquals("c/o Test A/S", $response->customerIdentity->coAddress);
         $this->assertEquals("2100", $response->customerIdentity->zipCode);
@@ -1007,12 +1011,15 @@ class InvoicePaymentIntegrationTest extends \PHPUnit\Framework\TestCase
     // IndividualCustomer validation
     function test_validates_all_required_methods_for_createOrder_useInvoicePayment_IndividualCustomer_DE()
     {
+        $this->markTestIncomplete("NL flow not maintained by webpay-dev");
+
         $order = WebPay::createOrder(ConfigurationService::getDefaultConfig())
             ->addOrderRow(
                 WebPayItem::orderRow()
                     ->setQuantity(1.0)
                     ->setAmountExVat(4.0)
                     ->setAmountIncVat(5.0)
+                    ->setDescription("IntegrationTest")
             )
             ->addCustomerDetails(
                 WebPayItem::individualCustomer()
@@ -1041,12 +1048,15 @@ class InvoicePaymentIntegrationTest extends \PHPUnit\Framework\TestCase
     // IndividualCustomer validation
     function test_validates_all_required_methods_for_createOrder_useInvoicePayment_IndividualCustomer_NL()
     {
+        $this->markTestIncomplete("NL flow not maintained by webpay-dev");
+
         $order = WebPay::createOrder(ConfigurationService::getDefaultConfig())
             ->addOrderRow(
                 WebPayItem::orderRow()
                     ->setQuantity(1.0)
                     ->setAmountExVat(4.0)
                     ->setAmountIncVat(5.0)
+                    ->setDescription("IntegrationTest")
             )
             ->addCustomerDetails(
                 WebPayItem::individualCustomer()
@@ -1074,6 +1084,8 @@ class InvoicePaymentIntegrationTest extends \PHPUnit\Framework\TestCase
 
     public function testInvoiceRequestNLReturnsSameAddress()
     {
+        $this->markTestIncomplete("NL flow not maintained by webpay-dev");
+
         $config = ConfigurationService::getDefaultConfig();
         $request = WebPay::createOrder($config)
             ->addOrderRow(TestUtil::createOrderRow())
@@ -1105,6 +1117,8 @@ class InvoicePaymentIntegrationTest extends \PHPUnit\Framework\TestCase
 
     public function testInvoiceRequestNLReturnsCorrectAddress()
     {
+        $this->markTestIncomplete("NL flow not maintained by webpay-dev");
+
         $config = ConfigurationService::getDefaultConfig();
         $request = WebPay::createOrder($config)
             ->addOrderRow(TestUtil::createOrderRow())
@@ -1191,6 +1205,8 @@ class InvoicePaymentIntegrationTest extends \PHPUnit\Framework\TestCase
 
     public function testInvoiceRequestNLReproduceErrorIn471193()
     {
+        $this->markTestIncomplete("NL flow not maintained by webpay-dev");
+
         $config = ConfigurationService::getDefaultConfig();
         $request = WebPay::createOrder($config)
             ->addOrderRow(TestUtil::createOrderRow())
