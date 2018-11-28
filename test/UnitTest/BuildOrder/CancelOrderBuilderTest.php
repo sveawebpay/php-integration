@@ -10,7 +10,7 @@ use Svea\WebPay\BuildOrder\CancelOrderBuilder;
 /**
  * @author Kristian Grossman-Madsen for Svea Webpay
  */
-class CancelOrderBuilderTest extends \PHPUnit_Framework_TestCase
+class CancelOrderBuilderTest extends \PHPUnit\Framework\TestCase
 {
 
     protected $cancelOrderObject;

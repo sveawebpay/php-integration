@@ -10,7 +10,7 @@ use Svea\WebPay\Config\ConfigurationService;
 /**
  * @author Kristian Grossman-Madsen for Svea Webpay
  */
-class UpdateOrderRowsRequestTest extends \PHPUnit_Framework_TestCase
+class UpdateOrderRowsRequestTest extends \PHPUnit\Framework\TestCase
 {
 
     public function test_add_single_orderRow_as_exvat()

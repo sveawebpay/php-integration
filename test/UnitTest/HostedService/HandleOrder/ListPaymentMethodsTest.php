@@ -4,7 +4,7 @@ namespace Svea\WebPay\Test\UnitTest\HostedService\HandleOrder;
 
 use SimpleXMLElement;
 use PHPUnit_Framework_Assert;
-use PHPUnit_Framework_TestCase;
+use \PHPUnit\Framework\TestCase;
 use Svea\WebPay\Config\ConfigurationService;
 use Svea\WebPay\Config\ConfigurationProvider;
 use Svea\WebPay\HostedService\HostedAdminRequest\ListPaymentMethods;
@@ -13,7 +13,7 @@ use Svea\WebPay\HostedService\HostedAdminRequest\ListPaymentMethods;
 /**
  * @author Kristian Grossman-Madsen for Svea Webpay
  */
-class ListPaymentMethodsTest extends PHPUnit_Framework_TestCase
+class ListPaymentMethodsTest extends \PHPUnit\Framework\TestCase
 {
 
     protected $configObject;
@@ -30,7 +30,7 @@ class ListPaymentMethodsTest extends PHPUnit_Framework_TestCase
     function test_class_exists()
     {
         $this->assertInstanceOf("Svea\WebPay\HostedService\HostedAdminRequest\ListPaymentMethods", $this->listpaymentmethodObject);
-        $this->assertEquals("getpaymentmethods", PHPUnit_Framework_Assert::readAttribute($this->listpaymentmethodObject, 'method'));
+        $this->assertEquals("getpaymentmethods", \PHPUnit\Framework\Assert::readAttribute($this->listpaymentmethodObject, 'method'));
     }
 
     function test_prepareRequest_array_contains_mac_merchantid_message()

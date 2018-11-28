@@ -10,7 +10,7 @@ use Svea\WebPay\Config\ConfigurationService;
 use Svea\WebPay\Config\ConfigurationProvider;
 use Svea\WebPay\BuildOrder\CreditOrderRowsBuilder;
 
-class CreditAmountAccountCreditTestextends extends  \PHPUnit_Framework_TestCase
+class CreditAmountAccountCreditTestextends extends  \PHPUnit\Framework\TestCase
 {
     public $builderObject;
 
@@ -29,46 +29,46 @@ class CreditAmountAccountCreditTestextends extends  \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Svea\WebPay\AdminService\CreditAmountAccountCreditRequest', $AddOrderRowsRequestObject);
     }
 
+    /**
+     * @expectedException Svea\WebPay\BuildOrder\Validator\ValidationException
+     * @expectedExceptionMessage orderId is required, use setOrderId().
+     */
     public function test_validate_throws_exception_on_missing_OrderId()
     {
-        $this->setExpectedException(
-            'Svea\WebPay\BuildOrder\Validator\ValidationException', 'orderId is required, use setOrderId().'
-        );
-
         unset($this->builderObject->orderId);
         $creditRequest = new CreditAmountAccountCreditRequest($this->builderObject);
         $request = $creditRequest->prepareRequest();
     }
 
 
+    /**
+     * @expectedException Svea\WebPay\BuildOrder\Validator\ValidationException
+     * @expectedExceptionMessage -missing value : countryCode is required, use setCountryCode().
+     */
     public function test_validate_throws_exception_on_missing_CountryCode()
     {
-        $this->setExpectedException(
-            'Svea\WebPay\BuildOrder\Validator\ValidationException', '-missing value : countryCode is required, use setCountryCode().'
-        );
-
         unset($this->builderObject->countryCode);
         $creditRequest = new CreditAmountAccountCreditRequest($this->builderObject);
         $request = $creditRequest->prepareRequest();
     }
 
+    /**
+     * @expectedException Svea\WebPay\BuildOrder\Validator\ValidationException
+     * @expectedExceptionMessage -incorrect value : amountIncVat is too small
+     */
     public function test_validate_throws_exception_on_missing_amountIncVat()
     {
-        $this->setExpectedException(
-            'Svea\WebPay\BuildOrder\Validator\ValidationException', '-incorrect value : amountIncVat is too small'
-        );
-
         unset($this->builderObject->amountIncVat);
         $creditRequest = new CreditAmountAccountCreditRequest($this->builderObject);
         $request = $creditRequest->prepareRequest();
     }
 
+    /**
+     * @expectedException Svea\WebPay\BuildOrder\Validator\ValidationException
+     * @expectedExceptionMessage -incorrect value : amountIncVat is too small
+     */
     public function test_validate_throws_exception_on_bad_amount_value()
     {
-        $this->setExpectedException(
-            'Svea\WebPay\BuildOrder\Validator\ValidationException', '-incorrect value : amountIncVat is too small'
-        );
-
         $this->builderObject->amountIncVat = "badValue";
         $creditRequest = new CreditAmountAccountCreditRequest($this->builderObject);
         $request = $creditRequest->prepareRequest();

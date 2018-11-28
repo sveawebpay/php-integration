@@ -2,7 +2,7 @@
 
 namespace Svea\WebPay\Test\IntegrationTest\AdminService;
  
-use PHPUnit_Framework_TestCase;
+use \PHPUnit\Framework\TestCase;
 use Svea\WebPay\Config\ConfigurationService;
 use Svea\WebPay\Constant\DistributionType;
 use Svea\WebPay\Test\TestUtil;
@@ -17,7 +17,7 @@ use stdClass;
 /**
  * @author Kristian Grossman-Madsen for Svea Svea\WebPay\WebPay
  */
-class CreditAmountRequestIntegrationTest extends PHPUnit_Framework_TestCase
+class CreditAmountRequestIntegrationTest extends \PHPUnit\Framework\TestCase
 {
 
     public static function getAccountCreditParamsForTesting()
@@ -56,6 +56,7 @@ class CreditAmountRequestIntegrationTest extends PHPUnit_Framework_TestCase
                     ->setAmountIncVat($amount)
                     ->setVatPercent($vat)
                     ->setQuantity($quantity)
+                    ->setDescription("IntegrationTest from php-integration")
             )
             ->addCustomerDetails(self::getCustomer())
             ->setCountryCode("SE")
@@ -100,6 +101,7 @@ class CreditAmountRequestIntegrationTest extends PHPUnit_Framework_TestCase
                     ->setAmountExVat($amount)
                     ->setVatPercent($vat)
                     ->setQuantity($quantity)
+                    ->setDescription("IntegrationTest from php-integration")
             )
             ->addCustomerDetails(self::getCustomer())
             ->setCountryCode("SE")

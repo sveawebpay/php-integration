@@ -7,13 +7,13 @@ use Svea\WebPay\Config\ConfigurationService;
 use Svea\WebPay\WebPay;
 use Svea\WebPay\WebPayItem;
 use Svea\WebPay\Test\TestUtil;
-use PHPUnit_Framework_TestCase;
+use \PHPUnit\Framework\TestCase;
 
 
 /**
  * @author Anneli Halld'n, Daniel Brolund for Svea Webpay
  */
-class PaymentPlanPaymentIntegrationTest extends PHPUnit_Framework_TestCase
+class PaymentPlanPaymentIntegrationTest extends \PHPUnit\Framework\TestCase
 {
 
     public function testPaymentPlanRequestReturnsAcceptedResult()

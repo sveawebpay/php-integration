@@ -2,7 +2,7 @@
 
 namespace Svea\WebPay\Test\IntegrationTest\BuildOrder;
 
-use PHPUnit_Framework_TestCase;
+use \PHPUnit\Framework\TestCase;
 use Svea\WebPay\Config\ConfigurationService;
 use Svea\WebPay\Constant\DistributionType;
 use Svea\WebPay\WebPay;
@@ -15,7 +15,7 @@ use Svea\WebPay\Test\TestUtil;
  *
  * @author Kristian Grossman-Madsen for Svea Svea\WebPay\WebPay
  */
-class DeliverOrderBuilderIntegrationTest extends PHPUnit_Framework_TestCase
+class DeliverOrderBuilderIntegrationTest extends \PHPUnit\Framework\TestCase
 {
 
     public function test_deliverOrder_deliverInvoiceOrder_with_orderrows_use_DeliverOrderEU_and_is_accepted()

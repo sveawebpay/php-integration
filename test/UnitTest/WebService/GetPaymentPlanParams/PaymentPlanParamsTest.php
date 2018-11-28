@@ -3,14 +3,14 @@
 namespace Svea\WebPay\Test\UnitTest\WebService\GetPaymentPlanParams;
 
 use Svea\WebPay\WebPay;
-use PHPUnit_Framework_TestCase;
+use \PHPUnit\Framework\TestCase;
 use Svea\WebPay\Config\ConfigurationService;
 
 
 /**
  * @author Anneli Halld'n, Daniel Brolund for Svea Webpay
  */
-class PaymentPlanParamsTest extends PHPUnit_Framework_TestCase
+class PaymentPlanParamsTest extends \PHPUnit\Framework\TestCase
 {
 
     public function testBuildRequest()

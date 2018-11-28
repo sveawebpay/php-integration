@@ -5,13 +5,13 @@ namespace Svea\WebPay\Test\IntegrationTest\WebService\Payment;
 use Svea\WebPay\WebPay;
 use Svea\WebPay\WebPayItem;
 use Svea\WebPay\Helper\Helper;
-use PHPUnit_Framework_TestCase;
+use \PHPUnit\Framework\TestCase;
 use Svea\WebPay\Config\ConfigurationService;
 
 /**
  * @author Kristian Grossman-Madsen
  */
-class FixedDiscountRowsIntegrationTest extends PHPUnit_Framework_TestCase
+class FixedDiscountRowsIntegrationTest extends \PHPUnit\Framework\TestCase
 {
 
     // This file contains the same tests as UnitTest/WebService/Payment/Svea\WebPay\Test\IntegrationTest\WebService\Payment\FixedDiscountRowsIntegrationTest

@@ -4,16 +4,11 @@ namespace Svea\WebPay\Test\UnitTest\Checkout;
 
 use Svea\WebPay\WebPay;
 use Svea\WebPay\WebPayItem;
-use PHPUnit_Framework_TestCase;
 use Svea\WebPay\Config\ConfigurationService;
 use Svea\WebPay\Checkout\Model\PresetValue;
 use Svea\WebPay\Checkout\Helper\CheckoutOrderBuilder;
 
-/**
- * Class TestCase
- * @package Svea\Svea\WebPay\WebPay\Test\UnitTest\Checkout
- */
-class TestCase extends PHPUnit_Framework_TestCase
+class TestCase extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var CheckoutOrderBuilder

@@ -30,7 +30,7 @@ class CheckoutPresetValueTest extends TestCase
     }
 
     /**
-     * @test
+     * @doesNotPerformAssertions
      */
     public function setTypeMethodReceiveGoodParams()
     {

@@ -13,7 +13,7 @@ use Svea\WebPay\Constant\SystemPaymentMethod;
 /**
  * @author Anneli Halld'n, Daniel Brolund for Svea Webpay
  */
-class DirectPaymentTest extends \PHPUnit_Framework_TestCase {
+class DirectPaymentTest extends \PHPUnit\Framework\TestCase {
 
     public function testConfigureExcludedPaymentMethods() {
         $config = ConfigurationService::getDefaultConfig();

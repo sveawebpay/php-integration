@@ -11,7 +11,7 @@ use Svea\WebPay\BuildOrder\DeliverOrderRowsBuilder;
 /**
  * @author Kristian Grossman-Madsen for Svea Webpay
  */
-class DeliverOrderRowsBuilderTest extends \PHPUnit_Framework_TestCase
+class DeliverOrderRowsBuilderTest extends \PHPUnit\Framework\TestCase
 {
 
     protected $deliverOrderRowsObject;
@@ -74,12 +74,12 @@ class DeliverOrderRowsBuilderTest extends \PHPUnit_Framework_TestCase
 
     /// validations
 
+    /**
+     * @expectedException Svea\WebPay\BuildOrder\Validator\ValidationException
+     * @expectedExceptionMessage countryCode is required for deliverInvoiceOrderRows(). Use method setCountryCode().
+     */
     public function test_deliverInvoiceOrderRows_throws_ValidationException_on_missing_setCountryCode()
     {
-        $this->setExpectedException(
-            'Svea\WebPay\BuildOrder\Validator\ValidationException', "countryCode is required for deliverInvoiceOrderRows(). Use method setCountryCode()."
-        );
-
         $deliverOrderRowsObject = $this->deliverOrderRowsObject
             //->setCountryCode("SE")
             ->setOrderId(123456)
@@ -89,12 +89,12 @@ class DeliverOrderRowsBuilderTest extends \PHPUnit_Framework_TestCase
         $deliverOrderRowsObject->deliverInvoiceOrderRows();
     }
 
+    /**
+     * @expectedException Svea\WebPay\BuildOrder\Validator\ValidationException
+     * @expectedExceptionMessage orderId is required for deliverInvoiceOrderRows(). Use method setOrderId().
+     */
     public function test_deliverInvoiceOrderRows_throws_ValidationException_on_missing_setOrderId()
     {
-        $this->setExpectedException(
-            'Svea\WebPay\BuildOrder\Validator\ValidationException', "orderId is required for deliverInvoiceOrderRows(). Use method setOrderId()."
-        );
-
         $deliverOrderRowsObject = $this->deliverOrderRowsObject
             ->setCountryCode("SE")
             //->setOrderId(123456)
@@ -104,12 +104,12 @@ class DeliverOrderRowsBuilderTest extends \PHPUnit_Framework_TestCase
         $deliverOrderRowsObject->deliverInvoiceOrderRows();
     }
 
+    /**
+     * @expectedException Svea\WebPay\BuildOrder\Validator\ValidationException
+     * @expectedExceptionMessage distributionType is required for deliverInvoiceOrderRows(). Use method setInvoiceDistributionType().
+     */
     public function test_deliverInvoiceOrderRows_throws_ValidationException_on_missing_setInvoiceDistributionType()
     {
-        $this->setExpectedException(
-            'Svea\WebPay\BuildOrder\Validator\ValidationException', "distributionType is required for deliverInvoiceOrderRows(). Use method setInvoiceDistributionType()."
-        );
-
         $deliverOrderRowsObject = $this->deliverOrderRowsObject
             ->setCountryCode("SE")
             ->setOrderId(123456)
@@ -119,12 +119,12 @@ class DeliverOrderRowsBuilderTest extends \PHPUnit_Framework_TestCase
         $deliverOrderRowsObject->deliverInvoiceOrderRows();
     }
 
+    /**
+     * @expectedException Svea\WebPay\BuildOrder\Validator\ValidationException
+     * @expectedExceptionMessage rowsToDeliver is required for deliverInvoiceOrderRows(). Use methods setRowToDeliver() or setRowsToDeliver().
+     */
     public function test_deliverInvoiceOrderRows_throws_ValidationException_on_missing_setRowToDeliver()
     {
-        $this->setExpectedException(
-            'Svea\WebPay\BuildOrder\Validator\ValidationException', "rowsToDeliver is required for deliverInvoiceOrderRows(). Use methods setRowToDeliver() or setRowsToDeliver()."
-        );
-
         $deliverOrderRowsObject = $this->deliverOrderRowsObject
             ->setCountryCode("SE")
             ->setOrderId(123456)

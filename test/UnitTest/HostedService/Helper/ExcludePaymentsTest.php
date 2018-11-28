@@ -9,7 +9,7 @@ use Svea\WebPay\HostedService\Helper\ExcludePayments as ExcludePayments;
 /**
  * @author Kristian Grossman-Madsen
  */
-class ExcludePaymentsTest extends \PHPUnit_Framework_TestCase
+class ExcludePaymentsTest extends \PHPUnit\Framework\TestCase
 {
 
     public function test_excludeInvoicesAndPaymentPlan_SE()

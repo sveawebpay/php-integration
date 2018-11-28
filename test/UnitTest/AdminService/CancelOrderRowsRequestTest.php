@@ -10,7 +10,7 @@ use Svea\WebPay\AdminService\CancelOrderRowsRequest;
 /**
  * @author Kristian Grossman-Madsen for Svea Webpay
  */
-class CancelOrderRowsRequestTest extends \PHPUnit_Framework_TestCase
+class CancelOrderRowsRequestTest extends \PHPUnit\Framework\TestCase
 {
 
     public $builderObject;
@@ -30,49 +30,45 @@ class CancelOrderRowsRequestTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Svea\WebPay\AdminService\CancelOrderRowsRequest', $CancelOrderRowsRequestObject);
     }
 
+    /**
+     * @expectedException Svea\WebPay\BuildOrder\Validator\ValidationException
+     * @expectedExceptionMessage -missing value : orderId is required.
+     */
     public function test_validate_throws_exception_on_missing_OrderId()
     {
-
-        $this->setExpectedException(
-            'Svea\WebPay\BuildOrder\Validator\ValidationException', '-missing value : orderId is required.'
-        );
-
         unset($this->builderObject->orderId);
         $CancelOrderRowsRequestObject = new CancelOrderRowsRequest($this->builderObject);
         $request = $CancelOrderRowsRequestObject->prepareRequest();
     }
 
+    /**
+     * @expectedException Svea\WebPay\BuildOrder\Validator\ValidationException
+     * @expectedExceptionMessage -missing value : orderType is required.
+     */
     public function test_validate_throws_exception_on_missing_OrderType()
     {
-
-        $this->setExpectedException(
-            'Svea\WebPay\BuildOrder\Validator\ValidationException', '-missing value : orderType is required.'
-        );
-
         unset($this->builderObject->orderType);
         $CancelOrderRowsRequestObject = new CancelOrderRowsRequest($this->builderObject);
         $request = $CancelOrderRowsRequestObject->prepareRequest();
     }
 
+    /**
+     * @expectedException Svea\WebPay\BuildOrder\Validator\ValidationException
+     * @expectedExceptionMessage -missing value : countryCode is required.
+     */
     public function test_validate_throws_exception_on_missing_CountryCode()
     {
-
-        $this->setExpectedException(
-            'Svea\WebPay\BuildOrder\Validator\ValidationException', '-missing value : countryCode is required.'
-        );
-
         unset($this->builderObject->countryCode);
         $CancelOrderRowsRequestObject = new CancelOrderRowsRequest($this->builderObject);
         $request = $CancelOrderRowsRequestObject->prepareRequest();
     }
 
+    /**
+     * @expectedException Svea\WebPay\BuildOrder\Validator\ValidationException
+     * @expectedExceptionMessage -missing value : rowsToCancel is required.
+     */
     public function test_validate_throws_exception_on_missing_RowsToCancel()
     {
-
-        $this->setExpectedException(
-            'Svea\WebPay\BuildOrder\Validator\ValidationException', '-missing value : rowsToCancel is required.'
-        );
-
         unset($this->builderObject->rowsToCancel);
         $CancelOrderRowsRequestObject = new CancelOrderRowsRequest($this->builderObject);
         $request = $CancelOrderRowsRequestObject->prepareRequest();

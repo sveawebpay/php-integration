@@ -5,7 +5,7 @@ namespace Svea\WebPay\Test\UnitTest\WebService\HandleOrder;
 use Svea\WebPay\WebPay;
 use Svea\WebPay\WebPayItem;
 use Svea\WebPay\Test\TestUtil;
-use PHPUnit_Framework_TestCase;
+use \PHPUnit\Framework\TestCase;
 use Svea\WebPay\Config\ConfigurationService;
 use Svea\WebPay\Constant\DistributionType;
 
@@ -13,7 +13,7 @@ use Svea\WebPay\Constant\DistributionType;
 /**
  * @author Anneli Halld'n, Daniel Brolund for Svea Webpay
  */
-class DeliverOrderTest extends PHPUnit_Framework_TestCase
+class DeliverOrderTest extends \PHPUnit\Framework\TestCase
 {
 
     public function testBuildRequest()

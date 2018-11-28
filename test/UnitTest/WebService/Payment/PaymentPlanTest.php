@@ -5,14 +5,14 @@ namespace Svea\WebPay\Test\UnitTest\WebService\Payment;
 use Svea\WebPay\WebPay;
 use Svea\WebPay\WebPayItem;
 use Svea\WebPay\Test\TestUtil;
-use PHPUnit_Framework_TestCase;
+use \PHPUnit\Framework\TestCase;
 use Svea\WebPay\Config\ConfigurationService;
 
 
 /**
  * @author Anneli Halld'n, Daniel Brolund for Svea Webpay
  */
-class PaymentPlanTest extends PHPUnit_Framework_TestCase
+class PaymentPlanTest extends \PHPUnit\Framework\TestCase
 {
 
     /**

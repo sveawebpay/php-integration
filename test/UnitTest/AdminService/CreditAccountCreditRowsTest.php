@@ -8,7 +8,7 @@ use Svea\WebPay\Config\ConfigurationProvider;
 use Svea\WebPay\BuildOrder\CreditOrderRowsBuilder;
 use Svea\WebPay\AdminService\CreditAccountCreditRowsRequest;
 
-class CreditAccountCreditRowsTest extends  \PHPUnit_Framework_TestCase
+class CreditAccountCreditRowsTest extends  \PHPUnit\Framework\TestCase
 {
     public $builderObject;
 
@@ -28,46 +28,45 @@ class CreditAccountCreditRowsTest extends  \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Svea\WebPay\AdminService\CreditAccountCreditRowsRequest', $AddOrderRowsRequestObject);
     }
 
+    /**
+     * @expectedException Svea\WebPay\BuildOrder\Validator\ValidationException
+     * @expectedExceptionMessage orderId is required, use setOrderId().
+     */
     public function test_validate_throws_exception_on_missing_OrderId()
     {
-        $this->setExpectedException(
-            'Svea\WebPay\BuildOrder\Validator\ValidationException', 'orderId is required, use setOrderId().'
-        );
-
         unset($this->builderObject->orderId);
         $creditRequest = new CreditAccountCreditRowsRequest($this->builderObject);
         $request = $creditRequest->prepareRequest();
     }
 
+    /**
+     * @expectedException Svea\WebPay\BuildOrder\Validator\ValidationException
+     * @expectedExceptionMessage -missing value : orderType is required.
+     */
     public function test_validate_throws_exception_on_missing_OrderType()
     {
-
-        $this->setExpectedException(
-            'Svea\WebPay\BuildOrder\Validator\ValidationException', '-missing value : orderType is required.'
-        );
-
         unset($this->builderObject->orderType);
         $creditRequest = new CreditAccountCreditRowsRequest($this->builderObject);
         $request = $creditRequest->prepareRequest();
     }
 
+    /**
+     * @expectedException Svea\WebPay\BuildOrder\Validator\ValidationException
+     * @expectedExceptionMessage -missing value : countryCode is required, use setCountryCode().
+     */
     public function test_validate_throws_exception_on_missing_CountryCode()
     {
-        $this->setExpectedException(
-            'Svea\WebPay\BuildOrder\Validator\ValidationException', '-missing value : countryCode is required, use setCountryCode().'
-        );
-
         unset($this->builderObject->countryCode);
         $creditRequest = new CreditAccountCreditRowsRequest($this->builderObject);
         $request = $creditRequest->prepareRequest();
     }
 
+    /**
+     * @expectedException Svea\WebPay\BuildOrder\Validator\ValidationException
+     * @expectedExceptionMessage -missing value : no rows to credit, use setRow(s)ToCredit() or addCreditOrderRow(s)().
+     */
     public function test_validate_throws_exception_on_missing_RowsToCredit()
     {
-        $this->setExpectedException(
-            'Svea\WebPay\BuildOrder\Validator\ValidationException', '-missing value : no rows to credit, use setRow(s)ToCredit() or addCreditOrderRow(s)().'
-        );
-
         $this->builderObject->rowsToCredit = array();
         $this->builderObject->creditOrderRows = array();
         $creditRequest = new CreditAccountCreditRowsRequest($this->builderObject);

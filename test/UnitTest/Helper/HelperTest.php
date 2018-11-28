@@ -8,7 +8,7 @@ use Svea\WebPay\Helper\Helper;
 use Svea\WebPay\Test\TestUtil;
 use Svea\WebPay\Config\ConfigurationService;
 
-class HelperTest extends \PHPUnit_Framework_TestCase
+class HelperTest extends \PHPUnit\Framework\TestCase
 {
 
     // Helper::bround() is an alias for round(x,0,PHP_ROUND_HALF_EVEN)
@@ -502,6 +502,9 @@ class HelperTest extends \PHPUnit_Framework_TestCase
 
 
     //  11A. mean inc to two tax rates, 50+6/3 = 18,67% => 19%
+    /**
+     * @doesNotPerformAssertions
+     */
     function test_splitMeanAcrossTaxRates_11a()
     {
         $discountAmount = 119.0;
@@ -520,6 +523,9 @@ class HelperTest extends \PHPUnit_Framework_TestCase
     }
 
     //  11B. mean inc to two tax rates, 50+6/3 = 18,67%
+    /**
+     * @doesNotPerformAssertions
+     */
     function test_splitMeanAcrossTaxRates_11b()
     {
         $discountAmount = 118.67;

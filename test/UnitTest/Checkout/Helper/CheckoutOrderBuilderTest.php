@@ -79,7 +79,7 @@ class CheckoutOrderBuilderTest extends TestCase
      /**
      * @test
      */
-    public function setLocale()
+    public function setSCOLocale()
     {
         $this->order->setLocale('sv-Se');
 

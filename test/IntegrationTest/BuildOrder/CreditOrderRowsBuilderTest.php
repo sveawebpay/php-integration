@@ -2,7 +2,7 @@
 
 namespace Svea\WebPay\Test\IntegrationTest\BuildOrder;
 
-use PHPUnit_Framework_TestCase;
+use \PHPUnit\Framework\TestCase;
 use Svea\WebPay\BuildOrder\CreditOrderRowsBuilder;
 use Svea\WebPay\Config\ConfigurationService;
 use Svea\WebPay\Constant\DistributionType;
@@ -16,7 +16,7 @@ use Svea\WebPay\WebPayItem;
 /**
  * @author Kristian Grossman-Madsen for Svea Svea\WebPay\WebPay
  */
-class CreditOrderRowsBuilderIntegrationTest extends PHPUnit_Framework_TestCase
+class CreditOrderRowsBuilderIntegrationTest extends \PHPUnit\Framework\TestCase
 {
 
     protected $invoiceIdToTest;

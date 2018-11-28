@@ -9,7 +9,7 @@ use Svea\WebPay\Config\ConfigurationService;
 /**
  * @author Kristian Grossman-Madsen for Svea Webpay
  */
-class UpdateOrderRequestTest extends \PHPUnit_Framework_TestCase
+class UpdateOrderRequestTest extends \PHPUnit\Framework\TestCase
 {
 
     public $notes = 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit.

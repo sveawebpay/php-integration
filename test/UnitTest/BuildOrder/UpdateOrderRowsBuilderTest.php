@@ -8,7 +8,7 @@ use Svea\WebPay\BuildOrder\UpdateOrderRowsBuilder;
 /**
  * @author Kristian Grossman-Madsen for Svea Webpay
  */
-class UpdateOrderRowsBuilderTest extends \PHPUnit_Framework_TestCase
+class UpdateOrderRowsBuilderTest extends \PHPUnit\Framework\TestCase
 {
 
     protected $updateOrderRowsObject;

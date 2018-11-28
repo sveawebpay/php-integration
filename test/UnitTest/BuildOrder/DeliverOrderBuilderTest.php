@@ -9,7 +9,7 @@ use Svea\WebPay\BuildOrder\DeliverOrderBuilder;
 /**
  * @author Kristian Grossman-Madsen for Svea Svea\WebPay\WebPay
  */
-class DeliverOrderBuilderTest extends \PHPUnit_Framework_TestCase
+class DeliverOrderBuilderTest extends \PHPUnit\Framework\TestCase
 {
 
     protected $deliverOrderObject;

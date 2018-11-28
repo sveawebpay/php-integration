@@ -12,11 +12,14 @@ use Svea\WebPay\Constant\DistributionType;
 /**
  * @author Kristian Grossman-Madsen for Svea Webpay
  */
-class CreditOrderRowsRequestTest extends \PHPUnit_Framework_TestCase
+class CreditOrderRowsRequestTest extends \PHPUnit\Framework\TestCase
 {
 
     /// characterising test for INTG-462
     // invoice
+    /**
+     * @doesNotPerformAssertions
+     */
     public function test_creditOrderRows_creditInvoiceOrderRows_does_not_validate_setOrderId()
     {
         $creditOrderRowsBuilder = WebPayAdmin::creditOrderRows(ConfigurationService::getDefaultConfig())
@@ -31,6 +34,10 @@ class CreditOrderRowsRequestTest extends \PHPUnit_Framework_TestCase
     }
 
     // card
+    /**
+     * @expectedException Svea\WebPay\BuildOrder\Validator\ValidationException
+     * @expectedExceptionMessage orderId is required for creditCardOrderRows(). Use method setOrderId().
+     */
     public function test_creditOrderRows_creditCardOrderRows_validates_setOrderId()
     {
         $creditOrderRowsBuilder = WebPayAdmin::creditOrderRows(ConfigurationService::getDefaultConfig())
@@ -39,14 +46,14 @@ class CreditOrderRowsRequestTest extends \PHPUnit_Framework_TestCase
             ->setCountryCode('SE')
             ->setRowToCredit(1);
 
-        $this->setExpectedException(
-            'Svea\WebPay\BuildOrder\Validator\ValidationException', 'orderId is required for creditCardOrderRows(). Use method setOrderId().'
-        );
-
         $request = $creditOrderRowsBuilder->creditCardOrderRows()->prepareRequest();
     }
 
     // direct bank
+    /**
+     * @expectedException Svea\WebPay\BuildOrder\Validator\ValidationException
+     * @expectedExceptionMessage orderId is required for creditCardOrderRows(). Use method setOrderId().
+     */
     public function test_creditOrderRows_creditDirectBankOrderRows_validates_setOrderId()
     {
         $creditOrderRowsBuilder = WebPayAdmin::creditOrderRows(ConfigurationService::getDefaultConfig())
@@ -54,10 +61,6 @@ class CreditOrderRowsRequestTest extends \PHPUnit_Framework_TestCase
             ->setInvoiceDistributionType(DistributionType::POST)
             ->setCountryCode('SE')
             ->setRowToCredit(1);
-
-        $this->setExpectedException(
-            'Svea\WebPay\BuildOrder\Validator\ValidationException', 'orderId is required for creditCardOrderRows(). Use method setOrderId().'
-        );
 
         $request = $creditOrderRowsBuilder->creditDirectBankOrderRows()->prepareRequest();
     }

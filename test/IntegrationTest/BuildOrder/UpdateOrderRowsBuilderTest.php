@@ -2,7 +2,7 @@
 
 namespace Svea\WebPay\Test\IntegrationTest\BuildOrder;
 
-use PHPUnit_Framework_TestCase;
+use \PHPUnit\Framework\TestCase;
 use Svea\WebPay\BuildOrder\RowBuilders\NumberedOrderRow;
 use Svea\WebPay\Config\ConfigurationService;
 use Svea\WebPay\Test\TestUtil;
@@ -12,7 +12,7 @@ use Svea\WebPay\WebPayItem;
 /**
  * @author Kristian Grossman-Madsen for Svea Svea\WebPay\WebPay
  */
-class UpdateOrderRowsBuilderIntegrationTest extends PHPUnit_Framework_TestCase
+class UpdateOrderRowsBuilderIntegrationTest extends \PHPUnit\Framework\TestCase
 {
 
     protected $invoiceIdToTest;
@@ -242,7 +242,7 @@ class UpdateOrderRowsBuilderIntegrationTest extends PHPUnit_Framework_TestCase
                     WebPayItem::numberedOrderRow()
                         ->setArticleNumber("30")
                         ->setQuantity(3)
-                        ->setAmountExVat(30.00)
+                        ->setAmountExVat(500.00)
                         ->setVatPercent(25)
                         ->setDescription("K3 Specification")
                         ->setName('K3 Name')

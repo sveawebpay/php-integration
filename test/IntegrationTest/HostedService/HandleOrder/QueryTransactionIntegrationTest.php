@@ -12,7 +12,7 @@ use Svea\WebPay\HostedService\HostedAdminRequest\QueryTransaction as QueryTransa
  *
  * @author Kristian Grossman-Madsen for Svea Svea\WebPay\WebPay
  */
-class QueryTransactionIntegrationTest extends \PHPUnit_Framework_TestCase
+class QueryTransactionIntegrationTest extends \PHPUnit\Framework\TestCase
 {
 
     /**

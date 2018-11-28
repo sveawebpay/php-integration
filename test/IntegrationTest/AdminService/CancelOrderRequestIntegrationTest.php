@@ -2,7 +2,7 @@
 
 namespace Svea\WebPay\Test\IntegrationTest\AdminService;
 
-use PHPUnit_Framework_TestCase;
+use \PHPUnit\Framework\TestCase;
 use Svea\WebPay\AdminService\CancelOrderRequest;
 use Svea\WebPay\BuildOrder\CancelOrderBuilder;
 use Svea\WebPay\Config\ConfigurationProvider;
@@ -11,7 +11,7 @@ use Svea\WebPay\Config\ConfigurationService;
 /**
  * @author Kristian Grossman-Madsen for Svea Webpay
  */
-class CancelOrderRequestIntegrationTest extends PHPUnit_Framework_TestCase
+class CancelOrderRequestIntegrationTest extends \PHPUnit\Framework\TestCase
 {
 
     /**
@@ -23,9 +23,9 @@ class CancelOrderRequestIntegrationTest extends PHPUnit_Framework_TestCase
     {
 
         // Stop here and mark this test as incomplete.
-//        $this->markTestIncomplete(
-//            'skeleton for test_manual_CancelOrderRequest'
-//        );
+        $this->markTestIncomplete(
+            'skeleton for test_manual_CancelOrderRequest'
+        );
 
         $countryCode = "SE";
         $sveaOrderIdToClose = 349698;

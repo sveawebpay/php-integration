@@ -10,7 +10,7 @@ use Svea\WebPay\HostedService\HostedAdminRequest\AnnulTransaction as AnnulTransa
  *
  * @author Kristian Grossman-Madsen for Svea Svea\WebPay\WebPay
  */
-class AnnulTransactionIntegrationTest extends \PHPUnit_Framework_TestCase
+class AnnulTransactionIntegrationTest extends \PHPUnit\Framework\TestCase
 {
 
     /**

@@ -13,7 +13,7 @@ use Svea\WebPay\HostedService\HostedAdminRequest\ConfirmTransaction as ConfirmTr
  *
  * @author Kristian Grossman-Madsen for Svea Svea\WebPay\WebPay
  */
-class ConfirmTransactionIntegrationTest extends \PHPUnit_Framework_TestCase
+class ConfirmTransactionIntegrationTest extends \PHPUnit\Framework\TestCase
 {
 
     /**

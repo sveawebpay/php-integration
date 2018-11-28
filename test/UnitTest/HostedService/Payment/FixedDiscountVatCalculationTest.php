@@ -10,7 +10,7 @@ require_once $root . '/../../../TestUtil.php';
 /**
  * @author Kristian Grossman-Madsen
  */
-class BvDiscountTest extends PHPUnit_Framework_TestCase {
+class BvDiscountTest extends \PHPUnit\Framework\TestCase {
     
     public function test_bv_order_sent_incvat_two_decimals_with_both_discounts() {        
 //    print_r("\n\n-----test_bv_order_sent_incvat_two_decimals_with_both_discounts()\n");

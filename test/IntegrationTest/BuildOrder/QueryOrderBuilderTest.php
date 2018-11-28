@@ -2,7 +2,7 @@
 
 namespace Svea\WebPay\Test\IntegrationTest\BuildOrder;
 
-use PHPUnit_Framework_TestCase;
+use \PHPUnit\Framework\TestCase;
 use Svea\WebPay\Config\ConfigurationService;
 use Svea\WebPay\Test\TestUtil;
 use Svea\WebPay\WebPayAdmin;
@@ -12,7 +12,7 @@ use Svea\WebPay\WebPayItem;
 /**
  * @author Kristian Grossman-Madsen for Svea Svea\WebPay\WebPay
  */
-class QueryOrderBuilderIntegrationTest extends PHPUnit_Framework_TestCase
+class QueryOrderBuilderIntegrationTest extends \PHPUnit\Framework\TestCase
 {
 
     /**

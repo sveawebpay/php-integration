@@ -2,7 +2,7 @@
 
 namespace Svea\WebPay\Test\IntegrationTest\AdminService;
 
-use PHPUnit_Framework_TestCase;
+use \PHPUnit\Framework\TestCase;
 use Svea\WebPay\AdminService\GetOrdersRequest;
 use Svea\WebPay\BuildOrder\QueryOrderBuilder;
 use Svea\WebPay\Config\ConfigurationProvider;
@@ -16,7 +16,7 @@ use Svea\WebPay\WebPayItem;
 /**
  * @author Kristian Grossman-Madsen for Svea Webpay
  */
-class GetOrdersRequestIntegrationTest extends PHPUnit_Framework_TestCase
+class GetOrdersRequestIntegrationTest extends \PHPUnit\Framework\TestCase
 {
 
     /**
@@ -312,8 +312,8 @@ class GetOrdersRequestIntegrationTest extends PHPUnit_Framework_TestCase
         $this->assertEquals("194605092222", $getOrdersResponse->customer->ssn);
         $this->assertEquals(null, $getOrdersResponse->customer->initials);
         $this->assertEquals(null, $getOrdersResponse->customer->birthDate);
-        $this->assertEquals(null, $getOrdersResponse->customer->firstname);           // not set for SE order
-        $this->assertEquals(null, $getOrdersResponse->customer->lastname);
+        $this->assertEquals("Tess", $getOrdersResponse->customer->firstname);           // not set for SE order
+        $this->assertEquals("Persson", $getOrdersResponse->customer->lastname);
         //$this->assertEquals( null, $getOrdersResponse->customer->email );
         //$this->assertEquals( null, $getOrdersResponse->customer->phonenumber );
         $this->assertEquals("Persson, Tess T", $getOrdersResponse->customer->name);   // FullName
@@ -407,9 +407,9 @@ class GetOrdersRequestIntegrationTest extends PHPUnit_Framework_TestCase
     {
 
         // Stop here and mark this test as incomplete.
-//    $this->markTestIncomplete(
-//        'skeleton for test_manual_GetOrdersRequest_for_paymentplan_order'
-//    );
+        $this->markTestIncomplete(
+        'skeleton for test_manual_GetOrdersRequest_for_paymentplan_order'
+    );
 
         // create order
         $country = "SE";

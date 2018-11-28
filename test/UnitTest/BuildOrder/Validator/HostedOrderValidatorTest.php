@@ -10,7 +10,7 @@ use Svea\WebPay\Constant\PaymentMethod;
 /**
  * @author Anneli Halld'n, Daniel Brolund, Fredrik Sundell for Svea Webpay
  */
-class HostedOrderValidatorTest extends \PHPUnit_Framework_TestCase
+class HostedOrderValidatorTest extends \PHPUnit\Framework\TestCase
 {
 
     /**

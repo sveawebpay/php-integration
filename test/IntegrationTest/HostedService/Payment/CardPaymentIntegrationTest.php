@@ -12,7 +12,7 @@ use Svea\WebPay\Config\ConfigurationService;
 /**
  * @author Anneli Halld'n, Daniel Brolund for Svea Webpay
  */
-class CardPaymentIntegrationTest extends \PHPUnit_Framework_TestCase
+class CardPaymentIntegrationTest extends \PHPUnit\Framework\TestCase
 {
 
     public function test_createOrder_usePayPage_redirects_to_paypage()

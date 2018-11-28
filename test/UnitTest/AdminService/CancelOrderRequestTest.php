@@ -10,7 +10,7 @@ use Svea\WebPay\AdminService\CancelOrderRequest;
 /**
  * @author Kristian Grossman-Madsen for Svea Webpay
  */
-class CancelOrderRequestTest extends \PHPUnit_Framework_TestCase
+class CancelOrderRequestTest extends \PHPUnit\Framework\TestCase
 {
 
     public $builderObject;
@@ -28,25 +28,23 @@ class CancelOrderRequestTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Svea\WebPay\AdminService\CancelOrderRequest', $cancelOrderRequestObject);
     }
 
+    /**
+     * @expectedException Svea\WebPay\BuildOrder\Validator\ValidationException
+     * @expectedExceptionMessage -missing value : orderId is required.
+     */
     public function test_validate_throws_exception_on_missing_OrderId()
     {
-
-        $this->setExpectedException(
-            'Svea\WebPay\BuildOrder\Validator\ValidationException', '-missing value : orderId is required.'
-        );
-
         unset($this->builderObject->orderId);
         $cancelOrderRequestObject = new CancelOrderRequest($this->builderObject);
         $request = $cancelOrderRequestObject->prepareRequest();
     }
 
+    /**
+     * @expectedException Svea\WebPay\BuildOrder\Validator\ValidationException
+     * @expectedExceptionMessage -missing value : orderType is required.
+     */
     public function test_validate_throws_exception_on_missing_OrderType()
     {
-
-        $this->setExpectedException(
-            'Svea\WebPay\BuildOrder\Validator\ValidationException', '-missing value : orderType is required.'
-        );
-
         unset($this->builderObject->orderType);
         $cancelOrderRequestObject = new CancelOrderRequest($this->builderObject);
         $request = $cancelOrderRequestObject->prepareRequest();

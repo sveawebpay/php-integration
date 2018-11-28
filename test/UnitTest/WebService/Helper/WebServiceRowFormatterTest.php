@@ -5,12 +5,12 @@ namespace Svea\WebPay\Test\UnitTest\WebService\Helper;
 use Svea\WebPay\WebPay;
 use Svea\WebPay\WebPayItem;
 use Svea\WebPay\Helper\Helper;
-use PHPUnit_Framework_TestCase;
+use \PHPUnit\Framework\TestCase;
 use Svea\WebPay\Config\ConfigurationService;
 use Svea\WebPay\WebService\Helper\WebServiceRowFormatter as WebServiceRowFormatter;
 
 
-class WebServiceRowFormatterTest extends PHPUnit_Framework_TestCase
+class WebServiceRowFormatterTest extends \PHPUnit\Framework\TestCase
 {
 
     public function test_convertIncVatToExVat()

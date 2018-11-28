@@ -4,14 +4,14 @@ namespace Svea\WebPay\Test\UnitTest\WebService\Payment;
 
 use Svea\WebPay\WebPay;
 use Svea\WebPay\WebPayItem;
-use PHPUnit_Framework_TestCase;
+use \PHPUnit\Framework\TestCase;
 use Svea\WebPay\Config\ConfigurationService;
 
 
 /**
  * @author Kristian Grossman-Madsen
  */
-class FixedDiscountRowsTest extends PHPUnit_Framework_TestCase
+class FixedDiscountRowsTest extends \PHPUnit\Framework\TestCase
 {
 
     /**
@@ -85,7 +85,7 @@ class FixedDiscountRowsTest extends PHPUnit_Framework_TestCase
         // check that service accepts order
         $response = $order->useInvoicePayment()->doRequest();
         $this->assertEquals(true, $response->accepted);
-        $this->assertEquals("131.40", $response->amount);
+        $this->assertEquals("131.4", $response->amount);
     }
 
     // same order with discount exvat should be sent with PriceIncludingVat = false but with split discount rows based on order amounts ex vat

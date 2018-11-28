@@ -3,7 +3,7 @@
 
 namespace Svea\WebPay\Test\IntegrationTest;
 
-use PHPUnit_Framework_TestCase;
+use \PHPUnit\Framework\TestCase;
 use Svea\WebPay\Config\ConfigurationService;
 use Svea\WebPay\Constant\DistributionType;
 use Svea\WebPay\Test\TestUtil;
@@ -14,7 +14,7 @@ use Svea\WebPay\WebPayItem;
 /**
  * @author Kristian Grossman-Madsen for Svea Svea\WebPay\WebPay
  */
-class WebPayAdminIntegrationTest extends PHPUnit_Framework_TestCase
+class WebPayAdminIntegrationTest extends \PHPUnit\Framework\TestCase
 {
 
     /// cancelOrder()

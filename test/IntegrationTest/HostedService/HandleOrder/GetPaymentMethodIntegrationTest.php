@@ -12,7 +12,7 @@ use Svea\WebPay\Constant\SystemPaymentMethod;
 /**
  * @author Anneli Halld'n, Daniel Brolund for Svea Webpay
  */
-class GetPaymentMethodIntegrationTest extends \PHPUnit_Framework_TestCase
+class GetPaymentMethodIntegrationTest extends \PHPUnit\Framework\TestCase
 {
 
     function testGetAllPaymentMethods()

@@ -1,7 +1,7 @@
 <?php
 namespace Svea\WebPay\Test\IntegrationTest\WebService\GetPaymentPlanParams;
 
-use PHPUnit_Framework_TestCase;
+use \PHPUnit\Framework\TestCase;
 use Svea\WebPay\Config\ConfigurationService;
 use Svea\WebPay\WebService\GetPaymentPlanParams\GetPaymentPlanParams as GetPaymentPlanParams;
 use Svea\WebPay\WebService\GetPaymentPlanParams\PaymentPlanPricePerMonth as PaymentPlanPricePerMonth;
@@ -10,7 +10,7 @@ use Svea\WebPay\WebService\GetPaymentPlanParams\PaymentPlanPricePerMonth as Paym
 /**
  * @author Jonas Lith, Kristian Grossman-Madsen
  */
-class PaymentPlanPricePerMonthTest extends PHPUnit_Framework_TestCase
+class PaymentPlanPricePerMonthTest extends \PHPUnit\Framework\TestCase
 {
 
     private function getGetPaymentPlanParamsResponseForTesting()

@@ -9,7 +9,7 @@ use Svea\WebPay\WebService\HandleOrder\CloseOrder;
 /**
  * @author Kristian Grossman-Madsen, Anneli Halld'n, Daniel Brolund for Svea Webpay
  */
-class CloseOrderBuilder
+class CloseOrderBuilder extends OrderBuilder
 {
     /**
      * @var ConfigurationService

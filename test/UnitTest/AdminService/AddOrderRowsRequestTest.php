@@ -14,7 +14,7 @@ use Svea\WebPay\AdminService\AddOrderRowsRequest;
 /**
  * @author Kristian Grossman-Madsen for Svea Webpay
  */
-class AddOrderRowsRequestTest extends \PHPUnit_Framework_TestCase
+class AddOrderRowsRequestTest extends \PHPUnit\Framework\TestCase
 {
 
     public $builderObject;
@@ -34,61 +34,56 @@ class AddOrderRowsRequestTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Svea\WebPay\AdminService\AddOrderRowsRequest', $AddOrderRowsRequestObject);
     }
 
+    /**
+     * @expectedException Svea\WebPay\BuildOrder\Validator\ValidationException
+     * @expectedExceptionMessage -missing value : orderId is required.
+     */
     public function test_validate_throws_exception_on_missing_OrderId()
     {
-
-        $this->setExpectedException(
-            'Svea\WebPay\BuildOrder\Validator\ValidationException', '-missing value : orderId is required.'
-        );
-
         unset($this->builderObject->orderId);
         $AddOrderRowsRequestObject = new AddOrderRowsRequest($this->builderObject);
         $request = $AddOrderRowsRequestObject->prepareRequest();
     }
 
+    /**
+     * @expectedException Svea\WebPay\BuildOrder\Validator\ValidationException
+     * @expectedExceptionMessage -missing value : orderType is required.
+     */
     public function test_validate_throws_exception_on_missing_OrderType()
     {
-
-        $this->setExpectedException(
-            'Svea\WebPay\BuildOrder\Validator\ValidationException', '-missing value : orderType is required.'
-        );
-
         unset($this->builderObject->orderType);
         $AddOrderRowsRequestObject = new AddOrderRowsRequest($this->builderObject);
         $request = $AddOrderRowsRequestObject->prepareRequest();
     }
 
+    /**
+     * @expectedException Svea\WebPay\BuildOrder\Validator\ValidationException
+     * @expectedExceptionMessage -missing value : countryCode is required.
+     */
     public function test_validate_throws_exception_on_missing_CountryCode()
     {
-
-        $this->setExpectedException(
-            'Svea\WebPay\BuildOrder\Validator\ValidationException', '-missing value : countryCode is required.'
-        );
-
         unset($this->builderObject->countryCode);
         $AddOrderRowsRequestObject = new AddOrderRowsRequest($this->builderObject);
         $request = $AddOrderRowsRequestObject->prepareRequest();
     }
 
+    /**
+     * @expectedException Svea\WebPay\BuildOrder\Validator\ValidationException
+     * @expectedExceptionMessage -missing value : orderRows is required.
+     */
     public function test_validate_throws_exception_on_missing_orderRows()
     {
-
-        $this->setExpectedException(
-            'Svea\WebPay\BuildOrder\Validator\ValidationException', '-missing value : orderRows is required.'
-        );
-
         unset($this->builderObject->orderRows);
         $AddOrderRowsRequestObject = new AddOrderRowsRequest($this->builderObject);
         $request = $AddOrderRowsRequestObject->prepareRequest();
     }
 
+    /**
+     * @expectedException Svea\WebPay\BuildOrder\Validator\ValidationException
+     * @expectedExceptionMessage -missing order row vat information : cannot calculate orderRow vatPercent, need at least two of amountExVat, amountIncVat and vatPercent.
+     */
     public function test_validate_throws_exception_on_orderRows_missing_vat_information_none()
     {
-
-        $this->setExpectedException(
-            'Svea\WebPay\BuildOrder\Validator\ValidationException', '-missing order row vat information : cannot calculate orderRow vatPercent, need at least two of amountExVat, amountIncVat and vatPercent.'
-        );
-
         $this->builderObject->orderRows[] = WebPayItem::orderRow()
             ->setArticleNumber("1")
             ->setQuantity(1)

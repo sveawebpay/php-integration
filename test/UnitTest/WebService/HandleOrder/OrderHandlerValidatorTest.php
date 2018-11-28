@@ -5,7 +5,7 @@ namespace Svea\WebPay\Test\UnitTest\WebService\HandleOrder;
 use Svea\WebPay\WebPay;
 use Svea\WebPay\WebPayItem;
 use Svea\WebPay\Test\TestUtil;
-use PHPUnit_Framework_TestCase;
+use \PHPUnit\Framework\TestCase;
 use Svea\WebPay\Config\ConfigurationService;
 use Svea\WebPay\BuildOrder\DeliverOrderBuilder;
 use Svea\WebPay\WebService\HandleOrder\DeliverInvoice;
@@ -14,7 +14,7 @@ use Svea\WebPay\WebService\HandleOrder\DeliverInvoice;
 /**
  * @author Anneli Halld'n, Daniel Brolund for Svea Webpay
  */
-class OrderHandlerValidatorTest extends PHPUnit_Framework_TestCase
+class OrderHandlerValidatorTest extends \PHPUnit\Framework\TestCase
 {
 
     /**
@@ -33,14 +33,21 @@ class OrderHandlerValidatorTest extends PHPUnit_Framework_TestCase
 
     public function test_deliverPaymentPlanOrder_with_missing_invoiceDistributionType_validates_OK()
     {
-        $config = ConfigurationService::getDefaultConfig();
-        $builder = WebPay::deliverOrder($config);
-        $request = $builder
-            ->setOrderId(123456)
-            ->setCountryCode("SE")
-            ->addOrderRow(TestUtil::createOrderRow())
-            ->deliverPaymentPlanOrder()
-            ->prepareRequest();
+        try {
+            $config = ConfigurationService::getDefaultConfig();
+            $builder = WebPay::deliverOrder($config);
+            $request = $builder
+                ->setOrderId(123456)
+                ->setCountryCode("SE")
+                ->addOrderRow(TestUtil::createOrderRow())
+                ->deliverPaymentPlanOrder()
+                ->prepareRequest();
+            $this->assertTrue(true);
+        } catch (Exception $e) {
+            // fail on validation error
+            $this->fail("Unexpected validation exception: " . $e->getMessage());
+        }
+
     }
 
     /**

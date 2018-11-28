@@ -11,7 +11,7 @@ use Svea\WebPay\AdminService\DeliverOrdersRequest;
 /**
  * @author Kristian Grossman-Madsen for Svea Webpay
  */
-class DeliverOrdersRequestTest extends \PHPUnit_Framework_TestCase
+class DeliverOrdersRequestTest extends \PHPUnit\Framework\TestCase
 {
 
     public $builderObject;
@@ -31,39 +31,36 @@ class DeliverOrdersRequestTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Svea\WebPay\AdminService\DeliverOrdersRequest', $deliverOrdersRequestObject);
     }
 
+    /**
+     * @expectedException Svea\WebPay\BuildOrder\Validator\ValidationException
+     * @expectedExceptionMessage -missing value : distributionType is required.
+     */
     public function test_validate_throws_exception_on_missing_DistributionType()
     {
-
-        $this->setExpectedException(
-            'Svea\WebPay\BuildOrder\Validator\ValidationException', '-missing value : distributionType is required.'
-        );
-
         unset($this->builderObject->distributionType);
 
         $deliverOrderRequestObject = new DeliverOrdersRequest($this->builderObject);
         $request = $deliverOrderRequestObject->prepareRequest();
     }
 
+    /**
+     * @expectedException Svea\WebPay\BuildOrder\Validator\ValidationException
+     * @expectedExceptionMessage -missing value : orderId is required.
+     */
     public function test_validate_throws_exception_on_missing_OrderId()
     {
-
-        $this->setExpectedException(
-            'Svea\WebPay\BuildOrder\Validator\ValidationException', '-missing value : orderId is required.'
-        );
-
         unset($this->builderObject->orderId);
 
         $deliverOrderRequestObject = new DeliverOrdersRequest($this->builderObject);
         $request = $deliverOrderRequestObject->prepareRequest();
     }
 
+    /**
+     * @expectedException Svea\WebPay\BuildOrder\Validator\ValidationException
+     * @expectedExceptionMessage -missing value : orderType is required.
+     */
     public function test_validate_throws_exception_on_missing_OrderType()
     {
-
-        $this->setExpectedException(
-            'Svea\WebPay\BuildOrder\Validator\ValidationException', '-missing value : orderType is required.'
-        );
-
         unset($this->builderObject->orderType);
 
         $deliverOrderRequestObject = new DeliverOrdersRequest($this->builderObject);

@@ -3,7 +3,7 @@
 namespace Svea\WebPay\Test\UnitTest\WebService\GetAddress;
 
 use Svea\WebPay\WebPay;
-use PHPUnit_Framework_TestCase;
+use \PHPUnit\Framework\TestCase;
 use Svea\WebPay\Config\ConfigurationService;
 use Svea\WebPay\Config\ConfigurationProvider;
 
@@ -11,7 +11,7 @@ use Svea\WebPay\Config\ConfigurationProvider;
 /**
  * @author Anneli Halld'n, Daniel Brolund for Svea Webpay
  */
-class GetAddressesTest extends PHPUnit_Framework_TestCase
+class GetAddressesTest extends \PHPUnit\Framework\TestCase
 {
 
     public function testBuildRequest()
@@ -65,13 +65,12 @@ class GetAddressesTest extends PHPUnit_Framework_TestCase
     }
 
     /// validations
+    /**
+     * @expectedException Svea\WebPay\BuildOrder\Validator\ValidationException
+     * @expectedExceptionMessage countryCode is required. Use function setCountryCode().
+     */
     public function test_missing_countryCode_throws_exception()
     {
-        $this->setExpectedException(
-            'Svea\WebPay\BuildOrder\Validator\ValidationException', "countryCode is required. Use function setCountryCode()."
-        );
-
-
         $request = WebPay::getAddresses(ConfigurationService::getDefaultConfig())
             //->setCountryCode( "SE" )
             ->setCustomerIdentifier("4605092222")
@@ -79,12 +78,12 @@ class GetAddressesTest extends PHPUnit_Framework_TestCase
             ->prepareRequest();
     }
 
+    /**
+     * @expectedException Svea\WebPay\BuildOrder\Validator\ValidationException
+     * @expectedExceptionMessage customerIdentifier is required. Use function setCustomerIdentifer().
+     */
     public function test_getIndividualAddresses_with_missing_customerIdentifier_throws_exception()
     {
-        $this->setExpectedException(
-            'Svea\WebPay\BuildOrder\Validator\ValidationException', "customerIdentifier is required. Use function setCustomerIdentifer()."
-        );
-
         $request = WebPay::getAddresses(ConfigurationService::getDefaultConfig())
             ->setCountryCode("SE")
             //->setCustomerIdentifier("4605092222")
@@ -92,12 +91,12 @@ class GetAddressesTest extends PHPUnit_Framework_TestCase
             ->prepareRequest();
     }
 
+    /**
+     * @expectedException Svea\WebPay\BuildOrder\Validator\ValidationException
+     * @expectedExceptionMessage customerIdentifier is required. Use function setCustomerIdentifer().
+     */
     public function test_getCompanyAddresses_with_missing_customerIdentifier_throws_exception()
     {
-        $this->setExpectedException(
-            'Svea\WebPay\BuildOrder\Validator\ValidationException', "customerIdentifier is required. Use function setCustomerIdentifer()."
-        );
-
         $request = WebPay::getAddresses(ConfigurationService::getDefaultConfig())
             ->setCountryCode("SE")
             //->setCustomerIdentifier("4605092222")
@@ -105,12 +104,12 @@ class GetAddressesTest extends PHPUnit_Framework_TestCase
             ->prepareRequest();
     }
 
+    /**
+     * @expectedException Svea\WebPay\BuildOrder\Validator\ValidationException
+     * @expectedExceptionMessage missing authentication credentials. Check configuration.
+     */
     public function test_missing_Configuration_for_CountryCode_throws_exception()
     {
-        $this->setExpectedException(
-            'Svea\WebPay\BuildOrder\Validator\ValidationException', "missing authentication credentials. Check configuration."
-        );
-
         $request = WebPay::getAddresses(ConfigurationService::getDefaultConfig());
 
         // clear both payment method credentials for SE
