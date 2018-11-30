@@ -57,11 +57,11 @@ class RecurTransactionIntegrationTest extends \PHPUnit\Framework\TestCase
             'skeleton for manual test of recur transaction amount'
         );
 
-        // 1. go to https://webpaypaymentgatewaytest.svea.com/webpay-admin/admin/start.xhtml
+        // 1. go to https://webpaypaymentgatewaystage.svea.com/webpay-admin/admin/start.xhtml
         // 2. go to verktyg -> betalning
         // 3. enter our test merchantid: 1130
         // 4. use the following xml, making sure to update to a unique customerrefno:
-        // <paymentmethod>KORTCERT</paymentmethod><subscriptiontype>RECURRINGCAPTURE</subscriptiontype><currency>SEK</currency><amount>500</amount><vat>100</vat><customerrefno>test_recur_NN</customerrefno><returnurl>https://webpaypaymentgatewaytest.svea.com/webpay-admin/admin/merchantresponsetest.xhtml</returnurl>
+        // <paymentmethod>KORTCERT</paymentmethod><subscriptiontype>RECURRINGCAPTURE</subscriptiontype><currency>SEK</currency><amount>500</amount><vat>100</vat><customerrefno>test_recur_NN</customerrefno><returnurl>https://webpaypaymentgatewaystage.svea.com/webpay-admin/admin/merchantresponsetest.xhtml</returnurl>
         // 5. the result should be:
         // <response><transaction id="581497"><paymentmethod>KORTCERT</paymentmethod><merchantid>1130</merchantid><customerrefno>test_recur_1</customerrefno><amount>500</amount><currency>SEK</currency><subscriptionid>2922</subscriptionid><cardtype>VISA</cardtype><maskedcardno>444433xxxxxx1100</maskedcardno><expirymonth>02</expirymonth><expiryyear>16</expiryyear><authcode>993955</authcode></transaction><statuscode>0</statuscode></response>
 

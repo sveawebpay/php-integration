@@ -49,7 +49,7 @@ class FixedDiscountVatCalculationTest extends \PHPUnit\Framework\TestCase
                 ->setName("-20i@6%*1")
         );
         $request = $order->usePaymentMethod(PaymentMethod::KORTCERT)
-            ->setReturnUrl("https://webpaypaymentgatewaytest.svea.com/webpay-admin/admin/merchantresponsetest.xhtml")
+            ->setReturnUrl("https://webpaypaymentgatewaystage.svea.com/webpay-admin/admin/merchantresponsetest.xhtml")
             ->getPaymentForm();
 
 //    print_r( $request->xmlMessage );
@@ -146,7 +146,7 @@ class FixedDiscountVatCalculationTest extends \PHPUnit\Framework\TestCase
                 ->setDiscountId("fixedDiscount2")
                 ->setName("-20i*1")
         );
-        $request = $order->usePaymentMethod(PaymentMethod::KORTCERT)->setReturnUrl("https://webpaypaymentgatewaytest.svea.com/webpay-admin/admin/merchantresponsetest.xhtml");
+        $request = $order->usePaymentMethod(PaymentMethod::KORTCERT)->setReturnUrl("https://webpaypaymentgatewaystage.svea.com/webpay-admin/admin/merchantresponsetest.xhtml");
         $request = $request->getPaymentForm();
 
 //    print_r( $request->xmlMessage );
