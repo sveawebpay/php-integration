@@ -45,7 +45,7 @@ class ConfirmTransactionIntegrationTest extends \PHPUnit\Framework\TestCase
             //->setCardPageLanguage("SE")
             ->getPaymentForm();
 
-        $url = "https://webpaypaymentgatewaytest.svea.com/webpay/payment";
+        $url = "https://webpaypaymentgatewaystage.svea.com/webpay/payment";
 
         // do request modeled on Svea\WebPay\Test\IntegrationTest\HostedService\Payment\CardPaymentIntegrationTest.php
 

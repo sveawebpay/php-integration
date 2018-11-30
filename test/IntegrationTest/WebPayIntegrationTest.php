@@ -99,7 +99,7 @@ class WebPayIntegrationTest extends \PHPUnit\Framework\TestCase
             ->usePaymentMethod(PaymentMethod::KORTCERT)
             ->setReturnUrl("http://myurl.se")
             ->getPaymentForm();
-        $url = "https://webpaypaymentgatewaytest.svea.com/webpay/payment";
+        $url = "https://webpaypaymentgatewaystage.svea.com/webpay/payment";
 
         /** CURL  **/
         $fields = array('merchantid' => urlencode($form->merchantid), 'message' => urlencode($form->xmlMessageBase64), 'mac' => urlencode($form->mac));
