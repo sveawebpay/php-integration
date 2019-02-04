@@ -8,6 +8,7 @@ use Svea\WebPay\Checkout\Service\Admin\GetOrderService;
 use Svea\WebPay\Helper\Helper;
 use Svea\WebPay\Config\ConfigurationProvider;
 use Svea\WebPay\HostedService\HostedAdminRequest\QueryTransaction;
+use Svea\WebPay\HostedService\HostedAdminRequest\QueryTransactionByCustomerRefNo;
 
 /**
  * QueryOrderBuilder is the class used to query information about an order from Svea.
@@ -115,8 +116,16 @@ class QueryOrderBuilder extends CheckoutAdminOrderBuilder
     public function queryCardOrder()
     {
         $this->orderType = ConfigurationProvider::HOSTED_ADMIN_TYPE;
-        $queryTransaction = new QueryTransaction($this->conf);
-        $queryTransaction->transactionId = $this->orderId;
+        if(isset($this->clientOrderNumber))
+        {
+            $queryTransaction = new QueryTransactionByCustomerRefNo($this->conf);
+            $queryTransaction->customerRefNo = $this->clientOrderNumber;
+        }
+        else
+        {
+            $queryTransaction = new QueryTransaction($this->conf);
+            $queryTransaction->transactionId = $this->orderId;
+        }
         $queryTransaction->countryCode = $this->countryCode;
         return $queryTransaction;
     }
@@ -128,8 +137,16 @@ class QueryOrderBuilder extends CheckoutAdminOrderBuilder
     public function queryDirectBankOrder()
     {
         $this->orderType = ConfigurationProvider::HOSTED_ADMIN_TYPE;
-        $queryTransaction = new QueryTransaction($this->conf);
-        $queryTransaction->transactionId = $this->orderId;
+        if(isset($this->clientOrderNumber))
+        {
+            $queryTransaction = new QueryTransactionByCustomerRefNo($this->conf);
+            $queryTransaction->customerRefNo = $this->clientOrderNumber;
+        }
+        else
+        {
+            $queryTransaction = new QueryTransaction($this->conf);
+            $queryTransaction->transactionId = $this->orderId;
+        }
         $queryTransaction->countryCode = $this->countryCode;
         return $queryTransaction;
     }

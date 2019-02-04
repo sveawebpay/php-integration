@@ -1750,6 +1750,7 @@ about the order and send the request using the QueryOrderBuilder methods:
 $request = WebPay::queryOrder($config)
    ->setOrderId()           // required for invoice and payment plan orders, use SveaOrderId received with createOrder response
    ->setTransactionId()	    // required for card orders only
+   ->setClientOrderNumber() // optional, can be used instead of ->setTransactionId()
    ->setCountryCode()       // required, use same country code as in createOrder request
    ->setCheckoutOrderId()   // required for checkoutOrder
 ;
