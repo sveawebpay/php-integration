@@ -179,11 +179,27 @@ class WebPayAdminUnitTest extends \PHPUnit\Framework\TestCase
         $this->assertInstanceOf("Svea\WebPay\HostedService\HostedAdminRequest\QueryTransaction", $request);
     }
 
+    public function test_queryOrder_queryCardOrder_returns_QueryTransactionByCustomerRefNo()
+    {
+        $queryOrder = WebPayAdmin::queryOrder(ConfigurationService::getDefaultConfig())
+            ->setClientOrderNumber("123");
+        $request = $queryOrder->queryCardOrder();
+        $this->assertInstanceOf("Svea\WebPay\HostedService\HostedAdminRequest\QueryTransactionByCustomerRefNo", $request);
+    }
+
     public function test_queryOrder_queryDirectBankOrder_returns_QueryTransaction()
     {
         $queryOrder = WebPayAdmin::queryOrder(ConfigurationService::getDefaultConfig());
         $request = $queryOrder->queryDirectBankOrder();
         $this->assertInstanceOf("Svea\WebPay\HostedService\HostedAdminRequest\QueryTransaction", $request);
+    }
+
+    public function test_queryOrder_queryDirectBankOrder_returns_QueryTransactionByCustomerRefNo()
+    {
+        $queryOrder = WebPayAdmin::queryOrder(ConfigurationService::getDefaultConfig())
+            ->setClientOrderNumber("123");
+        $request = $queryOrder->queryDirectBankOrder();
+        $this->assertInstanceOf("Svea\WebPay\HostedService\HostedAdminRequest\QueryTransactionByCustomerRefNo", $request);
     }
 
 // TODO add validation unit tests
