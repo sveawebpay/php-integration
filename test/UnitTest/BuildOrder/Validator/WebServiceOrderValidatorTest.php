@@ -11,7 +11,7 @@ use Svea\WebPay\Test\TestUtil;
 use Svea\WebPay\Config\ConfigurationService;
 
 /**
- * @author Anneli Halld'n, Daniel Brolund for Svea Webpay
+ * @author Anneli Halld'n, Daniel Brolund, Fredrik Sundell for Svea Webpay
  */
 class WebServiceOrderValidatorTest extends \PHPUnit\Framework\TestCase
 {
@@ -605,4 +605,118 @@ class WebServiceOrderValidatorTest extends \PHPUnit\Framework\TestCase
             ->prepareRequest();
     }
 
+    /**
+     * @expectedException Svea\WebPay\BuildOrder\Validator\ValidationException
+     * @expectedExceptionMessage -incorrect value : The fifth character of PeppolId must be ":"
+     */
+    public function testFailOnIncorrectFormatPeppolIdFifthCharacter()
+     {
+            $config = ConfigurationService::getDefaultConfig();
+            $request = WebPay::createOrder($config)
+                ->addOrderRow(TestUtil::createOrderRow())
+                ->addCustomerDetails(
+                    WebPayItem::companyCustomer()
+                        ->setNationalIdNumber(194608142222)
+                )
+                ->setOrderDate("2019-04-01")
+                ->setPeppolId("12345678")
+                ->setCountryCode("SE")
+                ->useInvoicePayment()
+                ->prepareRequest();
+    }
+
+    /**
+     * @expectedException Svea\WebPay\BuildOrder\Validator\ValidationException
+     * @expectedExceptionMessage -incorrect value : First 4 characters of PeppolId must be numeric.
+     */
+    public function testFailOnIncorrectFormatPeppolIdFirstCharacters()
+    {
+        $config = ConfigurationService::getDefaultConfig();
+        $request = WebPay::createOrder($config)
+            ->addOrderRow(TestUtil::createOrderRow())
+            ->addCustomerDetails(
+                WebPayItem::companyCustomer()
+                    ->setNationalIdNumber(194608142222))
+            ->setOrderDate("2019-04-01")
+            ->setPeppolId("12a4:1sdf")
+            ->setCountryCode("SE")
+            ->useInvoicePayment()
+            ->prepareRequest();
+    }
+
+    /**
+     * @expectedException Svea\WebPay\BuildOrder\Validator\ValidationException
+     * @expectedExceptionMessage -incorrect value : All characters after the fifth character in PeppolId must be alphanumeric.
+     */
+    public function testFailOnIncorrectFormatPeppolIdLastCharacters()
+    {
+        $config = ConfigurationService::getDefaultConfig();
+        $request = WebPay::createOrder($config)
+            ->addOrderRow(TestUtil::createOrderRow())
+            ->addCustomerDetails(
+                WebPayItem::companyCustomer()
+                    ->setNationalIdNumber(194608142222))
+            ->setOrderDate("2019-04-01")
+            ->setPeppolId("1234:....")
+            ->setCountryCode("SE")
+            ->useInvoicePayment()
+            ->prepareRequest();
+    }
+
+    /**
+     * @expectedException Svea\WebPay\BuildOrder\Validator\ValidationException
+     * @expectedExceptionMessage -incorrect value : PeppolId is too short, must be 6 characters or longer.
+     */
+    public function testFailOnIncorrectFormatPeppolIdTooShort()
+    {
+        $config = ConfigurationService::getDefaultConfig();
+        $request = WebPay::createOrder($config)
+            ->addOrderRow(TestUtil::createOrderRow())
+            ->addCustomerDetails(
+                WebPayItem::companyCustomer()
+                    ->setNationalIdNumber(194608142222))
+            ->setOrderDate("2019-04-01")
+            ->setPeppolId("1234")
+            ->setCountryCode("SE")
+            ->useInvoicePayment()
+            ->prepareRequest();
+    }
+
+    /**
+     * @expectedException Svea\WebPay\BuildOrder\Validator\ValidationException
+     * @expectedExceptionMessage -incorrect value : PeppolId is too long, must be 55 characters or fewer.
+     */
+    public function testFailOnIncorrectFormatPeppolIdTooLong()
+    {
+        $config = ConfigurationService::getDefaultConfig();
+        $request = WebPay::createOrder($config)
+            ->addOrderRow(TestUtil::createOrderRow())
+            ->addCustomerDetails(
+                WebPayItem::companyCustomer()
+                    ->setNationalIdNumber(194608142222))
+            ->setOrderDate("2019-04-01")
+            ->setPeppolId("1234:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
+            ->setCountryCode("SE")
+            ->useInvoicePayment()
+            ->prepareRequest();
+    }
+
+    /**
+     * @expectedException Svea\WebPay\BuildOrder\Validator\ValidationException
+     * @expectedExceptionMessage -incorrect value : CustomerType must be a company when using PeppolId.
+     */
+    public function testFailOnIncorrectFormatPeppolIdWrongCustomerType()
+    {
+        $config = ConfigurationService::getDefaultConfig();
+        $request = WebPay::createOrder($config)
+            ->addOrderRow(TestUtil::createOrderRow())
+            ->addCustomerDetails(
+                WebPayItem::individualCustomer()
+                    ->setNationalIdNumber(194605092222))
+            ->setOrderDate("2019-04-01")
+            ->setPeppolId("1234:asdf")
+            ->setCountryCode("SE")
+            ->useInvoicePayment()
+            ->prepareRequest();
+    }
 }

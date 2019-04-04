@@ -29,7 +29,7 @@ class PaymentPlanPricePerMonthTest extends \PHPUnit\Framework\TestCase
         $params = $this->getGetPaymentPlanParamsResponseForTesting();
         $response = new PaymentPlanPricePerMonth(2000, $params);
 //        $this->assertEquals(213060, $response->values[0]['campaignCode']);//don't test to be flexible
-        $this->assertEquals(2029, $response->values[0]['pricePerMonth']);
+        $this->assertEquals(80.1, $response->values[0]['pricePerMonth']);
     }
 
     function testBuildPriceCalculatorWithLowPrice_should_not_return_anything_if_price_is_less_than_all_campaign_min_prices()

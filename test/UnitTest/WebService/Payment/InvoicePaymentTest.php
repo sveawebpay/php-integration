@@ -9,10 +9,27 @@ use \PHPUnit\Framework\TestCase;
 use Svea\WebPay\Config\ConfigurationService;
 
 /**
- * @author Anneli Halld'n, Daniel Brolund for Svea Webpay
+ * @author Anneli Halld'n, Daniel Brolund, Fredrik Sundell for Svea Webpay
  */
 class InvoicePaymentTest extends \PHPUnit\Framework\TestCase
 {
+
+    public function testInvoiceRequestwithPeppolId()
+    {
+        $config = ConfigurationService::getDefaultConfig();
+        $request = WebPay::createOrder($config)
+            ->addOrderRow(TestUtil::createOrderRow())
+            ->addCustomerDetails(
+                WebPayItem::companyCustomer()
+                    ->setNationalIdNumber(194608142222))
+            ->setOrderDate("2019-04-01")
+            ->setPeppolId("1234:asdf")
+            ->setCountryCode("SE")
+            ->useInvoicePayment()
+            ->prepareRequest();
+
+        $this->assertEquals("1234:asdf", $request->request->CreateOrderInformation->PeppolId);
+    }
 
     public function testInvoiceRequestObjectForCustomerIdentityIndividualFromSE()
     {

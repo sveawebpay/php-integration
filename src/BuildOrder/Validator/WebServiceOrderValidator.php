@@ -5,7 +5,7 @@ namespace Svea\WebPay\BuildOrder\Validator;
 use Svea\WebPay\Config\ConfigurationProvider;
 
 /**
- * @author Anneli Halld'n, Daniel Brolund for Svea Webpay
+ * @author Anneli Halld'n, Daniel Brolund, Fredrik Sundell for Svea Webpay
  */
 class WebServiceOrderValidator extends OrderValidator
 {
@@ -71,6 +71,7 @@ class WebServiceOrderValidator extends OrderValidator
         }
 
         $this->errors = $identityValidator->validateDoubleIdentity($order, $this->errors);
+        $this->errors = $this->validatePeppolId($order, $this->errors);
         $this->errors = $this->validateRequiredFieldsForOrder($order, $this->errors);
         $this->errors = $this->validateOrderRows($order, $this->errors);
 

@@ -22,7 +22,7 @@ use Svea\WebPay\WebService\SveaSoap\SveaCreateOrderInformation;
  * Uses svea_soap package to build object formatted for SveaWebPay Europe Web service API
  * Object is sent with SveaDoPayment class in svea_soap package by PHP SoapClient
  *
- * @author Anneli Halld'n, Daniel Brolund for Svea Webpay
+ * @author Anneli Halld'n, Daniel Brolund, Fredrik Sundell for Svea Webpay
  */
 
 class WebServicePayment
@@ -89,6 +89,8 @@ class WebServicePayment
         $orderinformation->ClientOrderNumber = $this->order->clientOrderNumber;
         $orderinformation->OrderDate = $this->order->orderDate;
         $orderinformation->CustomerReference = $this->order->customerReference;
+        $orderinformation->PeppolId = $this->order->peppolId;
+
         if(isset($this->order->orderDeliveryAddress))
         {
             $orderinformation->OrderDeliveryAddress = $this->formatOrderDeliveryAddress();

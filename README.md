@@ -53,7 +53,7 @@
     * [6.7 WebPay::getAccountCreditParams()](#i6-7)
     * [6.8 WebPay::checkout()](#i6-8)
 * [7. WebPayAdmin entrypoint method reference](#i7)
-    * [7.1 WebPayAdmin::queryTaskInfo](#i7-1)
+    * [7.1 WebPayAdmin::queryTaskInfo()](#i7-1)
     * [7.2 WebPayAdmin::cancelOrder()](#i7-2)
     * [7.3 WebPayAdmin::queryOrder()](#i7-3)
     * [7.4 WebPayAdmin::cancelOrderRows()](#i7-4)
@@ -1251,6 +1251,7 @@ $order = WebPay::createOrder($config)
   ->setCurrency("SEK")                // required for card payment, direct bank & PayPage payments. Ignored for invoice and payment plan.
   ->setClientOrderNumber("A123456")   // Required for card payment, direct payment, Unique String(65). Optional for Invoice and Payment plan String(32).
   ->setCustomerReference("att: kgm")  // Optional for invoice and payment plan String(32), ignored for card & direct bank orders.
+  ->setPeppolId("1234:abcd1234")      // Optional for invoices where customer type is company, if set the invoice will be sent via PEPPOL
 ;
 ...
 ```

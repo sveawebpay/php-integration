@@ -13,10 +13,27 @@ use Svea\WebPay\WebService\WebServiceResponse\CustomerIdentity\CreateOrderIdenti
 
 
 /**
- * @author Anneli Halld'n, Daniel Brolund, Kristian Grossman-Madsen for Svea Webpay
+ * @author Anneli Halld'n, Daniel Brolund, Kristian Grossman-Madsen, Fredrik Sundell for Svea Webpay
  */
 class InvoicePaymentIntegrationTest extends \PHPUnit\Framework\TestCase
 {
+
+    public function testInvoiceRequestwithPeppolId()
+    {
+        $config = ConfigurationService::getDefaultConfig();
+        $request = WebPay::createOrder($config)
+            ->addOrderRow(TestUtil::createOrderRow())
+            ->addCustomerDetails(
+                WebPayItem::companyCustomer()
+                    ->setNationalIdNumber(194608142222))
+            ->setOrderDate("2019-04-01")
+            ->setCountryCode("SE")
+            ->setPeppolId("1234:asdf")
+            ->useInvoicePayment()
+            ->doRequest();
+
+        $this->assertEquals(1, $request->accepted);
+    }
 
     public function testInvoiceRequestAccepted()
     {
@@ -945,7 +962,7 @@ class InvoicePaymentIntegrationTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals("Ola Normann", $response->customerIdentity->fullName);    // Note: order may vary between countries, given by UC
         $this->assertEquals("Testveien 2", $response->customerIdentity->street);
         $this->assertEquals("", $response->customerIdentity->coAddress);
-        $this->assertEquals("359", $response->customerIdentity->zipCode);
+        $this->assertEquals("0359", $response->customerIdentity->zipCode);
         $this->assertEquals("Oslo", $response->customerIdentity->locality);
     }
 
@@ -1396,7 +1413,7 @@ class InvoicePaymentIntegrationTest extends \PHPUnit\Framework\TestCase
             ->setOrderDate("2012-12-12")
             ->useInvoicePayment()->doRequest();
         $this->assertEquals(1, $orderResponse->accepted);
-        $this->assertEquals("62.50", $orderResponse->amount);   // this is where
+        $this->assertEquals("62.5", $orderResponse->amount);   // this is where
 
         $query = WebPayAdmin::queryOrder($config)
             ->setCountryCode('SE')
