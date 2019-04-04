@@ -393,14 +393,14 @@ class GetOrdersRequestIntegrationTest extends \PHPUnit\Framework\TestCase
         $this->assertInstanceOf("Svea\WebPay\BuildOrder\RowBuilders\CompanyCustomer", $getOrdersResponse->customer);
         $this->assertEquals("194608142222", $getOrdersResponse->customer->orgNumber);
         $this->assertEquals(null, $getOrdersResponse->customer->companyVatNumber);
-        $this->assertEquals("Persson, Tess T", $getOrdersResponse->customer->companyName);
+        $this->assertEquals("Test", $getOrdersResponse->customer->companyName);
         $this->assertEquals(null, $getOrdersResponse->customer->email);
         $this->assertEquals(null, $getOrdersResponse->customer->phonenumber);
-        $this->assertEquals("Testgatan 1", $getOrdersResponse->customer->streetAddress);
-        $this->assertEquals("Testgatan 1", $getOrdersResponse->customer->street);
-        $this->assertEquals("c/o Eriksson, Erik", $getOrdersResponse->customer->coAddress);
-        $this->assertEquals("99999", $getOrdersResponse->customer->zipCode);
-        $this->assertEquals("Stan", $getOrdersResponse->customer->locality);
+        $this->assertEquals("Testaregatan 1", $getOrdersResponse->customer->streetAddress);
+        $this->assertEquals("Testaregatan 1", $getOrdersResponse->customer->street);
+        $this->assertEquals(null, $getOrdersResponse->customer->coAddress);
+        $this->assertEquals("11111", $getOrdersResponse->customer->zipCode);
+        $this->assertEquals("Solna", $getOrdersResponse->customer->locality);
     }
 
     public function test_manual_GetOrdersRequest_for_paymentplan_order()

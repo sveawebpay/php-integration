@@ -88,7 +88,7 @@ class FixedDiscountRowsIntegrationTest extends \PHPUnit\Framework\TestCase
         // check that service accepts order
         $response = $order->useInvoicePayment()->doRequest();
         $this->assertEquals(true, $response->accepted);
-        $this->assertEquals("131.40", $response->amount);
+        $this->assertEquals("131.4", $response->amount);
     }
 
     // same order with discount exvat should be sent with PriceIncludingVat = false but with split discount rows based on order amounts ex vat
@@ -222,7 +222,7 @@ class FixedDiscountRowsIntegrationTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(true, $response->accepted);
         // r() is round($val, 2, PHP_ROUND_HALF_EVEN), i.e. bankers rounding
         // r(60*1.20*1) + r(30*1.10*1) + r(16*1.10*1) + r(8*1.10*1) + r(-10*1.10*1) = 72+33+17.60 + 8.80 -11.00 = 120.40
-        $this->assertEquals("120.40", $response->amount);
+        $this->assertEquals("120.4", $response->amount);
     }
 
     // same order with discount incvat+vat should be sent with PriceIncludingVat = false with one discount row amount based on given incvat + vat
@@ -265,7 +265,7 @@ class FixedDiscountRowsIntegrationTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(true, $response->accepted);
         // r() is round($val, 2, PHP_ROUND_HALF_EVEN), i.e. bankers rounding
         // r(60*1.20*1) + r(30*1.10*1) + r(16*1.10*1) + r(8*1.10*1) + r(-10*1.10*1) = 72+33+17.60 + 8.80 -11.00 = 120.40
-        $this->assertEquals("120.40", $response->amount);
+        $this->assertEquals("120.4", $response->amount);
     }
 
     private static function create_only_incvat_order_and_fee_rows_order()
@@ -331,7 +331,7 @@ class FixedDiscountRowsIntegrationTest extends \PHPUnit\Framework\TestCase
         // check that service accepts order
         $response = $order->useInvoicePayment()->doRequest();
         $this->assertEquals(true, $response->accepted);
-        $this->assertEquals("131.40", $response->amount);
+        $this->assertEquals("131.4", $response->amount);
     }
 
     // same order with discount exvat should be sent with PriceIncludingVat = true but with split discount rows based on order amounts ex vat
@@ -465,7 +465,7 @@ class FixedDiscountRowsIntegrationTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(true, $response->accepted);
         // r() is round($val, 2, PHP_ROUND_HALF_EVEN), i.e. bankers rounding
         // r(72*1) + r(33*1) + r(17.60*1) + r(8.80*1) + r(-5.72*1.20*1) + r(-2.85*1.10*1) => 72.00+33.00+17.60+8.80-11.00 => 120.40
-        $this->assertEquals("120.40", $response->amount);
+        $this->assertEquals("120.4", $response->amount);
     }
 
     // same order with discount incvat+vat should be sent with PriceIncludingVat = false with one discount row amount based on given incvat + vat
@@ -508,6 +508,6 @@ class FixedDiscountRowsIntegrationTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(true, $response->accepted);
         // r() is round($val, 2, PHP_ROUND_HALF_EVEN), i.e. bankers rounding
         // r(72*1) + r(33*1) + r(17.60*1) + r(8.80*1) + r(-5.72*1.20*1) + r(-2.85*1.10*1) => 72.00+33.00+17.60+8.80-11.00 => 120.40
-        $this->assertEquals("120.40", $response->amount);
+        $this->assertEquals("120.4", $response->amount);
     }
 }

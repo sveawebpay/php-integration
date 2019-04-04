@@ -290,10 +290,10 @@ class CreditOrderRowsRequestIntegrationTest extends \PHPUnit\Framework\TestCase
             ->setCountryCode('SE')
             ->queryInvoiceOrder()->doRequest();
         $this->assertEquals(1, $query->accepted);
-        $this->assertEquals("100", $query->numberedOrderRows[0]->amountExVat);
+        $this->assertEquals("100.00", $query->numberedOrderRows[0]->amountExVat);
         $this->assertEquals(null, $query->numberedOrderRows[0]->amountIncVat);
         $this->assertEquals("25", $query->numberedOrderRows[0]->vatPercent);
-        $this->assertEquals("2", $query->numberedOrderRows[0]->quantity);
+        $this->assertEquals("2.00", $query->numberedOrderRows[0]->quantity);
 
         $creditOrder = WebPayAdmin::creditOrderRows($config)
             ->setInvoiceId($orderInfo->invoiceId)
@@ -323,10 +323,10 @@ class CreditOrderRowsRequestIntegrationTest extends \PHPUnit\Framework\TestCase
 
         // NOTE the order row status/amount does not reflect that the corresponding invoice row has been credited
         // TODO implement queryInvoice and recurse invoices to get the current order row status
-        $this->assertEquals("100", $query2->numberedOrderRows[0]->amountExVat);
+        $this->assertEquals("100.00", $query2->numberedOrderRows[0]->amountExVat);
         $this->assertEquals(null, $query2->numberedOrderRows[0]->amountIncVat);
         $this->assertEquals("25", $query2->numberedOrderRows[0]->vatPercent);
-        $this->assertEquals("2", $query2->numberedOrderRows[0]->quantity);
+        $this->assertEquals("2.00", $query2->numberedOrderRows[0]->quantity);
         // nope, can't be seen in the order, only in backoffice in delivered invoice as cumulative discount amount
         // $this->assertEquals("-10.00", $query->numberedOrderRows[1]->amountExVat);
         // $this->assertEquals("25", $query->numberedOrderRows[1]->vatPercent);
@@ -345,9 +345,9 @@ class CreditOrderRowsRequestIntegrationTest extends \PHPUnit\Framework\TestCase
             ->queryInvoiceOrder()->doRequest();
         $this->assertEquals(1, $query->accepted);
         $this->assertEquals(null, $query->numberedOrderRows[0]->amountExVat);
-        $this->assertEquals("125", $query->numberedOrderRows[0]->amountIncVat);
+        $this->assertEquals("125.00", $query->numberedOrderRows[0]->amountIncVat);
         $this->assertEquals("25", $query->numberedOrderRows[0]->vatPercent);
-        $this->assertEquals("2", $query->numberedOrderRows[0]->quantity);
+        $this->assertEquals("2.00", $query->numberedOrderRows[0]->quantity);
 
         $creditOrder = WebPayAdmin::creditOrderRows($config)
             ->setInvoiceId($orderInfo->invoiceId)
@@ -377,9 +377,9 @@ class CreditOrderRowsRequestIntegrationTest extends \PHPUnit\Framework\TestCase
         // NOTE the order row status/amount does not reflect that the corresponding invoice row has been credited
         // TODO implement queryInvoice and recurse invoices to get the current order row status
         $this->assertEquals(null, $query2->numberedOrderRows[0]->amountExVat);
-        $this->assertEquals("125", $query2->numberedOrderRows[0]->amountIncVat);
+        $this->assertEquals("125.00", $query2->numberedOrderRows[0]->amountIncVat);
         $this->assertEquals("25", $query2->numberedOrderRows[0]->vatPercent);
-        $this->assertEquals("2", $query2->numberedOrderRows[0]->quantity);
+        $this->assertEquals("2.00", $query2->numberedOrderRows[0]->quantity);
         // nope, can't be seen in the order, only in backoffice in delivered invoice as cumulative discount amount
         // $this->assertEquals("-20.00", $query->numberedOrderRows[1]->amountExVat);
         // $this->assertEquals("25", $query->numberedOrderRows[1]->vatPercent);

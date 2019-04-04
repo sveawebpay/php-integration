@@ -962,7 +962,7 @@ class InvoicePaymentIntegrationTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals("Ola Normann", $response->customerIdentity->fullName);    // Note: order may vary between countries, given by UC
         $this->assertEquals("Testveien 2", $response->customerIdentity->street);
         $this->assertEquals("", $response->customerIdentity->coAddress);
-        $this->assertEquals("359", $response->customerIdentity->zipCode);
+        $this->assertEquals("0359", $response->customerIdentity->zipCode);
         $this->assertEquals("Oslo", $response->customerIdentity->locality);
     }
 
@@ -1413,7 +1413,7 @@ class InvoicePaymentIntegrationTest extends \PHPUnit\Framework\TestCase
             ->setOrderDate("2012-12-12")
             ->useInvoicePayment()->doRequest();
         $this->assertEquals(1, $orderResponse->accepted);
-        $this->assertEquals("62.50", $orderResponse->amount);   // this is where
+        $this->assertEquals("62.5", $orderResponse->amount);   // this is where
 
         $query = WebPayAdmin::queryOrder($config)
             ->setCountryCode('SE')
