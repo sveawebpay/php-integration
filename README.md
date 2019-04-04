@@ -1251,6 +1251,7 @@ $order = WebPay::createOrder($config)
   ->setCurrency("SEK")                // required for card payment, direct bank & PayPage payments. Ignored for invoice and payment plan.
   ->setClientOrderNumber("A123456")   // Required for card payment, direct payment, Unique String(65). Optional for Invoice and Payment plan String(32).
   ->setCustomerReference("att: kgm")  // Optional for invoice and payment plan String(32), ignored for card & direct bank orders.
+  ->setPeppolId("1234:abcd1234")      // Optional for invoices where customer type is company, if set the invoice will be sent via PEPPOL
 ;
 ...
 ```

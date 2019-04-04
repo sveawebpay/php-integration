@@ -8,7 +8,7 @@ use Svea\WebPay\Config\ConfigurationProvider;
  * OrderBuilder collects and prepares order data to be sent to Svea. It is the
  * parent of CreateOrderBuilder and DeliverOrderBuilder.
  *
- * @author Kristian Grossman-Madsen, Anneli Halld'n, Daniel Brolund for Svea Svea\WebPay\WebPay
+ * @author Kristian Grossman-Madsen, Anneli Halld'n, Daniel Brolund, Fredrik Sundell for Svea WebPay
  */
 class OrderBuilder
 {
@@ -90,6 +90,12 @@ class OrderBuilder
      * @var \Svea\WebPay\BuildOrder\RowBuilders\OrderDeliveryAddress
      */
     public $orderDeliveryAddress;
+
+    /*
+     * @var string Used to send Peppol invoices
+     */
+    public $peppolId;
+
 
     /**
      * @param ConfigurationProvider $config
@@ -306,6 +312,18 @@ class OrderBuilder
     public function enableLogging($status)
     {
         $this->logging = $status;
+
+        return $this;
+    }
+
+    /**
+     * Optional, used to send Peppol invoices
+     * @param string $peppolId
+     * @return $this
+     */
+    public function setPeppolId($peppolId)
+    {
+        $this->peppolId = $peppolId;
 
         return $this;
     }

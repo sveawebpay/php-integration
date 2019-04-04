@@ -9,11 +9,54 @@ use Svea\WebPay\Checkout\Validation\ExVatRestrictionValidator;
  * that all required fields are present and of the correct type. Errors found
  * are returned as associative type-message pairs in an error array.
  *
- * @author Anneli Halld'n, Daniel Brolund, Kristian Grossman-Madsen for Svea Webpay
+ * @author Anneli Halld'n, Daniel Brolund, Kristian Grossman-Madsen, Fredrik Sundell for Svea Webpay
  */
 abstract class OrderValidator
 {
     public abstract function validate($order);
+
+    /**
+     * @param type $order
+     * @param type $errors
+     * @return type $errors
+     */
+    public function validatePeppolId($order, $errors)
+    {
+        if (isset($order->peppolId)) {
+
+            if($this->isCompany == false)
+            {
+                $errors['incorrect value'] = "CustomerType must be a company when using PeppolId.";
+            }
+
+            if(is_numeric(substr($order->peppolId,0,4)) == false )
+            {
+                $errors['incorrect value'] = "First 4 characters of PeppolId must be numeric.";
+            }
+
+            if(ctype_alnum(substr($order->peppolId,6)) == false)
+            {
+                $errors['incorrect value'] = "All characters after the fifth character in PeppolId must be alphanumeric.";
+            }
+
+            if(substr($order->peppolId,4,1) != ":")
+            {
+                $errors['incorrect value'] = "The fifth character of PeppolId must be \":\".";
+            }
+
+            if(strlen($order->peppolId) > 55)
+            {
+                $errors['incorrect value'] = "PeppolId is too long, must be 55 characters or fewer.";
+            }
+
+            if(strlen($order->peppolId) < 6)
+            {
+                $errors['incorrect value'] = "PeppolId is too short, must be 6 characters or longer.";
+            }
+        }
+
+        return $errors;
+    }
 
     /*
      * @param type $order
