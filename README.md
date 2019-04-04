@@ -53,7 +53,7 @@
     * [6.7 WebPay::getAccountCreditParams()](#i6-7)
     * [6.8 WebPay::checkout()](#i6-8)
 * [7. WebPayAdmin entrypoint method reference](#i7)
-    * [7.1 WebPayAdmin::queryTaskInfo](#i7-1)
+    * [7.1 WebPayAdmin::queryTaskInfo()](#i7-1)
     * [7.2 WebPayAdmin::cancelOrder()](#i7-2)
     * [7.3 WebPayAdmin::queryOrder()](#i7-3)
     * [7.4 WebPayAdmin::cancelOrderRows()](#i7-4)
