@@ -39,7 +39,7 @@ class WebPayUnitTest extends \PHPUnit\Framework\TestCase
     public function test_createOrder_usePaymentPlanPayment_returns_PaymentPlanPayment()
     {
         $createOrder = WebPay::createOrder(ConfigurationService::getDefaultConfig());
-        $request = $createOrder->usePaymentPlanPayment(TestUtil::getGetPaymentPlanParamsForTesting());
+        $request = $createOrder->usePaymentPlanPayment('111111');
         $this->assertInstanceOf("Svea\WebPay\WebService\Payment\PaymentPlanPayment", $request);
     }
 
@@ -657,7 +657,7 @@ class WebPayUnitTest extends \PHPUnit\Framework\TestCase
             ->setCountryCode("SE")
             ->setOrderDate(date('c'));
 
-        $request = $createOrder->usePaymentPlanPayment(TestUtil::getGetPaymentPlanParamsForTesting());
+        $request = $createOrder->usePaymentPlanPayment('111111');
 
         // prepareRequest() validates the order and throws SveaWebPayException on validation failure
         try {

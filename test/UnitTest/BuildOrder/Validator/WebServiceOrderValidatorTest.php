@@ -55,27 +55,12 @@ class WebServiceOrderValidatorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Use to get paymentPlanParams to be able to test PaymentPlanRequest
-     * @return type
-     */
-    public function getGetPaymentPlanParamsForTesting($config)
-    {
-        $addressRequest = WebPay::getPaymentPlanParams($config);
-        $response = $addressRequest
-            ->setCountryCode("SE")
-            ->doRequest();
-
-        return $response->campaignCodes[0]->campaignCode;
-    }
-
-    /**
      * @expectedException Svea\WebPay\BuildOrder\Validator\ValidationException
      * @expectedExceptionMessage -Wrong customer type : PaymentPlanPayment not allowed for Company customer.
      */
     public function testFailOnCompanyPaymentPlanPayment()
     {
         $config = ConfigurationService::getDefaultConfig();
-        $code = $this->getGetPaymentPlanParamsForTesting($config);
         $builder = WebPay::CreateOrder($config);
         $order = $builder
             ->addOrderRow(TestUtil::createHostedOrderRow())

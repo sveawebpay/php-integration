@@ -60,34 +60,6 @@ class FixedDiscountRowsTest extends \PHPUnit\Framework\TestCase
         return $order;
     }
 
-    // order with order/fee rows mixed exvat+vat / incvat+vat should be sent with PriceIncludingVat = false
-    public function test_mixed_order_row_and_shipping_fees_only_has_priceIncludingVat_false()
-    {
-        $order = FixedDiscountRowsTest::create_mixed_exvat_and_incvat_order_and_fee_rows_order();
-
-        $request = $order->useInvoicePayment()->prepareRequest();
-        // all order rows
-        $this->assertEquals(60.00, $request->request->CreateOrderInformation->OrderRows['OrderRow'][0]->PricePerUnit);
-        $this->assertEquals(20, $request->request->CreateOrderInformation->OrderRows['OrderRow'][0]->VatPercent);
-        $this->assertEquals(false, $request->request->CreateOrderInformation->OrderRows['OrderRow'][0]->PriceIncludingVat);
-        $this->assertEquals(30.00, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->PricePerUnit);
-        $this->assertEquals(10, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->VatPercent);
-        $this->assertEquals(false, $request->request->CreateOrderInformation->OrderRows['OrderRow'][1]->PriceIncludingVat);
-        // all invoice fee rows
-        $this->assertEquals(8.00, $request->request->CreateOrderInformation->OrderRows['OrderRow'][2]->PricePerUnit);
-        $this->assertEquals(10, $request->request->CreateOrderInformation->OrderRows['OrderRow'][2]->VatPercent);
-        $this->assertEquals(false, $request->request->CreateOrderInformation->OrderRows['OrderRow'][2]->PriceIncludingVat);
-        // all shipping fee rows
-        $this->assertEquals(16.00, $request->request->CreateOrderInformation->OrderRows['OrderRow'][3]->PricePerUnit);
-        $this->assertEquals(10, $request->request->CreateOrderInformation->OrderRows['OrderRow'][3]->VatPercent);
-        $this->assertEquals(false, $request->request->CreateOrderInformation->OrderRows['OrderRow'][3]->PriceIncludingVat);
-
-        // check that service accepts order
-        $response = $order->useInvoicePayment()->doRequest();
-        $this->assertEquals(true, $response->accepted);
-        $this->assertEquals("131.4", $response->amount);
-    }
-
     // same order with discount exvat should be sent with PriceIncludingVat = false but with split discount rows based on order amounts ex vat
     public function test_mixed_order_with_fixedDiscount_as_exvat_only_has_priceIncludingVat_false()
     {

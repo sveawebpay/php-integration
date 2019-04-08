@@ -86,7 +86,6 @@ class PaymentPlanTest extends \PHPUnit\Framework\TestCase
     public function testPaymentPlanWithPriceAsDecimal()
     {
         $config = ConfigurationService::getDefaultConfig();
-        $campaign = $this->getGetPaymentPlanParamsForTesting();
         $request = WebPay::createOrder($config)
             ->addOrderRow(WebPayItem::orderRow()
                 ->setArticleNumber("1")
@@ -100,7 +99,7 @@ class PaymentPlanTest extends \PHPUnit\Framework\TestCase
             ->setCustomerReference("33")
             ->setOrderDate("2012-12-12")
             ->setCurrency("SEK")
-            ->usePaymentPlanPayment($campaign)
+            ->usePaymentPlanPayment('111111')
             ->prepareRequest();
         //couponrow
 
@@ -117,7 +116,6 @@ class PaymentPlanTest extends \PHPUnit\Framework\TestCase
     public function testDiscountSetAsExVatWhenPriceSetAsExVatAndVatPercent()
     {
         $config = ConfigurationService::getDefaultConfig();
-        $campaign = $this->getGetPaymentPlanParamsForTesting();
         $request = WebPay::createOrder($config)
             ->addOrderRow(
                 WebPayItem::orderRow()
@@ -129,7 +127,7 @@ class PaymentPlanTest extends \PHPUnit\Framework\TestCase
             ->addCustomerDetails(TestUtil::createIndividualCustomer("SE"))
             ->setCountryCode("SE")
             ->setOrderDate("2012-12-12")
-            ->usePaymentPlanPayment($campaign)
+            ->usePaymentPlanPayment('111111')
             ->prepareRequest();
         $this->assertEquals(80, $request->request->CreateOrderInformation->OrderRows['OrderRow'][0]->PricePerUnit);
         $this->assertEquals(24, $request->request->CreateOrderInformation->OrderRows['OrderRow'][0]->VatPercent);
@@ -142,7 +140,6 @@ class PaymentPlanTest extends \PHPUnit\Framework\TestCase
     public function testDiscountSetAsExVatAndVatPercentWhenPriceSetAsExVatAndVatPercent()
     {
         $config = ConfigurationService::getDefaultConfig();
-        $campaign = $this->getGetPaymentPlanParamsForTesting();
         $request = WebPay::createOrder($config)
             ->addOrderRow(
                 WebPayItem::orderRow()
@@ -156,7 +153,7 @@ class PaymentPlanTest extends \PHPUnit\Framework\TestCase
             ->addCustomerDetails(TestUtil::createIndividualCustomer("SE"))
             ->setCountryCode("SE")
             ->setOrderDate("2012-12-12")
-            ->usePaymentPlanPayment($campaign)
+            ->usePaymentPlanPayment('111111')
             ->prepareRequest();
         $this->assertEquals(80, $request->request->CreateOrderInformation->OrderRows['OrderRow'][0]->PricePerUnit);
         $this->assertEquals(24, $request->request->CreateOrderInformation->OrderRows['OrderRow'][0]->VatPercent);
@@ -169,7 +166,6 @@ class PaymentPlanTest extends \PHPUnit\Framework\TestCase
     public function testDiscountPercentAndVatPercentWhenPriceSetAsExVatAndVatPercent()
     {
         $config = ConfigurationService::getDefaultConfig();
-        $campaign = $this->getGetPaymentPlanParamsForTesting();
         $request = WebPay::createOrder($config)
             ->addOrderRow(
                 WebPayItem::orderRow()
@@ -183,7 +179,7 @@ class PaymentPlanTest extends \PHPUnit\Framework\TestCase
             ->addCustomerDetails(TestUtil::createIndividualCustomer("SE"))
             ->setCountryCode("SE")
             ->setOrderDate("2012-12-12")
-            ->usePaymentPlanPayment($campaign)
+            ->usePaymentPlanPayment('111111')
             ->prepareRequest();
         $this->assertEquals(80, $request->request->CreateOrderInformation->OrderRows['OrderRow'][0]->PricePerUnit);
         $this->assertEquals(24, $request->request->CreateOrderInformation->OrderRows['OrderRow'][0]->VatPercent);
@@ -196,7 +192,6 @@ class PaymentPlanTest extends \PHPUnit\Framework\TestCase
     public function testFeeSetAsExVatAndVatPercentWhenPriceSetAsExVatAndVatPercent()
     {
         $config = ConfigurationService::getDefaultConfig();
-        $campaign = $this->getGetPaymentPlanParamsForTesting();
         $request = WebPay::createOrder($config)
             ->addOrderRow(
                 WebPayItem::orderRow()
@@ -211,7 +206,7 @@ class PaymentPlanTest extends \PHPUnit\Framework\TestCase
             ->addCustomerDetails(TestUtil::createIndividualCustomer("SE"))
             ->setCountryCode("SE")
             ->setOrderDate("2012-12-12")
-            ->usePaymentPlanPayment($campaign)
+            ->usePaymentPlanPayment('111111')
             ->prepareRequest();
 
         $this->assertEquals(80, $request->request->CreateOrderInformation->OrderRows['OrderRow'][0]->PricePerUnit);
@@ -225,7 +220,6 @@ class PaymentPlanTest extends \PHPUnit\Framework\TestCase
     public function testOrderRowPriceSetAsInkVatAndVatPercentSetAmountAsIncVat()
     {
         $config = ConfigurationService::getDefaultConfig();
-        $campaign = $this->getGetPaymentPlanParamsForTesting();
         $request = WebPay::createOrder($config)
             ->addOrderRow(
                 WebPayItem::orderRow()
@@ -236,7 +230,7 @@ class PaymentPlanTest extends \PHPUnit\Framework\TestCase
             ->addCustomerDetails(TestUtil::createIndividualCustomer("SE"))
             ->setCountryCode("SE")
             ->setOrderDate("2012-12-12")
-            ->usePaymentPlanPayment($campaign)
+            ->usePaymentPlanPayment('111111')
             ->prepareRequest();
 
         $this->assertEquals(123.9876, $request->request->CreateOrderInformation->OrderRows['OrderRow'][0]->PricePerUnit);
@@ -248,7 +242,6 @@ class PaymentPlanTest extends \PHPUnit\Framework\TestCase
     public function testFeeSetAsIncVatAndVatPercentWhenPriceSetAsIncVatAndVatPercent()
     {
         $config = ConfigurationService::getDefaultConfig();
-        $campaign = $this->getGetPaymentPlanParamsForTesting();
         $request = WebPay::createOrder($config)
             ->addOrderRow(
                 WebPayItem::orderRow()
@@ -267,7 +260,7 @@ class PaymentPlanTest extends \PHPUnit\Framework\TestCase
             ->addCustomerDetails(TestUtil::createIndividualCustomer("SE"))
             ->setCountryCode("SE")
             ->setOrderDate("2012-12-12")
-            ->usePaymentPlanPayment($campaign)
+            ->usePaymentPlanPayment('111111')
             ->prepareRequest();
 
         $this->assertEquals(123.9876, $request->request->CreateOrderInformation->OrderRows['OrderRow'][0]->PricePerUnit);
@@ -284,7 +277,6 @@ class PaymentPlanTest extends \PHPUnit\Framework\TestCase
     public function testDiscountSetAsIncVatWhenPriceSetAsIncVatAndVatPercent()
     {
         $config = ConfigurationService::getDefaultConfig();
-        $campaign = $this->getGetPaymentPlanParamsForTesting();
         $request = WebPay::createOrder($config)
             ->addOrderRow(
                 WebPayItem::orderRow()
@@ -296,7 +288,7 @@ class PaymentPlanTest extends \PHPUnit\Framework\TestCase
             ->addCustomerDetails(TestUtil::createIndividualCustomer("SE"))
             ->setCountryCode("SE")
             ->setOrderDate("2012-12-12")
-            ->usePaymentPlanPayment($campaign)
+            ->usePaymentPlanPayment('111111')
             ->prepareRequest();
         $this->assertEquals(123.9876, $request->request->CreateOrderInformation->OrderRows['OrderRow'][0]->PricePerUnit);
         $this->assertEquals(24, $request->request->CreateOrderInformation->OrderRows['OrderRow'][0]->VatPercent);
@@ -312,7 +304,6 @@ class PaymentPlanTest extends \PHPUnit\Framework\TestCase
     public function testDiscountSetAsExVatAndVatPercentWhenPriceSetAsIncVatAndVatPercent()
     {
         $config = ConfigurationService::getDefaultConfig();
-        $campaign = $this->getGetPaymentPlanParamsForTesting();
         $request = WebPay::createOrder($config)
             ->addOrderRow(
                 WebPayItem::orderRow()
@@ -326,7 +317,7 @@ class PaymentPlanTest extends \PHPUnit\Framework\TestCase
             ->addCustomerDetails(TestUtil::createIndividualCustomer("SE"))
             ->setCountryCode("SE")
             ->setOrderDate("2012-12-12")
-            ->usePaymentPlanPayment($campaign)
+            ->usePaymentPlanPayment('111111')
             ->prepareRequest();
         $this->assertEquals(123.9876, $request->request->CreateOrderInformation->OrderRows['OrderRow'][0]->PricePerUnit);
         $this->assertEquals(24, $request->request->CreateOrderInformation->OrderRows['OrderRow'][0]->VatPercent);
@@ -342,7 +333,6 @@ class PaymentPlanTest extends \PHPUnit\Framework\TestCase
     public function testDiscountPercentAndVatPercentWhenPriceSetAsIncVatAndVatPercent()
     {
         $config = ConfigurationService::getDefaultConfig();
-        $campaign = $this->getGetPaymentPlanParamsForTesting();
         $request = WebPay::createOrder($config)
             ->addOrderRow(
                 WebPayItem::orderRow()
