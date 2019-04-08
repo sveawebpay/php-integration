@@ -71,6 +71,7 @@
     * [9.1 Helper::paymentPlanPricePerMonth()](#i9-1)
     * [9.2 Request validateOrder(), prepareRequest(), getRequestTotals() methods](#i9-2)
     * [9.3 Logging Raw HTTP Requests](#i9-3)
+    * [9.4 Peppol-ID validation](#i9-4)
 * [10. Frequently Asked Questions](#i10)
     * [10.1 Supported currencies](#i10-1)
     * [10.2 Other payment method credentials](#i10-2)
