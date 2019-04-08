@@ -2271,7 +2271,7 @@ Which is not what we want.
 The correct way to do this is to send the order using the total amount incl. vat calculated from the item price ex. vat, and then add a discount row, that way the item row amount ex. vat and vat amount is correct, as well as the total amount charged to the customer:
 
 ```php
-<?php>
+<?php
 $order = WebPay::createOrder($config)
           ->addOrderRow(
               WebPayItem::orderRow()
@@ -2308,7 +2308,7 @@ You're able to fetch raw http logs to help debug problems that might occur, to e
 
 Request:
 ```php
-<?php>
+<?php
 $svea_order_id = 1048731;
 
 $svea_query = WebPayAdmin::queryOrder(ConfigurationService::getTestConfig())
