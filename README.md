@@ -2323,6 +2323,31 @@ The logs will then be defined in the response.
 
 Note: This will only work with requests sent by SOAP.
 
+### 9.4 Peppol-ID validation
+
+You can check whether a string is a valid Peppol-ID by calling the Helper function isValidPeppolId()
+
+Example:
+```php
+<?php
+require_once 'vendor/autoload.php';
+
+use Svea\WebPay\Helper\Helper;
+
+$var = '1234:abc1234';
+
+if(Helper::isValidPeppolId($var))
+{
+    // Valid Peppol-ID
+}
+else
+{
+    // Not Valid Peppol-ID    
+}
+
+
+```
+
 ## 10. Frequently Asked Questions <a name="i10"></a>
 
 ### 10.1 Supported currencies <a name="i10-1"></a>
