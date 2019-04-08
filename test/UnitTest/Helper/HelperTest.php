@@ -554,4 +554,25 @@ class HelperTest extends \PHPUnit\Framework\TestCase
         $var = Helper::isCardPayCurrency("XXX");
         $this->assertEquals(false, $var);
     }
+
+    function test_validPeppolId()
+    {
+        $var = Helper::isValidPeppolId("1234:abc12");
+        $this->assertEquals(true, $var);
+    }
+
+    function test_invalidPeppolId()
+    {
+        $var = Helper::isValidPeppolId("abcd:1234"); // First 4 characters must be numeric
+        $var1 = Helper::isValidPeppolId("1234abc12"); // Fifth character must be ':'.
+        $var2 = Helper::isValidPeppolId("1234:ab.c12"); // Rest of the characters must be alphanumeric
+        $var3 = Helper::isValidPeppolId("1234:abc12abc12abc12abc12abc12abc12abc12abc12abc12abc12abc12abc12abc12abc12abc12abc12abc12"); // String cannot be longer 55 characters
+        $var4 = Helper::isValidPeppolId("1234:"); // String must be longer than 5 characters
+
+        $this->assertEquals(false, $var);
+        $this->assertEquals(false, $var1);
+        $this->assertEquals(false, $var2);
+        $this->assertEquals(false, $var3);
+        $this->assertEquals(false, $var4);
+    }
 }
