@@ -168,23 +168,19 @@ class Helper
         return $properties_json;
     }
 
-    /**
-     * Parses the src/docs/info.json file and returns associative array containing Svea integration package (library) name, version et al.
-     * array contains keys "library_name" and "library_version"
-     */
     static function getSveaLibraryProperties()
     {
-        /*if (!defined('SVEA_REQUEST_DIR')) {
+        if (!defined('SVEA_REQUEST_DIR')) {
             define('SVEA_REQUEST_DIR', dirname(__FILE__));
         }
-        $info_json = file_get_contents(SVEA_REQUEST_DIR . "/docs/info.json");
-        $library_properties = json_decode($info_json, true);
-        */
+        $composerFile = file_get_contents(SVEA_REQUEST_DIR . "/../../composer.json");
+        $composerFile= json_decode($composerFile, true);
+
 
         // @todo change this to properly defined information
         $library_properties = array(
             'library_name' => 'PHP Integration Package',
-            'library_version' => '3.8.1',
+            'library_version' => $composerFile['version'],
         );
 
         return $library_properties;
