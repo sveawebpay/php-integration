@@ -64,6 +64,7 @@
     * [7.9 WebPayAdmin::updateOrder()](#i7-9)
     * [7.10 WebPayAdmin::creditAmount()](#i7-10)
     * [7.11 WebPayAdmin::creditOrderRows()](#i7-11)
+    * [7.12 WebPayAdmin::cancelRecurSubscription()](#i7-12)
 * [8. SveaResponse and response classes](#i8)
     * [8.1. Parsing an asynchronous service response](#i8-1)
     * [8.2. Response accepted and result code](#i8-2)
@@ -2143,7 +2144,23 @@ $creditOrderRowsBuilder = WebPayAdmin::creditOrderRows($testConfig)
     $response = $creditOrderRowsBuilder->creditCheckoutOrderWithNewOrderRow()->doRequest();
 ...
 ```
-    
+
+### 7.12 WebPayAdmin::cancelRecurSubscription() <a name="i7-12"></a>
+WebPayAdmin::cancelRecurSubscription() is used to inactive an existing recur subscription so that no more recurs can be made on it.
+
+[See full examples](example/cardorder_recur/cancel_recur.php)
+
+```php
+<?php
+$config = ConfigurationService::getTestConfig();
+
+$request = WebpayAdmin::cancelRecurSubscription($config)
+        ->setCountryCode("SE")
+        ->setSubscriptionId("123456")
+        ->cancelRecurSubscription()
+        ->doRequest();
+```
+
 [Back to top](#index)
 
 ## 8. SveaResponse and response classes <a name="i8"></a>
