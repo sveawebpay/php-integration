@@ -64,6 +64,7 @@
     * [7.9 WebPayAdmin::updateOrder()](#i7-9)
     * [7.10 WebPayAdmin::creditAmount()](#i7-10)
     * [7.11 WebPayAdmin::creditOrderRows()](#i7-11)
+    * [7.12 WebPayAdmin::cancelRecurSubscription()](#i7-12)
 * [8. SveaResponse and response classes](#i8)
     * [8.1. Parsing an asynchronous service response](#i8-1)
     * [8.2. Response accepted and result code](#i8-2)
@@ -71,6 +72,7 @@
     * [9.1 Helper::paymentPlanPricePerMonth()](#i9-1)
     * [9.2 Request validateOrder(), prepareRequest(), getRequestTotals() methods](#i9-2)
     * [9.3 Logging Raw HTTP Requests](#i9-3)
+    * [9.4 Peppol-ID validation](#i9-4)
 * [10. Frequently Asked Questions](#i10)
     * [10.1 Supported currencies](#i10-1)
     * [10.2 Other payment method credentials](#i10-2)
@@ -2142,7 +2144,23 @@ $creditOrderRowsBuilder = WebPayAdmin::creditOrderRows($testConfig)
     $response = $creditOrderRowsBuilder->creditCheckoutOrderWithNewOrderRow()->doRequest();
 ...
 ```
-    
+
+### 7.12 WebPayAdmin::cancelRecurSubscription() <a name="i7-12"></a>
+WebPayAdmin::cancelRecurSubscription() is used to inactive an existing recur subscription so that no more recurs can be made on it.
+
+[See full examples](example/cardorder_recur/cancel_recur.php)
+
+```php
+<?php
+$config = ConfigurationService::getTestConfig();
+
+$request = WebpayAdmin::cancelRecurSubscription($config)
+        ->setCountryCode("SE")
+        ->setSubscriptionId("123456")
+        ->cancelRecurSubscription()
+        ->doRequest();
+```
+
 [Back to top](#index)
 
 ## 8. SveaResponse and response classes <a name="i8"></a>
@@ -2271,7 +2289,7 @@ Which is not what we want.
 The correct way to do this is to send the order using the total amount incl. vat calculated from the item price ex. vat, and then add a discount row, that way the item row amount ex. vat and vat amount is correct, as well as the total amount charged to the customer:
 
 ```php
-<?php>
+<?php
 $order = WebPay::createOrder($config)
           ->addOrderRow(
               WebPayItem::orderRow()
@@ -2308,7 +2326,7 @@ You're able to fetch raw http logs to help debug problems that might occur, to e
 
 Request:
 ```php
-<?php>
+<?php
 $svea_order_id = 1048731;
 
 $svea_query = WebPayAdmin::queryOrder(ConfigurationService::getTestConfig())
@@ -2322,6 +2340,31 @@ $svea_query = WebPayAdmin::queryOrder(ConfigurationService::getTestConfig())
 The logs will then be defined in the response.
 
 Note: This will only work with requests sent by SOAP.
+
+### 9.4 Peppol-ID validation
+
+You can check whether a string is a valid Peppol-ID by calling the Helper function isValidPeppolId()
+
+Example:
+```php
+<?php
+require_once 'vendor/autoload.php';
+
+use Svea\WebPay\Helper\Helper;
+
+$var = '1234:abc1234';
+
+if(Helper::isValidPeppolId($var))
+{
+    // Valid Peppol-ID
+}
+else
+{
+    // Not Valid Peppol-ID    
+}
+
+
+```
 
 ## 10. Frequently Asked Questions <a name="i10"></a>
 

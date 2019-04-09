@@ -490,4 +490,20 @@ class WebPayAdmin
         return new QueryTaskInfoBuilder($config);
     }
 
+    /**
+     * The Svea\WebPay\WebPayAdmin::cancelRecurSubscription entry point method is used to invalidate an active subscriptionId making it impossible to do new recurs.
+     *
+     * @param ConfigurationProvider $config instance implementing Svea\WebPay\Config\ConfigurationProvider
+     * @return \Svea\WebPay\BuildOrder\CancelRecurSubscriptionBuilder
+     * @throws \Svea\WebPay\BuildOrder\Validator\ValidationException
+     */
+    public static function cancelRecurSubscription($config = null)
+    {
+        if ($config == null) {
+            self::throwMissingConfigException();
+        }
+
+        return new BuildOrder\CancelRecurSubscriptionBuilder($config);
+    }
+
 }
