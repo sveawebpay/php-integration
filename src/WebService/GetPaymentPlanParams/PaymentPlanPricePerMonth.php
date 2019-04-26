@@ -45,7 +45,7 @@ class PaymentPlanPricePerMonth
             foreach ($params->campaignCodes as $key => $value) {
                 if ($ignoreMaxAndMinFlag || ($price >= $value->fromAmount && $price <= $value->toAmount)) {
                     $pair = array();
-                    $pair['pricePerMonth'] = $price * $value->monthlyAnnuityFactor + $value->notificationFee;
+                    $pair['pricePerMonth'] = ($value['initialFee'] + (ceil($price * $value['monthlyAnnuityFactor']) + $value['notificationFee']) * $value['contractLengthInMonths']) / $value['contractLengthInMonths'];
                     foreach ($value as $key => $val) {
                         if ($key == "campaignCode") {
                             $pair[$key] = $val;
