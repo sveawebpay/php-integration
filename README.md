@@ -617,6 +617,7 @@ Example for populating order with required fields.
         ->setPushUri('https://svea.com/push.aspx?sid=123&svea_order=123') //required
         ->setTermsUri('http://localhost:51898/terms') //required
         ->setValidationCallbackUri('http://localhost:51898/validation-callback') // optional
+        ->addIdentityFlag(\Svea\WebPay\Checkout\Model\IdentityFlags::HIDENOTYOU) // optional, hides certain elements in the iframe
         ->setLocale('sv-Se'); // required
   ```
 

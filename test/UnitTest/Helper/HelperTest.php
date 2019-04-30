@@ -7,6 +7,8 @@ use Svea\WebPay\WebPayItem;
 use Svea\WebPay\Helper\Helper;
 use Svea\WebPay\Test\TestUtil;
 use Svea\WebPay\Config\ConfigurationService;
+use Svea\WebPay\WebService\GetPaymentPlanParams\GetPaymentPlanParams;
+use Svea\WebPay\WebService\WebServiceResponse\PaymentPlanParamsResponse;
 
 class HelperTest extends \PHPUnit\Framework\TestCase
 {
@@ -434,5 +436,160 @@ class HelperTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(false, $var2);
         $this->assertEquals(false, $var3);
         $this->assertEquals(false, $var4);
+    }
+
+    function test_calculateCorrectPricePerMonth()
+    {
+        $price = 10000;
+
+        $params = new GetPaymentPlanParams(ConfigurationService::getDefaultConfig());
+        $params->campaignCodes = array (
+                    0 =>
+                        array(
+                            'campaignCode' => 213060,
+                            'description' => 'Dela upp betalningen på 60 månader',
+                            'paymentPlanType' => 'Standard',
+                            'contractLengthInMonths' => 60,
+                            'monthlyAnnuityFactor' => '0.02555',
+                            'initialFee' => '100',
+                            'notificationFee' => '29',
+                            'interestRatePercent' => '16.75',
+                            'numberOfInterestFreeMonths' => 3,
+                            'numberOfPaymentFreeMonths' => 3,
+                            'fromAmount' => '1000',
+                            'toAmount' => '50000',
+                        ),
+                    1 =>
+                        array(
+                            'campaignCode' => 222065,
+                            'description' => 'Vårkampanj',
+                            'paymentPlanType' => 'InterestAndAmortizationFree',
+                            'contractLengthInMonths' => 3,
+                            'monthlyAnnuityFactor' => '1',
+                            'initialFee' => '0',
+                            'notificationFee' => '0',
+                            'interestRatePercent' => '0',
+                            'numberOfInterestFreeMonths' => 3,
+                            'numberOfPaymentFreeMonths' => 3,
+                            'fromAmount' => '120',
+                            'toAmount' => '30000',
+                        ),
+                    2 =>
+                        array(
+                            'campaignCode' => 222066,
+                            'description' => 'Sommarkampanj',
+                            'paymentPlanType' => 'InterestAndAmortizationFree',
+                            'contractLengthInMonths' => 3,
+                            'monthlyAnnuityFactor' => '1',
+                            'initialFee' => '0',
+                            'notificationFee' => '0',
+                            'interestRatePercent' => '0',
+                            'numberOfInterestFreeMonths' => 3,
+                            'numberOfPaymentFreeMonths' => 3,
+                            'fromAmount' => '120',
+                            'toAmount' => '30000',
+                        ),
+                    3 =>
+                        array(
+                            'campaignCode' => 223060,
+                            'description' => 'Köp nu betala om 3 månader (räntefritt)',
+                            'paymentPlanType' => 'InterestAndAmortizationFree',
+                            'contractLengthInMonths' => 3,
+                            'monthlyAnnuityFactor' => '1',
+                            'initialFee' => '0',
+                            'notificationFee' => '29',
+                            'interestRatePercent' => '0',
+                            'numberOfInterestFreeMonths' => 3,
+                            'numberOfPaymentFreeMonths' => 3,
+                            'fromAmount' => '1000',
+                            'toAmount' => '50000',
+                        ),
+                    4 =>
+                        array(
+                            'campaignCode' => 223065,
+                            'description' => 'Black Friday - Cyber Monday',
+                            'paymentPlanType' => 'InterestAndAmortizationFree',
+                            'contractLengthInMonths' => 3,
+                            'monthlyAnnuityFactor' => '1',
+                            'initialFee' => '0',
+                            'notificationFee' => '0',
+                            'interestRatePercent' => '0',
+                            'numberOfInterestFreeMonths' => 3,
+                            'numberOfPaymentFreeMonths' => 3,
+                            'fromAmount' => '120',
+                            'toAmount' => '30000',
+                        ),
+                    5 =>
+                        array(
+                            'campaignCode' => 223066,
+                            'description' => 'Julkampanj',
+                            'paymentPlanType' => 'InterestAndAmortizationFree',
+                            'contractLengthInMonths' => 3,
+                            'monthlyAnnuityFactor' => '1',
+                            'initialFee' => '0',
+                            'notificationFee' => '0',
+                            'interestRatePercent' => '0',
+                            'numberOfInterestFreeMonths' => 3,
+                            'numberOfPaymentFreeMonths' => 3,
+                            'fromAmount' => '120',
+                            'toAmount' => '30000',
+                        ),
+                    6 =>
+                        array(
+                            'campaignCode' => 310012,
+                            'description' => 'Dela upp betalningen på 12 månader (räntefritt)',
+                            'paymentPlanType' => 'InterestFree',
+                            'contractLengthInMonths' => 12,
+                            'monthlyAnnuityFactor' => '0.08333',
+                            'initialFee' => '295',
+                            'notificationFee' => '35',
+                            'interestRatePercent' => '0',
+                            'numberOfInterestFreeMonths' => 12,
+                            'numberOfPaymentFreeMonths' => 0,
+                            'fromAmount' => '1000',
+                            'toAmount' => '30000',
+                        ),
+                    7 =>
+                        array(
+                            'campaignCode' => 410012,
+                            'description' => 'Dela upp betalningen på 12 månader',
+                            'paymentPlanType' => 'Standard',
+                            'contractLengthInMonths' => 12,
+                            'monthlyAnnuityFactor' => '0.09259',
+                            'initialFee' => '0',
+                            'notificationFee' => '29',
+                            'interestRatePercent' => '19.9',
+                            'numberOfInterestFreeMonths' => 0,
+                            'numberOfPaymentFreeMonths' => 0,
+                            'fromAmount' => '100',
+                            'toAmount' => '30000',
+                        ),
+                    8 =>
+                        array(
+                            'campaignCode' => 410024,
+                            'description' => 'Dela upp betalningen på 24 månader',
+                            'paymentPlanType' => 'Standard',
+                            'contractLengthInMonths' => 24,
+                            'monthlyAnnuityFactor' => '0.04684',
+                            'initialFee' => '350',
+                            'notificationFee' => '35',
+                            'interestRatePercent' => '11.5',
+                            'numberOfInterestFreeMonths' => 0,
+                            'numberOfPaymentFreeMonths' => 0,
+                            'fromAmount' => '1000',
+                            'toAmount' => '150000',
+                        ));
+
+        $arr = Helper::paymentPlanPricePerMonth($price, $params, true);
+
+        $this->assertEquals(286.66666666667, $arr->values[0]['pricePerMonth']);
+        $this->assertEquals(10000.0, $arr->values[1]['pricePerMonth']);
+        $this->assertEquals(10000.0, $arr->values[2]['pricePerMonth']);
+        $this->assertEquals(10029.0, $arr->values[3]['pricePerMonth']);
+        $this->assertEquals(10000.0, $arr->values[4]['pricePerMonth']);
+        $this->assertEquals(10000.0, $arr->values[5]['pricePerMonth']);
+        $this->assertEquals(893.58333333333, $arr->values[6]['pricePerMonth']);
+        $this->assertEquals(955.0, $arr->values[7]['pricePerMonth']);
+        $this->assertEquals(518.58333333333, $arr->values[8]['pricePerMonth']);
     }
 }
