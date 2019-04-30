@@ -4,6 +4,7 @@ namespace Svea\WebPay\Checkout;
 
 use Svea\WebPay\Checkout\Helper\CheckoutOrderBuilder;
 use Svea\WebPay\Checkout\Model\PresetValue;
+use Svea\WebPay\Constant\IdentityFlags;
 
 /**
  * Class CheckoutOrderEntry
@@ -274,5 +275,18 @@ class CheckoutOrderEntry
     public function getCheckoutOrderBuilder()
     {
         return $this->checkoutOrderBuilder;
+    }
+
+    /**
+     * Add IdentityFlag to the list of IdentityFlag
+     *
+     * @param string $identityFlag
+     * @return $this
+     */
+    public function addIdentityFlag($identityFlag)
+    {
+        $this->checkoutOrderBuilder->addIdentityFlag($identityFlag);
+
+        return $this;
     }
 }

@@ -33,6 +33,8 @@ class CreateOrderValidator extends OrderValidator
 
         $errors = $this->validatePartnerKey($order, $errors);
 
+        $errors = $this->validateIdentityFlags($order, $errors);
+
         return $errors;
     }
 
@@ -102,6 +104,19 @@ class CreateOrderValidator extends OrderValidator
     {
         $errors = parent::validateOrderRows($order, $errors);
         $errors = $this->validateCheckoutOrderRows($order, $errors);
+
+        return $errors;
+    }
+
+    /**
+     * @param CheckoutOrderBuilder $order
+     * @param array $errors
+     * @return array
+     */
+    private function validateIdentityFlags($order, $errors)
+    {
+        $identityFlagValidator = new IdentityFlagValidator();
+        $errors = $identityFlagValidator->validate($order->getIdentityFlags(), $errors);
 
         return $errors;
     }

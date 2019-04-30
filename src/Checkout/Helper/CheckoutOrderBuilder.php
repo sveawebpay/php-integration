@@ -3,6 +3,7 @@
 namespace Svea\WebPay\Checkout\Helper;
 
 use Svea\WebPay\BuildOrder\OrderBuilder;
+use Svea\WebPay\Checkout\Model\IdentityFlags;
 use Svea\WebPay\Checkout\Model\MerchantSettings;
 use Svea\WebPay\Checkout\Model\PresetValue;
 use Svea\WebPay\Checkout\Service\GetOrderService;
@@ -43,6 +44,11 @@ class CheckoutOrderBuilder extends OrderBuilder
      * @var string $partnerKey
      */
     protected $partnerKey;
+
+    /**
+     * @var IdentityFlags []
+     */
+    protected $identityFlags = array();
 
     /**
      * CheckoutOrderBuilder constructor.
@@ -302,5 +308,28 @@ class CheckoutOrderBuilder extends OrderBuilder
     public function getPartnerKey()
     {
         return $this->partnerKey;
+    }
+
+    /**
+     * Return a list of IdentityFlags
+     *
+     * @return IdentityFlags []
+     */
+    public function getIdentityFlags()
+    {
+        return $this->identityFlags;
+    }
+
+    /**
+     * Add IdentityFlag to the list of IdentityFlags
+     *
+     * @param string $identityFlag
+     * @return $this
+     */
+    public function addIdentityFlag($identityFlag)
+    {
+        $this->identityFlags [] = $identityFlag;
+
+        return $this;
     }
 }
