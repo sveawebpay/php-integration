@@ -303,11 +303,12 @@ class Helper
      * @param float $price
      * @param $paymentPlanParamsResponseObject
      * @param boolean $ignoreMaxAndMinFlag ; optional, defaults to false
+     * @param int $decimals ; optional, defaults to 0
      * @return PaymentPlanPricePerMonth
      */
-    public static function paymentPlanPricePerMonth($price, $paymentPlanParamsResponseObject, $ignoreMaxAndMinFlag = false)
+    public static function paymentPlanPricePerMonth($price, $paymentPlanParamsResponseObject, $ignoreMaxAndMinFlag = false, $decimals = 0)
     {
-        return new PaymentPlanPricePerMonth($price, $paymentPlanParamsResponseObject, $ignoreMaxAndMinFlag);
+        return new PaymentPlanPricePerMonth($price, $paymentPlanParamsResponseObject, $ignoreMaxAndMinFlag, $decimals);
     }
 
     public static function getCardPayCurrencies()

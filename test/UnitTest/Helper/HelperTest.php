@@ -593,14 +593,179 @@ class HelperTest extends \PHPUnit\Framework\TestCase
 
         $arr = Helper::paymentPlanPricePerMonth($price, $params, true);
 
-        $this->assertEquals(286.66666666667, $arr->values[0]['pricePerMonth']);
+        $this->assertEquals(287, $arr->values[0]['pricePerMonth']);
         $this->assertEquals(10000.0, $arr->values[1]['pricePerMonth']);
         $this->assertEquals(10000.0, $arr->values[2]['pricePerMonth']);
         $this->assertEquals(10029.0, $arr->values[3]['pricePerMonth']);
         $this->assertEquals(10000.0, $arr->values[4]['pricePerMonth']);
         $this->assertEquals(10000.0, $arr->values[5]['pricePerMonth']);
-        $this->assertEquals(893.58333333333, $arr->values[6]['pricePerMonth']);
-        $this->assertEquals(955.0, $arr->values[7]['pricePerMonth']);
-        $this->assertEquals(518.58333333333, $arr->values[8]['pricePerMonth']);
+        $this->assertEquals(894, $arr->values[6]['pricePerMonth']);
+        $this->assertEquals(955, $arr->values[7]['pricePerMonth']);
+        $this->assertEquals(519, $arr->values[8]['pricePerMonth']);
+    }
+
+    function test_calculateCorrectPricePerMonthWithDecimals()
+    {
+        $price = 10000;
+
+        $response = (object) array(
+            "GetPaymentPlanParamsEuResult" => (object)array (
+                "Accepted" => true,
+                "ResultCode" => 0,
+                "CampaignCodes" => (object)array(
+                    "CampaignCodeInfo" => array(
+                        0 =>
+                            (object)array(
+                                "CampaignCode" => 213060,
+                                "Description" => "Dela upp betalningen på 60 månader",
+                                "PaymentPlanType" => "Standard",
+                                "ContractLengthInMonths" => 60,
+                                "MonthlyAnnuityFactor" => '0.02555',
+                                "InitialFee" => '100',
+                                "NotificationFee" => '29',
+                                "InterestRatePercent" => '16.75',
+                                "NumberOfInterestFreeMonths" => 3,
+                                "NumberOfPaymentFreeMonths" => 3,
+                                "FromAmount" => '1000',
+                                "ToAmount" => '50000',
+                            ),
+                        1 =>
+                            (object)array(
+                                'CampaignCode' => 222065,
+                                'Description' => 'Vårkampanj',
+                                'PaymentPlanType' => 'InterestAndAmortizationFree',
+                                'ContractLengthInMonths' => 3,
+                                'MonthlyAnnuityFactor' => '1',
+                                'InitialFee' => '0',
+                                'NotificationFee' => '0',
+                                'InterestRatePercent' => '0',
+                                'NumberOfInterestFreeMonths' => 3,
+                                'NumberOfPaymentFreeMonths' => 3,
+                                'FromAmount' => '120',
+                                'ToAmount' => '30000',
+                            ),
+                        2 =>
+                            (object)array(
+                                'CampaignCode' => 222066,
+                                'Description' => 'Sommarkampanj',
+                                'PaymentPlanType' => 'InterestAndAmortizationFree',
+                                'ContractLengthInMonths' => 3,
+                                'MonthlyAnnuityFactor' => '1',
+                                'InitialFee' => '0',
+                                'NotificationFee' => '0',
+                                'InterestRatePercent' => '0',
+                                'NumberOfInterestFreeMonths' => 3,
+                                'NumberOfPaymentFreeMonths' => 3,
+                                'FromAmount' => '120',
+                                'ToAmount' => '30000',
+                            ),
+                        3 =>
+                            (object)array(
+                                'CampaignCode' => 223060,
+                                'Description' => 'Köp nu betala om 3 månader (räntefritt)',
+                                'PaymentPlanType' => 'InterestAndAmortizationFree',
+                                'ContractLengthInMonths' => 3,
+                                'MonthlyAnnuityFactor' => '1',
+                                'InitialFee' => '0',
+                                'NotificationFee' => '29',
+                                'InterestRatePercent' => '0',
+                                'NumberOfInterestFreeMonths' => 3,
+                                'NumberOfPaymentFreeMonths' => 3,
+                                'FromAmount' => '1000',
+                                'ToAmount' => '50000',
+                            ),
+                        4 =>
+                            (object)array(
+                                'CampaignCode' => 223065,
+                                'Description' => 'Black Friday - Cyber Monday',
+                                'PaymentPlanType' => 'InterestAndAmortizationFree',
+                                'ContractLengthInMonths' => 3,
+                                'MonthlyAnnuityFactor' => '1',
+                                'InitialFee' => '0',
+                                'NotificationFee' => '0',
+                                'InterestRatePercent' => '0',
+                                'NumberOfInterestFreeMonths' => 3,
+                                'NumberOfPaymentFreeMonths' => 3,
+                                'FromAmount' => '120',
+                                'ToAmount' => '30000',
+                            ),
+                        5 =>
+                            (object)array(
+                                'CampaignCode' => 223066,
+                                'Description' => 'Julkampanj',
+                                'PaymentPlanType' => 'InterestAndAmortizationFree',
+                                'ContractLengthInMonths' => 3,
+                                'MonthlyAnnuityFactor' => '1',
+                                'InitialFee' => '0',
+                                'NotificationFee' => '0',
+                                'InterestRatePercent' => '0',
+                                'NumberOfInterestFreeMonths' => 3,
+                                'NumberOfPaymentFreeMonths' => 3,
+                                'FromAmount' => '120',
+                                'ToAmount' => '30000',
+                            ),
+                        6 =>
+                            (object)array(
+                                'CampaignCode' => 310012,
+                                'Description' => 'Dela upp betalningen på 12 månader (räntefritt)',
+                                'PaymentPlanType' => 'InterestFree',
+                                'ContractLengthInMonths' => 12,
+                                'MonthlyAnnuityFactor' => '0.08333',
+                                'InitialFee' => '295',
+                                'NotificationFee' => '35',
+                                'InterestRatePercent' => '0',
+                                'NumberOfInterestFreeMonths' => 12,
+                                'NumberOfPaymentFreeMonths' => 0,
+                                'FromAmount' => '1000',
+                                'ToAmount' => '30000',
+                            ),
+                        7 =>
+                            (object)array(
+                                'CampaignCode' => 410012,
+                                'Description' => 'Dela upp betalningen på 12 månader',
+                                'PaymentPlanType' => 'Standard',
+                                'ContractLengthInMonths' => 12,
+                                'MonthlyAnnuityFactor' => '0.09259',
+                                'InitialFee' => '0',
+                                'NotificationFee' => '29',
+                                'InterestRatePercent' => '19.9',
+                                'NumberOfInterestFreeMonths' => 0,
+                                'NumberOfPaymentFreeMonths' => 0,
+                                'FromAmount' => '100',
+                                'ToAmount' => '30000',
+                            ),
+                        8 =>
+                            (object)array(
+                                'CampaignCode' => 410024,
+                                'Description' => 'Dela upp betalningen på 24 månader',
+                                'PaymentPlanType' => 'Standard',
+                                'ContractLengthInMonths' => 24,
+                                'MonthlyAnnuityFactor' => '0.04684',
+                                'InitialFee' => '350',
+                                'NotificationFee' => '35',
+                                'InterestRatePercent' => '11.5',
+                                'NumberOfInterestFreeMonths' => 0,
+                                'NumberOfPaymentFreeMonths' => 0,
+                                'FromAmount' => '1000',
+                                'ToAmount' => '150000',
+                            )
+                    )
+                )
+            )
+        );
+
+        $params = new PaymentPlanParamsResponse($response, false);
+
+        $arr = Helper::paymentPlanPricePerMonth($price, $params, true, 2);
+
+        $this->assertEquals(286.75, $arr->values[0]['pricePerMonth']);
+        $this->assertEquals(10000.0, $arr->values[1]['pricePerMonth']);
+        $this->assertEquals(10000.0, $arr->values[2]['pricePerMonth']);
+        $this->assertEquals(10029.0, $arr->values[3]['pricePerMonth']);
+        $this->assertEquals(10000.0, $arr->values[4]['pricePerMonth']);
+        $this->assertEquals(10000.0, $arr->values[5]['pricePerMonth']);
+        $this->assertEquals(893.58, $arr->values[6]['pricePerMonth']);
+        $this->assertEquals(955, $arr->values[7]['pricePerMonth']);
+        $this->assertEquals(518.58, $arr->values[8]['pricePerMonth']);
     }
 }

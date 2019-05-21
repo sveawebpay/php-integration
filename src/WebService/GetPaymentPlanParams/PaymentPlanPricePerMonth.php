@@ -28,24 +28,26 @@ class PaymentPlanPricePerMonth
      * @param $price
      * @param $params
      * @param bool $ignoreMaxAndMinFlag
+     * @param int decimals
      */
-    function __construct($price, $params, $ignoreMaxAndMinFlag = false)
+    function __construct($price, $params, $ignoreMaxAndMinFlag = false, $decimals = 0)
     {
-        $this->calculate($price, $params, $ignoreMaxAndMinFlag);
+        $this->calculate($price, $params, $ignoreMaxAndMinFlag, $decimals);
     }
 
     /**
      * @param $price
      * @param $params
      * @param $ignoreMaxAndMinFlag
+     * @param $decimals
      */
-    private function calculate($price, $params, $ignoreMaxAndMinFlag)
+    private function calculate($price, $params, $ignoreMaxAndMinFlag, $decimals)
     {
         if (!empty($params)) {
             foreach ($params->campaignCodes as $key => $value) {
                 if ($ignoreMaxAndMinFlag || ($price >= $value->fromAmount && $price <= $value->toAmount)) {
                     $pair = array();
-                    $pair['pricePerMonth'] = ($value->initialFee + (ceil($price * $value->monthlyAnnuityFactor) + $value->notificationFee) * $value->contractLengthInMonths) / $value->contractLengthInMonths;
+                    $pair['pricePerMonth'] = round(($value->initialFee + (ceil($price * $value->monthlyAnnuityFactor) + $value->notificationFee) * max(1, $value->contractLengthInMonths - $value->numberOfPaymentFreeMonths)) / max(1, $value->contractLengthInMonths - $value->numberOfPaymentFreeMonths), $decimals);
                     foreach ($value as $key => $val) {
                         if ($key == "campaignCode") {
                             $pair[$key] = $val;
