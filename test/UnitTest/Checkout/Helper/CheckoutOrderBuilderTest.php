@@ -96,4 +96,13 @@ class CheckoutOrderBuilderTest extends TestCase
         $this->assertEquals($this->order->getMerchantSettings()->getValidationCallbackUri(), $validationCallbackUri);
     }
 
+    /**
+     * @test
+     */
+    public function setMerchantData()
+    {
+        $merchantData = 'Newsletter:true';
+        $this->order->setMerchantData($merchantData);
+        $this->assertEquals($this->order->getMerchantData(), $merchantData);
+    }
 }

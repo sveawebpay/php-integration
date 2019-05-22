@@ -27,7 +27,8 @@ class CreateCheckoutServiceTest extends TestCase
             ->setConfirmationUri('http://localhost:51925/checkout/confirm')
             ->setPushUri('https://svea.com/push.aspx?sid=123&svea_order=123')
             ->setTermsUri('http://localhost:51898/terms')
-            ->setLocale('sv-Se');
+            ->setLocale('sv-Se')
+            ->setMerchantData("Test string");
 
         $this->service = new CreateOrderService($this->order);
     }
@@ -64,6 +65,7 @@ class CreateCheckoutServiceTest extends TestCase
         $this->assertArrayHasKey('locale', $formattedOrderRows);
         $this->assertArrayHasKey('merchantSettings', $formattedOrderRows);
         $this->assertArrayHasKey('presetValues', $formattedOrderRows);
+        $this->assertArrayHasKey('merchantData', $formattedOrderRows);
     }
 
     /**

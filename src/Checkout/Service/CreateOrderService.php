@@ -104,6 +104,8 @@ class CreateOrderService extends CheckoutService
             }
         }
 
+        $data['merchantData'] = $order->getMerchantData();
+
         return $data;
     }
 }

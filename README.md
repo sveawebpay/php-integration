@@ -618,6 +618,7 @@ Example for populating order with required fields.
         ->setTermsUri('http://localhost:51898/terms') //required
         ->setValidationCallbackUri('http://localhost:51898/validation-callback') // optional
         ->addIdentityFlag(\Svea\WebPay\Checkout\Model\IdentityFlags::HIDENOTYOU) // optional, hides certain elements in the iframe
+        ->setMerchantData("\"Newsletter\":\"true\"") // optional, sets data on order which is not displayed to end-user but is available in backend
         ->setLocale('sv-Se'); // required
   ```
 
@@ -652,6 +653,7 @@ By setting the setTemporaryReference you will also get the temporary reference i
         ->setDiscountPercent(20)
         ->setArticleNumber('123')
         ->setTemporaryReference('230') // optional. Checkout orders only. Will not be applicable for other order types.
+        ->setMerchantData('gray') // optional. Checkout orders only. Set data which is not displayed to end-users but is available in the backend
         ->setName('Fork');
 
     $secondBoughtItem = WebPayItem::orderRow()
@@ -661,6 +663,7 @@ By setting the setTemporaryReference you will also get the temporary reference i
         ->setDescription('Korv med bröd')
         ->setArticleNumber('321')
         ->setTemporaryReference('231') // optional. Checkout orders only. Will not be applicable for other order types.
+        ->setMerchantData('tasty') // optional. Checkout orders only. Set data which is not displayed to end-users but is available in the backend
         ->setName('Fork');
 
     $discountItem = WebPayItem::fixedDiscount()
@@ -728,6 +731,7 @@ Returns full order response.
         ->setDescription("Billy")
         ->setArticleNumber("123456789A")
         ->setTemporaryReference('230') // optional. Checkout orders only. Will not be applicable for other order types.
+        ->setMerchantData('hello') // optional. Checkout orders only. Set data which is not displayed to end-users but is available in the backend
         ->setName('Fork');
 
     $secondBoughtItem = WebPayItem::orderRow()
@@ -737,6 +741,7 @@ Returns full order response.
         ->setDescription("Korv med bröd")
         ->setArticleNumber("123456789B")
         ->setTemporaryReference('231') // optional. Checkout orders only. Will not be applicable for other order types.
+        ->setMerchantData('tasty') // optional. Checkout orders only. Set data which is not displayed to end-users but is available in the backend
         ->setName('Fork');
 
     $orderBuilder->addOrderRow($firstBoughtItem);

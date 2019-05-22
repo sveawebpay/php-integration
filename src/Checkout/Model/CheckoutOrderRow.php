@@ -53,6 +53,25 @@ class CheckoutOrderRow
     private $temporaryReference;
 
     /**
+     * @var $merchantData
+     */
+    private $merchantData;
+
+    /**
+     * @return string
+     */
+    public function getMerchantData()
+    {
+        return $this->merchantData;
+    }
+
+    public function setMerchantData($merchantData)
+    {
+        $this->merchantData = $merchantData;
+        return $this;
+    }
+
+    /**
      * @return string
      */
     public function getArticleNumber()

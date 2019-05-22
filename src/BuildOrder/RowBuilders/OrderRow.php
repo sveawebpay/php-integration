@@ -65,6 +65,11 @@ class OrderRow
     public $vatDiscount = 0;
 
     /**
+     * @var string $merchantData
+     */
+    public $merchantData;
+
+    /**
      * Optional
      * @param string $articleNumberAsString
      * @return $this
@@ -113,6 +118,20 @@ class OrderRow
     public function setTemporaryReference($temporaryReference)
     {
         $this->temporaryReference = $temporaryReference;
+        return $this;
+    }
+
+    /**
+     * Optional -   Can be used when creating or updating an order.
+     *              The returned rows will have their corresponding merchant data as they were given in the in-data.
+     *              It will be stored by Svea and will be returned in GetOrder.
+     *              Checkout orders only. Will not be applicable for other order types.
+     * @param  $merchantData
+     * @return $this
+     */
+    public function setMerchantData($merchantData)
+    {
+        $this->merchantData = $merchantData;
         return $this;
     }
 

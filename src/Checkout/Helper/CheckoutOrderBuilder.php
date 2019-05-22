@@ -51,6 +51,11 @@ class CheckoutOrderBuilder extends OrderBuilder
     protected $identityFlags = array();
 
     /**
+     * @var string $merchantData
+     */
+    protected $merchantData;
+
+    /**
      * CheckoutOrderBuilder constructor.
      * @param \Svea\WebPay\Config\ConfigurationProvider $config
      */
@@ -331,5 +336,16 @@ class CheckoutOrderBuilder extends OrderBuilder
         $this->identityFlags [] = $identityFlag;
 
         return $this;
+    }
+
+    public function setMerchantData($merchantData)
+    {
+        $this->merchantData = $merchantData;
+        return $this;
+    }
+
+    public function getMerchantData()
+    {
+        return $this->merchantData;
     }
 }

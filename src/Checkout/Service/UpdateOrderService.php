@@ -65,7 +65,7 @@ class UpdateOrderService extends CheckoutService
         }
 
         $data['orderId'] = $order->getId();
-
+        $data['merchantData'] = $order->getMerchantData();
         return $data;
     }
 }

@@ -53,6 +53,7 @@ class UpdateCheckoutServiceTest extends TestCase
 
         $this->assertArrayHasKey('cart', $formattedOrderRows);
         $this->assertArrayHasKey('orderId', $formattedOrderRows);
+        $this->assertArrayHasKey('merchantData', $formattedOrderRows);
     }
 
     /**
