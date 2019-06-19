@@ -2,6 +2,7 @@
 
 namespace Svea\WebPay\WebService\GetPaymentPlanParams;
 
+use Svea\WebPay\Helper\Helper;
 /**
  * Calculates price per month for all available campaigns.
  *
@@ -46,22 +47,8 @@ class PaymentPlanPricePerMonth
         if (!empty($params)) {
             foreach ($params->campaignCodes as $key => $value) {
                 if ($ignoreMaxAndMinFlag || ($price >= $value->fromAmount && $price <= $value->toAmount)) {
-                    $pair = array();
+                    $pair = Helper::objectToArray($value);
                     $pair['pricePerMonth'] = round(($value->initialFee + (ceil($price * $value->monthlyAnnuityFactor) + $value->notificationFee) * max(1, $value->contractLengthInMonths - $value->numberOfPaymentFreeMonths)) / max(1, $value->contractLengthInMonths - $value->numberOfPaymentFreeMonths), $decimals);
-                    foreach ($value as $key => $val) {
-                        if ($key == "campaignCode") {
-                            $pair[$key] = $val;
-                        }
-
-                        if ($key == "description") {
-                            $pair[$key] = $val;
-                        }
-
-                        if ($key == "paymentPlanType") {
-                            $pair[$key] = $val;
-                        }
-
-                    }
                     array_push($this->values, $pair);
                 }
             }

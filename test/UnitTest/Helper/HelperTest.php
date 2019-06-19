@@ -5,10 +5,7 @@ namespace Svea\WebPay\Test\UnitTest\Helper;
 use Svea\WebPay\WebPay;
 use Svea\WebPay\WebPayItem;
 use Svea\WebPay\Helper\Helper;
-use Svea\WebPay\Test\TestUtil;
 use Svea\WebPay\Config\ConfigurationService;
-use Svea\WebPay\WebService\GetPaymentPlanParams\GetPaymentPlanParams;
-use Svea\WebPay\WebService\WebServiceResponse\CampaignCode\CampaignCode;
 use Svea\WebPay\WebService\WebServiceResponse\PaymentPlanParamsResponse;
 
 class HelperTest extends \PHPUnit\Framework\TestCase

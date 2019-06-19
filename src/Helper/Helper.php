@@ -300,6 +300,7 @@ class Helper
      * the flag is set to false or left out, the values array will not include
      * such amounts, which may result in an empty values array in the result.
      *
+     * @deprecated Use Svea\WebPay\Helper\PaymentPlanHelper instead, will be removed in the future
      * @param float $price
      * @param $paymentPlanParamsResponseObject
      * @param boolean $ignoreMaxAndMinFlag ; optional, defaults to false
@@ -365,5 +366,19 @@ class Helper
             return false;
         }
         return true;
+    }
+
+    public static function objectToArray($data)
+    {
+        if (is_array($data) || is_object($data))
+        {
+            $result = array();
+            foreach ($data as $key => $value)
+            {
+                $result[$key] = Helper::objectToArray($value);
+            }
+            return $result;
+        }
+        return $data;
     }
 }

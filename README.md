@@ -69,10 +69,11 @@
     * [8.1. Parsing an asynchronous service response](#i8-1)
     * [8.2. Response accepted and result code](#i8-2)
 * [9. Helper Class and Additional Developer Resources and Notes](#i9)
-    * [9.1 Helper::paymentPlanPricePerMonth()](#i9-1)
-    * [9.2 Request validateOrder(), prepareRequest(), getRequestTotals() methods](#i9-2)
-    * [9.3 Logging Raw HTTP Requests](#i9-3)
-    * [9.4 Peppol-ID validation](#i9-4)
+    * [9.1 PaymentPlanCalculator](#i9-1)
+    * [9.2 Helper::paymentPlanPricePerMonth()](#i9-2)
+    * [9.3 Request validateOrder(), prepareRequest(), getRequestTotals() methods](#i9-3)
+    * [9.4 Logging Raw HTTP Requests](#i9-4)
+    * [9.5 Peppol-ID validation](#i9-5)
 * [10. Frequently Asked Questions](#i10)
     * [10.1 Supported currencies](#i10-1)
     * [10.2 Other payment method credentials](#i10-2)
@@ -2210,7 +2211,526 @@ See the respective response classes for further information on response attribut
 ## 9. Helper Class and Additional Developer Resources and Notes <a name="i9"></a>
 In the Helper class we make available helper functions for i.e. bankers rounding, getting the different tax rates present in an order object, dividing an order row with an arbitrary mean tax rate across one or two new order rows with given tax rates, as well as splitting street addresses into streetName and houseNumber. See the Helper class definition for further information.
 
-### 9.1 Helper::paymentPlanPricePerMonth() <a name="i9-1"></a>
+### 9.1 PaymentPlanCalculator <a name="i9-1"></a>
+The PaymentPlanCalculator class contains several static methods that are useful for calculating amounts related to the payment plan campaigns
+
+The class can:
+* [Get the total amount to be payed for a single campaign](#i9-1-1)
+* [Get the monthly amount to be payed for a single campaign](#i9-1-2)
+* [Get the effective interest rate for a single campaign](#i9-1-3)
+* [Get total amount to be payed, the monthly amount to be payed and effective interest rate for a single campaign in one method](#i9-1-4)
+* [Get the total amount to be payed for several campaigns](#i9-1-5)
+* [Get the monthly amount to be payed for several campaigns](#i9-1-6)
+* [Get the effective interest rates for several campaigns](#i9-1-7)
+* [Get total amount to be payed, the monthly amount to be payed and effective interest rate for a several campaigns in one method](#i9-1-8)
+
+The campaign parameter in all the methods support both the class member "campaignCodes" which is in the response-object returned by WebPay::getPaymentPlanParams and also the response of GetAvailablePartPaymentCampaigns which is used for fetching campaigns from a checkout merchant.
+
+If the "CampaignCodeInfo" array is used, then the first letter of the array keys will be lower case otherwise the first letter will be uppercase.
+
+When fetching all campaigns you can choose to pass the parameter $ignoreMinMaxFlag, which by default is false. If true however all campaigns will be returned regardless of if the order total is valid for the campaign
+
+### 9.1.1 Get the total amount to be payed for a single campaign <a name="i9-1-1"></a>
+Input:
+```php
+<?php
+
+require_once 'path/to/vendor/autoloader/';
+
+use \Svea\WebPay\Helper\PaymentPlanHelper\PaymentPlanCalculator;
+
+$orderTotal = 11200;
+$decimals = 0; // This parameter is optional and will default to 0, use 2 decimals if payments are in euro
+$campaign = array (
+          'CampaignCode' => 213060,
+          'Description' => 'Dela upp betalningen på 60 månader',
+          'PaymentPlanType' => 0,
+          'ContractLengthInMonths' => 60,
+          'MonthlyAnnuityFactor' => 0.02555,
+          'InitialFee' => 100.0,
+          'NotificationFee' => 29.0,
+          'InterestRatePercent' => 16.75,
+          'NumberOfInterestFreeMonths' => 3,
+          'NumberOfPaymentFreeMonths' => 3,
+          'FromAmount' => 1000.0,
+          'ToAmount' => 50000.0
+          );
+
+$totalAmountToBePayed = PaymentPlanCalculator::getTotalAmountToPay($orderTotal, $campaign, $decimals);
+echo $totalAmountToBePayed;
+```
+Output:
+```php
+18067
+```
+### 9.1.2 Get the monthly amount to be payed for a single campaign <a name="i9-1-2"></a>
+Input:
+```php
+<?php
+
+require_once 'path/to/vendor/autoloader/';
+
+use \Svea\WebPay\Helper\PaymentPlanHelper\PaymentPlanCalculator;
+
+$orderTotal = 11200;
+$decimals = 0; // This parameter is optional and will default to 0, use 2 decimals if payments are in euro
+$campaign = array (
+          'CampaignCode' => 213060,
+          'Description' => 'Dela upp betalningen på 60 månader',
+          'PaymentPlanType' => 0,
+          'ContractLengthInMonths' => 60,
+          'MonthlyAnnuityFactor' => 0.02555,
+          'InitialFee' => 100.0,
+          'NotificationFee' => 29.0,
+          'InterestRatePercent' => 16.75,
+          'NumberOfInterestFreeMonths' => 3,
+          'NumberOfPaymentFreeMonths' => 3,
+          'FromAmount' => 1000.0,
+          'ToAmount' => 50000.0
+          );
+
+$monthlyAmount = PaymentPlanCalculator::getMonthlyAmountToPay($orderTotal, $campaign, $decimals);
+echo $monthlyAmount;
+```
+Output:
+```php
+317
+```
+### 9.1.3 Get the effective interest rate for a single campaign <a name="i9-1-3"></a>
+Input:
+```php
+<?php
+
+require_once 'path/to/vendor/autoloader/';
+
+use \Svea\WebPay\Helper\PaymentPlanHelper\PaymentPlanCalculator;
+
+$orderTotal = 11200;
+$decimals = 0; // This parameter is optional and will default to 0, use 2 decimals if payments are in euro
+$campaign = array (
+          'CampaignCode' => 213060,
+          'Description' => 'Dela upp betalningen på 60 månader',
+          'PaymentPlanType' => 0,
+          'ContractLengthInMonths' => 60,
+          'MonthlyAnnuityFactor' => 0.02555,
+          'InitialFee' => 100.0,
+          'NotificationFee' => 29.0,
+          'InterestRatePercent' => 16.75,
+          'NumberOfInterestFreeMonths' => 3,
+          'NumberOfPaymentFreeMonths' => 3,
+          'FromAmount' => 1000.0,
+          'ToAmount' => 50000.0
+          );
+
+$effectiveInterestRate = PaymentPlanCalculator::getEffectiveInterestRate($orderTotal, $campaign, $decimals);
+echo $effectiveInterestRate;
+```
+Output:
+```php
+21.33
+```
+### 9.1.4 Get all calculations for a single campaign <a name="i9-1-4"></a>
+Input:
+```php
+<?php
+
+require_once 'path/to/vendor/autoloader/';
+
+use \Svea\WebPay\Helper\PaymentPlanHelper\PaymentPlanCalculator;
+
+$orderTotal = 11200;
+$decimals = 0; // This parameter is optional and will default to 0, use 2 decimals if payments are in euro
+$campaign = array (
+    'CampaignCode' => 213060,
+    'Description' => 'Dela upp betalningen på 60 månader',
+    'PaymentPlanType' => 0,
+    'ContractLengthInMonths' => 60,
+    'MonthlyAnnuityFactor' => 0.02555,
+    'InitialFee' => 100.0,
+    'NotificationFee' => 29.0,
+    'InterestRatePercent' => 16.75,
+    'NumberOfInterestFreeMonths' => 3,
+    'NumberOfPaymentFreeMonths' => 3,
+    'FromAmount' => 1000.0,
+    'ToAmount' => 50000.0
+);
+
+$campaign = PaymentPlanCalculator::getAllCalculations($orderTotal, $campaign, $decimals);
+echo '<pre>' . print_r($campaign, true) . '</pre>';
+```
+Output:
+```php
+Array
+(
+    [CampaignCode] => 213060
+    [Description] => Dela upp betalningen på 60 månader
+    [PaymentPlanType] => 0
+    [ContractLengthInMonths] => 60
+    [MonthlyAnnuityFactor] => 0.02555
+    [InitialFee] => 100
+    [NotificationFee] => 29
+    [InterestRatePercent] => 16.75
+    [NumberOfInterestFreeMonths] => 3
+    [NumberOfPaymentFreeMonths] => 3
+    [FromAmount] => 1000
+    [ToAmount] => 50000
+    [EffectiveInterestRate] => 21.33
+    [MonthlyAmountToPay] => 317
+    [TotalAmountToPay] => 18067
+)
+```
+### 9.1.5 Get the total amount to be payed for several campaigns <a name="i9-1-5"></a>
+Input:
+```php
+<?php
+
+require_once 'path/to/vendor/autoloader/';
+
+use \Svea\WebPay\Helper\PaymentPlanHelper\PaymentPlanCalculator;
+
+$orderTotal = 11200;
+$decimals = 0; // This parameter is optional and will default to 0, use 2 decimals if payments are in euro
+$ignoreMinMaxFlag = false; // This parameters is optional and default to false, if set to true it will return all campaigns regardless of if it's valid for the order total
+$campaigns = array (
+    0 => array(
+        'CampaignCode' => 213060,
+        'Description' => 'Dela upp betalningen på 60 månader',
+        'PaymentPlanType' => 0,
+        'ContractLengthInMonths' => 60,
+        'MonthlyAnnuityFactor' => 0.02555,
+        'InitialFee' => 100.0,
+        'NotificationFee' => 29.0,
+        'InterestRatePercent' => 16.75,
+        'NumberOfInterestFreeMonths' => 3,
+        'NumberOfPaymentFreeMonths' => 3,
+        'FromAmount' => 1000.0,
+        'ToAmount' => 50000.0
+        ),
+    1 => array (
+        'CampaignCode' => 310012,
+        'Description' => 'Dela upp betalningen på 12 månader (räntefritt)',
+        'PaymentPlanType' => 1,
+        'ContractLengthInMonths' => 12,
+        'MonthlyAnnuityFactor' => 0.08333,
+        'InitialFee' => 295.0,
+        'NotificationFee' => 35.0,
+        'InterestRatePercent' => 0.0,
+        'NumberOfInterestFreeMonths' => 12,
+        'NumberOfPaymentFreeMonths' => 0,
+        'FromAmount' => 1000.0,
+        'ToAmount' => 30000.0,
+        )
+);
+
+$campaigns = PaymentPlanCalculator::getTotalAmountToPayFromCampaigns($orderTotal, $campaigns, $decimals, $ignoreMinMaxFlag);
+echo '<pre>' . print_r($campaigns, true) . '</pre>';
+```
+Output:
+```php
+Array
+(
+    [0] => Array
+        (
+            [CampaignCode] => 213060
+            [Description] => Dela upp betalningen på 60 månader
+            [PaymentPlanType] => 0
+            [ContractLengthInMonths] => 60
+            [MonthlyAnnuityFactor] => 0.02555
+            [InitialFee] => 100
+            [NotificationFee] => 29
+            [InterestRatePercent] => 16.75
+            [NumberOfInterestFreeMonths] => 3
+            [NumberOfPaymentFreeMonths] => 3
+            [FromAmount] => 1000
+            [ToAmount] => 50000
+            [TotalAmountToPay] => 18067
+        )
+
+    [1] => Array
+        (
+            [CampaignCode] => 310012
+            [Description] => Dela upp betalningen på 12 månader (räntefritt)
+            [PaymentPlanType] => 1
+            [ContractLengthInMonths] => 12
+            [MonthlyAnnuityFactor] => 0.08333
+            [InitialFee] => 295
+            [NotificationFee] => 35
+            [InterestRatePercent] => 0
+            [NumberOfInterestFreeMonths] => 12
+            [NumberOfPaymentFreeMonths] => 0
+            [FromAmount] => 1000
+            [ToAmount] => 30000
+            [TotalAmountToPay] => 11915
+        )
+
+)
+```
+### 9.1.6 Get the monthly amount to be payed for several campaigns <a name="i9-1-6"></a>
+Input:
+```php
+<?php
+
+require_once 'path/to/vendor/autoloader/';
+
+use \Svea\WebPay\Helper\PaymentPlanHelper\PaymentPlanCalculator;
+
+$orderTotal = 11200;
+$decimals = 0; // This parameter is optional and will default to 0, use 2 decimals if payments are in euro
+$ignoreMinMaxFlag = false; // This parameters is optional and default to false, if set to true it will return all campaigns regardless of if it's valid for the order total
+$campaigns = array (
+    0 => array(
+        'CampaignCode' => 213060,
+        'Description' => 'Dela upp betalningen på 60 månader',
+        'PaymentPlanType' => 0,
+        'ContractLengthInMonths' => 60,
+        'MonthlyAnnuityFactor' => 0.02555,
+        'InitialFee' => 100.0,
+        'NotificationFee' => 29.0,
+        'InterestRatePercent' => 16.75,
+        'NumberOfInterestFreeMonths' => 3,
+        'NumberOfPaymentFreeMonths' => 3,
+        'FromAmount' => 1000.0,
+        'ToAmount' => 50000.0
+        ),
+    1 => array (
+        'CampaignCode' => 310012,
+        'Description' => 'Dela upp betalningen på 12 månader (räntefritt)',
+        'PaymentPlanType' => 1,
+        'ContractLengthInMonths' => 12,
+        'MonthlyAnnuityFactor' => 0.08333,
+        'InitialFee' => 295.0,
+        'NotificationFee' => 35.0,
+        'InterestRatePercent' => 0.0,
+        'NumberOfInterestFreeMonths' => 12,
+        'NumberOfPaymentFreeMonths' => 0,
+        'FromAmount' => 1000.0,
+        'ToAmount' => 30000.0,
+        )
+);
+
+$campaigns = PaymentPlanCalculator::getMonthlyAmountToPayFromCampaigns($orderTotal, $campaigns, $decimals, $ignoreMinMaxFlag);
+echo '<pre>' . print_r($campaigns, true) . '</pre>';
+```
+Output:
+```php
+Array
+(
+    [0] => Array
+        (
+            [CampaignCode] => 213060
+            [Description] => Dela upp betalningen på 60 månader
+            [PaymentPlanType] => 0
+            [ContractLengthInMonths] => 60
+            [MonthlyAnnuityFactor] => 0.02555
+            [InitialFee] => 100
+            [NotificationFee] => 29
+            [InterestRatePercent] => 16.75
+            [NumberOfInterestFreeMonths] => 3
+            [NumberOfPaymentFreeMonths] => 3
+            [FromAmount] => 1000
+            [ToAmount] => 50000
+            [MonthlyAmountToPay] => 317
+        )
+
+    [1] => Array
+        (
+            [CampaignCode] => 310012
+            [Description] => Dela upp betalningen på 12 månader (räntefritt)
+            [PaymentPlanType] => 1
+            [ContractLengthInMonths] => 12
+            [MonthlyAnnuityFactor] => 0.08333
+            [InitialFee] => 295
+            [NotificationFee] => 35
+            [InterestRatePercent] => 0
+            [NumberOfInterestFreeMonths] => 12
+            [NumberOfPaymentFreeMonths] => 0
+            [FromAmount] => 1000
+            [ToAmount] => 30000
+            [MonthlyAmountToPay] => 993
+        )
+
+)
+```
+### 9.1.7 Get the effective interest rate for several campaigns <a name="i9-1-7"></a>
+Input:
+```php
+<?php
+
+require_once 'path/to/vendor/autoloader/';
+
+use \Svea\WebPay\Helper\PaymentPlanHelper\PaymentPlanCalculator;
+
+$orderTotal = 11200;
+$decimals = 0; // This parameter is optional and will default to 0, use 2 decimals if payments are in euro
+$ignoreMinMaxFlag = false; // This parameters is optional and default to false, if set to true it will return all campaigns regardless of if it's valid for the order total
+$campaigns = array (
+    0 => array(
+        'CampaignCode' => 213060,
+        'Description' => 'Dela upp betalningen på 60 månader',
+        'PaymentPlanType' => 0,
+        'ContractLengthInMonths' => 60,
+        'MonthlyAnnuityFactor' => 0.02555,
+        'InitialFee' => 100.0,
+        'NotificationFee' => 29.0,
+        'InterestRatePercent' => 16.75,
+        'NumberOfInterestFreeMonths' => 3,
+        'NumberOfPaymentFreeMonths' => 3,
+        'FromAmount' => 1000.0,
+        'ToAmount' => 50000.0
+        ),
+    1 => array (
+        'CampaignCode' => 310012,
+        'Description' => 'Dela upp betalningen på 12 månader (räntefritt)',
+        'PaymentPlanType' => 1,
+        'ContractLengthInMonths' => 12,
+        'MonthlyAnnuityFactor' => 0.08333,
+        'InitialFee' => 295.0,
+        'NotificationFee' => 35.0,
+        'InterestRatePercent' => 0.0,
+        'NumberOfInterestFreeMonths' => 12,
+        'NumberOfPaymentFreeMonths' => 0,
+        'FromAmount' => 1000.0,
+        'ToAmount' => 30000.0,
+        )
+);
+
+$campaigns = PaymentPlanCalculator::getEffectiveInterestRateFromCampaigns($orderTotal, $campaigns, $decimals, $ignoreMinMaxFlag);
+echo '<pre>' . print_r($campaigns, true) . '</pre>';
+```
+Output:
+```php
+Array
+(
+    [0] => Array
+        (
+            [CampaignCode] => 213060
+            [Description] => Dela upp betalningen på 60 månader
+            [PaymentPlanType] => 0
+            [ContractLengthInMonths] => 60
+            [MonthlyAnnuityFactor] => 0.02555
+            [InitialFee] => 100
+            [NotificationFee] => 29
+            [InterestRatePercent] => 16.75
+            [NumberOfInterestFreeMonths] => 3
+            [NumberOfPaymentFreeMonths] => 3
+            [FromAmount] => 1000
+            [ToAmount] => 50000
+            [EffectiveInterestRate] => 21.33
+        )
+
+    [1] => Array
+        (
+            [CampaignCode] => 310012
+            [Description] => Dela upp betalningen på 12 månader (räntefritt)
+            [PaymentPlanType] => 1
+            [ContractLengthInMonths] => 12
+            [MonthlyAnnuityFactor] => 0.08333
+            [InitialFee] => 295
+            [NotificationFee] => 35
+            [InterestRatePercent] => 0
+            [NumberOfInterestFreeMonths] => 12
+            [NumberOfPaymentFreeMonths] => 0
+            [FromAmount] => 1000
+            [ToAmount] => 30000
+            [EffectiveInterestRate] => 12.44
+        )
+
+)
+```
+### 9.1.8 Get all calculations for several campaigns <a name="i9-1-8"></a>
+Input:
+```php
+<?php
+
+require_once 'path/to/vendor/autoloader/';
+
+use \Svea\WebPay\Helper\PaymentPlanHelper\PaymentPlanCalculator;
+
+$orderTotal = 11200;
+$decimals = 0; // This parameter is optional and will default to 0, use 2 decimals if payments are in euro
+$ignoreMinMaxFlag = false; // This parameters is optional and default to false, if set to true it will return all campaigns regardless of if it's valid for the order total
+$campaigns = array (
+    0 => array(
+        'CampaignCode' => 213060,
+        'Description' => 'Dela upp betalningen på 60 månader',
+        'PaymentPlanType' => 0,
+        'ContractLengthInMonths' => 60,
+        'MonthlyAnnuityFactor' => 0.02555,
+        'InitialFee' => 100.0,
+        'NotificationFee' => 29.0,
+        'InterestRatePercent' => 16.75,
+        'NumberOfInterestFreeMonths' => 3,
+        'NumberOfPaymentFreeMonths' => 3,
+        'FromAmount' => 1000.0,
+        'ToAmount' => 50000.0
+        ),
+    1 => array (
+        'CampaignCode' => 310012,
+        'Description' => 'Dela upp betalningen på 12 månader (räntefritt)',
+        'PaymentPlanType' => 1,
+        'ContractLengthInMonths' => 12,
+        'MonthlyAnnuityFactor' => 0.08333,
+        'InitialFee' => 295.0,
+        'NotificationFee' => 35.0,
+        'InterestRatePercent' => 0.0,
+        'NumberOfInterestFreeMonths' => 12,
+        'NumberOfPaymentFreeMonths' => 0,
+        'FromAmount' => 1000.0,
+        'ToAmount' => 30000.0,
+        )
+);
+
+$campaigns = PaymentPlanCalculator::getAllCalculationsFromCampaigns($orderTotal, $campaigns, $decimals, $ignoreMinMaxFlag);
+echo '<pre>' . print_r($campaigns, true) . '</pre>';
+```
+Output:
+```php
+Array
+(
+    [0] => Array
+        (
+            [CampaignCode] => 213060
+            [Description] => Dela upp betalningen på 60 månader
+            [PaymentPlanType] => 0
+            [ContractLengthInMonths] => 60
+            [MonthlyAnnuityFactor] => 0.02555
+            [InitialFee] => 100
+            [NotificationFee] => 29
+            [InterestRatePercent] => 16.75
+            [NumberOfInterestFreeMonths] => 3
+            [NumberOfPaymentFreeMonths] => 3
+            [FromAmount] => 1000
+            [ToAmount] => 50000
+            [EffectiveInterestRate] => 21.33
+            [TotalAmountToPay] => 18067
+            [MonthlyAmountToPay] => 317
+        )
+
+    [1] => Array
+        (
+            [CampaignCode] => 310012
+            [Description] => Dela upp betalningen på 12 månader (räntefritt)
+            [PaymentPlanType] => 1
+            [ContractLengthInMonths] => 12
+            [MonthlyAnnuityFactor] => 0.08333
+            [InitialFee] => 295
+            [NotificationFee] => 35
+            [InterestRatePercent] => 0
+            [NumberOfInterestFreeMonths] => 12
+            [NumberOfPaymentFreeMonths] => 0
+            [FromAmount] => 1000
+            [ToAmount] => 30000
+            [EffectiveInterestRate] => 12.44
+            [TotalAmountToPay] => 11915
+            [MonthlyAmountToPay] => 993
+        )
+
+)
+```
+### 9.2 Helper::paymentPlanPricePerMonth() <a name="i9-2"></a>
+
+#### This method is marked as deprecated and will be removed from the integration package in the future, use [PaymentPlanCalculator](#i9-1) instead.
+
 This is a helper function provided to calculate the monthly price for the different payment plan options for a given sum. This information may be used when displaying i.e. payment options to the customer by checkout, or to display the lowest amount due per month to display on a product level.
 
 If the ignoreMaxAndMinFlag is set to true, the returned array also contains the theoretical monthly installments for a given amount, even if the campaign may not actually be available to use in a payment request, should the amount fall outside of the actual campaign min/max limit. If the flag is set to false or left out, the values array will not include such amounts, which may result in an empty values array in the result.
@@ -2228,17 +2748,17 @@ $pricePerMonthForFirstCampaign = $response->values[0]['pricePerMonth'];     // i
 ...
 ```
 
-### 9.2 Request validateOrder(), prepareRequest(), getRequestTotals() methods <a name="i9-2"></a>
+### 9.3 Request validateOrder(), prepareRequest(), getRequestTotals() methods <a name="i9-3"></a>
 During module development or debugging, various informational methods may be of use as an alternative to `doRequest()` as the final step in the createOrder process in order to get more information about the actual request data that will be sent to Svea.
 
-#### 9.2.1 prepareRequest()
+#### 9.3.1 prepareRequest()
 The `prepareRequest()` method will do everything `doRequest()` does, except send the SOAP request to Svea -- instead it returns an inspectable object containing the data that will be sent in the doRequest call. The output of prepareRequest is also used internally by the doRequest method. To use, simply substitute `prepareRequest()` for the final `doRequest()` and then inspect the contents of the returned object.
 
 
-#### 9.2.2 validateOrder()
+#### 9.3.2 validateOrder()
 The `validateOrder()` method validates that all required attributes are present in an order object, give the specific combination of country and chosen payment method, it returns an array containing any discovered errors.
 
-#### 9.2.3 getRequestTotals()
+#### 9.3.3 getRequestTotals()
 If you find yourself in need of knowing what the order total at Svea will amount to before sending the request, you can use the `getRequestTotals()` method to get the amount including vat, amount excluding vat and total vat amount.
 
 For example, if your integration only handles integer order amounts, you may have to supply a compensation row with the order to ensure that the invoiced order total amount in Svea's system match your integration order totals:
@@ -2326,7 +2846,7 @@ Which is about as exact as we can get. (Unfortunately there is no way to introdu
 
 [Back to top](#index)
 
-### 9.3 Logging Raw HTTP Requests <a name="i9-3"></a>
+### 9.4 Logging Raw HTTP Requests <a name="i9-4"></a>
 
 You're able to fetch raw http logs to help debug problems that might occur, to enable logging you just have to call the enableLogging method on the request that you're building like this:
 
@@ -2347,7 +2867,7 @@ The logs will then be defined in the response.
 
 Note: This will only work with requests sent by SOAP.
 
-### 9.4 Peppol-ID validation
+### 9.5 Peppol-ID validation <a name="i9-5"></a>
 
 You can check whether a string is a valid Peppol-ID by calling the Helper function isValidPeppolId()
 
