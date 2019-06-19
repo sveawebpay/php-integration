@@ -93,6 +93,9 @@ abstract class CheckoutService
         if (isset($item->TemporaryReference)) {
             $checkoutOrderItem->setTemporaryReference($item->TemporaryReference);
         }
+        if (isset($item->MerchantData)) {
+            $checkoutOrderItem->setMerchantData($item->MerchantData);
+        }
 
         return $checkoutOrderItem->toArray();
     }

@@ -20,6 +20,7 @@ $myConfig = ConfigurationService::getTestConfig();
 $orderBuilder = WebPay::checkout($myConfig);
 
 $orderBuilder->setCheckoutOrderId(7479)
+    //->setMerchantData("merchantData")
     ->setCountryCode('SE');
 
 // create and add items to order

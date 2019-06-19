@@ -289,4 +289,16 @@ class CheckoutOrderEntry
 
         return $this;
     }
+
+    /**
+     * Set merchantData on order
+     *
+     * @param string $merchantData
+     * @return $this
+     */
+    public function setMerchantData($merchantData)
+    {
+        $this->checkoutOrderBuilder->setMerchantData($merchantData);
+        return $this;
+    }
 }

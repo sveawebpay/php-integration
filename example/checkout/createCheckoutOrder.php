@@ -31,6 +31,7 @@ $orderBuilder->setCountryCode('SE')// customer country, we recommend basing this
     ->setTermsUri('http://localhost:51898/terms')
   //->setValidationCallbackUri('http://localhost:51898/validation-callback')
   //->setPartnerKey("77FB33EC-505D-4CCF-AA21-D9DF50DC8344")
+  //->setMerchantData("merchantData")
     ->setLocale($locale);
 
 $presetPhoneNumber = WebPayItem::presetValue()

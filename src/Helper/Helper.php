@@ -300,14 +300,16 @@ class Helper
      * the flag is set to false or left out, the values array will not include
      * such amounts, which may result in an empty values array in the result.
      *
+     * @deprecated Use Svea\WebPay\Helper\PaymentPlanHelper instead, will be removed in the future
      * @param float $price
      * @param $paymentPlanParamsResponseObject
      * @param boolean $ignoreMaxAndMinFlag ; optional, defaults to false
+     * @param int $decimals ; optional, defaults to 0
      * @return PaymentPlanPricePerMonth
      */
-    public static function paymentPlanPricePerMonth($price, $paymentPlanParamsResponseObject, $ignoreMaxAndMinFlag = false)
+    public static function paymentPlanPricePerMonth($price, $paymentPlanParamsResponseObject, $ignoreMaxAndMinFlag = false, $decimals = 0)
     {
-        return new PaymentPlanPricePerMonth($price, $paymentPlanParamsResponseObject, $ignoreMaxAndMinFlag);
+        return new PaymentPlanPricePerMonth($price, $paymentPlanParamsResponseObject, $ignoreMaxAndMinFlag, $decimals);
     }
 
     public static function getCardPayCurrencies()
@@ -364,5 +366,19 @@ class Helper
             return false;
         }
         return true;
+    }
+
+    public static function objectToArray($data)
+    {
+        if (is_array($data) || is_object($data))
+        {
+            $result = array();
+            foreach ($data as $key => $value)
+            {
+                $result[$key] = Helper::objectToArray($value);
+            }
+            return $result;
+        }
+        return $data;
     }
 }
