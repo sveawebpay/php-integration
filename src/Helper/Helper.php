@@ -173,14 +173,14 @@ class Helper
         if (!defined('SVEA_REQUEST_DIR')) {
             define('SVEA_REQUEST_DIR', dirname(__FILE__));
         }
-        $composerFile = file_get_contents(SVEA_REQUEST_DIR . "/../../composer.json");
-        $composerFile= json_decode($composerFile, true);
+        $versionFile = file_get_contents(SVEA_REQUEST_DIR . "/../../version.json");
+        $versionFile= json_decode($versionFile, true);
 
 
         // @todo change this to properly defined information
         $library_properties = array(
             'library_name' => 'PHP Integration Package',
-            'library_version' => $composerFile['version'],
+            'library_version' => $versionFile['version'],
         );
 
         return $library_properties;
