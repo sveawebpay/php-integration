@@ -283,6 +283,7 @@ class QueryTransactionResponse extends HostedAdminResponse
                     $newrow
                         ->setName((string)$orderrow['name'])
                         ->setAmountExVat(floatval(($orderrow['amount'] - $orderrow['vat'])) / 100)
+                        ->setAmountIncVat(floatval($orderrow['amount'])/100)
                         ->setDescription((string)$orderrow['description'])
                         ->setQuantity(floatval((string)$orderrow['quantity']))
                         ->setArticleNumber((string)$orderrow['sku'])
