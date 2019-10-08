@@ -1904,7 +1904,7 @@ $response = $request->creditAccountCreditOrderRows()->doRequest(); // returns Cr
 
 #### 7.5.1 Usage
 The WebPayAdmin::creditOrderRows entrypoint method is used to credit rows in an order after it has been delivered.
-Supports all payment methods. (To credit a Payment Plan order, contact Svea customer service.)
+Supports all payment methods.
 
 To credit an order row in full, you specify the index of the order row to credit (and for card orders, supply the numbered order row data itself).
 
