@@ -316,7 +316,7 @@ class GetOrdersRequestIntegrationTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals("Persson", $getOrdersResponse->customer->lastname);
         //$this->assertEquals( null, $getOrdersResponse->customer->email );
         //$this->assertEquals( null, $getOrdersResponse->customer->phonenumber );
-        $this->assertEquals("Persson, Tess T", $getOrdersResponse->customer->name);   // FullName
+        $this->assertEquals("Persson Tess T", $getOrdersResponse->customer->name);   // FullName
         $this->assertEquals("Testgatan 1", $getOrdersResponse->customer->streetAddress);
         $this->assertEquals("Testgatan 1", $getOrdersResponse->customer->street);
         $this->assertEquals("c/o Eriksson, Erik", $getOrdersResponse->customer->coAddress);

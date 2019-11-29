@@ -988,7 +988,7 @@ class InvoicePaymentIntegrationTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(1, $response->accepted);
         $this->assertTrue($response->customerIdentity instanceof CreateOrderIdentity);
         // verify returned address
-        $this->assertEquals("Persson, Tess T", $response->customerIdentity->fullName);    // Note: order may vary between countries, given by UC
+        $this->assertEquals("Persson Tess T", $response->customerIdentity->fullName);    // Note: order may vary between countries, given by UC
         $this->assertEquals("Testgatan 1", $response->customerIdentity->street);
         $this->assertEquals("c/o Eriksson, Erik", $response->customerIdentity->coAddress);
         $this->assertEquals("99999", $response->customerIdentity->zipCode);
@@ -1048,9 +1048,9 @@ class InvoicePaymentIntegrationTest extends \PHPUnit\Framework\TestCase
         // verify returned address
         $this->assertEquals("Hanne Jensen", $response->customerIdentity->fullName);    // Note: order may vary between countries, given by UC
         $this->assertEquals("Testvejen 42", $response->customerIdentity->street);
-        $this->assertEquals("c/o Test A/S", $response->customerIdentity->coAddress);
+        $this->assertEquals("c/o Test A/s", $response->customerIdentity->coAddress);
         $this->assertEquals("2100", $response->customerIdentity->zipCode);
-        $this->assertEquals("KØBENHVN Ø", $response->customerIdentity->locality);
+        $this->assertEquals("Københvn Ø", $response->customerIdentity->locality);
     }
 
     // FI
@@ -1075,7 +1075,7 @@ class InvoicePaymentIntegrationTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(1, $response->accepted);
         $this->assertTrue($response->customerIdentity instanceof CreateOrderIdentity);
         // verify returned address
-        $this->assertEquals("Kanerva Haapakoski, Kukka-Maaria", $response->customerIdentity->fullName);    // Note: order may vary between countries, given by UC
+        $this->assertEquals("Kanerva Haapakoski Kukka-Maaria", $response->customerIdentity->fullName);    // Note: order may vary between countries, given by UC
         $this->assertEquals("Atomitie 2 C", $response->customerIdentity->street);
         $this->assertEquals("", $response->customerIdentity->coAddress);
         $this->assertEquals("00370", $response->customerIdentity->zipCode);
