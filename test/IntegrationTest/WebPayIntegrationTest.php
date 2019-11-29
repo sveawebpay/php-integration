@@ -80,6 +80,9 @@ class WebPayIntegrationTest extends \PHPUnit\Framework\TestCase
     // card
     public function test_createOrder_usePaymentMethod_KORTCERT_redirects_to_certitrade()
     {
+        $this->markTestIncomplete(
+            'CertiTrade no longer used'
+        );
         $config = ConfigurationService::getDefaultConfig();
         $rowFactory = new TestUtil();
         $form = WebPay::createOrder($config)

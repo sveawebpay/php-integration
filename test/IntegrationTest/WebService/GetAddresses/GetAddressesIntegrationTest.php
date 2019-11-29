@@ -104,10 +104,10 @@ class GetAddressesIntegrationTest extends \PHPUnit\Framework\TestCase
 
         $this->assertEquals(1, $request->accepted);
         $this->assertEquals('Accepted', $request->resultcode);
-        $this->assertEquals('2BD497E1A2126A6755AC59D673EA5BD28DBCDC6B', $request->customerIdentity[0]->addressSelector);
+        $this->assertEquals('7d97a7f100744f419607fb654202cdc9', $request->customerIdentity[0]->addressSelector);
         $this->assertEquals('Person', $request->customerIdentity[0]->customerType);
-        $this->assertEquals('08 - 111 111 11', $request->customerIdentity[0]->phoneNumber);
-        $this->assertEquals('Persson, Tess T', $request->customerIdentity[0]->fullName);
+        $this->assertEquals('+46811111111', $request->customerIdentity[0]->phoneNumber);
+        $this->assertEquals('Persson Tess T', $request->customerIdentity[0]->fullName);
         $this->assertEquals('Tess', $request->customerIdentity[0]->firstName);
         $this->assertEquals('Persson', $request->customerIdentity[0]->lastName);
         $this->assertEquals('Testgatan 1', $request->customerIdentity[0]->street);

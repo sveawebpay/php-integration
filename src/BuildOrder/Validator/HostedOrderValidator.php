@@ -27,8 +27,38 @@ class HostedOrderValidator extends OrderValidator
         $this->errors = $this->validateCountryCode($order, $this->errors); //should be optional for hosted payment because not used
         $this->errors = $this->validateRequiredFieldsForOrder($order->order, $this->errors);
         $this->errors = $this->validateOrderRows($order, $this->errors);
+        $this->errors = $this->validatePayerAlias($order, $this->errors); // validate for swish
 
         return $this->errors;
+    }
+
+    /**
+     * @param type $order
+     * @param array $errors
+     * @return array
+     */
+    private function validatePayerAlias($order, $errors)
+    {
+        if (isset($order->order->payerAlias) && $order->paymentMethod == "SWISH")
+        {
+            if(ctype_digit($order->order->payerAlias) == false)
+            {
+                $errors['incorrect type'] = 'payerAlias must be numeric and can not contain any non-numeric characters';
+            }
+            if(strlen($order->order->payerAlias) != 11)
+            {
+                $errors['incorrect length'] = 'payerAlias must be 11 digits';
+            }
+            if($order->order->countryCode != "SE")
+            {
+                $errors['incorrect value'] = 'countryCode must be set to "SE" if payment method is SWISH';
+            }
+        }
+        elseif(isset($order->order->payerAlias) == false && isset($order->paymentMethod) && $order->paymentMethod == "SWISH")
+        {
+            $errors['missing value'] = 'payerAlias must be set if using payment method SWISH. Use function setPayerAlias()';
+        }
+        return $errors;
     }
 
     /**
@@ -41,7 +71,10 @@ class HostedOrderValidator extends OrderValidator
         if (isset($order->clientOrderNumber) == false || "" == $order->clientOrderNumber) {
             $errors['missing value'] = "ClientOrderNumber is required. Use function setClientOrderNumber().";
         }
-
+        /*if(isset($order->clientOrderNumber) && $order->paymentMethod == "SWISH")
+        {
+            $errors['incorrect value'] = "ClientOrderNumber cannot be longer than 35 characters for Swish payments";
+        }*/
         return $errors;
     }
 
