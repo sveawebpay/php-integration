@@ -10,7 +10,7 @@ abstract class PaymentMethod
 {
     const INVOICE = 'INVOICE';
     const PAYMENTPLAN = 'PAYMENTPLAN';
-    
+
     //DIRECT
     const BANKAXESS = 'BANKAXESS';
     const AKTIA_FI = 'DBAKTIAFI';
@@ -28,7 +28,8 @@ abstract class PaymentMethod
     const SPANKKI_FI = 'DBSPANKKIFI';
     const SWEDBANK_SE = 'DBSWEDBANKSE';
     const TAPIOLA_FI = 'DBTAPIOLAFI';
-    
+    const SWISH = 'SWISH';
+
     //PaymentMethodType::CARD
     const KORTCERT = 'KORTCERT';
     const SVEACARDPAY = 'SVEACARDPAY';

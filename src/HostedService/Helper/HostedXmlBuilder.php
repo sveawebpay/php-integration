@@ -113,6 +113,11 @@ class HostedXmlBuilder
             $this->XMLWriter->writeElement("ipaddress", $request['ipAddress']);
         }
 
+        if(isset($request['payerAlias']))
+        {
+            $this->XMLWriter->writeElement("payeralias", $request['payerAlias']);
+        }
+
         $this->XMLWriter->endElement();
         $this->XMLWriter->endDocument();
 

@@ -32,7 +32,8 @@
     * [4.5 Using the Svea PayPage](#i4-5)
     * [4.6 Svea Checkout](#i4-6)
     * [4.7 Account Credit](#i4-7)
-    * [4.8 Examples](#i4-8)
+    * [4.8 Swish](#i4-8)
+    * [4.9 Examples](#i4-9)
 * [5. WebPayItem reference](#i5)
     * [5.1 Specifying item price](#i5-1)
     * [5.2 WebPayItem::orderRow()](#i5-2)
@@ -961,26 +962,46 @@ $response = $request->doRequest();
 
 Another complete, runnable example of an invoice order can be found in the <a href="http://github.com/sveawebpay/php-integration/blob/master/example/accountcredit/" target="_blank">example/accountcredit</a> folder.
 
+### 4.8 Swish payments  <a name="i4-8"></a>
+Get a html form containing the request XML data. The form is an instance of PaymentForm, and also contains the complete html form as a string along with the form elements in an array.
 
+If you're testing Swish payments in stage, you can set any valid number and the payment will automatically be successful.
 
-### 4.8 Examples  <a name="i4-8"></a>
+```php
+<?php
+...
+    $config = ConfigurationService::getDefaultConfig();
+    $form = WebPay::createOrder($config)
+        ->addOrderRow(/*add any orderrow*/)
+        ->setCountryCode("SE")                              //Required, must be set to "SE" for Swish Payments
+        ->setClientOrderNumber("33")                        //Required
+        ->setCurrency("SEK")                                //Required, must be set to "SEK" for Swish Payments
+        ->setPayerAlias("46701234567")                      //Required, set consumers mobile number
+        ->usePaymentMethod(PaymentMethod::SWISH)            //Set payment method to SWISH
+        ->setReturnUrl("http://myurl.se")                   //Required, this is where the user will be redirected after a successful payment
+        ->setCallbackUrl("http://myurl.se/callback")        //Optional, however VERY recommended as redirects from Swish to returnUrl might fail
+        ->getPaymentForm();                                 
+...
+```
+### 4.9 Examples  <a name="i4-9"></a>
 
-#### 4.8.1 Svea checkout order
+#### 4.9.1 Svea checkout order
 Full Checkout examples order can be found in the [example/checkout](example/checkout) folder.
 
-#### 4.8.2 Svea invoice order
+#### 4.9.2 Svea invoice order
 An example of a synchronous (invoice) order can be found in the [example/invoiceorder](example/invoiceorder) folder.
 
-#### 4.8.3 Card order
+#### 4.9.3 Card order
 An example of an asynchronous card order can be found in the [example/cardorder](example/cardorder) folder.
 
-#### 4.8.4 Recurring card order
+#### 4.9.4 Recurring card order
 An example of an recurring card order, both the setup transaction and a recurring payment, can be found in the [example/cardorder_recur](example/cardorder_recur) folder.
 
-#### 4.8.5 Svea Account Credit
+#### 4.9.5 Svea Account Credit
 An example of an recurring card order, both the setup transaction and a recurring payment, can be found in the [example/accoutncredit(example/accoutncredit) folder.
 
-
+#### 4.9.6 Swish
+An example of an asynchronous swish payment can be found in the [example/swishorder](example/swishorder) folder.
 [Back to top](#index)
 
 ## 5. WebPayItem reference <a name="i5"></a>
@@ -2949,4 +2970,5 @@ Used in usePaymentMethod($paymentMethod) and in usePayPage()->includePaymentMeth
 | PaymentMethod::SKRILL             | Card payment with Dankort, Skrill.            |
 | PaymentMethod::INVOICE            | Invoice by PayPage.                           |
 | PaymentMethod::PAYMENTPLAN        | PaymentPlan by PayPage.                       |
+| PaymentMethod::SWISH              | Swish, only Sweden                            |
 ```

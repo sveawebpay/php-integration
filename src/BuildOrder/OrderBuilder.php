@@ -96,6 +96,10 @@ class OrderBuilder
      */
     public $peppolId;
 
+    /*
+     * @var string Mobile number to payer, only used with Swish else ignored
+     */
+    public $payerAlias;
 
     /**
      * @param ConfigurationProvider $config
@@ -324,6 +328,18 @@ class OrderBuilder
     public function setPeppolId($peppolId)
     {
         $this->peppolId = $peppolId;
+
+        return $this;
+    }
+
+    /**
+     * Required if using Swish, ignored if not
+     * @param string $payerAlias
+     * @return $this
+     */
+    public function setPayerAlias($payerAlias)
+    {
+        $this->payerAlias = $payerAlias;
 
         return $this;
     }

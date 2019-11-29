@@ -230,7 +230,10 @@ class HostedResponse
                 $this->resultcode = $resultcode . ' (ILLEGAL_CREDIT_USER)';
                 $this->errormessage = 'User is not allowed to perform credit operation.';
                 break;
-
+            case '146':
+                $this->resultcode = $resultcode . ' (CUSTOMER_NOT_FOUND)';
+                $this->errormessage = 'Customer is not enrolled for Swish or if another payment method was used the address lookup returned no results.';
+                break;
             case '300':
                 $this->resultcode = $resultcode . ' (BAD_CARDHOLDER_NAME)';
                 $this->errormessage = 'Invalid value for cardholder name.';
@@ -363,7 +366,10 @@ class HostedResponse
                 $this->resultcode = $resultcode . ' (TIMEOUT)';
                 $this->errormessage = 'Timeout at Svea.';
                 break;
-
+            case '342':
+                $this->resultcode = $resultcode . ' (TRANSACTION_ALREADY_IN_PROGRESS)';
+                $this->errormessage = 'There is currently another transaction in progress on this payer alias.';
+                break;
             case '500':
                 $this->resultcode = $resultcode . ' (ANTIFRAUD_CARDBIN_NOT_ALLOWED)';
                 $this->errormessage = 'Antifraud - cardbin not allowed.';
