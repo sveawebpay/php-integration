@@ -33,8 +33,8 @@ $myOrder->setOrderDate(date('c'));
 // To add the cart contents to the order we first create and specify a new orderRow item using methods from the Svea\WebPay\BuildOrder\RowBuilders\OrderRow class:
 $boughtItem = WebPayItem::orderRow();
 $boughtItem->setDescription("Billy");
-$boughtItem->setAmountExVat(700.99);
-$boughtItem->setVatPercent(25);
+$boughtItem->setAmountExVat(0.01);
+$boughtItem->setVatPercent(0);
 $boughtItem->setQuantity(1);
 
 // Add the order rows to the order: 
