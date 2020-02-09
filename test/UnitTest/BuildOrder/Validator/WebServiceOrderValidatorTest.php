@@ -365,7 +365,7 @@ class WebServiceOrderValidatorTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException Svea\WebPay\BuildOrder\Validator\ValidationException
-     * @expectedExceptionMessage -incorrect datatype : quantity is not numeric, set as integer or float.
+     * @expectedExceptionMessage -incorrect datatype : quantity is not numeric
      */
     public function testFailOnQuantityNotNumeric()
     {
