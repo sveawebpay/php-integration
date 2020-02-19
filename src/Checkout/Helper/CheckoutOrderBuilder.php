@@ -56,6 +56,11 @@ class CheckoutOrderBuilder extends OrderBuilder
     protected $merchantData;
 
     /**
+     * @var bool $requireElectronicIdAuthentication
+     */
+    protected $requireElectronicIdAuthentication;
+
+    /**
      * CheckoutOrderBuilder constructor.
      * @param \Svea\WebPay\Config\ConfigurationProvider $config
      */
@@ -348,4 +353,22 @@ class CheckoutOrderBuilder extends OrderBuilder
     {
         return $this->merchantData;
     }
+
+    /**
+     * Enable electronic id authentication for end-user if set to true
+     *
+     * @param bool $enabled
+     * @return $this
+     */
+    public function setRequireElectronicIdAuthentication($enabled)
+    {
+        $this->requireElectronicIdAuthentication = $enabled;
+        return $this;
+    }
+
+    public function getRequireElectronicIdAuthentication()
+    {
+        return $this->requireElectronicIdAuthentication;
+    }
+
 }

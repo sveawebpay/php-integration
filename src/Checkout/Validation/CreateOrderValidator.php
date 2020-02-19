@@ -35,6 +35,25 @@ class CreateOrderValidator extends OrderValidator
 
         $errors = $this->validateIdentityFlags($order, $errors);
 
+        $errors = $this->validateRequireElectronicIdAuthentication($order, $errors);
+
+        return $errors;
+    }
+
+    /**
+     * @param CheckoutOrderBuilder $order
+     * @param array $errors
+     * @return array
+     */
+    private function validateRequireElectronicIdAuthentication($order, $errors)
+    {
+        if($order->getRequireElectronicIdAuthentication() != null)
+        {
+            if(!is_bool($order->getRequireElectronicIdAuthentication()))
+            {
+                $errors['invalid type'] = "requireElectronicIdAuthentication field isn't a boolean type, use setRequireElectronicIdAuthentication(true)";
+            }
+        }
         return $errors;
     }
 

@@ -301,4 +301,16 @@ class CheckoutOrderEntry
         $this->checkoutOrderBuilder->setMerchantData($merchantData);
         return $this;
     }
+
+    /**
+     * Enable/disable electronic id authentication when end-customer finalizes order, default = false
+     *
+     * @param bool $enabled
+     * @return $this
+     */
+    public function setRequireElectronicIdAuthentication($enabled)
+    {
+        $this->checkoutOrderBuilder->setRequireElectronicIdAuthentication($enabled);
+        return $this;
+    }
 }

@@ -3,6 +3,7 @@
 namespace Svea\WebPay\Test\UnitTest\Checkout\Validation;
 
 use Svea\WebPay\BuildOrder\Validator\OrderValidator;
+use Svea\WebPay\BuildOrder\Validator\ValidationException;
 use Svea\WebPay\Checkout\Helper\CheckoutOrderBuilder;
 use Svea\WebPay\Checkout\Validation\CreateOrderValidator;
 use Svea\WebPay\Test\UnitTest\Checkout\TestCase;
@@ -14,7 +15,7 @@ use Svea\WebPay\Test\UnitTest\Checkout\TestCase;
 class CreateOrderValidationTest extends TestCase
 {
     /**
-     * @var \Svea\WebPay\BuildOrder\Validator\OrderValidator
+     * @var OrderValidator
      */
     protected $validator;
 
@@ -117,6 +118,20 @@ class CreateOrderValidationTest extends TestCase
         $this->order->setPartnerKey("77FB33EC-505D-4CCF-AA21-D9DF50DC8344");
 
         $errors = $this->invokeMethod($this->validator, 'validatePartnerKey', array($this->order, array()));
+
+        $errorsNum = count($errors);
+
+        $this->assertEquals(0, $errorsNum);
+    }
+
+    /**
+     * @test
+     */
+    public function requireElectronicIdAuthenticationWrongType()
+    {
+        $this->order->setRequireElectronicIdAuthentication(true);
+
+        $errors = $this->invokeMethod($this->validator, 'validateRequireElectronicIdAuthentication', array($this->order, array()));
 
         $errorsNum = count($errors);
 
