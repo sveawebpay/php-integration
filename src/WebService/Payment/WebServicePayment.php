@@ -11,10 +11,9 @@ use Svea\WebPay\WebService\SveaSoap\SveaRequest;
 use Svea\WebPay\WebService\SveaSoap\SveaIdentity;
 use Svea\WebPay\WebService\SveaSoap\SveaDoRequest;
 use Svea\WebPay\BuildOrder\Validator\ValidationException;
-use Svea\WebPay\WebService\Helper\WebServiceRowFormatter;
 use Svea\WebPay\WebService\SveaSoap\SveaCustomerIdentity;
 use Svea\WebPay\BuildOrder\Validator\WebServiceOrderValidator;
-use Svea\WebPay\WebService\SveaSoap\SveaCreateOrderInformation;
+use Svea\WebPay\WebService\WebServiceResponse\CreateOrderResponse;
 
 /**
  * Parent to InvoicePayment, AccountCredit and PaymentPlanPaymentHandles class
@@ -42,7 +41,7 @@ class WebServicePayment
 
     /**
      * Transforms object to array and sends it to SveaWebPay Europe Web service API by php SoapClient
-     * @return CreateOrderEuResponse
+     * @return CreateOrderResponse
      * @throws ValidationException
      */
     public function doRequest()
@@ -58,7 +57,7 @@ class WebServicePayment
 
     /**
      * Rebuild $order with svea_soap package to be in right format for SveaWebPay Europe Web service API
-     * @return prepared SveaRequest
+     * @return SveaRequest SveaRequest
      * @throws ValidationException
      */
     public function prepareRequest()
@@ -146,7 +145,7 @@ class WebServicePayment
     }
     /**
      * if CustomerIdentity is created by addCustomerDetails()
-     * @return \SveaCustomerIdentity
+     * @return SveaCustomerIdentity
      */
     public function formatCustomerDetails()
     {
@@ -216,7 +215,7 @@ class WebServicePayment
 
     /**
      * Format Customer Identity with svea_soap package
-     * @return \SveaCustomerIdentity
+     * @return SveaCustomerIdentity
      */
     private function formatCustomerIdentity()
     {
@@ -283,7 +282,8 @@ class WebServicePayment
 
     /**
      * Get calculated totals before sending the request
-     * @return Array of the rounded sums of all orderrows as it will be sent to Svea
+     * Returns Array of the rounded sums of all orderrows as it will be sent to Svea
+     * @returns array
      */
     public function getRequestTotals()
     {
