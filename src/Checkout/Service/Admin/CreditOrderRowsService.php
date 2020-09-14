@@ -38,7 +38,12 @@ class CreditOrderRowsService extends AdminImplementationService
         }
 
         $deliveryId = $this->adminBuilder->deliveryId;
-        if (empty($deliveryId) || !is_int($deliveryId)) {
+        if (is_int($deliveryId) || (is_float($deliveryId) && $deliveryId > 2147483647))
+        {
+
+        }
+        else
+        {
             $errors['incorrect Delivery Id'] = "Delivery Id can't be empty and must be Integer";
         }
 
