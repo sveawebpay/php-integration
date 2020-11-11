@@ -6,7 +6,8 @@ jobs:
       - image: circleci/php:7.3.7-node-browsers
     steps:
       - checkout
-      - run: sudo docker-php-ext-install zip
+      - run: sudo apt-get update && sudo apt-get install -y libxml2-dev
+      - run: sudo docker-php-ext-install zip soap
       - run: sudo composer self-update
 
       - run:
