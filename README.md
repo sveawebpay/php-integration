@@ -150,9 +150,9 @@ You should also add information about your integration platform (i.e. Magento, O
 
 When configured, the integration properties information will be passed to Svea alongside the various service requests.
 
-See the provided example of how to customize the config files in the <a href="http://github.com/sveawebpay/php-integration/blob/master/example/config_getaddresses/" target="_blank">example/config_getaddresses/</a> folder.
+See the provided example of how to customize the config files in the [example/config_getaddresses/](example/config_getaddresses/)</a> folder.
 
-See the <a href="http://sveawebpay.github.io/php-integration/api/classes/ConfigurationProvider.html" target="_blank">ConfigurationProvider</a> interface and the provided <a href="http://github.com/sveawebpay/php-integration/blob/master/src/Config/config_test.php" target="_blank">example of config file</a> for more information.
+See the [ConfigurationProvider](src/Config/ConfigurationProvider.php) interface and the provided [example of config file](src/Config/config_test.php) for more information.
 
 [Back to top](#index)
 
