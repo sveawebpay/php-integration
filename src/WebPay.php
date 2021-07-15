@@ -54,298 +54,298 @@ use Svea\WebPay\WebService\GetPaymentPlanParams\PaymentPlanPricePerMonth;
 class WebPay
 {
 
-    /**
-     * Use Svea\WebPay\WebPay::createOrder() to create an order using invoice, payment plan, card, or direct bank payment methods.
-     *
-     * See the CreateOrderBuilder class for more info on methods used to specify the order builder contents
-     * and chosing a payment method to use, followed by sending the request to Svea and parsing the response.
-     *
-     * Invoice and Payment plan orders will perform a synchronous payment on doRequest(), and will return a response
-     * object immediately.
-     *
-     * Card, Direct bank, and other hosted methods accessed via PayPage are asynchronous. They provide an html form
-     * containing a formatted message to send to Svea, which in turn will send a request response to a given return url,
-     * where the response can be parsed using the Svea\WebPay\Response\SveaResponse class.
-     *
-     *      $order = Svea\WebPay\WebPay::createOrder($config)
-     *          ->addOrderRow( $orderrow )          // required, see Svea\WebPay\WebPayItem::orderRow
-     *          ->addFee( $shippingfee )            // optional, see Svea\WebPay\WebPayItem for invoice, shipping fee
-     *          ->addDiscount( $discount )          // optional, see Svea\WebPay\WebPayItem for fixed, relative discount
-     *          ->addCustomerDetails( $customer )   // required for invoice and payment plan payments, see Svea\WebPay\WebPayItem for individual, company id.
-     *          ->setCountryCode("SE")              // required
-     *          ->setOrderDate(date('c'))           // required for invoice and payment plan payments
-     *          ->setCurrency("SEK")                // required for card payment, direct bank & PayPage payments. Ignored for invoice and payment plan.
-     *          ->setClientOrderNumber("A123456")   // required for card payment, direct payment, Svea\WebPay\Constant\PaymentMethod & PayPage payments, max length 30 chars.
-     *          ->setCustomerReference("att: kgm")  // optional, ignored for card & direct bank orders, max length 30 chars.
-     *      ;
-     *
-     * @see \Svea\OrderRow \Svea\WebPay\BuildOrder\RowBuilders\OrderRow
-     * @see \Svea\InvoiceFee \Svea\WebPay\BuildOrder\RowBuilders\InvoiceFee
-     * @see \Svea\ShippingFee \Svea\WebPay\BuildOrder\RowBuilders\ShippingFee
-     * @see \Svea\FixedDiscount \Svea\WebPay\BuildOrder\RowBuilders\FixedDiscount
-     * @see \Svea\Relativeiscount \Svea\WebPay\BuildOrder\RowBuilders\RelativeDiscount
-     * @see \Svea\IndividualCustomer \Svea\WebPay\BuildOrder\RowBuilders\IndividualCustomer
-     * @see \Svea\CompanyCustomer \Svea\WebPay\BuildOrder\RowBuilders\CompanyCustomer
-     * @return \Svea\WebPay\BuildOrder\CreateOrderBuilder
-     * @param ConfigurationProvider $config instance implementing Svea\WebPay\Config\ConfigurationProvider Interface
-     * @throws \Svea\WebPay\BuildOrder\Validator\ValidationException
-     *
-     */
-    public static function createOrder($config = NULL)
-    {
-        if ($config == NULL) {
-            WebPay::throwMissingConfigException();
-        }
+	/**
+	 * Use Svea\WebPay\WebPay::createOrder() to create an order using invoice, payment plan, card, or direct bank payment methods.
+	 *
+	 * See the CreateOrderBuilder class for more info on methods used to specify the order builder contents
+	 * and chosing a payment method to use, followed by sending the request to Svea and parsing the response.
+	 *
+	 * Invoice and Payment plan orders will perform a synchronous payment on doRequest(), and will return a response
+	 * object immediately.
+	 *
+	 * Card, Direct bank, and other hosted methods accessed via PayPage are asynchronous. They provide an html form
+	 * containing a formatted message to send to Svea, which in turn will send a request response to a given return url,
+	 * where the response can be parsed using the Svea\WebPay\Response\SveaResponse class.
+	 *
+	 *	  $order = Svea\WebPay\WebPay::createOrder($config)
+	 *		  ->addOrderRow( $orderrow )		  // required, see Svea\WebPay\WebPayItem::orderRow
+	 *		  ->addFee( $shippingfee )			// optional, see Svea\WebPay\WebPayItem for invoice, shipping fee
+	 *		  ->addDiscount( $discount )		  // optional, see Svea\WebPay\WebPayItem for fixed, relative discount
+	 *		  ->addCustomerDetails( $customer )   // required for invoice and payment plan payments, see Svea\WebPay\WebPayItem for individual, company id.
+	 *		  ->setCountryCode("SE")			  // required
+	 *		  ->setOrderDate(date('c'))		   // required for invoice and payment plan payments
+	 *		  ->setCurrency("SEK")				// required for card payment, direct bank & PayPage payments. Ignored for invoice and payment plan.
+	 *		  ->setClientOrderNumber("A123456")   // required for card payment, direct payment, Svea\WebPay\Constant\PaymentMethod & PayPage payments, max length 30 chars.
+	 *		  ->setCustomerReference("att: kgm")  // optional, ignored for card & direct bank orders, max length 30 chars.
+	 *	  ;
+	 *
+	 * @see \Svea\OrderRow \Svea\WebPay\BuildOrder\RowBuilders\OrderRow
+	 * @see \Svea\InvoiceFee \Svea\WebPay\BuildOrder\RowBuilders\InvoiceFee
+	 * @see \Svea\ShippingFee \Svea\WebPay\BuildOrder\RowBuilders\ShippingFee
+	 * @see \Svea\FixedDiscount \Svea\WebPay\BuildOrder\RowBuilders\FixedDiscount
+	 * @see \Svea\Relativeiscount \Svea\WebPay\BuildOrder\RowBuilders\RelativeDiscount
+	 * @see \Svea\IndividualCustomer \Svea\WebPay\BuildOrder\RowBuilders\IndividualCustomer
+	 * @see \Svea\CompanyCustomer \Svea\WebPay\BuildOrder\RowBuilders\CompanyCustomer
+	 * @return \Svea\WebPay\BuildOrder\CreateOrderBuilder
+	 * @param ConfigurationProvider $config instance implementing Svea\WebPay\Config\ConfigurationProvider Interface
+	 * @throws \Svea\WebPay\BuildOrder\Validator\ValidationException
+	 *
+	 */
+	public static function createOrder($config = NULL)
+	{
+		if ($config == NULL) {
+			WebPay::throwMissingConfigException();
+		}
 
-        return new CreateOrderBuilder($config);
-    }
+		return new CreateOrderBuilder($config);
+	}
 
-    /**
-     * Helper function, throws exception if no config is given.
-     *
-     * @throws ValidationException
-     */
-    private static function throwMissingConfigException()
-    {
-        throw new ValidationException('-missing parameter: This method requires an Svea\WebPay\Config\ConfigurationProvider object as parameter. Create a class that implements class Svea\WebPay\Config\ConfigurationProvider. Set returnvalues to configuration values. Create an object from that class. Alternative use static function from class ConfigurationService e.g. ConfigurationService::getDefaultConfig(). You can replace the default config values into config files to return your own config values.');
-    }
+	/**
+	 * Helper function, throws exception if no config is given.
+	 *
+	 * @throws ValidationException
+	 */
+	private static function throwMissingConfigException()
+	{
+		throw new ValidationException('-missing parameter: This method requires an Svea\WebPay\Config\ConfigurationProvider object as parameter. Create a class that implements class Svea\WebPay\Config\ConfigurationProvider. Set returnvalues to configuration values. Create an object from that class. Alternative use static function from class ConfigurationService e.g. ConfigurationService::getDefaultConfig(). You can replace the default config values into config files to return your own config values.');
+	}
 
-    /**
-     * Use the Svea\WebPay\WebPay::deliverOrder() entrypoint when you deliver an order to the customer.
-     * Supports Invoice, Payment Plan and Card orders. (Direct Bank orders are not supported.)
-     *
-     * The deliver order request should generally be sent to Svea once the ordered
-     * items have been sent out, or otherwise delivered, to the customer.
-     *
-     * For invoice and partpayment orders, the deliver order request triggers the
-     * invoice being sent out to the customer by Svea. (This assumes that your account
-     * has auto-approval of invoices turned on, please contact Svea if unsure).
-     *
-     * For card orders, the deliver order request confirms the card transaction,
-     * which in turn allows nightly batch processing of the transaction by Svea.
-     * (Delivering card orders is only needed if your account has auto-confirm
-     * turned off, please contact Svea if unsure.)
-     *
-     * To deliver an invoice, partpayment or card order in full, you do not need to
-     * specify order rows. To partially deliver an order, the recommended way is to
-     * use Svea\WebPay\WebPayAdmin::deliverOrderRows().
-     *
-     * Get an order builder instance using the Svea\WebPay\WebPay::deliverOrder entrypoint, then
-     * provide more information about the transaction using DeliverOrderBuilder methods:
-     *
-     *      $request = Svea\WebPay\WebPay::deliverOrder($config)
-     *          ->setOrderId()                  // invoice or payment plan only, required
-     *          ->setTransactionId()            // card only, optional, alias for setOrderId
-     *          ->setCountryCode()              // required
-     *          ->setInvoiceDistributionType()  // invoice only, required
-     *          ->setNumberOfCreditDays()       // invoice only, optional
-     *          ->setCaptureDate()              // card only, optional
-     *          ->addOrderRow()                 // deprecated, optional -- use Svea\WebPay\WebPayAdmin::deliverOrderRows instead
-     *          ->setCreditInvoice()            // deprecated, optional -- use Svea\WebPay\WebPayAdmin::creditOrderRows instead
-     *      ;
-     *      // then select the corresponding request class and send request
-     *      $response = $request->deliverInvoiceOrder()->doRequest();       // returns DeliverOrdersResponse (no rows) or DeliverOrderResult (with rows)
-     *      $response = $request->deliverPaymentPlanOrder()->doRequest();   // returns DeliverOrdersResponse (no rows) or DeliverOrderResult (with rows)
-     *      $response = $request->deliverCardOrder()->doRequest();          // returns ConfirmTransactionResponse
-     *
-     * @see \Svea\WebPay\DeliverOrderBuilder \Svea\WebPay\BuildOrder\DeliverOrderBuilder
-     * @see \Svea\WebPay\AdminService\DeliverOrdersResponse \Svea\WebPay\AdminService\AdminServiceResponse\DeliverOrdersResponse
-     * @see \Svea\WebPay\WebService\WebServiceResponse\DeliverOrderResult
-     * @see \Svea\WebPay\HostedService\ConfirmTransactionResponse \Svea\WebPay\HostedService\HostedResponse\HostedAdminResponse\ConfirmTransactionResponse
-     *
-     * @param ConfigurationProvider $config instance implementing Svea\WebPay\Config\ConfigurationProvider Interface
-     * @return \Svea\WebPay\BuildOrder\DeliverOrderBuilder
-     * @throws \Svea\WebPay\BuildOrder\Validator\ValidationException
-     */
-    public static function deliverOrder($config = NULL)
-    {
-        if ($config == NULL) {
-            WebPay::throwMissingConfigException();
-        }
+	/**
+	 * Use the Svea\WebPay\WebPay::deliverOrder() entrypoint when you deliver an order to the customer.
+	 * Supports Invoice, Payment Plan and Card orders. (Direct Bank orders are not supported.)
+	 *
+	 * The deliver order request should generally be sent to Svea once the ordered
+	 * items have been sent out, or otherwise delivered, to the customer.
+	 *
+	 * For invoice and partpayment orders, the deliver order request triggers the
+	 * invoice being sent out to the customer by Svea. (This assumes that your account
+	 * has auto-approval of invoices turned on, please contact Svea if unsure).
+	 *
+	 * For card orders, the deliver order request confirms the card transaction,
+	 * which in turn allows nightly batch processing of the transaction by Svea.
+	 * (Delivering card orders is only needed if your account has auto-confirm
+	 * turned off, please contact Svea if unsure.)
+	 *
+	 * To deliver an invoice, partpayment or card order in full, you do not need to
+	 * specify order rows. To partially deliver an order, the recommended way is to
+	 * use Svea\WebPay\WebPayAdmin::deliverOrderRows().
+	 *
+	 * Get an order builder instance using the Svea\WebPay\WebPay::deliverOrder entrypoint, then
+	 * provide more information about the transaction using DeliverOrderBuilder methods:
+	 *
+	 *	  $request = Svea\WebPay\WebPay::deliverOrder($config)
+	 *		  ->setOrderId()				  // invoice or payment plan only, required
+	 *		  ->setTransactionId()			// card only, optional, alias for setOrderId
+	 *		  ->setCountryCode()			  // required
+	 *		  ->setInvoiceDistributionType()  // invoice only, required
+	 *		  ->setNumberOfCreditDays()	   // invoice only, optional
+	 *		  ->setCaptureDate()			  // card only, optional
+	 *		  ->addOrderRow()				 // deprecated, optional -- use Svea\WebPay\WebPayAdmin::deliverOrderRows instead
+	 *		  ->setCreditInvoice()			// deprecated, optional -- use Svea\WebPay\WebPayAdmin::creditOrderRows instead
+	 *	  ;
+	 *	  // then select the corresponding request class and send request
+	 *	  $response = $request->deliverInvoiceOrder()->doRequest();	   // returns DeliverOrdersResponse (no rows) or DeliverOrderResult (with rows)
+	 *	  $response = $request->deliverPaymentPlanOrder()->doRequest();   // returns DeliverOrdersResponse (no rows) or DeliverOrderResult (with rows)
+	 *	  $response = $request->deliverCardOrder()->doRequest();		  // returns ConfirmTransactionResponse
+	 *
+	 * @see \Svea\WebPay\DeliverOrderBuilder \Svea\WebPay\BuildOrder\DeliverOrderBuilder
+	 * @see \Svea\WebPay\AdminService\DeliverOrdersResponse \Svea\WebPay\AdminService\AdminServiceResponse\DeliverOrdersResponse
+	 * @see \Svea\WebPay\WebService\WebServiceResponse\DeliverOrderResult
+	 * @see \Svea\WebPay\HostedService\ConfirmTransactionResponse \Svea\WebPay\HostedService\HostedResponse\HostedAdminResponse\ConfirmTransactionResponse
+	 *
+	 * @param ConfigurationProvider $config instance implementing Svea\WebPay\Config\ConfigurationProvider Interface
+	 * @return \Svea\WebPay\BuildOrder\DeliverOrderBuilder
+	 * @throws \Svea\WebPay\BuildOrder\Validator\ValidationException
+	 */
+	public static function deliverOrder($config = NULL)
+	{
+		if ($config == NULL) {
+			WebPay::throwMissingConfigException();
+		}
 
-        return new DeliverOrderBuilder($config);
-    }
+		return new DeliverOrderBuilder($config);
+	}
 
-    /**
-     * The Svea\WebPay\WebPay::getAddresses() entrypoint is used to fetch a list validated addresses
-     * associated with a given customer identity. This list can in turn be used to i.e.
-     * verify that an order delivery address matches the invoice address used by Svea for
-     * invoice and payment plan orders. Only applicable for SE, NO and DK customers.
-     * Note that in Norway, company customers only are supported.
-     *
-     * Get an request class instance using the Svea\WebPay\WebPay::getAddresses entrypoint, then
-     * provide more information about the transaction and send the request using the
-     * request class methods:
-     *
-     * Use setCountryCode() to supply the country code that corresponds to the account
-     * credentials used for the address lookup. Note that this means that you cannot
-     * look up a user in a foreign country, this is a consequence of the fact that the
-     * invoice and partpayment methods don't support foreign orders.
-     *
-     * Use setCustomerIdentifier() to provide the exact credentials needed to identify
-     * the customer according to country:
-     *      SE: Personnummer (private individual) or Organisationsnummer (company/legal entity)
-     *      NO: Organisasjonsnummer (company or other legal entity)
-     *      DK: Cpr.nr (private individual) or CVR-nummer (company or other legal entity)
-     *
-     * Then use either getIndividualAddresses() or getCompanyAddresses() depending on what kind of customer you want to look up.
-     *
-     * The final doRequest() will send the getAddresses request to Svea and return the result.
-     *
-     * The doRequest() method will then check if there exists credentials to use for the request in the given configurationProvider.
-     *
-     * (Note that this behaviour may cause problems if your integration is set to use different (test/production) credentials
-     * for invoice and payment plan -- if you get an error and this is the case, you may use one of the deprecated methods
-     * setOrderTypeInvoice() or setOrderTupePaymentPlan() to explicity state which method credentials to use.)
-     *
-     *      $request = Svea\WebPay\WebPay::getAddresses($config)
-     *          ->setCountryCode()                  // required -- the country to perform the customer address lookup in
-     *          ->setCustomerIdentifier()           // required -- social security number, company vat number etc. used to identify customer
-     *          ->setOrderTypeInvoice()             // deprecated -- method that corresponds to the Svea\WebPay\Config\ConfigurationProvider account credentials used
-     *          ->setOrderTypePaymentPlan()         // deprecated -- method that corresponds to the Svea\WebPay\Config\ConfigurationProvider account credentials used
-     *      ;
-     *      // then select the corresponding request class and send request
-     *      $response = $request->getIndividualAddresses()->doRequest();    // returns GetAddressesResponse
-     *      $response = $request->getCompanyAddresses()->doRequest();       // returns GetAddressesResponse
-     *
-     * @see Svea\WebPay\WebService\GetAddress\GetAddress
-     * @return \Svea\WebPay\WebService\GetAddress\GetAddresses
-     * @param ConfigurationProvider $config instance implementing Svea\WebPay\Config\ConfigurationProvider Interface
-     * @throws \Svea\WebPay\BuildOrder\Validator\ValidationException
-     */
-    public static function getAddresses($config = NULL)
-    {
-        if ($config == NULL) {
-            WebPay::throwMissingConfigException();
-        }
+	/**
+	 * The Svea\WebPay\WebPay::getAddresses() entrypoint is used to fetch a list validated addresses
+	 * associated with a given customer identity. This list can in turn be used to i.e.
+	 * verify that an order delivery address matches the invoice address used by Svea for
+	 * invoice and payment plan orders. Only applicable for SE, NO and DK customers.
+	 * Note that in Norway, company customers only are supported.
+	 *
+	 * Get an request class instance using the Svea\WebPay\WebPay::getAddresses entrypoint, then
+	 * provide more information about the transaction and send the request using the
+	 * request class methods:
+	 *
+	 * Use setCountryCode() to supply the country code that corresponds to the account
+	 * credentials used for the address lookup. Note that this means that you cannot
+	 * look up a user in a foreign country, this is a consequence of the fact that the
+	 * invoice and partpayment methods don't support foreign orders.
+	 *
+	 * Use setCustomerIdentifier() to provide the exact credentials needed to identify
+	 * the customer according to country:
+	 *	  SE: Personnummer (private individual) or Organisationsnummer (company/legal entity)
+	 *	  NO: Organisasjonsnummer (company or other legal entity)
+	 *	  DK: Cpr.nr (private individual) or CVR-nummer (company or other legal entity)
+	 *
+	 * Then use either getIndividualAddresses() or getCompanyAddresses() depending on what kind of customer you want to look up.
+	 *
+	 * The final doRequest() will send the getAddresses request to Svea and return the result.
+	 *
+	 * The doRequest() method will then check if there exists credentials to use for the request in the given configurationProvider.
+	 *
+	 * (Note that this behaviour may cause problems if your integration is set to use different (test/production) credentials
+	 * for invoice and payment plan -- if you get an error and this is the case, you may use one of the deprecated methods
+	 * setOrderTypeInvoice() or setOrderTupePaymentPlan() to explicity state which method credentials to use.)
+	 *
+	 *	  $request = Svea\WebPay\WebPay::getAddresses($config)
+	 *		  ->setCountryCode()				  // required -- the country to perform the customer address lookup in
+	 *		  ->setCustomerIdentifier()		   // required -- social security number, company vat number etc. used to identify customer
+	 *		  ->setOrderTypeInvoice()			 // deprecated -- method that corresponds to the Svea\WebPay\Config\ConfigurationProvider account credentials used
+	 *		  ->setOrderTypePaymentPlan()		 // deprecated -- method that corresponds to the Svea\WebPay\Config\ConfigurationProvider account credentials used
+	 *	  ;
+	 *	  // then select the corresponding request class and send request
+	 *	  $response = $request->getIndividualAddresses()->doRequest();	// returns GetAddressesResponse
+	 *	  $response = $request->getCompanyAddresses()->doRequest();	   // returns GetAddressesResponse
+	 *
+	 * @see Svea\WebPay\WebService\GetAddress\GetAddress
+	 * @return \Svea\WebPay\WebService\GetAddress\GetAddresses
+	 * @param ConfigurationProvider $config instance implementing Svea\WebPay\Config\ConfigurationProvider Interface
+	 * @throws \Svea\WebPay\BuildOrder\Validator\ValidationException
+	 */
+	public static function getAddresses($config = NULL)
+	{
+		if ($config == NULL) {
+			WebPay::throwMissingConfigException();
+		}
 
-        return new GetAddresses($config);
-    }
+		return new GetAddresses($config);
+	}
 
-    /**
-     * getPaymentPlanParams -- fetch current campaigns (payment plans) for a given client, used by i.e. paymentplan orders
-     *
-     * See the GetPaymentPlanParams request class for more info on required methods,
-     * how to send the request to Svea, as well as the final response type.
-     *
-     * @return \Svea\WebPay\WebService\GetPaymentPlanParams\GetPaymentPlanParams
-     * @param ConfigurationProvider $config instance implementing Svea\WebPay\Config\ConfigurationProvider
-     * @throws \Svea\WebPay\BuildOrder\Validator\ValidationException
-     */
-    public static function getPaymentPlanParams($config = NULL)
-    {
-        if ($config == NULL) {
-            WebPay::throwMissingConfigException();
-        }
+	/**
+	 * getPaymentPlanParams -- fetch current campaigns (payment plans) for a given client, used by i.e. paymentplan orders
+	 *
+	 * See the GetPaymentPlanParams request class for more info on required methods,
+	 * how to send the request to Svea, as well as the final response type.
+	 *
+	 * @return \Svea\WebPay\WebService\GetPaymentPlanParams\GetPaymentPlanParams
+	 * @param ConfigurationProvider $config instance implementing Svea\WebPay\Config\ConfigurationProvider
+	 * @throws \Svea\WebPay\BuildOrder\Validator\ValidationException
+	 */
+	public static function getPaymentPlanParams($config = NULL)
+	{
+		if ($config == NULL) {
+			WebPay::throwMissingConfigException();
+		}
 
-        return new GetPaymentPlanParams($config);
-    }
+		return new GetPaymentPlanParams($config);
+	}
 
-    /**
-     * getAccountCreditParams -- fetch current campaigns (AccountCredit) for the given client, used by i.e. accountCredit orders
-     *
-     * See the GetAccountCreditParams request class for more info on required methods,
-     * how to send the request to Svea, as well as the final response type.
-     *
-     * @return \Svea\WebPay\WebService\GetAccountCreditParams\GetAccountCreditParams
-     * @param ConfigurationProvider $config instance implementing Svea\WebPay\Config\ConfigurationProvider
-     * @throws \Svea\WebPay\BuildOrder\Validator\ValidationException
-     */
-    public static function getAccountCreditParams($config = NULL)
-    {
-        if ($config == NULL) {
-            WebPay::throwMissingConfigException();
-        }
+	/**
+	 * getAccountCreditParams -- fetch current campaigns (AccountCredit) for the given client, used by i.e. accountCredit orders
+	 *
+	 * See the GetAccountCreditParams request class for more info on required methods,
+	 * how to send the request to Svea, as well as the final response type.
+	 *
+	 * @return \Svea\WebPay\WebService\GetAccountCreditParams\GetAccountCreditParams
+	 * @param ConfigurationProvider $config instance implementing Svea\WebPay\Config\ConfigurationProvider
+	 * @throws \Svea\WebPay\BuildOrder\Validator\ValidationException
+	 */
+	public static function getAccountCreditParams($config = NULL)
+	{
+		if ($config == NULL) {
+			WebPay::throwMissingConfigException();
+		}
 
-        return new GetAccountCreditParams($config);
-    }
+		return new GetAccountCreditParams($config);
+	}
 
-    /**
-     * getPaymentMethods -- fetch available payment methods for a given client, used to define i.e. paymentmethod in payments
-     *
-     * See the GetPaymentMethods request class for more info on required methods,
-     * how to send the request to Svea, as well as the final response type.
-     *
-     * @deprecated 2.0.0 use Svea\WebPay\WebPayAdmin::listPaymentMethods() instead, which returns a response object instead of an array
-     * @see \Svea\WebPay\HostedService\HostedAdminRequest\ListPaymentMethods() \Svea\WebPay\HostedService\HostedAdminRequest\ListPaymentMethods()
-     *
-     * @param \Svea\WebPay\Config\ConfigurationProvider $config instance implementing Svea\WebPay\Config\ConfigurationProvider
-     * @return string[] array of available paymentmethods for this Svea\WebPay\Config\ConfigurationProvider
-     * @throws \Svea\WebPay\BuildOrder\Validator\ValidationException
-     */
-    public static function getPaymentMethods($config = NULL)
-    {
-        if ($config == NULL) {
-            WebPay::throwMissingConfigException();
-        }
+	/**
+	 * getPaymentMethods -- fetch available payment methods for a given client, used to define i.e. paymentmethod in payments
+	 *
+	 * See the GetPaymentMethods request class for more info on required methods,
+	 * how to send the request to Svea, as well as the final response type.
+	 *
+	 * @deprecated 2.0.0 use Svea\WebPay\WebPayAdmin::listPaymentMethods() instead, which returns a response object instead of an array
+	 * @see \Svea\WebPay\HostedService\HostedAdminRequest\ListPaymentMethods() \Svea\WebPay\HostedService\HostedAdminRequest\ListPaymentMethods()
+	 *
+	 * @param \Svea\WebPay\Config\ConfigurationProvider $config instance implementing Svea\WebPay\Config\ConfigurationProvider
+	 * @return string[] array of available paymentmethods for this Svea\WebPay\Config\ConfigurationProvider
+	 * @throws \Svea\WebPay\BuildOrder\Validator\ValidationException
+	 */
+	public static function getPaymentMethods($config = NULL)
+	{
+		if ($config == NULL) {
+			WebPay::throwMissingConfigException();
+		}
 
-        return new GetPaymentMethods($config);
-    }
+		return new GetPaymentMethods($config);
+	}
 
-    /** @deprecated -- use Helper::paymentPlanPricePerMonth() instead */
-    public static function paymentPlanPricePerMonth($price, $paymentPlanParamsResponseObject, $ignoreMaxAndMinFlag = false)
-    {
-        return new PaymentPlanPricePerMonth($price, $paymentPlanParamsResponseObject, $ignoreMaxAndMinFlag);
-    }
+	/** @deprecated -- use Helper::paymentPlanPricePerMonth() instead */
+	public static function paymentPlanPricePerMonth($price, $paymentPlanParamsResponseObject, $ignoreMaxAndMinFlag = false)
+	{
+		return new PaymentPlanPricePerMonth($price, $paymentPlanParamsResponseObject, $ignoreMaxAndMinFlag);
+	}
 
-    /**
-     * Start building Request to close orders. Only supports Invoice or Payment plan orders.
-     * @deprecated 2.0.0 -- use Svea\WebPay\WebPayAdmin::cancelOrder instead, which supports both synchronous and asynchronous orders
-     * @param ConfigurationProvider $config instance implementing Svea\WebPay\Config\ConfigurationProvider
-     * @return \Svea\WebPay\BuildOrder\CloseOrderBuilder
-     * @throws \Svea\WebPay\BuildOrder\Validator\ValidationException
-     */
-    public static function closeOrder($config = NULL)
-    {
-        if ($config == NULL) {
-            WebPay::throwMissingConfigException();
-        }
+	/**
+	 * Start building Request to close orders. Only supports Invoice or Payment plan orders.
+	 * @deprecated 2.0.0 -- use Svea\WebPay\WebPayAdmin::cancelOrder instead, which supports both synchronous and asynchronous orders
+	 * @param ConfigurationProvider $config instance implementing Svea\WebPay\Config\ConfigurationProvider
+	 * @return \Svea\WebPay\BuildOrder\CloseOrderBuilder
+	 * @throws \Svea\WebPay\BuildOrder\Validator\ValidationException
+	 */
+	public static function closeOrder($config = NULL)
+	{
+		if ($config == NULL) {
+			WebPay::throwMissingConfigException();
+		}
 
-        return new CloseOrderBuilder($config);
-    }
+		return new CloseOrderBuilder($config);
+	}
 
-    /**
-     * @param null $config
-     * @return CheckoutOrderEntry
-     * @throws \Svea\WebPay\BuildOrder\Validator\ValidationException
-     */
-    public static function checkout($config = null)
-    {
-        if ($config === null) {
-            WebPay::throwMissingConfigException();
-        }
+	/**
+	 * @param null $config
+	 * @return CheckoutOrderEntry
+	 * @throws \Svea\WebPay\BuildOrder\Validator\ValidationException
+	 */
+	public static function checkout($config = null)
+	{
+		if ($config === null) {
+			WebPay::throwMissingConfigException();
+		}
 
-        $checkoutOrderBuilder = new CheckoutOrderBuilder($config);
+		$checkoutOrderBuilder = new CheckoutOrderBuilder($config);
 
-        return new CheckoutOrderEntry($checkoutOrderBuilder);
-    }
+		return new CheckoutOrderEntry($checkoutOrderBuilder);
+	}
 
-    /**
-     * The Svea\WebPay\WebPay::listPaymentMethods method is used to fetch all available paymentmethods configured for a given country.
-     *
-     * Use the Svea\WebPay\WebPay::listPaymentMethods() entrypoint to get an instance of
-     * ListPaymentMethods. Then provide more information about the transaction and
-     * send the request using ListPaymentMethod methods.
-     *
-     *   $methods = Svea\WebPay\WebPay::listPaymentMethods( $config )
-     *      ->setCountryCode("SE")      // required
-     *      ->doRequest();
-     *
-     * Following the ->doRequest call you receive an instance of ListPaymentMethodsResponse.
-     *
-     * @see \Svea\WebPay\HostedService\ListPaymentMethods \Svea\WebPay\HostedService\HostedAdminRequest\ListPaymentMethods
-     * @see \Svea\WebPay\HostedService\ListPaymentMethodsResponse \Svea\WebPay\HostedService\HostedResponse\HostedAdminResponse\ListPaymentMethodsResponse
-     *
-     * @param ConfigurationProvider $config
-     * @return \Svea\WebPay\HostedService\HostedAdminRequest\ListPaymentMethods
-     * @throws \Svea\WebPay\BuildOrder\Validator\ValidationException
-     */
-    static function listPaymentMethods($config)
-    {
-        if ($config == NULL) {
-            WebPay::throwMissingConfigException();
-        }
+	/**
+	 * The Svea\WebPay\WebPay::listPaymentMethods method is used to fetch all available paymentmethods configured for a given country.
+	 *
+	 * Use the Svea\WebPay\WebPay::listPaymentMethods() entrypoint to get an instance of
+	 * ListPaymentMethods. Then provide more information about the transaction and
+	 * send the request using ListPaymentMethod methods.
+	 *
+	 *   $methods = Svea\WebPay\WebPay::listPaymentMethods( $config )
+	 *	  ->setCountryCode("SE")	  // required
+	 *	  ->doRequest();
+	 *
+	 * Following the ->doRequest call you receive an instance of ListPaymentMethodsResponse.
+	 *
+	 * @see \Svea\WebPay\HostedService\ListPaymentMethods \Svea\WebPay\HostedService\HostedAdminRequest\ListPaymentMethods
+	 * @see \Svea\WebPay\HostedService\ListPaymentMethodsResponse \Svea\WebPay\HostedService\HostedResponse\HostedAdminResponse\ListPaymentMethodsResponse
+	 *
+	 * @param ConfigurationProvider $config
+	 * @return \Svea\WebPay\HostedService\HostedAdminRequest\ListPaymentMethods
+	 * @throws \Svea\WebPay\BuildOrder\Validator\ValidationException
+	 */
+	static function listPaymentMethods($config)
+	{
+		if ($config == NULL) {
+			WebPay::throwMissingConfigException();
+		}
 
-        return new ListPaymentMethods($config);
-    }
+		return new ListPaymentMethods($config);
+	}
 }

@@ -38,12 +38,12 @@ $myOrder = WebPay::createOrder( $myConfig );
 
 // You then add information to the order object by using the methods in the Svea\WebPay\BuildOrder\CreateOrderBuilder class.
 // For a Card order, the following methods are required:
-$myOrder->setCurrency("SEK");                           // order currency
+$myOrder->setCurrency("SEK");						   // order currency
 $myOrder->setClientOrderNumber( "order #".date('c') );  // required - use a not previously sent client side order identifier, i.e. "order #20140519-371"
 // You may also chain fluent methods together:
 $myOrder
-        ->setCustomerReference("customer #123")         // optional - This should contain a customer reference, as in "customer #123".
-        ->setOrderDate("2014-05-28")                    // optional - or use an ISO8601 date as produced by i.e. date('c')
+		->setCustomerReference("customer #123")		 // optional - This should contain a customer reference, as in "customer #123".
+		->setOrderDate("2014-05-28")					// optional - or use an ISO8601 date as produced by i.e. date('c')
 ;
 
 // Then specify the items bought as order rows, using the methods in the Svea\WebPay\BuildOrder\RowBuilders\OrderRow class, and adding them to the order:
@@ -59,11 +59,11 @@ $myOrder->addOrderRow( $firstBoughtItem );
 
 // Add secondBoughtItem in a fluent fashion
 $myOrder->addOrderRow(
-            WebPayItem::orderRow()
-                ->setAmountIncVat( 5.00 )
-                ->setVatPercent( 12 )
-                ->setQuantity( 2 )
-                ->setDescription( "Korv med bröd" )
+			WebPayItem::orderRow()
+				->setAmountIncVat( 5.00 )
+				->setVatPercent( 12 )
+				->setQuantity( 2 )
+				->setDescription( "Korv med bröd" )
 );
 
 // For card orders the ->addCustomerDetails() method is optional, but recommended, so we'll add what info we have
@@ -84,8 +84,8 @@ $myCardOrderRequest = $myOrder->usePaymentMethod(PaymentMethod::SVEACARDPAY);
 
 // Then set any additional required request attributes as detailed below. (See Svea\PaymentMethodPayment and Svea\HostedPayment classes for details.)
 $myCardOrderRequest
-    ->setCardPageLanguage("SV")                                     // ISO639 language code, i.e. "SV", "EN" etc. Defaults to English.
-    ->setReturnUrl("http://localhost/".getPath()."/landingpage.php"); // The return url where we receive and process the finished request response
+	->setCardPageLanguage("SV")									 // ISO639 language code, i.e. "SV", "EN" etc. Defaults to English.
+	->setReturnUrl("http://localhost/".getPath()."/landingpage.php"); // The return url where we receive and process the finished request response
 
 // Get a payment form object which you can use to send the payment request to Svea
 $myCardOrderPaymentForm = $myCardOrderRequest->getPaymentForm();
@@ -99,12 +99,12 @@ print_r( $myCardOrderPaymentForm->completeHtmlFormWithSubmitButton );
  * get the path to this file, for use in specifying the returnurl etc.
  */
 function getPath() {
-    $myURL = $_SERVER['SCRIPT_NAME'];
-    $myPath = explode('/', $myURL);
-    unset( $myPath[count($myPath)-1]);
-    $myPath = implode( '/', $myPath);
+	$myURL = $_SERVER['SCRIPT_NAME'];
+	$myPath = explode('/', $myURL);
+	unset( $myPath[count($myPath)-1]);
+	$myPath = implode( '/', $myPath);
 
-    return $myPath;
+	return $myPath;
 }
 
 ?>

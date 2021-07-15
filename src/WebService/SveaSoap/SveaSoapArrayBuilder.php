@@ -7,22 +7,22 @@ namespace Svea\WebPay\WebService\SveaSoap;
  */
 class SveaSoapArrayBuilder
 {
-    /**
-     * Turns firs level objects in object to arrays
-     * @param $data
-     * @return array
-     */
-    function object_to_array($data)
-    {
-        if (is_array($data) || is_object($data)) {
-            $result = [];
-            foreach ($data as $key => $value) {
-                $result[$key] = $this->object_to_array($value);
-            }
+	/**
+	 * Turns firs level objects in object to arrays
+	 * @param $data
+	 * @return array
+	 */
+	function object_to_array($data)
+	{
+		if (is_array($data) || is_object($data)) {
+			$result = [];
+			foreach ($data as $key => $value) {
+				$result[$key] = $this->object_to_array($value);
+			}
 
-            return $result;
-        }
+			return $result;
+		}
 
-        return $data;
-    }
+		return $data;
+	}
 }

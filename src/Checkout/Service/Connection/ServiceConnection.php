@@ -8,8 +8,8 @@ namespace Svea\WebPay\Checkout\Service\Connection;
  */
 interface ServiceConnection
 {
-    public function create($requestData);
-    public function get($requestData);
-    public function update($requestData);
-    public function getAvailablePartPaymentCampaigns($requestData);
+	public function create($requestData);
+	public function get($requestData);
+	public function update($requestData);
+	public function getAvailablePartPaymentCampaigns($requestData);
 }

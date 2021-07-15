@@ -13,88 +13,88 @@ use Svea\WebPay\Helper\Helper;
  */
 class UpdateOrderRequest extends AdminServiceRequest
 {
-    /**
-     * @var UpdateOrderRowsBuilder $orderBuilder
-     */
-    public $orderBuilder;
+	/**
+	 * @var UpdateOrderRowsBuilder $orderBuilder
+	 */
+	public $orderBuilder;
 
-    /**
-     * @param UpdateOrderBuilder $updateOrderBuilder
-     */
-    public function __construct($updateOrderBuilder)
-    {
-        $this->action = "UpdateOrder";
-        $this->orderBuilder = $updateOrderBuilder;
-    }
+	/**
+	 * @param UpdateOrderBuilder $updateOrderBuilder
+	 */
+	public function __construct($updateOrderBuilder)
+	{
+		$this->action = "UpdateOrder";
+		$this->orderBuilder = $updateOrderBuilder;
+	}
 
-    /**
-     * populate and return soap request contents using AdminSoap helper classes to get the correct data format
-     * @return \Svea\WebPay\AdminService\AdminSoap\UpdateOrderRequest
-     * @throws ValidationException
-     */
-    public function prepareRequest()
-    {
-        $this->validateRequest();
-        $soapRequest = new \Svea\WebPay\AdminService\AdminSoap\UpdateOrderRequest(
-            new Authentication(
-                $this->orderBuilder->conf->getUsername(($this->orderBuilder->orderType), $this->orderBuilder->countryCode),
-                $this->orderBuilder->conf->getPassword(($this->orderBuilder->orderType), $this->orderBuilder->countryCode)
-            ),
-            $this->orderBuilder->conf->getClientNumber(($this->orderBuilder->orderType), $this->orderBuilder->countryCode),
-            AdminServiceRequest::CamelCaseOrderType($this->orderBuilder->orderType),
-            $this->orderBuilder->orderId,
-            $this->orderBuilder->clientOrderNumber,
-            $this->orderBuilder->notes
+	/**
+	 * populate and return soap request contents using AdminSoap helper classes to get the correct data format
+	 * @return \Svea\WebPay\AdminService\AdminSoap\UpdateOrderRequest
+	 * @throws ValidationException
+	 */
+	public function prepareRequest()
+	{
+		$this->validateRequest();
+		$soapRequest = new \Svea\WebPay\AdminService\AdminSoap\UpdateOrderRequest(
+			new Authentication(
+				$this->orderBuilder->conf->getUsername(($this->orderBuilder->orderType), $this->orderBuilder->countryCode),
+				$this->orderBuilder->conf->getPassword(($this->orderBuilder->orderType), $this->orderBuilder->countryCode)
+			),
+			$this->orderBuilder->conf->getClientNumber(($this->orderBuilder->orderType), $this->orderBuilder->countryCode),
+			AdminServiceRequest::CamelCaseOrderType($this->orderBuilder->orderType),
+			$this->orderBuilder->orderId,
+			$this->orderBuilder->clientOrderNumber,
+			$this->orderBuilder->notes
 
-        );
+		);
 
-        return $soapRequest;
-    }
+		return $soapRequest;
+	}
 
-    public function validate()
-    {
-        $errors = [];
-        $errors = $this->validateOrderId($errors);
-        $errors = $this->validateOrderType($errors);
-        $errors = $this->validateCountryCode($errors);
-        $errors = $this->validateStringLength($errors);
+	public function validate()
+	{
+		$errors = [];
+		$errors = $this->validateOrderId($errors);
+		$errors = $this->validateOrderType($errors);
+		$errors = $this->validateCountryCode($errors);
+		$errors = $this->validateStringLength($errors);
 
-        return $errors;
-    }
+		return $errors;
+	}
 
-    private function validateOrderId($errors)
-    {
-        if (isset($this->orderBuilder->orderId) == FALSE) {
-            $errors[] = ['missing value' => "orderId is required."];
-        }
+	private function validateOrderId($errors)
+	{
+		if (isset($this->orderBuilder->orderId) == FALSE) {
+			$errors[] = ['missing value' => "orderId is required."];
+		}
 
-        return $errors;
-    }
+		return $errors;
+	}
 
-    private function validateOrderType($errors)
-    {
-        if (isset($this->orderBuilder->orderType) == FALSE) {
-            $errors[] = ['missing value' => "orderType is required."];
-        }
+	private function validateOrderType($errors)
+	{
+		if (isset($this->orderBuilder->orderType) == FALSE) {
+			$errors[] = ['missing value' => "orderType is required."];
+		}
 
-        return $errors;
-    }
+		return $errors;
+	}
 
-    private function validateCountryCode($errors)
-    {
-        if (isset($this->orderBuilder->countryCode) == FALSE) {
-            $errors[] = ['missing value' => "countryCode is required."];
-        }
+	private function validateCountryCode($errors)
+	{
+		if (isset($this->orderBuilder->countryCode) == FALSE) {
+			$errors[] = ['missing value' => "countryCode is required."];
+		}
 
-        return $errors;
-    }
+		return $errors;
+	}
 
-    private function validateStringLength($errors)
-    {
-        if (strlen($this->orderBuilder->notes) > 200) {
-            $errors[] = ['String length' => "The field Notes must be a string with a maximum length of 200."];
-        }
+	private function validateStringLength($errors)
+	{
+		if (strlen($this->orderBuilder->notes) > 200) {
+			$errors[] = ['String length' => "The field Notes must be a string with a maximum length of 200."];
+		}
 
-        return $errors;
-    }
+		return $errors;
+	}
 }

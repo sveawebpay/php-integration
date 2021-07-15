@@ -11,29 +11,29 @@ use Svea\WebPay\Test\UnitTest\Checkout\TestCase;
  */
 class CheckoutRowFormatterTest extends TestCase
 {
-    /**
-     * @var CheckoutRowFormatter
-     */
-    protected $formatter;
+	/**
+	 * @var CheckoutRowFormatter
+	 */
+	protected $formatter;
 
-    public function setUp()
-    {
-        parent::setUp();
+	public function setUp()
+	{
+		parent::setUp();
 
-        $this->formatter = new CheckoutRowFormatter($this->order, true);
-    }
+		$this->formatter = new CheckoutRowFormatter($this->order, true);
+	}
 
-    /**
-     * @test
-     */
-    public function ifRowsAreFormatted()
-    {
-        $row = $this->returnOrderRow();
+	/**
+	 * @test
+	 */
+	public function ifRowsAreFormatted()
+	{
+		$row = $this->returnOrderRow();
 
-        $this->invokeMethod($this->formatter, 'formatOrderRows', [$row]);
+		$this->invokeMethod($this->formatter, 'formatOrderRows', [$row]);
 
-        $newRows = $this->getPrivateProperty($this->formatter, 'newRows');
+		$newRows = $this->getPrivateProperty($this->formatter, 'newRows');
 
-        $this->assertInstanceOf('Svea\WebPay\WebService\SveaSoap\SveaOrderRow', $newRows[0]);
-    }
+		$this->assertInstanceOf('Svea\WebPay\WebService\SveaSoap\SveaOrderRow', $newRows[0]);
+	}
 }

@@ -10,35 +10,35 @@ namespace Svea\WebPay\HostedService\HostedAdminRequest;
  */
 class GetPaymentMethods
 {
-    private $method = "getpaymentmethods";
-    private $config;
-    private $countryCode = "SE";    //Default SE
+	private $method = "getpaymentmethods";
+	private $config;
+	private $countryCode = "SE";	//Default SE
 
-    /**
-     * @deprecated 2.0 Use class ListPaymentMethods instead.
-     */
-    function __construct($config)
-    {
-        $this->config = $config;
-    }
+	/**
+	 * @deprecated 2.0 Use class ListPaymentMethods instead.
+	 */
+	function __construct($config)
+	{
+		$this->config = $config;
+	}
 
-    public function setContryCode($countryCodeAsString)
-    {
-        $this->countryCode = $countryCodeAsString;
+	public function setContryCode($countryCodeAsString)
+	{
+		$this->countryCode = $countryCodeAsString;
 
-        return $this;
-    }
+		return $this;
+	}
 
-    /**
-     * Wrapper for ListPaymentMethods->doRequest
-     * @deprecated 2.0 Use class ListPaymentMethods instead.
-     */
-    public function doRequest()
-    {
-        $request = new ListPaymentMethods($this->config);
-        $request->countryCode = $this->countryCode;
-        $response = $request->doRequest();
+	/**
+	 * Wrapper for ListPaymentMethods->doRequest
+	 * @deprecated 2.0 Use class ListPaymentMethods instead.
+	 */
+	public function doRequest()
+	{
+		$request = new ListPaymentMethods($this->config);
+		$request->countryCode = $this->countryCode;
+		$response = $request->doRequest();
 
-        return $response->paymentmethods;
-    }
+		return $response->paymentmethods;
+	}
 }

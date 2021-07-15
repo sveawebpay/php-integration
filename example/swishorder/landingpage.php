@@ -24,11 +24,11 @@ $rawResponse = $_REQUEST;
 // decode the raw response by passing it through the Svea\WebPay\Response\SveaResponse class
 try
 {
-    $myResponse = new SveaResponse($rawResponse, $countryCode = NULL, $myConfig);
+	$myResponse = new SveaResponse($rawResponse, $countryCode = NULL, $myConfig);
 }
 catch (Exception $e)
 {
-    echo $e->getMessage();
+	echo $e->getMessage();
 }
 
 // The decoded response is available through the ->getResponse() method.
@@ -43,15 +43,15 @@ An example of a successful request response. The 'accepted' attribute is true (1
 
 Svea\WebPay\HostedService\HostedResponse\HostedPaymentResponse Object
 (
-    [transactionId] => 722742
-    [clientOrderNumber] => order #2019-11-29T14:28:35 01:00
-    [paymentMethod] => SWISH
-    [merchantId] => 1130
-    [amount] => 3.75
-    [currency] => SEK
-    [accepted] => 1
-    [resultcode] =>
-    [errormessage] =>
+	[transactionId] => 722742
+	[clientOrderNumber] => order #2019-11-29T14:28:35 01:00
+	[paymentMethod] => SWISH
+	[merchantId] => 1130
+	[amount] => 3.75
+	[currency] => SEK
+	[accepted] => 1
+	[resultcode] =>
+	[errormessage] =>
 )
 
 )";
@@ -62,14 +62,14 @@ An example of a rejected request response -- 'accepted' is false (0) and resultc
 
 Svea\HostedPaymentResponse Object
 (
-    [transactionId] => 582828
-    [clientOrderNumber] => order #2019-11-29T14:28:35 01:00
-    [paymentMethod] => SWISH
-    [merchantId] => 1130
-    [amount] => 3.75
-    [currency] => SEK
-    [accepted] => 0
-    [resultcode] => 127 (CUSTOMERREFNO_ALREADY_USED)
-    [errormessage] => Customer reference number already used in another transaction.
+	[transactionId] => 582828
+	[clientOrderNumber] => order #2019-11-29T14:28:35 01:00
+	[paymentMethod] => SWISH
+	[merchantId] => 1130
+	[amount] => 3.75
+	[currency] => SEK
+	[accepted] => 0
+	[resultcode] => 127 (CUSTOMERREFNO_ALREADY_USED)
+	[errormessage] => Customer reference number already used in another transaction.
 )";
 ?>

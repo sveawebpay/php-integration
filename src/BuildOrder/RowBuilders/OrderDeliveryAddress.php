@@ -13,114 +13,114 @@ namespace Svea\WebPay\BuildOrder\RowBuilders;
 
 class OrderDeliveryAddress
 {
-    public $fullName;
-    public $firstName;
-    public $lastName;
-    public $streetAddress;
-    public $coAddress;
-    public $zipCode;
-    public $houseNumber;
-    public $locality;
-    public $countryCode;
-    /**
-     * @return mixed
-     */
-    /**
-     * @param mixed $fullName
-     * @return $this
-     */
-    public function setFullName($fullName)
-    {
-        $this->fullName = $fullName;
+	public $fullName;
+	public $firstName;
+	public $lastName;
+	public $streetAddress;
+	public $coAddress;
+	public $zipCode;
+	public $houseNumber;
+	public $locality;
+	public $countryCode;
+	/**
+	 * @return mixed
+	 */
+	/**
+	 * @param mixed $fullName
+	 * @return $this
+	 */
+	public function setFullName($fullName)
+	{
+		$this->fullName = $fullName;
 
-        return $this;
-    }
+		return $this;
+	}
 
-    /**
-     * @param mixed $firstName
-     * @return $this
-     */
-    public function setFirstName($firstName)
-    {
-        $this->firstName = $firstName;
+	/**
+	 * @param mixed $firstName
+	 * @return $this
+	 */
+	public function setFirstName($firstName)
+	{
+		$this->firstName = $firstName;
 
-        return $this;
-    }
+		return $this;
+	}
 
-    /**
-     * @param mixed $lastName
-     * @return $this
-     */
-    public function setLastName($lastName)
-    {
-        $this->lastName = $lastName;
+	/**
+	 * @param mixed $lastName
+	 * @return $this
+	 */
+	public function setLastName($lastName)
+	{
+		$this->lastName = $lastName;
 
-        return $this;
-    }
+		return $this;
+	}
 
-    /**
-     * @param mixed $streetAddress
-     * @return $this
-     */
-    public function setStreetAddress($streetAddress)
-    {
-        $this->streetAddress = $streetAddress;
+	/**
+	 * @param mixed $streetAddress
+	 * @return $this
+	 */
+	public function setStreetAddress($streetAddress)
+	{
+		$this->streetAddress = $streetAddress;
 
-        return $this;
-    }
+		return $this;
+	}
 
-    /**
-     * @param mixed $coAddress
-     * @return $this
-     */
-    public function setCoAddress($coAddress)
-    {
-        $this->coAddress = $coAddress;
+	/**
+	 * @param mixed $coAddress
+	 * @return $this
+	 */
+	public function setCoAddress($coAddress)
+	{
+		$this->coAddress = $coAddress;
 
-        return $this;
-    }
+		return $this;
+	}
 
-    /**
-     * @param mixed $zipCode
-     * @return mixed
-     */
-    public function setZipCode($zipCode)
-    {
-        $this->zipCode = $zipCode;
+	/**
+	 * @param mixed $zipCode
+	 * @return mixed
+	 */
+	public function setZipCode($zipCode)
+	{
+		$this->zipCode = $zipCode;
 
-        return $this;
-    }
+		return $this;
+	}
 
-    /**
-     * @param mixed $houseNumber
-     * @return $this
-     */
-    public function setHouseNumber($houseNumber)
-    {
-        $this->houseNumber = $houseNumber;
+	/**
+	 * @param mixed $houseNumber
+	 * @return $this
+	 */
+	public function setHouseNumber($houseNumber)
+	{
+		$this->houseNumber = $houseNumber;
 
-        return $this;
-    }
+		return $this;
+	}
 
-    /**
-     * @param mixed $locality
-     * @return $this
-     */
-    public function setLocality($locality)
-    {
-        $this->locality = $locality;
+	/**
+	 * @param mixed $locality
+	 * @return $this
+	 */
+	public function setLocality($locality)
+	{
+		$this->locality = $locality;
 
-        return $this;
-    }
+		return $this;
+	}
 
-    /**
-     * @param mixed $countryCode
-     * @return $this
-     */
-    public function setCountryCode($countryCode)
-    {
-        $this->countryCode = $countryCode;
+	/**
+	 * @param mixed $countryCode
+	 * @return $this
+	 */
+	public function setCountryCode($countryCode)
+	{
+		$this->countryCode = $countryCode;
 
-        return $this;
-    }
+		return $this;
+	}
 }

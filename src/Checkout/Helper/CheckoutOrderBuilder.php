@@ -20,355 +20,355 @@ use Svea\WebPay\Checkout\Service\GetAvailablePartPaymentCampaignsService;
  */
 class CheckoutOrderBuilder extends OrderBuilder
 {
-    /**
-     * @var float $id
-     */
-    protected $id;
+	/**
+	 * @var float $id
+	 */
+	protected $id;
 
-    /**
-     * @var MerchantSettings $merchantSettings
-     */
-    protected $merchantSettings;
+	/**
+	 * @var MerchantSettings $merchantSettings
+	 */
+	protected $merchantSettings;
 
-    /**
-     * @var string $locale
-     */
-    protected $locale;
+	/**
+	 * @var string $locale
+	 */
+	protected $locale;
 
-    /**
-     * @var PresetValue []
-     */
-    protected $presetValues = [];
+	/**
+	 * @var PresetValue []
+	 */
+	protected $presetValues = [];
 
-    /**
-     * @var string $partnerKey
-     */
-    protected $partnerKey;
+	/**
+	 * @var string $partnerKey
+	 */
+	protected $partnerKey;
 
-    /**
-     * @var IdentityFlags []
-     */
-    protected $identityFlags = [];
+	/**
+	 * @var IdentityFlags []
+	 */
+	protected $identityFlags = [];
 
-    /**
-     * @var string $merchantData
-     */
-    protected $merchantData;
+	/**
+	 * @var string $merchantData
+	 */
+	protected $merchantData;
 
-    /**
-     * @var bool $requireElectronicIdAuthentication
-     */
-    protected $requireElectronicIdAuthentication;
+	/**
+	 * @var bool $requireElectronicIdAuthentication
+	 */
+	protected $requireElectronicIdAuthentication;
 
-    /**
-     * CheckoutOrderBuilder constructor.
-     * @param \Svea\WebPay\Config\ConfigurationProvider $config
-     */
-    public function __construct($config)
-    {
-        parent::__construct($config);
+	/**
+	 * CheckoutOrderBuilder constructor.
+	 * @param \Svea\WebPay\Config\ConfigurationProvider $config
+	 */
+	public function __construct($config)
+	{
+		parent::__construct($config);
 
-        $this->merchantSettings = new MerchantSettings();
-    }
+		$this->merchantSettings = new MerchantSettings();
+	}
 
-    /**
-     * Calls logic that initialize creating a Checkout Order
-     * and returns response from server
-     *
-     * @return array
-     */
-    public function createOrder()
-    {
-        $createService = new CreateOrderService($this);
+	/**
+	 * Calls logic that initialize creating a Checkout Order
+	 * and returns response from server
+	 *
+	 * @return array
+	 */
+	public function createOrder()
+	{
+		$createService = new CreateOrderService($this);
 
-        return $createService->doRequest();
-    }
+		return $createService->doRequest();
+	}
 
-    /**
-     * Calls logic that initialize getting a Checkout Order
-     * and returns response from server
-     *
-     * @return array
-     */
-    public function getOrder()
-    {
-        $getOrderService = new GetOrderService($this);
+	/**
+	 * Calls logic that initialize getting a Checkout Order
+	 * and returns response from server
+	 *
+	 * @return array
+	 */
+	public function getOrder()
+	{
+		$getOrderService = new GetOrderService($this);
 
-        return $getOrderService->doRequest();
-    }
+		return $getOrderService->doRequest();
+	}
 
-    /**
-     * Calls logic that initialize updating a Checkout Order
-     * and returns response from server
-     *
-     * @return array
-     */
-    public function updateOrder()
-    {
-        $updateOrderService = new UpdateOrderService($this);
+	/**
+	 * Calls logic that initialize updating a Checkout Order
+	 * and returns response from server
+	 *
+	 * @return array
+	 */
+	public function updateOrder()
+	{
+		$updateOrderService = new UpdateOrderService($this);
 
-        return $updateOrderService->doRequest();
-    }
+		return $updateOrderService->doRequest();
+	}
 
-    /**
-     * Returns all campaigns that is available on the merchant
-     *
-     * @return array
-     */
-    public function getAvailablePartPaymentCampaigns()
-    {
-        $getAvailablePartPaymentCampaigns = new GetAvailablePartPaymentCampaignsService($this);
+	/**
+	 * Returns all campaigns that is available on the merchant
+	 *
+	 * @return array
+	 */
+	public function getAvailablePartPaymentCampaigns()
+	{
+		$getAvailablePartPaymentCampaigns = new GetAvailablePartPaymentCampaignsService($this);
 
-        return $getAvailablePartPaymentCampaigns->doRequest();
-    }
+		return $getAvailablePartPaymentCampaigns->doRequest();
+	}
 
-    /**
-     * Set Merchant Settings for an Checkout Order
-     *
-     * @param $merchantSettings
-     * @return $this
-     */
-    public function setMerchantSettings($merchantSettings)
-    {
-        $this->merchantSettings = $merchantSettings;
+	/**
+	 * Set Merchant Settings for an Checkout Order
+	 *
+	 * @param $merchantSettings
+	 * @return $this
+	 */
+	public function setMerchantSettings($merchantSettings)
+	{
+		$this->merchantSettings = $merchantSettings;
 
-        return $this;
-    }
+		return $this;
+	}
 
-    /**
-     * @return MerchantSettings
-     */
-    public function getMerchantSettings()
-    {
-        return $this->merchantSettings;
-    }
+	/**
+	 * @return MerchantSettings
+	 */
+	public function getMerchantSettings()
+	{
+		return $this->merchantSettings;
+	}
 
-    /**
-     * @param string $checkoutUri
-     * @return $this
-     */
-    public function setCheckoutUri($checkoutUri)
-    {
-        $this->merchantSettings->setCheckoutUri($checkoutUri);
+	/**
+	 * @param string $checkoutUri
+	 * @return $this
+	 */
+	public function setCheckoutUri($checkoutUri)
+	{
+		$this->merchantSettings->setCheckoutUri($checkoutUri);
 
-        return $this;
-    }
+		return $this;
+	}
 
-    /**
-     * @param string $confirmationUri
-     * @return $this
-     */
-    public function setConfirmationUri($confirmationUri)
-    {
-        $this->merchantSettings->setConfirmationUri($confirmationUri);
+	/**
+	 * @param string $confirmationUri
+	 * @return $this
+	 */
+	public function setConfirmationUri($confirmationUri)
+	{
+		$this->merchantSettings->setConfirmationUri($confirmationUri);
 
-        return $this;
-    }
+		return $this;
+	}
 
-    /**
-     * @param string $pushUri
-     * @return $this
-     */
-    public function setPushUri($pushUri)
-    {
-        $this->merchantSettings->setPushUri($pushUri);
+	/**
+	 * @param string $pushUri
+	 * @return $this
+	 */
+	public function setPushUri($pushUri)
+	{
+		$this->merchantSettings->setPushUri($pushUri);
 
-        return $this;
-    }
+		return $this;
+	}
 
-    /**
-     * @param string $termsUri
-     * @return $this
-     */
-    public function setTermsUri($termsUri)
-    {
-        $this->merchantSettings->setTermsUri($termsUri);
+	/**
+	 * @param string $termsUri
+	 * @return $this
+	 */
+	public function setTermsUri($termsUri)
+	{
+		$this->merchantSettings->setTermsUri($termsUri);
 
-        return $this;
-    }
+		return $this;
+	}
 
-    /**
-     * @param string $validationCallbackUri
-     * @return $this
-     */
-    public function setValidationCallbackUri($validationCallbackUri)
-    {
-        $this->merchantSettings->setValidationCallbackUri($validationCallbackUri);
-        return $this;
-    }
+	/**
+	 * @param string $validationCallbackUri
+	 * @return $this
+	 */
+	public function setValidationCallbackUri($validationCallbackUri)
+	{
+		$this->merchantSettings->setValidationCallbackUri($validationCallbackUri);
+		return $this;
+	}
 
-    /**
-     * @return string
-     */
-    public function getLocale()
-    {
-        return $this->locale;
-    }
+	/**
+	 * @return string
+	 */
+	public function getLocale()
+	{
+		return $this->locale;
+	}
 
-    /**
-     * @param string $locale
-     * @return $this
-     */
-    public function setLocale($locale)
-    {
-        $this->locale = $locale;
+	/**
+	 * @param string $locale
+	 * @return $this
+	 */
+	public function setLocale($locale)
+	{
+		$this->locale = $locale;
 
-        return $this;
-    }
+		return $this;
+	}
 
-    /**
-     * @return float
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
+	/**
+	 * @return float
+	 */
+	public function getId()
+	{
+		return $this->id;
+	}
 
-    /**
-     * @param $id
-     * @return $this
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
+	/**
+	 * @param $id
+	 * @return $this
+	 */
+	public function setId($id)
+	{
+		$this->id = $id;
 
-        return $this;
-    }
+		return $this;
+	}
 
-    /**
-     * Return country code
-     * If country code is not defined, default value "SE" will be returned
-     *
-     * @return string
-     */
-    public function getCountryCode()
-    {
-        $countryCode = $this->countryCode != null ? $this->countryCode : "SE";
+	/**
+	 * Return country code
+	 * If country code is not defined, default value "SE" will be returned
+	 *
+	 * @return string
+	 */
+	public function getCountryCode()
+	{
+		$countryCode = $this->countryCode != null ? $this->countryCode : "SE";
 
-        return $countryCode;
-    }
+		return $countryCode;
+	}
 
-    /**
-     * @return string
-     */
-    public function getCurrency()
-    {
-        return $this->currency;
-    }
+	/**
+	 * @return string
+	 */
+	public function getCurrency()
+	{
+		return $this->currency;
+	}
 
-    /**
-     * @param string $clientOrderNumber
-     * @return CheckoutOrderBuilder
-     */
-    public function setClientOrderNumber($clientOrderNumber)
-    {
-        $this->clientOrderNumber = $clientOrderNumber;
+	/**
+	 * @param string $clientOrderNumber
+	 * @return CheckoutOrderBuilder
+	 */
+	public function setClientOrderNumber($clientOrderNumber)
+	{
+		$this->clientOrderNumber = $clientOrderNumber;
 
-        return $this;
-    }
+		return $this;
+	}
 
-    /**
-     * @return string
-     */
-    public function getClientOrderNumber()
-    {
-        return $this->clientOrderNumber;
-    }
+	/**
+	 * @return string
+	 */
+	public function getClientOrderNumber()
+	{
+		return $this->clientOrderNumber;
+	}
 
-    /**
-     * Return a list of Preset Values
-     *
-     * @return PresetValue []
-     */
-    public function getPresetValues()
-    {
-        return $this->presetValues;
-    }
+	/**
+	 * Return a list of Preset Values
+	 *
+	 * @return PresetValue []
+	 */
+	public function getPresetValues()
+	{
+		return $this->presetValues;
+	}
 
-    /**
-     * Add Preset Value to the list of Preset Values
-     *
-     * @param PresetValue $presetValues
-     * @return $this
-     */
-    public function addPresetValue($presetValues)
-    {
-        $this->presetValues [] = $presetValues;
+	/**
+	 * Add Preset Value to the list of Preset Values
+	 *
+	 * @param PresetValue $presetValues
+	 * @return $this
+	 */
+	public function addPresetValue($presetValues)
+	{
+		$this->presetValues [] = $presetValues;
 
-        return $this;
-    }
+		return $this;
+	}
 
-    /**
-     * Sets a partnerKey which is provided by Svea.
-     * Optional to use
-     * @param string $partnerKey
-     * @return $this
-     */
-    public function setPartnerKey($partnerKey)
-    {
-        $this->partnerKey = $partnerKey;
+	/**
+	 * Sets a partnerKey which is provided by Svea.
+	 * Optional to use
+	 * @param string $partnerKey
+	 * @return $this
+	 */
+	public function setPartnerKey($partnerKey)
+	{
+		$this->partnerKey = $partnerKey;
 
-        return $this;
-    }
+		return $this;
+	}
 
-    /**
-     * Returns a partnerKey
-     * @return string
-     */
-    public function getPartnerKey()
-    {
-        return $this->partnerKey;
-    }
+	/**
+	 * Returns a partnerKey
+	 * @return string
+	 */
+	public function getPartnerKey()
+	{
+		return $this->partnerKey;
+	}
 
-    /**
-     * Return a list of IdentityFlags
-     *
-     * @return IdentityFlags []
-     */
-    public function getIdentityFlags()
-    {
-        return $this->identityFlags;
-    }
+	/**
+	 * Return a list of IdentityFlags
+	 *
+	 * @return IdentityFlags []
+	 */
+	public function getIdentityFlags()
+	{
+		return $this->identityFlags;
+	}
 
-    /**
-     * Add IdentityFlag to the list of IdentityFlags
-     *
-     * @param string $identityFlag
-     * @return $this
-     */
-    public function addIdentityFlag($identityFlag)
-    {
-        $this->identityFlags [] = $identityFlag;
+	/**
+	 * Add IdentityFlag to the list of IdentityFlags
+	 *
+	 * @param string $identityFlag
+	 * @return $this
+	 */
+	public function addIdentityFlag($identityFlag)
+	{
+		$this->identityFlags [] = $identityFlag;
 
-        return $this;
-    }
+		return $this;
+	}
 
-    public function setMerchantData($merchantData)
-    {
-        $this->merchantData = $merchantData;
-        return $this;
-    }
+	public function setMerchantData($merchantData)
+	{
+		$this->merchantData = $merchantData;
+		return $this;
+	}
 
-    public function getMerchantData()
-    {
-        return $this->merchantData;
-    }
+	public function getMerchantData()
+	{
+		return $this->merchantData;
+	}
 
-    /**
-     * Enable electronic id authentication for end-user if set to true
-     *
-     * @param bool $enabled
-     * @return $this
-     */
-    public function setRequireElectronicIdAuthentication($enabled)
-    {
-        $this->requireElectronicIdAuthentication = $enabled;
-        return $this;
-    }
+	/**
+	 * Enable electronic id authentication for end-user if set to true
+	 *
+	 * @param bool $enabled
+	 * @return $this
+	 */
+	public function setRequireElectronicIdAuthentication($enabled)
+	{
+		$this->requireElectronicIdAuthentication = $enabled;
+		return $this;
+	}
 
-    public function getRequireElectronicIdAuthentication()
-    {
-        return $this->requireElectronicIdAuthentication;
-    }
+	public function getRequireElectronicIdAuthentication()
+	{
+		return $this->requireElectronicIdAuthentication;
+	}
 
 }

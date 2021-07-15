@@ -16,18 +16,18 @@ ini_set('display_errors', 'On');
 // get config object
 $myConfig = ConfigurationService::getTestConfig();
 try {
-    $request = WebPay::checkout($myConfig);
+	$request = WebPay::checkout($myConfig);
 
-    $presetValueIsCompany = \Svea\WebPay\WebPayItem::presetValue()
-        ->setTypeName(\Svea\WebPay\Checkout\Model\PresetValue::IS_COMPANY)
-        ->setValue(false)
-        ->setIsReadonly(true);
+	$presetValueIsCompany = \Svea\WebPay\WebPayItem::presetValue()
+		->setTypeName(\Svea\WebPay\Checkout\Model\PresetValue::IS_COMPANY)
+		->setValue(false)
+		->setIsReadonly(true);
 
-    $request->setCountryCode('SE')
-        ->addPresetValue($presetValueIsCompany);
+	$request->setCountryCode('SE')
+		->addPresetValue($presetValueIsCompany);
 
-    $response = $request->getAvailablePartPaymentCampaigns();
-    echo "<pre>" . print_r($response, true) . "</pre>";
+	$response = $request->getAvailablePartPaymentCampaigns();
+	echo "<pre>" . print_r($response, true) . "</pre>";
 } catch (\Exception $e) {
-    echo "<pre>" . print_r($e->getMessage(), true) . "</pre>";
+	echo "<pre>" . print_r($e->getMessage(), true) . "</pre>";
 }

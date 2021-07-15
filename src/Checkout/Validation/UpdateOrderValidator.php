@@ -10,28 +10,28 @@ use Svea\WebPay\BuildOrder\Validator\OrderValidator;
  */
 class UpdateOrderValidator extends OrderValidator
 {
-    public $errors = [];
+	public $errors = [];
 
-    public function validate($order)
-    {
-        $errors = $this->errors;
-        $errors = $this->restrictExVatValue($order, $errors);
-        $errors = $this->validateOrderId($order, $errors);
-        $errors = $this->validateOrderRows($order, $errors);
+	public function validate($order)
+	{
+		$errors = $this->errors;
+		$errors = $this->restrictExVatValue($order, $errors);
+		$errors = $this->validateOrderId($order, $errors);
+		$errors = $this->validateOrderRows($order, $errors);
 
-        return $errors;
-    }
+		return $errors;
+	}
 
-    /**
-     * @param object $order
-     * @param array $errors
-     * @return array
-     */
-    protected function validateOrderRows($order, $errors)
-    {
-        $errors = parent::validateOrderRows($order, $errors);
-        $errors = $this->validateCheckoutOrderRows($order, $errors);
+	/**
+	 * @param object $order
+	 * @param array $errors
+	 * @return array
+	 */
+	protected function validateOrderRows($order, $errors)
+	{
+		$errors = parent::validateOrderRows($order, $errors);
+		$errors = $this->validateCheckoutOrderRows($order, $errors);
 
-        return $errors;
-    }
+		return $errors;
+	}
 }

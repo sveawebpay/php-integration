@@ -12,42 +12,42 @@ use Svea\WebPay\Test\UnitTest\Checkout\TestCase;
  */
 class UpdateOrderValidationTest extends TestCase
 {
-    /**
-     * @var OrderValidator
-     */
-    protected $validator;
+	/**
+	 * @var OrderValidator
+	 */
+	protected $validator;
 
-    public function setUp()
-    {
-        parent::setUp();
-        $this->validator = new UpdateOrderValidator();
-    }
+	public function setUp()
+	{
+		parent::setUp();
+		$this->validator = new UpdateOrderValidator();
+	}
 
-    /**
-     * @test
-     */
-    public function ifBlankCheckoutOrderIsPassed()
-    {
-        $this->order->setId(123);
+	/**
+	 * @test
+	 */
+	public function ifBlankCheckoutOrderIsPassed()
+	{
+		$this->order->setId(123);
 
-        $errors = $this->invokeMethod($this->validator, 'validate', [$this->order, []]);
+		$errors = $this->invokeMethod($this->validator, 'validate', [$this->order, []]);
 
-        $errorsNum = count($errors);
+		$errorsNum = count($errors);
 
-        $this->assertEquals(0, $errorsNum);
-    }
+		$this->assertEquals(0, $errorsNum);
+	}
 
-    /**
-     * @test
-     */
-    public function ifCheckoutOrderIdNotPassed()
-    {
-        $this->order->addOrderRow($this->returnOrderRow());
+	/**
+	 * @test
+	 */
+	public function ifCheckoutOrderIdNotPassed()
+	{
+		$this->order->addOrderRow($this->returnOrderRow());
 
-        $errors = $this->invokeMethod($this->validator, 'validateOrderRows', [$this->order, []]);
+		$errors = $this->invokeMethod($this->validator, 'validateOrderRows', [$this->order, []]);
 
-        $errorsNum = count($errors);
+		$errorsNum = count($errors);
 
-        $this->assertEquals(0, $errorsNum);
-    }
+		$this->assertEquals(0, $errorsNum);
+	}
 }
