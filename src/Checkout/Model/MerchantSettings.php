@@ -5,7 +5,7 @@ namespace Svea\WebPay\Checkout\Model;
 /**
  * This class hold information about urls that
  * are necessary for creating an checkout order
- * 
+ *
  * Class MerchantSettings
  * @package Svea\Svea\WebPay\WebPay\Checkout\Model
  */

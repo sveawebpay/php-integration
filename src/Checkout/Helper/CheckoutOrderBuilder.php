@@ -34,7 +34,7 @@ class CheckoutOrderBuilder extends OrderBuilder
      * @var string $locale
      */
     protected $locale;
- 
+
     /**
      * @var PresetValue []
      */
@@ -100,7 +100,7 @@ class CheckoutOrderBuilder extends OrderBuilder
     /**
      * Calls logic that initialize updating a Checkout Order
      * and returns response from server
-     * 
+     *
      * @return array
      */
     public function updateOrder()
@@ -124,7 +124,7 @@ class CheckoutOrderBuilder extends OrderBuilder
 
     /**
      * Set Merchant Settings for an Checkout Order
-     * 
+     *
      * @param $merchantSettings
      * @return $this
      */
@@ -238,7 +238,7 @@ class CheckoutOrderBuilder extends OrderBuilder
     /**
      * Return country code
      * If country code is not defined, default value "SE" will be returned
-     * 
+     *
      * @return string
      */
     public function getCountryCode()
@@ -277,7 +277,7 @@ class CheckoutOrderBuilder extends OrderBuilder
 
     /**
      * Return a list of Preset Values
-     * 
+     *
      * @return PresetValue []
      */
     public function getPresetValues()
@@ -287,7 +287,7 @@ class CheckoutOrderBuilder extends OrderBuilder
 
     /**
      * Add Preset Value to the list of Preset Values
-     * 
+     *
      * @param PresetValue $presetValues
      * @return $this
      */

@@ -1,7 +1,7 @@
 <?php
 /**
- * example file, how to credit an existing card order using the queried original order rows 
- * 
+ * example file, how to credit an existing card order using the queried original order rows
+ *
  * @author Kristian Grossman-Madsen for Svea Svea\WebPay\WebPay
  */
 
@@ -22,7 +22,7 @@ $myConfig = ConfigurationService::getTestConfig(); // add your Svea credentials 
 // 2) specifying that all of the original order rows are to be credited, passing in their number and, as this is a card order, the order rows themselves
 
 // 2) instead credit specific order rows, 2):
-// 
+//
 // First we create a builder object and populate them with the required fields.
 $firstCreditOrderRowsBuilder = WebPayAdmin::creditOrderRows( $myConfig );
 
@@ -30,7 +30,7 @@ $firstCreditOrderRowsBuilder = WebPayAdmin::creditOrderRows( $myConfig );
 $myTransactionId = file_get_contents("transactionid.txt");
 if( ! $myTransactionId ) {
     echo "<pre>Error: transactionid.txt not found, first run cardorder_credit.php to set up the card order. aborting.";
-    die;    
+    die;
 }
 $firstCreditOrderRowsBuilder
     ->setOrderId( $myTransactionId )
@@ -45,11 +45,11 @@ $secondCreditOrderRowsBuilder
 ;
 
 // To credit specific order rows, you pass the order rows numbers you wish to credit using setRowsToCredit().
-// For card orders, you also need to pass in the numbered order rows themselves using addNumberedOrderRows(). 
+// For card orders, you also need to pass in the numbered order rows themselves using addNumberedOrderRows().
 
 // You can use the Svea\WebPay\WebPayAdmin::queryCardOrder() entrypoint method to get a copy of the original order rows sent to Svea.
 // Note that these order rows does not update following a successful credit order rows request, even though the
-// QueryTransactionResponse field creditedamount returned by a queryOrder request will reflect the current credit status.  
+// QueryTransactionResponse field creditedamount returned by a queryOrder request will reflect the current credit status.
 //
 $queryOrderBuilder = WebPayAdmin::queryOrder( $myConfig )
     ->setOrderId( $myTransactionId )
@@ -57,10 +57,10 @@ $queryOrderBuilder = WebPayAdmin::queryOrder( $myConfig )
 ;
 
 // query orderrows to pass in creditOrderRows->setNumberedOrderRows()
-$queryResponse = $queryOrderBuilder->queryCardOrder()->doRequest(); 
+$queryResponse = $queryOrderBuilder->queryCardOrder()->doRequest();
 if( ! $queryResponse->accepted ) {
     echo "<pre>Error: queryOrder failed. aborting.";
-    die;    
+    die;
 }
 
 // The query response holds an array of NumberedOrderRow containing the order rows as sent in the createOrder request
@@ -76,11 +76,11 @@ $secondCreditOrderRowsBuilder
 ;
 
 // Send the credit request to Svea:
-$myCreditRequest = $secondCreditOrderRowsBuilder->creditCardOrderRows();        
+$myCreditRequest = $secondCreditOrderRowsBuilder->creditCardOrderRows();
 $myCreditResponse = $myCreditRequest->doRequest();
 
 
-// The response is an instance of LowerTransactionResponse 
+// The response is an instance of LowerTransactionResponse
 echo "<pre>";
 print_r( "the creditCardOrderRows() response:");
 print_r( $myCreditResponse );
@@ -114,7 +114,7 @@ the creditCardOrderRows() response:Svea\WebPay\HostedService\HostedResponse\Host
     [customerrefno] => order #2014-08-26T14:28:33 02:00
     [accepted] => 1
     [resultcode] => 0
-    [errormessage] => 
+    [errormessage] =>
 )
 
 The following is the result of a Svea\WebPay\WebPayAdmin::queryOrder for the above order, as you can see the entire authorized/captured amount has been credited:
@@ -141,75 +141,75 @@ Svea\WebPay\HostedService\HostedResponse\HostedAdminResponse\QueryTransactionRes
         (
             [0] => Svea\WebPay\BuildOrder\RowBuilders\NumberedOrderRow Object
                 (
-                    [creditInvoiceId] => 
-                    [invoiceId] => 
+                    [creditInvoiceId] =>
+                    [invoiceId] =>
                     [rowNumber] => 1
-                    [status] => 
-                    [articleNumber] => 
+                    [status] =>
+                    [articleNumber] =>
                     [quantity] => 1
-                    [unit] => 
+                    [unit] =>
                     [amountExVat] => 100
                     [vatPercent] => 25
-                    [amountIncVat] => 
-                    [name] => 
+                    [amountIncVat] =>
+                    [name] =>
                     [description] => A
-                    [discountPercent] => 
+                    [discountPercent] =>
                     [vatDiscount] => 0
                 )
 
             [1] => Svea\WebPay\BuildOrder\RowBuilders\NumberedOrderRow Object
                 (
-                    [creditInvoiceId] => 
-                    [invoiceId] => 
+                    [creditInvoiceId] =>
+                    [invoiceId] =>
                     [rowNumber] => 2
-                    [status] => 
-                    [articleNumber] => 
+                    [status] =>
+                    [articleNumber] =>
                     [quantity] => 1
-                    [unit] => 
+                    [unit] =>
                     [amountExVat] => 100
                     [vatPercent] => 25
-                    [amountIncVat] => 
-                    [name] => 
+                    [amountIncVat] =>
+                    [name] =>
                     [description] => B
-                    [discountPercent] => 
+                    [discountPercent] =>
                     [vatDiscount] => 0
                 )
 
             [2] => Svea\WebPay\BuildOrder\RowBuilders\NumberedOrderRow Object
                 (
-                    [creditInvoiceId] => 
-                    [invoiceId] => 
+                    [creditInvoiceId] =>
+                    [invoiceId] =>
                     [rowNumber] => 3
-                    [status] => 
-                    [articleNumber] => 
+                    [status] =>
+                    [articleNumber] =>
                     [quantity] => 1
-                    [unit] => 
+                    [unit] =>
                     [amountExVat] => 100
                     [vatPercent] => 25
-                    [amountIncVat] => 
-                    [name] => 
+                    [amountIncVat] =>
+                    [name] =>
                     [description] => C
-                    [discountPercent] => 
+                    [discountPercent] =>
                     [vatDiscount] => 0
                 )
 
         )
 
-    [callbackurl] => 
+    [callbackurl] =>
     [capturedate] => 2014-11-20 16:02:20.26
-    [subscriptionId] => 
-    [subscriptiontype] => 
-    [cardType] => 
-    [maskedCardNumber] => 
-    [eci] => 
-    [mdstatus] => 
-    [expiryYear] => 
-    [expiryMonth] => 
-    [chname] => 
-    [authCode] => 
+    [subscriptionId] =>
+    [subscriptiontype] =>
+    [cardType] =>
+    [maskedCardNumber] =>
+    [eci] =>
+    [mdstatus] =>
+    [expiryYear] =>
+    [expiryMonth] =>
+    [chname] =>
+    [authCode] =>
     [accepted] => 1
     [resultcode] => 0
-    [errormessage] => 
+    [errormessage] =>
 )
 </pre>";
 

@@ -139,7 +139,7 @@ class GetAddressesTest extends \PHPUnit\Framework\TestCase
         $request->conf->conf['credentials']['SE']['auth']['Invoice']['username'] = "sverigetest";
         $request->conf->conf['credentials']['SE']['auth']['Invoice']['password'] = "sverigetest";
         $request->conf->conf['credentials']['SE']['auth']['Invoice']['clientNumber'] = 79021;
-//        $request->conf->conf['credentials']['SE']['auth']['PaymentPlan']['username'] = null;        
+//        $request->conf->conf['credentials']['SE']['auth']['PaymentPlan']['username'] = null;
 //        $request->conf->conf['credentials']['SE']['auth']['PaymentPlan']['password'] = null;
 //        $request->conf->conf['credentials']['SE']['auth']['PaymentPlan']['clientNumber'] = null;
 //        $request->conf->conf['credentials']['SE']['auth']['AccountCredit']['username'] = null;

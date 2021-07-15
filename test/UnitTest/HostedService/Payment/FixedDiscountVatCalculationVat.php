@@ -78,7 +78,7 @@ class FixedDiscountVatCalculationTest extends \PHPUnit\Framework\TestCase
         "  </row>\n";
         $this->assertEquals(1, substr_count($request->xmlMessage, $expectedDiscountRow2));
 
-        // lagt ordern med den dumpade xml:en från utskriften i tools/payment, ger detta response:        
+        // lagt ordern med den dumpade xml:en från utskriften i tools/payment, ger detta response:
 
         //<response>
         //  <transaction id="600089">
@@ -111,7 +111,7 @@ class FixedDiscountVatCalculationTest extends \PHPUnit\Framework\TestCase
         //    </customer>
         //  </transaction>
         //  <statuscode>0</statuscode>
-        //</response>        
+        //</response>
     }
 
     public function test_bv_order_sent_incvat_two_decimals_with_both_discounts_with_amount_only()
@@ -175,7 +175,7 @@ class FixedDiscountVatCalculationTest extends \PHPUnit\Framework\TestCase
         "  </row>\n";
         $this->assertEquals(1, substr_count($request->xmlMessage, $expectedDiscountRow2));
 
-        // lagt ordern med den dumpade xml:en från utskriften i tools/payment, ger detta response:                
+        // lagt ordern med den dumpade xml:en från utskriften i tools/payment, ger detta response:
 
         //<response>
         //  <transaction id="600123">
@@ -208,6 +208,6 @@ class FixedDiscountVatCalculationTest extends \PHPUnit\Framework\TestCase
         //    </customer>
         //  </transaction>
         //  <statuscode>0</statuscode>
-        //</response>    
+        //</response>
     }
 }

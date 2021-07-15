@@ -90,7 +90,7 @@ class CancelRecurSubscriptionIntegrationTest extends \PHPUnit\Framework\TestCase
 
         $this->assertInstanceOf("Svea\WebPay\HostedService\HostedResponse\HostedAdminResponse\CancelRecurSubscriptionResponse", $response);
 
-        ////print_r($response);                
+        ////print_r($response);
         $this->assertEquals(1, $response->accepted);
     }
 }

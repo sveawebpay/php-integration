@@ -88,4 +88,4 @@ class GetOrdersRequest extends AdminServiceRequest
 
         return $errors;
     }
-}        
+}

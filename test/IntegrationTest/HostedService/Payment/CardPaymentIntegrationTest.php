@@ -60,7 +60,7 @@ class CardPaymentIntegrationTest extends \PHPUnit\Framework\TestCase
 
         curl_close($ch);
 
-        //print_r( $cr);        
+        //print_r( $cr);
         $this->assertEquals(200, $info['http_code']);
         $this->assertEquals(1, $info['redirect_count']);
         $expected_infourl = "https://webpaypaymentgatewaystage.svea.com/webpay/public/static/paypage.html";

@@ -19,18 +19,18 @@ use Svea\WebPay\HostedService\HostedResponse\HostedAdminResponse\ConfirmTransact
  */
 class LowerTransaction extends HostedRequest
 {
-    /** 
-     * @var string $transactionId Required. 
+    /**
+     * @var string $transactionId Required.
      */
     public $transactionId;
 
-    /** 
-     * @var string $amountToLower Required. Use minor currency (i.e. 1 SEK => 100 in minor currency) 
+    /**
+     * @var string $amountToLower Required. Use minor currency (i.e. 1 SEK => 100 in minor currency)
      */
     public $amountToLower;
 
-    /** 
-     * @var boolean $alsoDoConfirm Optional. Iff true, doRequest() will perform a ConfirmTransaction request following a successful doRequest 
+    /**
+     * @var boolean $alsoDoConfirm Optional. Iff true, doRequest() will perform a ConfirmTransaction request following a successful doRequest
      */
     public $alsoDoConfirm;
 

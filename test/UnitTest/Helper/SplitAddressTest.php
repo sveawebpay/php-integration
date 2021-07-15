@@ -11,7 +11,7 @@ class SplitAddressTest extends \PHPUnit\Framework\TestCase
     {
         $PRINT_TO_CONSOLE = false;      // set to true to get debug output
 
-        // you may force netbeans output window encoding to use utf-8 by adding 
+        // you may force netbeans output window encoding to use utf-8 by adding
         // netbeans_default_options= "... -J-Dfile.encoding=UTF-8"
         // to <netbeans install folder>/etc/netbeans.conf
         if ($PRINT_TO_CONSOLE) {
@@ -176,7 +176,7 @@ class SplitAddressTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals("42 23", $address[2]); // ok, see testInvoiceRequestNLAcceptedWithDoubleHousenumber
     }
 
-    // decided not to implement this case, as it looks like a corner case w/"street 42" and housenumber 23 after    
+    // decided not to implement this case, as it looks like a corner case w/"street 42" and housenumber 23 after
 //    //Svea testperson DK
 //    function testGate_42_23(){
 //        $address = Helper::splitStreetAddress("Gate 42 23");
@@ -194,7 +194,7 @@ class SplitAddressTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals("Street", $address[1]);
         $this->assertEquals("10", $address[2]);
     }
-    // decided not to implement this case, as it looks like a corner case    
+    // decided not to implement this case, as it looks like a corner case
 //    function testGate_42comma_23(){
 //        $address = Helper::splitStreetAddress("Gate 4, 23");
 //        $this->assertEquals( "Gate 42", $address[1]);

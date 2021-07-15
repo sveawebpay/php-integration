@@ -17,18 +17,18 @@ use Svea\WebPay\HostedService\HostedResponse\HostedAdminResponse\RecurTransactio
  */
 class RecurTransaction extends HostedRequest
 {
-    /** 
-     * @var string $subscriptionId Required. This is the subscription id returned with the inital transaction that set up the subscription response. 
+    /**
+     * @var string $subscriptionId Required. This is the subscription id returned with the inital transaction that set up the subscription response.
      */
     public $subscriptionId;
 
-    /** 
-     * @var string $customerRefNo Required. This is the new unique customer reference number for the resulting recur transaction. 
+    /**
+     * @var string $customerRefNo Required. This is the new unique customer reference number for the resulting recur transaction.
      */
     public $customerRefNo;
 
-    /** 
-     * @var string $amount Required. Use minor currency (i.e. 1 SEK => 100 in minor currency) 
+    /**
+     * @var string $amount Required. Use minor currency (i.e. 1 SEK => 100 in minor currency)
      */
     public $amount;
 
@@ -37,8 +37,8 @@ class RecurTransaction extends HostedRequest
      */
     public $vat;
 
-    /** 
-     * @var string $currency Optional. 
+    /**
+     * @var string $currency Optional.
      */
     public $currency;
 

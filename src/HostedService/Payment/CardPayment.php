@@ -11,7 +11,7 @@ use Svea\WebPay\HostedService\Helper\ExcludePayments;
  * @author Anneli Halld'n, Daniel Brolund, Kristian Grossman-Madsen for Svea Svea\WebPay\WebPay
  */
 class CardPayment extends HostedPayment
-{       
+{
     /**
      * Creates a new CardPayment containing a given order.
      * @param CreateOrderBuilder $order
@@ -38,7 +38,7 @@ class CardPayment extends HostedPayment
         $methods[] = SystemPaymentMethod::DBSEBFTGSE;
         $methods[] = SystemPaymentMethod::DBSHBSE;
         $methods[] = SystemPaymentMethod::DBSWEDBANKSE;
-        
+
         //other
         $methods[] = SystemPaymentMethod::PAYPAL;
 

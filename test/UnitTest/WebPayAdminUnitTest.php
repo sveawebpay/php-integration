@@ -32,7 +32,7 @@ class WebPayAdminUnitTest extends \PHPUnit\Framework\TestCase
     // TODO add validation unit tests
 
 
-    // Svea\WebPay\WebPayAdmin::cancelOrder() -------------------------------------------------------------------------------------	
+    // Svea\WebPay\WebPayAdmin::cancelOrder() -------------------------------------------------------------------------------------
     // returned request class
     public function test_cancelOrder_cancelInvoiceOrder_returns_CloseOrder()
     {
@@ -86,7 +86,7 @@ class WebPayAdminUnitTest extends \PHPUnit\Framework\TestCase
     function test_missing_required_method_for_cancelOrder_cancelCardOrder_setOrderId()
     {
         $request = WebPayAdmin::cancelOrder(ConfigurationService::getDefaultConfig())
-            //->setOrderId("123456789")                
+            //->setOrderId("123456789")
             ->setCountryCode("SE");
         $request->cancelCardOrder()->prepareRequest();
     }
@@ -98,7 +98,7 @@ class WebPayAdminUnitTest extends \PHPUnit\Framework\TestCase
     function test_missing_required_method_for_cancelOrder_cancelCardOrder_setCountryCode()
     {
         $request = WebPayAdmin::cancelOrder(ConfigurationService::getDefaultConfig())
-            ->setOrderId("123456789")//->setCountryCode("SE")            
+            ->setOrderId("123456789")//->setCountryCode("SE")
         ;
         $request->cancelCardOrder()->prepareRequest();
     }
@@ -186,23 +186,23 @@ class WebPayAdminUnitTest extends \PHPUnit\Framework\TestCase
     }
     // TODO add validation tests here
 
-    // Svea\WebPay\WebPayAdmin::creditOrderRows --------------------------------------------    
+    // Svea\WebPay\WebPayAdmin::creditOrderRows --------------------------------------------
     public function test_creditOrderRows_returns_CreditOrderRowsBuilder()
     {
         $builderObject = WebPayAdmin::creditOrderRows(ConfigurationService::getDefaultConfig());
         $this->assertInstanceOf("Svea\WebPay\BuildOrder\CreditOrderRowsBuilder", $builderObject);
     }
 
-    // creditInvoiceOrderRows  
+    // creditInvoiceOrderRows
     function test_validates_all_required_methods_for_creditOrderRows_creditInvoiceRows()
     {
-        // needs either setRow(s)ToCredit or addCreditOrderRow(s)    
+        // needs either setRow(s)ToCredit or addCreditOrderRow(s)
         $request = WebPayAdmin::creditOrderRows(ConfigurationService::getDefaultConfig())
             ->setInvoiceId("123456789")
             ->setInvoiceDistributionType(DistributionType::POST)
             ->setCountryCode("SE")
             //->addCreditOrderRow( Svea\WebPay\Test\TestUtil::createOrderRow() )
-            //->addCreditOrderRows( array( Svea\WebPay\Test\TestUtil::createOrderRow(), Svea\WebPay\Test\TestUtil::createOrderRow() ) )         
+            //->addCreditOrderRows( array( Svea\WebPay\Test\TestUtil::createOrderRow(), Svea\WebPay\Test\TestUtil::createOrderRow() ) )
             ->setRowToCredit(1)//->setRowsToCredit(array(1,2))
         ;
         try {
@@ -225,8 +225,8 @@ class WebPayAdminUnitTest extends \PHPUnit\Framework\TestCase
             ->setInvoiceDistributionType(DistributionType::POST)
             ->setCountryCode("SE")
             //->addCreditOrderRow( Svea\WebPay\Test\TestUtil::createOrderRow() )
-            //->addCreditOrderRows( array( Svea\WebPay\Test\TestUtil::createOrderRow(), Svea\WebPay\Test\TestUtil::createOrderRow() ) )         
-            //->setRowToCredit(1)              
+            //->addCreditOrderRows( array( Svea\WebPay\Test\TestUtil::createOrderRow(), Svea\WebPay\Test\TestUtil::createOrderRow() ) )
+            //->setRowToCredit(1)
             //->setRowsToCredit(array(1,2))
         ;
         $request->creditInvoiceOrderRows()->prepareRequest();
@@ -241,9 +241,9 @@ class WebPayAdminUnitTest extends \PHPUnit\Framework\TestCase
         $request = WebPayAdmin::creditOrderRows(ConfigurationService::getDefaultConfig())
             ->setInvoiceId("123456789")
             ->setInvoiceDistributionType(DistributionType::POST)
-            //->setCountryCode("SE")            
+            //->setCountryCode("SE")
             //->addCreditOrderRow( Svea\WebPay\Test\TestUtil::createOrderRow() )
-            //->addCreditOrderRows( array( Svea\WebPay\Test\TestUtil::createOrderRow(), Svea\WebPay\Test\TestUtil::createOrderRow() ) )         
+            //->addCreditOrderRows( array( Svea\WebPay\Test\TestUtil::createOrderRow(), Svea\WebPay\Test\TestUtil::createOrderRow() ) )
             ->setRowToCredit(1)//->setRowsToCredit(array(1,2))
         ;
         $request->creditInvoiceOrderRows()->prepareRequest();
@@ -259,7 +259,7 @@ class WebPayAdminUnitTest extends \PHPUnit\Framework\TestCase
             //->setInvoiceDistributionType(Svea\WebPay\Constant\DistributionType::POST)
             ->setCountryCode("SE")
             //->addCreditOrderRow( Svea\WebPay\Test\TestUtil::createOrderRow() )
-            //->addCreditOrderRows( array( Svea\WebPay\Test\TestUtil::createOrderRow(), Svea\WebPay\Test\TestUtil::createOrderRow() ) )         
+            //->addCreditOrderRows( array( Svea\WebPay\Test\TestUtil::createOrderRow(), Svea\WebPay\Test\TestUtil::createOrderRow() ) )
             ->setRowToCredit(1)//->setRowsToCredit(array(1,2))
         ;
         $request->creditInvoiceOrderRows()->prepareRequest();
@@ -272,11 +272,11 @@ class WebPayAdminUnitTest extends \PHPUnit\Framework\TestCase
     function test_validates_missing_required_method_for_creditOrderRows_creditInvoiceOrderRows_missing_setInvoiceId()
     {
         $request = WebPayAdmin::creditOrderRows(ConfigurationService::getDefaultConfig())
-            //->setInvoiceId("123456789")                
+            //->setInvoiceId("123456789")
             ->setInvoiceDistributionType(DistributionType::POST)
             ->setCountryCode("SE")
             //->addCreditOrderRow( Svea\WebPay\Test\TestUtil::createOrderRow() )
-            //->addCreditOrderRows( array( Svea\WebPay\Test\TestUtil::createOrderRow(), Svea\WebPay\Test\TestUtil::createOrderRow() ) )         
+            //->addCreditOrderRows( array( Svea\WebPay\Test\TestUtil::createOrderRow(), Svea\WebPay\Test\TestUtil::createOrderRow() ) )
             ->setRowToCredit(1)//->setRowsToCredit(array(1,2))
         ;
         $request->creditInvoiceOrderRows()->prepareRequest();
@@ -310,10 +310,10 @@ class WebPayAdminUnitTest extends \PHPUnit\Framework\TestCase
     function test_validates_missing_required_method_for_creditOrderRows_creditCardOrderRows_missing_setOrderId()
     {
         $request = WebPayAdmin::creditOrderRows(ConfigurationService::getDefaultConfig())
-            //->setOrderId("123456")              
-            //->setCountryCode("SE")              
+            //->setOrderId("123456")
+            //->setCountryCode("SE")
             //->addCreditOrderRow( Svea\WebPay\Test\TestUtil::createOrderRow() )
-            //->addCreditOrderRows( array( Svea\WebPay\Test\TestUtil::createOrderRow(), Svea\WebPay\Test\TestUtil::createOrderRow() ) )    
+            //->addCreditOrderRows( array( Svea\WebPay\Test\TestUtil::createOrderRow(), Svea\WebPay\Test\TestUtil::createOrderRow() ) )
             //->setRowToCredit(1)
             //->setRowsToCredit(array(2,3))
             //->addNumberedOrderRow( Svea\WebPay\Test\TestUtil::createNumberedOrderRow( 100.00, 1, 1 ) )
@@ -330,9 +330,9 @@ class WebPayAdminUnitTest extends \PHPUnit\Framework\TestCase
     {
         $request = WebPayAdmin::creditOrderRows(ConfigurationService::getDefaultConfig())
             ->setOrderId("123456")
-            //->setCountryCode("SE")              
+            //->setCountryCode("SE")
             //->addCreditOrderRow( Svea\WebPay\Test\TestUtil::createOrderRow() )
-            //->addCreditOrderRows( array( Svea\WebPay\Test\TestUtil::createOrderRow(), Svea\WebPay\Test\TestUtil::createOrderRow() ) )    
+            //->addCreditOrderRows( array( Svea\WebPay\Test\TestUtil::createOrderRow(), Svea\WebPay\Test\TestUtil::createOrderRow() ) )
             //->setRowToCredit(1)
             //->setRowsToCredit(array(2,3))
             //->addNumberedOrderRow( Svea\WebPay\Test\TestUtil::createNumberedOrderRow( 100.00, 1, 1 ) )
@@ -351,7 +351,7 @@ class WebPayAdminUnitTest extends \PHPUnit\Framework\TestCase
             ->setOrderId("123456")
             ->setCountryCode("SE")
             //->addCreditOrderRow( Svea\WebPay\Test\TestUtil::createOrderRow() )
-            //->addCreditOrderRows( array( Svea\WebPay\Test\TestUtil::createOrderRow(), Svea\WebPay\Test\TestUtil::createOrderRow() ) )    
+            //->addCreditOrderRows( array( Svea\WebPay\Test\TestUtil::createOrderRow(), Svea\WebPay\Test\TestUtil::createOrderRow() ) )
             //->setRowToCredit(1)
             //->setRowsToCredit(array(2,3))
             //->addNumberedOrderRow( Svea\WebPay\Test\TestUtil::createNumberedOrderRow( 100.00, 1, 1 ) )
@@ -370,7 +370,7 @@ class WebPayAdminUnitTest extends \PHPUnit\Framework\TestCase
             ->setOrderId("123456")
             ->setCountryCode("SE")
             //->addCreditOrderRow( Svea\WebPay\Test\TestUtil::createOrderRow() )
-            //->addCreditOrderRows( array( Svea\WebPay\Test\TestUtil::createOrderRow(), Svea\WebPay\Test\TestUtil::createOrderRow() ) )    
+            //->addCreditOrderRows( array( Svea\WebPay\Test\TestUtil::createOrderRow(), Svea\WebPay\Test\TestUtil::createOrderRow() ) )
             ->setRowToCredit(1)
             //->setRowsToCredit(array(2,3))
             //->addNumberedOrderRow( Svea\WebPay\Test\TestUtil::createNumberedOrderRow( 100.00, 1, 1 ) )
@@ -390,7 +390,7 @@ class WebPayAdminUnitTest extends \PHPUnit\Framework\TestCase
             ->setCountryCode("SE")
             ->addNumberedOrderRow(TestUtil::createNumberedOrderRow(100.00, 1, 1))
             ->setRowToCredit(9);
-        $request = $creditOrderRowsObject->creditCardOrderRows(); // exception thrown in builder when selecting request class   
+        $request = $creditOrderRowsObject->creditCardOrderRows(); // exception thrown in builder when selecting request class
     }
 
     // creditDirectBankOrderRows

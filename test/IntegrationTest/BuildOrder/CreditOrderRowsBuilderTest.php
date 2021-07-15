@@ -29,15 +29,15 @@ class CreditOrderRowsBuilderIntegrationTest extends \PHPUnit\Framework\TestCase
         $this->successfulTransactionToTest = 583628; // set to a card transaction w/status success, see test_manual_setup_CreditCardOrderRows_testdata
     }
 
-    // CreditCardOrderRows    
+    // CreditCardOrderRows
 
     function test_manual_setup_CreditInvoiceOrderRows_testdata()
     {
 
         // Stop here and mark this test as incomplete.
         $this->markTestIncomplete(
-            'test_manual_setup_CreditOrderRows_testdata -- run this first to setup order for CreditOrderRows tests to work with. 
-            1. Run once, then make sure to log as ug 79021 and approve the invoice in the admin interface. 
+            'test_manual_setup_CreditOrderRows_testdata -- run this first to setup order for CreditOrderRows tests to work with.
+            1. Run once, then make sure to log as ug 79021 and approve the invoice in the admin interface.
             2. Set $this->invoiceIdToTest to the approved invoice id in setUp() above.
             3. Then uncomment and run CreditOrderRows tests below.'
         );
@@ -286,15 +286,15 @@ class CreditOrderRowsBuilderIntegrationTest extends \PHPUnit\Framework\TestCase
 
         // Stop here and mark this test as incomplete.
         $this->markTestIncomplete(
-            '1. test_manual_setup_CreditCardOrderRows_testdata -- run this first to setup order for CreditOrderRows tests to work with. 
-            Run once, then make sure to approve the invoice in the admin interface. Then uncomment and run CreditOrderRows tests.               
-             
-            2. verktyg / confirm, merchant 1130, use this xml w/correct transactionid, todays date => status = CONFIRMED         
+            '1. test_manual_setup_CreditCardOrderRows_testdata -- run this first to setup order for CreditOrderRows tests to work with.
+            Run once, then make sure to approve the invoice in the admin interface. Then uncomment and run CreditOrderRows tests.
+
+            2. verktyg / confirm, merchant 1130, use this xml w/correct transactionid, todays date => status = CONFIRMED
             <confirm>
             <transactionid>583004</transactionid>
             <capturedate>2014-06-02</capturedate>
             </confirm>
-            
+
             3. schemalagda jobb / dailycapture kortcert task => status = SUCCESS'
 
         );
@@ -468,7 +468,7 @@ class CreditOrderRowsBuilderIntegrationTest extends \PHPUnit\Framework\TestCase
 
         $this->assertEquals(1, $queryResponse->accepted);
         //print_r( $queryResponse );
-        // credited               12500   
+        // credited               12500
         // credit 100 @12 *100 =  11200
         // credit   1 @25 *100 =    125 => 23825
         $this->assertEquals(23825, $queryResponse->creditedamount);
@@ -523,7 +523,7 @@ class CreditOrderRowsBuilderIntegrationTest extends \PHPUnit\Framework\TestCase
 
         $this->assertEquals(1, $queryResponse->accepted);
         //print_r( $queryResponse );
-        // credited               23825   
+        // credited               23825
         // credit 100 @0 *100 =   10000
         // credit  10 @25 *100 =   1250 => 35075
         $this->assertEquals(35075, $queryResponse->creditedamount);
@@ -555,7 +555,7 @@ class CreditOrderRowsBuilderIntegrationTest extends \PHPUnit\Framework\TestCase
         $creditOrderRowsResponse = $creditOrderRowsRequest->doRequest();
 
         //print_r("test_CreditOrderRows_creditCardOrderRows_addCreditOrderRow_setRowToCredit_exceeds_original_order_fails:\n");
-        //print_r( $creditOrderRowsResponse );        
+        //print_r( $creditOrderRowsResponse );
         $this->assertEquals(0, $creditOrderRowsResponse->accepted);
         $this->assertEquals("119 (ILLEGAL_CREDITED_AMOUNT)", $creditOrderRowsResponse->resultcode);
     }

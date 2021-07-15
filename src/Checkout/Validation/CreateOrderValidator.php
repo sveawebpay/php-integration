@@ -97,7 +97,7 @@ class CreateOrderValidator extends OrderValidator
         if ($order->getLocale() === null) {
             $errors['incorrectLocale'] = "locale must be defined";
         }
-        
+
         return $errors;
     }
 

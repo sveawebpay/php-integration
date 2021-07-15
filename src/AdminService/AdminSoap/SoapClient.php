@@ -81,7 +81,7 @@ class SoapClient
         // wrap the request
         $wrappedRequest = new \SoapVar($request, SOAP_ENC_OBJECT, "-", "--", "request", "http://tempuri.org/");
 
-        // do soapcall            
+        // do soapcall
         $response = $this->client->__soapCall($action, [$wrappedRequest],
             ["soapaction" => 'http://tempuri.org/IAdminService/' . $action]
         );

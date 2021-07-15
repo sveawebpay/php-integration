@@ -1,7 +1,7 @@
 <?php
 /**
  * example file, writes card order request response transactionid to file for use when crediting transaction
- * 
+ *
  * @author Kristian Grossman-madsen for Svea Svea\WebPay\WebPay
  */
 
@@ -57,8 +57,8 @@ Svea\WebPay\HostedService\HostedResponse\HostedPaymentResponse Object
     [amount] => 375
     [currency] => SEK
     [accepted] => 1
-    [resultcode] => 
-    [errormessage] => 
+    [resultcode] =>
+    [errormessage] =>
     [cardType] => VISA
     [maskedCardNumber] => 444433xxxxxx1100
     [expiryMonth] => 01

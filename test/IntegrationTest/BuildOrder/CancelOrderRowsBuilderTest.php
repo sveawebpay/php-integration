@@ -195,7 +195,7 @@ class CancelOrderRowsBuilderIntegrationTest extends \PHPUnit\Framework\TestCase
 
         //print_r( $query2Response);
         // 2x100 @25 = 25000 (5000)     <- credited
-        // amount = 25000 -25000, vat = 5000 
+        // amount = 25000 -25000, vat = 5000
         $this->assertEquals(1, $query2Response->accepted);
         $this->assertEquals(1, $query2Response->accepted);
         $this->assertEquals(25000, $query2Response->amount);

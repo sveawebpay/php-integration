@@ -83,7 +83,7 @@ class QueryTransactionTest extends \PHPUnit\Framework\TestCase
         // check annul request message contents
         $xmlMessage = new SimpleXMLElement(base64_decode(urldecode($form['message'])));
 
-        $this->assertEquals("query", $xmlMessage->getName());   // root node        
+        $this->assertEquals("query", $xmlMessage->getName());   // root node
         $this->assertEquals((string)$transactionId, $xmlMessage->transactionid);
     }
 

@@ -14,7 +14,7 @@ use Svea\WebPay\Helper\Helper;
  */
 class CreditInvoiceRowsRequest extends AdminServiceRequest
 {
-    /** 
+    /**
      * @var CreditOrderRowsBuilder $orderBuilder
      */
     public $orderBuilder;

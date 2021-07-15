@@ -34,8 +34,8 @@ use Svea\WebPay\WebService\WebServiceResponse\CampaignCode\CampaignCode;
  */
 class PaymentPlanParamsResponse extends WebServiceResponse
 {
-    /** 
-     * @var CampaignCode[] $campaignCodes - array of CampaignCode 
+    /**
+     * @var CampaignCode[] $campaignCodes - array of CampaignCode
      */
     public $campaignCodes = [];
 
@@ -97,5 +97,5 @@ class PaymentPlanParamsResponse extends WebServiceResponse
             }
         }
     }
-    
+
 }

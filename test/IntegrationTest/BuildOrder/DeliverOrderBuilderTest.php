@@ -60,7 +60,7 @@ class DeliverOrderBuilderIntegrationTest extends \PHPUnit\Framework\TestCase
         //
         //stdClass Object
         //(
-        //    [ErrorMessage] => 
+        //    [ErrorMessage] =>
         //    [ResultCode] => 0
         //    [OrdersDelivered] => stdClass Object
         //        (
@@ -75,21 +75,21 @@ class DeliverOrderBuilderIntegrationTest extends \PHPUnit\Framework\TestCase
         //
         //        )
         //
-        //)        
+        //)
         $deliverResponse = $DeliverOrderBuilder->deliverInvoiceOrder()->doRequest();
 
-        ////print_r( $deliverResponse );        
+        ////print_r( $deliverResponse );
         //Svea\WebPay\AdminService\AdminServiceResponse\DeliverOrdersResponse Object
         //(
         //    [clientId] => 79021
         //    [amount] => 250.00
-        //    [invoiceId] => 
-        //    [contractNumber] => 
+        //    [invoiceId] =>
+        //    [contractNumber] =>
         //    [orderType] => Invoice
         //    [orderId] => 414168
         //    [accepted] => 1
         //    [resultcode] => 0
-        //    [errormessage] => 
+        //    [errormessage] =>
         //)
 
         $this->assertInstanceOf("Svea\WebPay\AdminService\AdminServiceResponse\DeliverOrdersResponse", $deliverResponse);
@@ -186,7 +186,7 @@ class DeliverOrderBuilderIntegrationTest extends \PHPUnit\Framework\TestCase
         // 1. remove (put in a comment) the above code to enable the test
         // 2. run the test, and check status of transaction in backoffice logs
 
-        $orderId = 585714;  // pre-existing card transactionId with status AUTHORIZED  
+        $orderId = 585714;  // pre-existing card transactionId with status AUTHORIZED
 
         $DeliverOrderBuilder = WebPay::deliverOrder(ConfigurationService::getDefaultConfig())
             ->setCountryCode("SE")

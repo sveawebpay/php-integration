@@ -39,7 +39,7 @@ class CancelOrderRequestIntegrationTest extends \PHPUnit\Framework\TestCase
         $request = new CancelOrderRequest($cancelOrderBuilder);
         $response = $request->doRequest();
 
-        ////print_r("cancelorderrequest: "); //print_r( $response );        
+        ////print_r("cancelorderrequest: "); //print_r( $response );
         $this->assertInstanceOf('Svea\WebPay\AdminService\AdminServiceResponse\CancelOrderResponse', $response);
         $this->assertEquals(1, $response->accepted);
         $this->assertEquals(0, $response->resultcode);

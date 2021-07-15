@@ -7,6 +7,6 @@ namespace Svea\WebPay\WebService\SveaSoap;
  */
 class SveaDeliverOrder
 {
-    public $Auth;    
+    public $Auth;
     public $DeliverOrderInformation;
 }

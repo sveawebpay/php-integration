@@ -53,7 +53,7 @@ $myCreditRequest = $firstCreditOrderRowsBuilder->creditCardOrderRows();
 $myCreditResponse = $myCreditRequest->doRequest();
 
 
-// The response is an instance of LowerTransactionResponse 
+// The response is an instance of LowerTransactionResponse
 echo "<pre>";
 print_r("the creditCardOrderRows() response:");
 print_r($myCreditResponse);
@@ -87,7 +87,7 @@ the creditCardOrderRows() response:Svea\WebPay\HostedService\HostedResponse\Host
     [customerrefno] => order #2014-08-26T14:28:33 02:00
     [accepted] => 1
     [resultcode] => 0
-    [errormessage] => 
+    [errormessage] =>
 )
 
 The following is the result of a Svea\WebPay\WebPayAdmin::queryOrder for the above order, as you can see the entire authorized/captured amount has been credited:
@@ -114,75 +114,75 @@ Svea\WebPay\HostedService\HostedResponse\HostedAdminResponse\QueryTransactionRes
         (
             [0] => Svea\WebPay\BuildOrder\RowBuilders\NumberedOrderRow Object
                 (
-                    [creditInvoiceId] => 
-                    [invoiceId] => 
+                    [creditInvoiceId] =>
+                    [invoiceId] =>
                     [rowNumber] => 1
-                    [status] => 
-                    [articleNumber] => 
+                    [status] =>
+                    [articleNumber] =>
                     [quantity] => 1
-                    [unit] => 
+                    [unit] =>
                     [amountExVat] => 100
                     [vatPercent] => 25
-                    [amountIncVat] => 
-                    [name] => 
+                    [amountIncVat] =>
+                    [name] =>
                     [description] => A
-                    [discountPercent] => 
+                    [discountPercent] =>
                     [vatDiscount] => 0
                 )
 
             [1] => Svea\WebPay\BuildOrder\RowBuilders\NumberedOrderRow Object
                 (
-                    [creditInvoiceId] => 
-                    [invoiceId] => 
+                    [creditInvoiceId] =>
+                    [invoiceId] =>
                     [rowNumber] => 2
-                    [status] => 
-                    [articleNumber] => 
+                    [status] =>
+                    [articleNumber] =>
                     [quantity] => 1
-                    [unit] => 
+                    [unit] =>
                     [amountExVat] => 100
                     [vatPercent] => 25
-                    [amountIncVat] => 
-                    [name] => 
+                    [amountIncVat] =>
+                    [name] =>
                     [description] => B
-                    [discountPercent] => 
+                    [discountPercent] =>
                     [vatDiscount] => 0
                 )
 
             [2] => Svea\WebPay\BuildOrder\RowBuilders\NumberedOrderRow Object
                 (
-                    [creditInvoiceId] => 
-                    [invoiceId] => 
+                    [creditInvoiceId] =>
+                    [invoiceId] =>
                     [rowNumber] => 3
-                    [status] => 
-                    [articleNumber] => 
+                    [status] =>
+                    [articleNumber] =>
                     [quantity] => 1
-                    [unit] => 
+                    [unit] =>
                     [amountExVat] => 100
                     [vatPercent] => 25
-                    [amountIncVat] => 
-                    [name] => 
+                    [amountIncVat] =>
+                    [name] =>
                     [description] => C
-                    [discountPercent] => 
+                    [discountPercent] =>
                     [vatDiscount] => 0
                 )
 
         )
 
-    [callbackurl] => 
+    [callbackurl] =>
     [capturedate] => 2014-11-20 15:36:12.607
-    [subscriptionId] => 
-    [subscriptiontype] => 
-    [cardType] => 
-    [maskedCardNumber] => 
-    [eci] => 
-    [mdstatus] => 
-    [expiryYear] => 
-    [expiryMonth] => 
-    [chname] => 
-    [authCode] => 
+    [subscriptionId] =>
+    [subscriptiontype] =>
+    [cardType] =>
+    [maskedCardNumber] =>
+    [eci] =>
+    [mdstatus] =>
+    [expiryYear] =>
+    [expiryMonth] =>
+    [chname] =>
+    [authCode] =>
     [accepted] => 1
     [resultcode] => 0
-    [errormessage] => 
+    [errormessage] =>
 )
 </pre>";
 

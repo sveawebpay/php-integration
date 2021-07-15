@@ -143,7 +143,7 @@ class AddOrderRowsRequestIntegrationTest extends \PHPUnit\Framework\TestCase
         //print_r( "\n\ntest_add_single_orderRow_with_vat_missmatch1: created w/ 145 ex @24% = 179,80 for " .$orderResponse->sveaOrderId );
         //print_r( "\ntest_add_single_orderRow_with_vat_missmatch1: added w/ 80 inc @24% = 80" );
         //print_r( "\ntest_add_single_orderRow_with_vat_missmatch1: total amount 179,80 +80 = 259,80 for ".$orderResponse->sveaOrderId );
-        $this->assertEquals("145.00", $query->numberedOrderRows[0]->amountExVat);   // => 179,80        
+        $this->assertEquals("145.00", $query->numberedOrderRows[0]->amountExVat);   // => 179,80
         $this->assertEquals("24", $query->numberedOrderRows[0]->vatPercent);
         $this->assertEquals("64.52", $query->numberedOrderRows[1]->amountExVat);    // 64,5161 *1,24 => 80.00
         $this->assertEquals("24", $query->numberedOrderRows[1]->vatPercent);
@@ -194,7 +194,7 @@ class AddOrderRowsRequestIntegrationTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals("145.00", $query->numberedOrderRows[0]->amountIncVat);
         $this->assertEquals("24", $query->numberedOrderRows[0]->vatPercent);
         $this->assertEquals("24", $query->numberedOrderRows[1]->vatPercent);
-        //print_r( $orderResponse->sveaOrderId );        
+        //print_r( $orderResponse->sveaOrderId );
     }
 
     //--------------------------------------------------------------------------------------------------
@@ -230,7 +230,7 @@ class AddOrderRowsRequestIntegrationTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(1, $response->accepted);
         // first sent as incvat, will cause error and resend:
         //<ns3:PriceIncludingVat>true</ns3:PriceIncludingVat>
-        //<ns3:PricePerUnit>80</ns3:PricePerUnit>            
+        //<ns3:PricePerUnit>80</ns3:PricePerUnit>
         // resent as exvat:
         //<ns3:PriceIncludingVat>false</ns3:PriceIncludingVat>
         //<ns3:PricePerUnit>64.516129032258</ns3:PricePerUnit>
@@ -244,7 +244,7 @@ class AddOrderRowsRequestIntegrationTest extends \PHPUnit\Framework\TestCase
         //print_r( "\n\ntest_add_single_orderRow_with_vat_missmatch1: created w/ 145 ex @24% = 179,80 for " .$orderResponse->sveaOrderId );
         //print_r( "\ntest_add_single_orderRow_with_vat_missmatch1: added w/ 80 inc @24% = 80" );
         //print_r( "\ntest_add_single_orderRow_with_vat_missmatch1: total amount 179,80 +80 = 259,80 for ".$orderResponse->sveaOrderId );
-        $this->assertEquals("145.00", $query->numberedOrderRows[0]->amountExVat);   // => 179,80 inc        
+        $this->assertEquals("145.00", $query->numberedOrderRows[0]->amountExVat);   // => 179,80 inc
         $this->assertEquals("24", $query->numberedOrderRows[0]->vatPercent);
         $this->assertEquals("64.52", $query->numberedOrderRows[1]->amountExVat);    // => 80.00 inc
         //print_r( $orderResponse->sveaOrderId );
@@ -289,7 +289,7 @@ class AddOrderRowsRequestIntegrationTest extends \PHPUnit\Framework\TestCase
         //print_r( "\n\ntest_add_single_orderRow_with_vat_missmatch1: created w/ 145 ex @24% = 179,80 for " .$orderResponse->sveaOrderId );
         //print_r( "\ntest_add_single_orderRow_with_vat_missmatch1: added w/ 80 inc @24% = 80" );
         //print_r( "\ntest_add_single_orderRow_with_vat_missmatch1: total amount 179,80 +80 = 259,80 for ".$orderResponse->sveaOrderId );
-        $this->assertEquals("179.80", $query->numberedOrderRows[0]->amountIncVat);   // => 179,80        
+        $this->assertEquals("179.80", $query->numberedOrderRows[0]->amountIncVat);   // => 179,80
         $this->assertEquals("24", $query->numberedOrderRows[0]->vatPercent);
         $this->assertEquals("80.00", $query->numberedOrderRows[1]->amountIncVat);    // => 80.00 // ok, pga incvat in till Svea hela vägen
         $this->assertEquals("24", $query->numberedOrderRows[1]->vatPercent);

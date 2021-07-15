@@ -69,7 +69,7 @@ class ListPaymentMethodsTest extends \PHPUnit\Framework\TestCase
         // check request message contents
         $xmlMessage = new SimpleXMLElement(base64_decode(urldecode($form['message'])));
 
-        $this->assertEquals("getpaymentmethods", $xmlMessage->getName());   // root node        
+        $this->assertEquals("getpaymentmethods", $xmlMessage->getName());   // root node
         $this->assertEquals((string)$merchantid, $xmlMessage->merchantid);
     }
 }

@@ -48,7 +48,7 @@ class CancelOrderRowsRequestIntegrationTest extends \PHPUnit\Framework\TestCase
         $cancelOrderRowsRequest->setRowToCancel(1);
         $cancelOrderRowsResponse = $cancelOrderRowsRequest->cancelInvoiceOrderRows()->doRequest();
 
-        ////print_r( $cancelOrderRowsResponse );        
+        ////print_r( $cancelOrderRowsResponse );
         $this->assertInstanceOf('Svea\WebPay\AdminService\AdminServiceResponse\CancelOrderRowsResponse', $cancelOrderRowsResponse);
         $this->assertEquals(1, $cancelOrderRowsResponse->accepted);
     }
@@ -80,14 +80,14 @@ class CancelOrderRowsRequestIntegrationTest extends \PHPUnit\Framework\TestCase
 
         $myOrderId = $orderResponse->sveaOrderId;
 
-        // cancel first row in order                
+        // cancel first row in order
         $cancelOrderRowsRequest = WebPayAdmin::cancelOrderRows(ConfigurationService::getDefaultConfig());
         $cancelOrderRowsRequest->setCountryCode($country);
         $cancelOrderRowsRequest->setOrderId($myOrderId);
         $cancelOrderRowsRequest->setRowToCancel(1);
         $cancelOrderRowsResponse = $cancelOrderRowsRequest->cancelPaymentPlanOrderRows()->doRequest();
 
-        ////print_r( $cancelOrderRowsResponse );        
+        ////print_r( $cancelOrderRowsResponse );
         $this->assertInstanceOf('Svea\WebPay\AdminService\AdminServiceResponse\CancelOrderRowsResponse', $cancelOrderRowsResponse);
         $this->assertEquals(1, $cancelOrderRowsResponse->accepted);
     }
@@ -119,14 +119,14 @@ class CancelOrderRowsRequestIntegrationTest extends \PHPUnit\Framework\TestCase
 
         $myOrderId = $orderResponse->sveaOrderId;
 
-        // cancel first row in order                
+        // cancel first row in order
         $cancelOrderRowsRequest = WebPayAdmin::cancelOrderRows(ConfigurationService::getDefaultConfig());
         $cancelOrderRowsRequest->setCountryCode($country);
         $cancelOrderRowsRequest->setOrderId($myOrderId);
         $cancelOrderRowsRequest->setRowsToCancel([1, 2]);
         $cancelOrderRowsResponse = $cancelOrderRowsRequest->cancelPaymentPlanOrderRows()->doRequest();
 
-        ////print_r( $cancelOrderRowsResponse );        
+        ////print_r( $cancelOrderRowsResponse );
         $this->assertInstanceOf('Svea\WebPay\AdminService\AdminServiceResponse\CancelOrderRowsResponse', $cancelOrderRowsResponse);
         $this->assertEquals(1, $cancelOrderRowsResponse->accepted);
     }

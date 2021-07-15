@@ -152,38 +152,38 @@ class HostedXmlBuilderTest extends \PHPUnit\Framework\TestCase
     }
 
 //    public function test_getCreditTransactionXML() {
-//        
+//
 //        // example from webservice api docs
-//        $elements = array( 
+//        $elements = array(
 //            "transactionid" => 521527,
 //            "amounttocredit" => 100
 //        );
-//        
+//
 //        // generate the request XML
 //        $xmlBuilder = new HostedXmlBuilder();
 //        $requestXML = $xmlBuilder->getCreditTransactionXML( $elements );
 //
 //        // parse the generated request XML
 //        $xmlMessage = new \SimpleXMLElement($requestXML);
-//  
+//
 //        $this->assertEquals((string)$elements["transactionid"], $xmlMessage->transactionid);
 //        $this->assertEquals((string)$elements["amounttocredit"], $xmlMessage->amounttocredit);
-//    }  
+//    }
 
 //    public function test_getQueryTransactionXML() {
-//        
+//
 //        // example from webservice api docs
-//        $elements = array( 
+//        $elements = array(
 //            "transactionid" => 521527,
 //        );
-//        
+//
 //        // generate the request XML
 //        $xmlBuilder = new HostedXmlBuilder();
 //        $requestXML = $xmlBuilder->getQueryTransactionXML( $elements );
 //
 //        // parse the generated request XML
 //        $xmlMessage = new \SimpleXMLElement($requestXML);
-//  
+//
 //        $this->assertEquals((string)$elements["transactionid"], $xmlMessage->transactionid);
-//    }  
+//    }
 }

@@ -1,7 +1,7 @@
 <?php
 
 namespace Svea\WebPay\Test\IntegrationTest\AdminService;
- 
+
 use \PHPUnit\Framework\TestCase;
 use Svea\WebPay\Config\ConfigurationService;
 use Svea\WebPay\Constant\DistributionType;

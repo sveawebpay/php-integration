@@ -251,7 +251,7 @@ class QueryTransactionResponse extends HostedAdminResponse
             //        )
             //
             //    [statuscode] => 0
-            //)   
+            //)
 
             if (property_exists($hostedAdminResponse->transaction, "orderrows")) {
                 $rownumber = 1;
@@ -268,7 +268,7 @@ class QueryTransactionResponse extends HostedAdminResponse
                     // [unit]
 
                     $newrow = new NumberedOrderRow(); // webpay orderrow
-                    //Svea\WebPay\WebPayItem OrderRow:          
+                    //Svea\WebPay\WebPayItem OrderRow:
                     // $articleNumber
                     // $quantity
                     // $unit
