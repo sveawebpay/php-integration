@@ -154,7 +154,7 @@ class PayPagePaymentTest extends \PHPUnit\Framework\TestCase {
         //test values are as expected avter transforming xml to php object
         $this->assertEquals('SEK', $xmlMessage->currency);
     }
-    
+
     public function testBuildPayPagePaymentCallBackUrl() {
         $config = ConfigurationService::getDefaultConfig();
         $rowFactory = new TestUtil();

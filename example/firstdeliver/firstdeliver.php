@@ -16,7 +16,7 @@ ini_set('display_errors', 'On');
 $myConfig = \Svea\WebPay\Config\ConfigurationService::getTestConfig();
 
 // We assume that you've previously run the firstorder.php file and successfully made a createOrder request to Svea using the invoice payment method.
-// The svea order id returned in the request response was then written to the file sveaorderid.txt in the firstorder/ folder 
+// The svea order id returned in the request response was then written to the file sveaorderid.txt in the firstorder/ folder
 
 $mySveaOrderId = file_get_contents("../firstorder/sveaorderid.txt");
 if (!$mySveaOrderId) {
@@ -53,25 +53,25 @@ Svea\WebPay\AdminService\AdminServiceResponse\DeliverOrdersResponse Object
 (
     [accepted] => 1
     [resultcode] => 0
-    [errormessage] => 
+    [errormessage] =>
     [amount] => 876.24
     [orderType] => Invoice
     [invoiceId] => 1028004
-    [contractNumber] => 
+    [contractNumber] =>
 )";
 
 echo "</pre><font color='red'><pre>\n
 
-An example of a rejected request response -- 'accepted' is false (0) and resultcode/errormessage indicates that the order has already been delivered (i.e. the order has status closed).   
+An example of a rejected request response -- 'accepted' is false (0) and resultcode/errormessage indicates that the order has already been delivered (i.e. the order has status closed).
 
 Svea\WebPay\AdminService\AdminServiceResponse\DeliverOrdersResponse Object
 (
     [accepted] => 0
     [resultcode] => 20000
     [errormessage] => Order is closed.
-    [amount] => 
-    [orderType] => 
-    [invoiceId] => 
-    [contractNumber] => 
+    [amount] =>
+    [orderType] =>
+    [invoiceId] =>
+    [contractNumber] =>
 )";
 

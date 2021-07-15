@@ -7,7 +7,7 @@ use Svea\WebPay\Helper\Helper;
 
 
 class ConfigurationProviderTest extends \PHPUnit\Framework\TestCase {
-    
+
     public function testDefaultTestConfig() {
         $config = ConfigurationService::getDefaultConfig();
         $this->assertEquals("sverigetest", $config->getUsername("Invoice","SE"));

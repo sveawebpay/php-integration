@@ -5,7 +5,7 @@ namespace Svea\WebPay\BuildOrder\Validator;
 use Svea\WebPay\BuildOrder\CreateOrderBuilder;
 
 class IdentityValidator
-{ 
+{
     private $isCompany;
 
     /**

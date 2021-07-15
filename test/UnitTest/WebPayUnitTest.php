@@ -79,7 +79,7 @@ class WebPayUnitTest extends \PHPUnit\Framework\TestCase
     function test_validates_missing_required_method_for_useInvoicePayment_IndividualCustomer_SE_addOrderRow()
     {
         $order = WebPay::createOrder(ConfigurationService::getDefaultConfig())
-            //->addOrderRow( 
+            //->addOrderRow(
             //    Svea\WebPay\WebPayItem::orderRow()
             //        ->setQuantity(1.0)
             //        ->setAmountExVat(4.0)
@@ -437,7 +437,7 @@ class WebPayUnitTest extends \PHPUnit\Framework\TestCase
             //->setName("Theo", "Giebel")
             //->setStreetAddress("Zörgiebelweg", 21)
             //->setZipCode("13591")
-            //->setLocality("BERLIN")  
+            //->setLocality("BERLIN")
             )
             ->setCountryCode("DE")
             ->setOrderDate(date('c'));
@@ -446,7 +446,7 @@ class WebPayUnitTest extends \PHPUnit\Framework\TestCase
         $order->useInvoicePayment()->prepareRequest();
     }
     // CompanyCustomer
-    // TODO       
+    // TODO
 
     // NL
     // IndividualCustomer validation
@@ -506,7 +506,7 @@ class WebPayUnitTest extends \PHPUnit\Framework\TestCase
             //->setName("Sneider", "Boasman")
             //->setStreetAddress("Gate 42", 23)
             //->setZipCode("1102 HG")
-            //->setLocality("BARENDRECHT")     
+            //->setLocality("BARENDRECHT")
             )
             ->setCountryCode("NL")
             ->setOrderDate(date('c'));
@@ -515,9 +515,9 @@ class WebPayUnitTest extends \PHPUnit\Framework\TestCase
         $order->useInvoicePayment()->prepareRequest();
     }
 //    $this->setExpectedException(
-//        'Svea\WebPay\BuildOrder\Validator\ValidationException', 
+//        'Svea\WebPay\BuildOrder\Validator\ValidationException',
 //        '-missing value : NationalIdNumber is required for individual customers when countrycode is SE, NO, DK or FI. Use function setNationalIdNumber().'
-//    );   
+//    );
 
     /// Svea\WebPay\WebPay::deliverOrder()
     // deliverInvoiceOrder
@@ -534,7 +534,7 @@ class WebPayUnitTest extends \PHPUnit\Framework\TestCase
         $deliverOrder = WebPay::deliverOrder(ConfigurationService::getDefaultConfig());
         $deliverOrder->addOrderRow(WebPayItem::orderRow());
         $request = $deliverOrder->deliverInvoiceOrder();
-        $this->assertInstanceOf("Svea\WebPay\WebService\HandleOrder\DeliverInvoice", $request);         // WebService\DeliverInvoice => soap call DeliverOrderEU  
+        $this->assertInstanceOf("Svea\WebPay\WebService\HandleOrder\DeliverInvoice", $request);         // WebService\DeliverInvoice => soap call DeliverOrderEU
     }
 
     // deliverPaymentPlanOrder

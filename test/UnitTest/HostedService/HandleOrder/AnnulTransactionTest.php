@@ -75,7 +75,7 @@ class AnnulTransactionTest extends \PHPUnit\Framework\TestCase
         // check annul request message contents
         $xmlMessage = new SimpleXMLElement(base64_decode(urldecode($form['message'])));
 
-        $this->assertEquals("annul", $xmlMessage->getName());   // root node        
+        $this->assertEquals("annul", $xmlMessage->getName());   // root node
         $this->assertEquals((string)$transactionId, $xmlMessage->transactionid);
     }
 

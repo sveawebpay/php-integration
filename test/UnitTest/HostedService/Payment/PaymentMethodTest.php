@@ -63,7 +63,7 @@ class PaymentMethodTest extends \PHPUnit\Framework\TestCase{
                 ->setReturnUrl("http://myurl.se")
                 ->getPaymentForm();
 
-        $xmlMessage = new \SimpleXMLElement($form->xmlMessage); 
+        $xmlMessage = new \SimpleXMLElement($form->xmlMessage);
         $this->assertEquals(SystemPaymentMethod::INVOICE_SE, $xmlMessage->paymentmethod[0]);
         $this->assertEquals("TRUE", $xmlMessage->iscompany);
         $this->assertEquals("4608142222", $xmlMessage->customer->ssn);

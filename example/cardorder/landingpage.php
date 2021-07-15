@@ -2,7 +2,7 @@
 
 /**
  * example file, how to handle a card order request response
- * 
+ *
  * @author Kristian Grossman-madsen for Svea Svea\WebPay\WebPay
  */
 
@@ -50,7 +50,7 @@ Svea\HostedPaymentResponse Object
     [amount] => 23.74
     [currency] => SEK
     [accepted] => 1
-    [resultcode] => 
+    [resultcode] =>
     [cardType] => VISA
     [maskedCardNumber] => 444433xxxxxx1100
     [expiryMonth] => 02
@@ -60,7 +60,7 @@ Svea\HostedPaymentResponse Object
 
 echo "\n</pre><font color='red'><pre>\n\n
 
-An example of a rejected request response -- 'accepted' is false (0) and resultcode/errormessage indicates that the clientOrderNumber above has been reused, which is prohibited.   
+An example of a rejected request response -- 'accepted' is false (0) and resultcode/errormessage indicates that the clientOrderNumber above has been reused, which is prohibited.
 
 Svea\HostedPaymentResponse Object
 (

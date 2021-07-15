@@ -37,8 +37,8 @@ class RecurTransactionTest extends \PHPUnit\Framework\TestCase
 //        $currency = "SEK";
 //        $this->recurTransactionObject->setCurrency( $currency );
 //        $this->assertEquals( $currency, PHPUnit_Framework_Assert::readAttribute($this->recurTransactionObject, 'currency') );
-//    }    
-//    
+//    }
+//
 //    function test_setAmount() {
 //        $amount = 100;
 //        $this->recurTransactionObject->setAmount( $amount );
@@ -46,13 +46,13 @@ class RecurTransactionTest extends \PHPUnit\Framework\TestCase
 //    }
 //
 //    function test_setCustomerRefNo( ){
-//        $customerRefNo = "myCustomerRefNo";       
+//        $customerRefNo = "myCustomerRefNo";
 //        $this->recurTransactionObject->setCustomerRefNo( $customerRefNo );
 //        $this->assertEquals( $customerRefNo, PHPUnit_Framework_Assert::readAttribute($this->recurTransactionObject, 'customerRefNo') );
 //    }
-//    
+//
 //    function test_setSubscriptionId( ){
-//        $subscriptionId = 987654;       
+//        $subscriptionId = 987654;
 //        $this->recurTransactionObject->setSubscriptionId( $subscriptionId );
 //        $this->assertEquals( $subscriptionId, PHPUnit_Framework_Assert::readAttribute($this->recurTransactionObject, 'subscriptionId') );
 //    }
@@ -118,7 +118,7 @@ class RecurTransactionTest extends \PHPUnit\Framework\TestCase
         // check credit request message contents
         $xmlMessage = new SimpleXMLElement(base64_decode(urldecode($form['message'])));
 
-        $this->assertEquals("recur", $xmlMessage->getName());   // root node        
+        $this->assertEquals("recur", $xmlMessage->getName());   // root node
         $this->assertEquals((string)$customerRefNo, $xmlMessage->customerrefno);
         $this->assertEquals((string)$subscriptionId, $xmlMessage->subscriptionid);
         $this->assertEquals((string)$currency, $xmlMessage->currency);

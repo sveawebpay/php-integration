@@ -194,7 +194,7 @@ class QueryTransactionIntegrationTest extends \PHPUnit\Framework\TestCase
         //        )
         //
         //    [statuscode] => 0
-        //)        
+        //)
 
         $this->assertInstanceOf("Svea\WebPay\HostedService\HostedResponse\HostedAdminResponse\QueryTransactionResponse", $response);
 
@@ -208,7 +208,7 @@ class QueryTransactionIntegrationTest extends \PHPUnit\Framework\TestCase
         //    [amount] => 25500
         //    [currency] => SEK
         //    [vat] => 600
-        //    [capturedamount] => 
+        //    [capturedamount] =>
         //    [authorizedamount] => 25500
         //    [created] => 2014-10-06 15:35:55.327
         //    [creditstatus] => CREDNONE
@@ -219,58 +219,58 @@ class QueryTransactionIntegrationTest extends \PHPUnit\Framework\TestCase
         //        (
         //            [0] => Svea\WebPay\BuildOrder\RowBuilders\NumberedOrderRow Object
         //                (
-        //                    [creditInvoiceId] => 
-        //                    [invoiceId] => 
+        //                    [creditInvoiceId] =>
+        //                    [invoiceId] =>
         //                    [rowNumber] => 1
-        //                    [status] => 
+        //                    [status] =>
         //                    [articleNumber] => 123
         //                    [quantity] => 1
         //                    [unit] => st
         //                    [amountExVat] => 4
         //                    [vatPercent] => 25
-        //                    [amountIncVat] => 
+        //                    [amountIncVat] =>
         //                    [name] => Orderrow1
         //                    [description] => Orderrow description
-        //                    [discountPercent] => 
+        //                    [discountPercent] =>
         //                    [vatDiscount] => 0
         //                )
         //
         //            [1] => Svea\WebPay\BuildOrder\RowBuilders\NumberedOrderRow Object
         //                (
-        //                    [creditInvoiceId] => 
-        //                    [invoiceId] => 
+        //                    [creditInvoiceId] =>
+        //                    [invoiceId] =>
         //                    [rowNumber] => 2
-        //                    [status] => 
+        //                    [status] =>
         //                    [articleNumber] => 124
         //                    [quantity] => 2
         //                    [unit] => m2
         //                    [amountExVat] => 100
         //                    [vatPercent] => 25
-        //                    [amountIncVat] => 
+        //                    [amountIncVat] =>
         //                    [name] => Orderrow2
         //                    [description] => Orderrow2 description
-        //                    [discountPercent] => 
+        //                    [discountPercent] =>
         //                    [vatDiscount] => 0
         //                )
         //
         //        )
         //
-        //    [callbackurl] => 
-        //    [capturedate] => 
-        //    [subscriptionId] => 
-        //    [subscriptiontype] => 
-        //    [cardType] => 
-        //    [maskedCardNumber] => 
-        //    [eci] => 
-        //    [mdstatus] => 
-        //    [expiryYear] => 
-        //    [expiryMonth] => 
-        //    [chname] => 
-        //    [authCode] => 
+        //    [callbackurl] =>
+        //    [capturedate] =>
+        //    [subscriptionId] =>
+        //    [subscriptiontype] =>
+        //    [cardType] =>
+        //    [maskedCardNumber] =>
+        //    [eci] =>
+        //    [mdstatus] =>
+        //    [expiryYear] =>
+        //    [expiryMonth] =>
+        //    [chname] =>
+        //    [authCode] =>
         //    [accepted] => 1
         //    [resultcode] => 0
-        //    [errormessage] => 
-        //)       
+        //    [errormessage] =>
+        //)
 
         $this->assertEquals(1, $response->accepted);
         $this->assertEquals(0, $response->resultcode);
@@ -334,7 +334,7 @@ class QueryTransactionIntegrationTest extends \PHPUnit\Framework\TestCase
         // Stop here and mark this test as incomplete.
 //        $this->markTestIncomplete(
 //            'test_manual_parsing_of_queried_recur_order_without_orderrows_works'
-//        );               
+//        );
 
         // 1. go to https://webpaypaymentgatewaystage.svea.com/webpay-admin/admin/start.xhtml
         // 2. go to verktyg -> betalning
@@ -355,7 +355,7 @@ class QueryTransactionIntegrationTest extends \PHPUnit\Framework\TestCase
         $response = $request->doRequest();
 
         // Example of raw recur order 581497 response (see QueryTransactionResponse class) to parse
-        //        
+        //
         //SimpleXMLElement Object
         //(
         //    [transaction] => SimpleXMLElement Object
@@ -388,7 +388,7 @@ class QueryTransactionIntegrationTest extends \PHPUnit\Framework\TestCase
         //        )
         //
         //    [statuscode] => 0
-        //)               
+        //)
 
         $this->assertInstanceOf("Svea\WebPay\HostedService\HostedResponse\HostedAdminResponse\QueryTransactionResponse", $response);
 
@@ -409,22 +409,22 @@ class QueryTransactionIntegrationTest extends \PHPUnit\Framework\TestCase
         //    [creditedamount] => 0
         //    [merchantresponsecode] => 0
         //    [paymentMethod] => KORTCERT
-        //    [numberedOrderRows] => 
-        //    [callbackurl] => 
+        //    [numberedOrderRows] =>
+        //    [callbackurl] =>
         //    [capturedate] => 2014-04-18 00:15:12.287
         //    [subscriptionId] => 2922
         //    [subscriptiontype] => RECURRINGCAPTURE
-        //    [cardType] => 
-        //    [maskedCardNumber] => 
-        //    [eci] => 
-        //    [mdstatus] => 
-        //    [expiryYear] => 
-        //    [expiryMonth] => 
-        //    [chname] => 
-        //    [authCode] => 
+        //    [cardType] =>
+        //    [maskedCardNumber] =>
+        //    [eci] =>
+        //    [mdstatus] =>
+        //    [expiryYear] =>
+        //    [expiryMonth] =>
+        //    [chname] =>
+        //    [authCode] =>
         //    [accepted] => 1
         //    [resultcode] => 0
-        //    [errormessage] => 
+        //    [errormessage] =>
         //)
 
         $this->assertEquals(1, $response->accepted);
@@ -467,7 +467,7 @@ class QueryTransactionIntegrationTest extends \PHPUnit\Framework\TestCase
         // Stop here and mark this test as incomplete.
 //        $this->markTestIncomplete(
 //            'test_manual_parsing_of_queried_recur_order_without_orderrows_works'
-//        );               
+//        );
 
         // 1. See Svea\WebPay\Test\IntegrationTest\HostedService\Payment\CardPaymentURLIntegrationTest::test_manual_CardPayment_getPaymentUrl():
         // 2. run the test, and get the subscription paymenturl from the output
@@ -484,7 +484,7 @@ class QueryTransactionIntegrationTest extends \PHPUnit\Framework\TestCase
         $response = $request->doRequest();
 
         // Example of raw recur order 586076 response (see QueryTransactionResponse class) to parse
-        //     
+        //
         //SimpleXMLElement Object
         //(
         //    [transaction] => SimpleXMLElement Object
@@ -689,7 +689,7 @@ class QueryTransactionIntegrationTest extends \PHPUnit\Framework\TestCase
         $transactionId = 586159;
 
         // Example of raw recur order 586159 response (see QueryTransactionResponse class) to parse
-        //    
+        //
         //SimpleXMLElement Object
         //(
         //    [transaction] => SimpleXMLElement Object
@@ -823,10 +823,10 @@ class QueryTransactionIntegrationTest extends \PHPUnit\Framework\TestCase
         $maskedCardNumber = "444433xxxxxx1100";
         $expiryMonth = 01;
         $expiryYear = 15;
-        $subscriptionId = 3050; // insert 
+        $subscriptionId = 3050; // insert
 
         // the below applies to the recur request, and may differ from the original transaction
-        $new_amount = "2500"; // in minor currency  
+        $new_amount = "2500"; // in minor currency
         $new_customerrefno = "test_manual_recurring_payment_step_1 " . date('c');
 
         // below is actual test, shouldn't need to change it
@@ -841,7 +841,7 @@ class QueryTransactionIntegrationTest extends \PHPUnit\Framework\TestCase
         // check that request was accepted
         $this->assertEquals(1, $response->accepted);
 
-        ////print_r("Recur card transaction response: "); //print_r( $response );        
+        ////print_r("Recur card transaction response: "); //print_r( $response );
         //
         //Recur card transaction response: Svea\WebPay\HostedService\HostedResponse\HostedAdminResponse\RecurTransactionResponse Object
         //(
@@ -859,8 +859,8 @@ class QueryTransactionIntegrationTest extends \PHPUnit\Framework\TestCase
         //    [subscriptionid] => 3050
         //    [accepted] => 1
         //    [resultcode] => 0
-        //    [errormessage] => 
-        //)        
+        //    [errormessage] =>
+        //)
 
         // Set the below to match the transaction, then run the test.
         $transactionId = $response->transactionId;
@@ -915,7 +915,7 @@ class QueryTransactionIntegrationTest extends \PHPUnit\Framework\TestCase
 
         $this->assertInstanceOf("Svea\WebPay\HostedService\HostedResponse\HostedAdminResponse\QueryTransactionResponse", $queryResponse);
 
-        ////print_r($queryResponse);        
+        ////print_r($queryResponse);
         //
         //Svea\WebPay\HostedService\HostedResponse\HostedAdminResponse\QueryTransactionResponse Object
         //(
@@ -925,30 +925,30 @@ class QueryTransactionIntegrationTest extends \PHPUnit\Framework\TestCase
         //    [status] => AUTHORIZED
         //    [amount] => 2500
         //    [currency] => SEK
-        //    [vat] => 
-        //    [capturedamount] => 
+        //    [vat] =>
+        //    [capturedamount] =>
         //    [authorizedamount] => 2500
         //    [created] => 2014-10-06 15:53:45.367
         //    [creditstatus] => CREDNONE
         //    [creditedamount] => 0
         //    [merchantresponsecode] => 0
         //    [paymentMethod] => CARD
-        //    [numberedOrderRows] => 
-        //    [callbackurl] => 
-        //    [capturedate] => 
+        //    [numberedOrderRows] =>
+        //    [callbackurl] =>
+        //    [capturedate] =>
         //    [subscriptionId] => 3050
         //    [subscriptiontype] => RECURRINGCAPTURE
-        //    [cardType] => 
-        //    [maskedCardNumber] => 
-        //    [eci] => 
-        //    [mdstatus] => 
-        //    [expiryYear] => 
-        //    [expiryMonth] => 
-        //    [chname] => 
-        //    [authCode] => 
+        //    [cardType] =>
+        //    [maskedCardNumber] =>
+        //    [eci] =>
+        //    [mdstatus] =>
+        //    [expiryYear] =>
+        //    [expiryMonth] =>
+        //    [chname] =>
+        //    [authCode] =>
         //    [accepted] => 1
         //    [resultcode] => 0
-        //    [errormessage] => 
+        //    [errormessage] =>
         //)
 
         $this->assertEquals(1, $response->accepted);

@@ -43,7 +43,7 @@ class DeliverOrdersRequestIntegrationTest extends \PHPUnit\Framework\TestCase
         $request = new DeliverOrdersRequest($DeliverOrderBuilder);
         $response = $request->doRequest();
 
-        ////print_r( $response );        
+        ////print_r( $response );
         $this->assertInstanceOf('Svea\WebPay\AdminService\AdminServiceResponse\DeliverOrdersResponse', $response);
         $this->assertEquals(0, $response->accepted); //
         $this->assertEquals(20000, $response->resultcode); // 20000, order is closed.
@@ -75,7 +75,7 @@ class DeliverOrdersRequestIntegrationTest extends \PHPUnit\Framework\TestCase
         $request = new DeliverOrdersRequest($DeliverOrderBuilder);
         $response = $request->doRequest();
 
-        ////print_r( $response );        
+        ////print_r( $response );
         $this->assertInstanceOf('Svea\WebPay\AdminService\AdminServiceResponse\DeliverOrdersResponse', $response);
         $this->assertEquals(true, $response->accepted);    // truth
         $this->assertEquals(1, $response->accepted);       // equals literal 1

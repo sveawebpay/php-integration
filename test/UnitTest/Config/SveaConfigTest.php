@@ -34,10 +34,10 @@ class SveaConfigTest extends \PHPUnit\Framework\TestCase {
         $this->assertEquals("sverigetest", $request->request->Auth->Password);
         $this->assertEquals(79021, $request->request->Auth->ClientNumber);
     }
-    
+
     public function test_getSveaSingleCountryConfig_defaults() {
         $secret = "8a9cece566e808da63c6f07ff415ff9e127909d000d259aba24daa2fed6d9e3f8b0b62e8ad1fa91c7d7cd6fc3352deaae66cdb533123edf127ad7d1f4c77e7a3";
-      
+
         $config = ConfigurationService::getSingleCountryConfig(
                 null, // SE
                 null, null, null, //invoice 79021
@@ -45,7 +45,7 @@ class SveaConfigTest extends \PHPUnit\Framework\TestCase {
                 null, null, null, //accountCredit 58702
                 null, null, // merchantid 1130
                 null // test
-        );        
+        );
 
         $this->assertInstanceOf('Svea\WebPay\Config\ConfigurationProvider', $config );
 
@@ -68,9 +68,9 @@ class SveaConfigTest extends \PHPUnit\Framework\TestCase {
         $this->assertEquals($secret, $config->getSecret(ConfigurationProvider::HOSTED_TYPE, "SE"));
         $this->assertEquals(ConfigurationService::SWP_TEST_URL, $config->getEndPoint(ConfigurationProvider::HOSTED_TYPE));
     }
-    
+
     public function test_getSveaSingleCountryConfig_respects_passed_parameters() {
- 
+
         $config = ConfigurationService::getSingleCountryConfig(
                 "NO",
                 "norgetest2", "norgetest2", "33308",
@@ -78,8 +78,8 @@ class SveaConfigTest extends \PHPUnit\Framework\TestCase {
                 "sverigetest", "sverigetest", "58702",
                 "1701", "foo",
                 true // $prod = true
-        );        
-        
+        );
+
         $this->assertInstanceOf('Svea\WebPay\Config\ConfigurationProvider', $config );
         $this->assertEquals("norgetest2", $config->getUsername(ConfigurationProvider::INVOICE_TYPE, "NO") );
         $this->assertEquals("norgetest2", $config->getPassword(ConfigurationProvider::INVOICE_TYPE, "NO") );
@@ -97,7 +97,7 @@ class SveaConfigTest extends \PHPUnit\Framework\TestCase {
         $this->assertEquals("foo", $config->getSecret(ConfigurationProvider::HOSTED_TYPE, "NO"));
         $this->assertEquals(ConfigurationService::SWP_PROD_URL, $config->getEndPoint(ConfigurationProvider::HOSTED_TYPE));
     }
-    
+
     /**
      * @expectedException Svea\WebPay\HostedService\Helper\InvalidCountryException
      */
@@ -109,7 +109,7 @@ class SveaConfigTest extends \PHPUnit\Framework\TestCase {
                 null, null, null, //accountcredit 58702
                 null, null, // merchantid 1130
                 null // test
-        );        
+        );
 
         $config->getUsername(ConfigurationProvider::INVOICE_TYPE, "NO");
     }

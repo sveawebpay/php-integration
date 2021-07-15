@@ -2,8 +2,8 @@
 
 namespace Svea\WebPay\BuildOrder;
 
-use Svea\WebPay\Config\SveaConfigurationProvider; 
-use Svea\WebPay\BuildOrder\Validator\ValidationException; 
+use Svea\WebPay\Config\SveaConfigurationProvider;
+use Svea\WebPay\BuildOrder\Validator\ValidationException;
 
 /**
  * Class PaymentAdminOrderBuilder
@@ -35,7 +35,7 @@ class PaymentAdminOrderBuilder
         $this->conf = $configProvider;
     }
 
-     
+
 
     /**
      * @param $clientNumber
@@ -89,6 +89,6 @@ class PaymentAdminOrderBuilder
     public function setTransactionId($transactionIdAsString)
     {
         return $this->setOrderId($transactionIdAsString);
-    } 
-    
+    }
+
 }

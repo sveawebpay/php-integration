@@ -24,7 +24,7 @@ class GetPaymentMethodIntegrationTest extends \PHPUnit\Framework\TestCase
             ->setContryCode("SE")
             ->doRequest();
 
-        //print_r( "testGetAllPaymentMethods: "); //print_r( $response );        
+        //print_r( "testGetAllPaymentMethods: "); //print_r( $response );
         $this->assertEquals(PaymentMethod::BANKAXESS, $response[0]);
         $this->assertEquals(PaymentMethod::NORDEA_SE, $response[1]);
         $this->assertEquals(PaymentMethod::SEB_SE, $response[2]);

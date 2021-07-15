@@ -36,10 +36,10 @@ abstract class PaymentMethod
     const SVEACARDPAY_PF = 'SVEACARDPAY_PF';
     const SKRILL = 'SKRILL';
     const KORTWN = 'KORTWN';
-    
+
     //PREPAID
     const MICRODEB = 'MICRODEB';
-    
+
     //PSP
     const PAYGROUND = 'PAYGROUND';
     const PAYPAL = 'PAYPAL';

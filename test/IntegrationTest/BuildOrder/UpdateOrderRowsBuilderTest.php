@@ -54,7 +54,7 @@ class UpdateOrderRowsBuilderIntegrationTest extends \PHPUnit\Framework\TestCase
         $orderResponse = $order->useInvoicePayment()->doRequest();
         $this->assertEquals(1, $orderResponse->accepted);
 
-        // update all attributes for a numbered orderRow   
+        // update all attributes for a numbered orderRow
         $updateOrderRowsResponse = WebPayAdmin::updateOrderRows(ConfigurationService::getDefaultConfig())
             ->setOrderId($orderResponse->sveaOrderId)
             ->setCountryCode($country)
@@ -76,7 +76,7 @@ class UpdateOrderRowsBuilderIntegrationTest extends \PHPUnit\Framework\TestCase
         ////print_r( $updateOrderRowsResponse );
         ////print_r("test_UpdateOrderRows_updateInvoiceOrderRows_single_row_success: "); //print_r( $orderResponse->sveaOrderId );
         $this->assertEquals(1, $updateOrderRowsResponse->accepted);
-        // todo query result & check amounts, description automatically        
+        // todo query result & check amounts, description automatically
     }
 
     function test_UpdateOrderRows_updateInvoiceOrderRows_multiple_row_success()
@@ -118,7 +118,7 @@ class UpdateOrderRowsBuilderIntegrationTest extends \PHPUnit\Framework\TestCase
         $orderResponse = $order->useInvoicePayment()->doRequest();
         $this->assertEquals(1, $orderResponse->accepted);
 
-        // update all attributes for a numbered orderRow   
+        // update all attributes for a numbered orderRow
         $updateOrderRowsResponse = WebPayAdmin::updateOrderRows(ConfigurationService::getDefaultConfig())
             ->setOrderId($orderResponse->sveaOrderId)
             ->setCountryCode($country)
@@ -167,7 +167,7 @@ class UpdateOrderRowsBuilderIntegrationTest extends \PHPUnit\Framework\TestCase
         ////print_r( $updateOrderRowsResponse );
         ////print_r("test_UpdateOrderRows_updateInvoiceOrderRows_single_row_success: "); //print_r( $orderResponse->sveaOrderId );
         $this->assertEquals(1, $updateOrderRowsResponse->accepted);
-        // todo query result & check amounts, description automatically        
+        // todo query result & check amounts, description automatically
     }
 
     function test_UpdateOrderRows_updatePaymentPlanOrderRows_multiple_row_success()
@@ -209,7 +209,7 @@ class UpdateOrderRowsBuilderIntegrationTest extends \PHPUnit\Framework\TestCase
         $orderResponse = $order->usePaymentPlanPayment(TestUtil::getGetPaymentPlanParamsForTesting())->doRequest();
         $this->assertEquals(1, $orderResponse->accepted);
 
-        // update all attributes for a numbered orderRow   
+        // update all attributes for a numbered orderRow
         $updateOrderRowsResponse = WebPayAdmin::updateOrderRows(ConfigurationService::getDefaultConfig())
             ->setOrderId($orderResponse->sveaOrderId)
             ->setCountryCode($country)
@@ -258,7 +258,7 @@ class UpdateOrderRowsBuilderIntegrationTest extends \PHPUnit\Framework\TestCase
         ////print_r( $updateOrderRowsResponse );
         ////print_r("test_UpdateOrderRows_updateInvoiceOrderRows_single_row_success: "); //print_r( $orderResponse->sveaOrderId );
         $this->assertEquals(1, $updateOrderRowsResponse->accepted);
-        // todo query result & check amounts, description automatically        
+        // todo query result & check amounts, description automatically
     }
 
     function _test_UpdateOrderRows_manually_created_paymentplan()
@@ -276,7 +276,7 @@ class UpdateOrderRowsBuilderIntegrationTest extends \PHPUnit\Framework\TestCase
 //            ->setName('A Name')
 //            ->setUnit("st")
 //            ->setDiscountPercent(0)
-//        );      
+//        );
 //        $order->addOrderRow( Svea\WebPay\WebPayItem::orderRow()
 //            ->setArticleNumber("2")
 //            ->setQuantity( 1 )
@@ -286,7 +286,7 @@ class UpdateOrderRowsBuilderIntegrationTest extends \PHPUnit\Framework\TestCase
 //            ->setName('B Name')
 //            ->setUnit("st")
 //            ->setDiscountPercent(0)
-//        );         
+//        );
 //        $order->addOrderRow( Svea\WebPay\WebPayItem::orderRow()
 //            ->setArticleNumber("3")
 //            ->setQuantity( 1 )
@@ -296,11 +296,11 @@ class UpdateOrderRowsBuilderIntegrationTest extends \PHPUnit\Framework\TestCase
 //            ->setName('C Name')
 //            ->setUnit("st")
 //            ->setDiscountPercent(0)
-//        );         
-//        $orderResponse = $order->usePaymentPlanPayment( Svea\WebPay\Test\TestUtil::getGetPaymentPlanParamsForTesting() )->doRequest();       
+//        );
+//        $orderResponse = $order->usePaymentPlanPayment( Svea\WebPay\Test\TestUtil::getGetPaymentPlanParamsForTesting() )->doRequest();
 //        $this->assertEquals(1, $orderResponse->accepted);
 
-        // update all attributes for a numbered orderRow   
+        // update all attributes for a numbered orderRow
         $updateOrderRowsResponse = WebPayAdmin::updateOrderRows(ConfigurationService::getDefaultConfig())
             ->setOrderId(364183)
             ->setCountryCode($country)
@@ -322,7 +322,7 @@ class UpdateOrderRowsBuilderIntegrationTest extends \PHPUnit\Framework\TestCase
         //print_r( $updateOrderRowsResponse );
         ////print_r("test_UpdateOrderRows_updateInvoiceOrderRows_single_row_success: "); //print_r( $orderResponse->sveaOrderId );
         $this->assertEquals(1, $updateOrderRowsResponse->accepted);
-        // todo query result & check amounts, description automatically        
+        // todo query result & check amounts, description automatically
     }
 }
 

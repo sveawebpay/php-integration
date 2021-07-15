@@ -17,11 +17,11 @@ use Svea\WebPay\Helper\Helper;
  */
 class AddOrderRowsRequest extends AdminServiceRequest
 {
-    /** 
+    /**
      * @var AddOrderRowsBuilder $orderBuilder
      */
     public $orderBuilder;
-    
+
     private $amount;
 
     /**

@@ -19,7 +19,7 @@ class CancelRecurSubscription extends HostedRequest
      */
     public $conf;
 
-    /** 
+    /**
      * @var string $subscriptionId Required. This is the subscription id returned with the initial transaction that set up the subscription response.
      */
     public $subscriptionId;

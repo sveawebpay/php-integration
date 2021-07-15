@@ -45,7 +45,7 @@ interface ConfigurationProvider
     const ACCOUNTCREDIT_TYPE = 'AccountCredit';
 
     /*
-     *  Checkout 
+     *  Checkout
      */
     const CHECKOUT = 'CHECKOUT';
     const CHECKOUT_ADMIN = 'CHECKOUT_ADMIN';

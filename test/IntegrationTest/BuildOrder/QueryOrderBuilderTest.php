@@ -306,7 +306,7 @@ class QueryOrderBuilderIntegrationTest extends \PHPUnit\Framework\TestCase
         ////print_r( $queryResponse);
         $this->assertEquals(1, $queryResponse->accepted);
 
-        // assert that order rows are the same 
+        // assert that order rows are the same
         $this->assertEquals($a_quantity, $queryResponse->numberedOrderRows[0]->quantity);
         $this->assertEquals($a_amountExVat, $queryResponse->numberedOrderRows[0]->amountExVat);
 
@@ -457,15 +457,15 @@ class QueryOrderBuilderIntegrationTest extends \PHPUnit\Framework\TestCase
         //        (
         //            [0] => Svea\WebPay\BuildOrder\RowBuilders\OrderRow Object
         //                (
-        //                    [articleNumber] => 
+        //                    [articleNumber] =>
         //                    [quantity] => 2
-        //                    [unit] => 
+        //                    [unit] =>
         //                    [amountExVat] => 1000
-        //                    [amountIncVat] => 
+        //                    [amountIncVat] =>
         //                    [vatPercent] => 25
-        //                    [name] => 
-        //                    [description] => 
-        //                    [discountPercent] => 
+        //                    [name] =>
+        //                    [description] =>
+        //                    [discountPercent] =>
         //                    [vatDiscount] => 0
         //                )
         //
@@ -475,11 +475,11 @@ class QueryOrderBuilderIntegrationTest extends \PHPUnit\Framework\TestCase
         //                    [quantity] => 1
         //                    [unit] => pcs.
         //                    [amountExVat] => 100
-        //                    [amountIncVat] => 
+        //                    [amountIncVat] =>
         //                    [vatPercent] => 12
         //                    [name] => B Name
         //                    [description] => B Description
-        //                    [discountPercent] => 
+        //                    [discountPercent] =>
         //                    [vatDiscount] => 0
         //                )
         //
@@ -487,10 +487,10 @@ class QueryOrderBuilderIntegrationTest extends \PHPUnit\Framework\TestCase
         //
         //    [accepted] => 1
         //    [resultcode] => 0
-        //    [errormessage] => 
+        //    [errormessage] =>
         //)
 
-        // assert that order rows are the same 
+        // assert that order rows are the same
         $this->assertEquals($a_quantity, $queryResponse->numberedOrderRows[0]->quantity);
         $this->assertEquals($a_amountExVat, $queryResponse->numberedOrderRows[0]->amountExVat);
 

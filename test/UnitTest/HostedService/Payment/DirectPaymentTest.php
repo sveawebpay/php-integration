@@ -33,7 +33,7 @@ class DirectPaymentTest extends \PHPUnit\Framework\TestCase {
                 ->getPaymentForm();
 
         $xmlMessage = new \SimpleXMLElement($form->xmlMessage);
-        
+
 //        $excluded = (array)$xmlMessage->excludepaymentmethods->exclude; // only works with php 5.5
 //        $this->assertTrue( in_array( SystemPaymentMethod::KORTCERT, $excluded ) );
 //        $this->assertTrue( in_array( SystemPaymentMethod::SKRILL, $excluded ) );

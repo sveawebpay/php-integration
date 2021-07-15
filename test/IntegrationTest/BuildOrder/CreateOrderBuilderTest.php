@@ -74,7 +74,7 @@ class CreateOrderBuilderIntegrationTest extends \PHPUnit\Framework\TestCase
     // CreateOrderBuilder card payment method
     // see Svea\WebPay\Test\IntegrationTest\HostedService\Payment\CardPaymentURLIntegrationTest->test_manual_CardPayment_getPaymentUrl()
 
-    // CreateOrderBuilder direct bank payment method   //TODO    
+    // CreateOrderBuilder direct bank payment method   //TODO
 
 
 }

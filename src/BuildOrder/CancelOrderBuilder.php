@@ -24,7 +24,7 @@ use Svea\WebPay\HostedService\HostedAdminRequest\AnnulTransaction;
  * @author Kristian Grossman-Madsen for Svea Svea\WebPay\WebPay
  */
 class CancelOrderBuilder extends CheckoutAdminOrderBuilder
-{ 
+{
     /**
      * @var ConfigurationProvider $conf
      */

@@ -51,7 +51,7 @@ class LowerTransactionIntegrationTest extends \PHPUnit\Framework\TestCase
         // - 100 => success, 11600 at Svea, Svea status AUTHORIZED
         // - 11600 => success, Svea status ANNULLED
         // - 1 => failure, accepted = 0, resultcode = "105 (ILLEGAL_TRANSACTIONSTATUS)", errormessage = "Invalid transaction status."
-        // 
+        //
         // new order of 130 kr => 13000 at Svea
         // - 13001 => failure, accepted = 0, resultcode = "305 (BAD_AMOUNT), errormessage = "Invalid value for amount."
         // - 10000 => success, success, 3000 at Svea, Svea status AUTHORIZED

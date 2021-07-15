@@ -56,7 +56,7 @@ class CheckoutPresetValueTest extends TestCase
             ->setIsReadonly($readonly);
 
         $array = $pv->returnPresetArray();
-        
+
         $this->assertEquals($array['typeName'], $pv::POSTAL_CODE);
         $this->assertEquals($array['value'], $postalCode);
         $this->assertEquals($array['isReadonly'], $readonly);

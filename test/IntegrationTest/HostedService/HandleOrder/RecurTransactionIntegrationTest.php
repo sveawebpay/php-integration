@@ -78,7 +78,7 @@ class RecurTransactionIntegrationTest extends \PHPUnit\Framework\TestCase
         $subscriptionId = 3036;
 
         // the below applies to the recur request, and may differ from the original transaction
-        $new_amount = "2500"; // in minor currency  
+        $new_amount = "2500"; // in minor currency
         $new_clientOrderNumber = "test_recur_" . date('c');
 
         // below is actual test, shouldn't need to change it
@@ -93,7 +93,7 @@ class RecurTransactionIntegrationTest extends \PHPUnit\Framework\TestCase
 
         $this->assertInstanceOf("Svea\WebPay\HostedService\HostedResponse\HostedAdminResponse\RecurTransactionResponse", $response);
 
-        ////print_r($response);                
+        ////print_r($response);
         $this->assertEquals(1, $response->accepted);
 
         $this->assertEquals("CARD", $response->paymentMethod);    // CARD is alias for KORTCERT, and this alias is returned by webservice

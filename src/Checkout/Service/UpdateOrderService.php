@@ -19,7 +19,7 @@ class UpdateOrderService extends CheckoutService
     public function doRequest()
     {
         $requestData = $this->prepareRequest();
-        
+
         $response = $this->serviceConnection->update($requestData);
 
         return $response;

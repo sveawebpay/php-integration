@@ -16,8 +16,8 @@ use Svea\WebPay\HostedService\HostedResponse\HostedAdminResponse\QueryTransactio
  */
 class QueryTransaction extends HostedRequest
 {
-    /** 
-     * @var string $transactionId Required. 
+    /**
+     * @var string $transactionId Required.
      */
     public $transactionId;
 

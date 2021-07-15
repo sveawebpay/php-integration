@@ -2,7 +2,7 @@
 
 /**
  * example file, how to handle a swish order request response
- * 
+ *
  * @author Fredrik Sundell / fre-sund
  */
 
@@ -50,15 +50,15 @@ Svea\WebPay\HostedService\HostedResponse\HostedPaymentResponse Object
     [amount] => 3.75
     [currency] => SEK
     [accepted] => 1
-    [resultcode] => 
-    [errormessage] => 
+    [resultcode] =>
+    [errormessage] =>
 )
 
 )";
 
 echo "\n</pre><font color='red'><pre>\n\n
 
-An example of a rejected request response -- 'accepted' is false (0) and resultcode/errormessage indicates that the clientOrderNumber above has been reused, which is prohibited.   
+An example of a rejected request response -- 'accepted' is false (0) and resultcode/errormessage indicates that the clientOrderNumber above has been reused, which is prohibited.
 
 Svea\HostedPaymentResponse Object
 (

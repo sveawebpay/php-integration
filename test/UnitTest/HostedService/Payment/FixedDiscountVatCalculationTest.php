@@ -11,10 +11,10 @@ require_once $root . '/../../../TestUtil.php';
  * @author Kristian Grossman-Madsen
  */
 class BvDiscountTest extends \PHPUnit\Framework\TestCase {
-    
-    public function test_bv_order_sent_incvat_two_decimals_with_both_discounts() {        
+
+    public function test_bv_order_sent_incvat_two_decimals_with_both_discounts() {
 //    print_r("\n\n-----test_bv_order_sent_incvat_two_decimals_with_both_discounts()\n");
-    
+
         $order = WebPay::createOrder(\Svea\WebPay\Config\ConfigurationService::getDefaultConfig())
             ->addCustomerDetails(WebPayItem::individualCustomer()->setNationalIdNumber(194605092222))
             ->setCountryCode("SE")
@@ -50,19 +50,19 @@ class BvDiscountTest extends \PHPUnit\Framework\TestCase {
         ;        $request = $order->usePaymentMethod(PaymentMethod::KORTCERT)
                 ->setReturnUrl("https://webpaypaymentgatewaystage.svea.com/webpay-admin/admin/merchantresponsetest.xhtml")
                 ->getPaymentForm();
-        
+
 //    print_r( $request->xmlMessage );
-   
+
         // 240i@6% => 240 (13,58491) => 24000 (1358)
         $expectedDiscountRow =
         "  <row>\n".
         "   <sku>fixedDiscount</sku>\n".
         "   <name>-240i@6%*1</name>\n".
         "   <description></description>\n".
-        "   <amount>-24000</amount>\n".      
-        "   <vat>-1358</vat>\n";            
+        "   <amount>-24000</amount>\n".
+        "   <vat>-1358</vat>\n";
         "   <quantity>1</quantity>\n".
-        "  </row>\n";   
+        "  </row>\n";
         $this->assertEquals(1, substr_count($request->xmlMessage, $expectedDiscountRow));
 
         // 20i@6% => 2000 (1,132076) => 2000 (113)
@@ -71,13 +71,13 @@ class BvDiscountTest extends \PHPUnit\Framework\TestCase {
         "   <sku>fixedDiscount2</sku>\n".
         "   <name>-20i@6%*1</name>\n".
         "   <description></description>\n".
-        "   <amount>-2000</amount>\n".      
-        "   <vat>-113</vat>\n";            
+        "   <amount>-2000</amount>\n".
+        "   <vat>-113</vat>\n";
         "   <quantity>1</quantity>\n".
-        "  </row>\n";            
-        $this->assertEquals(1, substr_count($request->xmlMessage, $expectedDiscountRow2));        
-             
-        // lagt ordern med den dumpade xml:en från utskriften i tools/payment, ger detta response:        
+        "  </row>\n";
+        $this->assertEquals(1, substr_count($request->xmlMessage, $expectedDiscountRow2));
+
+        // lagt ordern med den dumpade xml:en från utskriften i tools/payment, ger detta response:
 
         //<response>
         //  <transaction id="600089">
@@ -110,12 +110,12 @@ class BvDiscountTest extends \PHPUnit\Framework\TestCase {
         //    </customer>
         //  </transaction>
         //  <statuscode>0</statuscode>
-        //</response>        
+        //</response>
     }
-    
-    public function test_bv_order_sent_incvat_two_decimals_with_both_discounts_with_amount_only() {        
+
+    public function test_bv_order_sent_incvat_two_decimals_with_both_discounts_with_amount_only() {
 //    print_r("\n\n-----test_bv_order_sent_incvat_two_decimals_with_both_discounts_with_amount_only()\n");
-    
+
         $order = WebPay::createOrder(\Svea\WebPay\Config\ConfigurationService::getDefaultConfig())
             ->addCustomerDetails(WebPayItem::individualCustomer()->setNationalIdNumber(194605092222))
             ->setCountryCode("SE")
@@ -146,22 +146,22 @@ class BvDiscountTest extends \PHPUnit\Framework\TestCase {
                 ->setDiscountId("fixedDiscount2")
                 ->setName("-20i*1")
             )
-        ;        
+        ;
         $request = $order->usePaymentMethod(PaymentMethod::KORTCERT)->setReturnUrl("https://webpaypaymentgatewaystage.svea.com/webpay-admin/admin/merchantresponsetest.xhtml");
         $request = $request->getPaymentForm();
-        
+
 //    print_r( $request->xmlMessage );
-   
+
         // 240i@6% => 240 (13,58491) => 24000 (1358)
         $expectedDiscountRow =
         "  <row>\n".
         "   <sku>fixedDiscount</sku>\n".
         "   <name>-240i*1</name>\n".
         "   <description></description>\n".
-        "   <amount>-24000</amount>\n".      
-        "   <vat>-1358</vat>\n";            
+        "   <amount>-24000</amount>\n".
+        "   <vat>-1358</vat>\n";
         "   <quantity>1</quantity>\n".
-        "  </row>\n";   
+        "  </row>\n";
         $this->assertEquals(1, substr_count($request->xmlMessage, $expectedDiscountRow));
 
         // 20i@6% => 2000 (1,132076) => 2000 (113)
@@ -170,14 +170,14 @@ class BvDiscountTest extends \PHPUnit\Framework\TestCase {
         "   <sku>fixedDiscount2</sku>\n".
         "   <name>-20i*1</name>\n".
         "   <description></description>\n".
-        "   <amount>-2000</amount>\n".      
-        "   <vat>-113</vat>\n";            
+        "   <amount>-2000</amount>\n".
+        "   <vat>-113</vat>\n";
         "   <quantity>1</quantity>\n".
-        "  </row>\n";            
-        $this->assertEquals(1, substr_count($request->xmlMessage, $expectedDiscountRow2));                     
+        "  </row>\n";
+        $this->assertEquals(1, substr_count($request->xmlMessage, $expectedDiscountRow2));
 
-        // lagt ordern med den dumpade xml:en från utskriften i tools/payment, ger detta response:                
-        
+        // lagt ordern med den dumpade xml:en från utskriften i tools/payment, ger detta response:
+
         //<response>
         //  <transaction id="600123">
         //    <paymentmethod>KORTCERT</paymentmethod>
@@ -209,6 +209,6 @@ class BvDiscountTest extends \PHPUnit\Framework\TestCase {
         //    </customer>
         //  </transaction>
         //  <statuscode>0</statuscode>
-        //</response>    
-    }    
+        //</response>
+    }
 }

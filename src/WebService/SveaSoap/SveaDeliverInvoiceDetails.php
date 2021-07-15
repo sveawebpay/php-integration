@@ -11,19 +11,19 @@ class SveaDeliverInvoiceDetails
      * Already set at Svea, but needs to be included in array
      */
     public $NumberOfCreditDays = "";
-    
+
     /**
      * Post or Email
      */
     public $InvoiceDistributionType;
-    
+
     /**
      * Can leave blank
      */
     public $IsCreditInvoice = "";
-    
+
     public $InvoiceIdToCredit;
-    
+
     /**
      * If order not changed, set with orderRowarray from CreateOrderEu
      */
@@ -36,7 +36,7 @@ class SveaDeliverInvoiceDetails
     {
         $this->OrderRows['OrderRow'] = [];
     }
-    
+
     /**
      * only use if order is changed
      * @param $orderRow

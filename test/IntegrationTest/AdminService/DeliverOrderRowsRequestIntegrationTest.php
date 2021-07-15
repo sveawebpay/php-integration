@@ -38,7 +38,7 @@ class DeliverOrderRowsRequestIntegrationTest extends \PHPUnit\Framework\TestCase
             );
 
         $orderResponse = $order->useInvoicePayment()->doRequest();
-        ////print_r( $orderResponse );                   
+        ////print_r( $orderResponse );
 
         $myOrderId = $orderResponse->sveaOrderId;
 
@@ -51,10 +51,10 @@ class DeliverOrderRowsRequestIntegrationTest extends \PHPUnit\Framework\TestCase
         $deliverOrderRowsResponse = $deliverOrderRowsRequest->deliverInvoiceOrderRows()->doRequest();
 
         // Example DeliverPartial raw request response to parse:
-        // 
+        //
         //stdClass Object
         //(
-        //    [ErrorMessage] => 
+        //    [ErrorMessage] =>
         //    [ResultCode] => 0
         //    [OrdersDelivered] => stdClass Object
         //        (
@@ -69,9 +69,9 @@ class DeliverOrderRowsRequestIntegrationTest extends \PHPUnit\Framework\TestCase
         //
         //        )
         //
-        //)        
+        //)
 
-        ////print_r( $deliverOrderRowsResponse );   
+        ////print_r( $deliverOrderRowsResponse );
         //
         // Example DeliverPartialResponse
         //
@@ -80,13 +80,13 @@ class DeliverOrderRowsRequestIntegrationTest extends \PHPUnit\Framework\TestCase
         //    [clientId] => 79021
         //    [amount] => 250.00
         //    [invoiceId] => 1033902
-        //    [contractNumber] => 
+        //    [contractNumber] =>
         //    [orderType] => Invoice
         //    [orderId] => 414183
         //    [accepted] => 1
         //    [resultcode] => 0
-        //    [errormessage] => 
-        //)        
+        //    [errormessage] =>
+        //)
 
         $this->assertInstanceOf("Svea\WebPay\AdminService\AdminServiceResponse\DeliverPartialResponse", $deliverOrderRowsResponse);
         $this->assertEquals(1, $deliverOrderRowsResponse->accepted);
@@ -98,7 +98,7 @@ class DeliverOrderRowsRequestIntegrationTest extends \PHPUnit\Framework\TestCase
         $this->assertStringMatchesFormat("%d", $deliverOrderRowsResponse->invoiceId);   // %d => an unsigned integer value
         $this->assertEquals(null, $deliverOrderRowsResponse->contractNumber);
         $this->assertEquals("Invoice", $deliverOrderRowsResponse->orderType);
-        $this->assertStringMatchesFormat("%d", $deliverOrderRowsResponse->orderId);   // %d => an unsigned integer value        
+        $this->assertStringMatchesFormat("%d", $deliverOrderRowsResponse->orderId);   // %d => an unsigned integer value
     }
 
     public function test_deliver_multiple_invoice_orderRows_returns_accepted_with_invoiceId()
@@ -135,7 +135,7 @@ class DeliverOrderRowsRequestIntegrationTest extends \PHPUnit\Framework\TestCase
         $deliverOrderRowsRequest->setRowsToDeliver([1, 2]);
         $deliverOrderRowsResponse = $deliverOrderRowsRequest->deliverInvoiceOrderRows()->doRequest();
 
-        ////print_r( $deliverOrderRowsResponse );        
+        ////print_r( $deliverOrderRowsResponse );
         $this->assertInstanceOf('Svea\WebPay\AdminService\AdminServiceResponse\DeliverPartialResponse', $deliverOrderRowsResponse);
         $this->assertEquals(true, $deliverOrderRowsResponse->accepted);    // truth
         $this->assertEquals(1, $deliverOrderRowsResponse->accepted);       // equals literal 1
@@ -182,12 +182,12 @@ class DeliverOrderRowsRequestIntegrationTest extends \PHPUnit\Framework\TestCase
         $queryRequest = WebPayAdmin::queryOrder(ConfigurationService::getDefaultConfig());
         $queryResponse = $queryRequest->setCountryCode("SE")->setTransactionId($transactionId)->queryCardOrder()->doRequest();
 
-        ////print_r( $queryResponse );                   
+        ////print_r( $queryResponse );
         $this->assertEquals(1, $queryResponse->accepted);
         $this->assertEquals("AUTHORIZED", $queryResponse->status);
         $this->assertEquals(600, $queryResponse->amount);
         $this->assertEquals(600, $queryResponse->authorizedamount); // not manipulated post creation
-        $this->assertEquals(0, $queryResponse->creditedamount); // not manipulated post creation        
+        $this->assertEquals(0, $queryResponse->creditedamount); // not manipulated post creation
 
         $deliverRequest = WebPayAdmin::deliverOrderRows(ConfigurationService::getDefaultConfig());
         $deliverRequest->setCountryCode("SE")->setOrderId($transactionId);
@@ -202,7 +202,7 @@ class DeliverOrderRowsRequestIntegrationTest extends \PHPUnit\Framework\TestCase
         $queryResponse2 = WebPayAdmin::queryOrder(ConfigurationService::getDefaultConfig())
             ->setOrderId($transactionId)->setCountryCode("SE")->queryCardOrder()->doRequest();
 
-        //print_r( $queryResponse2); 
+        //print_r( $queryResponse2);
         $this->assertEquals(1, $queryResponse2->accepted);
         $this->assertEquals("CONFIRMED", $queryResponse2->status);
         $this->assertEquals(100, $queryResponse2->authorizedamount);
@@ -246,7 +246,7 @@ class DeliverOrderRowsRequestIntegrationTest extends \PHPUnit\Framework\TestCase
         $queryRequest = WebPayAdmin::queryOrder(ConfigurationService::getDefaultConfig());
         $queryResponse = $queryRequest->setCountryCode("SE")->setTransactionId($transactionId)->queryCardOrder()->doRequest();
 
-        ////print_r( $queryResponse );                   
+        ////print_r( $queryResponse );
         $this->assertEquals(1, $queryResponse->accepted);
 
         $deliverRequest = WebPayAdmin::deliverOrderRows(ConfigurationService::getDefaultConfig());
@@ -323,7 +323,7 @@ class DeliverOrderRowsRequestIntegrationTest extends \PHPUnit\Framework\TestCase
         $queryRequest = WebPayAdmin::queryOrder(ConfigurationService::getDefaultConfig());
         $queryResponse = $queryRequest->setCountryCode("SE")->setTransactionId($transactionId)->queryCardOrder()->doRequest();
 
-        //print_r( $queryResponse );                   
+        //print_r( $queryResponse );
         $this->assertEquals(1, $queryResponse->accepted);
         $this->assertEquals("CONFIRMED", $queryResponse->status);
 

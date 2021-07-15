@@ -57,7 +57,7 @@ $firstBoughtItem->setArticleNumber("123456789A");
 // Add firstBoughtItem to order row
 $myOrder->addOrderRow($firstBoughtItem);
 
-// Add secondBoughtItem in a fluent fashion 
+// Add secondBoughtItem in a fluent fashion
 $myOrder->addOrderRow(
     WebPayItem::orderRow()
         ->setAmountIncVat(5.00)
@@ -91,7 +91,7 @@ echo "<pre>Your request response:\n\n";
 print_r($myResponse);
 
 echo "</pre><font color='blue'><pre>
-An example of a successful request response. The 'accepted' attribute is true (1), and resultcode/errormessage is not set. 
+An example of a successful request response. The 'accepted' attribute is true (1), and resultcode/errormessage is not set.
 (Note that the customerIdentity received in the response indicates the Svea invoice address, which should normally match the order shipping address.):
 
 Svea\WebPay\WebService\WebServiceResponse\CreateOrderResponse Object
@@ -100,17 +100,17 @@ Svea\WebPay\WebService\WebServiceResponse\CreateOrderResponse Object
     [sveaWillBuyOrder] => 1
     [amount] => 23.73
     [expirationDate] => 2015-03-10T00:00:00+01:00
-    [clientOrderNumber] => 
+    [clientOrderNumber] =>
     [orderType] => Invoice
     [customerIdentity] => Svea\WebPay\WebService\WebServiceResponse\CustomerIdentity\CreateOrderIdentity Object
         (
-            [email] => 
-            [ipAddress] => 
+            [email] =>
+            [ipAddress] =>
             [countryCode] => SE
-            [houseNumber] => 
+            [houseNumber] =>
             [customerType] => Individual
             [nationalIdNumber] => 194605092222
-            [phoneNumber] => 
+            [phoneNumber] =>
             [fullName] => Persson, Tess T
             [street] => Testgatan 1
             [coAddress] => c/o Eriksson, Erik
@@ -119,7 +119,7 @@ Svea\WebPay\WebService\WebServiceResponse\CreateOrderResponse Object
         )
 
     [accepted] => 1
-    [errormessage] => 
+    [errormessage] =>
     [resultcode] => 0
 )
 </pre>";

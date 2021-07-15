@@ -80,10 +80,10 @@ class CreateOrderResponse extends WebServiceResponse
             $this->logs = $logs;
         }
 
-        // set response attributes        
+        // set response attributes
         if ($this->accepted == 1) {
 
-            // always present 
+            // always present
             $this->sveaOrderId = $response->CreateOrderEuResult->CreateOrderResult->SveaOrderId;
             $this->sveaWillBuyOrder = $response->CreateOrderEuResult->CreateOrderResult->SveaWillBuyOrder;
             $this->amount = $response->CreateOrderEuResult->CreateOrderResult->Amount;

@@ -98,7 +98,7 @@ abstract class OrderValidator
                     $errors['missing values'] = "At least one of the values must be set in combination with VatPercent, in object Svea\WebPay\BuildOrder\RowBuilders\Item:: AmountIncVat or AmountExVat for Orderrow. Use functions setAmountExVat() or setAmountIncVat().";
                 }
 
-                // force correct order type of present attributes, see class OrderRow 
+                // force correct order type of present attributes, see class OrderRow
                 if (isset($row->vatDiscount) && !(is_int($row->vatDiscount) || is_float($row->vatDiscount)))
                     $errors['incorrect datatype'] = "vatDiscount is not of type int or float.";
 

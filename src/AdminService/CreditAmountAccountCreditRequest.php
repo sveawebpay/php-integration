@@ -19,8 +19,8 @@ use Svea\WebPay\AdminService\AdminSoap\CancelPaymentPlanAmountRequest;
  */
 class CreditAmountAccountCreditRequest extends AdminServiceRequest
 {
-    /** 
-     * @var CreditOrderRowsBuilder $orderBuilder 
+    /**
+     * @var CreditOrderRowsBuilder $orderBuilder
      */
     public $orderBuilder;
 
