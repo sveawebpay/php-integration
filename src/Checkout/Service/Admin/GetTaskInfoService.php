@@ -30,9 +30,9 @@ class GetTaskInfoService extends AdminImplementationService
     {
         $this->validate();
 
-        $requestData = array(
+        $requestData = [
             'locationUrl' => $this->adminBuilder->taskUrl
-        );
+        ];
 
         return $requestData;
     }
@@ -42,7 +42,7 @@ class GetTaskInfoService extends AdminImplementationService
      */
     public function validate()
     {
-        $errors = array();
+        $errors = [];
 
         $taskUrl = $this->adminBuilder->taskUrl;
 

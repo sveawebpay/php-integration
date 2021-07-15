@@ -35,13 +35,13 @@ class WebServiceRowFormatter
         $this->order = $order;
         $this->resendOrderVat = $resendOrderVat;
 
-        $this->totalAmountPerVatRateIncVat = array();
-        $this->totalAmountPerVatRateExVat = array();
+        $this->totalAmountPerVatRateIncVat = [];
+        $this->totalAmountPerVatRateExVat = [];
     }
 
     public function formatRows()
     {
-        $this->newRows = array();
+        $this->newRows = [];
 
         $this->calculateTotals();
 
@@ -475,7 +475,7 @@ class WebServiceRowFormatter
     protected function formatFixedDiscountSpecifiedAsAmountIncVatOnly($discountRow)
     {
 
-        $splitRows = array(); // one (or more) formated discount rows, split across the vat rates in the order
+        $splitRows = []; // one (or more) formated discount rows, split across the vat rates in the order
 
         foreach ($this->totalAmountPerVatRateIncVat as $vatRate => $amountAtThisVatRateIncVat) {
 
@@ -527,7 +527,7 @@ class WebServiceRowFormatter
      */
     protected function formatFixedDiscountSpecifiedAsAmountExVatOnly($discountRow)
     {
-        $splitRows = array(); // one (or more) formated discount rows, split across the vat rates in the order
+        $splitRows = []; // one (or more) formated discount rows, split across the vat rates in the order
 
         foreach ($this->totalAmountPerVatRateExVat as $vatRate => $amountAtThisVatRateExVat) {
 

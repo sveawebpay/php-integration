@@ -37,7 +37,7 @@ class SveaResponseTest extends \PHPUnit\Framework\TestCase
     {
         $config = ConfigurationService::getDefaultConfig();
 
-        $message = (object)array("CloseOrderEuResult" => (object)array("Accepted" => "1", "ResultCode" => "0"));
+        $message = (object)["CloseOrderEuResult" => (object)["Accepted" => "1", "ResultCode" => "0"]];
 
         $this->assertTrue(\is_object($message));
 
@@ -74,7 +74,7 @@ class SveaResponseTest extends \PHPUnit\Framework\TestCase
         $merchantId = $config->getMerchantId(ConfigurationProvider::HOSTED_TYPE, "SE");
 
         // the $rawresponse is similar to what we get posted back to our return url following a CardPayment post to i.e. the certitrade payment page
-        $rawresponse = array();
+        $rawresponse = [];
         $rawresponse['response'] = $message;
         $rawresponse['mac'] = $mac;
         $rawresponse['merchantId'] = $merchantId;

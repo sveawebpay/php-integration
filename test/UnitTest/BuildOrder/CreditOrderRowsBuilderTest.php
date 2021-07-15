@@ -89,7 +89,7 @@ class CreditOrderRowsBuilderTest extends \PHPUnit\Framework\TestCase
             ->setQuantity(1)// required
             ->setRowNumber(2);
 
-        $this->creditOrderRowsObject->addNumberedOrderRows(array($numberedOrderRow1, $numberedOrderRow2));
+        $this->creditOrderRowsObject->addNumberedOrderRows([$numberedOrderRow1, $numberedOrderRow2]);
         $this->assertInternalType('array', $this->creditOrderRowsObject->numberedOrderRows);
     }
 

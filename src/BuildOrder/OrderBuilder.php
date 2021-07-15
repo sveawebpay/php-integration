@@ -34,32 +34,32 @@ class OrderBuilder
     /**
      * @var \Svea\WebPay\BuildOrder\RowBuilders\OrderRow []  array of OrderRow
      */
-    public $orderRows = array();
+    public $orderRows = [];
 
     /**
      * @var \Svea\WebPay\BuildOrder\RowBuilders\ShippingFee []  array of ShippingFee
      */
-    public $shippingFeeRows = array();
+    public $shippingFeeRows = [];
 
     /**
      * @var \Svea\WebPay\BuildOrder\RowBuilders\InvoiceFee []  array of InvoiceFee
      */
-    public $invoiceFeeRows = array();
+    public $invoiceFeeRows = [];
 
     /**
      * @var \Svea\WebPay\BuildOrder\RowBuilders\FixedDiscount []  array of FixedDiscount
      */
-    public $fixedDiscountRows = array();
+    public $fixedDiscountRows = [];
 
     /**
      * @var \Svea\WebPay\BuildOrder\RowBuilders\RelativeDiscount []  array of RelativeDiscount
      */
-    public $relativeDiscountRows = array();
+    public $relativeDiscountRows = [];
 
     /**
      * @var array $rows of all rows in the order they are set
      */
-    public $rows = array();
+    public $rows = [];
 
     /**
      * @var string Country code as described by ISO 3166-1: "SE", "NO", "DK", "FI","DE", "NL"

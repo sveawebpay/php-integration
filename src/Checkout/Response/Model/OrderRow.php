@@ -67,7 +67,7 @@ class OrderRow
 
     public function getRefactoredData()
     {
-        return array(
+        return [
             'ArticleNumber' => $this->articleNumber,
             'Name' => $this->name,
             'Quantity' => $this->quantity / $this::MINOR_CURRENCY,
@@ -77,6 +77,6 @@ class OrderRow
             'Unit' => $this->unit,
             'TemporaryReference' => $this->temporaryReference,
             'RowId' => $this->rowId
-        );
+        ];
     }
 }

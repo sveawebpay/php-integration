@@ -116,7 +116,7 @@ class HelperIntegrationTest extends \PHPUnit\Framework\TestCase
         $discountMeanVatPercent = 20.0;
         $discountName = 'Name';
         $discountDescription = 'Description';
-        $allowedTaxRates = array(25);
+        $allowedTaxRates = [25];
 
         $discountRows = Helper::splitMeanAcrossTaxRates(
             $discountAmount, $discountMeanVatPercent, $discountName, $discountDescription, $allowedTaxRates, $discountGivenExVat
@@ -147,7 +147,7 @@ class HelperIntegrationTest extends \PHPUnit\Framework\TestCase
         $discountMeanVatPercent = 20.0;
         $discountName = 'Name';
         $discountDescription = 'Description';
-        $allowedTaxRates = array(25);
+        $allowedTaxRates = [25];
 
         $discountRows = Helper::splitMeanAcrossTaxRates(
             $discountAmount, $discountMeanVatPercent, $discountName, $discountDescription, $allowedTaxRates, $discountGivenExVat
@@ -178,7 +178,7 @@ class HelperIntegrationTest extends \PHPUnit\Framework\TestCase
         $discountMeanVatPercent = 16.0;
         $discountName = 'Name';
         $discountDescription = 'Description';
-        $allowedTaxRates = array(25, 6);
+        $allowedTaxRates = [25, 6];
 
         $discountRows = Helper::splitMeanAcrossTaxRates(
             $discountAmount, $discountMeanVatPercent, $discountName, $discountDescription, $allowedTaxRates, $discountGivenExVat
@@ -224,7 +224,7 @@ class HelperIntegrationTest extends \PHPUnit\Framework\TestCase
         $discountMeanVatPercent = 16.0;
         $discountName = 'Name';
         $discountDescription = 'Description';
-        $allowedTaxRates = array(25, 6);
+        $allowedTaxRates = [25, 6];
 
         $discountRows = Helper::splitMeanAcrossTaxRates(
             $discountAmount, $discountMeanVatPercent, $discountName, $discountDescription, $allowedTaxRates, $discountGivenExVat

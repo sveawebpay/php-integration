@@ -35,7 +35,7 @@ class GetOrdersRequest extends AdminServiceRequest
     {
         $this->validateRequest();
 
-        $soapRequest = array();
+        $soapRequest = [];
         $soapRequest = new \Svea\WebPay\AdminService\AdminSoap\GetOrdersRequest(
             new Authentication(
                 $this->orderBuilder->conf->getUsername(($this->orderBuilder->orderType), $this->orderBuilder->countryCode),
@@ -54,7 +54,7 @@ class GetOrdersRequest extends AdminServiceRequest
 
     public function validate()
     {
-        $errors = array();
+        $errors = [];
         $errors = $this->validateOrderId($errors);
         $errors = $this->validateOrderType($errors);
         $errors = $this->validateCountryCode($errors);
@@ -65,7 +65,7 @@ class GetOrdersRequest extends AdminServiceRequest
     private function validateOrderId($errors)
     {
         if (isset($this->orderBuilder->orderId) == FALSE) {
-            $errors[] = array('missing value' => "orderId is required.");
+            $errors[] = ['missing value' => "orderId is required."];
         }
 
         return $errors;
@@ -74,7 +74,7 @@ class GetOrdersRequest extends AdminServiceRequest
     private function validateOrderType($errors)
     {
         if (isset($this->orderBuilder->orderType) == FALSE) {
-            $errors[] = array('missing value' => "orderType is required.");
+            $errors[] = ['missing value' => "orderType is required."];
         }
 
         return $errors;
@@ -83,7 +83,7 @@ class GetOrdersRequest extends AdminServiceRequest
     private function validateCountryCode($errors)
     {
         if (isset($this->orderBuilder->countryCode) == FALSE) {
-            $errors[] = array('missing value' => "countryCode is required.");
+            $errors[] = ['missing value' => "countryCode is required."];
         }
 
         return $errors;

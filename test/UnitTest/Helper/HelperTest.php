@@ -49,7 +49,7 @@ class HelperTest extends \PHPUnit\Framework\TestCase
         $discountVatAmount = 18.6667;
         $discountName = 'Coupon(1112)';
         $discountDescription = '-100kr';
-        $allowedTaxRates = array(25, 6);
+        $allowedTaxRates = [25, 6];
 
         $discountRows = Helper::splitMeanToTwoTaxRates($discountAmountIncVat, $discountVatAmount, $discountName, $discountDescription, $allowedTaxRates);
 
@@ -64,7 +64,7 @@ class HelperTest extends \PHPUnit\Framework\TestCase
         $discountVatAmount = 18.6667;
         $discountName = 'Coupon(1112)';
         $discountDescription = '-100kr';
-        $allowedTaxRates = array(25, 6);
+        $allowedTaxRates = [25, 6];
 
         $discountRows = Helper::splitMeanToTwoTaxRates($discountAmountExVat, $discountVatAmount, $discountName, $discountDescription, $allowedTaxRates);
 
@@ -91,7 +91,7 @@ class HelperTest extends \PHPUnit\Framework\TestCase
         $discountVatAmount = 15.5;
         $discountName = 'Coupon(1112)';
         $discountDescription = '-100kr';
-        $allowedTaxRates = array(25, 6);
+        $allowedTaxRates = [25, 6];
 
         $discountRows = Helper::splitMeanToTwoTaxRates($discountAmountExVat, $discountVatAmount, $discountName, $discountDescription, $allowedTaxRates);
 
@@ -196,7 +196,7 @@ class HelperTest extends \PHPUnit\Framework\TestCase
         $discountMeanVatPercent = 20.0;
         $discountName = 'Name';
         $discountDescription = 'Description';
-        $allowedTaxRates = array(25);
+        $allowedTaxRates = [25];
 
         $discountRows = Helper::splitMeanAcrossTaxRates(
             $discountAmount, $discountMeanVatPercent, $discountName, $discountDescription, $allowedTaxRates, $discountGivenExVat
@@ -219,7 +219,7 @@ class HelperTest extends \PHPUnit\Framework\TestCase
         $discountMeanVatPercent = 20.0;
         $discountName = 'Name';
         $discountDescription = 'Description';
-        $allowedTaxRates = array(25);
+        $allowedTaxRates = [25];
 
         $discountRows = Helper::splitMeanAcrossTaxRates(
             $discountAmount, $discountMeanVatPercent, $discountName, $discountDescription, $allowedTaxRates, $discountGivenExVat
@@ -238,7 +238,7 @@ class HelperTest extends \PHPUnit\Framework\TestCase
         $discountMeanVatPercent = 16.0;
         $discountName = 'Name';
         $discountDescription = 'Description';
-        $allowedTaxRates = array(25, 6);
+        $allowedTaxRates = [25, 6];
 
         $discountRows = Helper::splitMeanAcrossTaxRates(
             $discountAmount, $discountMeanVatPercent, $discountName, $discountDescription, $allowedTaxRates, $discountGivenExVat
@@ -267,7 +267,7 @@ class HelperTest extends \PHPUnit\Framework\TestCase
         $discountMeanVatPercent = 16.0;
         $discountName = 'Name';
         $discountDescription = 'Description';
-        $allowedTaxRates = array(25, 6);
+        $allowedTaxRates = [25, 6];
 
         $discountRows = Helper::splitMeanAcrossTaxRates(
             $discountAmount, $discountMeanVatPercent, $discountName, $discountDescription, $allowedTaxRates, $discountGivenExVat
@@ -296,7 +296,7 @@ class HelperTest extends \PHPUnit\Framework\TestCase
         $discountMeanVatPercent = 0.0;
         $discountName = 'Name';
         $discountDescription = 'Description';
-        $allowedTaxRates = array(25);
+        $allowedTaxRates = [25];
 
         $discountRows = Helper::splitMeanAcrossTaxRates(
             $discountAmount, $discountMeanVatPercent, $discountName, $discountDescription, $allowedTaxRates, $discountGivenExVat
@@ -319,7 +319,7 @@ class HelperTest extends \PHPUnit\Framework\TestCase
         $discountMeanVatPercent = -1;
         $discountName = 'Name';
         $discountDescription = 'Description';
-        $allowedTaxRates = array(25, 6);
+        $allowedTaxRates = [25, 6];
 
         $discountRows = Helper::splitMeanAcrossTaxRates(
             $discountAmount, $discountMeanVatPercent, $discountName, $discountDescription, $allowedTaxRates, $discountGivenExVat
@@ -372,7 +372,7 @@ class HelperTest extends \PHPUnit\Framework\TestCase
         $discountMeanVatPercent = 19;
         $discountName = 'Name';
         $discountDescription = 'Description';
-        $allowedTaxRates = array(25, 6);
+        $allowedTaxRates = [25, 6];
 
         $discountRows = Helper::splitMeanAcrossTaxRates(
             $discountAmount, $discountMeanVatPercent, $discountName, $discountDescription, $allowedTaxRates, $discountGivenExVat
@@ -393,7 +393,7 @@ class HelperTest extends \PHPUnit\Framework\TestCase
         $discountMeanVatPercent = 18.67;
         $discountName = 'Name';
         $discountDescription = 'Description';
-        $allowedTaxRates = array(25, 6);
+        $allowedTaxRates = [25, 6];
 
         $discountRows = Helper::splitMeanAcrossTaxRates(
             $discountAmount, $discountMeanVatPercent, $discountName, $discountDescription, $allowedTaxRates, $discountGivenExVat
@@ -440,14 +440,14 @@ class HelperTest extends \PHPUnit\Framework\TestCase
     {
         $price = 10000;
 
-        $response = (object) array(
-            "GetPaymentPlanParamsEuResult" => (object)array (
+        $response = (object) [
+            "GetPaymentPlanParamsEuResult" => (object)[
                 "Accepted" => true,
                 "ResultCode" => 0,
-                "CampaignCodes" => (object)array(
-                    "CampaignCodeInfo" => array(
+                "CampaignCodes" => (object)[
+                    "CampaignCodeInfo" => [
                         0 =>
-                            (object)array(
+                            (object)[
                                 "CampaignCode" => 213060,
                                 "Description" => "Dela upp betalningen på 60 månader",
                                 "PaymentPlanType" => "Standard",
@@ -460,9 +460,9 @@ class HelperTest extends \PHPUnit\Framework\TestCase
                                 "NumberOfPaymentFreeMonths" => 3,
                                 "FromAmount" => '1000',
                                 "ToAmount" => '50000',
-                        ),
+                        ],
                         1 =>
-                            (object)array(
+                            (object)[
                                 'CampaignCode' => 222065,
                                 'Description' => 'Vårkampanj',
                                 'PaymentPlanType' => 'InterestAndAmortizationFree',
@@ -475,9 +475,9 @@ class HelperTest extends \PHPUnit\Framework\TestCase
                                 'NumberOfPaymentFreeMonths' => 3,
                                 'FromAmount' => '120',
                                 'ToAmount' => '30000',
-                            ),
+                            ],
                         2 =>
-                            (object)array(
+                            (object)[
                                 'CampaignCode' => 222066,
                                 'Description' => 'Sommarkampanj',
                                 'PaymentPlanType' => 'InterestAndAmortizationFree',
@@ -490,9 +490,9 @@ class HelperTest extends \PHPUnit\Framework\TestCase
                                 'NumberOfPaymentFreeMonths' => 3,
                                 'FromAmount' => '120',
                                 'ToAmount' => '30000',
-                            ),
+                            ],
                         3 =>
-                            (object)array(
+                            (object)[
                                 'CampaignCode' => 223060,
                                 'Description' => 'Köp nu betala om 3 månader (räntefritt)',
                                 'PaymentPlanType' => 'InterestAndAmortizationFree',
@@ -505,9 +505,9 @@ class HelperTest extends \PHPUnit\Framework\TestCase
                                 'NumberOfPaymentFreeMonths' => 3,
                                 'FromAmount' => '1000',
                                 'ToAmount' => '50000',
-                            ),
+                            ],
                         4 =>
-                            (object)array(
+                            (object)[
                                 'CampaignCode' => 223065,
                                 'Description' => 'Black Friday - Cyber Monday',
                                 'PaymentPlanType' => 'InterestAndAmortizationFree',
@@ -520,9 +520,9 @@ class HelperTest extends \PHPUnit\Framework\TestCase
                                 'NumberOfPaymentFreeMonths' => 3,
                                 'FromAmount' => '120',
                                 'ToAmount' => '30000',
-                            ),
+                            ],
                         5 =>
-                            (object)array(
+                            (object)[
                                 'CampaignCode' => 223066,
                                 'Description' => 'Julkampanj',
                                 'PaymentPlanType' => 'InterestAndAmortizationFree',
@@ -535,9 +535,9 @@ class HelperTest extends \PHPUnit\Framework\TestCase
                                 'NumberOfPaymentFreeMonths' => 3,
                                 'FromAmount' => '120',
                                 'ToAmount' => '30000',
-                            ),
+                            ],
                         6 =>
-                            (object)array(
+                            (object)[
                                 'CampaignCode' => 310012,
                                 'Description' => 'Dela upp betalningen på 12 månader (räntefritt)',
                                 'PaymentPlanType' => 'InterestFree',
@@ -550,9 +550,9 @@ class HelperTest extends \PHPUnit\Framework\TestCase
                                 'NumberOfPaymentFreeMonths' => 0,
                                 'FromAmount' => '1000',
                                 'ToAmount' => '30000',
-                            ),
+                            ],
                         7 =>
-                            (object)array(
+                            (object)[
                                 'CampaignCode' => 410012,
                                 'Description' => 'Dela upp betalningen på 12 månader',
                                 'PaymentPlanType' => 'Standard',
@@ -565,9 +565,9 @@ class HelperTest extends \PHPUnit\Framework\TestCase
                                 'NumberOfPaymentFreeMonths' => 0,
                                 'FromAmount' => '100',
                                 'ToAmount' => '30000',
-                            ),
+                            ],
                         8 =>
-                            (object)array(
+                            (object)[
                                 'CampaignCode' => 410024,
                                 'Description' => 'Dela upp betalningen på 24 månader',
                                 'PaymentPlanType' => 'Standard',
@@ -580,11 +580,11 @@ class HelperTest extends \PHPUnit\Framework\TestCase
                                 'NumberOfPaymentFreeMonths' => 0,
                                 'FromAmount' => '1000',
                                 'ToAmount' => '150000',
-                            )
-                    )
-                )
-            )
-        );
+                            ]
+                    ]
+                ]
+            ]
+        ];
 
         $params = new PaymentPlanParamsResponse($response, false);
 
@@ -605,14 +605,14 @@ class HelperTest extends \PHPUnit\Framework\TestCase
     {
         $price = 10000;
 
-        $response = (object) array(
-            "GetPaymentPlanParamsEuResult" => (object)array (
+        $response = (object) [
+            "GetPaymentPlanParamsEuResult" => (object)[
                 "Accepted" => true,
                 "ResultCode" => 0,
-                "CampaignCodes" => (object)array(
-                    "CampaignCodeInfo" => array(
+                "CampaignCodes" => (object)[
+                    "CampaignCodeInfo" => [
                         0 =>
-                            (object)array(
+                            (object)[
                                 "CampaignCode" => 213060,
                                 "Description" => "Dela upp betalningen på 60 månader",
                                 "PaymentPlanType" => "Standard",
@@ -625,9 +625,9 @@ class HelperTest extends \PHPUnit\Framework\TestCase
                                 "NumberOfPaymentFreeMonths" => 3,
                                 "FromAmount" => '1000',
                                 "ToAmount" => '50000',
-                            ),
+                            ],
                         1 =>
-                            (object)array(
+                            (object)[
                                 'CampaignCode' => 222065,
                                 'Description' => 'Vårkampanj',
                                 'PaymentPlanType' => 'InterestAndAmortizationFree',
@@ -640,9 +640,9 @@ class HelperTest extends \PHPUnit\Framework\TestCase
                                 'NumberOfPaymentFreeMonths' => 3,
                                 'FromAmount' => '120',
                                 'ToAmount' => '30000',
-                            ),
+                            ],
                         2 =>
-                            (object)array(
+                            (object)[
                                 'CampaignCode' => 222066,
                                 'Description' => 'Sommarkampanj',
                                 'PaymentPlanType' => 'InterestAndAmortizationFree',
@@ -655,9 +655,9 @@ class HelperTest extends \PHPUnit\Framework\TestCase
                                 'NumberOfPaymentFreeMonths' => 3,
                                 'FromAmount' => '120',
                                 'ToAmount' => '30000',
-                            ),
+                            ],
                         3 =>
-                            (object)array(
+                            (object)[
                                 'CampaignCode' => 223060,
                                 'Description' => 'Köp nu betala om 3 månader (räntefritt)',
                                 'PaymentPlanType' => 'InterestAndAmortizationFree',
@@ -670,9 +670,9 @@ class HelperTest extends \PHPUnit\Framework\TestCase
                                 'NumberOfPaymentFreeMonths' => 3,
                                 'FromAmount' => '1000',
                                 'ToAmount' => '50000',
-                            ),
+                            ],
                         4 =>
-                            (object)array(
+                            (object)[
                                 'CampaignCode' => 223065,
                                 'Description' => 'Black Friday - Cyber Monday',
                                 'PaymentPlanType' => 'InterestAndAmortizationFree',
@@ -685,9 +685,9 @@ class HelperTest extends \PHPUnit\Framework\TestCase
                                 'NumberOfPaymentFreeMonths' => 3,
                                 'FromAmount' => '120',
                                 'ToAmount' => '30000',
-                            ),
+                            ],
                         5 =>
-                            (object)array(
+                            (object)[
                                 'CampaignCode' => 223066,
                                 'Description' => 'Julkampanj',
                                 'PaymentPlanType' => 'InterestAndAmortizationFree',
@@ -700,9 +700,9 @@ class HelperTest extends \PHPUnit\Framework\TestCase
                                 'NumberOfPaymentFreeMonths' => 3,
                                 'FromAmount' => '120',
                                 'ToAmount' => '30000',
-                            ),
+                            ],
                         6 =>
-                            (object)array(
+                            (object)[
                                 'CampaignCode' => 310012,
                                 'Description' => 'Dela upp betalningen på 12 månader (räntefritt)',
                                 'PaymentPlanType' => 'InterestFree',
@@ -715,9 +715,9 @@ class HelperTest extends \PHPUnit\Framework\TestCase
                                 'NumberOfPaymentFreeMonths' => 0,
                                 'FromAmount' => '1000',
                                 'ToAmount' => '30000',
-                            ),
+                            ],
                         7 =>
-                            (object)array(
+                            (object)[
                                 'CampaignCode' => 410012,
                                 'Description' => 'Dela upp betalningen på 12 månader',
                                 'PaymentPlanType' => 'Standard',
@@ -730,9 +730,9 @@ class HelperTest extends \PHPUnit\Framework\TestCase
                                 'NumberOfPaymentFreeMonths' => 0,
                                 'FromAmount' => '100',
                                 'ToAmount' => '30000',
-                            ),
+                            ],
                         8 =>
-                            (object)array(
+                            (object)[
                                 'CampaignCode' => 410024,
                                 'Description' => 'Dela upp betalningen på 24 månader',
                                 'PaymentPlanType' => 'Standard',
@@ -745,11 +745,11 @@ class HelperTest extends \PHPUnit\Framework\TestCase
                                 'NumberOfPaymentFreeMonths' => 0,
                                 'FromAmount' => '1000',
                                 'ToAmount' => '150000',
-                            )
-                    )
-                )
-            )
-        );
+                            ]
+                    ]
+                ]
+            ]
+        ];
 
         $params = new PaymentPlanParamsResponse($response, false);
 

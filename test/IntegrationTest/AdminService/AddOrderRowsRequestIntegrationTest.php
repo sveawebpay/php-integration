@@ -27,7 +27,7 @@ class AddOrderRowsRequestIntegrationTest extends \PHPUnit\Framework\TestCase
         $this->builderObject->orderId = 123456;
         $this->builderObject->orderType = ConfigurationProvider::INVOICE_TYPE;
         $this->builderObject->countryCode = "SE";
-        $this->builderObject->orderRows = array(TestUtil::createOrderRow(10.00));
+        $this->builderObject->orderRows = [TestUtil::createOrderRow(10.00)];
     }
 
     public function test_add_single_orderRow()

@@ -7,7 +7,7 @@ use Svea\WebPay\BuildOrder\Validator\OrderValidator;
 
 class UpdateOrderRowValidator extends OrderValidator
 {
-    public $errors = array();
+    public $errors = [];
 
     /**
      * @param UpdateOrderRowsBuilder $adminBuilder

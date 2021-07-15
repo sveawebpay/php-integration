@@ -30,7 +30,7 @@ class CreditOrderRowsService extends AdminImplementationService
      */
     public function validate()
     {
-        $errors = array();
+        $errors = [];
 
         $orderId = $this->adminBuilder->orderId;
         if (empty($orderId) || !is_int($orderId)) {
@@ -92,10 +92,10 @@ class CreditOrderRowsService extends AdminImplementationService
     {
         $this->validate();
 
-        $requestData = array(
+        $requestData = [
             'orderId' => $this->adminBuilder->orderId,
             'deliveryId' => $this->adminBuilder->deliveryId
-        );
+        ];
 
         if (!empty($this->adminBuilder->rowsToCredit)) {
             $requestData['orderRowIds'] = $this->adminBuilder->rowsToCredit;
@@ -105,12 +105,12 @@ class CreditOrderRowsService extends AdminImplementationService
              */
             $orderRow = $this->adminBuilder->creditOrderRows[0];
 
-            $requestData['newCreditRow'] = array(
+            $requestData['newCreditRow'] = [
                 'name' => $orderRow->name,
                 'quantity'   => intval((string)Helper::bround($orderRow->quantity, 2) * 100),
                 'unitPrice'  => intval((string)Helper::bround($orderRow->amountIncVat, 2) * 100),
                 'vatPercent' => intval((string)Helper::bround($orderRow->vatPercent, 2) * 100)
-            );
+            ];
         }
 
         return $requestData;

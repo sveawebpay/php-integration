@@ -33,7 +33,7 @@ class DeliverOrderService extends AdminImplementationService
      */
     public function validate()
     {
-        $errors = array();
+        $errors = [];
 
         $orderId = $this->adminBuilder->orderId;
         if (empty($orderId) || !is_int($orderId)) {
@@ -63,11 +63,11 @@ class DeliverOrderService extends AdminImplementationService
     {
         $this->validate();
 
-        $requestData = array(
+        $requestData = [
             'orderId' => $this->adminBuilder->orderId
-        );
+        ];
 
-        $orderRowIds = array();
+        $orderRowIds = [];
         if ($this->isDeliverOrderRows === true) {
             $orderRowIds = $this->adminBuilder->rowsToDeliver;
         }

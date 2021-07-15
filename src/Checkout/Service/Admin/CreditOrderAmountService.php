@@ -16,7 +16,7 @@ class CreditOrderAmountService extends AdminImplementationService
      */
     public function validate()
     {
-        $errors = array();
+        $errors = [];
 
         $orderId = $this->adminBuilder->orderId;
         if (empty($orderId) || !is_int($orderId)) {
@@ -49,10 +49,10 @@ class CreditOrderAmountService extends AdminImplementationService
     {
         $this->validate();
 
-        $requestData = array(
+        $requestData = [
             'orderId' => $this->adminBuilder->orderId,
             'deliveryId' => $this->adminBuilder->deliveryId
-        );
+        ];
         $amount = $this->adminBuilder->amountIncVat;
         $minorCreditAmount = Helper::bround($amount, 2) * 100;
         $requestData['creditedAmount'] = intval((string)$minorCreditAmount);

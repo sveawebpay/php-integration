@@ -7,135 +7,135 @@ namespace Svea\WebPay\Config;
  * own account credentials. Replace the values in the arrays with your credentials
  * (supplied by your Svea account manager).
  */
-return array(
-    'integrationParams' => array(
+return [
+    'integrationParams' => [
         'integrationcompany' => "myIntegrationCompany",
         'integrationversion' => "myIntegrationVersion",
         'integrationplatform' => "myIntegrationPlatform"
-    ),
-    'commonCredentials' => array(
+    ],
+    'commonCredentials' => [
         'merchantId' => '',
         'secret' => ''
-    ),
-    'checkoutCredentials' => array(
+    ],
+    'checkoutCredentials' => [
         'checkoutMerchantId' => '',
         'checkoutSecret' => ''
-    ),
+    ],
     'defaultCountryCode' => 'SE',
-    'credentials' => array(
-        'SE' => array(
-            ConfigurationProvider::INVOICE_TYPE => array(
+    'credentials' => [
+        'SE' => [
+            ConfigurationProvider::INVOICE_TYPE => [
                 'username' => '',
                 'password' => '',
                 'clientNumber' => ''
-            ),
-            ConfigurationProvider::PAYMENTPLAN_TYPE => array(
+            ],
+            ConfigurationProvider::PAYMENTPLAN_TYPE => [
                 'username' => '',
                 'password' => '',
                 'clientNumber' => ''
-            ),
-            ConfigurationProvider::ACCOUNTCREDIT_TYPE => array(
+            ],
+            ConfigurationProvider::ACCOUNTCREDIT_TYPE => [
                 'username' => '',
                 'password' => '',
                 'clientNumber' => ''
-            ),
-            ConfigurationProvider::CHECKOUT => array(
+            ],
+            ConfigurationProvider::CHECKOUT => [
                 'username' => '',
                 'password' => ''
-            )
-        ),
-        'NO' => array(
-            ConfigurationProvider::INVOICE_TYPE => array(
+            ]
+        ],
+        'NO' => [
+            ConfigurationProvider::INVOICE_TYPE => [
                 'username' => '',
                 'password' => '',
                 'clientNumber' => ''
-            ),
-            ConfigurationProvider::PAYMENTPLAN_TYPE => array(
+            ],
+            ConfigurationProvider::PAYMENTPLAN_TYPE => [
                 'username' => '',
                 'password' => '',
                 'clientNumber' => ''
-            ),
-            ConfigurationProvider::ACCOUNTCREDIT_TYPE => array(
+            ],
+            ConfigurationProvider::ACCOUNTCREDIT_TYPE => [
                 'username' => '',
                 'password' => '',
                 'clientNumber' => ''
-            ),
-            ConfigurationProvider::CHECKOUT => array(
+            ],
+            ConfigurationProvider::CHECKOUT => [
                 'username' => '',
                 'password' => ''
-            )
-        ),
-        'FI' => array(
-            ConfigurationProvider::INVOICE_TYPE => array(
+            ]
+        ],
+        'FI' => [
+            ConfigurationProvider::INVOICE_TYPE => [
                 'username' => '',
                 'password' => '',
                 'clientNumber' => ''
-            ),
-            ConfigurationProvider::PAYMENTPLAN_TYPE => array(
+            ],
+            ConfigurationProvider::PAYMENTPLAN_TYPE => [
                 'username' => '',
                 'password' => '',
                 'clientNumber' => ''
-            ),
-            ConfigurationProvider::ACCOUNTCREDIT_TYPE => array(
+            ],
+            ConfigurationProvider::ACCOUNTCREDIT_TYPE => [
                 'username' => '',
                 'password' => '',
                 'clientNumber' => ''
-            ),
-            ConfigurationProvider::CHECKOUT => array(
+            ],
+            ConfigurationProvider::CHECKOUT => [
                 'username' => '',
                 'password' => ''
-            )
-        ),
-        'DK' => array(
-            ConfigurationProvider::INVOICE_TYPE => array(
+            ]
+        ],
+        'DK' => [
+            ConfigurationProvider::INVOICE_TYPE => [
                 'username' => '',
                 'password' => '',
                 'clientNumber' => ''
-            ),
-            ConfigurationProvider::PAYMENTPLAN_TYPE => array(
+            ],
+            ConfigurationProvider::PAYMENTPLAN_TYPE => [
                 'username' => '',
                 'password' => '',
                 'clientNumber' => ''
-            ),
-            ConfigurationProvider::ACCOUNTCREDIT_TYPE => array(
+            ],
+            ConfigurationProvider::ACCOUNTCREDIT_TYPE => [
                 'username' => '',
                 'password' => '',
                 'clientNumber' => ''
-            )
-        ),
-        'NL' => array(
-            ConfigurationProvider::INVOICE_TYPE => array(
+            ]
+        ],
+        'NL' => [
+            ConfigurationProvider::INVOICE_TYPE => [
                 'username' => '',
                 'password' => '',
                 'clientNumber' => ''
-            ),
-            ConfigurationProvider::PAYMENTPLAN_TYPE => array(
+            ],
+            ConfigurationProvider::PAYMENTPLAN_TYPE => [
                 'username' => '',
                 'password' => '',
                 'clientNumber' => ''
-            ),
-            ConfigurationProvider::ACCOUNTCREDIT_TYPE => array(
+            ],
+            ConfigurationProvider::ACCOUNTCREDIT_TYPE => [
                 'username' => '',
                 'password' => '',
                 'clientNumber' => ''
-            )
-        ),
-        'DE' => array(
-            ConfigurationProvider::INVOICE_TYPE => array(
+            ]
+        ],
+        'DE' => [
+            ConfigurationProvider::INVOICE_TYPE => [
                 'username' => '',
                 'password' => '',
                 'clientNumber' => ''
-            ),
-            ConfigurationProvider::PAYMENTPLAN_TYPE => array(
+            ],
+            ConfigurationProvider::PAYMENTPLAN_TYPE => [
                 'username' => '',
                 'password' => '',
                 'clientNumber' => ''
-            ),
-            ConfigurationProvider::ACCOUNTCREDIT_TYPE => array(
+            ],
+            ConfigurationProvider::ACCOUNTCREDIT_TYPE => [
                 'username' => '',
                 'password' => '',
                 'clientNumber' => ''
-            )
-        )
-    )
-);
+            ]
+        ]
+    ]
+];

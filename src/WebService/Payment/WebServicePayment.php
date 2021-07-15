@@ -159,7 +159,7 @@ class WebServicePayment
         }
 
         //For european countries Individual/Company - identity required
-        $idValues = array();
+        $idValues = [];
 
         if ($this->order->countryCode != 'SE'
             && $this->order->countryCode != 'NO'
@@ -227,7 +227,7 @@ class WebServicePayment
         }
 
         //For european countries Individual/Company - identity required
-        $idValues = array();
+        $idValues = [];
 
         if ($this->order->countryCode != 'SE'
             && $this->order->countryCode != 'NO'
@@ -299,7 +299,7 @@ class WebServicePayment
             $total_incvat += Helper::bround(($rowExVat + $rowVat), 2);
         }
 
-        return array('total_exvat' => $total_exvat, 'total_incvat' => $total_incvat, 'total_vat' => $total_vat);
+        return ['total_exvat' => $total_exvat, 'total_incvat' => $total_incvat, 'total_vat' => $total_vat];
 
 
     }

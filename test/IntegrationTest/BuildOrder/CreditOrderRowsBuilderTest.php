@@ -141,7 +141,7 @@ class CreditOrderRowsBuilderIntegrationTest extends \PHPUnit\Framework\TestCase
             ->setInvoiceId($this->invoiceIdToTest)
             ->setInvoiceDistributionType(DistributionType::POST)
             ->setCountryCode($this->country)
-            ->setRowsToCredit(array(2, 3))
+            ->setRowsToCredit([2, 3])
             ->creditInvoiceOrderRows()
             ->doRequest();
 
@@ -450,7 +450,7 @@ class CreditOrderRowsBuilderIntegrationTest extends \PHPUnit\Framework\TestCase
         $creditOrderRowsRequest = $creditOrderRowsBuilder
             ->setOrderId($this->successfulTransactionToTest)
             ->setCountryCode($this->country)
-            ->setRowsToCredit(array(2, 3))
+            ->setRowsToCredit([2, 3])
             ->addNumberedOrderRows($queryResponse->numberedOrderRows)// use the queried order rows as base for what amount to credit
             ->creditCardOrderRows();
         $creditOrderRowsResponse = $creditOrderRowsRequest->doRequest();

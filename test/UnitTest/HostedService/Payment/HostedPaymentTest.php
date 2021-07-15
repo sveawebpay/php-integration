@@ -87,7 +87,7 @@ class HostedPaymentTest extends \PHPUnit\Framework\TestCase {
 
         // follows HostedPayment calculateRequestValues() outline:
         $formatter = new HostedRowFormatter();
-        $request = array();
+        $request = [];
 
         $request['rows'] = $formatter->formatRows($order);
         $request['amount'] = $formatter->formatTotalAmount($request['rows']);
@@ -112,7 +112,7 @@ class HostedPaymentTest extends \PHPUnit\Framework\TestCase {
 
         // follows HostedPayment calculateRequestValues() outline:
         $formatter = new HostedRowFormatter();
-        $request = array();
+        $request = [];
 
         $request['rows'] = $formatter->formatRows($order);
         $request['amount'] = $formatter->formatTotalAmount($request['rows']);
@@ -137,7 +137,7 @@ class HostedPaymentTest extends \PHPUnit\Framework\TestCase {
 
         // follows HostedPayment calculateRequestValues() outline:
         $formatter = new HostedRowFormatter();
-        $request = array();
+        $request = [];
 
         $request['rows'] = $formatter->formatRows($order);
         $request['amount'] = $formatter->formatTotalAmount($request['rows']);
@@ -165,7 +165,7 @@ class HostedPaymentTest extends \PHPUnit\Framework\TestCase {
 
         // follows HostedPayment calculateRequestValues() outline:
         $formatter = new HostedRowFormatter();
-        $request = array();
+        $request = [];
 
         $request['rows'] = $formatter->formatRows($order);
         $request['amount'] = $formatter->formatTotalAmount($request['rows']);
@@ -191,7 +191,7 @@ class HostedPaymentTest extends \PHPUnit\Framework\TestCase {
 
         // follows HostedPayment calculateRequestValues() outline:
         $formatter = new HostedRowFormatter();
-        $request = array();
+        $request = [];
 
         $request['rows'] = $formatter->formatRows($order);
         $request['amount'] = $formatter->formatTotalAmount($request['rows']);
@@ -222,7 +222,7 @@ class HostedPaymentTest extends \PHPUnit\Framework\TestCase {
 
         // follows HostedPayment calculateRequestValues() outline:
         $formatter = new HostedRowFormatter();
-        $request = array();
+        $request = [];
 
         $request['rows'] = $formatter->formatRows($order);
         $request['amount'] = $formatter->formatTotalAmount($request['rows']);
@@ -257,7 +257,7 @@ class HostedPaymentTest extends \PHPUnit\Framework\TestCase {
 
         // follows HostedPayment calculateRequestValues() outline:
         $formatter = new HostedRowFormatter();
-        $request = array();
+        $request = [];
 
         $request['rows'] = $formatter->formatRows($order);
         $request['amount'] = $formatter->formatTotalAmount($request['rows']);
@@ -288,7 +288,7 @@ class HostedPaymentTest extends \PHPUnit\Framework\TestCase {
 
         // follows HostedPayment calculateRequestValues() outline:
         $formatter = new HostedRowFormatter();
-        $request = array();
+        $request = [];
 
         $request['rows'] = $formatter->formatRows($order);
         $request['amount'] = $formatter->formatTotalAmount($request['rows']);
@@ -319,7 +319,7 @@ class HostedPaymentTest extends \PHPUnit\Framework\TestCase {
 
         // follows HostedPayment calculateRequestValues() outline:
         $formatter = new HostedRowFormatter();
-        $request = array();
+        $request = [];
 
         $request['rows'] = $formatter->formatRows($order);
         $request['amount'] = $formatter->formatTotalAmount($request['rows']);
@@ -344,7 +344,7 @@ class HostedPaymentTest extends \PHPUnit\Framework\TestCase {
 
         // follows HostedPayment calculateRequestValues() outline:
         $formatter = new HostedRowFormatter();
-        $request = array();
+        $request = [];
 
         $request['rows'] = $formatter->formatRows($order);
         $request['amount'] = $formatter->formatTotalAmount($request['rows']);
@@ -369,7 +369,7 @@ class HostedPaymentTest extends \PHPUnit\Framework\TestCase {
 
         // follows HostedPayment calculateRequestValues() outline:
         $formatter = new HostedRowFormatter();
-        $request = array();
+        $request = [];
 
         $request['rows'] = $formatter->formatRows($order);
         $request['amount'] = $formatter->formatTotalAmount($request['rows']);
@@ -400,7 +400,7 @@ class HostedPaymentTest extends \PHPUnit\Framework\TestCase {
 
         // follows HostedPayment calculateRequestValues() outline:
         $formatter = new HostedRowFormatter();
-        $request = array();
+        $request = [];
 
         $request['rows'] = $formatter->formatRows($order);
         $request['amount'] = $formatter->formatTotalAmount($request['rows']);

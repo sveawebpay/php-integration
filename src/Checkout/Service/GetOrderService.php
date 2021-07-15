@@ -19,9 +19,9 @@ class GetOrderService extends CheckoutService
     {
         $this->prepareRequest();
 
-        $requestData = array(
+        $requestData = [
             'orderId' => $this->order->getId()
-        );
+        ];
         $response = $this->serviceConnection->get($requestData);
 
         return $response;

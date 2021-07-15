@@ -26,7 +26,7 @@ class SearchOrdersRequest extends AdminServiceRequest
     {
         $this->validateRequest();
 
-        $soapRequest = array();
+        $soapRequest = [];
         $soapRequest = new SearchOrdersSoapRequest(
             new Authentication(
                 $this->orderBuilder->conf->getUsername(($this->orderBuilder->orderType), $this->orderBuilder->countryCode),
@@ -40,7 +40,7 @@ class SearchOrdersRequest extends AdminServiceRequest
 
     public function validate()
     {
-        $errors = array();
+        $errors = [];
        // $errors = $this->validateOrderId($errors);
        // $errors = $this->validateOrderType($errors);
        // $errors = $this->validateCountryCode($errors);
@@ -51,7 +51,7 @@ class SearchOrdersRequest extends AdminServiceRequest
     private function validateOrderId($errors)
     {
         if (isset($this->orderBuilder->orderId) == FALSE) {
-            $errors[] = array('missing value' => "orderId is required.");
+            $errors[] = ['missing value' => "orderId is required."];
         }
 
         return $errors;

@@ -39,7 +39,7 @@ class CreditTransaction extends HostedRequest
 
     protected function validateRequestAttributes()
     {
-        $errors = array();
+        $errors = [];
         $errors = $this->validateTransactionId($this, $errors);
         $errors = $this->validateCreditAmount($this, $errors);
 

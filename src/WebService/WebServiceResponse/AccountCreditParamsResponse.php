@@ -30,7 +30,7 @@ class AccountCreditParamsResponse extends WebServiceResponse
     /**
      * @var AccountCreditCampaignCode[] $AccountCreditCampaignCodes - array of AccountCreditCampaignCode
      */
-    public $AccountCreditCampaignCodes = array();
+    public $AccountCreditCampaignCodes = [];
 
     /**
      * AccountCreditParamsResponse constructor.

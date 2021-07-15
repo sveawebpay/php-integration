@@ -37,7 +37,7 @@ class CancelRecurSubscription extends HostedRequest
 
     protected function validateRequestAttributes()
     {
-        $errors = array();
+        $errors = [];
         $errors = $this->validateSubscriptionId($this, $errors);
 
         return $errors;

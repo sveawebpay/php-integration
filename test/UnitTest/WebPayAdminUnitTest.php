@@ -289,11 +289,11 @@ class WebPayAdminUnitTest extends \PHPUnit\Framework\TestCase
             ->setOrderId("123456")
             ->setCountryCode("SE")
             ->addCreditOrderRow(TestUtil::createOrderRow())
-            ->addCreditOrderRows(array(TestUtil::createOrderRow(), TestUtil::createOrderRow()))
+            ->addCreditOrderRows([TestUtil::createOrderRow(), TestUtil::createOrderRow()])
             ->setRowToCredit(1)
-            ->setRowsToCredit(array(2, 3))
+            ->setRowsToCredit([2, 3])
             ->addNumberedOrderRow(TestUtil::createNumberedOrderRow(100.00, 1, 1))
-            ->addNumberedOrderRows(array(TestUtil::createNumberedOrderRow(100.00, 1, 2), TestUtil::createNumberedOrderRow(100.00, 1, 3)));
+            ->addNumberedOrderRows([TestUtil::createNumberedOrderRow(100.00, 1, 2), TestUtil::createNumberedOrderRow(100.00, 1, 3)]);
         try {
             $request->creditCardOrderRows()->prepareRequest();
             $this->assertTrue(true);

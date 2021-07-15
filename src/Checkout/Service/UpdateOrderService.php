@@ -57,7 +57,7 @@ class UpdateOrderService extends CheckoutService
      */
     protected function mapCreateOrderData(CheckoutOrderBuilder $order)
     {
-        $data = array();
+        $data = [];
         $orderItems = $this->formatOrderInformationWithOrderRows();
 
         foreach ($orderItems as $item) {

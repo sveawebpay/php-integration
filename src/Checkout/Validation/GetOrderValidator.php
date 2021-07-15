@@ -10,7 +10,7 @@ use Svea\WebPay\BuildOrder\Validator\OrderValidator;
  */
 class GetOrderValidator extends OrderValidator
 {
-    public $errors = array();
+    public $errors = [];
 
     public function validate($order)
     {

@@ -34,7 +34,7 @@ class CreateOrderValidationTest extends TestCase
             ->setCurrency('SEK')
             ->setLocale('sv-Se');
 
-        $errors = $this->invokeMethod($this->validator, 'validateRequiredOrderFields', array($this->order, array()));
+        $errors = $this->invokeMethod($this->validator, 'validateRequiredOrderFields', [$this->order, []]);
 
         $errorsNum = count($errors);
 
@@ -46,7 +46,7 @@ class CreateOrderValidationTest extends TestCase
      */
     public function ifRequiredOrderFieldsAreNotPassed()
     {
-        $errors = $this->invokeMethod($this->validator, 'validateRequiredOrderFields', array($this->order, array()));
+        $errors = $this->invokeMethod($this->validator, 'validateRequiredOrderFields', [$this->order, []]);
 
         $errorsNum = count($errors);
 
@@ -58,7 +58,7 @@ class CreateOrderValidationTest extends TestCase
      */
     public function ifOrderRowsAreNotPassed()
     {
-        $errors = $this->invokeMethod($this->validator, 'validateRequiredFieldsForOrder', array($this->order, array()));
+        $errors = $this->invokeMethod($this->validator, 'validateRequiredFieldsForOrder', [$this->order, []]);
 
         $errorsNum = count($errors);
 
@@ -72,7 +72,7 @@ class CreateOrderValidationTest extends TestCase
     {
         $this->order->addOrderRow($this->returnOrderRow());
 
-        $errors = $this->invokeMethod($this->validator, 'validateRequiredFieldsForOrder', array($this->order, array()));
+        $errors = $this->invokeMethod($this->validator, 'validateRequiredFieldsForOrder', [$this->order, []]);
 
         $errorsNum = count($errors);
 
@@ -86,7 +86,7 @@ class CreateOrderValidationTest extends TestCase
     {
         $this->order;
 
-        $errors = $this->invokeMethod($this->validator, 'validateMerchantSettings', array($this->order, array()));
+        $errors = $this->invokeMethod($this->validator, 'validateMerchantSettings', [$this->order, []]);
 
         $errorsNum = count($errors);
 
@@ -103,7 +103,7 @@ class CreateOrderValidationTest extends TestCase
             ->setPushUri('https://svea.com/push.aspx?sid=123&svea_order=123')
             ->setTermsUri('http://localhost:51898/terms');
 
-        $errors = $this->invokeMethod($this->validator, 'validateMerchantSettings', array($this->order, array()));
+        $errors = $this->invokeMethod($this->validator, 'validateMerchantSettings', [$this->order, []]);
 
         $errorsNum = count($errors);
 
@@ -117,7 +117,7 @@ class CreateOrderValidationTest extends TestCase
     {
         $this->order->setPartnerKey("77FB33EC-505D-4CCF-AA21-D9DF50DC8344");
 
-        $errors = $this->invokeMethod($this->validator, 'validatePartnerKey', array($this->order, array()));
+        $errors = $this->invokeMethod($this->validator, 'validatePartnerKey', [$this->order, []]);
 
         $errorsNum = count($errors);
 
@@ -131,7 +131,7 @@ class CreateOrderValidationTest extends TestCase
     {
         $this->order->setRequireElectronicIdAuthentication(true);
 
-        $errors = $this->invokeMethod($this->validator, 'validateRequireElectronicIdAuthentication', array($this->order, array()));
+        $errors = $this->invokeMethod($this->validator, 'validateRequireElectronicIdAuthentication', [$this->order, []]);
 
         $errorsNum = count($errors);
 

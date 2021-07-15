@@ -88,11 +88,11 @@ abstract class HostedRequest
         $mac = hash("sha512", base64_encode($message) . $secret);
 
         // encode the request elements
-        $request_fields = array(
+        $request_fields = [
             'merchantid' => urlencode($merchantId),
             'message' => urlencode(base64_encode($message)),
             'mac' => urlencode($mac)
-        );
+        ];
 
         return $request_fields;
     }

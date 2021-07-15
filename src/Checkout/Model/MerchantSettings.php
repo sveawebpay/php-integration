@@ -144,12 +144,12 @@ class MerchantSettings
      */
     public function getMerchantSettings()
     {
-        return array(
+        return [
             'termsUri' => $this->getTermsUri(),
             'checkoutUri' => $this->getCheckoutUri(),
             'confirmationUri' => $this->getConfirmationUri(),
             'checkoutValidationCallBackUri' => $this->getValidationCallbackUri(),
             'pushUri' => $this->getPushUri()
-        );
+        ];
     }
 }

@@ -22,7 +22,7 @@ use Svea\WebPay\Helper\Helper;
  */
 class PaymentPlanPricePerMonth
 {
-    public $values = array();
+    public $values = [];
 
     /**
      * PaymentPlanPricePerMonth constructor.

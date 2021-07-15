@@ -15,7 +15,7 @@ $sveaCheckoutOrderId = 201;
 try {
     $response = WebPayAdmin::deliverOrderRows($testConfig)
         ->setCheckoutOrderId($sveaCheckoutOrderId) // Required field
-        ->setRowsToDeliver(array(1, 2)) // Required field
+        ->setRowsToDeliver([1, 2]) // Required field
         ->deliverCheckoutOrderRows()
         ->doRequest();
 

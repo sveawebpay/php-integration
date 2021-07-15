@@ -87,8 +87,8 @@ class DeliverOrderRowsBuilder extends CheckoutAdminOrderBuilder
     public function __construct($config)
     {
         parent::__construct($config);
-        $this->rowsToDeliver = array();
-        $this->numberedOrderRows = array();
+        $this->rowsToDeliver = [];
+        $this->numberedOrderRows = [];
     }
 
     /**

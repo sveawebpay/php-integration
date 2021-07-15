@@ -12,7 +12,7 @@ class EffectiveInterestRateCalculator
     private $tolerance = 0.00000001;
     private $initialLowerBound = 0;
     private $initialUpperBound = 10000000;
-    private $payments = array();
+    private $payments = [];
     private $sizeOfLoan;
 
     public function __construct($sizeOfLoan)
@@ -101,6 +101,6 @@ class EffectiveInterestRateCalculator
 
     public function addPayment($timeToPaymentInYears, $amount)
     {
-        array_push($this->payments, array('timeToPaymentInYears' => $timeToPaymentInYears, 'amount' => $amount));
+        array_push($this->payments, ['timeToPaymentInYears' => $timeToPaymentInYears, 'amount' => $amount]);
     }
 }

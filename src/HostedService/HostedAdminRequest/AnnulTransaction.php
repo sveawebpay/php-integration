@@ -34,7 +34,7 @@ class AnnulTransaction extends HostedRequest
 
     protected function validateRequestAttributes()
     {
-        $errors = array();
+        $errors = [];
         $errors = $this->validateTransactionId($this, $errors);
 
         return $errors;

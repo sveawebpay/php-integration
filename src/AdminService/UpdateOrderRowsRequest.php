@@ -60,7 +60,7 @@ class UpdateOrderRowsRequest extends AdminServiceRequest
 
     public function validate()
     {
-        $errors = array();
+        $errors = [];
         $errors = $this->validateOrderId($errors);
         $errors = $this->validateRowNumber($errors);
         $errors = $this->validateOrderType($errors);
@@ -74,7 +74,7 @@ class UpdateOrderRowsRequest extends AdminServiceRequest
     private function validateOrderId($errors)
     {
         if (isset($this->orderBuilder->orderId) == FALSE) {
-            $errors[] = array('missing value' => "orderId is required.");
+            $errors[] = ['missing value' => "orderId is required."];
         }
 
         return $errors;
@@ -84,7 +84,7 @@ class UpdateOrderRowsRequest extends AdminServiceRequest
     {
         foreach ($this->orderBuilder->numberedOrderRows as $orderRow) {
             if (isset($orderRow->rowNumber) == FALSE) {
-                $errors[] = array('missing value' => "rowNumber is required.");
+                $errors[] = ['missing value' => "rowNumber is required."];
             }
         }
 
@@ -94,7 +94,7 @@ class UpdateOrderRowsRequest extends AdminServiceRequest
     private function validateOrderType($errors)
     {
         if (isset($this->orderBuilder->orderType) == FALSE) {
-            $errors[] = array('missing value' => "orderType is required.");
+            $errors[] = ['missing value' => "orderType is required."];
         }
 
         return $errors;
@@ -103,7 +103,7 @@ class UpdateOrderRowsRequest extends AdminServiceRequest
     private function validateCountryCode($errors)
     {
         if (isset($this->orderBuilder->countryCode) == FALSE) {
-            $errors[] = array('missing value' => "countryCode is required.");
+            $errors[] = ['missing value' => "countryCode is required."];
         }
 
         return $errors;
@@ -112,7 +112,7 @@ class UpdateOrderRowsRequest extends AdminServiceRequest
     private function validateNumberedOrderRowsExist($errors)
     {
         if (isset($this->orderBuilder->numberedOrderRows) == FALSE) {
-            $errors[] = array('missing value' => "numberedOrderRows is required.");
+            $errors[] = ['missing value' => "numberedOrderRows is required."];
         }
 
         return $errors;
@@ -122,7 +122,7 @@ class UpdateOrderRowsRequest extends AdminServiceRequest
     {
         foreach ($this->orderBuilder->numberedOrderRows as $orderRow) {
             if (!isset($orderRow->vatPercent) && (!isset($orderRow->amountIncVat) && !isset($orderRow->amountExVat))) {
-                $errors[] = array('missing order row vat information' => "cannot calculate orderRow vatPercent, need at least two of amountExVat, amountIncVat and vatPercent.");
+                $errors[] = ['missing order row vat information' => "cannot calculate orderRow vatPercent, need at least two of amountExVat, amountIncVat and vatPercent."];
             }
         }
 

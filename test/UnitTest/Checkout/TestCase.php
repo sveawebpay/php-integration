@@ -26,7 +26,7 @@ class TestCase extends \PHPUnit\Framework\TestCase
      * @param array $parameters
      * @return mixed
      */
-    public function invokeMethod(&$object, $methodName, array $parameters = array())
+    public function invokeMethod(&$object, $methodName, array $parameters = [])
     {
         $reflection = new \ReflectionClass(get_class($object));
         $method = $reflection->getMethod($methodName);
@@ -99,7 +99,7 @@ class TestCase extends \PHPUnit\Framework\TestCase
      */
     protected function getRandVatPercent()
     {
-        return array_rand(array(6, 12, 25));
+        return array_rand([6, 12, 25]);
     }
 
     /**
@@ -108,7 +108,7 @@ class TestCase extends \PHPUnit\Framework\TestCase
      */
     protected function getRandDiscountPercent()
     {
-        return array_rand(array(6, 12, 20, 25));
+        return array_rand([6, 12, 20, 25]);
     }
 
     /**

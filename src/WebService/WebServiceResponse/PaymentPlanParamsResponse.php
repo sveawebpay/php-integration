@@ -37,7 +37,7 @@ class PaymentPlanParamsResponse extends WebServiceResponse
     /** 
      * @var CampaignCode[] $campaignCodes - array of CampaignCode 
      */
-    public $campaignCodes = array();
+    public $campaignCodes = [];
 
     /**
      * PaymentPlanParamsResponse constructor.

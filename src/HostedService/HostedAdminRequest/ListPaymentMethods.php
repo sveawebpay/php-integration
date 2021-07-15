@@ -45,7 +45,7 @@ class ListPaymentMethods extends HostedRequest
 
     protected function validateRequestAttributes()
     {
-        $errors = array();
+        $errors = [];
 
         return $errors;
     }

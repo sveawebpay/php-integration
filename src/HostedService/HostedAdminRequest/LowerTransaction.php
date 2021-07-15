@@ -120,7 +120,7 @@ class LowerTransaction extends HostedRequest
 
     protected function validateRequestAttributes()
     {
-        $errors = array();
+        $errors = [];
         $errors = $this->validateTransactionId($this, $errors);
         $errors = $this->validateAmountToLower($this, $errors);
 

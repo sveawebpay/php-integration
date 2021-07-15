@@ -21,7 +21,7 @@ class DeliverOrderRowsRequestTest extends \PHPUnit\Framework\TestCase
         $this->builderObject->orderId = 123456;
         $this->builderObject->orderType = ConfigurationProvider::INVOICE_TYPE;
         $this->builderObject->countryCode = "SE";
-        $this->builderObject->rowsToDeliver = array(1);
+        $this->builderObject->rowsToDeliver = [1];
     }
 
     public function testClassExists()

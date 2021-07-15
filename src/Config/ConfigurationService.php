@@ -118,43 +118,43 @@ class ConfigurationService
         $secret = ($secret == null) ? $defaultSecretWord : $secret;
 
         // set up credentials array for given country:
-        $singleCountryConfig[$countryCode] = array("auth" =>
-            array(
-                ConfigurationProvider::INVOICE_TYPE => array(
+        $singleCountryConfig[$countryCode] = ["auth" =>
+            [
+                ConfigurationProvider::INVOICE_TYPE => [
                     "username" => $invoiceUsername,
                     "password" => $invoicePassword,
                     "clientNumber" => $invoiceClientNo
-                ),
-                ConfigurationProvider::PAYMENTPLAN_TYPE => array(
+                ],
+                ConfigurationProvider::PAYMENTPLAN_TYPE => [
                     "username" => $paymentPlanUsername,
                     "password" => $paymentPlanPassword,
                     "clientNumber" => $paymentPlanClientNo
-                ),
-                ConfigurationProvider::ACCOUNTCREDIT_TYPE => array(
+                ],
+                ConfigurationProvider::ACCOUNTCREDIT_TYPE => [
                     "username" => $accountCreditUsername,
                     "password" => $accountCreditPassword,
                     "clientNumber" => $accountCreditClientNo
-                ),
-                ConfigurationProvider::HOSTED_TYPE => array(
+                ],
+                ConfigurationProvider::HOSTED_TYPE => [
                     "merchantId" => $merchantId,
                     "secret" => $secret
-                )
-            )
-        );
+                ]
+            ]
+        ];
 
-        $singleCountryConfig['common']['auth'][ConfigurationProvider::HOSTED_TYPE] = array(
+        $singleCountryConfig['common']['auth'][ConfigurationProvider::HOSTED_TYPE] = [
             "merchantId" => $merchantId,
             "secret" => $secret
-        );
+        ];
 
-        $singleCountryConfig['common']['auth'][ConfigurationProvider::CHECKOUT] = array(
+        $singleCountryConfig['common']['auth'][ConfigurationProvider::CHECKOUT] = [
             "merchantId" => $merchantId,
             "secret" => $secret
-        );
+        ];
 
         // return a ConfigurationProvider object
         return new SveaConfigurationProvider(
-            array("url" => $urls, "credentials" => $singleCountryConfig, "integrationproperties" => $integrationProperties)
+            ["url" => $urls, "credentials" => $singleCountryConfig, "integrationproperties" => $integrationProperties]
         );
     }
 
@@ -162,14 +162,14 @@ class ConfigurationService
     {
         list($config, $urls) = self::retrieveConfigFile($isProd);
 
-        $credentialParams = array();
+        $credentialParams = [];
         $credentials = $config['credentials'];
 
         $commonCredentials = $config['commonCredentials'];
         $checkoutCredentials = $config['checkoutCredentials'];
-        $credentialParams['common'] = array();
+        $credentialParams['common'] = [];
         foreach ($credentials as $countryCode => $configPerCountry) {
-            $credentialParams[$countryCode] = array('auth' => array());
+            $credentialParams[$countryCode] = ['auth' => []];
             foreach ($configPerCountry as $paymentType => $configPerType) {
                 if ($paymentType === ConfigurationProvider::CHECKOUT && ($countryCode == "DE" || $countryCode  == "NL")) {
                     $configPerType = array_merge($configPerType, $checkoutCredentials);
@@ -184,7 +184,7 @@ class ConfigurationService
 
         $integrationProperties = $config['integrationParams'];
 
-        return new SveaConfigurationProvider(array("url" => $urls, "credentials" => $credentialParams, "integrationproperties" => $integrationProperties));
+        return new SveaConfigurationProvider(["url" => $urls, "credentials" => $credentialParams, "integrationproperties" => $integrationProperties]);
     }
 
     private static function retrieveConfigFile($isProd)
@@ -197,12 +197,12 @@ class ConfigurationService
             $urls = self::getTestUrls();
         }
 
-        return array($config, $urls);
+        return [$config, $urls];
     }
 
     private static function getTestUrls()
     {
-        return array(
+        return [
             ConfigurationProvider::HOSTED_TYPE => self::SWP_TEST_URL,
             ConfigurationProvider::INVOICE_TYPE => self::SWP_TEST_WS_URL,
             ConfigurationProvider::PAYMENTPLAN_TYPE => self::SWP_TEST_WS_URL,
@@ -212,12 +212,12 @@ class ConfigurationService
             ConfigurationProvider::PREPARED_URL => self::SWP_TEST_PREPARED_URL,
             ConfigurationProvider::CHECKOUT => self::CHECKOUT_TEST_BASE_URL,
             ConfigurationProvider::CHECKOUT_ADMIN => self::CHECKOUT_ADMIN_TEST_BASE_URL
-        );
+        ];
     }
 
     private static function getProdUrls()
     {
-        return array(
+        return [
             ConfigurationProvider::HOSTED_TYPE => self::SWP_PROD_URL,
             ConfigurationProvider::INVOICE_TYPE => self::SWP_PROD_WS_URL,
             ConfigurationProvider::PAYMENTPLAN_TYPE => self::SWP_PROD_WS_URL,
@@ -227,6 +227,6 @@ class ConfigurationService
             ConfigurationProvider::PREPARED_URL => self::SWP_PROD_PREPARED_URL,
             ConfigurationProvider::CHECKOUT => self::CHECKOUT_PROD_BASE_URL,
             ConfigurationProvider::CHECKOUT_ADMIN => self::CHECKOUT_ADMIN_PROD_BASE_URL
-        );
+        ];
     }
 }

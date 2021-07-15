@@ -123,7 +123,7 @@ class CancelOrderRowsRequestIntegrationTest extends \PHPUnit\Framework\TestCase
         $cancelOrderRowsRequest = WebPayAdmin::cancelOrderRows(ConfigurationService::getDefaultConfig());
         $cancelOrderRowsRequest->setCountryCode($country);
         $cancelOrderRowsRequest->setOrderId($myOrderId);
-        $cancelOrderRowsRequest->setRowsToCancel(array(1, 2));
+        $cancelOrderRowsRequest->setRowsToCancel([1, 2]);
         $cancelOrderRowsResponse = $cancelOrderRowsRequest->cancelPaymentPlanOrderRows()->doRequest();
 
         ////print_r( $cancelOrderRowsResponse );        

@@ -35,7 +35,7 @@ class CancelOrderRowsRequest extends AdminServiceRequest
     {
         $this->validateRequest();
 
-        $orderRowNumbers = array();
+        $orderRowNumbers = [];
         foreach ($this->orderBuilder->rowsToCancel as $rowToCancel) {
             $orderRowNumbers[] = new SoapVar($rowToCancel, XSD_LONG, null, null, 'long', "http://schemas.microsoft.com/2003/10/Serialization/Arrays");
         }
@@ -79,7 +79,7 @@ class CancelOrderRowsRequest extends AdminServiceRequest
 
     public function validate()
     {
-        $errors = array();
+        $errors = [];
         $errors = $this->validateOrderId($errors);
         $errors = $this->validateOrderType($errors);
         $errors = $this->validateCountryCode($errors);
@@ -91,7 +91,7 @@ class CancelOrderRowsRequest extends AdminServiceRequest
     private function validateOrderId($errors)
     {
         if (isset($this->orderBuilder->orderId) == FALSE) {
-            $errors[] = array('missing value' => "orderId is required.");
+            $errors[] = ['missing value' => "orderId is required."];
         }
 
         return $errors;
@@ -100,7 +100,7 @@ class CancelOrderRowsRequest extends AdminServiceRequest
     private function validateOrderType($errors)
     {
         if (isset($this->orderBuilder->orderType) == FALSE) {
-            $errors[] = array('missing value' => "orderType is required.");
+            $errors[] = ['missing value' => "orderType is required."];
         }
 
         return $errors;
@@ -109,7 +109,7 @@ class CancelOrderRowsRequest extends AdminServiceRequest
     private function validateCountryCode($errors)
     {
         if (isset($this->orderBuilder->countryCode) == FALSE) {
-            $errors[] = array('missing value' => "countryCode is required.");
+            $errors[] = ['missing value' => "countryCode is required."];
         }
 
         return $errors;
@@ -118,7 +118,7 @@ class CancelOrderRowsRequest extends AdminServiceRequest
     private function validateRowsToCancel($errors)
     {
         if (isset($this->orderBuilder->rowsToCancel) == FALSE) {
-            $errors[] = array('missing value' => "rowsToCancel is required.");
+            $errors[] = ['missing value' => "rowsToCancel is required."];
         }
 
         return $errors;

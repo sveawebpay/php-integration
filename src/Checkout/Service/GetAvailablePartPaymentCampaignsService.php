@@ -24,9 +24,9 @@ class GetAvailablePartPaymentCampaignsService extends CheckoutService
         {
             if(strtolower($presetValue['typeName']) == 'iscompany')
             {
-                $requestData = array(
+                $requestData = [
                     'isCompany' => $presetValue['value']
-                );
+                ];
             }
         }
 
@@ -66,7 +66,7 @@ class GetAvailablePartPaymentCampaignsService extends CheckoutService
 
     protected function mapPresetValue(CheckoutOrderBuilder $request)
     {
-        $data = array();
+        $data = [];
         if (count($request->getPresetValues()) > 0) {
             foreach ($request->getPresetValues() as $presetValue) {
                 $data['presetValues'] [] = $presetValue->returnPresetArray();

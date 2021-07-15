@@ -132,7 +132,7 @@ class DeliverOrderRowsRequestIntegrationTest extends \PHPUnit\Framework\TestCase
         $deliverOrderRowsRequest->setCountryCode($country);
         $deliverOrderRowsRequest->setOrderId($myOrderId);
         $deliverOrderRowsRequest->setInvoiceDistributionType(DistributionType::POST);
-        $deliverOrderRowsRequest->setRowsToDeliver(array(1, 2));
+        $deliverOrderRowsRequest->setRowsToDeliver([1, 2]);
         $deliverOrderRowsResponse = $deliverOrderRowsRequest->deliverInvoiceOrderRows()->doRequest();
 
         ////print_r( $deliverOrderRowsResponse );        

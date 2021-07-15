@@ -7,7 +7,7 @@ class SveaCreateAccountCreditOrderInformation extends CreateOrderInformation
     /**
      * @var array $CreateAccountCreditDetails
      */
-    public $CreateAccountCreditDetails = array();
+    public $CreateAccountCreditDetails = [];
 
     /**
      * Sets Variable if contains CampaignCode for AccountCredit
@@ -15,12 +15,12 @@ class SveaCreateAccountCreditOrderInformation extends CreateOrderInformation
      */
     public function __construct($CampaignCode = "")
     {
-        $this->OrderRows['OrderRow'] = array();
+        $this->OrderRows['OrderRow'] = [];
 
         if ($CampaignCode != "") {
-            $this->CreateAccountCreditDetails = array(
+            $this->CreateAccountCreditDetails = [
                 "CampaignCode" => $CampaignCode,
-            );
+            ];
         }
     }
 }

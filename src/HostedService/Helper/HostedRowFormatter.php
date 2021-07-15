@@ -29,7 +29,7 @@ class HostedRowFormatter
     {
         $this->totalAmount = 0;
         $this->totalVat = 0;
-        $this->newRows = array();
+        $this->newRows = [];
     }
 
     /**

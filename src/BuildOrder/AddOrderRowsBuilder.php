@@ -67,7 +67,7 @@ class AddOrderRowsBuilder extends CheckoutAdminOrderBuilder
     public function __construct($config)
     {
         parent::__construct($config);
-        $this->orderRows = array();
+        $this->orderRows = [];
     }
 
     /**
