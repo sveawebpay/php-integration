@@ -125,10 +125,10 @@ class PresetValue
      */
     public function returnPresetArray()
     {
-        return array(
+        return [
             'typeName' => $this->typeName,
             'value' => $this->value,
             'isReadonly' => $this->isReadonly,
-        );
+        ];
     }
 }

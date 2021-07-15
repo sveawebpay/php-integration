@@ -27,14 +27,14 @@ class SveaDeliverInvoiceDetails
     /**
      * If order not changed, set with orderRowarray from CreateOrderEu
      */
-    public $OrderRows = array();
+    public $OrderRows = [];
 
     /**
      * SveaDeliverInvoiceDetails constructor.
      */
     public function __construct()
     {
-        $this->OrderRows['OrderRow'] = array();
+        $this->OrderRows['OrderRow'] = [];
     }
     
     /**

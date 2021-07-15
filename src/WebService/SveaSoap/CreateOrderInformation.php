@@ -12,7 +12,7 @@ abstract class CreateOrderInformation
     public $OrderType;
     public $AddressSelector;
     public $ClientOrderNumber;
-    public $OrderRows = array();
+    public $OrderRows = [];
     public $CustomerIdentity;
     public $OrderDate;
 

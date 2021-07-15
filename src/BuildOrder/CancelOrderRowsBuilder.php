@@ -87,8 +87,8 @@ class CancelOrderRowsBuilder extends CheckoutAdminOrderBuilder
     public function __construct($config)
     {
         parent::__construct($config);
-        $this->rowsToCancel = array();
-        $this->numberedOrderRows = array();
+        $this->rowsToCancel = [];
+        $this->numberedOrderRows = [];
     }
 
     /**

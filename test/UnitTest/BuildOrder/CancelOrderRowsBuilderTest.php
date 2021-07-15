@@ -73,7 +73,7 @@ class CancelOrderRowsBuilderTest extends \PHPUnit\Framework\TestCase
             ->setQuantity(1)// required
             ->setRowNumber(2);
 
-        $this->cancelOrderRowsObject->addNumberedOrderRows(array($numberedOrderRow1, $numberedOrderRow2));
+        $this->cancelOrderRowsObject->addNumberedOrderRows([$numberedOrderRow1, $numberedOrderRow2]);
         $this->assertInternalType('array', $this->cancelOrderRowsObject->numberedOrderRows);
     }
 

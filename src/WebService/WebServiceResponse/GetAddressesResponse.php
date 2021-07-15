@@ -38,7 +38,7 @@ class GetAddressesResponse extends WebServiceResponse
     /**
      * @var $customerIdentity - GetAddressIdentity  array of GetAddressIdentity
      */
-    public $customerIdentity = array();
+    public $customerIdentity = [];
 
     /**
      * GetAddressesResponse constructor.

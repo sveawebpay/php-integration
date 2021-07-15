@@ -38,7 +38,7 @@ class CheckoutOrderBuilder extends OrderBuilder
     /**
      * @var PresetValue []
      */
-    protected $presetValues = array();
+    protected $presetValues = [];
 
     /**
      * @var string $partnerKey
@@ -48,7 +48,7 @@ class CheckoutOrderBuilder extends OrderBuilder
     /**
      * @var IdentityFlags []
      */
-    protected $identityFlags = array();
+    protected $identityFlags = [];
 
     /**
      * @var string $merchantData

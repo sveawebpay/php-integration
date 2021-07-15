@@ -53,7 +53,7 @@ class UpdateOrderRequest extends AdminServiceRequest
 
     public function validate()
     {
-        $errors = array();
+        $errors = [];
         $errors = $this->validateOrderId($errors);
         $errors = $this->validateOrderType($errors);
         $errors = $this->validateCountryCode($errors);
@@ -65,7 +65,7 @@ class UpdateOrderRequest extends AdminServiceRequest
     private function validateOrderId($errors)
     {
         if (isset($this->orderBuilder->orderId) == FALSE) {
-            $errors[] = array('missing value' => "orderId is required.");
+            $errors[] = ['missing value' => "orderId is required."];
         }
 
         return $errors;
@@ -74,7 +74,7 @@ class UpdateOrderRequest extends AdminServiceRequest
     private function validateOrderType($errors)
     {
         if (isset($this->orderBuilder->orderType) == FALSE) {
-            $errors[] = array('missing value' => "orderType is required.");
+            $errors[] = ['missing value' => "orderType is required."];
         }
 
         return $errors;
@@ -83,7 +83,7 @@ class UpdateOrderRequest extends AdminServiceRequest
     private function validateCountryCode($errors)
     {
         if (isset($this->orderBuilder->countryCode) == FALSE) {
-            $errors[] = array('missing value' => "countryCode is required.");
+            $errors[] = ['missing value' => "countryCode is required."];
         }
 
         return $errors;
@@ -92,7 +92,7 @@ class UpdateOrderRequest extends AdminServiceRequest
     private function validateStringLength($errors)
     {
         if (strlen($this->orderBuilder->notes) > 200) {
-            $errors[] = array('String length' => "The field Notes must be a string with a maximum length of 200.");
+            $errors[] = ['String length' => "The field Notes must be a string with a maximum length of 200."];
         }
 
         return $errors;

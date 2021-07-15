@@ -37,7 +37,7 @@ class AccountCreditQueryBuilder extends CheckoutAdminOrderBuilder
     /**
      * @var AccountCreditInformation []
      * */
-    public $clientAccountCreditInformation = array();
+    public $clientAccountCreditInformation = [];
 
     public function __construct($config) {
         $this->conf = $config;

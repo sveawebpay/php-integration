@@ -32,7 +32,7 @@ class CheckoutAdminResponseHelper
 
     private static function convertDeliveries($deliveries)
     {
-        $newDeliveries = array();
+        $newDeliveries = [];
         foreach ($deliveries as $delivery) {
             if (isset($delivery['DeliveryAmount']) && !empty($delivery['DeliveryAmount'])) {
                 $delivery['DeliveryAmount'] = $delivery['DeliveryAmount'] / self::MINOR_CURRENCY;
@@ -48,7 +48,7 @@ class CheckoutAdminResponseHelper
             }
 
             $deliveryOrderRows = $delivery['OrderRows'];
-            $newDeliveryOrderRows = array();
+            $newDeliveryOrderRows = [];
 
             if (is_array($deliveryOrderRows)) {
                 foreach ($deliveryOrderRows as $deliveryOrderRow) {
@@ -65,7 +65,7 @@ class CheckoutAdminResponseHelper
 
     private static function convertCredits($credits)
     {
-        $newCredits = array();
+        $newCredits = [];
 
         foreach ($credits as $credit) {
             if (isset($credit['Amount']) && !empty($credit['Amount'])) {
@@ -73,7 +73,7 @@ class CheckoutAdminResponseHelper
             }
 
             $creditOrderRows = $credit['OrderRows'];
-            $newCreditOrderRows = array();
+            $newCreditOrderRows = [];
 
             if (is_array($creditOrderRows)) {
                 foreach ($creditOrderRows as $creditOrderRow) {
@@ -90,7 +90,7 @@ class CheckoutAdminResponseHelper
 
     private static function convertOrderRows($orderRows)
     {
-        $newOrderRows = array();
+        $newOrderRows = [];
         foreach ($orderRows as $row) {
             $newOrderRows[] = self::convertMinorCurrencyValues($row);
         }

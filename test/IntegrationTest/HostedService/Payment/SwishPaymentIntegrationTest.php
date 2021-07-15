@@ -33,7 +33,7 @@ class SwishPaymentIntegrationTest extends \PHPUnit\Framework\TestCase
         $url = "https://webpaypaymentgatewaystage.svea.com/webpay/payment";
 
 
-        $fields = array('merchantid' => urlencode($form->merchantid), 'message' => urlencode($form->xmlMessageBase64), 'mac' => urlencode($form->mac));
+        $fields = ['merchantid' => urlencode($form->merchantid), 'message' => urlencode($form->xmlMessageBase64), 'mac' => urlencode($form->mac)];
         $fieldsString = "";
         foreach ($fields as $key => $value) {
             $fieldsString .= $key . '=' . $value . '&';

@@ -112,9 +112,9 @@ class CreditOrderRowsBuilder extends CheckoutAdminOrderBuilder
     public function __construct($config)
     {
         $this->conf = $config;
-        $this->creditOrderRows = array();
-        $this->rowsToCredit = array();
-        $this->numberedOrderRows = array();
+        $this->creditOrderRows = [];
+        $this->rowsToCredit = [];
+        $this->numberedOrderRows = [];
     }
 
     /**

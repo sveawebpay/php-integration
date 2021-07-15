@@ -58,7 +58,7 @@ class CloseOrder extends HandleOrder
 
     public function validate($order)
     {
-        $errors = array();
+        $errors = [];
         $errors = $this->validateOrderId($order, $errors);
 
         return $errors;

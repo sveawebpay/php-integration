@@ -43,7 +43,7 @@ class SoapClient
 
         $client = new \SoapClient(
             null,
-            array(
+            [
                 'location' => $endpoint,
                 'uri' => "http://tempuri.org/",
                 'use' => SOAP_LITERAL,
@@ -51,14 +51,14 @@ class SoapClient
                 'connection_timeout' => 60,
                 'trace' => 1,
                 'soap_version' => SOAP_1_1,
-                'stream_context' => stream_context_create(array('http' => array(
+                'stream_context' => stream_context_create(['http' => [
                     'header' => 'X-Svea-Library-Name: ' . $libraryName . "\n" .
                         'X-Svea-Library-Version: ' . $libraryVersion . "\n" .
                         'X-Svea-Integration-Platform: ' . $integrationPlatform . "\n" .
                         'X-Svea-Integration-Company: ' . $integrationCompany . "\n" .
                         'X-Svea-Integration-Version: ' . $integrationVersion
-                )))
-            )
+                ]])
+            ]
         );
 
         return $client;
@@ -82,8 +82,8 @@ class SoapClient
         $wrappedRequest = new \SoapVar($request, SOAP_ENC_OBJECT, "-", "--", "request", "http://tempuri.org/");
 
         // do soapcall            
-        $response = $this->client->__soapCall($action, array($wrappedRequest),
-            array("soapaction" => 'http://tempuri.org/IAdminService/' . $action)
+        $response = $this->client->__soapCall($action, [$wrappedRequest],
+            ["soapaction" => 'http://tempuri.org/IAdminService/' . $action]
         );
 
         return $response;

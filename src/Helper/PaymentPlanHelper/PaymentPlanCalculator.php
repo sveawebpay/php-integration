@@ -172,7 +172,7 @@ class PaymentPlanCalculator
      */
     public static function getTotalAmountToPayFromCampaigns($totalPrice, $campaigns, $decimals = 0, $ignoreMinMaxFlag = false)
     {
-        $result = array();
+        $result = [];
 
         foreach($campaigns as $key => $campaign)
         {
@@ -208,7 +208,7 @@ class PaymentPlanCalculator
      */
     public static function getMonthlyAmountToPayFromCampaigns($totalPrice, $campaigns, $decimals = 0, $ignoreMinMaxFlag = false)
     {
-        $result = array();
+        $result = [];
 
         foreach($campaigns as $key => $campaign)
         {
@@ -243,7 +243,7 @@ class PaymentPlanCalculator
      */
     public static function getEffectiveInterestRateFromCampaigns($totalPrice, $campaigns, $decimals = 0, $ignoreMinMaxFlag = false)
     {
-        $result = array();
+        $result = [];
 
         foreach($campaigns as $key => $campaign)
         {
@@ -278,7 +278,7 @@ class PaymentPlanCalculator
      */
     public static function getAllCalculationsFromCampaigns($totalPrice, $campaigns, $decimals = 0, $ignoreMinMaxFlag = false)
     {
-        $result = array();
+        $result = [];
 
         foreach($campaigns as $key => $campaign)
         {

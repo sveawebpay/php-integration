@@ -43,24 +43,24 @@ class SveaDoRequest
             $timestampStart = time();
             $microtimeStart = microtime(true);
         }
-        $result = array("requestResult" => $this->client->__soapCall($method, array($params)));
+        $result = ["requestResult" => $this->client->__soapCall($method, [$params])];
         if($logging == true)
         {
-            $logs = array(
-                "logs" => array(
-                    "request" => array(
+            $logs = [
+                "logs" => [
+                    "request" => [
                         "timestamp" => $timestampStart,
                         "headers" => $this->client->__getLastRequestHeaders(),
                         "body" => htmlentities($this->client->__getLastRequest())
-                    ),
-                    "response" => array(
+                    ],
+                    "response" => [
                         "timestamp" => time(),
                         "headers" => $this->client->__getLastResponseHeaders(),
                         "body" => htmlentities($this->client->__getLastResponse()),
                         "dataAmount" => strlen($this->client->__getLastResponseHeaders()) + strlen($this->client->__getLastResponse()),
                         "duration" => round(microtime(true) - $microtimeStart, 3)
-                    )
-                ));
+                    ]
+                ]];
             $result = array_merge($result, $logs);
         }
         return $result;
@@ -79,17 +79,17 @@ class SveaDoRequest
 
         $client = new \SoapClient(
             $this->svea_server,
-            array(
+            [
                 "trace" => 1,
-                'stream_context' => stream_context_create(array('http' => array(
+                'stream_context' => stream_context_create(['http' => [
                     'header' => 'X-Svea-Library-Name: ' . $libraryName . "\n" .
                         'X-Svea-Library-Version: ' . $libraryVersion . "\n" .
                         'X-Svea-Integration-Platform: ' . $integrationPlatform . "\n" .
                         'X-Svea-Integration-Company: ' . $integrationCompany . "\n" .
                         'X-Svea-Integration-Version: ' . $integrationVersion
-                ))),
+                ]]),
                 "soap_version" => SOAP_1_2
-            )
+            ]
         );
         return $client;
     }

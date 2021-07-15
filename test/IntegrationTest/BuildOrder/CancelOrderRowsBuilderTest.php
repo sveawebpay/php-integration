@@ -63,7 +63,7 @@ class CancelOrderRowsBuilderIntegrationTest extends \PHPUnit\Framework\TestCase
         $cancelResponse = $cancelBuilder
             ->setOrderId($orderResponse->sveaOrderId)
             ->setCountryCode($country)
-            ->setRowsToCancel(array(1, 2))
+            ->setRowsToCancel([1, 2])
             ->setRowToCancel(3)
             ->cancelInvoiceOrderRows()
             ->doRequest();
@@ -305,7 +305,7 @@ class CancelOrderRowsBuilderIntegrationTest extends \PHPUnit\Framework\TestCase
         $cancelOrderRowsBuilder = $cancelBuilder
             ->setOrderId($createdOrderId)
             ->setCountryCode($country)
-            ->setRowsToCancel(array(2, 3))
+            ->setRowsToCancel([2, 3])
             ->addNumberedOrderRows($queryResponse->numberedOrderRows);
         $cancelOrderRowsResponse = $cancelOrderRowsBuilder->cancelCardOrderRows()->doRequest();
         $this->assertEquals(1, $cancelOrderRowsResponse->accepted);

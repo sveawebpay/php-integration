@@ -16,7 +16,7 @@ class ExcludePayments
      */
     public static function excludeInvoicesAndPaymentPlan()
     {
-        $methods = array();
+        $methods = [];
 
         $methods[] = SystemPaymentMethod::INVOICESE;
         $methods[] = SystemPaymentMethod::PAYMENTPLANSE;

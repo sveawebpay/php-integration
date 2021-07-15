@@ -86,7 +86,7 @@ class GetAccountCreditParams
         );
 
         $object = new SveaRequest();
-        $object->request = (object)array("Auth" => $auth);
+        $object->request = (object)["Auth" => $auth];
 
         return $object;
     }

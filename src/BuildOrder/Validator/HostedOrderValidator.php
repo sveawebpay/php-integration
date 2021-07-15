@@ -8,7 +8,7 @@ use Svea\WebPay\Helper\Helper;
  */
 class HostedOrderValidator extends OrderValidator
 {
-    public $errors = array();
+    public $errors = [];
 
     protected $isCompany = false;
 

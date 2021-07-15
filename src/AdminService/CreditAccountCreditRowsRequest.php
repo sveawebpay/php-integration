@@ -30,7 +30,7 @@ class CreditAccountCreditRowsRequest extends AdminServiceRequest
     public function __construct($creditOrderRowsBuilder)
     {
         $this->action = "CancelAccountCreditRows";
-        $this->orderRows = array();
+        $this->orderRows = [];
         $this->orderBuilder = $creditOrderRowsBuilder;
     }
 
@@ -60,7 +60,7 @@ class CreditAccountCreditRowsRequest extends AdminServiceRequest
     protected function getAdminSoapOrderRowsFromBuilderOrderRowsUsingVatFlag($builderOrderRows, $priceIncludingVat = NULL)
     {
         $amount = 0;
-        $orderRows = array();
+        $orderRows = [];
         //if orderrownumber is set, create an orderrow with dummy values. Will be ignored in Svea\WebPay\WebPay WS
         if (count($this->orderBuilder->rowsToCredit) > 0) {
             foreach ($this->orderBuilder->rowsToCredit as $rownumber) {
@@ -98,7 +98,7 @@ class CreditAccountCreditRowsRequest extends AdminServiceRequest
 
     public function validate()
     {
-        $errors = array();
+        $errors = [];
         $errors = $this->validateOrderId($errors);
         $errors = $this->validateHasRows($errors);
         $errors = $this->validateOrderType($errors);
@@ -112,7 +112,7 @@ class CreditAccountCreditRowsRequest extends AdminServiceRequest
     public function validateOrderId($errors)
     {
         if (isset($this->orderBuilder->orderId) == FALSE) {
-            $errors[] = array('missing value' => "orderId is required, use setOrderId().");
+            $errors[] = ['missing value' => "orderId is required, use setOrderId()."];
         }
 
         return $errors;
@@ -123,7 +123,7 @@ class CreditAccountCreditRowsRequest extends AdminServiceRequest
         if ((count($this->orderBuilder->rowsToCredit) == 0) &&
             (count($this->orderBuilder->creditOrderRows) == 0)
         ) {
-            $errors[] = array('missing value' => "no rows to credit, use setRow(s)ToCredit() or addCreditOrderRow(s)().");
+            $errors[] = ['missing value' => "no rows to credit, use setRow(s)ToCredit() or addCreditOrderRow(s)()."];
         }
 
         return $errors;
@@ -132,7 +132,7 @@ class CreditAccountCreditRowsRequest extends AdminServiceRequest
     private function validateOrderType($errors)
     {
         if (isset($this->orderBuilder->orderType) == FALSE) {
-            $errors[] = array('missing value' => "orderType is required.");
+            $errors[] = ['missing value' => "orderType is required."];
         }
 
         return $errors;
@@ -141,7 +141,7 @@ class CreditAccountCreditRowsRequest extends AdminServiceRequest
     private function validateCountryCode($errors)
     {
         if (isset($this->orderBuilder->countryCode) == FALSE) {
-            $errors[] = array('missing value' => "countryCode is required, use setCountryCode().");
+            $errors[] = ['missing value' => "countryCode is required, use setCountryCode()."];
         }
 
         return $errors;
@@ -151,7 +151,7 @@ class CreditAccountCreditRowsRequest extends AdminServiceRequest
     {
         foreach ($this->orderBuilder->creditOrderRows as $orderRow) {
             if (!isset($orderRow->description)) {
-                $errors[] = array('missing value' => "Description is required.");
+                $errors[] = ['missing value' => "Description is required."];
             }
         }
 
@@ -162,7 +162,7 @@ class CreditAccountCreditRowsRequest extends AdminServiceRequest
     {
         foreach ($this->orderBuilder->creditOrderRows as $orderRow) {
             if (!isset($orderRow->vatPercent) && (!isset($orderRow->amountIncVat) && !isset($orderRow->amountExVat))) {
-                $errors[] = array('missing order row vat information' => "cannot calculate orderRow vatPercent, need at least two of amountExVat, amountIncVat and vatPercent.");
+                $errors[] = ['missing order row vat information' => "cannot calculate orderRow vatPercent, need at least two of amountExVat, amountIncVat and vatPercent."];
             }
         }
 

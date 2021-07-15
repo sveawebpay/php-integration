@@ -56,7 +56,7 @@ class RecurTransaction extends HostedRequest
 
     protected function validateRequestAttributes()
     {
-        $errors = array();
+        $errors = [];
         $errors = $this->validateAmount($this, $errors);
         $errors = $this->validateCustomerRefNo($this, $errors);
         $errors = $this->validateSubscriptionId($this, $errors);

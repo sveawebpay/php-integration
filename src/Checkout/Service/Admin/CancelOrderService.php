@@ -34,7 +34,7 @@ class CancelOrderService extends AdminImplementationService
      */
     public function validate()
     {
-        $errors = array();
+        $errors = [];
 
         $orderId = $this->adminBuilder->orderId;
         if (empty($orderId) || !is_int($orderId)) {
@@ -59,9 +59,9 @@ class CancelOrderService extends AdminImplementationService
     {
         $this->validate();
 
-        $requestData = array(
+        $requestData = [
             'orderId' => $this->adminBuilder->orderId
-        );
+        ];
 
         if ($this->isCancelAmount === true) {
             $amount = $this->adminBuilder->amountIncVat;

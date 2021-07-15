@@ -23,7 +23,7 @@ class PaymentForm
     public $secretWord;
     public $mac;
     public $completeHtmlFormWithSubmitButton;
-    public $htmlFormFieldsAsArray = array();
+    public $htmlFormFieldsAsArray = [];
     private $submitMessage;
     private $noScriptMessage;
 

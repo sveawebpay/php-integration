@@ -26,7 +26,7 @@ class Helper
     static function splitMeanToTwoTaxRates($discountAmountExVat, $discountMeanVat, $discountName, $discountDescription, $allowedTaxRates)
     {
 
-        $fixedDiscounts = array();
+        $fixedDiscounts = [];
 
         if (sizeof($allowedTaxRates) > 1) {
 
@@ -84,7 +84,7 @@ class Helper
      */
     static function getTaxRatesInOrder($order)
     {
-        $taxRates = array();
+        $taxRates = [];
 
         foreach ($order->orderRows as $orderRow) {
 
@@ -178,10 +178,10 @@ class Helper
 
 
         // @todo change this to properly defined information
-        $library_properties = array(
+        $library_properties = [
             'library_name' => 'PHP Integration Package',
             'library_version' => $versionFile['version'],
-        );
+        ];
 
         return $library_properties;
     }
@@ -201,11 +201,11 @@ class Helper
         $integrationVersion =
             method_exists($config, "getIntegrationVersion") ? $config->getIntegrationVersion() : "Integration version not available";
 
-        $integration_properties = array(
+        $integration_properties = [
             "integration_platform" => $integrationPlatform,
             "integration_version" => $integrationVersion,
             "integration_company" => $integrationCompany
-        );
+        ];
 
         return $integration_properties;
     }
@@ -229,7 +229,7 @@ class Helper
     static function splitMeanAcrossTaxRates($discountAmount, $discountMeanVat, $discountName, $discountDescription, $allowedTaxRates, $amountExVatFlag = true)
     {
 
-        $fixedDiscounts = array();
+        $fixedDiscounts = [];
 
         if ($discountMeanVat > 0) {
 
@@ -314,7 +314,7 @@ class Helper
 
     public static function getCardPayCurrencies()
     {
-        $currencyList = array(
+        $currencyList = [
             "SEK",
             "NOK",
             "DKK",
@@ -322,7 +322,7 @@ class Helper
             "USD",
             "GBP",
             "PLN"
-            );
+            ];
         return $currencyList;
     }
 
@@ -372,7 +372,7 @@ class Helper
     {
         if (is_array($data) || is_object($data))
         {
-            $result = array();
+            $result = [];
             foreach ($data as $key => $value)
             {
                 $result[$key] = Helper::objectToArray($value);

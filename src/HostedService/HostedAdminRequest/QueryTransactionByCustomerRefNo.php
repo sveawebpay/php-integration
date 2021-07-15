@@ -34,7 +34,7 @@ class QueryTransactionByCustomerRefNo extends HostedRequest
 
     protected function validateRequestAttributes()
     {
-        $errors = array();
+        $errors = [];
         $errors = $this->validateClientOrderNumber($this, $errors);
 
         return $errors;

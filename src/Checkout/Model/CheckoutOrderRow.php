@@ -220,7 +220,7 @@ class CheckoutOrderRow
      */
     public function toArray()
     {
-        $result = array();
+        $result = [];
         $properties = get_object_vars($this);
 
         foreach ($properties as $property => $value) {

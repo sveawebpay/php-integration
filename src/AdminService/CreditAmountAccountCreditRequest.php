@@ -60,7 +60,7 @@ class CreditAmountAccountCreditRequest extends AdminServiceRequest
 
     public function validate()
     {
-        $errors = array();
+        $errors = [];
         $errors = $this->validateOrderId($errors);
         $errors = $this->validateCountryCode($errors);
         $errors = $this->validateAmount($errors);
@@ -71,7 +71,7 @@ class CreditAmountAccountCreditRequest extends AdminServiceRequest
     public function validateOrderId($errors)
     {
         if (isset($this->orderBuilder->orderId) == FALSE) {
-            $errors[] = array('missing value' => "orderId is required, use setOrderId().");
+            $errors[] = ['missing value' => "orderId is required, use setOrderId()."];
         }
 
         return $errors;
@@ -80,7 +80,7 @@ class CreditAmountAccountCreditRequest extends AdminServiceRequest
     private function validateCountryCode($errors)
     {
         if (isset($this->orderBuilder->countryCode) == FALSE) {
-            $errors[] = array('missing value' => "countryCode is required, use setCountryCode().");
+            $errors[] = ['missing value' => "countryCode is required, use setCountryCode()."];
         }
 
         return $errors;
@@ -89,10 +89,10 @@ class CreditAmountAccountCreditRequest extends AdminServiceRequest
     private function validateAmount($errors)
     {
         if (!isset($this->orderBuilder->amountIncVat) || $this->orderBuilder->amountIncVat <= 0) {
-            $errors[] = array('incorrect value' => "amountIncVat is too small.");
+            $errors[] = ['incorrect value' => "amountIncVat is too small."];
         } elseif (isset($this->orderBuilder->amountIncVat) &&
                   !(is_float($this->orderBuilder->amountIncVat) || is_int($this->orderBuilder->amountIncVat))) {
-            $errors[] = array('incorrect datatype' => "amountIncVat is not of type float or int.");
+            $errors[] = ['incorrect datatype' => "amountIncVat is not of type float or int."];
         }
 
         return $errors;
@@ -101,7 +101,7 @@ class CreditAmountAccountCreditRequest extends AdminServiceRequest
     protected function getAdminSoapOrderRowsFromBuilderOrderRowsUsingVatFlag($builderOrderRows, $priceIncludingVat = NULL)
     {
         $amount = 0;
-        $orderRows = array();
+        $orderRows = [];
         foreach ($builderOrderRows as $orderRow) {
             if (isset($orderRow->vatPercent) && isset($orderRow->amountExVat)) {
                 $amount = WebServiceRowFormatter::convertExVatToIncVat($orderRow->amountExVat, $orderRow->vatPercent);

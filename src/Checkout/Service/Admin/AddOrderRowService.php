@@ -32,10 +32,10 @@ class AddOrderRowService extends AdminImplementationService
     {
         $this->validate();
 
-        $requestData = array(
+        $requestData = [
             'orderId' => $this->adminBuilder->orderId,
             'orderRow' => $this->formatOrderRowValues()
-        );
+        ];
 
         return $requestData;
     }
@@ -53,7 +53,7 @@ class AddOrderRowService extends AdminImplementationService
 
     private function formatOrderRowValues()
     {
-        $requestOrderRow = array();
+        $requestOrderRow = [];
 
         $rowData = $this->adminBuilder->orderRows[0];
         foreach ($rowData as $orderRowKey => $orderRowValue) {

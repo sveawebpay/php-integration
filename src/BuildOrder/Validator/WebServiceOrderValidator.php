@@ -9,7 +9,7 @@ use Svea\WebPay\Config\ConfigurationProvider;
  */
 class WebServiceOrderValidator extends OrderValidator
 {
-    public $errors = array();
+    public $errors = [];
 
     protected $isCompany;
 

@@ -59,7 +59,7 @@ class DeliverOrdersRequest extends AdminServiceRequest
 
     public function validate()
     {
-        $errors = array();
+        $errors = [];
         $errors = $this->validateDistributionType($errors);
         $errors = $this->validateOrderId($errors);
         $errors = $this->validateOrderType($errors);
@@ -71,7 +71,7 @@ class DeliverOrdersRequest extends AdminServiceRequest
     private function validateDistributionType($errors)
     {
         if (isset($this->orderBuilder->distributionType) == FALSE) {
-            $errors[] = array('missing value' => "distributionType is required.");
+            $errors[] = ['missing value' => "distributionType is required."];
         }
         else
         {
@@ -79,7 +79,7 @@ class DeliverOrdersRequest extends AdminServiceRequest
             {
                 if(isset($this->orderBuilder->distributionType) == TRUE && $this->orderBuilder->distributionType == DistributionType::EINVOICEB2B && $this->orderBuilder->countryCode != "NO")
                 {
-                    $errors[] = array('incorrect value' => "distributionType EInvoiceB2B is only allowed for Norway.");
+                    $errors[] = ['incorrect value' => "distributionType EInvoiceB2B is only allowed for Norway."];
                 }
             }
         }
@@ -90,7 +90,7 @@ class DeliverOrdersRequest extends AdminServiceRequest
     private function validateOrderId($errors)
     {
         if (isset($this->orderBuilder->orderId) == FALSE) {
-            $errors[] = array('missing value' => "orderId is required.");
+            $errors[] = ['missing value' => "orderId is required."];
         }
 
         return $errors;
@@ -99,7 +99,7 @@ class DeliverOrdersRequest extends AdminServiceRequest
     private function validateOrderType($errors)
     {
         if (isset($this->orderBuilder->orderType) == FALSE) {
-            $errors[] = array('missing value' => "orderType is required.");
+            $errors[] = ['missing value' => "orderType is required."];
         }
 
         return $errors;
@@ -108,7 +108,7 @@ class DeliverOrdersRequest extends AdminServiceRequest
     private function validateCountryCode($errors)
     {
         if (isset($this->orderBuilder->countryCode) == FALSE) {
-            $errors[] = array('missing value' => "countryCode is required.");
+            $errors[] = ['missing value' => "countryCode is required."];
         }
 
         return $errors;

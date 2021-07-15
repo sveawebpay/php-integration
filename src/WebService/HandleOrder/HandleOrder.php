@@ -19,7 +19,7 @@ abstract class HandleOrder
      */
     public $orderBuilder;
 
-    public $errors = array();
+    public $errors = [];
 
     /**
      * @param CloseOrderBuilder|DeliverOrderBuilder $handleOrderBuilder

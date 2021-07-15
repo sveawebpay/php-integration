@@ -19,14 +19,14 @@ class PaymentPlanCalculatorTest extends TestCase
 
     protected function getInterestAndAmortizationFreeCampaign()
     {
-        $response = (object) array(
-            "GetPaymentPlanParamsEuResult" => (object)array (
+        $response = (object) [
+            "GetPaymentPlanParamsEuResult" => (object)[
                 "Accepted" => true,
                 "ResultCode" => 0,
-                "CampaignCodes" => (object)array(
-                    "CampaignCodeInfo" => array(
+                "CampaignCodes" => (object)[
+                    "CampaignCodeInfo" => [
                         0 =>
-                            (object)array(
+                            (object)[
                                 'CampaignCode' => 223060,
                                 'Description' => 'Köp nu betala om 3 månader (räntefritt)',
                                 'PaymentPlanType' => 'InterestAndAmortizationFree',
@@ -39,11 +39,11 @@ class PaymentPlanCalculatorTest extends TestCase
                                 'NumberOfPaymentFreeMonths' => 3,
                                 'FromAmount' => '1000',
                                 'ToAmount' => '50000',
-                            )
-                    )
-                )
-            )
-        );
+                            ]
+                    ]
+                ]
+            ]
+        ];
 
         $params = new PaymentPlanParamsResponse($response, false);
 
@@ -52,7 +52,7 @@ class PaymentPlanCalculatorTest extends TestCase
 
     protected function getInterestAndAmortizationFreeCampaignAsArray()
     {
-        return array (
+        return [
             'CampaignCode' => 223060,
             'Description' => 'Köp nu betala om 3 månader (räntefritt)',
             'PaymentPlanType' => 2,
@@ -65,19 +65,19 @@ class PaymentPlanCalculatorTest extends TestCase
             'NumberOfPaymentFreeMonths' => 3,
             'FromAmount' => 1000.0,
             'ToAmount' => 50000.0,
-        );
+        ];
     }
 
     protected function getInterestFreeCampaign()
     {
-        $response = (object) array(
-            "GetPaymentPlanParamsEuResult" => (object)array (
+        $response = (object) [
+            "GetPaymentPlanParamsEuResult" => (object)[
                 "Accepted" => true,
                 "ResultCode" => 0,
-                "CampaignCodes" => (object)array(
-                    "CampaignCodeInfo" => array(
+                "CampaignCodes" => (object)[
+                    "CampaignCodeInfo" => [
                         0 =>
-                            (object)array(
+                            (object)[
                                 'CampaignCode' => 310012,
                                 'Description' => 'Dela upp betalningen på 12 månader (räntefritt)',
                                 'PaymentPlanType' => 'InterestFree',
@@ -90,11 +90,11 @@ class PaymentPlanCalculatorTest extends TestCase
                                 'NumberOfPaymentFreeMonths' => 0,
                                 'FromAmount' => '1000',
                                 'ToAmount' => '30000',
-                            )
-                    )
-                )
-            )
-        );
+                            ]
+                    ]
+                ]
+            ]
+        ];
 
         $params = new PaymentPlanParamsResponse($response, false);
 
@@ -103,7 +103,7 @@ class PaymentPlanCalculatorTest extends TestCase
 
     protected function getFinnishInterestAndAmortizationFreeCampaignAsArray()
     {
-        return array (
+        return [
             'CampaignCode' => 220002,
             'Description' => 'OSTA NYT, MAKSA 3 KK PÄÄSTÄ',
             'PaymentPlanType' => 2,
@@ -116,12 +116,12 @@ class PaymentPlanCalculatorTest extends TestCase
             'NumberOfPaymentFreeMonths' => 3,
             'FromAmount' => 50.0,
             'ToAmount' => 5000.0,
-        );
+        ];
     }
 
     protected function getInterestFreeCampaignAsArray()
     {
-        return array (
+        return [
             'CampaignCode' => 310012,
             'Description' => 'Dela upp betalningen på 12 månader (räntefritt)',
             'PaymentPlanType' => 1,
@@ -134,12 +134,12 @@ class PaymentPlanCalculatorTest extends TestCase
             'NumberOfPaymentFreeMonths' => 0,
             'FromAmount' => 1000.0,
             'ToAmount' => 30000.0,
-        );
+        ];
     }
 
     protected function getFinnishInterestFreeCampaignAsArray()
     {
-        return array (
+        return [
             'CampaignCode' => 220001,
             'Description' => 'ERÄMAKSU 3 KK KOROTON',
             'PaymentPlanType' => 1,
@@ -152,19 +152,19 @@ class PaymentPlanCalculatorTest extends TestCase
             'NumberOfPaymentFreeMonths' => 0,
             'FromAmount' => 50.0,
             'ToAmount' => 1000.0,
-        );
+        ];
     }
 
     protected function getStandardCampaign()
     {
-        $response = (object) array(
-            "GetPaymentPlanParamsEuResult" => (object)array (
+        $response = (object) [
+            "GetPaymentPlanParamsEuResult" => (object)[
                 "Accepted" => true,
                 "ResultCode" => 0,
-                "CampaignCodes" => (object)array(
-                    "CampaignCodeInfo" => array(
+                "CampaignCodes" => (object)[
+                    "CampaignCodeInfo" => [
                         0 =>
-                            (object)array(
+                            (object)[
                                 "CampaignCode" => 213060,
                                 "Description" => "Dela upp betalningen på 60 månader",
                                 "PaymentPlanType" => "Standard",
@@ -177,11 +177,11 @@ class PaymentPlanCalculatorTest extends TestCase
                                 "NumberOfPaymentFreeMonths" => 3,
                                 "FromAmount" => '1000',
                                 "ToAmount" => '50000',
-                            )
-                    )
-                )
-            )
-        );
+                            ]
+                    ]
+                ]
+            ]
+        ];
 
         $params = new PaymentPlanParamsResponse($response, false);
 
@@ -190,7 +190,7 @@ class PaymentPlanCalculatorTest extends TestCase
 
     protected function getStandardCampaignAsArray()
     {
-        return array (
+        return [
             'CampaignCode' => 213060,
             'Description' => 'Dela upp betalningen på 60 månader',
             'PaymentPlanType' => 0,
@@ -203,12 +203,12 @@ class PaymentPlanCalculatorTest extends TestCase
             'NumberOfPaymentFreeMonths' => 3,
             'FromAmount' => 1000.0,
             'ToAmount' => 50000.0,
-        );
+        ];
     }
 
     protected function getFinnishStandardCampaignAsArray()
     {
-        return array (
+        return [
             'CampaignCode' => 220012,
             'Description' => 'ERÄMAKSU 12 KK 9.8%',
             'PaymentPlanType' => 0,
@@ -221,19 +221,19 @@ class PaymentPlanCalculatorTest extends TestCase
             'NumberOfPaymentFreeMonths' => 0,
             'FromAmount' => 50,
             'ToAmount' => 1000,
-        );
+        ];
     }
 
     protected function getMixedCampaigns()
     {
-        $response = (object) array(
-            "GetPaymentPlanParamsEuResult" => (object)array (
+        $response = (object) [
+            "GetPaymentPlanParamsEuResult" => (object)[
                 "Accepted" => true,
                 "ResultCode" => 0,
-                "CampaignCodes" => (object)array(
-                    "CampaignCodeInfo" => array(
+                "CampaignCodes" => (object)[
+                    "CampaignCodeInfo" => [
                         0 =>
-                            (object)array(
+                            (object)[
                                 "CampaignCode" => 213060,
                                 "Description" => "Dela upp betalningen på 60 månader",
                                 "PaymentPlanType" => "Standard",
@@ -246,9 +246,9 @@ class PaymentPlanCalculatorTest extends TestCase
                                 "NumberOfPaymentFreeMonths" => 3,
                                 "FromAmount" => '1000',
                                 "ToAmount" => '50000',
-                            ),
+                            ],
                         1 =>
-                            (object)array(
+                            (object)[
                                 'CampaignCode' => 222065,
                                 'Description' => 'Vårkampanj',
                                 'PaymentPlanType' => 'InterestAndAmortizationFree',
@@ -261,9 +261,9 @@ class PaymentPlanCalculatorTest extends TestCase
                                 'NumberOfPaymentFreeMonths' => 3,
                                 'FromAmount' => '120',
                                 'ToAmount' => '30000',
-                            ),
+                            ],
                         2 =>
-                            (object)array(
+                            (object)[
                                 'CampaignCode' => 222066,
                                 'Description' => 'Sommarkampanj',
                                 'PaymentPlanType' => 'InterestAndAmortizationFree',
@@ -276,9 +276,9 @@ class PaymentPlanCalculatorTest extends TestCase
                                 'NumberOfPaymentFreeMonths' => 3,
                                 'FromAmount' => '120',
                                 'ToAmount' => '30000',
-                            ),
+                            ],
                         3 =>
-                            (object)array(
+                            (object)[
                                 'CampaignCode' => 223060,
                                 'Description' => 'Köp nu betala om 3 månader (räntefritt)',
                                 'PaymentPlanType' => 'InterestAndAmortizationFree',
@@ -291,9 +291,9 @@ class PaymentPlanCalculatorTest extends TestCase
                                 'NumberOfPaymentFreeMonths' => 3,
                                 'FromAmount' => '1000',
                                 'ToAmount' => '50000',
-                            ),
+                            ],
                         4 =>
-                            (object)array(
+                            (object)[
                                 'CampaignCode' => 223065,
                                 'Description' => 'Black Friday - Cyber Monday',
                                 'PaymentPlanType' => 'InterestAndAmortizationFree',
@@ -306,9 +306,9 @@ class PaymentPlanCalculatorTest extends TestCase
                                 'NumberOfPaymentFreeMonths' => 3,
                                 'FromAmount' => '120',
                                 'ToAmount' => '30000',
-                            ),
+                            ],
                         5 =>
-                            (object)array(
+                            (object)[
                                 'CampaignCode' => 223066,
                                 'Description' => 'Julkampanj',
                                 'PaymentPlanType' => 'InterestAndAmortizationFree',
@@ -321,9 +321,9 @@ class PaymentPlanCalculatorTest extends TestCase
                                 'NumberOfPaymentFreeMonths' => 3,
                                 'FromAmount' => '120',
                                 'ToAmount' => '30000',
-                            ),
+                            ],
                         6 =>
-                            (object)array(
+                            (object)[
                                 'CampaignCode' => 310012,
                                 'Description' => 'Dela upp betalningen på 12 månader (räntefritt)',
                                 'PaymentPlanType' => 'InterestFree',
@@ -336,9 +336,9 @@ class PaymentPlanCalculatorTest extends TestCase
                                 'NumberOfPaymentFreeMonths' => 0,
                                 'FromAmount' => '1000',
                                 'ToAmount' => '30000',
-                            ),
+                            ],
                         7 =>
-                            (object)array(
+                            (object)[
                                 'CampaignCode' => 410012,
                                 'Description' => 'Dela upp betalningen på 12 månader',
                                 'PaymentPlanType' => 'Standard',
@@ -351,9 +351,9 @@ class PaymentPlanCalculatorTest extends TestCase
                                 'NumberOfPaymentFreeMonths' => 0,
                                 'FromAmount' => '100',
                                 'ToAmount' => '30000',
-                            ),
+                            ],
                         8 =>
-                            (object)array(
+                            (object)[
                                 'CampaignCode' => 410024,
                                 'Description' => 'Dela upp betalningen på 24 månader',
                                 'PaymentPlanType' => 'Standard',
@@ -366,11 +366,11 @@ class PaymentPlanCalculatorTest extends TestCase
                                 'NumberOfPaymentFreeMonths' => 0,
                                 'FromAmount' => '1000',
                                 'ToAmount' => '150000',
-                            )
-                    )
-                )
-            )
-        );
+                            ]
+                    ]
+                ]
+            ]
+        ];
 
         $params = new PaymentPlanParamsResponse($response, false);
 
@@ -379,9 +379,9 @@ class PaymentPlanCalculatorTest extends TestCase
 
     protected function getMixedCampaignsAsArray()
     {
-        return  array (
+        return  [
             0 =>
-                array (
+                [
                     'CampaignCode' => 213060,
                     'Description' => 'Dela upp betalningen på 60 månader',
                     'PaymentPlanType' => 0,
@@ -394,9 +394,9 @@ class PaymentPlanCalculatorTest extends TestCase
                     'NumberOfPaymentFreeMonths' => 3,
                     'FromAmount' => 1000.0,
                     'ToAmount' => 50000.0,
-                ),
+                ],
             1 =>
-                array (
+                [
                     'CampaignCode' => 222065,
                     'Description' => 'Vårkampanj',
                     'PaymentPlanType' => 2,
@@ -409,9 +409,9 @@ class PaymentPlanCalculatorTest extends TestCase
                     'NumberOfPaymentFreeMonths' => 3,
                     'FromAmount' => 120.0,
                     'ToAmount' => 30000.0,
-                ),
+                ],
             2 =>
-                array (
+                [
                     'CampaignCode' => 222066,
                     'Description' => 'Sommarkampanj',
                     'PaymentPlanType' => 2,
@@ -424,9 +424,9 @@ class PaymentPlanCalculatorTest extends TestCase
                     'NumberOfPaymentFreeMonths' => 3,
                     'FromAmount' => 120.0,
                     'ToAmount' => 30000.0,
-                ),
+                ],
             3 =>
-                array (
+                [
                     'CampaignCode' => 223060,
                     'Description' => 'Köp nu betala om 3 månader (räntefritt)',
                     'PaymentPlanType' => 2,
@@ -439,9 +439,9 @@ class PaymentPlanCalculatorTest extends TestCase
                     'NumberOfPaymentFreeMonths' => 3,
                     'FromAmount' => 1000.0,
                     'ToAmount' => 50000.0,
-                ),
+                ],
             4 =>
-                array (
+                [
                     'CampaignCode' => 223065,
                     'Description' => 'Black Friday - Cyber Monday',
                     'PaymentPlanType' => 2,
@@ -454,9 +454,9 @@ class PaymentPlanCalculatorTest extends TestCase
                     'NumberOfPaymentFreeMonths' => 3,
                     'FromAmount' => 120.0,
                     'ToAmount' => 30000.0,
-                ),
+                ],
             5 =>
-                array (
+                [
                     'CampaignCode' => 223066,
                     'Description' => 'Julkampanj',
                     'PaymentPlanType' => 2,
@@ -469,9 +469,9 @@ class PaymentPlanCalculatorTest extends TestCase
                     'NumberOfPaymentFreeMonths' => 3,
                     'FromAmount' => 120.0,
                     'ToAmount' => 30000.0,
-                ),
+                ],
             6 =>
-                array (
+                [
                     'CampaignCode' => 310012,
                     'Description' => 'Dela upp betalningen på 12 månader (räntefritt)',
                     'PaymentPlanType' => 1,
@@ -484,9 +484,9 @@ class PaymentPlanCalculatorTest extends TestCase
                     'NumberOfPaymentFreeMonths' => 0,
                     'FromAmount' => 1000.0,
                     'ToAmount' => 30000.0,
-                ),
+                ],
             7 =>
-                array (
+                [
                     'CampaignCode' => 410012,
                     'Description' => 'Dela upp betalningen på 12 månader',
                     'PaymentPlanType' => 0,
@@ -499,9 +499,9 @@ class PaymentPlanCalculatorTest extends TestCase
                     'NumberOfPaymentFreeMonths' => 0,
                     'FromAmount' => 100.0,
                     'ToAmount' => 30000.0,
-                ),
+                ],
             8 =>
-                array (
+                [
                     'CampaignCode' => 410024,
                     'Description' => 'Dela upp betalningen på 24 månader',
                     'PaymentPlanType' => 0,
@@ -514,9 +514,9 @@ class PaymentPlanCalculatorTest extends TestCase
                     'NumberOfPaymentFreeMonths' => 0,
                     'FromAmount' => 1000.0,
                     'ToAmount' => 150000.0,
-                ),
+                ],
             9 =>
-                array (
+                [
                     'CampaignCode' => 996699,
                     'Description' => 'Sommarkampanj',
                     'PaymentPlanType' => 1,
@@ -529,15 +529,15 @@ class PaymentPlanCalculatorTest extends TestCase
                     'NumberOfPaymentFreeMonths' => 3,
                     'FromAmount' => 500.0,
                     'ToAmount' => 50000.0,
-                ),
-        );
+                ],
+        ];
     }
 
     protected function getFinnishMixedCampaignsAsArray()
     {
-        return array (
+        return [
             0 =>
-                array (
+                [
                     'CampaignCode' => 220001,
                     'Description' => 'ERÄMAKSU 3 KK KOROTON',
                     'PaymentPlanType' => 1,
@@ -550,9 +550,9 @@ class PaymentPlanCalculatorTest extends TestCase
                     'NumberOfPaymentFreeMonths' => 0,
                     'FromAmount' => 50.0,
                     'ToAmount' => 1000.0,
-                ),
+                ],
             1 =>
-                array (
+                [
                     'CampaignCode' => 220003,
                     'Description' => 'ERÄMAKSU 3 KK, 9.8%',
                     'PaymentPlanType' => 0,
@@ -565,9 +565,9 @@ class PaymentPlanCalculatorTest extends TestCase
                     'NumberOfPaymentFreeMonths' => 0,
                     'FromAmount' => 50.0,
                     'ToAmount' => 1000.0,
-                ),
+                ],
             2 =>
-                array (
+                [
                     'CampaignCode' => 220006,
                     'Description' => 'ERÄMAKSU 6 KK, 9.8%',
                     'PaymentPlanType' => 0,
@@ -580,9 +580,9 @@ class PaymentPlanCalculatorTest extends TestCase
                     'NumberOfPaymentFreeMonths' => 0,
                     'FromAmount' => 50.0,
                     'ToAmount' => 1000.0,
-                ),
+                ],
             3 =>
-                array (
+                [
                     'CampaignCode' => 220012,
                     'Description' => 'ERÄMAKSU 12 KK 9.8%',
                     'PaymentPlanType' => 0,
@@ -595,9 +595,9 @@ class PaymentPlanCalculatorTest extends TestCase
                     'NumberOfPaymentFreeMonths' => 0,
                     'FromAmount' => 50.0,
                     'ToAmount' => 1000.0,
-                ),
+                ],
             4 =>
-                array (
+                [
                     'CampaignCode' => 220024,
                     'Description' => 'ERÄMAKSU 24 KK, 9.8',
                     'PaymentPlanType' => 0,
@@ -610,9 +610,9 @@ class PaymentPlanCalculatorTest extends TestCase
                     'NumberOfPaymentFreeMonths' => 0,
                     'FromAmount' => 50.0,
                     'ToAmount' => 1000.0,
-                ),
+                ],
             5 =>
-                array (
+                [
                     'CampaignCode' => 220002,
                     'Description' => 'OSTA NYT, MAKSA 3 KK PÄÄSTÄ',
                     'PaymentPlanType' => 2,
@@ -625,8 +625,8 @@ class PaymentPlanCalculatorTest extends TestCase
                     'NumberOfPaymentFreeMonths' => 3,
                     'FromAmount' => 50.0,
                     'ToAmount' => 5000.0,
-                ),
-        );
+                ],
+        ];
     }
 
     function test_InterestAndAmortizationFreePaymentPlanCalculator_getTotalAmountToPay()

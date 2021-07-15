@@ -66,7 +66,7 @@ class CreateOrderService extends CheckoutService
      */
     protected function mapCreateOrderData(CheckoutOrderBuilder $order)
     {
-        $data = array();
+        $data = [];
 
         /**
          * @var \Svea\WebPay\WebService\SveaSoap\SveaOrderRow [] $orderItems

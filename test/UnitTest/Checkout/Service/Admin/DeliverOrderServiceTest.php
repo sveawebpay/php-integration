@@ -11,7 +11,7 @@ class DeliverOrderServiceTest extends TestCase
     public function testPrepareDataWithOrderIdAsInteger()
     {
         $sveaCheckoutOrderId = 7383;
-        $orderRowIds = array(1, 3);
+        $orderRowIds = [1, 3];
         $testConfig = ConfigurationService::getTestConfig();
 
         $getOrderService = WebPayAdmin::deliverOrderRows($testConfig)
@@ -22,7 +22,7 @@ class DeliverOrderServiceTest extends TestCase
         $preparedData = $this->invokeMethod($getOrderService, 'prepareRequest');
 
         $this->assertEquals(7383, $preparedData['orderId']);
-        $this->assertEquals(array(1, 3), $preparedData['orderRowIds']);
+        $this->assertEquals([1, 3], $preparedData['orderRowIds']);
     }
 
     /**
@@ -48,7 +48,7 @@ class DeliverOrderServiceTest extends TestCase
     public function testPrepareDataWithOrderIdAsIntegerAndOrderRowIdsAsString()
     {
         $sveaCheckoutOrderId = 7383;
-        $orderRowIds = array('1', '3');
+        $orderRowIds = ['1', '3'];
         $testConfig = ConfigurationService::getTestConfig();
 
         $getOrderService = WebPayAdmin::deliverOrderRows($testConfig)
@@ -62,7 +62,7 @@ class DeliverOrderServiceTest extends TestCase
     public function testPrepareDataWithOrderIdAsIntegerAndOrderRowIdsAsInteger()
     {
         $sveaCheckoutOrderId = 7383;
-        $orderRowIds = array(1, 3);
+        $orderRowIds = [1, 3];
         $testConfig = ConfigurationService::getTestConfig();
 
         $getOrderService = WebPayAdmin::deliverOrderRows($testConfig)
@@ -72,9 +72,9 @@ class DeliverOrderServiceTest extends TestCase
 
         $preparedData = $this->invokeMethod($getOrderService, 'prepareRequest');
 
-        $this->assertEquals(array(
+        $this->assertEquals([
             'orderId' => 7383,
-            'orderRowIds' => array(1, 3)
-        ), $preparedData);
+            'orderRowIds' => [1, 3]
+        ], $preparedData);
     }
 }

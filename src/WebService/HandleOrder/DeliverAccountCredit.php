@@ -101,7 +101,7 @@ class DeliverAccountCredit extends HandleOrder
 
     public function validate($order)
     {
-        $errors = array();
+        $errors = [];
         $errors = $this->validateCountryCode($order, $errors);
         $errors = $this->validateOrderId($order, $errors);
         $errors = $this->validateInvoiceDetails($order, $errors);

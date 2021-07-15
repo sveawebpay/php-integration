@@ -21,7 +21,7 @@ class CancelOrderRowsRequestTest extends \PHPUnit\Framework\TestCase
         $this->builderObject->orderId = 123456;
         $this->builderObject->orderType = ConfigurationProvider::INVOICE_TYPE;
         $this->builderObject->countryCode = "SE";
-        $this->builderObject->rowsToCancel = array(1);
+        $this->builderObject->rowsToCancel = [1];
     }
 
     public function testClassExists()

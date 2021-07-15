@@ -23,7 +23,7 @@ class CheckoutRowFormatter extends WebServiceRowFormatter
      */
     public function formatRows()
     {
-        $this->newRows = array();
+        $this->newRows = [];
 
         $this->calculateTotals();
 

@@ -16,7 +16,7 @@ class CancelOrderRowService extends AdminImplementationService
      */
     public function validate()
     {
-        $errors = array();
+        $errors = [];
 
         $orderId = $this->adminBuilder->orderId;
         if (empty($orderId) || !is_int($orderId)) {
@@ -51,10 +51,10 @@ class CancelOrderRowService extends AdminImplementationService
         $this->validate();
 
         $orderRowId = $this->adminBuilder->rowsToCancel[0];
-        $requestData = array(
+        $requestData = [
             'orderId' => $this->adminBuilder->orderId,
             'orderRowId' => $orderRowId
-        );
+        ];
 
         return $requestData;
     }

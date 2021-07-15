@@ -30,7 +30,7 @@ class CheckoutRowFormatterTest extends TestCase
     {
         $row = $this->returnOrderRow();
 
-        $this->invokeMethod($this->formatter, 'formatOrderRows', array($row));
+        $this->invokeMethod($this->formatter, 'formatOrderRows', [$row]);
 
         $newRows = $this->getPrivateProperty($this->formatter, 'newRows');
 

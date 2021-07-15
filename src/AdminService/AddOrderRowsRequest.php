@@ -62,7 +62,7 @@ class AddOrderRowsRequest extends AdminServiceRequest
 
     public function validate()
     {
-        $errors = array();
+        $errors = [];
         $errors = $this->validateOrderId($errors);
         $errors = $this->validateOrderType($errors);
         $errors = $this->validateCountryCode($errors);
@@ -75,7 +75,7 @@ class AddOrderRowsRequest extends AdminServiceRequest
     private function validateOrderId($errors)
     {
         if (isset($this->orderBuilder->orderId) == FALSE) {
-            $errors[] = array('missing value' => "orderId is required.");
+            $errors[] = ['missing value' => "orderId is required."];
         }
 
         return $errors;
@@ -84,7 +84,7 @@ class AddOrderRowsRequest extends AdminServiceRequest
     private function validateOrderType($errors)
     {
         if (isset($this->orderBuilder->orderType) == FALSE) {
-            $errors[] = array('missing value' => "orderType is required.");
+            $errors[] = ['missing value' => "orderType is required."];
         }
 
         return $errors;
@@ -93,7 +93,7 @@ class AddOrderRowsRequest extends AdminServiceRequest
     private function validateCountryCode($errors)
     {
         if (isset($this->orderBuilder->countryCode) == FALSE) {
-            $errors[] = array('missing value' => "countryCode is required.");
+            $errors[] = ['missing value' => "countryCode is required."];
         }
 
         return $errors;
@@ -102,7 +102,7 @@ class AddOrderRowsRequest extends AdminServiceRequest
     private function validateRowsToAdd($errors)
     {
         if (isset($this->orderBuilder->orderRows) == FALSE) {
-            $errors[] = array('missing value' => "orderRows is required.");
+            $errors[] = ['missing value' => "orderRows is required."];
         }
 
         return $errors;
@@ -113,7 +113,7 @@ class AddOrderRowsRequest extends AdminServiceRequest
         if (isset($this->orderBuilder->orderRows)) {
             foreach ($this->orderBuilder->orderRows as $orderRow) {
                 if (!isset($orderRow->vatPercent) && (!isset($orderRow->amountIncVat) && !isset($orderRow->amountExVat))) {
-                    $errors[] = array('missing order row vat information' => "cannot calculate orderRow vatPercent, need at least two of amountExVat, amountIncVat and vatPercent.");
+                    $errors[] = ['missing order row vat information' => "cannot calculate orderRow vatPercent, need at least two of amountExVat, amountIncVat and vatPercent."];
                 }
             }
         }

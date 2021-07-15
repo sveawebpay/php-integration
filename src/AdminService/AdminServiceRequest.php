@@ -79,21 +79,21 @@ abstract class AdminServiceRequest
         $soapResponse = $soapClient->doSoapCall($this->action, $requestObject);
         if($this->orderBuilder->logging == true)
         {
-            $logs = array(
-                "logs" => array(
-                    "request" => array(
+            $logs = [
+                "logs" => [
+                    "request" => [
                         "timestamp" => $timestampStart,
                         "headers" => $soapClient->getClient()->__getLastRequestHeaders(),
                         "body" => htmlentities($soapClient->getClient()->__getLastRequest())
-                    ),
-                    "response" => array(
+                    ],
+                    "response" => [
                         "timestamp" => time(),
                         "headers" => $soapClient->getClient()->__getLastResponseHeaders(),
                         "body" => htmlentities($soapClient->getClient()->__getLastResponse()),
                         "dataAmount" => strlen($soapClient->getClient()->__getLastResponseHeaders()) + strlen($soapClient->getClient()->__getLastResponse()),
                         "duration" => round(microtime(true) - $microtimeStart, 3)
-                    )
-                ));
+                    ]
+                ]];
         }
         $sveaResponse = new SveaResponse($soapResponse, null, null, $this->action, isset($logs['logs']) ? $logs['logs'] : NULL);
         $response = $sveaResponse->getResponse();
@@ -171,7 +171,7 @@ abstract class AdminServiceRequest
     protected function getAdminSoapOrderRowsFromBuilderOrderRowsUsingVatFlag($builderOrderRows, $priceIncludingVat)
     {
         $amount = 0;
-        $orderRows = array();
+        $orderRows = [];
         foreach ($builderOrderRows as $orderRow) {
             if (isset($orderRow->vatPercent) && isset($orderRow->amountExVat)) {
                 $amount = $priceIncludingVat ? WebServiceRowFormatter::convertExVatToIncVat($orderRow->amountExVat, $orderRow->vatPercent) : $orderRow->amountExVat;
@@ -215,7 +215,7 @@ abstract class AdminServiceRequest
     protected function getAdminSoapNumberedOrderRowsFromBuilderOrderRowsUsingVatFlag($builderOrderRows, $priceIncludingVat)
     {
         $amount = 0;
-        $numberedOrderRows = array();
+        $numberedOrderRows = [];
         foreach ($builderOrderRows as $orderRow) {
             if (isset($orderRow->vatPercent) && isset($orderRow->amountExVat)) {
                 $amount = $priceIncludingVat ? WebServiceRowFormatter::convertExVatToIncVat($orderRow->amountExVat, $orderRow->vatPercent) : $orderRow->amountExVat;

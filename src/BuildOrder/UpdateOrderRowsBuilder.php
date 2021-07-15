@@ -65,7 +65,7 @@ class UpdateOrderRowsBuilder extends CheckoutAdminOrderBuilder
     public function __construct($config)
     {
         $this->conf = $config;
-        $this->numberedOrderRows = array();
+        $this->numberedOrderRows = [];
     }
 
     /**

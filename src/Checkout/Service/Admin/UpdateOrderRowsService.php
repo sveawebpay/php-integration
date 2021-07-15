@@ -32,11 +32,11 @@ class UpdateOrderRowsService extends AdminImplementationService
     {
         $this->validate();
 
-        $requestData = array(
+        $requestData = [
             'orderId' => $this->adminBuilder->orderId,
             'orderRowId' => $this->adminBuilder->numberedOrderRows[0]->rowNumber,
             'orderRow' => $this->formatOrderRowValues()
-        );
+        ];
 
         return $requestData;
     }
@@ -54,7 +54,7 @@ class UpdateOrderRowsService extends AdminImplementationService
 
     private function formatOrderRowValues()
     {
-        $requestOrderRow = array();
+        $requestOrderRow = [];
 
         $rowData = $this->adminBuilder->numberedOrderRows[0];
         foreach ($rowData as $orderRowKey => $orderRowValue) {

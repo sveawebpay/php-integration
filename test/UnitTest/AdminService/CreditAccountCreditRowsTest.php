@@ -18,8 +18,8 @@ class CreditAccountCreditRowsTest extends  \PHPUnit\Framework\TestCase
         $this->builderObject->orderId = 123456;
         $this->builderObject->orderType = ConfigurationProvider::ACCOUNTCREDIT_TYPE;
         $this->builderObject->countryCode = "SE";
-        $this->builderObject->rowsToCredit = array(TestUtil::createOrderRow(10.00));
-        $this->builderObject->creditOrderRows = array(TestUtil::createOrderRow(10.00));
+        $this->builderObject->rowsToCredit = [TestUtil::createOrderRow(10.00)];
+        $this->builderObject->creditOrderRows = [TestUtil::createOrderRow(10.00)];
     }
 
     public function testClassExists()
@@ -67,8 +67,8 @@ class CreditAccountCreditRowsTest extends  \PHPUnit\Framework\TestCase
      */
     public function test_validate_throws_exception_on_missing_RowsToCredit()
     {
-        $this->builderObject->rowsToCredit = array();
-        $this->builderObject->creditOrderRows = array();
+        $this->builderObject->rowsToCredit = [];
+        $this->builderObject->creditOrderRows = [];
         $creditRequest = new CreditAccountCreditRowsRequest($this->builderObject);
         $request = $creditRequest->prepareRequest();
     }

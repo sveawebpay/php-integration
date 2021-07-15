@@ -36,8 +36,8 @@ class CreditInvoiceRowsRequest extends AdminServiceRequest
     {
         $this->action = "CreditInvoiceRows";
         $this->orderBuilder = $creditOrderRowsBuilder;
-        $this->rowNumbers = array();
-        $this->orderRows = array();
+        $this->rowNumbers = [];
+        $this->orderRows = [];
     }
 
     /**
@@ -74,7 +74,7 @@ class CreditInvoiceRowsRequest extends AdminServiceRequest
 
     public function validate()
     {
-        $errors = array();
+        $errors = [];
         $errors = $this->validateInvoiceId($errors);
         $errors = $this->validateInvoiceDistributionType($errors);
         $errors = $this->validateOrderType($errors);
@@ -88,7 +88,7 @@ class CreditInvoiceRowsRequest extends AdminServiceRequest
     private function validateInvoiceId($errors)
     {
         if (isset($this->orderBuilder->invoiceId) == FALSE) {
-            $errors[] = array('missing value' => "invoiceId is required, use setInvoiceId().");
+            $errors[] = ['missing value' => "invoiceId is required, use setInvoiceId()."];
         }
 
         return $errors;
@@ -97,7 +97,7 @@ class CreditInvoiceRowsRequest extends AdminServiceRequest
     private function validateInvoiceDistributionType($errors)
     {
         if (isset($this->orderBuilder->distributionType) == FALSE) {
-            $errors[] = array('missing value' => "distributionType is required, use setInvoiceDistributionType().");
+            $errors[] = ['missing value' => "distributionType is required, use setInvoiceDistributionType()."];
         }
 
         return $errors;
@@ -106,7 +106,7 @@ class CreditInvoiceRowsRequest extends AdminServiceRequest
     private function validateOrderType($errors)
     {
         if (isset($this->orderBuilder->orderType) == FALSE) {
-            $errors[] = array('missing value' => "orderType is required.");
+            $errors[] = ['missing value' => "orderType is required."];
         }
 
         return $errors;
@@ -115,7 +115,7 @@ class CreditInvoiceRowsRequest extends AdminServiceRequest
     private function validateCountryCode($errors)
     {
         if (isset($this->orderBuilder->countryCode) == FALSE) {
-            $errors[] = array('missing value' => "countryCode is required, use setCountryCode().");
+            $errors[] = ['missing value' => "countryCode is required, use setCountryCode()."];
         }
 
         return $errors;
@@ -126,7 +126,7 @@ class CreditInvoiceRowsRequest extends AdminServiceRequest
         if ((count($this->orderBuilder->rowsToCredit) == 0) &&
             (count($this->orderBuilder->creditOrderRows) == 0)
         ) {
-            $errors[] = array('missing value' => "no rows to credit, use setRow(s)ToCredit() or addCreditOrderRow(s)().");
+            $errors[] = ['missing value' => "no rows to credit, use setRow(s)ToCredit() or addCreditOrderRow(s)()."];
         }
 
         return $errors;
@@ -136,7 +136,7 @@ class CreditInvoiceRowsRequest extends AdminServiceRequest
     {
         foreach ($this->orderBuilder->creditOrderRows as $orderRow) {
             if (!isset($orderRow->vatPercent) && (!isset($orderRow->amountIncVat) && !isset($orderRow->amountExVat))) {
-                $errors[] = array('missing order row vat information' => "cannot calculate orderRow vatPercent, need at least two of amountExVat, amountIncVat and vatPercent.");
+                $errors[] = ['missing order row vat information' => "cannot calculate orderRow vatPercent, need at least two of amountExVat, amountIncVat and vatPercent."];
             }
         }
 

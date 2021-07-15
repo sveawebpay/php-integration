@@ -49,15 +49,15 @@ class GetOrderServiceTest extends TestCase
          * @var QueryOrderBuilder|\PHPUnit_Framework_MockObject_MockObject $queryOrderBuilder
          */
         $queryOrderBuilder = $this->getMockBuilder('\Svea\WebPay\BuildOrder\QueryOrderBuilder')
-            ->setConstructorArgs(array($testConfig))
+            ->setConstructorArgs([$testConfig])
             ->getMock();
 
         /**
          * @var GetOrderService|\PHPUnit_Framework_MockObject_MockObject $getOrderServiceMock
          */
         $getOrderServiceMock = $this->getMockBuilder('\Svea\WebPay\Checkout\Service\Admin\GetOrderService')
-            ->setConstructorArgs(array($queryOrderBuilder))
-            ->setMethods(array('validate', 'prepareData', 'doRequest'))
+            ->setConstructorArgs([$queryOrderBuilder])
+            ->setMethods(['validate', 'prepareData', 'doRequest'])
             ->getMock();
 
         $getOrderServiceMock->expects($this->once())->method('prepareRequest');

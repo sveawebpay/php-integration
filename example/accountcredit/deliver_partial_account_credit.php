@@ -13,7 +13,7 @@ $svea_order_id = 1048734;
 
 $response = WebPayAdmin::deliverOrderRows(ConfigurationService::getDefaultConfig())
     ->setOrderId($svea_order_id)
-    ->setRowsToDeliver(array(8, 9))
+    ->setRowsToDeliver([8, 9])
     ->setCountryCode('SE')
     ->setInvoiceDistributionType(DistributionType::POST)
     ->deliverAccountCreditOrderRows()

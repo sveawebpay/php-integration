@@ -11,7 +11,7 @@ use Svea\WebPay\Checkout\Helper\CheckoutOrderBuilder;
  */
 class CreateOrderValidator extends OrderValidator
 {
-    public $errors = array();
+    public $errors = [];
 
     /**
      * @param CheckoutOrderBuilder $order

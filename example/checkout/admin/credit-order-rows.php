@@ -26,7 +26,7 @@ try {
      *
      * For crediting NewOrderRow look at credit-new-order-row.php example
      */
-    $creditOrderRowsBuilder->setRowsToCredit(array(3));
+    $creditOrderRowsBuilder->setRowsToCredit([3]);
 
     $response = $creditOrderRowsBuilder->creditCheckoutOrderRows()->doRequest();
 

@@ -42,7 +42,7 @@ class ConfirmTransaction extends HostedRequest
 
     protected function validateRequestAttributes()
     {
-        $errors = array();
+        $errors = [];
         $errors = $this->validateTransactionId($this, $errors);
         $errors = $this->validateCaptureDate($this, $errors);
 

@@ -94,7 +94,7 @@ class HostedPayment
     {
         $this->langCode = "en";
         $this->order = $order;
-        $this->request = array();
+        $this->request = [];
     }
 
     /**
@@ -338,11 +338,11 @@ class HostedPayment
         $mac = hash("sha512", base64_encode($message) . $secret);
 
         // encode the request elements
-        $fields = array(
+        $fields = [
             'merchantid' => urlencode($merchantId),
             'message' => urlencode(base64_encode($message)),
             'mac' => urlencode($mac)
-        );
+        ];
 
         // below taken from HostedRequest doRequest
         $fieldsString = "";

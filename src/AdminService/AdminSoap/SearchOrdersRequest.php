@@ -20,7 +20,7 @@ class SearchOrdersRequest
             "-", "--", "Authentication", "http://schemas.datacontract.org/2004/07/DataObjects.Admin.Service");
         // Settings -- optional, not sent by package
 
-        $list = array();
+        $list = [];
         foreach($accountsToRetrieve as $accountInfo)
         {
             $clientAccountCreditId = new SoapVar($accountInfo->clientAccountCreditId, XSD_LONG,

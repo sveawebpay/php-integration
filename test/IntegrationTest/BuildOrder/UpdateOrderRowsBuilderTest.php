@@ -135,7 +135,7 @@ class UpdateOrderRowsBuilderIntegrationTest extends \PHPUnit\Framework\TestCase
                 ->setStatus(NumberedOrderRow::ORDERROWSTATUS_NOTDELIVERED)
             )
             ->updateOrderRows(
-                array(
+                [
                     WebPayItem::numberedOrderRow()
                         ->setArticleNumber("20")
                         ->setQuantity(2)
@@ -159,7 +159,7 @@ class UpdateOrderRowsBuilderIntegrationTest extends \PHPUnit\Framework\TestCase
                         ->setDiscountPercent(1)
                         ->setRowNumber(3)
                         ->setStatus(NumberedOrderRow::ORDERROWSTATUS_NOTDELIVERED)
-                )
+                ]
             )
             ->updateInvoiceOrderRows()
             ->doRequest();
@@ -226,7 +226,7 @@ class UpdateOrderRowsBuilderIntegrationTest extends \PHPUnit\Framework\TestCase
                 ->setStatus(NumberedOrderRow::ORDERROWSTATUS_NOTDELIVERED)
             )
             ->updateOrderRows(
-                array(
+                [
                     WebPayItem::numberedOrderRow()
                         ->setArticleNumber("20")
                         ->setQuantity(2)
@@ -250,7 +250,7 @@ class UpdateOrderRowsBuilderIntegrationTest extends \PHPUnit\Framework\TestCase
                         ->setDiscountPercent(1)
                         ->setRowNumber(3)
                         ->setStatus(NumberedOrderRow::ORDERROWSTATUS_NOTDELIVERED)
-                )
+                ]
             )
             ->updatePaymentPlanOrderRows()
             ->doRequest();

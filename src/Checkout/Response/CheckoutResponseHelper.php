@@ -11,7 +11,7 @@ class CheckoutResponseHelper
         $response = $data;
 
         if (isset($response['Cart']['Items']) && is_array($response['Cart']['Items'])) {
-            $newItems  = array();
+            $newItems  = [];
             $cartItems = $response['Cart']['Items'];
 
             foreach ($cartItems as $item) {

@@ -226,7 +226,7 @@ class GetAddresses
 
     public function validate($getaddressesrequest)
     {
-        $errors = array();
+        $errors = [];
 
         // countrycode -> ssn/companyid -> check credentials
         $errors = $this->validateCountryCode($getaddressesrequest, $errors);
