@@ -25,9 +25,9 @@ $myResponse = new SveaResponse( $rawResponse, $countryCode, $myConfig );
 
 // abort if request failed
 if( $myResponse->getResponse()->accepted == 0 ) {
-    echo "<pre>Request failed. aborting";
-    print_r( $myResponse->getResponse() );
-    die;
+	echo "<pre>Request failed. aborting";
+	print_r( $myResponse->getResponse() );
+	die;
 }
 
 // The decoded response is available through the ->getResponse() method.
@@ -50,31 +50,31 @@ An example of a successful request response. The 'accepted' attribute is true (1
 
 Svea\WebPay\HostedService\HostedResponse\HostedPaymentResponse Object
 (
-    [transactionId] => 589739
-    [clientOrderNumber] => order #2014-11-20T14:48:28 01:00
-    [paymentMethod] => KORTCERT
-    [merchantId] => 1130
-    [amount] => 375
-    [currency] => SEK
-    [accepted] => 1
-    [resultcode] =>
-    [errormessage] =>
-    [cardType] => VISA
-    [maskedCardNumber] => 444433xxxxxx1100
-    [expiryMonth] => 01
-    [expiryYear] => 15
-    [authCode] => 204374
+	[transactionId] => 589739
+	[clientOrderNumber] => order #2014-11-20T14:48:28 01:00
+	[paymentMethod] => KORTCERT
+	[merchantId] => 1130
+	[amount] => 375
+	[currency] => SEK
+	[accepted] => 1
+	[resultcode] =>
+	[errormessage] =>
+	[cardType] => VISA
+	[maskedCardNumber] => 444433xxxxxx1100
+	[expiryMonth] => 01
+	[expiryYear] => 15
+	[authCode] => 204374
 )";
 
 /**
  * get the path to this file, for use in specifying the returnurl etc.
  */
 function getPath() {
-    $myURL = $_SERVER['SCRIPT_NAME'];
-    $myPath = explode('/', $myURL);
-    unset( $myPath[count($myPath)-1]);
-    $myPath = implode( '/', $myPath);
+	$myURL = $_SERVER['SCRIPT_NAME'];
+	$myPath = explode('/', $myURL);
+	unset( $myPath[count($myPath)-1]);
+	$myPath = implode( '/', $myPath);
 
-    return $myPath;
+	return $myPath;
 }
 ?>

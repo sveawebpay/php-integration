@@ -12,11 +12,11 @@ ini_set('display_errors', 'On');
 $svea_order_id = 1048734;
 
 $response = WebPayAdmin::deliverOrderRows(ConfigurationService::getDefaultConfig())
-    ->setOrderId($svea_order_id)
-    ->setRowsToDeliver([8, 9])
-    ->setCountryCode('SE')
-    ->setInvoiceDistributionType(DistributionType::POST)
-    ->deliverAccountCreditOrderRows()
-    ->doRequest();
+	->setOrderId($svea_order_id)
+	->setRowsToDeliver([8, 9])
+	->setCountryCode('SE')
+	->setInvoiceDistributionType(DistributionType::POST)
+	->deliverAccountCreditOrderRows()
+	->doRequest();
 
 var_dump($response);

@@ -10,14 +10,14 @@ use Svea\WebPay\BuildOrder\Validator\OrderValidator;
  */
 class GetAvailablePartPaymentCampaignsValidator extends OrderValidator
 {
-    public $errors = [];
+	public $errors = [];
 
-    public function validate($request)
-    {
-        $errors = $this->errors;
-        $errors = $this->validatePresetIsCompanyIsSet($request, $errors);
-        $errors = $this->validatePresetIsCompanyIsBoolean($request, $errors);
+	public function validate($request)
+	{
+		$errors = $this->errors;
+		$errors = $this->validatePresetIsCompanyIsSet($request, $errors);
+		$errors = $this->validatePresetIsCompanyIsBoolean($request, $errors);
 
-        return $errors;
-    }
+		return $errors;
+	}
 }

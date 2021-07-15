@@ -13,12 +13,12 @@ $sveaCheckoutOrderId = 204;
 
 // Cancel order
 try {
-    $response = WebPayAdmin::cancelOrder($testConfig)
-        ->setCheckoutOrderId($sveaCheckoutOrderId)
-        ->cancelCheckoutOrder()
-        ->doRequest();
-    var_dump($response);
+	$response = WebPayAdmin::cancelOrder($testConfig)
+		->setCheckoutOrderId($sveaCheckoutOrderId)
+		->cancelCheckoutOrder()
+		->doRequest();
+	var_dump($response);
 } catch (\Exception $ex) {
-    var_dump('Error message -> ' . $ex->getMessage());
-    var_dump('Error code -> ' . $ex->getCode());
+	var_dump('Error message -> ' . $ex->getMessage());
+	var_dump('Error code -> ' . $ex->getCode());
 }

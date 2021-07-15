@@ -11,124 +11,124 @@ use Svea\WebPay\BuildOrder\Validator\ValidationException;
  */
 class PresetValue
 {
-    const NATIONAL_ID = 'nationalId';
-    const EMAIL_ADDRESS = 'emailAddress';
-    const PHONE_NUMBER = 'phoneNumber';
-    const POSTAL_CODE = 'postalCode';
-    const IS_COMPANY = 'isCompany';
+	const NATIONAL_ID = 'nationalId';
+	const EMAIL_ADDRESS = 'emailAddress';
+	const PHONE_NUMBER = 'phoneNumber';
+	const POSTAL_CODE = 'postalCode';
+	const IS_COMPANY = 'isCompany';
 
-    /**
-     * @var string
-     */
-    protected $typeName;
+	/**
+	 * @var string
+	 */
+	protected $typeName;
 
-    /**
-     * @var mixed
-     */
-    protected $value;
+	/**
+	 * @var mixed
+	 */
+	protected $value;
 
-    /**
-     * @var bool
-     */
-    protected $isReadonly;
+	/**
+	 * @var bool
+	 */
+	protected $isReadonly;
 
-    /**
-     * @return string
-     */
-    public function getTypeName()
-    {
-        return $this->typeName;
-    }
+	/**
+	 * @return string
+	 */
+	public function getTypeName()
+	{
+		return $this->typeName;
+	}
 
-    /**
-     * @param string $typeName
-     * @return PresetValue
-     * @throws ValidationException
-     */
-    public function setTypeName($typeName)
-    {
-        $this->validateInput($typeName);
+	/**
+	 * @param string $typeName
+	 * @return PresetValue
+	 * @throws ValidationException
+	 */
+	public function setTypeName($typeName)
+	{
+		$this->validateInput($typeName);
 
-        $this->typeName = $typeName;
+		$this->typeName = $typeName;
 
-        return $this;
-    }
+		return $this;
+	}
 
-    /**
-     * @param $typeName
-     * @throws \Svea\WebPay\BuildOrder\Validator\ValidationException
-     */
-    private function validateInput($typeName)
-    {
-        $constantListValue = $this->getConstantListValues();
+	/**
+	 * @param $typeName
+	 * @throws \Svea\WebPay\BuildOrder\Validator\ValidationException
+	 */
+	private function validateInput($typeName)
+	{
+		$constantListValue = $this->getConstantListValues();
 
-        if (!in_array($typeName, $constantListValue)) {
-            throw new ValidationException('This Typename "' . $typeName . '" is not supported. Supported types are: ' .
-                join(', ', $constantListValue) . '.');
-        }
-    }
+		if (!in_array($typeName, $constantListValue)) {
+			throw new ValidationException('This Typename "' . $typeName . '" is not supported. Supported types are: ' .
+				join(', ', $constantListValue) . '.');
+		}
+	}
 
-    /**
-     * Return values of all defined constants in this class
-     *
-     * @return array
-     */
-    private function getConstantListValues()
-    {
-        $rc = new \ReflectionClass($this);
-        $constantList = array_values($rc->getConstants());
+	/**
+	 * Return values of all defined constants in this class
+	 *
+	 * @return array
+	 */
+	private function getConstantListValues()
+	{
+		$rc = new \ReflectionClass($this);
+		$constantList = array_values($rc->getConstants());
 
-        return $constantList;
-    }
+		return $constantList;
+	}
 
-    /**
-     * @return mixed
-     */
-    public function getValue()
-    {
-        return $this->value;
-    }
+	/**
+	 * @return mixed
+	 */
+	public function getValue()
+	{
+		return $this->value;
+	}
 
-    /**
-     * @param mixed $value
-     * @return PresetValue
-     */
-    public function setValue($value)
-    {
-        $this->value = $value;
+	/**
+	 * @param mixed $value
+	 * @return PresetValue
+	 */
+	public function setValue($value)
+	{
+		$this->value = $value;
 
-        return $this;
-    }
+		return $this;
+	}
 
-    /**
-     * @return boolean
-     */
-    public function isIsReadonly()
-    {
-        return $this->isReadonly;
-    }
+	/**
+	 * @return boolean
+	 */
+	public function isIsReadonly()
+	{
+		return $this->isReadonly;
+	}
 
-    /**
-     * @param boolean $isReadonly
-     * @return PresetValue
-     */
-    public function setIsReadonly($isReadonly)
-    {
-        $this->isReadonly = $isReadonly;
+	/**
+	 * @param boolean $isReadonly
+	 * @return PresetValue
+	 */
+	public function setIsReadonly($isReadonly)
+	{
+		$this->isReadonly = $isReadonly;
 
-        return $this;
-    }
+		return $this;
+	}
 
 
-    /**
-     * @return array
-     */
-    public function returnPresetArray()
-    {
-        return [
-            'typeName' => $this->typeName,
-            'value' => $this->value,
-            'isReadonly' => $this->isReadonly,
-        ];
-    }
+	/**
+	 * @return array
+	 */
+	public function returnPresetArray()
+	{
+		return [
+			'typeName' => $this->typeName,
+			'value' => $this->value,
+			'isReadonly' => $this->isReadonly,
+		];
+	}
 }

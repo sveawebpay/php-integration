@@ -15,61 +15,61 @@ use Svea\WebPay\WebService\SveaSoap\SveaCloseOrderInformation;
  */
 class CloseOrder extends HandleOrder
 {
-    /**
-     * @param CloseOrderBuilder $CloseOrderBuilder
-     */
-    public function __construct($CloseOrderBuilder)
-    {
-        parent::__construct($CloseOrderBuilder);
-    }
+	/**
+	 * @param CloseOrderBuilder $CloseOrderBuilder
+	 */
+	public function __construct($CloseOrderBuilder)
+	{
+		parent::__construct($CloseOrderBuilder);
+	}
 
-    /**
-     * Prepare and sends request
-     * @return type CloseOrderEuResponse
-     */
-    public function doRequest()
-    {
-        $requestObject = $this->prepareRequest();
-        $request = new SveaDoRequest($this->orderBuilder->conf, $this->orderBuilder->orderType, "CloseOrderEu", $requestObject, $this->orderBuilder->logging);
-        $responseObject = new SveaResponse($request->result['requestResult'], "", NULL, NULL, isset($request->result['logs']) ? $request->result['logs'] : NULL);
+	/**
+	 * Prepare and sends request
+	 * @return type CloseOrderEuResponse
+	 */
+	public function doRequest()
+	{
+		$requestObject = $this->prepareRequest();
+		$request = new SveaDoRequest($this->orderBuilder->conf, $this->orderBuilder->orderType, "CloseOrderEu", $requestObject, $this->orderBuilder->logging);
+		$responseObject = new SveaResponse($request->result['requestResult'], "", NULL, NULL, isset($request->result['logs']) ? $request->result['logs'] : NULL);
 
-        return $responseObject->response;
-    }
+		return $responseObject->response;
+	}
 
-    /**
-     * Returns prepared closeOrder request
-     * @return SveaRequest
-     */
-    public function prepareRequest()
-    {
-        $this->validateRequest();
+	/**
+	 * Returns prepared closeOrder request
+	 * @return SveaRequest
+	 */
+	public function prepareRequest()
+	{
+		$this->validateRequest();
 
-        $sveaCloseOrder = new SveaCloseOrder;
-        $sveaCloseOrder->Auth = $this->getStoreAuthorization();
-        $orderInfo = new SveaCloseOrderInformation();
-        $orderInfo->SveaOrderId = $this->orderBuilder->orderId;
-        $sveaCloseOrder->CloseOrderInformation = $orderInfo;
+		$sveaCloseOrder = new SveaCloseOrder;
+		$sveaCloseOrder->Auth = $this->getStoreAuthorization();
+		$orderInfo = new SveaCloseOrderInformation();
+		$orderInfo->SveaOrderId = $this->orderBuilder->orderId;
+		$sveaCloseOrder->CloseOrderInformation = $orderInfo;
 
-        $object = new SveaRequest();
-        $object->request = $sveaCloseOrder;
+		$object = new SveaRequest();
+		$object->request = $sveaCloseOrder;
 
-        return $object;
-    }
+		return $object;
+	}
 
-    public function validate($order)
-    {
-        $errors = [];
-        $errors = $this->validateOrderId($order, $errors);
+	public function validate($order)
+	{
+		$errors = [];
+		$errors = $this->validateOrderId($order, $errors);
 
-        return $errors;
-    }
+		return $errors;
+	}
 
-    private function validateOrderId($order, $errors)
-    {
-        if (isset($order->orderId) == FALSE) {
-            $errors['missing value'] = "OrderId is required. Use function setOrderId() with the SveaOrderId from the createOrder response.";
-        }
+	private function validateOrderId($order, $errors)
+	{
+		if (isset($order->orderId) == FALSE) {
+			$errors['missing value'] = "OrderId is required. Use function setOrderId() with the SveaOrderId from the createOrder response.";
+		}
 
-        return $errors;
-    }
+		return $errors;
+	}
 }

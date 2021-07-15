@@ -24,17 +24,17 @@ $myOrder = WebPay::createOrder($myConfig);
 
 // You then add information to the order object by using the methods in the Svea\CreateOrderBuilder class.
 // For a Card order, the following methods are required:
-$myOrder->setCountryCode("SE");                         // customer country, we recommend basing this on the customer billing address
-$myOrder->setCurrency("SEK");                           // order currency
+$myOrder->setCountryCode("SE");						 // customer country, we recommend basing this on the customer billing address
+$myOrder->setCurrency("SEK");						   // order currency
 $myOrder->setClientOrderNumber("order #" . date('c'));  // required - use a not previously sent client side order identifier, i.e. "order #20140519-371"
 
 // Add order item in a fluent fashion
 $myOrder->addOrderRow(
-    WebPayItem::orderRow()
-        ->setAmountExVat(100.00)
-        ->setVatPercent(25)
-        ->setQuantity(1)
-        ->setDescription("Monthly recurring fee")
+	WebPayItem::orderRow()
+		->setAmountExVat(100.00)
+		->setVatPercent(25)
+		->setQuantity(1)
+		->setDescription("Monthly recurring fee")
 );
 
 // We have now completed specifying the order, and wish to send the payment request to Svea. To do so, we first select a payment method.
@@ -45,12 +45,12 @@ $mySubscriptionId = file_get_contents("subscription.txt");
 
 if ($mySubscriptionId)
 {
-    $myRecurOrderRequest->setSubscriptionId($mySubscriptionId);
+	$myRecurOrderRequest->setSubscriptionId($mySubscriptionId);
 }
 else // or, abort if subscription.txt is missing
 {
-    echo "<pre>Error: subscription.txt not found, first run cardorder_recur.php to set up the card order subscription. aborting.";
-    die;
+	echo "<pre>Error: subscription.txt not found, first run cardorder_recur.php to set up the card order subscription. aborting.";
+	die;
 }
 
 // Send the recur payment request to Svea
@@ -65,11 +65,11 @@ print_r($myRecurOrderResponse);
  */
 function getPath()
 {
-    $myURL = $_SERVER['SCRIPT_NAME'];
-    $myPath = explode('/', $myURL);
-    unset($myPath[count($myPath) - 1]);
-    $myPath = implode('/', $myPath);
+	$myURL = $_SERVER['SCRIPT_NAME'];
+	$myPath = explode('/', $myURL);
+	unset($myPath[count($myPath) - 1]);
+	$myPath = implode('/', $myPath);
 
-    return $myPath;
+	return $myPath;
 }
 

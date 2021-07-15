@@ -10,10 +10,10 @@ use Svea\WebPay\BuildOrder\Validator\OrderValidator;
 class VoidValidator extends OrderValidator
 {
 
-    public $nrOfCalls = 0;
+	public $nrOfCalls = 0;
 
-    public function validate($order)
-    {
-        $this->nrOfCalls++;
-    }
+	public function validate($order)
+	{
+		$this->nrOfCalls++;
+	}
 }

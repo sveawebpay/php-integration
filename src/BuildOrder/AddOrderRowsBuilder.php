@@ -33,114 +33,114 @@ use Svea\WebPay\BuildOrder\Validator\ValidationException;
  */
 class AddOrderRowsBuilder extends CheckoutAdminOrderBuilder
 {
-    /**
-     * @var ConfigurationProvider $conf
-     */
-    public $conf;
+	/**
+	 * @var ConfigurationProvider $conf
+	 */
+	public $conf;
 
-    /**
-     * @var OrderRow[] $orderRows
-     */
-    public $orderRows;
+	/**
+	 * @var OrderRow[] $orderRows
+	 */
+	public $orderRows;
 
-    /**
-     * string $orderId  Svea order id to query, as returned in the createOrder request response,
-     * either a transactionId or a SveaOrderId
-     */
-    public $orderId;
+	/**
+	 * string $orderId  Svea order id to query, as returned in the createOrder request response,
+	 * either a transactionId or a SveaOrderId
+	 */
+	public $orderId;
 
-    /**
-     * @var string $countryCode
-     */
-    public $countryCode;
+	/**
+	 * @var string $countryCode
+	 */
+	public $countryCode;
 
-    /**
-     * @var string $orderType -- one of Svea\WebPay\Config\ConfigurationProvider::INVOICE_TYPE, ::PAYMENTPLAN_TYPE
-     */
-    public $orderType;
+	/**
+	 * @var string $orderType -- one of Svea\WebPay\Config\ConfigurationProvider::INVOICE_TYPE, ::PAYMENTPLAN_TYPE
+	 */
+	public $orderType;
 
 
-    /**
-     * AddOrderRowsBuilder constructor.
-     * @param $config
-     */
-    public function __construct($config)
-    {
-        parent::__construct($config);
-        $this->orderRows = [];
-    }
+	/**
+	 * AddOrderRowsBuilder constructor.
+	 * @param $config
+	 */
+	public function __construct($config)
+	{
+		parent::__construct($config);
+		$this->orderRows = [];
+	}
 
-    /**
-     * Required. Use SveaOrderId recieved with createOrder response.
-     * @param string $orderIdAsString
-     * @return $this
-     */
-    public function setOrderId($orderIdAsString) {
-        $this->orderId = $orderIdAsString;
-        return $this;
-    }
+	/**
+	 * Required. Use SveaOrderId recieved with createOrder response.
+	 * @param string $orderIdAsString
+	 * @return $this
+	 */
+	public function setOrderId($orderIdAsString) {
+		$this->orderId = $orderIdAsString;
+		return $this;
+	}
 
-    /**
-     * Required. Use same countryCode as in createOrder request.
-     * @param $countryCodeAsString
-     * @return $this
-     */
-    public function setCountryCode($countryCodeAsString)
-    {
-        $this->countryCode = $countryCodeAsString;
-        return $this;
-    }
+	/**
+	 * Required. Use same countryCode as in createOrder request.
+	 * @param $countryCodeAsString
+	 * @return $this
+	 */
+	public function setCountryCode($countryCodeAsString)
+	{
+		$this->countryCode = $countryCodeAsString;
+		return $this;
+	}
 
-    /**
-     * Required.
-     * @param OrderRow $row
-     * @return $this
-     */
-    public function addOrderRow($row)
-    {
-        $this->orderRows[] = $row;
-        return $this;
-    }
+	/**
+	 * Required.
+	 * @param OrderRow $row
+	 * @return $this
+	 */
+	public function addOrderRow($row)
+	{
+		$this->orderRows[] = $row;
+		return $this;
+	}
 
-    /**
-     * Convenience method to add several rows at once.
-     * @param \Svea\WebPay\BuildOrder\RowBuilders\OrderRow[] $rows
-     * @return $this
-     */
-    public function addOrderRows($rows)
-    {
-        $this->orderRows = array_merge($this->orderRows, $rows);
-        return $this;
-    }
+	/**
+	 * Convenience method to add several rows at once.
+	 * @param \Svea\WebPay\BuildOrder\RowBuilders\OrderRow[] $rows
+	 * @return $this
+	 */
+	public function addOrderRows($rows)
+	{
+		$this->orderRows = array_merge($this->orderRows, $rows);
+		return $this;
+	}
 
-    /**
-     * Use addInvoiceOrderRows() to add rows to an Invoice order using AdminServiceRequest AddOrderRows request
-     * @return AddOrderRowsRequest
-     */
-    public function addInvoiceOrderRows()
-    {
-        $this->orderType = ConfigurationProvider::INVOICE_TYPE;
-        return new AddOrderRowsRequest($this);
-    }
+	/**
+	 * Use addInvoiceOrderRows() to add rows to an Invoice order using AdminServiceRequest AddOrderRows request
+	 * @return AddOrderRowsRequest
+	 */
+	public function addInvoiceOrderRows()
+	{
+		$this->orderType = ConfigurationProvider::INVOICE_TYPE;
+		return new AddOrderRowsRequest($this);
+	}
 
-    /**
-     * Use addPaymentPlanOrderRows() to add rows to a PaymentPlan order using AdminServiceRequest AddOrderRows request
-     * @return AddOrderRowsRequest
-     */
-    public function addPaymentPlanOrderRows()
-    {
-        $this->orderType = ConfigurationProvider::PAYMENTPLAN_TYPE;
-        return new AddOrderRowsRequest($this);
-    }
+	/**
+	 * Use addPaymentPlanOrderRows() to add rows to a PaymentPlan order using AdminServiceRequest AddOrderRows request
+	 * @return AddOrderRowsRequest
+	 */
+	public function addPaymentPlanOrderRows()
+	{
+		$this->orderType = ConfigurationProvider::PAYMENTPLAN_TYPE;
+		return new AddOrderRowsRequest($this);
+	}
 
-    /**
-     * Use addCheckoutOrderRows() to add rows to a Checkout order
-     * @return AddOrderRowService
-     * @throws ValidationException
-     * @throws \Exception
-     */
-    public function addCheckoutOrderRows()
-    {
-        return new AddOrderRowService($this);
-    }
+	/**
+	 * Use addCheckoutOrderRows() to add rows to a Checkout order
+	 * @return AddOrderRowService
+	 * @throws ValidationException
+	 * @throws \Exception
+	 */
+	public function addCheckoutOrderRows()
+	{
+		return new AddOrderRowService($this);
+	}
 }

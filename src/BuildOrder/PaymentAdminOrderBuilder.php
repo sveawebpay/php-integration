@@ -11,84 +11,84 @@ use Svea\WebPay\BuildOrder\Validator\ValidationException;
  */
 class PaymentAdminOrderBuilder
 {
-    /**
-     * @var string $orderId
-     */
-    public $orderId;
+	/**
+	 * @var string $orderId
+	 */
+	public $orderId;
 
-    /**
-     * @var SveaConfigurationProvider
-     */
-    public $conf;
+	/**
+	 * @var SveaConfigurationProvider
+	 */
+	public $conf;
 
-    /**
-     * @var string $countryCode
-     */
-    public $countryCode;
+	/**
+	 * @var string $countryCode
+	 */
+	public $countryCode;
 
-    /**
-     * PaymentAdminOrderBuilder constructor.
-     * @param $configProvider
-     */
-    public function __construct($configProvider)
-    {
-        $this->conf = $configProvider;
-    }
+	/**
+	 * PaymentAdminOrderBuilder constructor.
+	 * @param $configProvider
+	 */
+	public function __construct($configProvider)
+	{
+		$this->conf = $configProvider;
+	}
 
 
 
-    /**
-     * @param $clientNumber
-     */
-    private function setClientNumberConfigurationValue($clientNumber)
-    {
-        $this->conf->setClientNumber($clientNumber);
-    }
+	/**
+	 * @param $clientNumber
+	 */
+	private function setClientNumberConfigurationValue($clientNumber)
+	{
+		$this->conf->setClientNumber($clientNumber);
+	}
 
-    /**
-     * @return mixed
-     */
-    public function getOrderId()
-    {
-        return $this->orderId;
-    }
+	/**
+	 * @return mixed
+	 */
+	public function getOrderId()
+	{
+		return $this->orderId;
+	}
 
-    /**
-     * @param mixed $orderId
-     * @return $this
-     */
-    public function setOrderId($orderId)
-    {
-        $this->orderId = $orderId;
-        return $this;
-    }
+	/**
+	 * @param mixed $orderId
+	 * @return $this
+	 */
+	public function setOrderId($orderId)
+	{
+		$this->orderId = $orderId;
+		return $this;
+	}
 
-    /**
-     * @return string
-     */
-    public function getCountryCode()
-    {
-        return $this->countryCode;
-    }
+	/**
+	 * @return string
+	 */
+	public function getCountryCode()
+	{
+		return $this->countryCode;
+	}
 
-    /**
-     * @param $countryCodeAsString
-     * @return $this
-     */
-    public function setCountryCode($countryCodeAsString)
-    {
-        $this->countryCode = $countryCodeAsString;
-        return $this;
-    }
+	/**
+	 * @param $countryCodeAsString
+	 * @return $this
+	 */
+	public function setCountryCode($countryCodeAsString)
+	{
+		$this->countryCode = $countryCodeAsString;
+		return $this;
+	}
 
-    /**
-     * Optional -- alias for setOrderId().
-     * @param string $transactionIdAsString
-     * @return $this
-     */
-    public function setTransactionId($transactionIdAsString)
-    {
-        return $this->setOrderId($transactionIdAsString);
-    }
+	/**
+	 * Optional -- alias for setOrderId().
+	 * @param string $transactionIdAsString
+	 * @return $this
+	 */
+	public function setTransactionId($transactionIdAsString)
+	{
+		return $this->setOrderId($transactionIdAsString);
+	}
 
 }

@@ -15,23 +15,23 @@ $sveaCheckoutOrderId = 51955;
 
 // Update order rows
 try {
-    $response = WebPayAdmin::updateOrderRows($testConfig)
-        ->setCheckoutOrderId($sveaCheckoutOrderId)
-        ->updateOrderRow(
-            WebPayItem::numberedOrderRow()
-                ->setRowId(4)
-                ->setName('someProd')
-                ->setVatPercent(6)
-                ->setDiscountPercent(50)
-                ->setAmountIncVat(123.9876)
-                ->setQuantity(4)
-                ->setUnit('pc')
-        )
-        ->updateCheckoutOrderRows()
-        ->doRequest();
+	$response = WebPayAdmin::updateOrderRows($testConfig)
+		->setCheckoutOrderId($sveaCheckoutOrderId)
+		->updateOrderRow(
+			WebPayItem::numberedOrderRow()
+				->setRowId(4)
+				->setName('someProd')
+				->setVatPercent(6)
+				->setDiscountPercent(50)
+				->setAmountIncVat(123.9876)
+				->setQuantity(4)
+				->setUnit('pc')
+		)
+		->updateCheckoutOrderRows()
+		->doRequest();
 
-    var_dump($response);
+	var_dump($response);
 } catch (\Exception $ex) {
-    var_dump('Error message -> ' . $ex->getMessage());
-    var_dump('Error code -> ' . $ex->getCode());
+	var_dump('Error message -> ' . $ex->getMessage());
+	var_dump('Error code -> ' . $ex->getCode());
 }

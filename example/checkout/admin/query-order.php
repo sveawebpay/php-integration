@@ -12,13 +12,13 @@ $testConfig = \Svea\WebPay\Config\ConfigurationService::getTestConfig();
 $sveaCheckoutOrderId = 51760;
 
 try {
-    $response = WebPayAdmin::queryOrder($testConfig)
-        ->setCheckoutOrderId($sveaCheckoutOrderId)
-        ->queryCheckoutOrder()
-        ->doRequest();
+	$response = WebPayAdmin::queryOrder($testConfig)
+		->setCheckoutOrderId($sveaCheckoutOrderId)
+		->queryCheckoutOrder()
+		->doRequest();
 
-    print_r($response);
+	print_r($response);
 } catch (\Exception $ex) {
-    var_dump('Error message -> ' . $ex->getMessage());
-    var_dump('Error code -> ' . $ex->getCode());
+	var_dump('Error message -> ' . $ex->getMessage());
+	var_dump('Error code -> ' . $ex->getCode());
 }

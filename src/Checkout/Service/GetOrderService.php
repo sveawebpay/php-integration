@@ -11,40 +11,40 @@ use Svea\WebPay\Checkout\Validation\GetOrderValidator;
  */
 class GetOrderService extends CheckoutService
 {
-    /**
-     * Send call Connection Library
-     * @return mixed
-     */
-    public function doRequest()
-    {
-        $this->prepareRequest();
+	/**
+	 * Send call Connection Library
+	 * @return mixed
+	 */
+	public function doRequest()
+	{
+		$this->prepareRequest();
 
-        $requestData = [
-            'orderId' => $this->order->getId()
-        ];
-        $response = $this->serviceConnection->get($requestData);
+		$requestData = [
+			'orderId' => $this->order->getId()
+		];
+		$response = $this->serviceConnection->get($requestData);
 
-        return $response;
-    }
+		return $response;
+	}
 
-    /**
-     * Validate order data
-     * @return array|mixed
-     */
-    protected function validateOrder()
-    {
-        $validator = new GetOrderValidator();
-        $errors = $validator->validate($this->order);
+	/**
+	 * Validate order data
+	 * @return array|mixed
+	 */
+	protected function validateOrder()
+	{
+		$validator = new GetOrderValidator();
+		$errors = $validator->validate($this->order);
 
-        return $errors;
-    }
+		return $errors;
+	}
 
-    /**
-     * @throws \Svea\WebPay\BuildOrder\Validator\ValidationException
-     */
-    protected function prepareRequest()
-    {
-        $errors = $this->validateOrder();
-        $this->processErrors($errors);
-    }
+	/**
+	 * @throws \Svea\WebPay\BuildOrder\Validator\ValidationException
+	 */
+	protected function prepareRequest()
+	{
+		$errors = $this->validateOrder();
+		$this->processErrors($errors);
+	}
 }

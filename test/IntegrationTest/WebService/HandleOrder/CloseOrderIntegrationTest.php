@@ -13,54 +13,54 @@ use Svea\WebPay\WebPayItem;
 class CloseOrderIntegrationTest extends \PHPUnit\Framework\TestCase
 {
 
-    /**
-     * Function to use in testfunctions
-     * @return integer SveaOrderId
-     */
-    private function getInvoiceOrderId()
-    {
-        $config = ConfigurationService::getDefaultConfig();
-        $request = WebPay::createOrder($config)
-            ->addOrderRow(TestUtil::createOrderRow())
-            ->addCustomerDetails(WebPayItem::individualCustomer()->setNationalIdNumber(194605092222))
-            ->setCountryCode("SE")
-            ->setCustomerReference("33")
-            ->setOrderDate("2012-12-12")
-            ->setCurrency("SEK")
-            ->useInvoicePayment()// returnerar InvoiceOrder object
-            //->setPasswordBasedAuthorization("sverigetest", "sverigetest", 79021)
-            ->doRequest();
+	/**
+	 * Function to use in testfunctions
+	 * @return integer SveaOrderId
+	 */
+	private function getInvoiceOrderId()
+	{
+		$config = ConfigurationService::getDefaultConfig();
+		$request = WebPay::createOrder($config)
+			->addOrderRow(TestUtil::createOrderRow())
+			->addCustomerDetails(WebPayItem::individualCustomer()->setNationalIdNumber(194605092222))
+			->setCountryCode("SE")
+			->setCustomerReference("33")
+			->setOrderDate("2012-12-12")
+			->setCurrency("SEK")
+			->useInvoicePayment()// returnerar InvoiceOrder object
+			//->setPasswordBasedAuthorization("sverigetest", "sverigetest", 79021)
+			->doRequest();
 
-        return $request->sveaOrderId;
-    }
+		return $request->sveaOrderId;
+	}
 
-    public function testCloseInvoiceOrder()
-    {
-        $config = ConfigurationService::getDefaultConfig();
-        $orderId = $this->getInvoiceOrderId();
-        $orderBuilder = WebPay::closeOrder($config);
-        $request = $orderBuilder
-            ->setOrderId($orderId)
-            ->setCountryCode("SE")
-            ->closeInvoiceOrder()
-            ->doRequest();
+	public function testCloseInvoiceOrder()
+	{
+		$config = ConfigurationService::getDefaultConfig();
+		$orderId = $this->getInvoiceOrderId();
+		$orderBuilder = WebPay::closeOrder($config);
+		$request = $orderBuilder
+			->setOrderId($orderId)
+			->setCountryCode("SE")
+			->closeInvoiceOrder()
+			->doRequest();
 
-        $this->assertEquals(1, $request->accepted);
-        $this->assertEquals(0, $request->resultcode);
-    }
+		$this->assertEquals(1, $request->accepted);
+		$this->assertEquals(0, $request->resultcode);
+	}
 
-    /**
-     * @expectedException \Svea\WebPay\BuildOrder\Validator\ValidationException
-     */
-    public function testCloseInvoiceOrder_missing_setOrderId_throws_ValidationException()
-    {
-        $config = ConfigurationService::getDefaultConfig();
-        $orderId = $this->getInvoiceOrderId();
-        $orderBuilder = WebPay::closeOrder($config);
-        $request = $orderBuilder
-//                ->setOrderId($orderId)
-            ->setCountryCode("SE")
-            ->closeInvoiceOrder()
-            ->doRequest();
-    }
+	/**
+	 * @expectedException \Svea\WebPay\BuildOrder\Validator\ValidationException
+	 */
+	public function testCloseInvoiceOrder_missing_setOrderId_throws_ValidationException()
+	{
+		$config = ConfigurationService::getDefaultConfig();
+		$orderId = $this->getInvoiceOrderId();
+		$orderBuilder = WebPay::closeOrder($config);
+		$request = $orderBuilder
+//				->setOrderId($orderId)
+			->setCountryCode("SE")
+			->closeInvoiceOrder()
+			->doRequest();
+	}
 }

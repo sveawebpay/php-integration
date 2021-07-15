@@ -14,65 +14,65 @@ use Svea\WebPay\HostedService\HostedResponse\HostedAdminResponse\CancelRecurSubs
  */
 class CancelRecurSubscription extends HostedRequest
 {
-    /*
-     * @var string $conf ConfigurationProvider $conf
-     */
-    public $conf;
+	/*
+	 * @var string $conf ConfigurationProvider $conf
+	 */
+	public $conf;
 
-    /**
-     * @var string $subscriptionId Required. This is the subscription id returned with the initial transaction that set up the subscription response.
-     */
-    public $subscriptionId;
+	/**
+	 * @var string $subscriptionId Required. This is the subscription id returned with the initial transaction that set up the subscription response.
+	 */
+	public $subscriptionId;
 
-    /**
-     * Usage: create an instance, set all required attributes, then call doRequest().
-     * Required: $subscriptionId
-     * @param ConfigurationProvider $config instance implementing Svea\WebPay\Config\ConfigurationProvider
-     */
-    function __construct($config)
-    {
-        $this->method = "cancelrecursubscription";
-        parent::__construct($config);
-    }
+	/**
+	 * Usage: create an instance, set all required attributes, then call doRequest().
+	 * Required: $subscriptionId
+	 * @param ConfigurationProvider $config instance implementing Svea\WebPay\Config\ConfigurationProvider
+	 */
+	function __construct($config)
+	{
+		$this->method = "cancelrecursubscription";
+		parent::__construct($config);
+	}
 
-    protected function validateRequestAttributes()
-    {
-        $errors = [];
-        $errors = $this->validateSubscriptionId($this, $errors);
+	protected function validateRequestAttributes()
+	{
+		$errors = [];
+		$errors = $this->validateSubscriptionId($this, $errors);
 
-        return $errors;
-    }
+		return $errors;
+	}
 
-    private function validateSubscriptionId($self, $errors)
-    {
-        if (isset($self->subscriptionId) == FALSE) {
-            $errors['missing value'] = "subscriptionId is required. Use function setSubscriptionId() with the subscriptionId from the createOrder response.";
-        }
+	private function validateSubscriptionId($self, $errors)
+	{
+		if (isset($self->subscriptionId) == FALSE) {
+			$errors['missing value'] = "subscriptionId is required. Use function setSubscriptionId() with the subscriptionId from the createOrder response.";
+		}
 
-        return $errors;
-    }
+		return $errors;
+	}
 
-    protected function createRequestXml()
-    {
-        $XMLWriter = new \XMLWriter();
+	protected function createRequestXml()
+	{
+		$XMLWriter = new \XMLWriter();
 
-        $XMLWriter->openMemory();
-        $XMLWriter->setIndent(true);
-        $XMLWriter->startDocument("1.0", "UTF-8");
-        $XMLWriter->writeComment(Helper::getLibraryAndPlatformPropertiesAsJson($this->config));
-        $XMLWriter->startElement($this->method);
-        $XMLWriter->writeElement("subscriptionid", $this->subscriptionId);
-        $XMLWriter->endElement();
-        $XMLWriter->endDocument();
+		$XMLWriter->openMemory();
+		$XMLWriter->setIndent(true);
+		$XMLWriter->startDocument("1.0", "UTF-8");
+		$XMLWriter->writeComment(Helper::getLibraryAndPlatformPropertiesAsJson($this->config));
+		$XMLWriter->startElement($this->method);
+		$XMLWriter->writeElement("subscriptionid", $this->subscriptionId);
+		$XMLWriter->endElement();
+		$XMLWriter->endDocument();
 
-        return $XMLWriter->flush();
-    }
+		return $XMLWriter->flush();
+	}
 
-    protected function parseResponse($message)
-    {
-        $countryCode = $this->countryCode;
-        $config = $this->config;
+	protected function parseResponse($message)
+	{
+		$countryCode = $this->countryCode;
+		$config = $this->config;
 
-        return new CancelRecurSubscriptionResponse($message, $countryCode, $config);
-    }
+		return new CancelRecurSubscriptionResponse($message, $countryCode, $config);
+	}
 }

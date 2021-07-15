@@ -10,23 +10,23 @@ namespace Svea\WebPay\WebService\SveaSoap;
  */
 class SveaAuth
 {
-    public $Username;
+	public $Username;
 
-    public $Password;
+	public $Password;
 
-    public $ClientNumber;
+	public $ClientNumber;
 
-    /**
-     * creates a SveaAuth instance w/the given username, password & clientnumber
-     *
-     * @param string $Username
-     * @param string $Password
-     * @param string $ClientNumber
-     */
-    function __construct($Username = NULL, $Password = NULL, $ClientNumber = NULL)
-    {
-        if ($Username) $this->Username = $Username;
-        if ($Password) $this->Password = $Password;
-        if ($ClientNumber) $this->ClientNumber = $ClientNumber;
-    }
+	/**
+	 * creates a SveaAuth instance w/the given username, password & clientnumber
+	 *
+	 * @param string $Username
+	 * @param string $Password
+	 * @param string $ClientNumber
+	 */
+	function __construct($Username = NULL, $Password = NULL, $ClientNumber = NULL)
+	{
+		if ($Username) $this->Username = $Username;
+		if ($Password) $this->Password = $Password;
+		if ($ClientNumber) $this->ClientNumber = $ClientNumber;
+	}
 }

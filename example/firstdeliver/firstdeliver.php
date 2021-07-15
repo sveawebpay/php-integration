@@ -20,8 +20,8 @@ $myConfig = \Svea\WebPay\Config\ConfigurationService::getTestConfig();
 
 $mySveaOrderId = file_get_contents("../firstorder/sveaorderid.txt");
 if (!$mySveaOrderId) {
-    print_r("../firstorder/sveaorderid.txt not found, run firstorder.php first. aborting.");
-    die();
+	print_r("../firstorder/sveaorderid.txt not found, run firstorder.php first. aborting.");
+	die();
 }
 
 // Begin the order creation process by creating an order builder object using the Svea\WebPay\WebPay::createOrder() method:
@@ -51,13 +51,13 @@ An example of a successful request response. The 'accepted' attribute is true (1
 
 Svea\WebPay\AdminService\AdminServiceResponse\DeliverOrdersResponse Object
 (
-    [accepted] => 1
-    [resultcode] => 0
-    [errormessage] =>
-    [amount] => 876.24
-    [orderType] => Invoice
-    [invoiceId] => 1028004
-    [contractNumber] =>
+	[accepted] => 1
+	[resultcode] => 0
+	[errormessage] =>
+	[amount] => 876.24
+	[orderType] => Invoice
+	[invoiceId] => 1028004
+	[contractNumber] =>
 )";
 
 echo "</pre><font color='red'><pre>\n
@@ -66,12 +66,12 @@ An example of a rejected request response -- 'accepted' is false (0) and resultc
 
 Svea\WebPay\AdminService\AdminServiceResponse\DeliverOrdersResponse Object
 (
-    [accepted] => 0
-    [resultcode] => 20000
-    [errormessage] => Order is closed.
-    [amount] =>
-    [orderType] =>
-    [invoiceId] =>
-    [contractNumber] =>
+	[accepted] => 0
+	[resultcode] => 20000
+	[errormessage] => Order is closed.
+	[amount] =>
+	[orderType] =>
+	[invoiceId] =>
+	[contractNumber] =>
 )";
 

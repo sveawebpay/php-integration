@@ -8,73 +8,73 @@ use Svea\WebPay\Test\UnitTest\Checkout\TestCase;
 
 class DeliverOrderServiceTest extends TestCase
 {
-    public function testPrepareDataWithOrderIdAsInteger()
-    {
-        $sveaCheckoutOrderId = 7383;
-        $orderRowIds = [1, 3];
-        $testConfig = ConfigurationService::getTestConfig();
+	public function testPrepareDataWithOrderIdAsInteger()
+	{
+		$sveaCheckoutOrderId = 7383;
+		$orderRowIds = [1, 3];
+		$testConfig = ConfigurationService::getTestConfig();
 
-        $getOrderService = WebPayAdmin::deliverOrderRows($testConfig)
-            ->setCheckoutOrderId($sveaCheckoutOrderId)
-            ->setRowsToDeliver($orderRowIds)
-            ->deliverCheckoutOrderRows();
+		$getOrderService = WebPayAdmin::deliverOrderRows($testConfig)
+			->setCheckoutOrderId($sveaCheckoutOrderId)
+			->setRowsToDeliver($orderRowIds)
+			->deliverCheckoutOrderRows();
 
-        $preparedData = $this->invokeMethod($getOrderService, 'prepareRequest');
+		$preparedData = $this->invokeMethod($getOrderService, 'prepareRequest');
 
-        $this->assertEquals(7383, $preparedData['orderId']);
-        $this->assertEquals([1, 3], $preparedData['orderRowIds']);
-    }
+		$this->assertEquals(7383, $preparedData['orderId']);
+		$this->assertEquals([1, 3], $preparedData['orderRowIds']);
+	}
 
-    /**
-     * @expectedException \Svea\WebPay\BuildOrder\Validator\ValidationException
-     * @expectedExceptionMessage incorrect Order Id : Order Id can't be empty and must be Integer
-     */
-    public function testPrepareDataWithOrderIdAsString()
-    {
-        $sveaCheckoutOrderId = '7383';
-        $testConfig = ConfigurationService::getTestConfig();
+	/**
+	 * @expectedException \Svea\WebPay\BuildOrder\Validator\ValidationException
+	 * @expectedExceptionMessage incorrect Order Id : Order Id can't be empty and must be Integer
+	 */
+	public function testPrepareDataWithOrderIdAsString()
+	{
+		$sveaCheckoutOrderId = '7383';
+		$testConfig = ConfigurationService::getTestConfig();
 
-        $getOrderService = WebPayAdmin::deliverOrderRows($testConfig)
-            ->setCheckoutOrderId($sveaCheckoutOrderId)
-            ->deliverCheckoutOrderRows();
+		$getOrderService = WebPayAdmin::deliverOrderRows($testConfig)
+			->setCheckoutOrderId($sveaCheckoutOrderId)
+			->deliverCheckoutOrderRows();
 
-        $this->invokeMethod($getOrderService, 'prepareRequest');
-    }
+		$this->invokeMethod($getOrderService, 'prepareRequest');
+	}
 
-    /**
-     * @expectedException \Svea\WebPay\BuildOrder\Validator\ValidationException
-     * @expectedExceptionMessage incorrect Order Row Id : Order Row Id can't be empty and must be Integer
-     */
-    public function testPrepareDataWithOrderIdAsIntegerAndOrderRowIdsAsString()
-    {
-        $sveaCheckoutOrderId = 7383;
-        $orderRowIds = ['1', '3'];
-        $testConfig = ConfigurationService::getTestConfig();
+	/**
+	 * @expectedException \Svea\WebPay\BuildOrder\Validator\ValidationException
+	 * @expectedExceptionMessage incorrect Order Row Id : Order Row Id can't be empty and must be Integer
+	 */
+	public function testPrepareDataWithOrderIdAsIntegerAndOrderRowIdsAsString()
+	{
+		$sveaCheckoutOrderId = 7383;
+		$orderRowIds = ['1', '3'];
+		$testConfig = ConfigurationService::getTestConfig();
 
-        $getOrderService = WebPayAdmin::deliverOrderRows($testConfig)
-            ->setCheckoutOrderId($sveaCheckoutOrderId)
-            ->setRowsToDeliver($orderRowIds)
-            ->deliverCheckoutOrderRows();
+		$getOrderService = WebPayAdmin::deliverOrderRows($testConfig)
+			->setCheckoutOrderId($sveaCheckoutOrderId)
+			->setRowsToDeliver($orderRowIds)
+			->deliverCheckoutOrderRows();
 
-        $this->invokeMethod($getOrderService, 'prepareRequest');
-    }
+		$this->invokeMethod($getOrderService, 'prepareRequest');
+	}
 
-    public function testPrepareDataWithOrderIdAsIntegerAndOrderRowIdsAsInteger()
-    {
-        $sveaCheckoutOrderId = 7383;
-        $orderRowIds = [1, 3];
-        $testConfig = ConfigurationService::getTestConfig();
+	public function testPrepareDataWithOrderIdAsIntegerAndOrderRowIdsAsInteger()
+	{
+		$sveaCheckoutOrderId = 7383;
+		$orderRowIds = [1, 3];
+		$testConfig = ConfigurationService::getTestConfig();
 
-        $getOrderService = WebPayAdmin::deliverOrderRows($testConfig)
-            ->setCheckoutOrderId($sveaCheckoutOrderId)
-            ->setRowsToDeliver($orderRowIds)
-            ->deliverCheckoutOrderRows();
+		$getOrderService = WebPayAdmin::deliverOrderRows($testConfig)
+			->setCheckoutOrderId($sveaCheckoutOrderId)
+			->setRowsToDeliver($orderRowIds)
+			->deliverCheckoutOrderRows();
 
-        $preparedData = $this->invokeMethod($getOrderService, 'prepareRequest');
+		$preparedData = $this->invokeMethod($getOrderService, 'prepareRequest');
 
-        $this->assertEquals([
-            'orderId' => 7383,
-            'orderRowIds' => [1, 3]
-        ], $preparedData);
-    }
+		$this->assertEquals([
+			'orderId' => 7383,
+			'orderRowIds' => [1, 3]
+		], $preparedData);
+	}
 }

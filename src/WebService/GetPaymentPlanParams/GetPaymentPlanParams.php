@@ -22,66 +22,66 @@ use Svea\WebPay\WebService\SveaSoap\SveaRequest;
  */
 class GetPaymentPlanParams
 {
-    public $testmode = false;
-    public $object;
-    public $conf;
-    public $countryCode;
-    public $logging;
+	public $testmode = false;
+	public $object;
+	public $conf;
+	public $countryCode;
+	public $logging;
 
-    function __construct($config)
-    {
-        $this->conf = $config;
-    }
+	function __construct($config)
+	{
+		$this->conf = $config;
+	}
 
-    /*
-     * Enables raw HTTP logs
-     */
-    public function enableLogging($logging)
-    {
-        $this->logging = $logging;
-    }
-    /**
-     * Required
-     *
-     * @param string $countryCodeAsString
-     * @return $this
-     */
-    public function setCountryCode($countryCodeAsString)
-    {
-        $this->countryCode = $countryCodeAsString;
+	/*
+	 * Enables raw HTTP logs
+	 */
+	public function enableLogging($logging)
+	{
+		$this->logging = $logging;
+	}
+	/**
+	 * Required
+	 *
+	 * @param string $countryCodeAsString
+	 * @return $this
+	 */
+	public function setCountryCode($countryCodeAsString)
+	{
+		$this->countryCode = $countryCodeAsString;
 
-        return $this;
-    }
+		return $this;
+	}
 
-    /**
-     * Prepares and sends request
-     *
-     * @return \Svea\WebPay\WebService\WebServiceResponse\PaymentPlanParamsResponse
-     */
-    public function doRequest()
-    {
-        $requestObject = $this->prepareRequest();
-        $request = new SveaDoRequest($this->conf, ConfigurationProvider::PAYMENTPLAN_TYPE, "GetPaymentPlanParamsEu", $requestObject, $this->logging);
+	/**
+	 * Prepares and sends request
+	 *
+	 * @return \Svea\WebPay\WebService\WebServiceResponse\PaymentPlanParamsResponse
+	 */
+	public function doRequest()
+	{
+		$requestObject = $this->prepareRequest();
+		$request = new SveaDoRequest($this->conf, ConfigurationProvider::PAYMENTPLAN_TYPE, "GetPaymentPlanParamsEu", $requestObject, $this->logging);
 
-        $responseObject = new SveaResponse($request->result['requestResult'], "", NULL, NULL, isset($request->result['logs']) ? $request->result['logs'] : NULL);
+		$responseObject = new SveaResponse($request->result['requestResult'], "", NULL, NULL, isset($request->result['logs']) ? $request->result['logs'] : NULL);
 
-        return $responseObject->response;
-    }
+		return $responseObject->response;
+	}
 
-    /**
-     * @return SveaRequest
-     */
-    public function prepareRequest()
-    {
-        $auth = new SveaAuth(
-            $this->conf->getUsername(ConfigurationProvider::PAYMENTPLAN_TYPE, $this->countryCode),
-            $this->conf->getPassword(ConfigurationProvider::PAYMENTPLAN_TYPE, $this->countryCode),
-            $this->conf->getClientNumber(ConfigurationProvider::PAYMENTPLAN_TYPE, $this->countryCode)
-        );
+	/**
+	 * @return SveaRequest
+	 */
+	public function prepareRequest()
+	{
+		$auth = new SveaAuth(
+			$this->conf->getUsername(ConfigurationProvider::PAYMENTPLAN_TYPE, $this->countryCode),
+			$this->conf->getPassword(ConfigurationProvider::PAYMENTPLAN_TYPE, $this->countryCode),
+			$this->conf->getClientNumber(ConfigurationProvider::PAYMENTPLAN_TYPE, $this->countryCode)
+		);
 
-        $object = new SveaRequest();
-        $object->request = (object)["Auth" => $auth];
+		$object = new SveaRequest();
+		$object->request = (object)["Auth" => $auth];
 
-        return $object;
-    }
+		return $object;
+	}
 }

@@ -38,13 +38,13 @@ $myOrder = WebPay::createOrder($myConfig);
 
 // You then add information to the order object by using the methods in the Svea\WebPay\BuildOrder\CreateOrderBuilder class.
 // For an Invoice order, the following methods are required:
-$myOrder->setCountryCode("SE");                         // customer country, we recommend basing this on the customer billing address
-//$myOrder->setCurrency("SEK");                           // order currency
+$myOrder->setCountryCode("SE");						 // customer country, we recommend basing this on the customer billing address
+//$myOrder->setCurrency("SEK");						   // order currency
 // You may also chain fluent methods together:
 $myOrder
-//        ->setClientOrderNumber("order #20140519-375")   // optional - use a not previously sent client side order identifier, i.e. "order #20140519-371"
-//        ->setCustomerReference("customer #123")         // optional - This should contain a customer reference, as in "customer #123".
-    ->setOrderDate("2014-05-28")                    // required - or use an ISO8601 date as produced by i.e. date('c')
+//		->setClientOrderNumber("order #20140519-375")   // optional - use a not previously sent client side order identifier, i.e. "order #20140519-371"
+//		->setCustomerReference("customer #123")		 // optional - This should contain a customer reference, as in "customer #123".
+	->setOrderDate("2014-05-28")					// required - or use an ISO8601 date as produced by i.e. date('c')
 ;
 // Then specify the items bought as order rows, using the methods in the Svea\WebPay\BuildOrder\RowBuilders\OrderRow class, and adding them to the order:
 $firstBoughtItem = WebPayItem::orderRow();
@@ -59,11 +59,11 @@ $myOrder->addOrderRow($firstBoughtItem);
 
 // Add secondBoughtItem in a fluent fashion
 $myOrder->addOrderRow(
-    WebPayItem::orderRow()
-        ->setAmountIncVat(5.00)
-        ->setVatPercent(12)
-        ->setQuantity(2)
-        ->setDescription("Korv med bröd")
+	WebPayItem::orderRow()
+		->setAmountIncVat(5.00)
+		->setVatPercent(12)
+		->setQuantity(2)
+		->setDescription("Korv med bröd")
 );
 
 // Next, we create a customer identity object, note that for invoice orders Svea overrides any given address w/verified credit report address in the response.
@@ -96,31 +96,31 @@ An example of a successful request response. The 'accepted' attribute is true (1
 
 Svea\WebPay\WebService\WebServiceResponse\CreateOrderResponse Object
 (
-    [sveaOrderId] => 503312
-    [sveaWillBuyOrder] => 1
-    [amount] => 23.73
-    [expirationDate] => 2015-03-10T00:00:00+01:00
-    [clientOrderNumber] =>
-    [orderType] => Invoice
-    [customerIdentity] => Svea\WebPay\WebService\WebServiceResponse\CustomerIdentity\CreateOrderIdentity Object
-        (
-            [email] =>
-            [ipAddress] =>
-            [countryCode] => SE
-            [houseNumber] =>
-            [customerType] => Individual
-            [nationalIdNumber] => 194605092222
-            [phoneNumber] =>
-            [fullName] => Persson, Tess T
-            [street] => Testgatan 1
-            [coAddress] => c/o Eriksson, Erik
-            [zipCode] => 99999
-            [locality] => Stan
-        )
+	[sveaOrderId] => 503312
+	[sveaWillBuyOrder] => 1
+	[amount] => 23.73
+	[expirationDate] => 2015-03-10T00:00:00+01:00
+	[clientOrderNumber] =>
+	[orderType] => Invoice
+	[customerIdentity] => Svea\WebPay\WebService\WebServiceResponse\CustomerIdentity\CreateOrderIdentity Object
+		(
+			[email] =>
+			[ipAddress] =>
+			[countryCode] => SE
+			[houseNumber] =>
+			[customerType] => Individual
+			[nationalIdNumber] => 194605092222
+			[phoneNumber] =>
+			[fullName] => Persson, Tess T
+			[street] => Testgatan 1
+			[coAddress] => c/o Eriksson, Erik
+			[zipCode] => 99999
+			[locality] => Stan
+		)
 
-    [accepted] => 1
-    [errormessage] =>
-    [resultcode] => 0
+	[accepted] => 1
+	[errormessage] =>
+	[resultcode] => 0
 )
 </pre>";
 
