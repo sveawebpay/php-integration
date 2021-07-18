@@ -15,6 +15,6 @@ $ppCampaign = WebPay::getPaymentPlanParams(ConfigurationService::getDefaultConfi
 $ppCampaign->enableLogging(true);
 
 $campaigns = $ppCampaign->setCountryCode('SE')
-    ->doRequest();
+	->doRequest();
 
 echo "<pre>" . print_r($campaigns, true) . "</pre>";

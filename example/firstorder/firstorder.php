@@ -17,7 +17,7 @@ ini_set('display_errors', 'On');
 // get configuration object holding the Svea service login credentials
 $myConfig = ConfigurationService::getTestConfig();
 
-// We assume that you've collected the following information about the order in your shop: 
+// We assume that you've collected the following information about the order in your shop:
 // The shop cart contains one item "Billy" which cost 700,99 kr excluding vat (25%).
 // When selecting to pay using the invoice payment method, the customer has also provided their social security number, which is required for invoice orders.
 
@@ -37,14 +37,14 @@ $boughtItem->setAmountExVat(0.01);
 $boughtItem->setVatPercent(0);
 $boughtItem->setQuantity(1);
 
-// Add the order rows to the order: 
+// Add the order rows to the order:
 $myOrder->addOrderRow($boughtItem);
 
 // Next, we create a customer identity object, for invoice orders Svea will look up the customer address et al based on the social security number
 $customerInformation = WebPayItem::individualCustomer();
 $customerInformation->setNationalIdNumber("194605092222");
 
-// Add the customer to the order: 
+// Add the customer to the order:
 $myOrder->addCustomerDetails($customerInformation);
 
 // We have now completed specifying the order, and wish to send the payment request to Svea. To do so, we first select the invoice payment method:
@@ -55,9 +55,9 @@ $myResponse = $myInvoiceOrderRequest->doRequest();
 
 // Check the response attribute 'accepted' for true to see if the request succeeded, if not, see the attributes resultcode and/or errormessage
 if ($myResponse->accepted == true) {
-    // save the sveaOrderId to a file, for use in firstdeliver.php
-    $myFirstOrderId = $myResponse->sveaOrderId;
-    file_put_contents("sveaorderid.txt", $myFirstOrderId);
+	// save the sveaOrderId to a file, for use in firstdeliver.php
+	$myFirstOrderId = $myResponse->sveaOrderId;
+	file_put_contents("sveaorderid.txt", $myFirstOrderId);
 };
 
 echo "<pre>Your request response (the customerIdentity contains the verified invoice address, which should match the order shipping address used):\n\n";
@@ -72,29 +72,29 @@ An example of a successful request response. The 'accepted' attribute is true (1
 
 Svea\WebPay\WebService\WebServiceResponse\CreateOrderResponse Object
 (
-    [sveaOrderId] => 362168
-    [sveaWillBuyOrder] => 1
-    [amount] => 876.24
-    [expirationDate] => 2014-08-16T00:00:00+02:00
-    [accepted] => 1
-    [errormessage] => 
-    [resultcode] => 0
-    [orderType] => Invoice
-    [customerIdentity] => Svea\WebPay\WebService\WebServiceResponse\CustomerIdentity\CreateOrderIdentity Object
-        (
-            [email] => 
-            [ipAddress] => 
-            [countryCode] => SE
-            [houseNumber] => 
-            [customerType] => Individual
-            [nationalIdNumber] => 194605092222
-            [phoneNumber] => 
-            [fullName] => Persson, Tess T
-            [street] => Testgatan 1
-            [coAddress] => c/o Eriksson, Erik
-            [zipCode] => 99999
-            [locality] => Stan
-        )
+	[sveaOrderId] => 362168
+	[sveaWillBuyOrder] => 1
+	[amount] => 876.24
+	[expirationDate] => 2014-08-16T00:00:00+02:00
+	[accepted] => 1
+	[errormessage] =>
+	[resultcode] => 0
+	[orderType] => Invoice
+	[customerIdentity] => Svea\WebPay\WebService\WebServiceResponse\CustomerIdentity\CreateOrderIdentity Object
+		(
+			[email] =>
+			[ipAddress] =>
+			[countryCode] => SE
+			[houseNumber] =>
+			[customerType] => Individual
+			[nationalIdNumber] => 194605092222
+			[phoneNumber] =>
+			[fullName] => Persson, Tess T
+			[street] => Testgatan 1
+			[coAddress] => c/o Eriksson, Erik
+			[zipCode] => 99999
+			[locality] => Stan
+		)
 
 )";
 

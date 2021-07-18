@@ -10,5 +10,5 @@ namespace Svea\WebPay\AdminService\AdminServiceResponse;
  */
 class DeliverPartialResponse extends DeliverOrdersResponse
 {
-    
+
 }

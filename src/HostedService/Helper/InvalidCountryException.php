@@ -6,5 +6,5 @@ use Exception;
 
 class InvalidCountryException extends Exception
 {
-    // \Exception referes to class Exception outside our \Svea\ namespace
+	// \Exception referes to class Exception outside our \Svea\ namespace
 }

@@ -7,22 +7,22 @@ namespace Svea\WebPay\WebService\WebServiceResponse\CustomerIdentity;
  */
 class CreateOrderIdentity extends CustomerIdentityResponse
 {
-    public $email;
-    public $ipAddress;
-    public $countryCode;
-    public $houseNumber;
+	public $email;
+	public $ipAddress;
+	public $countryCode;
+	public $houseNumber;
 
-    /**
-     * CreateOrderIdentity constructor.
-     * @param object $customer
-     */
-    function __construct($customer)
-    {
-        $this->email = isset($customer->Email) ? $customer->Email : "";
-        $this->ipAddress = isset($customer->IpAddress) ? $customer->IpAddress : "";
-        $this->countryCode = isset($customer->CountryCode) ? $customer->CountryCode : "";
-        $this->houseNumber = isset($customer->HouseNumber) ? $customer->HouseNumber : "";
+	/**
+	 * CreateOrderIdentity constructor.
+	 * @param object $customer
+	 */
+	function __construct($customer)
+	{
+		$this->email = isset($customer->Email) ? $customer->Email : "";
+		$this->ipAddress = isset($customer->IpAddress) ? $customer->IpAddress : "";
+		$this->countryCode = isset($customer->CountryCode) ? $customer->CountryCode : "";
+		$this->houseNumber = isset($customer->HouseNumber) ? $customer->HouseNumber : "";
 
-        parent::__construct($customer);
-    }
+		parent::__construct($customer);
+	}
 }

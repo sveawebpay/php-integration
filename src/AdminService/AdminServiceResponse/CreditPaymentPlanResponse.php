@@ -9,21 +9,21 @@ namespace Svea\WebPay\AdminService\AdminServiceResponse;
  */
 class CreditPaymentPlanResponse extends AdminServiceResponse
 {
-    /**
-     * CreditPaymentPlanResponse constructor.
-     * @param $message
-     * @param $logs
-     */
-    function __construct($message, $logs)
-    {
-        $this->formatObject($message, $logs);
-    }
+	/**
+	 * CreditPaymentPlanResponse constructor.
+	 * @param $message
+	 * @param $logs
+	 */
+	function __construct($message, $logs)
+	{
+		$this->formatObject($message, $logs);
+	}
 }
 
 // raw response message example:
 //
 //stdClass Object
 //(
-//    [ErrorMessage] =>
-//    [ResultCode] => 0
+//	[ErrorMessage] =>
+//	[ResultCode] => 0
 //)

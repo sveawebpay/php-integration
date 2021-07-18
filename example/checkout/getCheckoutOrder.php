@@ -19,11 +19,11 @@ $myConfig = ConfigurationService::getTestConfig();
 $orderBuilder = WebPay::checkout($myConfig);
 
 $orderBuilder->setCheckoutOrderId(51721)
-    ->setCountryCode('SE'); // optional line of code
+	->setCountryCode('SE'); // optional line of code
 
 try {
-    $response = $orderBuilder->getOrder();
-    echo "<pre>" . print_r($response, true) ."</pre>";
+	$response = $orderBuilder->getOrder();
+	echo "<pre>" . print_r($response, true) ."</pre>";
 } catch (\Exception $e) {
-    echo "<pre>" . print_r($e->getMessage(), true) . "</pre>";
+	echo "<pre>" . print_r($e->getMessage(), true) . "</pre>";
 }

@@ -35,109 +35,109 @@ use Svea\WebPay\BuildOrder\Validator\ValidationException;
  */
 class UpdateOrderRowsBuilder extends CheckoutAdminOrderBuilder
 {
-    /**
-     * @var ConfigurationProvider $conf
-     */
-    public $conf;
+	/**
+	 * @var ConfigurationProvider $conf
+	 */
+	public $conf;
 
-    /**
-     * @var NumberedOrderRow[] $numberedOrderRows the updated order rows
-     */
-    public $numberedOrderRows;
+	/**
+	 * @var NumberedOrderRow[] $numberedOrderRows the updated order rows
+	 */
+	public $numberedOrderRows;
 
-    /**
-     * string $orderId  Svea order id to query, as returned in the createOrder request response,
-     * either a transactionId or a SveaOrderId
-     */
-    public $orderId;
+	/**
+	 * string $orderId  Svea order id to query, as returned in the createOrder request response,
+	 * either a transactionId or a SveaOrderId
+	 */
+	public $orderId;
 
-    /** @var string $countryCode */
-    public $countryCode;
+	/** @var string $countryCode */
+	public $countryCode;
 
-    /** @var string $orderType -- one of Svea\WebPay\Config\ConfigurationProvider::INVOICE_TYPE, ::PAYMENTPLAN_TYPE */
-    public $orderType;
+	/** @var string $orderType -- one of Svea\WebPay\Config\ConfigurationProvider::INVOICE_TYPE, ::PAYMENTPLAN_TYPE */
+	public $orderType;
 
 
-    /**
-     * UpdateOrderRowsBuilder constructor.
-     * @param $config
-     */
-    public function __construct($config)
-    {
-        $this->conf = $config;
-        $this->numberedOrderRows = array();
-    }
+	/**
+	 * UpdateOrderRowsBuilder constructor.
+	 * @param $config
+	 */
+	public function __construct($config)
+	{
+		$this->conf = $config;
+		$this->numberedOrderRows = [];
+	}
 
-    /**
-     * Required. Use SveaOrderId recieved with createOrder response.
-     * @param string $orderIdAsString
-     * @return $this
-     */
-    public function setOrderId($orderIdAsString) {
-        $this->orderId = $orderIdAsString;
-        return $this;
-    }
+	/**
+	 * Required. Use SveaOrderId recieved with createOrder response.
+	 * @param string $orderIdAsString
+	 * @return $this
+	 */
+	public function setOrderId($orderIdAsString) {
+		$this->orderId = $orderIdAsString;
+		return $this;
+	}
 
-    /**
-     * Required. Use same countryCode as in createOrder request.
-     * @param string $countryCodeAsString
-     * @return $this
-     */
-    public function setCountryCode($countryCodeAsString)
-    {
-        $this->countryCode = $countryCodeAsString;
+	/**
+	 * Required. Use same countryCode as in createOrder request.
+	 * @param string $countryCodeAsString
+	 * @return $this
+	 */
+	public function setCountryCode($countryCodeAsString)
+	{
+		$this->countryCode = $countryCodeAsString;
 
-        return $this;
-    }
+		return $this;
+	}
 
-    /**
-     * Required.
-     * @param NumberedOrderRow $row
-     * @return $this
-     */
-    public function updateOrderRow($row)
-    {
-        $this->numberedOrderRows[] = $row;
+	/**
+	 * Required.
+	 * @param NumberedOrderRow $row
+	 * @return $this
+	 */
+	public function updateOrderRow($row)
+	{
+		$this->numberedOrderRows[] = $row;
 
-        return $this;
-    }
+		return $this;
+	}
 
-    /**
-     * Convenience method to add several rows at once.
-     * @param NumberedOrderRow[] $rows
-     * @return $this
-     */
-    public function updateOrderRows($rows)
-    {
-        $this->numberedOrderRows = array_merge($this->numberedOrderRows, $rows);
+	/**
+	 * Convenience method to add several rows at once.
+	 * @param NumberedOrderRow[] $rows
+	 * @return $this
+	 */
+	public function updateOrderRows($rows)
+	{
+		$this->numberedOrderRows = array_merge($this->numberedOrderRows, $rows);
 
-        return $this;
-    }
+		return $this;
+	}
 
-    /**
-     * Use updateInvoiceOrderRows() to update an Invoice order using AdminServiceRequest UpdateOrderRows request
-     * @return UpdateOrderRowsRequest
-     */
-    public function updateInvoiceOrderRows()
-    {
-        $this->orderType = ConfigurationProvider::INVOICE_TYPE;
+	/**
+	 * Use updateInvoiceOrderRows() to update an Invoice order using AdminServiceRequest UpdateOrderRows request
+	 * @return UpdateOrderRowsRequest
+	 */
+	public function updateInvoiceOrderRows()
+	{
+		$this->orderType = ConfigurationProvider::INVOICE_TYPE;
 
-        return new UpdateOrderRowsRequest($this);
-    }
+		return new UpdateOrderRowsRequest($this);
+	}
 
-    /**
-     * Use updatePaymentPlanOrderRows() to update a PaymentPlan order using AdminServiceRequest UpdateOrderRows request
-     * @return UpdateOrderRowsRequest
-     */
-    public function updatePaymentPlanOrderRows()
-    {
-        $this->orderType = ConfigurationProvider::PAYMENTPLAN_TYPE;
+	/**
+	 * Use updatePaymentPlanOrderRows() to update a PaymentPlan order using AdminServiceRequest UpdateOrderRows request
+	 * @return UpdateOrderRowsRequest
+	 */
+	public function updatePaymentPlanOrderRows()
+	{
+		$this->orderType = ConfigurationProvider::PAYMENTPLAN_TYPE;
 
-        return new UpdateOrderRowsRequest($this);
-    }
+		return new UpdateOrderRowsRequest($this);
+	}
 
-    public function updateCheckoutOrderRows()
-    {
-        return new UpdateOrderRowsService($this);
-    }
+	public function updateCheckoutOrderRows()
+	{
+		return new UpdateOrderRowsService($this);
+	}
 }

@@ -11,61 +11,61 @@ use Svea\WebPay\Checkout\Validation\UpdateOrderValidator;
  */
 class UpdateOrderService extends CheckoutService
 {
-    public $requestObject;
+	public $requestObject;
 
-    /**
-     * Send call Connection Library
-     */
-    public function doRequest()
-    {
-        $requestData = $this->prepareRequest();
-        
-        $response = $this->serviceConnection->update($requestData);
+	/**
+	 * Send call Connection Library
+	 */
+	public function doRequest()
+	{
+		$requestData = $this->prepareRequest();
 
-        return $response;
-    }
+		$response = $this->serviceConnection->update($requestData);
 
-    /**
-     * Process Order for request data for Svea Checkout API
-     * @return array
-     * @throws \Svea\WebPay\BuildOrder\Validator\ValidationException
-     */
-    protected function prepareRequest()
-    {
-        $errors = $this->validateOrder();
-        $this->processErrors($errors);
-        $data = $this->mapCreateOrderData($this->order);
+		return $response;
+	}
 
-        return $data;
-    }
+	/**
+	 * Process Order for request data for Svea Checkout API
+	 * @return array
+	 * @throws \Svea\WebPay\BuildOrder\Validator\ValidationException
+	 */
+	protected function prepareRequest()
+	{
+		$errors = $this->validateOrder();
+		$this->processErrors($errors);
+		$data = $this->mapCreateOrderData($this->order);
 
-    /**
-     * Validate order data
-     */
-    protected function validateOrder()
-    {
-        $validator = new UpdateOrderValidator();
-        $errors = $validator->validate($this->order);
+		return $data;
+	}
 
-        return $errors;
-    }
+	/**
+	 * Validate order data
+	 */
+	protected function validateOrder()
+	{
+		$validator = new UpdateOrderValidator();
+		$errors = $validator->validate($this->order);
 
-    /**
-     * Map Order to array
-     * @param CheckoutOrderBuilder $order
-     * @return array
-     */
-    protected function mapCreateOrderData(CheckoutOrderBuilder $order)
-    {
-        $data = array();
-        $orderItems = $this->formatOrderInformationWithOrderRows();
+		return $errors;
+	}
 
-        foreach ($orderItems as $item) {
-            $data['cart']['items'][] = $this->mapOrderItem($item);
-        }
+	/**
+	 * Map Order to array
+	 * @param CheckoutOrderBuilder $order
+	 * @return array
+	 */
+	protected function mapCreateOrderData(CheckoutOrderBuilder $order)
+	{
+		$data = [];
+		$orderItems = $this->formatOrderInformationWithOrderRows();
 
-        $data['orderId'] = $order->getId();
-        $data['merchantData'] = $order->getMerchantData();
-        return $data;
-    }
+		foreach ($orderItems as $item) {
+			$data['cart']['items'][] = $this->mapOrderItem($item);
+		}
+
+		$data['orderId'] = $order->getId();
+		$data['merchantData'] = $order->getMerchantData();
+		return $data;
+	}
 }

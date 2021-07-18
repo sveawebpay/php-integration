@@ -13,53 +13,53 @@ use Svea\WebPay\Test\UnitTest\Checkout\TestCase;
  */
 class GetAvailablePartPaymentCampaignsValidationTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function validatePresetValueIsCompanySuccess()
-    {
-        $presetValueIsCompany = \Svea\WebPay\WebPayItem::presetValue()
-            ->setTypeName(\Svea\WebPay\Checkout\Model\PresetValue::IS_COMPANY)
-            ->setValue(false)
-            ->setIsReadonly(true);
+	/**
+	 * @test
+	 */
+	public function validatePresetValueIsCompanySuccess()
+	{
+		$presetValueIsCompany = \Svea\WebPay\WebPayItem::presetValue()
+			->setTypeName(\Svea\WebPay\Checkout\Model\PresetValue::IS_COMPANY)
+			->setValue(false)
+			->setIsReadonly(true);
 
-        $presetRequest = new CheckoutOrderBuilder(ConfigurationService::getTestConfig());
-        $presetRequest->addPresetValue($presetValueIsCompany);
+		$presetRequest = new CheckoutOrderBuilder(ConfigurationService::getTestConfig());
+		$presetRequest->addPresetValue($presetValueIsCompany);
 
-        $errors = new GetAvailablePartPaymentCampaignsValidator();
+		$errors = new GetAvailablePartPaymentCampaignsValidator();
 
-        $this->assertEquals(0, count($errors->validate($presetRequest)));
-    }
+		$this->assertEquals(0, count($errors->validate($presetRequest)));
+	}
 
-    /**
-     * @test
-     */
-    public function validatePresetValueIsCompanyValueWrongType()
-    {
-        $presetValueIsCompany = \Svea\WebPay\WebPayItem::presetValue()
-            ->setTypeName(\Svea\WebPay\Checkout\Model\PresetValue::IS_COMPANY)
-            ->setValue("false")
-            ->setIsReadonly(true);
+	/**
+	 * @test
+	 */
+	public function validatePresetValueIsCompanyValueWrongType()
+	{
+		$presetValueIsCompany = \Svea\WebPay\WebPayItem::presetValue()
+			->setTypeName(\Svea\WebPay\Checkout\Model\PresetValue::IS_COMPANY)
+			->setValue("false")
+			->setIsReadonly(true);
 
-        $presetRequest = new CheckoutOrderBuilder(ConfigurationService::getTestConfig());
-        $presetRequest->addPresetValue($presetValueIsCompany);
+		$presetRequest = new CheckoutOrderBuilder(ConfigurationService::getTestConfig());
+		$presetRequest->addPresetValue($presetValueIsCompany);
 
-        $errors = new GetAvailablePartPaymentCampaignsValidator();
+		$errors = new GetAvailablePartPaymentCampaignsValidator();
 
-        $this->assertGreaterThan(0, count($errors->validate($presetRequest)));
-    }
+		$this->assertGreaterThan(0, count($errors->validate($presetRequest)));
+	}
 
-    public function validatePresetValueIsCompanyValueNotSet()
-    {
-        $presetValueIsCompany = \Svea\WebPay\WebPayItem::presetValue()
-            ->setTypeName(\Svea\WebPay\Checkout\Model\PresetValue::IS_COMPANY)
-            ->setIsReadonly(true);
+	public function validatePresetValueIsCompanyValueNotSet()
+	{
+		$presetValueIsCompany = \Svea\WebPay\WebPayItem::presetValue()
+			->setTypeName(\Svea\WebPay\Checkout\Model\PresetValue::IS_COMPANY)
+			->setIsReadonly(true);
 
-        $presetRequest = new CheckoutOrderBuilder(ConfigurationService::getTestConfig());
-        $presetRequest->addPresetValue($presetValueIsCompany);
+		$presetRequest = new CheckoutOrderBuilder(ConfigurationService::getTestConfig());
+		$presetRequest->addPresetValue($presetValueIsCompany);
 
-        $errors = new GetAvailablePartPaymentCampaignsValidator();
+		$errors = new GetAvailablePartPaymentCampaignsValidator();
 
-        $this->assertGreaterThan(0, count($errors->validate($presetRequest)));
-    }
+		$this->assertGreaterThan(0, count($errors->validate($presetRequest)));
+	}
 }

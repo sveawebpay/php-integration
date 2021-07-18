@@ -12,13 +12,13 @@ $testConfig = \Svea\WebPay\Config\ConfigurationService::getTestConfig();
 $taskUrl = 'http://paymentadminapi.svea.com/api/v1/queue/1';
 
 try {
-    $response = WebPayAdmin::queryTaskInfo($testConfig)
-        ->setTaskUrl($taskUrl)
-        ->getTaskInfo()
-        ->doRequest();
+	$response = WebPayAdmin::queryTaskInfo($testConfig)
+		->setTaskUrl($taskUrl)
+		->getTaskInfo()
+		->doRequest();
 
-    print_r($response);
+	print_r($response);
 } catch (\Exception $ex) {
-    var_dump('Error message -> ' . $ex->getMessage());
-    var_dump('Error code -> ' . $ex->getCode());
+	var_dump('Error message -> ' . $ex->getMessage());
+	var_dump('Error code -> ' . $ex->getCode());
 }

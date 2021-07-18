@@ -8,16 +8,16 @@ namespace Svea\WebPay\WebService\SveaSoap;
  * */
 abstract class CreateOrderInformation
 {
-    public $CustomerReference;
-    public $OrderType;
-    public $AddressSelector;
-    public $ClientOrderNumber;
-    public $OrderRows = array();
-    public $CustomerIdentity;
-    public $OrderDate;
+	public $CustomerReference;
+	public $OrderType;
+	public $AddressSelector;
+	public $ClientOrderNumber;
+	public $OrderRows = [];
+	public $CustomerIdentity;
+	public $OrderDate;
 
-    public function addOrderRow($orderRow)
-    {
-        array_push($this->OrderRows['OrderRow'], $orderRow);
-    }
+	public function addOrderRow($orderRow)
+	{
+		array_push($this->OrderRows['OrderRow'], $orderRow);
+	}
 }

@@ -12,73 +12,73 @@ use Svea\WebPay\Test\UnitTest\Checkout\TestCase;
  */
 class UpdateCheckoutServiceTest extends TestCase
 {
-    /**
-     * @var CheckoutService
-     */
-    protected $service;
+	/**
+	 * @var CheckoutService
+	 */
+	protected $service;
 
-    public function setUp()
-    {
-        parent::setUp();
+	public function setUp()
+	{
+		parent::setUp();
 
-        $this->order->setCountryCode("SE");
+		$this->order->setCountryCode("SE");
 
-        $this->service = new UpdateOrderService($this->order);
-    }
+		$this->service = new UpdateOrderService($this->order);
+	}
 
-    /**
-     * @test
-     */
-    public function gettingFormattedRows()
-    {
-        $this->order
-            ->addOrderRow($this->returnOrderRow())
-            ->addOrderRow($this->returnOrderRow());
+	/**
+	 * @test
+	 */
+	public function gettingFormattedRows()
+	{
+		$this->order
+			->addOrderRow($this->returnOrderRow())
+			->addOrderRow($this->returnOrderRow());
 
-        $formattedOrderRows = $this->invokeMethod($this->service, 'formatOrderInformationWithOrderRows');
+		$formattedOrderRows = $this->invokeMethod($this->service, 'formatOrderInformationWithOrderRows');
 
-        $this->assertEquals(2, count($formattedOrderRows));
-    }
+		$this->assertEquals(2, count($formattedOrderRows));
+	}
 
-    /**
-     * @test
-     */
-    public function preparingData()
-    {
-        $this->order
-            ->addOrderRow($this->returnOrderRow())
-            ->addOrderRow($this->returnOrderRow());
+	/**
+	 * @test
+	 */
+	public function preparingData()
+	{
+		$this->order
+			->addOrderRow($this->returnOrderRow())
+			->addOrderRow($this->returnOrderRow());
 
-        $formattedOrderRows = $this->invokeMethod($this->service, 'mapCreateOrderData', array($this->order));
+		$formattedOrderRows = $this->invokeMethod($this->service, 'mapCreateOrderData', [$this->order]);
 
-        $this->assertArrayHasKey('cart', $formattedOrderRows);
-        $this->assertArrayHasKey('orderId', $formattedOrderRows);
-        $this->assertArrayHasKey('merchantData', $formattedOrderRows);
-    }
+		$this->assertArrayHasKey('cart', $formattedOrderRows);
+		$this->assertArrayHasKey('orderId', $formattedOrderRows);
+		$this->assertArrayHasKey('merchantData', $formattedOrderRows);
+	}
 
-    /**
-     * @test
-     */
-    public function orderValidationWithBadOrder()
-    {
-        $errors = $this->invokeMethod($this->service, 'validateOrder');
+	/**
+	 * @test
+	 */
+	public function orderValidationWithBadOrder()
+	{
+		$errors = $this->invokeMethod($this->service, 'validateOrder');
 
-        $this->assertGreaterThan(0, count($errors));
-    }
+		$this->assertGreaterThan(0, count($errors));
+	}
 
-    /**
-     * @test
-     */
-    public function orderValidationWithGoodOrder()
-    {
-        $this->order
-            ->setId(123)
-            ->addOrderRow($this->returnOrderRow())
-            ->addOrderRow($this->returnOrderRow());
+	/**
+	 * @test
+	 */
+	public function orderValidationWithGoodOrder()
+	{
+		$this->order
+			->setId(123)
+			->addOrderRow($this->returnOrderRow())
+			->addOrderRow($this->returnOrderRow());
 
-        $errors = $this->invokeMethod($this->service, 'validateOrder');
+		$errors = $this->invokeMethod($this->service, 'validateOrder');
 
-        $this->assertEquals(0, count($errors));
-    }
+		$this->assertEquals(0, count($errors));
+	}
 
 }

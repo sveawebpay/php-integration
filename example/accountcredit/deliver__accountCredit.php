@@ -12,11 +12,11 @@ ini_set('display_errors', 'On');
 $svea_order_id = 1045662;
 
 $svea_delivery_request = \Svea\WebPay\WebPay::deliverOrder(ConfigurationService::getDefaultConfig())
-    ->setOrderId($svea_order_id)
-    ->setOrderDate(date('c'))
-    ->setCountryCode('SE')
-    ->setInvoiceDistributionType(DistributionType::POST)
-    ->deliverAccountCreditOrder()
-    ->doRequest();
+	->setOrderId($svea_order_id)
+	->setOrderDate(date('c'))
+	->setCountryCode('SE')
+	->setInvoiceDistributionType(DistributionType::POST)
+	->deliverAccountCreditOrder()
+	->doRequest();
 
 var_dump($svea_delivery_request);

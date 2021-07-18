@@ -11,48 +11,48 @@ use Svea\WebPay\HostedService\Helper\ExcludePayments;
  * @author Anneli Halld'n, Daniel Brolund, Kristian Grossman-Madsen for Svea Svea\WebPay\WebPay
  */
 class CardPayment extends HostedPayment
-{       
-    /**
-     * Creates a new CardPayment containing a given order.
-     * @param CreateOrderBuilder $order
-     */
-    public function __construct($order)
-    {
-        parent::__construct($order);
-    }
+{
+	/**
+	 * Creates a new CardPayment containing a given order.
+	 * @param CreateOrderBuilder $order
+	 */
+	public function __construct($order)
+	{
+		parent::__construct($order);
+	}
 
-    /**
-     * configureExcludedPaymentMethods returns a list of payment methods not to
-     * present on the paypage for this payment method method class.
-     * @return string[] the list of excluded payment methods, @see SystemPaymentMethod
-     */
-    protected function configureExcludedPaymentMethods()
-    {
-        // first, exclude all invoice/paymentplan payment methods
-        $methods = ExcludePayments::excludeInvoicesAndPaymentPlan();
+	/**
+	 * configureExcludedPaymentMethods returns a list of payment methods not to
+	 * present on the paypage for this payment method method class.
+	 * @return string[] the list of excluded payment methods, @see SystemPaymentMethod
+	 */
+	protected function configureExcludedPaymentMethods()
+	{
+		// first, exclude all invoice/paymentplan payment methods
+		$methods = ExcludePayments::excludeInvoicesAndPaymentPlan();
 
-        //directbanks
-        $methods[] = SystemPaymentMethod::BANKAXESS;
-        $methods[] = SystemPaymentMethod::DBNORDEASE;
-        $methods[] = SystemPaymentMethod::DBSEBSE;
-        $methods[] = SystemPaymentMethod::DBSEBFTGSE;
-        $methods[] = SystemPaymentMethod::DBSHBSE;
-        $methods[] = SystemPaymentMethod::DBSWEDBANKSE;
-        
-        //other
-        $methods[] = SystemPaymentMethod::PAYPAL;
+		//directbanks
+		$methods[] = SystemPaymentMethod::BANKAXESS;
+		$methods[] = SystemPaymentMethod::DBNORDEASE;
+		$methods[] = SystemPaymentMethod::DBSEBSE;
+		$methods[] = SystemPaymentMethod::DBSEBFTGSE;
+		$methods[] = SystemPaymentMethod::DBSHBSE;
+		$methods[] = SystemPaymentMethod::DBSWEDBANKSE;
 
-        return $methods;
-    }
+		//other
+		$methods[] = SystemPaymentMethod::PAYPAL;
 
-    /**
-     * calculateRequestValues adds the payment methods not to present on the
-     * paypage to the request array
-     */
-    public function calculateRequestValues()
-    {
-        $this->request['excludePaymentMethods'] = $this->configureExcludedPaymentMethods();
+		return $methods;
+	}
 
-        return parent::calculateRequestValues();
-    }
+	/**
+	 * calculateRequestValues adds the payment methods not to present on the
+	 * paypage to the request array
+	 */
+	public function calculateRequestValues()
+	{
+		$this->request['excludePaymentMethods'] = $this->configureExcludedPaymentMethods();
+
+		return parent::calculateRequestValues();
+	}
 }

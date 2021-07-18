@@ -11,23 +11,23 @@ namespace Svea\WebPay\WebService\WebServiceResponse;
  */
 abstract class WebServiceResponse
 {
-    /**
-     * @var bool $accepted true if the request succeeded, else false
-     */
-    public $accepted;
+	/**
+	 * @var bool $accepted true if the request succeeded, else false
+	 */
+	public $accepted;
 
-    /**
-     * @var string $errormessage set iff the request returned an unsuccessful response, see also the returncode attribute
-     */
-    public $errormessage;
+	/**
+	 * @var string $errormessage set iff the request returned an unsuccessful response, see also the returncode attribute
+	 */
+	public $errormessage;
 
-    /**
-     * @var int $resultcode response specific result code
-     */
-    public $resultcode;
+	/**
+	 * @var int $resultcode response specific result code
+	 */
+	public $resultcode;
 
-    /**
-     * @var array $logs Raw HTTP request / response logs
-     */
-    public $logs;
+	/**
+	 * @var array $logs Raw HTTP request / response logs
+	 */
+	public $logs;
 }

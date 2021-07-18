@@ -26,9 +26,9 @@ $myResponse = new SveaResponse($rawResponse, $countryCode, $myConfig);
 
 // abort if request failed
 if ($myResponse->getResponse()->accepted == 0) {
-    echo "<pre>Request failed. aborting";
-    print_r($myResponse->getResponse());
-    die;
+	echo "<pre>Request failed. aborting";
+	print_r($myResponse->getResponse());
+	die;
 }
 
 // The decoded response is available through the ->getResponse() method.
@@ -50,11 +50,11 @@ print_r("<a href=\"$recurorderUrl\">$recurorderUrl</a>");
  */
 function getPath()
 {
-    $myURL = $_SERVER['SCRIPT_NAME'];
-    $myPath = explode('/', $myURL);
-    unset($myPath[count($myPath) - 1]);
-    $myPath = implode('/', $myPath);
+	$myURL = $_SERVER['SCRIPT_NAME'];
+	$myPath = explode('/', $myURL);
+	unset($myPath[count($myPath) - 1]);
+	$myPath = implode('/', $myPath);
 
-    return $myPath;
+	return $myPath;
 }
 

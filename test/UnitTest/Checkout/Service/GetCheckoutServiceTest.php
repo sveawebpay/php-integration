@@ -12,39 +12,39 @@ use Svea\WebPay\Checkout\Service\CheckoutService;
  */
 class GetCheckoutServiceTest extends TestCase
 {
-    /**
-     * @var CheckoutService
-     */
-    protected $service;
+	/**
+	 * @var CheckoutService
+	 */
+	protected $service;
 
-    public function setUp()
-    {
-        parent::setUp();
+	public function setUp()
+	{
+		parent::setUp();
 
-        $this->service = new GetOrderService($this->order);
-    }
+		$this->service = new GetOrderService($this->order);
+	}
 
-    /**
-     * @test
-     */
-    public function orderValidationWithBadOrder()
-    {
-        $errors = $this->invokeMethod($this->service, 'validateOrder');
+	/**
+	 * @test
+	 */
+	public function orderValidationWithBadOrder()
+	{
+		$errors = $this->invokeMethod($this->service, 'validateOrder');
 
-        $this->assertGreaterThan(0, count($errors));
-    }
+		$this->assertGreaterThan(0, count($errors));
+	}
 
-    /**
-     * @test
-     */
-    public function orderValidationWithGoodOrder()
-    {
-        $this->order
-            ->setId(123);
+	/**
+	 * @test
+	 */
+	public function orderValidationWithGoodOrder()
+	{
+		$this->order
+			->setId(123);
 
-        $errors = $this->invokeMethod($this->service, 'validateOrder');
+		$errors = $this->invokeMethod($this->service, 'validateOrder');
 
-        $this->assertEquals(0, count($errors));
-    }
+		$this->assertEquals(0, count($errors));
+	}
 
 }

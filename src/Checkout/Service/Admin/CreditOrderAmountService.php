@@ -7,67 +7,67 @@ use Svea\WebPay\Helper\Helper;
 
 class CreditOrderAmountService extends AdminImplementationService
 {
-    /**
-     * @var CreditAmountBuilder $adminBuilder
-     */
-    public $adminBuilder;
-    /**
-     * Validate order data
-     */
-    public function validate()
-    {
-        $errors = array();
+	/**
+	 * @var CreditAmountBuilder $adminBuilder
+	 */
+	public $adminBuilder;
+	/**
+	 * Validate order data
+	 */
+	public function validate()
+	{
+		$errors = [];
 
-        $orderId = $this->adminBuilder->orderId;
-        if (empty($orderId) || !is_int($orderId)) {
-            $errors['incorrect Order Id'] = "Order Id can't be empty and must be Integer";
-        }
+		$orderId = $this->adminBuilder->orderId;
+		if (empty($orderId) || !is_int($orderId)) {
+			$errors['incorrect Order Id'] = "Order Id can't be empty and must be Integer";
+		}
 
-        $deliveryId = $this->adminBuilder->deliveryId;
-        if (is_int($deliveryId) || (is_float($deliveryId) && $deliveryId > 2147483647))
-        {
+		$deliveryId = $this->adminBuilder->deliveryId;
+		if (is_int($deliveryId) || (is_float($deliveryId) && $deliveryId > 2147483647))
+		{
 
-        }
-        else
-        {
-            $errors['incorrect Delivery Id'] = "Delivery Id can't be empty and must be Integer";
-        }
+		}
+		else
+		{
+			$errors['incorrect Delivery Id'] = "Delivery Id can't be empty and must be Integer";
+		}
 
-        $creditAmount = $this->adminBuilder->amountIncVat;
-        if (empty($creditAmount) || !is_numeric($creditAmount)) {
-            $errors['incorrect Credit Amount'] = "Credit amount can't be empty and must be number";
-        }
+		$creditAmount = $this->adminBuilder->amountIncVat;
+		if (empty($creditAmount) || !is_numeric($creditAmount)) {
+			$errors['incorrect Credit Amount'] = "Credit amount can't be empty and must be number";
+		}
 
-        $this->processErrors($errors);
-    }
+		$this->processErrors($errors);
+	}
 
-    /**
-     * Format given date so that will match data structure required for Admin API
-     * @return mixed
-     */
-    public function prepareRequest()
-    {
-        $this->validate();
+	/**
+	 * Format given date so that will match data structure required for Admin API
+	 * @return mixed
+	 */
+	public function prepareRequest()
+	{
+		$this->validate();
 
-        $requestData = array(
-            'orderId' => $this->adminBuilder->orderId,
-            'deliveryId' => $this->adminBuilder->deliveryId
-        );
-        $amount = $this->adminBuilder->amountIncVat;
-        $minorCreditAmount = Helper::bround($amount, 2) * 100;
-        $requestData['creditedAmount'] = intval((string)$minorCreditAmount);
+		$requestData = [
+			'orderId' => $this->adminBuilder->orderId,
+			'deliveryId' => $this->adminBuilder->deliveryId
+		];
+		$amount = $this->adminBuilder->amountIncVat;
+		$minorCreditAmount = Helper::bround($amount, 2) * 100;
+		$requestData['creditedAmount'] = intval((string)$minorCreditAmount);
 
-        return $requestData;
-    }
+		return $requestData;
+	}
 
-    /**
-     * Send call Connection Library
-     */
-    public function doRequest()
-    {
-        $preparedData = $this->prepareRequest();
-        $response = $this->checkoutAdminConnection->creditOrderAmount($preparedData);
+	/**
+	 * Send call Connection Library
+	 */
+	public function doRequest()
+	{
+		$preparedData = $this->prepareRequest();
+		$response = $this->checkoutAdminConnection->creditOrderAmount($preparedData);
 
-        return $response;
-    }
+		return $response;
+	}
 }

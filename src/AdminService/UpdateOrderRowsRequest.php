@@ -15,117 +15,117 @@ use Svea\WebPay\Helper\Helper;
  */
 class UpdateOrderRowsRequest extends AdminServiceRequest
 {
-    /**
-     * @var UpdateOrderRowsBuilder $orderBuilder
-     */
-    public $orderBuilder;
+	/**
+	 * @var UpdateOrderRowsBuilder $orderBuilder
+	 */
+	public $orderBuilder;
 
-    private $amount;
+	private $amount;
 
-    /**
-     * @param UpdateOrderRowsBuilder $updateOrderRowsBuilder
-     */
-    public function __construct($updateOrderRowsBuilder)
-    {
-        $this->action = "UpdateOrderRows";
-        $this->orderBuilder = $updateOrderRowsBuilder;
-    }
+	/**
+	 * @param UpdateOrderRowsBuilder $updateOrderRowsBuilder
+	 */
+	public function __construct($updateOrderRowsBuilder)
+	{
+		$this->action = "UpdateOrderRows";
+		$this->orderBuilder = $updateOrderRowsBuilder;
+	}
 
-    /**
-     * populate and return soap request contents using AdminSoap helper classes to get the correct data format
-     * @param bool $resendOrderWithFlippedPriceIncludingVat
-     * @return AdminSoap\UpdateOrderRowsRequest
-     * @throws ValidationException
-     */
-    public function prepareRequest($resendOrderWithFlippedPriceIncludingVat = false)
-    {
-        $this->validateRequest();
-        $this->priceIncludingVat = $this->determineVatFlag($this->orderBuilder->numberedOrderRows, $resendOrderWithFlippedPriceIncludingVat);
-        $updatedOrderRows =
-            $this->getAdminSoapNumberedOrderRowsFromBuilderOrderRowsUsingVatFlag($this->orderBuilder->numberedOrderRows, $this->priceIncludingVat);
+	/**
+	 * populate and return soap request contents using AdminSoap helper classes to get the correct data format
+	 * @param bool $resendOrderWithFlippedPriceIncludingVat
+	 * @return AdminSoap\UpdateOrderRowsRequest
+	 * @throws ValidationException
+	 */
+	public function prepareRequest($resendOrderWithFlippedPriceIncludingVat = false)
+	{
+		$this->validateRequest();
+		$this->priceIncludingVat = $this->determineVatFlag($this->orderBuilder->numberedOrderRows, $resendOrderWithFlippedPriceIncludingVat);
+		$updatedOrderRows =
+			$this->getAdminSoapNumberedOrderRowsFromBuilderOrderRowsUsingVatFlag($this->orderBuilder->numberedOrderRows, $this->priceIncludingVat);
 
-        $soapRequest = new \Svea\WebPay\AdminService\AdminSoap\UpdateOrderRowsRequest(
-            new Authentication(
-                $this->orderBuilder->conf->getUsername(($this->orderBuilder->orderType), $this->orderBuilder->countryCode),
-                $this->orderBuilder->conf->getPassword(($this->orderBuilder->orderType), $this->orderBuilder->countryCode)
-            ),
-            $this->orderBuilder->conf->getClientNumber(($this->orderBuilder->orderType), $this->orderBuilder->countryCode),
-            AdminServiceRequest::CamelCaseOrderType($this->orderBuilder->orderType),
-            $this->orderBuilder->orderId,
-            new SoapVar($updatedOrderRows, SOAP_ENC_OBJECT)
-        );
+		$soapRequest = new \Svea\WebPay\AdminService\AdminSoap\UpdateOrderRowsRequest(
+			new Authentication(
+				$this->orderBuilder->conf->getUsername(($this->orderBuilder->orderType), $this->orderBuilder->countryCode),
+				$this->orderBuilder->conf->getPassword(($this->orderBuilder->orderType), $this->orderBuilder->countryCode)
+			),
+			$this->orderBuilder->conf->getClientNumber(($this->orderBuilder->orderType), $this->orderBuilder->countryCode),
+			AdminServiceRequest::CamelCaseOrderType($this->orderBuilder->orderType),
+			$this->orderBuilder->orderId,
+			new SoapVar($updatedOrderRows, SOAP_ENC_OBJECT)
+		);
 
-        return $soapRequest;
-    }
+		return $soapRequest;
+	}
 
-    public function validate()
-    {
-        $errors = array();
-        $errors = $this->validateOrderId($errors);
-        $errors = $this->validateRowNumber($errors);
-        $errors = $this->validateOrderType($errors);
-        $errors = $this->validateCountryCode($errors);
-        $errors = $this->validateNumberedOrderRowsExist($errors);
-        $errors = $this->validateNumberedOrderRowsHasPriceAndVatInformation($errors);
+	public function validate()
+	{
+		$errors = [];
+		$errors = $this->validateOrderId($errors);
+		$errors = $this->validateRowNumber($errors);
+		$errors = $this->validateOrderType($errors);
+		$errors = $this->validateCountryCode($errors);
+		$errors = $this->validateNumberedOrderRowsExist($errors);
+		$errors = $this->validateNumberedOrderRowsHasPriceAndVatInformation($errors);
 
-        return $errors;
-    }
+		return $errors;
+	}
 
-    private function validateOrderId($errors)
-    {
-        if (isset($this->orderBuilder->orderId) == FALSE) {
-            $errors[] = array('missing value' => "orderId is required.");
-        }
+	private function validateOrderId($errors)
+	{
+		if (isset($this->orderBuilder->orderId) == FALSE) {
+			$errors[] = ['missing value' => "orderId is required."];
+		}
 
-        return $errors;
-    }
+		return $errors;
+	}
 
-    private function validateRowNumber($errors)
-    {
-        foreach ($this->orderBuilder->numberedOrderRows as $orderRow) {
-            if (isset($orderRow->rowNumber) == FALSE) {
-                $errors[] = array('missing value' => "rowNumber is required.");
-            }
-        }
+	private function validateRowNumber($errors)
+	{
+		foreach ($this->orderBuilder->numberedOrderRows as $orderRow) {
+			if (isset($orderRow->rowNumber) == FALSE) {
+				$errors[] = ['missing value' => "rowNumber is required."];
+			}
+		}
 
-        return $errors;
-    }
+		return $errors;
+	}
 
-    private function validateOrderType($errors)
-    {
-        if (isset($this->orderBuilder->orderType) == FALSE) {
-            $errors[] = array('missing value' => "orderType is required.");
-        }
+	private function validateOrderType($errors)
+	{
+		if (isset($this->orderBuilder->orderType) == FALSE) {
+			$errors[] = ['missing value' => "orderType is required."];
+		}
 
-        return $errors;
-    }
+		return $errors;
+	}
 
-    private function validateCountryCode($errors)
-    {
-        if (isset($this->orderBuilder->countryCode) == FALSE) {
-            $errors[] = array('missing value' => "countryCode is required.");
-        }
+	private function validateCountryCode($errors)
+	{
+		if (isset($this->orderBuilder->countryCode) == FALSE) {
+			$errors[] = ['missing value' => "countryCode is required."];
+		}
 
-        return $errors;
-    }
+		return $errors;
+	}
 
-    private function validateNumberedOrderRowsExist($errors)
-    {
-        if (isset($this->orderBuilder->numberedOrderRows) == FALSE) {
-            $errors[] = array('missing value' => "numberedOrderRows is required.");
-        }
+	private function validateNumberedOrderRowsExist($errors)
+	{
+		if (isset($this->orderBuilder->numberedOrderRows) == FALSE) {
+			$errors[] = ['missing value' => "numberedOrderRows is required."];
+		}
 
-        return $errors;
-    }
+		return $errors;
+	}
 
-    private function validateNumberedOrderRowsHasPriceAndVatInformation($errors)
-    {
-        foreach ($this->orderBuilder->numberedOrderRows as $orderRow) {
-            if (!isset($orderRow->vatPercent) && (!isset($orderRow->amountIncVat) && !isset($orderRow->amountExVat))) {
-                $errors[] = array('missing order row vat information' => "cannot calculate orderRow vatPercent, need at least two of amountExVat, amountIncVat and vatPercent.");
-            }
-        }
+	private function validateNumberedOrderRowsHasPriceAndVatInformation($errors)
+	{
+		foreach ($this->orderBuilder->numberedOrderRows as $orderRow) {
+			if (!isset($orderRow->vatPercent) && (!isset($orderRow->amountIncVat) && !isset($orderRow->amountExVat))) {
+				$errors[] = ['missing order row vat information' => "cannot calculate orderRow vatPercent, need at least two of amountExVat, amountIncVat and vatPercent."];
+			}
+		}
 
-        return $errors;
-    }
+		return $errors;
+	}
 }

@@ -16,43 +16,43 @@ use Svea\WebPay\HostedService\Helper\ExcludePayments;
  */
 class DirectPayment extends HostedPayment
 {
-    /**
-     * Creates a new DirectPayment containing a given order.
-     * @param CreateOrderBuilder $order
-     */
-    public function __construct($order)
-    {
-        parent::__construct($order);
-    }
+	/**
+	 * Creates a new DirectPayment containing a given order.
+	 * @param CreateOrderBuilder $order
+	 */
+	public function __construct($order)
+	{
+		parent::__construct($order);
+	}
 
-    /**
-     * calculateRequestValues adds the payment methods not to present on the
-     * paypage to the request array
-     */
-    public function calculateRequestValues()
-    {
-        $this->request['excludePaymentMethods'] = $this->configureExcludedPaymentMethods();
+	/**
+	 * calculateRequestValues adds the payment methods not to present on the
+	 * paypage to the request array
+	 */
+	public function calculateRequestValues()
+	{
+		$this->request['excludePaymentMethods'] = $this->configureExcludedPaymentMethods();
 
-        return parent::calculateRequestValues();
-    }
+		return parent::calculateRequestValues();
+	}
 
-    /**
-     * configureExcludedPaymentMethods returns a list of payment methods not to present on the paypage for this payment method method class.
-     * @return string[] the list of excluded payment methods, @see SystemPaymentMethod
-     */
-    protected function configureExcludedPaymentMethods()
-    {
-        // first, exclude all invoice/paymentplan payment methods
-        $methods = ExcludePayments::excludeInvoicesAndPaymentPlan();
-        
-        //card
-        $methods[] = SystemPaymentMethod::KORTCERT;
-        $methods[] = SystemPaymentMethod::SKRILL;
-        $methods[] = SystemPaymentMethod::SVEACARDPAY;
+	/**
+	 * configureExcludedPaymentMethods returns a list of payment methods not to present on the paypage for this payment method method class.
+	 * @return string[] the list of excluded payment methods, @see SystemPaymentMethod
+	 */
+	protected function configureExcludedPaymentMethods()
+	{
+		// first, exclude all invoice/paymentplan payment methods
+		$methods = ExcludePayments::excludeInvoicesAndPaymentPlan();
 
-        //other
-        $methods[] = SystemPaymentMethod::PAYPAL;
+		//card
+		$methods[] = SystemPaymentMethod::KORTCERT;
+		$methods[] = SystemPaymentMethod::SKRILL;
+		$methods[] = SystemPaymentMethod::SVEACARDPAY;
 
-        return $methods;
-    }
+		//other
+		$methods[] = SystemPaymentMethod::PAYPAL;
+
+		return $methods;
+	}
 }

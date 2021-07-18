@@ -22,9 +22,9 @@ $testmode_enabled = true;
 
 // Get a config object  populated with the correct credentials, for test or production, respectively
 if ($testmode_enabled) {
-    $myConfig = Svea\MyConfig::getTestConfig();
+	$myConfig = Svea\MyConfig::getTestConfig();
 } else {
-    $myConfig = Svea\MyConfig::getProdConfig();
+	$myConfig = Svea\MyConfig::getProdConfig();
 }
 
 // Make a getAddresses lookup using my account test credentials:
@@ -67,7 +67,7 @@ print_r("Raw GetAddressResponse contents for testperson $getAddressesForCompanyN
 print_r($companyResponse);
 
 //foreach( $companyResponse->customerIdentity as $address ) {
-//    print_r( $address ); print_r( "\n" );
+//	print_r( $address ); print_r( "\n" );
 //}
 
 ?>

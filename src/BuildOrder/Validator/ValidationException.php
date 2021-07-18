@@ -9,5 +9,5 @@ use Exception;
  */
 class ValidationException extends Exception
 {
-    // \Exception referes to class Exception outside our \Svea\ namespace
+	// \Exception referes to class Exception outside our \Svea\ namespace
 }

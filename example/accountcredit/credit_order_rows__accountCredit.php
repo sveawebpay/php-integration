@@ -15,10 +15,10 @@ $orderId = 1000757;
 $orderRowIndex = 2;
 
 $credit = WebPayAdmin::creditOrderRows(ConfigurationService::getDefaultConfig())
-    ->setOrderId($orderId)
-    ->setCountryCode('SE')
-    ->setRowToCredit(2)
-    ->creditAccountCreditOrderRows()
-    ->doRequest();
+	->setOrderId($orderId)
+	->setCountryCode('SE')
+	->setRowToCredit(2)
+	->creditAccountCreditOrderRows()
+	->doRequest();
 
 var_dump($credit);

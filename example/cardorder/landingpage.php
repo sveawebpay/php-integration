@@ -2,7 +2,7 @@
 
 /**
  * example file, how to handle a card order request response
- * 
+ *
  * @author Kristian Grossman-madsen for Svea Svea\WebPay\WebPay
  */
 
@@ -24,11 +24,11 @@ $rawResponse = $_REQUEST;
 // decode the raw response by passing it through the Svea\WebPay\Response\SveaResponse class
 try
 {
-    $myResponse = new SveaResponse($rawResponse, $countryCode = NULL, $myConfig);
+	$myResponse = new SveaResponse($rawResponse, $countryCode = NULL, $myConfig);
 }
 catch (Exception $e)
 {
-    echo $e->getMessage();
+	echo $e->getMessage();
 }
 
 // The decoded response is available through the ->getResponse() method.
@@ -43,35 +43,35 @@ An example of a successful request response. The 'accepted' attribute is true (1
 
 Svea\HostedPaymentResponse Object
 (
-    [transactionId] => 582827
-    [clientOrderNumber] => order #20140519-374
-    [paymentMethod] => KORTCERT
-    [merchantId] => 1130
-    [amount] => 23.74
-    [currency] => SEK
-    [accepted] => 1
-    [resultcode] => 
-    [cardType] => VISA
-    [maskedCardNumber] => 444433xxxxxx1100
-    [expiryMonth] => 02
-    [expiryYear] => 15
-    [authCode] => 941033
+	[transactionId] => 582827
+	[clientOrderNumber] => order #20140519-374
+	[paymentMethod] => KORTCERT
+	[merchantId] => 1130
+	[amount] => 23.74
+	[currency] => SEK
+	[accepted] => 1
+	[resultcode] =>
+	[cardType] => VISA
+	[maskedCardNumber] => 444433xxxxxx1100
+	[expiryMonth] => 02
+	[expiryYear] => 15
+	[authCode] => 941033
 )";
 
 echo "\n</pre><font color='red'><pre>\n\n
 
-An example of a rejected request response -- 'accepted' is false (0) and resultcode/errormessage indicates that the clientOrderNumber above has been reused, which is prohibited.   
+An example of a rejected request response -- 'accepted' is false (0) and resultcode/errormessage indicates that the clientOrderNumber above has been reused, which is prohibited.
 
 Svea\HostedPaymentResponse Object
 (
-    [transactionId] => 582828
-    [clientOrderNumber] => order #20140519-374.err
-    [paymentMethod] => KORTCERT
-    [merchantId] => 1130
-    [amount] => 23.74
-    [currency] => SEK
-    [accepted] => 0
-    [resultcode] => 127 (CUSTOMERREFNO_ALREADY_USED)
-    [errormessage] => Customer reference number already used in another transaction.
+	[transactionId] => 582828
+	[clientOrderNumber] => order #20140519-374.err
+	[paymentMethod] => KORTCERT
+	[merchantId] => 1130
+	[amount] => 23.74
+	[currency] => SEK
+	[accepted] => 0
+	[resultcode] => 127 (CUSTOMERREFNO_ALREADY_USED)
+	[errormessage] => Customer reference number already used in another transaction.
 )";
 ?>

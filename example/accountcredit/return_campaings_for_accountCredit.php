@@ -12,6 +12,6 @@ ini_set('display_errors', 'On');
 $ppCampaign = WebPay::getAccountCreditParams(ConfigurationService::getDefaultConfig());
 
 $campaigns = $ppCampaign->setCountryCode('SE')
-    ->doRequest();
+	->doRequest();
 
 var_dump($campaigns);

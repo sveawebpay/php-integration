@@ -16,60 +16,60 @@ use Svea\WebPay\HostedService\HostedResponse\HostedAdminResponse\QueryTransactio
  */
 class QueryTransactionByCustomerRefNo extends HostedRequest
 {
-    /**
-     * @var string $customerRefNo Required.
-     */
-    public $customerRefNo;
+	/**
+	 * @var string $customerRefNo Required.
+	 */
+	public $customerRefNo;
 
-    /**
-     * Usage: create an instance, set all required attributes, then call doRequest().
-     * Required: $customerRefNo
-     * @param ConfigurationProvider $config instance implementing Svea\WebPay\Config\ConfigurationProvider
-     */
-    function __construct($config)
-    {
-        $this->method = "querycustomerrefno";
-        parent::__construct($config);
-    }
+	/**
+	 * Usage: create an instance, set all required attributes, then call doRequest().
+	 * Required: $customerRefNo
+	 * @param ConfigurationProvider $config instance implementing Svea\WebPay\Config\ConfigurationProvider
+	 */
+	function __construct($config)
+	{
+		$this->method = "querycustomerrefno";
+		parent::__construct($config);
+	}
 
-    protected function validateRequestAttributes()
-    {
-        $errors = array();
-        $errors = $this->validateClientOrderNumber($this, $errors);
+	protected function validateRequestAttributes()
+	{
+		$errors = [];
+		$errors = $this->validateClientOrderNumber($this, $errors);
 
-        return $errors;
-    }
+		return $errors;
+	}
 
-    private function validateClientOrderNumber($self, $errors)
-    {
-        if (isset($self->customerRefNo) == FALSE) {
-            $errors['missing value'] = "customerRefNo is required. Use function setClientOrderNumber() with the order number you used when creating the transaction.";
-        }
+	private function validateClientOrderNumber($self, $errors)
+	{
+		if (isset($self->customerRefNo) == FALSE) {
+			$errors['missing value'] = "customerRefNo is required. Use function setClientOrderNumber() with the order number you used when creating the transaction.";
+		}
 
-        return $errors;
-    }
+		return $errors;
+	}
 
-    protected function createRequestXml()
-    {
-        $XMLWriter = new \XMLWriter();
+	protected function createRequestXml()
+	{
+		$XMLWriter = new \XMLWriter();
 
-        $XMLWriter->openMemory();
-        $XMLWriter->setIndent(true);
-        $XMLWriter->startDocument("1.0", "UTF-8");
-        $XMLWriter->writeComment(Helper::getLibraryAndPlatformPropertiesAsJson($this->config));
-        $XMLWriter->startElement("query");  // note, not the same as $this->method above
-        $XMLWriter->writeElement("customerrefno", $this->customerRefNo);
-        $XMLWriter->endElement();
-        $XMLWriter->endDocument();
+		$XMLWriter->openMemory();
+		$XMLWriter->setIndent(true);
+		$XMLWriter->startDocument("1.0", "UTF-8");
+		$XMLWriter->writeComment(Helper::getLibraryAndPlatformPropertiesAsJson($this->config));
+		$XMLWriter->startElement("query");  // note, not the same as $this->method above
+		$XMLWriter->writeElement("customerrefno", $this->customerRefNo);
+		$XMLWriter->endElement();
+		$XMLWriter->endDocument();
 
-        return $XMLWriter->flush();
-    }
+		return $XMLWriter->flush();
+	}
 
-    protected function parseResponse($message)
-    {
-        $countryCode = $this->countryCode;
-        $config = $this->config;
+	protected function parseResponse($message)
+	{
+		$countryCode = $this->countryCode;
+		$config = $this->config;
 
-        return new QueryTransactionResponse($message, $countryCode, $config);
-    }
+		return new QueryTransactionResponse($message, $countryCode, $config);
+	}
 }
