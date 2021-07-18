@@ -1,9 +1,9 @@
-# EditorConfig is awesome: https://EditorConfig.org
+# EditorConfig: https://EditorConfig.org
+# Notepad++ Plugin: https://github.com/editorconfig/editorconfig-notepad-plus-plus
+# Visual Studio Code Plugin: https://marketplace.visualstudio.com/items?itemName=EditorConfig.EditorConfig
 
-# top-most EditorConfig file
 root = true
 
-# Unix-style newlines with a newline ending every file
 [*.{json,md,php}]
 charset = utf-8
 indent_style = tab
