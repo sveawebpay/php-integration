@@ -32,9 +32,6 @@ class ExcludePayments
 		$methods[] = SystemPaymentMethod::INVOICE_FI;
 		$methods[] = SystemPaymentMethod::PAYMENTPLAN_FI;
 
-		$methods[] = SystemPaymentMethod::INVOICE_NL;
-		$methods[] = SystemPaymentMethod::PAYMENTPLAN_NL;
-
 		$methods[] = SystemPaymentMethod::INVOICE_NO;
 		$methods[] = SystemPaymentMethod::PAYMENTPLAN_NO;
 
