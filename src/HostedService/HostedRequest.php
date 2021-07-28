@@ -45,12 +45,7 @@ abstract class HostedRequest
     public function doRequest()
     {
         $fields = $this->prepareRequest();
-
-        $fieldsString = "";
-        foreach ($fields as $key => $value) {
-            $fieldsString .= $key . '=' . $value . '&';
-        }
-        rtrim($fieldsString, '&');
+        $fieldsString = http_build_query($fields, '', '&');
 
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $this->config->getEndPoint(SveaConfigurationProvider::HOSTED_ADMIN_TYPE) . $this->method);
