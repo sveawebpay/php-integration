@@ -132,5 +132,3 @@ class ConfirmTransactionTest extends \PHPUnit\Framework\TestCase
 		$form = $this->confirmObject->prepareRequest();
 	}
 }
-
-?>

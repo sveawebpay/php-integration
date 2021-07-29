@@ -69,5 +69,3 @@ print_r($companyResponse);
 //foreach( $companyResponse->customerIdentity as $address ) {
 //	print_r( $address ); print_r( "\n" );
 //}
-
-?>

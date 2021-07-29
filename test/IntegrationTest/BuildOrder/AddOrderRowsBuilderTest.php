@@ -255,5 +255,3 @@ class AddOrderRowsBuilderIntegrationTest extends \PHPUnit\Framework\TestCase
 		$this->assertEquals(1, $addOrderRowsResponse->accepted);
 	}
 }
-
-?>

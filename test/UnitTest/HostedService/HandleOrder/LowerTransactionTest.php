@@ -125,5 +125,3 @@ class LowerTransactionTest extends \PHPUnit\Framework\TestCase
 	}
 
 }
-
-?>

@@ -661,6 +661,3 @@ class QueryOrderBuilderIntegrationTest extends \PHPUnit\Framework\TestCase
 	// query direct bank order row(s)
 	// negative tests?
 }
-
-
-?>

@@ -74,4 +74,3 @@ Svea\HostedPaymentResponse Object
 	[resultcode] => 127 (CUSTOMERREFNO_ALREADY_USED)
 	[errormessage] => Customer reference number already used in another transaction.
 )";
-?>

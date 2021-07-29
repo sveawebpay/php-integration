@@ -224,4 +224,3 @@ function getPath() {
 
 	return $myPath;
 }
-?>

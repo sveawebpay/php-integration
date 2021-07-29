@@ -94,5 +94,3 @@ class CancelRecurSubscriptionIntegrationTest extends \PHPUnit\Framework\TestCase
 		$this->assertEquals(1, $response->accepted);
 	}
 }
-
-?>

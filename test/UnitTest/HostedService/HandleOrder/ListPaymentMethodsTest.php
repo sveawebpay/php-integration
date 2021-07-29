@@ -73,5 +73,3 @@ class ListPaymentMethodsTest extends \PHPUnit\Framework\TestCase
 		$this->assertEquals((string)$merchantid, $xmlMessage->merchantid);
 	}
 }
-
-?>
