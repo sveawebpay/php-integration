@@ -208,5 +208,3 @@ class RecurTransactionTest extends \PHPUnit\Framework\TestCase
 		$form = $this->recurTransactionObject->prepareRequest();
 	}
 }
-
-?>

@@ -199,5 +199,3 @@ class DeliverOrderBuilderIntegrationTest extends \PHPUnit\Framework\TestCase
 		$this->assertInstanceOf("Svea\WebPay\HostedService\HostedResponse\HostedAdminResponse\ConfirmTransactionResponse", $response);
 	}
 }
-
-?>

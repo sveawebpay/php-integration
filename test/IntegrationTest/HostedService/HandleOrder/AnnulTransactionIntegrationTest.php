@@ -66,5 +66,3 @@ class AnnulTransactionIntegrationTest extends \PHPUnit\Framework\TestCase
 		$this->assertEquals($customerrefno, $response->clientOrderNumber);
 	}
 }
-
-?>

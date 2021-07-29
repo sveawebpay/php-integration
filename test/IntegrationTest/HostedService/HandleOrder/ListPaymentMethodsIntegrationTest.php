@@ -44,5 +44,3 @@ class ListPaymentMethodsIntegrationTest extends \PHPUnit\Framework\TestCase
 		$this->assertEquals(PaymentMethod::PAYMENTPLAN, $response->paymentmethods[7]);
 	}
 }
-
-?>

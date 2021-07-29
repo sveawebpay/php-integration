@@ -92,5 +92,3 @@ class AnnulTransactionTest extends \PHPUnit\Framework\TestCase
 	}
 
 }
-
-?>

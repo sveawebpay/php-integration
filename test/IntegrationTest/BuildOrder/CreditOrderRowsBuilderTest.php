@@ -560,5 +560,3 @@ class CreditOrderRowsBuilderIntegrationTest extends \PHPUnit\Framework\TestCase
 		$this->assertEquals("119 (ILLEGAL_CREDITED_AMOUNT)", $creditOrderRowsResponse->resultcode);
 	}
 }
-
-?>

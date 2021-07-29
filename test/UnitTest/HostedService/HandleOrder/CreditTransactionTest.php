@@ -118,5 +118,3 @@ class CreditTransactionTest extends \PHPUnit\Framework\TestCase
 		$form = $this->creditObject->prepareRequest();
 	}
 }
-
-?>

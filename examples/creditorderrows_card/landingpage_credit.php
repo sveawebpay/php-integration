@@ -77,4 +77,3 @@ function getPath() {
 
 	return $myPath;
 }
-?>

@@ -114,5 +114,3 @@ class ConfirmTransactionIntegrationTest extends \PHPUnit\Framework\TestCase
 		$this->assertEquals($clientOrderNumber, $response->clientOrderNumber);
 	}
 }
-
-?>

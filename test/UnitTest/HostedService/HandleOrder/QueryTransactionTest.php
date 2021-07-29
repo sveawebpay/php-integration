@@ -99,5 +99,3 @@ class QueryTransactionTest extends \PHPUnit\Framework\TestCase
 		$form = $this->queryObject->prepareRequest();
 	}
 }
-
-?>

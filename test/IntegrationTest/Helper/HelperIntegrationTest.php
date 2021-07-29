@@ -249,5 +249,3 @@ class HelperIntegrationTest extends \PHPUnit\Framework\TestCase
 	}
 
 }
-
-?>

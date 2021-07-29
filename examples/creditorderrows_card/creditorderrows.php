@@ -198,5 +198,3 @@ function getPath()
 
 	return $myPath;
 }
-
-?>

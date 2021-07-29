@@ -325,5 +325,3 @@ class UpdateOrderRowsBuilderIntegrationTest extends \PHPUnit\Framework\TestCase
 		// todo query result & check amounts, description automatically
 	}
 }
-
-?>

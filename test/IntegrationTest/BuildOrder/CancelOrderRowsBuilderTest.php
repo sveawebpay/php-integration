@@ -331,5 +331,3 @@ class CancelOrderRowsBuilderIntegrationTest extends \PHPUnit\Framework\TestCase
 	}
 
 }
-
-?>

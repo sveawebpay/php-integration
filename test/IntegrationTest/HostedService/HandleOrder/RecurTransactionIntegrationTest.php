@@ -110,5 +110,3 @@ class RecurTransactionIntegrationTest extends \PHPUnit\Framework\TestCase
 		$this->assertEquals($new_amount, $response->amount);
 	}
 }
-
-?>

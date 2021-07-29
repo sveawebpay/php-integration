@@ -82,5 +82,3 @@ function getPath()
 
 	return $myPath;
 }
-
-?>
