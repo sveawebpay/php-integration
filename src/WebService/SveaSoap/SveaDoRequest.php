@@ -34,10 +34,9 @@ class SveaDoRequest
 
     private function CallSoap($method, $order, $logging)
     {
-        $builder = new SveaSoapArrayBuilder();
         $headers = new \SoapHeader('http://www.w3.org/2005/08/addressing', 'To', str_replace("/SveaWebPay.asmx?WSDL", "",$this->svea_server) . "/webpay/" . $method);
         $this->client->__setSoapHeaders($headers);
-        $params = $builder->object_to_array($order);
+        $params = (array)$order;
         if($logging == true)
         {
             $timestampStart = time();
