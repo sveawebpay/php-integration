@@ -2770,6 +2770,94 @@ $pricePerMonthForFirstCampaign = $response->values[0]['pricePerMonth'];     // i
 ...
 ```
 
+### 9.2.3 getRequestTotals()
+If you find yourself in need of knowing what the order total at Svea will amount to before sending the request, you can use the `getRequestTotals()` method to get the amount including vat, amount excluding vat and total vat amount.
+
+For example, if your integration only handles integer order amounts, you may have to supply a compensation row with the order to ensure that the invoiced order total amount in Svea's system match your integration order totals:
+
+Your integration has the following order totals (in integers only) for an order containing one item:
+1 item at cost 1400 kr inclusive of 6% vat (i.e. 1321 kr excl vat, 79 kr vat in your system)
+
+The order row is specified using the following code, and then sent to Svea
+
+```php
+<?php
+$order = WebPay::createOrder($config)->
+         ->addOrderRow(
+         WebPayItem::orderRow()
+            ->setAmountIncVat(1400.00)
+            ->setVatPercent(6)
+            ->setQuantity(1)
+         );
+...
+$response = $order->useInvoicePayment->doRequest();
+```
+
+As Svea always re-calculate an order to a sum and a vat percentage, this order will be represented in Svea backoffice as:
+
+```
+Price (excl. VAT)   Price (incl. VAT)	Totalt netto	VAT%	Sum (incl. VAT)
+1320,75             1400.00             1320,75          6.00	1400,00
+                                        -------         -----   -------
+                                        1320,75         79,25	1400,00
+```
+
+If we try to make up the difference by adding a compensation (i.e. discount row):
+
+```php
+<?php
+$order->addDiscount( WebPayItem::fixedDiscount()
+                       ->setAmountIncVat(-0.25)    // a negative discount shows up as a positive adjustment
+                       ->setVatPercent(0)
+                   )
+                ...
+```
+
+it will show up as
+
+```
+Price (excl. VAT)   Price (incl. VAT)	Totalt netto	VAT%	Sum (incl. VAT)
+1320,75             1400.00             1320,75          6.00	1400,00
+0,25                0,25                0,25             0.00   0,25
+                                        -------         -----   -------
+                                        1321,00         79,25	1400,25
+```
+Which is not what we want.
+
+The correct way to do this is to send the order using the total amount incl. vat calculated from the item price ex. vat, and then add a discount row, that way the item row amount ex. vat and vat amount is correct, as well as the total amount charged to the customer:
+
+```php
+<?php
+$order = WebPay::createOrder($config)
+          ->addOrderRow(
+              WebPayItem::orderRow()
+                  ->setAmountIncVat(1400.26)
+                  ->setVatPercent(6)
+                  ->setQuantity(1)
+          )
+          ->addDiscount( WebPayItem::fixedDiscount()
+                          ->setAmountIncVat(-0.26)
+                          ->setVatPercent(0)
+                      )
+          ...
+```
+
+which will show up as
+
+```
+Price (excl. VAT)   Price (incl. VAT)	Totalt netto	VAT%	Sum (incl. VAT)
+1321,00             1400,26             1321,00          6.00	1400,26
+-0,26               -0,26               -0,26            0.00   -0,26
+                                        -------         -----   -------
+                                        1320,74         79,26	1400,00
+```
+
+Which is about as exact as we can get. (Unfortunately there is no way to introduce a discount of vat only, as you need to pay vat on the entire 1321 kr, regardless on the total amount actually charged to the customer.)
+
+`getRequestTotal()` for webservice requests returns the sums calculated for the orderRows as it will be handled in our systems. Returns an array with total_exvat, total_incvat and total_vat.
+
+[Back to top](#index)
+
 ### 9.3 Request validateOrder(), prepareRequest(), getRequestTotals() methods <a name="i9-3"></a>
 During module development or debugging, various informational methods may be of use as an alternative to `doRequest()` as the final step in the createOrder process in order to get more information about the actual request data that will be sent to Svea.
 
