@@ -7,7 +7,7 @@ namespace Svea\WebPay\WebService\SveaSoap;
  */
 class SveaCloseOrder
 {
-    public $Auth;
+	public $Auth;
 
-    public $CloseOrderInformation;
+	public $CloseOrderInformation;
 }

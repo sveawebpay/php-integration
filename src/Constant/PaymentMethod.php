@@ -8,39 +8,39 @@ namespace Svea\WebPay\Constant;
  */
 abstract class PaymentMethod
 {
-    const INVOICE = 'INVOICE';
-    const PAYMENTPLAN = 'PAYMENTPLAN';
+	const INVOICE = 'INVOICE';
+	const PAYMENTPLAN = 'PAYMENTPLAN';
 
-    //DIRECT
-    const BANKAXESS = 'BANKAXESS';
-    const AKTIA_FI = 'DBAKTIAFI';
-    const ALANDSBANKEN_FI = 'DBALANDSBANKENFI';
-    const DANSKEBANK_SE = 'DBDANSKEBANKSE';
-    const NORDEA_EE = 'DBNORDEAEE';
-    const NORDEA_FI = 'DBNORDEAFI';
-    const NORDEA_SE = 'DBNORDEASE';
-    const POHJOLA_FI = 'DBPOHJOLAFI';
-    const SAMPOFI = 'DBSAMPOFI';
-    const SEB_SE = 'DBSEBSE';
-    const SEBFTG_SE = 'DBSEBFTGSE';
-    const SHB_SE = 'DBSHBSE';
-    const SHB_FI = 'DBSHBFI';
-    const SPANKKI_FI = 'DBSPANKKIFI';
-    const SWEDBANK_SE = 'DBSWEDBANKSE';
-    const TAPIOLA_FI = 'DBTAPIOLAFI';
-    const SWISH = 'SWISH';
+	//DIRECT
+	const BANKAXESS = 'BANKAXESS';
+	const AKTIA_FI = 'DBAKTIAFI';
+	const ALANDSBANKEN_FI = 'DBALANDSBANKENFI';
+	const DANSKEBANK_SE = 'DBDANSKEBANKSE';
+	const NORDEA_EE = 'DBNORDEAEE';
+	const NORDEA_FI = 'DBNORDEAFI';
+	const NORDEA_SE = 'DBNORDEASE';
+	const POHJOLA_FI = 'DBPOHJOLAFI';
+	const SAMPOFI = 'DBSAMPOFI';
+	const SEB_SE = 'DBSEBSE';
+	const SEBFTG_SE = 'DBSEBFTGSE';
+	const SHB_SE = 'DBSHBSE';
+	const SHB_FI = 'DBSHBFI';
+	const SPANKKI_FI = 'DBSPANKKIFI';
+	const SWEDBANK_SE = 'DBSWEDBANKSE';
+	const TAPIOLA_FI = 'DBTAPIOLAFI';
+	const SWISH = 'SWISH';
 
-    //PaymentMethodType::CARD
-    const KORTCERT = 'KORTCERT';
-    const SVEACARDPAY = 'SVEACARDPAY';
-    const SVEACARDPAY_PF = 'SVEACARDPAY_PF';
-    const SKRILL = 'SKRILL';
-    const KORTWN = 'KORTWN';
-    
-    //PREPAID
-    const MICRODEB = 'MICRODEB';
-    
-    //PSP
-    const PAYGROUND = 'PAYGROUND';
-    const PAYPAL = 'PAYPAL';
+	//PaymentMethodType::CARD
+	const KORTCERT = 'KORTCERT';
+	const SVEACARDPAY = 'SVEACARDPAY';
+	const SVEACARDPAY_PF = 'SVEACARDPAY_PF';
+	const SKRILL = 'SKRILL';
+	const KORTWN = 'KORTWN';
+
+	//PREPAID
+	const MICRODEB = 'MICRODEB';
+
+	//PSP
+	const PAYGROUND = 'PAYGROUND';
+	const PAYPAL = 'PAYPAL';
 }

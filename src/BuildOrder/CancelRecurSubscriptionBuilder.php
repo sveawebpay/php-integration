@@ -8,29 +8,29 @@ use Svea\WebPay\HostedService\HostedAdminRequest\CancelRecurSubscription;
 class CancelRecurSubscriptionBuilder extends OrderBuilder
 {
 
-    /**
-     * @var string $subscriptionId
-     */
-    public $subscriptionId;
+	/**
+	 * @var string $subscriptionId
+	 */
+	public $subscriptionId;
 
-    /**
-     * Set subscriptionId
-     *
-     * @param string $subscriptionId
-     * @return $this
-     */
-    public function setSubscriptionId($subscriptionId)
-    {
-        $this->subscriptionId = $subscriptionId;
+	/**
+	 * Set subscriptionId
+	 *
+	 * @param string $subscriptionId
+	 * @return $this
+	 */
+	public function setSubscriptionId($subscriptionId)
+	{
+		$this->subscriptionId = $subscriptionId;
 
-        return $this;
-    }
+		return $this;
+	}
 
-    public function cancelRecurSubscription()
-    {
-        $cancelRecurSubscription = new CancelRecurSubscription($this->conf);
-        $cancelRecurSubscription->subscriptionId = $this->subscriptionId;
-        $cancelRecurSubscription->countryCode = $this->countryCode;
-        return $cancelRecurSubscription;
-    }
+	public function cancelRecurSubscription()
+	{
+		$cancelRecurSubscription = new CancelRecurSubscription($this->conf);
+		$cancelRecurSubscription->subscriptionId = $this->subscriptionId;
+		$cancelRecurSubscription->countryCode = $this->countryCode;
+		return $cancelRecurSubscription;
+	}
 }

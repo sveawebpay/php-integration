@@ -9,13 +9,13 @@ namespace Svea\WebPay\AdminService\AdminServiceResponse;
  */
 class CancelAccountCreditAmount extends AdminServiceResponse
 {
-    /**
-     * CreditPaymentPlanResponse constructor.
-     * @param $message
-     * @param $logs
-     */
-    function __construct($message, $logs)
-    {
-        $this->formatObject($message, $logs);
-    }
+	/**
+	 * CreditPaymentPlanResponse constructor.
+	 * @param $message
+	 * @param $logs
+	 */
+	function __construct($message, $logs)
+	{
+		$this->formatObject($message, $logs);
+	}
 }

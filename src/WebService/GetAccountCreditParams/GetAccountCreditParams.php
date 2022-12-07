@@ -22,72 +22,72 @@ use Svea\WebPay\WebService\SveaSoap\SveaRequest;
  */
 class GetAccountCreditParams
 {
-    public $testmode = false;
-    public $object;
-    public $conf;
-    public $countryCode;
-    public $logging = false;
+	public $testmode = false;
+	public $object;
+	public $conf;
+	public $countryCode;
+	public $logging = false;
 
-    function __construct($config)
-    {
-        $this->conf = $config;
-    }
+	function __construct($config)
+	{
+		$this->conf = $config;
+	}
 
-    /**
-     * Required
-     *
-     * @param string $countryCodeAsString
-     * @return $this
-     */
-    public function setCountryCode($countryCodeAsString)
-    {
-        $this->countryCode = $countryCodeAsString;
+	/**
+	 * Required
+	 *
+	 * @param string $countryCodeAsString
+	 * @return $this
+	 */
+	public function setCountryCode($countryCodeAsString)
+	{
+		$this->countryCode = $countryCodeAsString;
 
-        return $this;
-    }
+		return $this;
+	}
 
-    /**
-     * Optional
-     *
-     * @param bool $logging
-     * @return $this
-     */
-    public function enableLogging($logging)
-    {
-        $this->logging = $logging;
+	/**
+	 * Optional
+	 *
+	 * @param bool $logging
+	 * @return $this
+	 */
+	public function enableLogging($logging)
+	{
+		$this->logging = $logging;
 
-        return $this;
-    }
+		return $this;
+	}
 
-    /**
-     * Prepares and sends request
-     *
-     * @return \Svea\WebPay\WebService\WebServiceResponse\PaymentPlanParamsResponse
-     */
-    public function doRequest()
-    {
-        $requestObject = $this->prepareRequest();
-        $request = new SveaDoRequest($this->conf, ConfigurationProvider::ACCOUNTCREDIT_TYPE, "GetAccountCreditParamsEu", $requestObject, $this->logging);
+	/**
+	 * Prepares and sends request
+	 *
+	 * @return \Svea\WebPay\WebService\WebServiceResponse\PaymentPlanParamsResponse
+	 */
+	public function doRequest()
+	{
+		$requestObject = $this->prepareRequest();
+		$request = new SveaDoRequest($this->conf, ConfigurationProvider::ACCOUNTCREDIT_TYPE, "GetAccountCreditParamsEu", $requestObject, $this->logging);
 
-        $responseObject = new SveaResponse($request->result['requestResult'], "", NULL, NULL,isset($request->result['logs']) ? $request->result['logs'] : NULL);
+		$responseObject = new SveaResponse($request->result['requestResult'], "", NULL, NULL,isset($request->result['logs']) ? $request->result['logs'] : NULL);
 
-        return $responseObject->response;
-    }
+		return $responseObject->response;
+	}
 
-    /**
-     * @return SveaRequest
-     */
-    public function prepareRequest()
-    {
-        $auth = new SveaAuth(
-            $this->conf->getUsername(ConfigurationProvider::ACCOUNTCREDIT_TYPE, $this->countryCode),
-            $this->conf->getPassword(ConfigurationProvider::ACCOUNTCREDIT_TYPE, $this->countryCode),
-            $this->conf->getClientNumber(ConfigurationProvider::ACCOUNTCREDIT_TYPE, $this->countryCode)
-        );
+	/**
+	 * @return SveaRequest
+	 */
+	public function prepareRequest()
+	{
+		$auth = new SveaAuth(
+			$this->conf->getUsername(ConfigurationProvider::ACCOUNTCREDIT_TYPE, $this->countryCode),
+			$this->conf->getPassword(ConfigurationProvider::ACCOUNTCREDIT_TYPE, $this->countryCode),
+			$this->conf->getClientNumber(ConfigurationProvider::ACCOUNTCREDIT_TYPE, $this->countryCode)
+		);
 
-        $object = new SveaRequest();
-        $object->request = (object)array("Auth" => $auth);
+		$object = new SveaRequest();
+		$object->request = (object)["Auth" => $auth];
 
-        return $object;
-    }
+		return $object;
+	}
 }

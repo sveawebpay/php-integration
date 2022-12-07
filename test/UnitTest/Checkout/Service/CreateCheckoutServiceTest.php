@@ -12,84 +12,84 @@ use Svea\WebPay\Test\UnitTest\Checkout\TestCase;
  */
 class CreateCheckoutServiceTest extends TestCase
 {
-    /**
-     * @var CheckoutService
-     */
-    protected $service;
+	/**
+	 * @var CheckoutService
+	 */
+	protected $service;
 
-    public function setUp()
-    {
-        parent::setUp();
+	public function setUp()
+	{
+		parent::setUp();
 
-        $this->order->setCountryCode("SE")
-            ->setCurrency('SEK')
-            ->setCheckoutUri('http://localhost:51925/')
-            ->setConfirmationUri('http://localhost:51925/checkout/confirm')
-            ->setPushUri('https://svea.com/push.aspx?sid=123&svea_order=123')
-            ->setTermsUri('http://localhost:51898/terms')
-            ->setLocale('sv-Se')
-            ->setMerchantData("Test string");
+		$this->order->setCountryCode("SE")
+			->setCurrency('SEK')
+			->setCheckoutUri('http://localhost:51925/')
+			->setConfirmationUri('http://localhost:51925/checkout/confirm')
+			->setPushUri('https://svea.com/push.aspx?sid=123&svea_order=123')
+			->setTermsUri('http://localhost:51898/terms')
+			->setLocale('sv-Se')
+			->setMerchantData("Test string");
 
-        $this->service = new CreateOrderService($this->order);
-    }
+		$this->service = new CreateOrderService($this->order);
+	}
 
-    /**
-     * @test
-     */
-    public function gettingFormattedRows()
-    {
-        $this->order
-            ->addOrderRow($this->returnOrderRow())
-            ->addOrderRow($this->returnOrderRow());
+	/**
+	 * @test
+	 */
+	public function gettingFormattedRows()
+	{
+		$this->order
+			->addOrderRow($this->returnOrderRow())
+			->addOrderRow($this->returnOrderRow());
 
-        $formattedOrderRows = $this->invokeMethod($this->service, 'formatOrderInformationWithOrderRows');
+		$formattedOrderRows = $this->invokeMethod($this->service, 'formatOrderInformationWithOrderRows');
 
-        $this->assertEquals(2, count($formattedOrderRows));
-    }
+		$this->assertEquals(2, count($formattedOrderRows));
+	}
 
-    /**
-     * @test
-     */
-    public function preparingData()
-    {
-        $this->order
-            ->addPresetValue($this->returnPresetValue())
-            ->addOrderRow($this->returnOrderRow())
-            ->addOrderRow($this->returnOrderRow());
+	/**
+	 * @test
+	 */
+	public function preparingData()
+	{
+		$this->order
+			->addPresetValue($this->returnPresetValue())
+			->addOrderRow($this->returnOrderRow())
+			->addOrderRow($this->returnOrderRow());
 
-        $formattedOrderRows = $this->invokeMethod($this->service, 'mapCreateOrderData', array($this->order));
+		$formattedOrderRows = $this->invokeMethod($this->service, 'mapCreateOrderData', [$this->order]);
 
-        $this->assertArrayHasKey('cart', $formattedOrderRows);
-        $this->assertArrayHasKey('currency', $formattedOrderRows);
-        $this->assertArrayHasKey('countryCode', $formattedOrderRows);
-        $this->assertArrayHasKey('locale', $formattedOrderRows);
-        $this->assertArrayHasKey('merchantSettings', $formattedOrderRows);
-        $this->assertArrayHasKey('presetValues', $formattedOrderRows);
-        $this->assertArrayHasKey('merchantData', $formattedOrderRows);
-    }
+		$this->assertArrayHasKey('cart', $formattedOrderRows);
+		$this->assertArrayHasKey('currency', $formattedOrderRows);
+		$this->assertArrayHasKey('countryCode', $formattedOrderRows);
+		$this->assertArrayHasKey('locale', $formattedOrderRows);
+		$this->assertArrayHasKey('merchantSettings', $formattedOrderRows);
+		$this->assertArrayHasKey('presetValues', $formattedOrderRows);
+		$this->assertArrayHasKey('merchantData', $formattedOrderRows);
+	}
 
-    /**
-     * @test
-    */
-    public function orderValidationWithBadOrder()
-    {
-        $errors = $this->invokeMethod($this->service, 'validateOrder');
+	/**
+	 * @test
+	*/
+	public function orderValidationWithBadOrder()
+	{
+		$errors = $this->invokeMethod($this->service, 'validateOrder');
 
-        $this->assertGreaterThan(0, count($errors));
-    }
+		$this->assertGreaterThan(0, count($errors));
+	}
 
-    /**
-     * @test
-     */
-    public function orderValidationWithGoodOrder()
-    {
-        $this->order
-            ->addOrderRow($this->returnOrderRow())
-            ->addOrderRow($this->returnOrderRow());
+	/**
+	 * @test
+	 */
+	public function orderValidationWithGoodOrder()
+	{
+		$this->order
+			->addOrderRow($this->returnOrderRow())
+			->addOrderRow($this->returnOrderRow());
 
-        $errors = $this->invokeMethod($this->service, 'validateOrder');
+		$errors = $this->invokeMethod($this->service, 'validateOrder');
 
-        $this->assertEquals(0, count($errors));
-    }
+		$this->assertEquals(0, count($errors));
+	}
 
 }

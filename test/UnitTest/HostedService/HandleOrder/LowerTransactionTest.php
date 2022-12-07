@@ -16,114 +16,112 @@ use Svea\WebPay\HostedService\HostedAdminRequest\LowerTransaction;
 class LowerTransactionTest extends \PHPUnit\Framework\TestCase
 {
 
-    protected $configObject;
-    protected $lowerTransactionObject;
+	protected $configObject;
+	protected $lowerTransactionObject;
 
-    // fixture, run once before each test method
-    protected function setUp()
-    {
-        $this->configObject = ConfigurationService::getDefaultConfig();
-        $this->lowerTransactionObject = new LowerTransaction($this->configObject);
-    }
+	// fixture, run once before each test method
+	protected function setUp()
+	{
+		$this->configObject = ConfigurationService::getDefaultConfig();
+		$this->lowerTransactionObject = new LowerTransaction($this->configObject);
+	}
 
-    // test methods
-    function test_class_exists()
-    {
-        $this->assertInstanceOf("Svea\WebPay\HostedService\HostedAdminRequest\LowerTransaction", $this->lowerTransactionObject);
-        $this->assertEquals("loweramount", \PHPUnit\Framework\Assert::readAttribute($this->lowerTransactionObject, 'method'));
-    }
+	// test methods
+	function test_class_exists()
+	{
+		$this->assertInstanceOf("Svea\WebPay\HostedService\HostedAdminRequest\LowerTransaction", $this->lowerTransactionObject);
+		$this->assertEquals("loweramount", \PHPUnit\Framework\Assert::readAttribute($this->lowerTransactionObject, 'method'));
+	}
 
-    function test_setCountryCode()
-    {
-        $countryCode = "SE";
-        $this->lowerTransactionObject->countryCode = $countryCode;
-        $this->assertEquals($countryCode, \PHPUnit\Framework\Assert::readAttribute($this->lowerTransactionObject, 'countryCode'));
-    }
+	function test_setCountryCode()
+	{
+		$countryCode = "SE";
+		$this->lowerTransactionObject->countryCode = $countryCode;
+		$this->assertEquals($countryCode, \PHPUnit\Framework\Assert::readAttribute($this->lowerTransactionObject, 'countryCode'));
+	}
 
-    function test_prepareRequest_array_contains_mac_merchantid_message()
-    {
+	function test_prepareRequest_array_contains_mac_merchantid_message()
+	{
 
-        // set up lowerTransaction object & get request form
-        $transactionId = 987654;
-        $this->lowerTransactionObject->transactionId = $transactionId;
+		// set up lowerTransaction object & get request form
+		$transactionId = 987654;
+		$this->lowerTransactionObject->transactionId = $transactionId;
 
-        $amountToLower = 100;
-        $this->lowerTransactionObject->amountToLower = $amountToLower;
+		$amountToLower = 100;
+		$this->lowerTransactionObject->amountToLower = $amountToLower;
 
-        $countryCode = "SE";
-        $this->lowerTransactionObject->countryCode = $countryCode;
+		$countryCode = "SE";
+		$this->lowerTransactionObject->countryCode = $countryCode;
 
-        $form = $this->lowerTransactionObject->prepareRequest();
+		$form = $this->lowerTransactionObject->prepareRequest();
 
-        // prepared request is message (base64 encoded), merchantid, mac
-        $this->assertTrue(isset($form['merchantid']));
-        $this->assertTrue(isset($form['mac']));
-        $this->assertTrue(isset($form['message']));
-    }
+		// prepared request is message (base64 encoded), merchantid, mac
+		$this->assertTrue(isset($form['merchantid']));
+		$this->assertTrue(isset($form['mac']));
+		$this->assertTrue(isset($form['message']));
+	}
 
-    function test_prepareRequest_has_correct_merchantid_mac_and_lowerTransaction_request_message_contents()
-    {
+	function test_prepareRequest_has_correct_merchantid_mac_and_lowerTransaction_request_message_contents()
+	{
 
-        // set up lowerTransaction object & get request form
-        $transactionId = 987654;
-        $this->lowerTransactionObject->transactionId = $transactionId;
+		// set up lowerTransaction object & get request form
+		$transactionId = 987654;
+		$this->lowerTransactionObject->transactionId = $transactionId;
 
-        $amountToLower = 100;
-        $this->lowerTransactionObject->amountToLower = $amountToLower;
+		$amountToLower = 100;
+		$this->lowerTransactionObject->amountToLower = $amountToLower;
 
-        $countryCode = "SE";
-        $this->lowerTransactionObject->countryCode = $countryCode;
+		$countryCode = "SE";
+		$this->lowerTransactionObject->countryCode = $countryCode;
 
-        $form = $this->lowerTransactionObject->prepareRequest();
+		$form = $this->lowerTransactionObject->prepareRequest();
 
-        // get our merchantid & secret
-        $merchantid = $this->configObject->getMerchantId(ConfigurationProvider::HOSTED_TYPE, $countryCode);
-        $secret = $this->configObject->getSecret(ConfigurationProvider::HOSTED_TYPE, $countryCode);
+		// get our merchantid & secret
+		$merchantid = $this->configObject->getMerchantId(ConfigurationProvider::HOSTED_TYPE, $countryCode);
+		$secret = $this->configObject->getSecret(ConfigurationProvider::HOSTED_TYPE, $countryCode);
 
-        // check mechantid
-        $this->assertEquals($merchantid, urldecode($form['merchantid']));
+		// check mechantid
+		$this->assertEquals($merchantid, urldecode($form['merchantid']));
 
-        // check valid mac
-        $this->assertEquals(hash("sha512", urldecode($form['message']) . $secret), urldecode($form['mac']));
+		// check valid mac
+		$this->assertEquals(hash("sha512", urldecode($form['message']) . $secret), urldecode($form['mac']));
 
-        // check credit request message contents
-        $xmlMessage = new SimpleXMLElement(base64_decode(urldecode($form['message'])));
+		// check credit request message contents
+		$xmlMessage = new SimpleXMLElement(base64_decode(urldecode($form['message'])));
 
-        $this->assertEquals("loweramount", $xmlMessage->getName());   // root node        
-        $this->assertEquals((string)$transactionId, $xmlMessage->transactionid);
-        $this->assertEquals((string)$amountToLower, $xmlMessage->amounttolower);
-    }
+		$this->assertEquals("loweramount", $xmlMessage->getName());   // root node
+		$this->assertEquals((string)$transactionId, $xmlMessage->transactionid);
+		$this->assertEquals((string)$amountToLower, $xmlMessage->amounttolower);
+	}
 
-    /**
-     * @expectedException Svea\WebPay\BuildOrder\Validator\ValidationException
-     * @expectedExceptionMessage -missing value : transactionId is required. Use function setTransactionId() with the SveaOrderId from the createOrder response.
-     */
-    function test_prepareRequest_missing_transactionId_throws_exception()
-    {
-        $amountToLower = 100;
-        $this->lowerTransactionObject->amountToLower = $amountToLower;
+	/**
+	 * @expectedException Svea\WebPay\BuildOrder\Validator\ValidationException
+	 * @expectedExceptionMessage -missing value : transactionId is required. Use function setTransactionId() with the SveaOrderId from the createOrder response.
+	 */
+	function test_prepareRequest_missing_transactionId_throws_exception()
+	{
+		$amountToLower = 100;
+		$this->lowerTransactionObject->amountToLower = $amountToLower;
 
-        $countryCode = "SE";
-        $this->lowerTransactionObject->countryCode = $countryCode;
+		$countryCode = "SE";
+		$this->lowerTransactionObject->countryCode = $countryCode;
 
-        $form = $this->lowerTransactionObject->prepareRequest();
-    }
+		$form = $this->lowerTransactionObject->prepareRequest();
+	}
 
-    /**
-     * @expectedException Svea\WebPay\BuildOrder\Validator\ValidationException
-     * @expectedExceptionMessage -missing value : amountToLower is required. Use function setAmountToLower().
-     */
-    function test_prepareRequest_missing_amountToLower_throws_exception()
-    {
-        $transactionId = 987654;
-        $this->lowerTransactionObject->transactionId = $transactionId;
+	/**
+	 * @expectedException Svea\WebPay\BuildOrder\Validator\ValidationException
+	 * @expectedExceptionMessage -missing value : amountToLower is required. Use function setAmountToLower().
+	 */
+	function test_prepareRequest_missing_amountToLower_throws_exception()
+	{
+		$transactionId = 987654;
+		$this->lowerTransactionObject->transactionId = $transactionId;
 
-        $countryCode = "SE";
-        $this->lowerTransactionObject->countryCode = $countryCode;
+		$countryCode = "SE";
+		$this->lowerTransactionObject->countryCode = $countryCode;
 
-        $form = $this->lowerTransactionObject->prepareRequest();
-    }
+		$form = $this->lowerTransactionObject->prepareRequest();
+	}
 
 }
-
-?>

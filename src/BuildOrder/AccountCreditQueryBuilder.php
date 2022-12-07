@@ -29,44 +29,44 @@ use Svea\WebPay\HostedService\HostedAdminRequest\QueryTransaction;
  */
 class AccountCreditQueryBuilder extends CheckoutAdminOrderBuilder
 {
-    /**
-     * @var ConfigurationProvider $conf
-     */
-    public $conf;
+	/**
+	 * @var ConfigurationProvider $conf
+	 */
+	public $conf;
 
-    /**
-     * @var AccountCreditInformation []
-     * */
-    public $clientAccountCreditInformation = array();
+	/**
+	 * @var AccountCreditInformation []
+	 * */
+	public $clientAccountCreditInformation = [];
 
-    public function __construct($config) {
-        $this->conf = $config;
-    }
+	public function __construct($config) {
+		$this->conf = $config;
+	}
 
-    /**
-     * Add ClientAccountInformation, this is only for AccountCredit
-     *
-     * @var AccountCreditInformation @info
-     * @return $this
-     */
-    public function addClientAccountCreditInformation($info)
-    {
-        $this->clientAccountCreditInformation [] = $info;
+	/**
+	 * Add ClientAccountInformation, this is only for AccountCredit
+	 *
+	 * @var AccountCreditInformation @info
+	 * @return $this
+	 */
+	public function addClientAccountCreditInformation($info)
+	{
+		$this->clientAccountCreditInformation [] = $info;
 
-        return $this;
-    }
+		return $this;
+	}
 
-    /**
-     * Retrieve list of clientAccountCreditInformation
-     */
-    public function getClientAccountCreditInformation()
-    {
-        return $this->clientAccountCreditInformation;
-    }
+	/**
+	 * Retrieve list of clientAccountCreditInformation
+	 */
+	public function getClientAccountCreditInformation()
+	{
+		return $this->clientAccountCreditInformation;
+	}
 
-    public function queryAccountCreditOrder()
-    {
-        $this->orderType = ConfigurationProvider::ACCOUNTCREDIT_TYPE;
-        return new SearchOrdersRequest($this);
-    }
+	public function queryAccountCreditOrder()
+	{
+		$this->orderType = ConfigurationProvider::ACCOUNTCREDIT_TYPE;
+		return new SearchOrdersRequest($this);
+	}
 }

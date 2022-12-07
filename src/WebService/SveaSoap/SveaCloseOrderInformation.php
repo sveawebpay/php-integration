@@ -7,5 +7,5 @@ namespace Svea\WebPay\WebService\SveaSoap;
  */
 class SveaCloseOrderInformation
 {
-    public $SveaOrderId;
+	public $SveaOrderId;
 }

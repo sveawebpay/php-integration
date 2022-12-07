@@ -22,36 +22,36 @@ use Svea\WebPay\Helper\Helper;
  */
 class PaymentPlanPricePerMonth
 {
-    public $values = array();
+	public $values = [];
 
-    /**
-     * PaymentPlanPricePerMonth constructor.
-     * @param $price
-     * @param $params
-     * @param bool $ignoreMaxAndMinFlag
-     * @param int decimals
-     */
-    function __construct($price, $params, $ignoreMaxAndMinFlag = false, $decimals = 0)
-    {
-        $this->calculate($price, $params, $ignoreMaxAndMinFlag, $decimals);
-    }
+	/**
+	 * PaymentPlanPricePerMonth constructor.
+	 * @param $price
+	 * @param $params
+	 * @param bool $ignoreMaxAndMinFlag
+	 * @param int decimals
+	 */
+	function __construct($price, $params, $ignoreMaxAndMinFlag = false, $decimals = 0)
+	{
+		$this->calculate($price, $params, $ignoreMaxAndMinFlag, $decimals);
+	}
 
-    /**
-     * @param $price
-     * @param $params
-     * @param $ignoreMaxAndMinFlag
-     * @param $decimals
-     */
-    private function calculate($price, $params, $ignoreMaxAndMinFlag, $decimals)
-    {
-        if (!empty($params)) {
-            foreach ($params->campaignCodes as $key => $value) {
-                if ($ignoreMaxAndMinFlag || ($price >= $value->fromAmount && $price <= $value->toAmount)) {
-                    $pair = Helper::objectToArray($value);
-                    $pair['pricePerMonth'] = round(($value->initialFee + (ceil($price * $value->monthlyAnnuityFactor) + $value->notificationFee) * max(1, $value->contractLengthInMonths - $value->numberOfPaymentFreeMonths)) / max(1, $value->contractLengthInMonths - $value->numberOfPaymentFreeMonths), $decimals);
-                    array_push($this->values, $pair);
-                }
-            }
-        }
-    }
+	/**
+	 * @param $price
+	 * @param $params
+	 * @param $ignoreMaxAndMinFlag
+	 * @param $decimals
+	 */
+	private function calculate($price, $params, $ignoreMaxAndMinFlag, $decimals)
+	{
+		if (!empty($params)) {
+			foreach ($params->campaignCodes as $key => $value) {
+				if ($ignoreMaxAndMinFlag || ($price >= $value->fromAmount && $price <= $value->toAmount)) {
+					$pair = Helper::objectToArray($value);
+					$pair['pricePerMonth'] = round(($value->initialFee + (ceil($price * $value->monthlyAnnuityFactor) + $value->notificationFee) * max(1, $value->contractLengthInMonths - $value->numberOfPaymentFreeMonths)) / max(1, $value->contractLengthInMonths - $value->numberOfPaymentFreeMonths), $decimals);
+					array_push($this->values, $pair);
+				}
+			}
+		}
+	}
 }

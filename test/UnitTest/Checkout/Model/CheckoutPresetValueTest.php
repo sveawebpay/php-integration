@@ -12,53 +12,53 @@ use Svea\WebPay\Test\UnitTest\Checkout\TestCase;
 class CheckoutPresetValueTest extends TestCase
 {
 
-    public function setUp()
-    {
-        parent::setUp();
-    }
+	public function setUp()
+	{
+		parent::setUp();
+	}
 
-    /**
-     * @test
-     *
-     * @expectedException \Svea\WebPay\BuildOrder\Validator\ValidationException
-     */
-    public function setTypeMethodReceiveBadParam()
-    {
-        $pv = new PresetValue();
+	/**
+	 * @test
+	 *
+	 * @expectedException \Svea\WebPay\BuildOrder\Validator\ValidationException
+	 */
+	public function setTypeMethodReceiveBadParam()
+	{
+		$pv = new PresetValue();
 
-        $pv->setTypeName('NonExistingName');
-    }
+		$pv->setTypeName('NonExistingName');
+	}
 
-    /**
-     * @doesNotPerformAssertions
-     */
-    public function setTypeMethodReceiveGoodParams()
-    {
-        $pv = new PresetValue();
-        $typeList = $this->invokeMethod($pv, 'getConstantListValues');
+	/**
+	 * @doesNotPerformAssertions
+	 */
+	public function setTypeMethodReceiveGoodParams()
+	{
+		$pv = new PresetValue();
+		$typeList = $this->invokeMethod($pv, 'getConstantListValues');
 
-        foreach ($typeList as $type) {
-            $pv->setTypeName($type);
-        }
-    }
+		foreach ($typeList as $type) {
+			$pv->setTypeName($type);
+		}
+	}
 
-    /**
-     * @test
-     */
-    public function printArray()
-    {
-        $postalCode = '11123';
-        $readonly = true;
+	/**
+	 * @test
+	 */
+	public function printArray()
+	{
+		$postalCode = '11123';
+		$readonly = true;
 
-        $pv = new PresetValue();
-        $pv->setTypeName($pv::POSTAL_CODE)
-            ->setValue($postalCode)
-            ->setIsReadonly($readonly);
+		$pv = new PresetValue();
+		$pv->setTypeName($pv::POSTAL_CODE)
+			->setValue($postalCode)
+			->setIsReadonly($readonly);
 
-        $array = $pv->returnPresetArray();
-        
-        $this->assertEquals($array['typeName'], $pv::POSTAL_CODE);
-        $this->assertEquals($array['value'], $postalCode);
-        $this->assertEquals($array['isReadonly'], $readonly);
-    }
+		$array = $pv->returnPresetArray();
+
+		$this->assertEquals($array['typeName'], $pv::POSTAL_CODE);
+		$this->assertEquals($array['value'], $postalCode);
+		$this->assertEquals($array['isReadonly'], $readonly);
+	}
 }

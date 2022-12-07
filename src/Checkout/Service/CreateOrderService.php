@@ -14,103 +14,103 @@ use Svea\WebPay\Checkout\Validation\CreateOrderValidator;
  */
 class CreateOrderService extends CheckoutService
 {
-    public $requestObject;
+	public $requestObject;
 
-    /**
-     * Send call to Connection Library
-     *
-     * @return array
-     */
-    public function doRequest()
-    {
-        $requestData = $this->prepareRequest();
+	/**
+	 * Send call to Connection Library
+	 *
+	 * @return array
+	 */
+	public function doRequest()
+	{
+		$requestData = $this->prepareRequest();
 
-        $response = $this->serviceConnection->create($requestData);
+		$response = $this->serviceConnection->create($requestData);
 
-        return $response;
-    }
+		return $response;
+	}
 
-    /**
-     * Process Order for request data for Svea Checkout API
-     *
-     * @return array
-     * @throws \Svea\WebPay\BuildOrder\Validator\ValidationException
-     */
-    protected function prepareRequest()
-    {
-        $errors = $this->validateOrder();
-        $this->processErrors($errors);
-        $data = $this->mapCreateOrderData($this->order);
+	/**
+	 * Process Order for request data for Svea Checkout API
+	 *
+	 * @return array
+	 * @throws \Svea\WebPay\BuildOrder\Validator\ValidationException
+	 */
+	protected function prepareRequest()
+	{
+		$errors = $this->validateOrder();
+		$this->processErrors($errors);
+		$data = $this->mapCreateOrderData($this->order);
 
-        return $data;
-    }
+		return $data;
+	}
 
-    /**
-     * Validate order data
-     *
-     * @return array of errors
-     */
-    protected function validateOrder()
-    {
-        $validator = new CreateOrderValidator();
-        $errors = $validator->validate($this->order);
+	/**
+	 * Validate order data
+	 *
+	 * @return array of errors
+	 */
+	protected function validateOrder()
+	{
+		$validator = new CreateOrderValidator();
+		$errors = $validator->validate($this->order);
 
-        return $errors;
-    }
+		return $errors;
+	}
 
-    /**
-     * Map Order to array
-     *
-     * @param CheckoutOrderBuilder $order
-     * @return array
-     */
-    protected function mapCreateOrderData(CheckoutOrderBuilder $order)
-    {
-        $data = array();
+	/**
+	 * Map Order to array
+	 *
+	 * @param CheckoutOrderBuilder $order
+	 * @return array
+	 */
+	protected function mapCreateOrderData(CheckoutOrderBuilder $order)
+	{
+		$data = [];
 
-        /**
-         * @var \Svea\WebPay\WebService\SveaSoap\SveaOrderRow [] $orderItems
-         */
-        $orderItems = $this->formatOrderInformationWithOrderRows();
+		/**
+		 * @var \Svea\WebPay\WebService\SveaSoap\SveaOrderRow [] $orderItems
+		 */
+		$orderItems = $this->formatOrderInformationWithOrderRows();
 
-        foreach ($orderItems as $item) {
-            $data['cart']['items'][] = $this->mapOrderItem($item);
-        }
+		foreach ($orderItems as $item) {
+			$data['cart']['items'][] = $this->mapOrderItem($item);
+		}
 
-        $data['currency'] = $order->currency;
-        $data['countryCode'] = $order->countryCode;
-        $data['locale'] = $order->getLocale();
+		$data['currency'] = $order->currency;
+		$data['countryCode'] = $order->countryCode;
+		$data['locale'] = $order->getLocale();
 
-        $data['merchantSettings'] = $order->getMerchantSettings()->getMerchantSettings();
+		$data['merchantSettings'] = $order->getMerchantSettings()->getMerchantSettings();
 
-        $data['clientOrderNumber'] = $order->getClientOrderNumber();
+		$data['clientOrderNumber'] = $order->getClientOrderNumber();
 
-        if (count($order->getPresetValues()) > 0) {
-            foreach ($order->getPresetValues() as $presetValue) {
-                $data['presetValues'] [] = $presetValue->returnPresetArray();
-            }
-        }
+		if (count($order->getPresetValues()) > 0) {
+			foreach ($order->getPresetValues() as $presetValue) {
+				$data['presetValues'] [] = $presetValue->returnPresetArray();
+			}
+		}
 
-        if ($order->getPartnerKey() != null)
-        {
-            $data['partnerKey'] = $order->getPartnerKey();
-        }
+		if ($order->getPartnerKey() != null)
+		{
+			$data['partnerKey'] = $order->getPartnerKey();
+		}
 
-        if ($order->getIdentityFlags() != null)
-        {
-            foreach ($order->getIdentityFlags() as $key => $identityFlag)
-            {
-                $data['identityFlags'][$identityFlag] = true;
-            }
-        }
+		if ($order->getIdentityFlags() != null)
+		{
+			foreach ($order->getIdentityFlags() as $key => $identityFlag)
+			{
+				$data['identityFlags'][$identityFlag] = true;
+			}
+		}
 
-        $data['merchantData'] = $order->getMerchantData();
+		$data['merchantData'] = $order->getMerchantData();
 
-        if($order->getRequireElectronicIdAuthentication() != null)
-        {
-            $data['requireElectronicIdAuthentication'] = $order->getRequireElectronicIdAuthentication();
-        }
+		if($order->getRequireElectronicIdAuthentication() != null)
+		{
+			$data['requireElectronicIdAuthentication'] = $order->getRequireElectronicIdAuthentication();
+		}
 
-        return $data;
-    }
+		return $data;
+	}
 }
