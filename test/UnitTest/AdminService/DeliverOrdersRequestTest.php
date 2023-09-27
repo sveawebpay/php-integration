@@ -16,7 +16,7 @@ class DeliverOrdersRequestTest extends \PHPUnit\Framework\TestCase
 
     public $builderObject;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->builderObject = new DeliverOrderBuilder(ConfigurationService::getDefaultConfig());
         $this->builderObject->setOrderId(123456);

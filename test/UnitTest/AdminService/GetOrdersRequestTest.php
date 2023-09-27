@@ -14,7 +14,7 @@ class GetOrdersRequestTest extends \PHPUnit\Framework\TestCase
 
     public $builderObject;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->builderObject = new OrderBuilder(ConfigurationService::getDefaultConfig());
         // TODO create classes w/methods for below

@@ -17,7 +17,7 @@ class OrderBuilderTest extends \PHPUnit\Framework\TestCase
 
     //Set up orderobject
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $config = ConfigurationService::getDefaultConfig();
         $this->orderBuilder = WebPay::createOrder($config);

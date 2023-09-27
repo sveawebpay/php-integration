@@ -19,7 +19,7 @@ class AddOrderRowsRequestTest extends \PHPUnit\Framework\TestCase
 
     public $builderObject;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->builderObject = new OrderBuilder(ConfigurationService::getDefaultConfig());
         $this->builderObject->orderId = 123456;

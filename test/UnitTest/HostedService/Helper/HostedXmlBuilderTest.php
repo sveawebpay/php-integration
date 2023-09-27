@@ -17,7 +17,7 @@ class HostedXmlBuilderTest extends \PHPUnit\Framework\TestCase
 
     private $order;
 
-    protected function setUp()
+    protected function setup(): void
     {
         $this->order = WebPay::createOrder(ConfigurationService::getDefaultConfig());
 

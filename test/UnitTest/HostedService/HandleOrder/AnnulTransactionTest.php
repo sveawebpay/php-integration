@@ -19,7 +19,7 @@ class AnnulTransactionTest extends \PHPUnit\Framework\TestCase
     protected $annulObject;
 
     // fixture, run once before each test method
-    protected function setUp()
+    protected function setup(): void
     {
         $this->configObject = ConfigurationService::getDefaultConfig();
         $this->annulObject = new AnnulTransaction($this->configObject);

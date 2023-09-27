@@ -20,7 +20,7 @@ class RecurTransactionTest extends \PHPUnit\Framework\TestCase
     protected $recurTransactionObject;
 
     // fixture, run once before each test method
-    protected function setUp()
+    protected function setup(): void
     {
         $this->configObject = ConfigurationService::getDefaultConfig();
         $this->recurTransactionObject = new RecurTransaction($this->configObject);

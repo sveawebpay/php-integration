@@ -15,7 +15,7 @@ class TestCase extends \PHPUnit\Framework\TestCase
      */
     protected $order;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->order = $this->returnCreatedOrder();
     }

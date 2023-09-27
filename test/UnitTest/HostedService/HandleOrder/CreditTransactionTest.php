@@ -20,7 +20,7 @@ class CreditTransactionTest extends \PHPUnit\Framework\TestCase
     protected $creditObject;
 
     // fixture, run once before each test method
-    protected function setUp()
+    protected function setup(): void
     {
         $this->configObject = ConfigurationService::getDefaultConfig();
         $this->creditObject = new CreditTransaction($this->configObject);

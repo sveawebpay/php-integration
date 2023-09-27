@@ -16,7 +16,7 @@ class CheckoutRowFormatterTest extends TestCase
      */
     protected $formatter;
 
-    public function setUp()
+    public function setup(): void
     {
         parent::setUp();
 

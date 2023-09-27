@@ -17,7 +17,7 @@ class UpdateOrderValidationTest extends TestCase
      */
     protected $validator;
 
-    public function setUp()
+    public function setup(): void
     {
         parent::setUp();
         $this->validator = new UpdateOrderValidator();

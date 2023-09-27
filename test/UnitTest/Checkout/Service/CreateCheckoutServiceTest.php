@@ -17,7 +17,7 @@ class CreateCheckoutServiceTest extends TestCase
      */
     protected $service;
 
-    public function setUp()
+    public function setup(): void
     {
         parent::setUp();
 

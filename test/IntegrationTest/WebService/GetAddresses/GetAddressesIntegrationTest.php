@@ -17,7 +17,7 @@ class GetAddressesIntegrationTest extends \PHPUnit\Framework\TestCase
     private $config;
     private $addressRequest;
 
-    public function SetUp()
+    public function SetUp(): void
     {
         $this->config = ConfigurationService::getDefaultConfig();
         $this->addressRequest = new GetAddresses($this->config);

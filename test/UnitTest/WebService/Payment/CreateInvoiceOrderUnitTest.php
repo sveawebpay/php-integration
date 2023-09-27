@@ -25,7 +25,7 @@ class CreateInvoiceOrderUnitTest extends \PHPUnit\Framework\TestCase
     var $incvatInvoiceFee;
     var $incvatShippingFee;
 
-    public function setUp()
+    public function setup(): void
     {   // run before each test, in effect resetting the default order
 
         $this->order = WebPay::createOrder(ConfigurationService::getDefaultConfig())

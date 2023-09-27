@@ -16,7 +16,7 @@ class AccountCreditPaymentTest extends \PHPUnit\Framework\TestCase
 
 
 
-    public function __setUp()
+    public function __setup(): void
     {
 
     }

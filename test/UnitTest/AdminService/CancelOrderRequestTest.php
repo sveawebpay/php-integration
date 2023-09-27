@@ -15,7 +15,7 @@ class CancelOrderRequestTest extends \PHPUnit\Framework\TestCase
 
     public $builderObject;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->builderObject = new CancelOrderBuilder(ConfigurationService::getDefaultConfig());
         $this->builderObject->setOrderId(123456);

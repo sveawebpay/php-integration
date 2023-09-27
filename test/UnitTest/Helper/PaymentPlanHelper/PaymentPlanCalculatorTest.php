@@ -12,7 +12,7 @@ class PaymentPlanCalculatorTest extends TestCase
 
     protected $paymentPlanParams;
 
-    protected function setUp()
+    protected function setup(): void
     {
         $this->price = 11200;
     }

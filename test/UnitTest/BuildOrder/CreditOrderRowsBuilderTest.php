@@ -16,7 +16,7 @@ class CreditOrderRowsBuilderTest extends \PHPUnit\Framework\TestCase
 
     protected $creditOrderRowsObject;
 
-    function setUp()
+    function setUp(): void
     {
         $this->creditOrderRowsObject = new CreditOrderRowsBuilder(ConfigurationService::getDefaultConfig());
     }

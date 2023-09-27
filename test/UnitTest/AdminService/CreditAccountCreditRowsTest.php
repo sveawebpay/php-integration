@@ -12,7 +12,7 @@ class CreditAccountCreditRowsTest extends  \PHPUnit\Framework\TestCase
 {
     public $builderObject;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->builderObject = new CreditOrderRowsBuilder(ConfigurationService::getDefaultConfig());
         $this->builderObject->orderId = 123456;

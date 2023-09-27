@@ -102,11 +102,47 @@ class OrderBuilder
     public $payerAlias;
 
     /**
+     * @var string
+     */
+    public $identificationConfirmationUrl;
+
+    /**
+     * @var string
+     */
+    public $identificationRejectionUrl;
+
+    /**
      * @param ConfigurationProvider $config
      */
     public function __construct($config)
     {
         $this->conf = $config;
+    }
+
+    /**
+     * Set the confirmation URL
+     * Needed for SV payments that require secure customer authentication
+     *
+     * @param string $url
+     * @return self
+     */
+    public function setIdentificationConfirmationUrl(string $url)
+    {
+        $this->identificationConfirmationUrl = $url;
+        return $this;
+    }
+
+    /**
+     * Set the rejection URL
+     * Needed for SV payments that require secure customer authentication
+     *
+     * @param string $url
+     * @return self
+     */
+    public function setIdentificationRejectionUrl(string $url)
+    {
+        $this->identificationRejectionUrl = $url;
+        return $this;
     }
 
     /*

@@ -47,6 +47,10 @@ $customerInformation->setNationalIdNumber("194605092222");
 // Add the customer to the order: 
 $myOrder->addCustomerDetails($customerInformation);
 
+// If a stronger authentication is needed (invoice to SE for example) we need to tell where to redirect after successfull/rejected authentication
+$myOrder->setIdentificationConfirmationUrl('https://mydomain.com/successfull-authentication');
+$myOrder->setIdentificationRejectionUrl('https://mydomain.com/rejected-authentication');
+
 // We have now completed specifying the order, and wish to send the payment request to Svea. To do so, we first select the invoice payment method:
 $myInvoiceOrderRequest = $myOrder->useInvoicePayment();
 
