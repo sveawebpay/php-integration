@@ -13,7 +13,7 @@ class SveaOrder
     /**
      * Navigation
      *
-     * @var stdClass
+     * @var \Svea\WebPay\WebService\SveaSoap\SveaNavigation
      */
     public $Navigation;
 }

@@ -244,34 +244,7 @@ abstract class OrderValidator
      */ 
     public function validUrl($url)
     {
-        if (!$url) {
-            return false;
-        }
-
-        $isValid = filter_var($url, FILTER_VALIDATE_URL);
-
-        $denied_tld = [
-            '.local',
-            '.localhost',
-            '.example.com',
-            '.domain.com',
-            '.test',
-            '.loc',
-            '.local.se',
-            '.moc',
-            '.ngrcode',
-            '.me',
-            '.tld',
-        ];
-
-        // check if the URL ends with a denied TLD
-        foreach ($denied_tld as $tld) {
-            if (self::str_ends_with($url, $tld)) {
-                return false;
-            }
-        }
-
-        return (bool) $isValid;
+        return (bool) filter_var($url, FILTER_VALIDATE_URL);
     }
 
     /**
