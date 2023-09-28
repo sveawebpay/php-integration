@@ -55,14 +55,14 @@ class WebServiceOrderValidator extends OrderValidator
         // Require the order to contain identication urls for swedish customers using invoice payment
         if (
             $this->isCompany === false &&
-            strtoupper($order->orderType) === 'INVOICE' &&
+            in_array(strtoupper($order->orderType), ['INVOICE', 'PAYMENTPLAN']) &&
             strtoupper($order->countryCode) === 'SE'
         ) {
             if (!$this->validUrl($order->identificationConfirmationUrl)) {
-                $this->errors['Confirmation URL not valid'] = "The confirmation url is not set or using a faulty top level domain";
+                $this->errors['Confirmation URL not valid'] = "The confirmation url is not set or is not valid.";
             }
             if (!$this->validUrl($order->identificationRejectionUrl)) {
-                $this->errors['Rejection URL not valid'] = "The rejection url is not set or using a faulty top level domain";
+                $this->errors['Rejection URL not valid'] = "The rejection url is not set or is not valid.";
             }
         }
 
