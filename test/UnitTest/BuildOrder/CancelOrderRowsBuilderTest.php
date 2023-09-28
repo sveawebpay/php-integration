@@ -14,7 +14,7 @@ class CancelOrderRowsBuilderTest extends \PHPUnit\Framework\TestCase
 
     protected $cancelOrderRowsObject;
 
-    function setUp()
+    function setUp(): void
     {
         $this->cancelOrderRowsObject = new CancelOrderRowsBuilder(ConfigurationService::getDefaultConfig());
     }

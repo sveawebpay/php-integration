@@ -2,9 +2,7 @@
 
 namespace Svea\WebPay\Test\UnitTest\Checkout\Helper;
 
-use Svea\WebPay\Checkout\Helper\CheckoutOrderBuilder;
 use Svea\WebPay\Test\UnitTest\Checkout\TestCase;
-use Svea\WebPay\WebPay;
 
 /**
  * Class CheckoutOrderBuilderTest
@@ -17,7 +15,7 @@ class CheckoutOrderBuilderTest extends TestCase
      */
     protected $order;
 
-    public function setUp()
+    public function setup(): void
     {
         $this->order = $this->returnCreatedOrder();
     }

@@ -13,6 +13,7 @@ use Svea\WebPay\WebService\SveaSoap\SveaDoRequest;
 use Svea\WebPay\BuildOrder\Validator\ValidationException;
 use Svea\WebPay\WebService\SveaSoap\SveaCustomerIdentity;
 use Svea\WebPay\BuildOrder\Validator\WebServiceOrderValidator;
+use Svea\WebPay\WebService\SveaSoap\SveaNavigation;
 use Svea\WebPay\WebService\WebServiceResponse\CreateOrderResponse;
 
 /**
@@ -96,7 +97,8 @@ class WebServicePayment
 
         }
         $sveaOrder->CreateOrderInformation = $this->setOrderType($orderinformation);
-
+        $sveaOrder->Navigation = $this->setNavigation();
+ 
         $object = new SveaRequest();
         $object->request = $sveaOrder;
 
@@ -104,6 +106,19 @@ class WebServicePayment
         $this->requestObject = $object;
 
         return $object;
+    }
+
+    /**
+     * Set navigation URLs needed for compliant payment methods
+     *
+     * @return SveaNavigation
+     */
+    public function setNavigation() {
+        $navigation = new SveaNavigation();
+        $navigation->setConfirmationUrl($this->order->identificationConfirmationUrl)
+            ->setRejectionUrl($this->order->identificationRejectionUrl);
+
+        return $navigation;
     }
 
     public function validateOrder()

@@ -61,6 +61,12 @@ class CreateOrderResponse extends WebServiceResponse
      * @var string $pendingReason if pending is true then a reason can be found in this variable
      */
     public $pendingReasons;
+
+    /**
+     * @var string $redirectUrl May be present. If the order requires additional authentication the customer will be redirected to this url.
+     */
+    public $redirectUrl;
+   
     /**
      * CreateOrderResponse constructor.
      * @param $response
@@ -93,16 +99,24 @@ class CreateOrderResponse extends WebServiceResponse
             if (isset($response->CreateOrderEuResult->CreateOrderResult->ClientOrderNumber)) {
                 $this->clientOrderNumber = $response->CreateOrderEuResult->CreateOrderResult->ClientOrderNumber;
             }
+            
             if (isset($response->CreateOrderEuResult->CreateOrderResult->OrderType)) {
                 $this->orderType = $response->CreateOrderEuResult->CreateOrderResult->OrderType;
             }
+            
             if (isset($response->CreateOrderEuResult->CreateOrderResult->CustomerIdentity)) {
                 $this->customerIdentity = new CreateOrderIdentity($response->CreateOrderEuResult->CreateOrderResult->CustomerIdentity);
             }
+            
             if (isset($response->CreateOrderEuResult->CreateOrderResult->PendingReasons))
             {
                 $this->pending = 1;
                 $this->pendingReasons = $response->CreateOrderEuResult->CreateOrderResult->PendingReasons;
+            }
+            
+            if (isset($response->CreateOrderEuResult->NavigationResult))
+            {
+                $this->redirectUrl = $response->CreateOrderEuResult->NavigationResult->RedirectUrl;
             }
         }
     }

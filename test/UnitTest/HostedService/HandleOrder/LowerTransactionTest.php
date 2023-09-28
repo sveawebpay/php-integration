@@ -20,7 +20,7 @@ class LowerTransactionTest extends \PHPUnit\Framework\TestCase
     protected $lowerTransactionObject;
 
     // fixture, run once before each test method
-    protected function setUp()
+    protected function setup(): void
     {
         $this->configObject = ConfigurationService::getDefaultConfig();
         $this->lowerTransactionObject = new LowerTransaction($this->configObject);

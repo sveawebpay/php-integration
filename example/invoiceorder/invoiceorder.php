@@ -79,6 +79,10 @@ $myCustomerInformation->setZipCode($customerZipCode)->setLocality($customerCity)
 
 $myOrder->addCustomerDetails($myCustomerInformation);
 
+// If a stronger authentication is needed (invoice to SE for example) we need to tell where to redirect after successful/rejected authentication
+$myOrder->setIdentificationConfirmationUrl('https://mydomain.com/successful-authentication');
+$myOrder->setIdentificationRejectionUrl('https://mydomain.com/rejected-authentication');
+
 // We have now completed specifying the order, and wish to send the payment request to Svea. To do so, we first select a payment method.
 // We'll use the invoice order method.
 $myInvoiceOrderRequest = $myOrder->useInvoicePayment();
@@ -94,33 +98,41 @@ echo "</pre><font color='blue'><pre>
 An example of a successful request response. The 'accepted' attribute is true (1), and resultcode/errormessage is not set. 
 (Note that the customerIdentity received in the response indicates the Svea invoice address, which should normally match the order shipping address.):
 
-Svea\WebPay\WebService\WebServiceResponse\CreateOrderResponse Object
-(
-    [sveaOrderId] => 503312
-    [sveaWillBuyOrder] => 1
-    [amount] => 23.73
-    [expirationDate] => 2015-03-10T00:00:00+01:00
-    [clientOrderNumber] => 
+Svea\WebPay\WebService\WebServiceResponse\CreateOrderResponse Object {
+    [sveaOrderId] => 9688029
     [orderType] => Invoice
-    [customerIdentity] => Svea\WebPay\WebService\WebServiceResponse\CustomerIdentity\CreateOrderIdentity Object
+    [sveaWillBuyOrder] => true
+    [amount] => 10000
+    [customerIdentity] => Svea\WebPay\WebService\WebServiceResponse\CustomerIdentity\CreateOrderIdentity) Object
         (
-            [email] => 
+            [email] => email@address.se
             [ipAddress] => 
             [countryCode] => SE
             [houseNumber] => 
             [customerType] => Individual
             [nationalIdNumber] => 194605092222
-            [phoneNumber] => 
+            [phoneNumber] => 070123456789
             [fullName] => Persson, Tess T
             [street] => Testgatan 1
             [coAddress] => c/o Eriksson, Erik
             [zipCode] => 99999
             [locality] => Stan
+            [publicKey] => 
         )
-
-    [accepted] => 1
-    [errormessage] => 
+    }
+    [expirationDate] => 2023-01-01T00:00:00+01:00
+    [clientOrderNumber] => 12345678910
+    [pending] => 1
+    [pendingReasons] => Object {
+        (
+            [string] => BankId
+        )
+    }
+    [redirectUrl] => https://identifystage.svea.com/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+    [accepted] => true
+    [errormessage] =>
     [resultcode] => 0
-)
+    [logs] => NULL
+  }
 </pre>";
 

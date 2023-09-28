@@ -22,7 +22,7 @@ class CreditOrderRowsBuilderIntegrationTest extends \PHPUnit\Framework\TestCase
     protected $invoiceIdToTest;
     protected $country;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->country = "SE";
         $this->invoiceIdToTest = 1028204;   // set this to the approved invoice set up by test_manual_setup_CreditOrderRows_testdata()

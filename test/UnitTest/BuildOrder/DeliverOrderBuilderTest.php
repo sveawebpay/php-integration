@@ -14,7 +14,7 @@ class DeliverOrderBuilderTest extends \PHPUnit\Framework\TestCase
 
     protected $deliverOrderObject;
 
-    function setUp()
+    function setUp(): void
     {
         $this->deliverOrderObject = new DeliverOrderBuilder(ConfigurationService::getDefaultConfig());
     }

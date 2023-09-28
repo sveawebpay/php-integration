@@ -16,7 +16,7 @@ class DeliverOrderRowsBuilderTest extends \PHPUnit\Framework\TestCase
 
     protected $deliverOrderRowsObject;
 
-    function setUp()
+    function setUp(): void
     {
         $this->deliverOrderRowsObject = new DeliverOrderRowsBuilder(ConfigurationService::getDefaultConfig());
     }

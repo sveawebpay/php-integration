@@ -15,7 +15,7 @@ class AddOrderRowsBuilderTest extends \PHPUnit\Framework\TestCase
 
     protected $addOrderRowsObject;
 
-    function setUp()
+    function setUp(): void
     {
         $this->addOrderRowsObject = new AddOrderRowsBuilder(ConfigurationService::getDefaultConfig());
     }

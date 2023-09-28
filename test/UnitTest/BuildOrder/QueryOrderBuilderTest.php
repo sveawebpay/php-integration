@@ -14,7 +14,7 @@ class QueryOrderBuilderTest extends \PHPUnit\Framework\TestCase
 
     protected $queryOrderObject;
 
-    function setUp()
+    function setUp(): void
     {
         $this->queryOrderObject = new QueryOrderBuilder(ConfigurationService::getDefaultConfig());
     }

@@ -8,7 +8,7 @@ use Svea\WebPay\WebPayItem;
 
 class CheckoutOrderRowTest extends TestCase
 {
-    public function setUp()
+    public function setup(): void
     {
         parent::setUp();
     }

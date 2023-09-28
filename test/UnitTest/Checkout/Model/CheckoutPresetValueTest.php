@@ -12,7 +12,7 @@ use Svea\WebPay\Test\UnitTest\Checkout\TestCase;
 class CheckoutPresetValueTest extends TestCase
 {
 
-    public function setUp()
+    public function setup(): void
     {
         parent::setUp();
     }

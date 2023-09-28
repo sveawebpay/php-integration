@@ -18,7 +18,7 @@ class AddOrderRowsBuilderIntegrationTest extends \PHPUnit\Framework\TestCase
     protected $invoiceIdToTest;
     protected $country;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->country = "SE";
         $this->invoiceIdToTest = 123456;   // set this to the approved invoice set up by test_manual_setup_CreditOrderRows_testdata()

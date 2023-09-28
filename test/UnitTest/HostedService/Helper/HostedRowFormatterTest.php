@@ -17,7 +17,7 @@ class HostedRowFormatterTest extends \PHPUnit\Framework\TestCase
 
     private $order;
 
-    protected function SetUp()
+    protected function setup(): void
     {
         $this->order = WebPay::createOrder(ConfigurationService::getDefaultConfig());
     }
