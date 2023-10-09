@@ -52,35 +52,22 @@ class WebServiceOrderValidator extends OrderValidator
             $this->errors["Wrong customer type"] = "PaymentPlanPayment not allowed for Company customer.";
         }
 
-        // Require the order to contain identication urls for swedish customers using invoice payment
-        if (
-            $this->isCompany === false &&
-            in_array(strtoupper($order->orderType), ['INVOICE', 'PAYMENTPLAN']) &&
-            strtoupper($order->countryCode) === 'SE'
-        ) {
-            // If confirmation url is set, rejection url must also be set
-            if (
-                !empty($order->identificationConfirmationUrl) &&
-                empty($order->identificationRejectionUrl)
-            ) {
+        // If confirmation url is set, rejection url must also be set
+        if ($order->identificationConfirmationUrl) {
+            if (empty($order->identificationRejectionUrl)) {
                 $this->errors['Missing rejection URL'] = "The rejection url is not set";
             }
-
-            // If rejection url is set, confirmation url must also be set
-            if (
-                empty($order->identificationConfirmationUrl) &&
-                !empty($order->identificationRejectionUrl)
-            ) {
-                $this->errors['Missing confirmation URL'] = "The confirmation url is not set";
-            }
-
-            // If confirmation url is set, it must be a valid url
-            if (!empty($order->identificationConfirmationUrl) && !$this->validUrl($order->identificationConfirmationUrl)) {
+            if (!$this->validUrl($order->identificationConfirmationUrl)) {
                 $this->errors['Confirmation URL not valid'] = "The confirmation url is not valid.";
             }
+        }
 
-            // If rejection url is set, it must be a valid url
-            if (!empty($order->identificationRejectionUrl) && !$this->validUrl($order->identificationRejectionUrl)) {
+        // If rejection url is set, confirmation url must also be set
+        if ($order->identificationRejectionUrl) {
+            if (empty($order->identificationConfirmationUrl)) {
+                $this->errors['Missing confirmation URL'] = "The confirmation url is not set";
+            }
+            if (!$this->validUrl($order->identificationRejectionUrl)) {
                 $this->errors['Rejection URL not valid'] = "The rejection url is not valid.";
             }
         }
