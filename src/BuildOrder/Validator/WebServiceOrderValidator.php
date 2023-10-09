@@ -58,11 +58,30 @@ class WebServiceOrderValidator extends OrderValidator
             in_array(strtoupper($order->orderType), ['INVOICE', 'PAYMENTPLAN']) &&
             strtoupper($order->countryCode) === 'SE'
         ) {
-            if (!$this->validUrl($order->identificationConfirmationUrl)) {
-                $this->errors['Confirmation URL not valid'] = "The confirmation url is not set or is not valid.";
+            // If confirmation url is set, rejection url must also be set
+            if (
+                !empty($order->identificationConfirmationUrl) &&
+                empty($order->identificationRejectionUrl)
+            ) {
+                $this->errors['Missing rejection URL'] = "The rejection url is not set";
             }
-            if (!$this->validUrl($order->identificationRejectionUrl)) {
-                $this->errors['Rejection URL not valid'] = "The rejection url is not set or is not valid.";
+
+            // If rejection url is set, confirmation url must also be set
+            if (
+                empty($order->identificationConfirmationUrl) &&
+                !empty($order->identificationRejectionUrl)
+            ) {
+                $this->errors['Missing confirmation URL'] = "The confirmation url is not set";
+            }
+
+            // If confirmation url is set, it must be a valid url
+            if (!empty($order->identificationConfirmationUrl) && !$this->validUrl($order->identificationConfirmationUrl)) {
+                $this->errors['Confirmation URL not valid'] = "The confirmation url is not valid.";
+            }
+
+            // If rejection url is set, it must be a valid url
+            if (!empty($order->identificationRejectionUrl) && !$this->validUrl($order->identificationRejectionUrl)) {
+                $this->errors['Rejection URL not valid'] = "The rejection url is not valid.";
             }
         }
 
