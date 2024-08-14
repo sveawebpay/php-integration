@@ -28,6 +28,8 @@ $customerAddress = "Testgatan 1";
 $customerZipCode = "99999";
 $customerCity = "Stan";
 $customerCountry = "Sverige";
+$customerPhoneNumber = "+46701234567";
+$customerEmail = "email@address.com";
 
 // The customer has bought three items, one "Billy" which cost 700,99 kr excluding vat (25%) and two hotdogs for 5 kr (incl. vat).
 
@@ -74,6 +76,7 @@ $myCustomerInformation->setName( $customerFirstName, $customerLastName);
 $sveaAddress = \Svea\WebPay\Helper\Helper::splitStreetAddress($customerAddress); // Svea requires an address and a house number
 $myCustomerInformation->setStreetAddress( $sveaAddress[0], $sveaAddress[1] );
 $myCustomerInformation->setZipCode( $customerZipCode )->setLocality( $customerCity );
+$myCustomerInformation->setPhoneNumber( $customerPhoneNumber )->setEmail( $customerEmail );
 
 $myOrder->addCustomerDetails( $myCustomerInformation );
 
