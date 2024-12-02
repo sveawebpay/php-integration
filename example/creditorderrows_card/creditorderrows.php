@@ -5,7 +5,7 @@
  * @author Kristian Grossman-Madsen for Svea Svea\WebPay\WebPay
  */
 
-require_once '../../vendor/autoload.php';
+require_once __DIR__.'/../../vendor/autoload.php';
 
 use Svea\WebPay\Config\ConfigurationService;
 use Svea\WebPay\WebPayAdmin;
