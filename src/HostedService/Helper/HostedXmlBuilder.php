@@ -334,6 +334,10 @@ class HostedXmlBuilder
         $this->XMLWriter->writeElement("iscompany", $this->isCompany);  // -- used by invoice payment
         $this->XMLWriter->writeElement("addinvoicefee", "FALSE");       // -- used by invoice payment
         // addressid                                                    // -- used by invoice payment
+        
+        if (isset($request['payerAlias'])) {
+            $this->XMLWriter->writeElement("payeralias", $request['payerAlias']);
+        }
 
         $this->XMLWriter->endElement();
         $this->XMLWriter->endDocument();

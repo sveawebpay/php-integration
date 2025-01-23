@@ -36,7 +36,7 @@ use Svea\WebPay\WebService\WebServiceResponse\CustomerIdentity\GetAddressIdentit
 class GetAddressesResponse extends WebServiceResponse
 {
     /**
-     * @var $customerIdentity - GetAddressIdentity  array of GetAddressIdentity
+     * @var array - GetAddressIdentity  array of GetAddressIdentity
      */
     public $customerIdentity = array();
 

@@ -27,8 +27,7 @@ abstract class PaymentMethod
     const SHB_FI = 'DBSHBFI';
     const SPANKKI_FI = 'DBSPANKKIFI';
     const SWEDBANK_SE = 'DBSWEDBANKSE';
-    const TAPIOLA_FI = 'DBTAPIOLAFI';
-    const SWISH = 'SWISH';
+    const TAPIOLA_FI = 'DBTAPIOLAFI';    
 
     //PaymentMethodType::CARD
     const KORTCERT = 'KORTCERT';
@@ -43,4 +42,10 @@ abstract class PaymentMethod
     //PSP
     const PAYGROUND = 'PAYGROUND';
     const PAYPAL = 'PAYPAL';
+
+    const MOBILEPAY = 'MOBILEPAY';
+    const SWISH = 'SWISH';
+    const SWISH_PF = 'SWISH_PF';
+    const VIPPS = 'VIPPS';
+    const TRUSTLY = 'TRUSTLY';
 }
