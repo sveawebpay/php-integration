@@ -30,4 +30,15 @@ abstract class WebServiceResponse
      * @var array $logs Raw HTTP request / response logs
      */
     public $logs;
+
+    /**
+     * Allow dynamic access to response attributes
+     *
+     * @param string $name
+     * @return mixed
+     */
+    public function __get($name)
+    {
+        return $this->$name;   
+    }
 }

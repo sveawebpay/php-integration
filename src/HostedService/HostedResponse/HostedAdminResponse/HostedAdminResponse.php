@@ -33,7 +33,6 @@ class HostedAdminResponse extends HostedResponse
         $this->config = $config;
 
         if (is_object($message)) {
-
             if (isset($message->mac) && isset($message->message)) {
                 $decodedXml = base64_decode($message->message);
                 $secret = $config->getSecret(ConfigurationProvider::HOSTED_TYPE, $countryCode);

@@ -40,6 +40,13 @@ class PaymentPlanParamsResponse extends WebServiceResponse
     public $campaignCodes = array();
 
     /**
+     * Country
+     *
+     * @var string
+     */
+    public $country;
+
+    /**
      * PaymentPlanParamsResponse constructor.
      * @param $response
      * @param $logs

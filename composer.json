@@ -1,11 +1,11 @@
 {
   "name": "sveaekonomi/webpay",
   "version": "3.14.1",
-  "description": "Php integration library for Svea Ekonomis payment methods",
+  "description": "Php integration library for Svea payment methods",
   "license": "Apache-2.0",
   "authors": [
     {
-      "name": "Svea Ekonomi AB",
+      "name": "Svea Bank AB",
       "email": "support-webpay@sveaekonomi.se"
     }
   ],
