@@ -17,4 +17,5 @@ class SveaOrderRow
     public $VatPercent;
     public $DiscountPercent;
     public $PriceIncludingVat;
+    public $RowType;
 }

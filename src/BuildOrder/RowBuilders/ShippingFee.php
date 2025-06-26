@@ -35,7 +35,6 @@ class ShippingFee
      */
     public $amountExVat;
 
-
     /**
      * @var float $amountIncVat
      */
@@ -60,6 +59,11 @@ class ShippingFee
      * @var string $temporaryReference - Option parameter.
      */
     public $temporaryReference;
+
+    /**
+     * @var string $rowType - Optional type of row name
+     */
+    public $rowType = "Row";
 
     /**
      * ShippingFee constructor.

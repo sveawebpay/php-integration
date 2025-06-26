@@ -50,6 +50,11 @@ class InvoiceFee
     public $temporaryReference;
 
     /**
+     * @var string $rowType - Optional type of row name
+     */
+    public $rowType = "InvoiceFee";
+
+    /**
      * InvoiceFee constructor.
      */
     function __construct()

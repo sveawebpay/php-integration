@@ -70,6 +70,11 @@ class OrderRow
     public $merchantData;
 
     /**
+     * @var string $rowType - Optional type of row name
+     */
+    public $rowType = "Row";
+
+    /**
      * Optional
      * @param string $articleNumberAsString
      * @return $this

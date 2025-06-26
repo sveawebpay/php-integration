@@ -327,6 +327,8 @@ class WebServiceRowFormatter
             $orderRow->TemporaryReference = $row->temporaryReference;
         }
 
+        $orderRow->RowType = $row->rowType;
+
         $this->newRows[] = $orderRow;
     }
 
@@ -374,6 +376,8 @@ class WebServiceRowFormatter
         if (isset($row->temporaryReference)) {
             $orderRow->TemporaryReference = $row->temporaryReference;
         }
+
+         $orderRow->RowType = $row->rowType;
 
         $this->newRows[] = $orderRow;
     }
@@ -425,6 +429,8 @@ class WebServiceRowFormatter
                 $orderRow->TemporaryReference = $row->temporaryReference;
             }
 
+            $orderRow->RowType = $row->rowType;
+
             $this->newRows[] = $orderRow;
         }
 
@@ -460,6 +466,8 @@ class WebServiceRowFormatter
             if (isset($row->temporaryReference)) {
                 $orderRow->TemporaryReference = $row->temporaryReference;
             }
+
+            $orderRow->RowType = $row->rowType;
 
             $this->newRows[] = $orderRow;
         }
@@ -612,6 +620,7 @@ class WebServiceRowFormatter
             $orderRow->PricePerUnit = $this->priceIncludingVat ? -number_format($discountIncVat, 5, '.', '') : -number_format($discountExVat, 5, '.', ''); //Discountpercent on total price inc vat.
             $orderRow->VatPercent = $vatRate;
             $orderRow->PriceIncludingVat = $this->priceIncludingVat ? TRUE : FALSE;
+            $orderRow->RowType = $row->rowType;
 
             $this->newRows[] = $orderRow;
         }
