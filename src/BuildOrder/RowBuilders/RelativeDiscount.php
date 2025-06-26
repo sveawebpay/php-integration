@@ -32,6 +32,10 @@ class RelativeDiscount
      */
     public $description;
 
+    /**
+     * @var string $rowType - Optional type of row name
+     */
+    public $rowType = "Row";
 
     /**
      * Optional

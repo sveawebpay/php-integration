@@ -50,6 +50,11 @@ class FixedDiscount
     public $temporaryReference;
 
     /**
+     * @var string $rowType - The type of row to be created.
+     */
+    public $rowType = 'Row';
+
+    /**
      * Optional
      *
      * @param string $IdAsString
