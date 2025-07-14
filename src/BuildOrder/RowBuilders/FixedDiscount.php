@@ -29,6 +29,11 @@ class FixedDiscount
      */
     public $description;
 
+	/**
+	 * @var float $amount
+	 */
+	public $amount;
+
     /**
      * @var float $amountIncVat
      */
@@ -50,9 +55,9 @@ class FixedDiscount
     public $temporaryReference;
 
     /**
-     * @var string $rowType - The type of row to be created.
+     * @var string|null $rowType - The type of row to be created.
      */
-    public $rowType = 'Row';
+    public $rowType = null;
 
     /**
      * Optional
