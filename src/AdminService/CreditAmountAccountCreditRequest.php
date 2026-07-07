@@ -88,11 +88,13 @@ class CreditAmountAccountCreditRequest extends AdminServiceRequest
 
     private function validateAmount($errors)
     {
-        if (!isset($this->orderBuilder->amountIncVat) || $this->orderBuilder->amountIncVat <= 0) {
+        if (!isset($this->orderBuilder->amountIncVat)) {
             $errors[] = array('incorrect value' => "amountIncVat is too small.");
         } elseif (isset($this->orderBuilder->amountIncVat) &&
-                  !(is_float($this->orderBuilder->amountIncVat) || is_int($this->orderBuilder->amountIncVat))) {
+                   !(is_float($this->orderBuilder->amountIncVat) || is_int($this->orderBuilder->amountIncVat))) {
             $errors[] = array('incorrect datatype' => "amountIncVat is not of type float or int.");
+        } elseif ($this->orderBuilder->amountIncVat <= 0) {
+            $errors[] = array('incorrect value' => "amountIncVat is too small.");
         }
 
         return $errors;

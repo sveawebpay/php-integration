@@ -20,6 +20,8 @@ class SveaCustomerIdentity
     public $CountryCode;
     public $CustomerType;
     public $PublicKey;
+    public $IndividualIdentity;
+    public $CompanyIdentity;
 
     /**
      * Dynamically crate an instancevariable depending on Company or Individual

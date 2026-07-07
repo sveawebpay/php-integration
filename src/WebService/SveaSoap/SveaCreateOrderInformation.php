@@ -4,6 +4,8 @@ namespace Svea\WebPay\WebService\SveaSoap;
 
 class SveaCreateOrderInformation extends CreateOrderInformation
 {
+    public $CreatePaymentPlanDetails;
+
     /**
      * Sets Variable if contains CampaignCode for Paymentplan
      * @param string $CampaignCode

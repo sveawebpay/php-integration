@@ -4,6 +4,14 @@ namespace Svea\WebPay\HostedService\Payment;
 
 class HostedOrderRowBuilder
 {
+    public $sku;
+    public $name;
+    public $description;
+    public $amount;
+    public $vat;
+    public $quantity;
+    public $unit;
+
     /**
      * @param string $skuAsString
      * @return $this

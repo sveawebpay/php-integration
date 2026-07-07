@@ -15,6 +15,7 @@ abstract class CreateOrderInformation
     public $OrderRows = array();
     public $CustomerIdentity;
     public $OrderDate;
+    public $PeppolId;
 
     public function addOrderRow($orderRow)
     {

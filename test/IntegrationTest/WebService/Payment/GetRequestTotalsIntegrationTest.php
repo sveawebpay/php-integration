@@ -373,7 +373,7 @@ class GetRequestTotalsIntegrationTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(79.26, $preview_total['total_vat']);
 
         $target_total = 1400.00;
-        $compensation_amount = (double)$preview_total['total_incvat'] - $target_total;
+        $compensation_amount = (float)$preview_total['total_incvat'] - $target_total;
 
         $order->addDiscount(WebPayItem::fixedDiscount()
             ->setAmountIncVat($compensation_amount)
@@ -412,7 +412,7 @@ class GetRequestTotalsIntegrationTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(79.26, $preview_total['total_vat']);
 
         $target_total = 1400.00;
-        $compensation_amount = (double)$preview_total['total_incvat'] - $target_total;
+        $compensation_amount = (float)$preview_total['total_incvat'] - $target_total;
 
         $order->addDiscount(WebPayItem::fixedDiscount()
             ->setAmountIncVat($compensation_amount)

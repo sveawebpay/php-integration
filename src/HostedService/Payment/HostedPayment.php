@@ -87,6 +87,16 @@ class HostedPayment
     public $request;
 
     /**
+     * @var ConfigurationProvider $config
+     */
+    public $config;
+
+    /**
+     * @var string $countryCode
+     */
+    public $countryCode;
+
+    /**
      * Creates a HostedPayment, sets default language to english
      * @param CreateOrderBuilder $order
      */
@@ -254,7 +264,7 @@ class HostedPayment
         $this->request['callbackUrl'] = $this->callbackUrl;
         $this->request['cancelUrl'] = $this->cancelUrl;
 
-        $this->request['currency'] = strtoupper(trim($this->order->currency));
+        $this->request['currency'] = strtoupper(trim(isset($this->order->currency) ? $this->order->currency : ""));
 
         if (isset($this->subscriptionType)) {
             $this->request['subscriptionType'] = $this->subscriptionType;

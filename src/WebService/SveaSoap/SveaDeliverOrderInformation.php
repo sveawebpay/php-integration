@@ -8,6 +8,8 @@ class SveaDeliverOrderInformation
 {
     public $SveaOrderId;
     public $OrderType;
+    public $DeliverInvoiceDetails;
+    public $DeliverAccountCreditDetails;
 
     /**
      * SveaDeliverOrderInformation constructor.
