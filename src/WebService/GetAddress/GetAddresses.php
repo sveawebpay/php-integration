@@ -36,6 +36,7 @@ class GetAddresses
     public $ssn;
     public $testmode = false;
     public $logging = false;
+    public $request;
 
     /**
      * @param ConfigurationProvider $config

@@ -44,6 +44,11 @@ class IndividualCustomer
     public $firstname;
 
     /**
+     * @var string $name
+     */
+    public $name;
+
+    /**
      * @var string $lastname
      */
     public $lastname;

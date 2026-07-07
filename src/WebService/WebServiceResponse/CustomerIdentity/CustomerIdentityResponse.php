@@ -25,6 +25,16 @@ class CustomerIdentityResponse
     public $phoneNumber;
 
     /**
+     * @var string $firstName
+     */
+    public $firstName;
+
+    /**
+     * @var string $lastName
+     */
+    public $lastName;
+
+    /**
      * @var string $fullName
      */
     public $fullName;

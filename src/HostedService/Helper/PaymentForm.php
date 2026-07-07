@@ -24,6 +24,7 @@ class PaymentForm
     public $mac;
     public $completeHtmlFormWithSubmitButton;
     public $htmlFormFieldsAsArray = array();
+    public $rawFields = array();
     private $submitMessage;
     private $noScriptMessage;
 

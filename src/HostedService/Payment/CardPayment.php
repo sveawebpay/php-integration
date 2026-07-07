@@ -12,6 +12,8 @@ use Svea\WebPay\HostedService\Helper\ExcludePayments;
  */
 class CardPayment extends HostedPayment
 {       
+    public $subscriptionType;
+
     /**
      * Creates a new CardPayment containing a given order.
      * @param CreateOrderBuilder $order

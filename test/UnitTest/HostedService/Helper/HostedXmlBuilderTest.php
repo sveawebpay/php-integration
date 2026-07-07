@@ -16,6 +16,8 @@ class HostedXmlBuilderTest extends \PHPUnit\Framework\TestCase
 {
 
     private $order;
+    private $individualCustomer;
+    private $orderRow;
 
     protected function setup(): void
     {

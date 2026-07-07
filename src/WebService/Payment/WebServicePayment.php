@@ -89,7 +89,9 @@ class WebServicePayment
         $orderinformation->ClientOrderNumber = $this->order->clientOrderNumber;
         $orderinformation->OrderDate = $this->order->orderDate;
         $orderinformation->CustomerReference = $this->order->customerReference;
-        $orderinformation->PeppolId = $this->order->peppolId;
+        if (isset($this->order->peppolId)) {
+            $orderinformation->PeppolId = $this->order->peppolId;
+        }
 
         if(isset($this->order->orderDeliveryAddress))
         {

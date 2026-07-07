@@ -18,6 +18,7 @@ class ListPaymentMethodsTest extends \PHPUnit\Framework\TestCase
 
     protected $configObject;
     protected $listpaymentmethodsObject;
+    protected $listpaymentmethodObject;
 
     // fixture, run once before each test method
     protected function setup(): void

@@ -75,7 +75,7 @@ class Helper
      */
     static function bround($dVal, $iDec = 0)
     {
-        return round($dVal, $iDec, PHP_ROUND_HALF_EVEN);
+        return round((float)$dVal, $iDec, PHP_ROUND_HALF_EVEN);
     }
 
     /**

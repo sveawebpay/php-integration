@@ -40,6 +40,13 @@ class HostedPaymentResponse extends HostedResponse
      */
     public $currency;
 
+    public $subscriptionId;
+    public $cardType;
+    public $maskedCardNumber;
+    public $expiryMonth;
+    public $expiryYear;
+    public $authCode;
+
     /**
      * HostedPaymentResponse validates the hosted payment response.
      *

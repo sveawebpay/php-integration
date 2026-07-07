@@ -86,6 +86,26 @@ class OrderBuilder
      */
     public $clientOrderNumber;
 
+    /**
+     * @var int|string Svea order id used by admin requests
+     */
+    public $orderId;
+
+    /**
+     * @var string Order type used by admin requests
+     */
+    public $orderType;
+
+    /**
+     * @var array Rows selected for cancellation
+     */
+    public $rowsToCancel;
+
+    /**
+     * @var array Rows selected for delivery
+     */
+    public $rowsToDeliver;
+
     /*
      * @var \Svea\WebPay\BuildOrder\RowBuilders\OrderDeliveryAddress
      */

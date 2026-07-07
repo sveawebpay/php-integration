@@ -65,7 +65,7 @@ class CreditAmountAccountCreditTestextends extends  \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException Svea\WebPay\BuildOrder\Validator\ValidationException
-     * @expectedExceptionMessage -incorrect value : amountIncVat is too small
+     * @expectedExceptionMessage -incorrect datatype : amountIncVat is not of type float or int.
      */
     public function test_validate_throws_exception_on_bad_amount_value()
     {

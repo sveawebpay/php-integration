@@ -91,7 +91,7 @@ class UpdateOrderRequest extends AdminServiceRequest
 
     private function validateStringLength($errors)
     {
-        if (strlen($this->orderBuilder->notes) > 200) {
+        if (isset($this->orderBuilder->notes) && strlen($this->orderBuilder->notes) > 200) {
             $errors[] = array('String length' => "The field Notes must be a string with a maximum length of 200.");
         }
 

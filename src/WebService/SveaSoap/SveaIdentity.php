@@ -2,7 +2,7 @@
 
 namespace Svea\WebPay\WebService\SveaSoap;
 
-class SveaIdentity
+class SveaIdentity extends \stdClass
 {
     /**
      * Dynamically crate an instancevariable depending on Company or Individual

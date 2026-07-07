@@ -14,6 +14,7 @@ use Svea\WebPay\Config\ConfigurationService;
  */
 class OrderBuilderTest extends \PHPUnit\Framework\TestCase
 {
+    private $orderBuilder;
 
     //Set up orderobject
 

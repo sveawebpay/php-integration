@@ -2,7 +2,7 @@
 
 namespace Svea\WebPay\WebService\SveaSoap;
 
-class SveaCustomerIdentity
+class SveaCustomerIdentity extends \stdClass
 {
     /**
      * Only include in Nordic countries

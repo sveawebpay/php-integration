@@ -58,11 +58,17 @@ class SveaConfigurationProvider implements ConfigurationProvider
     private function getCredentialsProperty($property, $type, $country)
     {
         if ($property === 'merchantId' || $property === 'secret') {
-            if (array_key_exists($property, $this->conf['credentials']['common']['auth'][$type]) === false) {
+            $typeKey = (string)$type;
+
+            if (array_key_exists($typeKey, $this->conf['credentials']['common']['auth']) === false) {
+                $this->throwInvalidTypeException($type);
+            }
+
+            if (array_key_exists($property, $this->conf['credentials']['common']['auth'][$typeKey]) === false) {
                 $this->throwInvalidCredentialProperty();
             }
 
-            return $this->conf['credentials']['common']['auth'][$type][$property];
+            return $this->conf['credentials']['common']['auth'][$typeKey][$property];
         } else {
             return $this->getCredentialsPropertyByCountry($property, $type, $country);
         }
@@ -70,15 +76,16 @@ class SveaConfigurationProvider implements ConfigurationProvider
 
     private function getCredentialsPropertyByCountry($property, $type, $country)
     {
-        $uCountry = strtoupper($country);
+        $uCountry = strtoupper((string)$country);
+        $typeKey = (string)$type;
 
         if (array_key_exists($uCountry, $this->conf['credentials']) == FALSE) {
             $this->throwInvalidCountryException();
-        } elseif (array_key_exists($type, $this->conf['credentials'][$uCountry]['auth']) == FALSE) {
+        } elseif (array_key_exists($typeKey, $this->conf['credentials'][$uCountry]['auth']) == FALSE) {
             $this->throwInvalidTypeException($type);
         }
 
-        return $this->conf['credentials'][$uCountry]['auth'][$type][$property];
+        return $this->conf['credentials'][$uCountry]['auth'][$typeKey][$property];
     }
 
     /**
@@ -157,11 +164,13 @@ class SveaConfigurationProvider implements ConfigurationProvider
      */
     public function getEndPoint($type)
     {
-        if (array_key_exists($type, $this->conf['url']) == FALSE) {
+        $typeKey = (string)$type;
+
+        if (array_key_exists($typeKey, $this->conf['url']) == FALSE) {
             $this->throwInvalidTypeException($type);
         }
 
-        return $this->conf['url'][$type];
+        return $this->conf['url'][$typeKey];
     }
 
     public function getIntegrationPlatform()
