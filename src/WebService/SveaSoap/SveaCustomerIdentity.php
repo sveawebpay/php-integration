@@ -2,7 +2,7 @@
 
 namespace Svea\WebPay\WebService\SveaSoap;
 
-class SveaCustomerIdentity
+class SveaCustomerIdentity extends \stdClass
 {
     /**
      * Only include in Nordic countries
@@ -20,8 +20,6 @@ class SveaCustomerIdentity
     public $CountryCode;
     public $CustomerType;
     public $PublicKey;
-    public $IndividualIdentity;
-    public $CompanyIdentity;
 
     /**
      * Dynamically crate an instancevariable depending on Company or Individual

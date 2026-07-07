@@ -4,12 +4,10 @@ namespace Svea\WebPay\WebService\SveaSoap;
 
 use Svea\WebPay\Config\ConfigurationProvider;
 
-class SveaDeliverOrderInformation
+class SveaDeliverOrderInformation extends \stdClass
 {
     public $SveaOrderId;
     public $OrderType;
-    public $DeliverInvoiceDetails;
-    public $DeliverAccountCreditDetails;
 
     /**
      * SveaDeliverOrderInformation constructor.
