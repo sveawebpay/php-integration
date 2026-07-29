@@ -5,7 +5,7 @@
  * @author Savo Garovic, Janko Stevanovic and Fredrik Sundell for Svea Ekonomi AB
  */
 
-require_once '../../vendor/autoload.php';
+require_once __DIR__.'/../../vendor/autoload.php';
 
 use Svea\WebPay\WebPay;
 use Svea\WebPay\WebPayItem;
